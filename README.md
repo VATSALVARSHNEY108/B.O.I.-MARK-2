@@ -19,6 +19,13 @@ An intelligent desktop automation tool powered by Google's Gemini AI that unders
 - **Web Search**: Quick web searches
 - **File Operations**: Create files with content
 
+### 📱 Messaging & Communication (Advanced)
+- **SMS Messaging**: Send text messages to contacts via Twilio
+- **Email**: Send emails with attachments via Gmail
+- **File Sharing**: Send photos and files to contacts
+- **Contact Management**: Store and manage contact information
+- **Natural Language**: "Send this photo to John" or "Text Sarah I'm on my way"
+
 ### 🔧 Built With
 - **Gemini AI** (gemini-2.0-flash-exp) for natural language understanding
 - **PyAutoGUI** for GUI automation
@@ -46,6 +53,13 @@ python main.py
 - "Open chrome and search for weather"
 - "Create a file called test.txt with content Hello"
 
+**Messaging Commands (Advanced):**
+- "Send this photo to John"
+- "Text Sarah that I'm running late"
+- "Email my boss about the meeting"
+- "Add contact Mom with phone 555-1234 and email mom@example.com"
+- Type `contacts` - List all contacts
+
 **Utility Commands:**
 - Type `help` - Show available features
 - Type `position` - See current mouse coordinates
@@ -69,6 +83,12 @@ python main.py
 - Python 3.11+
 - Gemini API Key (configured in environment)
 - Desktop environment (Linux, macOS, or Windows)
+
+**Optional (for Messaging Features):**
+- **Twilio Account** (for SMS): Set `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and `TWILIO_PHONE_NUMBER`
+- **Gmail Account** (for Email): Set `GMAIL_USER` (your email) and `GMAIL_APP_PASSWORD` 
+  - Gmail App Password setup: https://support.google.com/accounts/answer/185833
+  - Regular Gmail passwords won't work - you need an app-specific password
 
 ## Notes
 

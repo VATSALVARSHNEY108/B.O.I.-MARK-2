@@ -45,5 +45,8 @@ Thumbs.db
 # Screenshots
 screenshot*.png
 
+# Contacts
+contacts.json
+
 # Logs
 *.log

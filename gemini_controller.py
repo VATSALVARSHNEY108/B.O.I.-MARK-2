@@ -46,6 +46,8 @@ def parse_command(user_input: str) -> dict:
     system_prompt = """You are a desktop automation assistant. Parse user commands into structured JSON actions.
 
 Available actions:
+
+DESKTOP AUTOMATION:
 - open_app: Open an application (parameters: app_name)
 - type_text: Type text (parameters: text)
 - click: Click at position (parameters: x, y) or click (parameters: button - left/right/middle)
@@ -58,6 +60,21 @@ Available actions:
 - search_web: Search the web (parameters: query)
 - create_file: Create a file (parameters: filename, content)
 - wait: Wait for seconds (parameters: seconds)
+
+MESSAGING & CONTACTS:
+- send_sms: Send SMS text message (parameters: contact_name OR phone, message)
+- send_email: Send email (parameters: contact_name OR email, subject, body)
+- send_file: Send file to contact (parameters: contact_name, file_path, message [optional])
+- add_contact: Add a new contact (parameters: name, phone [optional], email [optional])
+- list_contacts: List all contacts (parameters: none)
+- get_contact: Get contact details (parameters: name)
+
+IMPORTANT:
+- For "send to [name]" commands, use contact_name parameter
+- If user says "text John" or "message Sarah", use send_sms
+- If user says "email John" or "send email to Sarah", use send_email
+- If user says "send this photo/file to John", use send_file with file_path
+- Extract contact names accurately (e.g., "John", "Sarah", "Mom", "Boss")
 
 For multi-step tasks, return steps as a list. Each step should have action and parameters.
 

@@ -22,13 +22,18 @@ class DesktopAutomationCLI:
         print("  Powered by Gemini AI")
         print("=" * 70)
         print("\n💡 Tell me what you want to do in plain English!")
-        print("   Examples:")
+        print("   Desktop Automation:")
         print("   • 'Open notepad and type Hello World'")
         print("   • 'Take a screenshot'")
         print("   • 'Search Google for Python tutorials'")
-        print("   • 'Press Ctrl+C'")
+        print("\n   📱 Messaging (Advanced):")
+        print("   • 'Send this photo to John' (send files)")
+        print("   • 'Text Sarah that I'm running late' (SMS)")
+        print("   • 'Email my boss the report' (Email)")
+        print("   • 'Add contact Mom with phone 555-1234'")
         print("\n📌 Commands:")
-        print("   • Type 'help' for AI assistance")
+        print("   • Type 'help' for full feature list")
+        print("   • Type 'contacts' to list contacts")
         print("   • Type 'position' to see mouse coordinates")
         print("   • Type 'exit' or 'quit' to stop")
         print("=" * 70)
@@ -53,6 +58,12 @@ class DesktopAutomationCLI:
         print("   • Search the web")
         print("   • Create files")
         print("   • Wait/pause")
+        print("\n🔹 Messaging & Contacts:")
+        print("   • Send SMS: 'text John that I'm on my way'")
+        print("   • Send Email: 'email Sarah about the meeting'")
+        print("   • Send Files: 'send report.pdf to my boss'")
+        print("   • Manage Contacts: 'add contact [name]', 'list contacts'")
+        print("   • Note: Requires Twilio (SMS) or Gmail setup")
         print("\n🔹 Multi-Step Workflows:")
         print("   • Combine actions in one command")
         print("   • Example: 'Open notepad, type Hello, and save as test.txt'")
@@ -94,6 +105,11 @@ class DesktopAutomationCLI:
                 
                 elif user_input_lower == 'position':
                     self.get_mouse_position()
+                    continue
+                
+                elif user_input_lower == 'contacts':
+                    result = self.executor.execute_single_action("list_contacts", {})
+                    print(f"\n{result['message']}")
                     continue
                 
                 print("\n🤔 Processing your command with AI...")

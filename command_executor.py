@@ -2,12 +2,16 @@ import os
 import platform
 import webbrowser
 from gui_automation import GUIAutomation
+from contact_manager import ContactManager
+from messaging_service import MessagingService
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
     
     def __init__(self):
         self.gui = GUIAutomation()
+        self.contact_manager = ContactManager()
+        self.messaging = MessagingService(self.contact_manager)
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -165,6 +169,70 @@ class CommandExecutor:
                     return {
                         "success": False,
                         "message": f"Failed to create file: {str(e)}"
+                    }
+            
+            elif action == "send_sms":
+                contact_name = parameters.get("contact_name")
+                phone = parameters.get("phone")
+                message = parameters.get("message", "")
+                result = self.messaging.send_sms(contact_name=contact_name, phone=phone, message=message)
+                return result
+            
+            elif action == "send_email":
+                contact_name = parameters.get("contact_name")
+                email = parameters.get("email")
+                subject = parameters.get("subject", "")
+                body = parameters.get("body", "")
+                result = self.messaging.send_email(contact_name=contact_name, email=email, subject=subject, body=body)
+                return result
+            
+            elif action == "send_file":
+                contact_name = parameters.get("contact_name", "")
+                file_path = parameters.get("file_path", "")
+                message = parameters.get("message", "")
+                method = parameters.get("method", "auto")
+                result = self.messaging.send_file(contact_name, file_path, message, method)
+                return result
+            
+            elif action == "add_contact":
+                name = parameters.get("name", "")
+                phone = parameters.get("phone")
+                email = parameters.get("email")
+                success = self.contact_manager.add_contact(name, phone, email)
+                return {
+                    "success": success,
+                    "message": f"Added contact: {name}" if success else f"Failed to add contact: {name}"
+                }
+            
+            elif action == "list_contacts":
+                contacts = self.contact_manager.list_contacts()
+                if contacts:
+                    contact_list = "\n".join([
+                        f"  • {c['name']} - Phone: {c['phone'] or 'N/A'}, Email: {c['email'] or 'N/A'}"
+                        for c in contacts
+                    ])
+                    return {
+                        "success": True,
+                        "message": f"Contacts:\n{contact_list}"
+                    }
+                else:
+                    return {
+                        "success": True,
+                        "message": "No contacts found. Use 'add contact' to create one."
+                    }
+            
+            elif action == "get_contact":
+                name = parameters.get("name", "")
+                contact = self.contact_manager.get_contact(name)
+                if contact:
+                    return {
+                        "success": True,
+                        "message": f"Contact: {contact['name']}\n  Phone: {contact['phone'] or 'N/A'}\n  Email: {contact['email'] or 'N/A'}"
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "message": f"Contact not found: {name}"
                     }
             
             elif action == "error":
