@@ -49,11 +49,19 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 
 ## Features Implemented
 
+### **NEW** AI Code Generation
+- **Intelligent Code Writing**: Describe what you want in plain English
+- **Multi-Language Support**: Python, JavaScript, Java, C++, and more
+- **Auto-Type to Editor**: Opens notepad/editor and types the code
+- **Educational Output**: Includes comments and best practices
+- Examples: "Write code for checking palindrome", "Generate bubble sort in Python"
+
 ### Natural Language Processing
 - AI-powered command interpretation using Gemini
 - Support for single commands and multi-step workflows
 - Context-aware error handling with AI suggestions
 - **NEW**: Understands messaging intent ("send to", "text", "email")
+- **NEW**: Understands code generation requests ("write code for", "generate code")
 
 ### Desktop Automation Capabilities
 - Application launching
@@ -130,6 +138,9 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - ✅ **NEW**: Extended Gemini prompts for messaging commands
 - ✅ **NEW**: Added structural validation for AI responses
 - ✅ **NEW**: Updated CLI with messaging examples
+- ✅ **NEW**: Implemented AI Code Generation feature
+- ✅ **NEW**: Auto-open editor and type generated code
+- ✅ **NEW**: Support for multiple programming languages
 
 ### Usage Notes
 - Application runs in **DEMO MODE** in Replit's cloud environment (no GUI available)
@@ -139,6 +150,13 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - **Messaging features** work in demo mode but require Twilio/Gmail credentials for real sending
 
 ## Example Commands
+
+### **NEW** AI Code Generation
+- "Write code for checking palindrome"
+- "Generate Python code for bubble sort"
+- "Create JavaScript code for form validation"
+- "Write Java code for fibonacci sequence"
+- "Generate C++ code for binary search"
 
 ### Desktop Automation
 - "Open notepad"

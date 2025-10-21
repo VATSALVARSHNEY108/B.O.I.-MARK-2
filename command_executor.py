@@ -4,6 +4,7 @@ import webbrowser
 from gui_automation import GUIAutomation
 from contact_manager import ContactManager
 from messaging_service import MessagingService
+from gemini_controller import generate_code
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -234,6 +235,53 @@ class CommandExecutor:
                         "success": False,
                         "message": f"Contact not found: {name}"
                     }
+            
+            elif action == "generate_code":
+                description = parameters.get("description", "")
+                language = parameters.get("language", "python")
+                
+                if not description:
+                    return {
+                        "success": False,
+                        "message": "No code description provided"
+                    }
+                
+                print(f"  🤖 Generating {language} code for: {description}...")
+                code = generate_code(description, language)
+                
+                return {
+                    "success": True,
+                    "message": f"Generated {language} code",
+                    "generated_code": code
+                }
+            
+            elif action == "write_code_to_editor":
+                description = parameters.get("description", "")
+                language = parameters.get("language", "python")
+                editor = parameters.get("editor", "notepad")
+                
+                if not description:
+                    return {
+                        "success": False,
+                        "message": "No code description provided"
+                    }
+                
+                print(f"  🤖 Generating {language} code for: {description}...")
+                code = generate_code(description, language)
+                
+                print(f"  📝 Opening {editor}...")
+                self.gui.open_application(editor)
+                
+                import time
+                time.sleep(1)
+                
+                print(f"  ⌨️  Typing code...")
+                self.gui.type_text(code, interval=0.01)
+                
+                return {
+                    "success": True,
+                    "message": f"Generated and wrote {language} code to {editor}"
+                }
             
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")

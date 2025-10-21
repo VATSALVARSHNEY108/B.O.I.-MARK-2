@@ -4,6 +4,16 @@ An intelligent desktop automation tool powered by Google's Gemini AI that unders
 
 ## Features
 
+### 🤖 AI Code Generation (NEW!)
+- **Write Code Automatically**: Just describe what you want - "Write code for checking palindrome"
+- **Any Programming Language**: Python, JavaScript, Java, C++, and more
+- **Auto-Type to Editor**: Generates code and types it directly into notepad or any text editor
+- **Smart & Educational**: Includes comments and best practices
+- **Examples**:
+  - "Write code for checking palindrome"
+  - "Generate Python code for bubble sort"
+  - "Create JavaScript code for form validation"
+
 ### 🎯 Natural Language Control
 - Issue commands in plain English - no coding required
 - AI-powered command interpretation using Gemini
@@ -40,6 +50,13 @@ python main.py
 ```
 
 ### Example Commands
+
+**AI Code Generation (NEW!):**
+- "Write code for checking palindrome"
+- "Generate Python code for bubble sort algorithm"
+- "Create JavaScript code for a calculator"
+- "Write Java code for fibonacci sequence"
+- "Generate C++ code for binary search"
 
 **Simple Actions:**
 - "Open notepad"
