@@ -37,14 +37,29 @@ An intelligent desktop automation tool powered by Google's Gemini AI that unders
 - **Natural Language**: "Send this photo to John" or "Text Sarah I'm on my way"
 
 ### 🔧 Built With
-- **Gemini AI** (gemini-2.0-flash-exp) for natural language understanding
+- **Gemini AI** (gemini-2.0-flash-exp) for natural language understanding and code generation
+- **Tkinter** for the beautiful GUI interface
 - **PyAutoGUI** for GUI automation
 - **Pyperclip** for clipboard operations
 - **Python 3.11**
 
 ## Usage
 
-Run the automation controller:
+### GUI Version (Recommended)
+Run the beautiful graphical interface:
+```bash
+python gui_app.py
+```
+
+Features:
+- 🎨 Modern dark theme interface
+- 💡 Quick example buttons
+- 📋 Real-time output display
+- ⚡ Easy-to-use command input
+- 🔘 Help, Contacts, and Clear buttons
+
+### CLI Version
+Run the command-line interface:
 ```bash
 python main.py
 ```

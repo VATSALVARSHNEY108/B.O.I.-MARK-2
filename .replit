@@ -17,15 +17,15 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Automation Controller"
+args = "GUI App"
 
 [[workflows.workflow]]
-name = "Automation Controller"
+name = "GUI App"
 author = "agent"
-
-[workflows.workflow.metadata]
-outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python main.py"
+args = "python gui_app.py"
+
+[workflows.workflow.metadata]
+outputType = "vnc"

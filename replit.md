@@ -40,7 +40,15 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
    - Demo mode for testing without real credentials
    - Automatically uses available contact methods
 
-6. **main.py** - CLI Interface
+6. **gui_app.py** - Graphical User Interface (Primary Interface)
+   - **NEW**: Beautiful modern GUI with dark theme
+   - Text input field with quick example buttons
+   - Real-time output display with color-coded messages
+   - Status indicators and help system
+   - Threading for non-blocking command execution
+   - Built with tkinter
+
+7. **main.py** - CLI Interface (Alternative)
    - Interactive command-line interface
    - User-friendly prompts and help system
    - Environment validation (checks for API key)
@@ -116,10 +124,11 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - `GMAIL_APP_PASSWORD` - Optional for Email (Gmail app-specific password)
 
 ### Workflow
-- **Name**: Automation Controller
-- **Command**: `python main.py`
-- **Type**: Console application
-- **Status**: Running in demo mode (headless environment)
+- **Name**: GUI App
+- **Command**: `python gui_app.py`
+- **Type**: GUI application (with VNC display)
+- **Status**: Running in demo mode
+- **Alternative**: `python main.py` (CLI version)
 
 ## Current State
 
@@ -141,6 +150,9 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - ✅ **NEW**: Implemented AI Code Generation feature
 - ✅ **NEW**: Auto-open editor and type generated code
 - ✅ **NEW**: Support for multiple programming languages
+- ✅ **NEW**: Created beautiful GUI application with tkinter
+- ✅ **NEW**: Modern dark theme interface with quick examples
+- ✅ **NEW**: Real-time output display and status indicators
 
 ### Usage Notes
 - Application runs in **DEMO MODE** in Replit's cloud environment (no GUI available)
