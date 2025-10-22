@@ -164,27 +164,27 @@
                 return;
             }
             
-            // Remove spaces and dashes from phone number
-            const cleanPhone = phone.replace(/[\s-]/g, '').replace('+', '');
+            // Remove spaces, dashes, and + from phone number
+            const cleanPhone = phone.replace(/[\s\-+]/g, '');
             
-            // Build WhatsApp URL
-            let url = `whatsapp://send?phone=${cleanPhone}`;
+            // Build WhatsApp URL using wa.me (works better with Desktop)
+            let url = `https://wa.me/${cleanPhone}`;
             
             if (message) {
                 const encodedMessage = encodeURIComponent(message);
-                url += `&text=${encodedMessage}`;
+                url += `?text=${encodedMessage}`;
             }
             
-            // Open WhatsApp Desktop
-            window.location.href = url;
+            // Open in new tab - will redirect to WhatsApp Desktop if installed
+            window.open(url, '_blank');
             
-            console.log('Opening WhatsApp Desktop with URL:', url);
+            console.log('Opening WhatsApp with URL:', url);
         }
         
         function openWhatsAppOnly() {
-            // Just open WhatsApp Desktop without opening any specific chat
-            window.location.href = 'whatsapp://';
-            console.log('Opening WhatsApp Desktop');
+            // Open WhatsApp Web which will offer to open Desktop
+            window.open('https://web.whatsapp.com', '_blank');
+            console.log('Opening WhatsApp Web');
         }
         
         // Allow Enter key to submit

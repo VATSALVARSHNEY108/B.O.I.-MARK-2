@@ -217,36 +217,24 @@ class WhatsAppAutomation:
             
             if message:
                 encoded_message = quote(message)
-                url = f"whatsapp://send?phone={phone_clean}&text={encoded_message}"
-                print(f"  💻 Opening WhatsApp Desktop chat with {phone_number}")
+                url = f"https://wa.me/{phone_clean}?text={encoded_message}"
+                print(f"  💻 Opening WhatsApp chat with {phone_number}")
                 print(f"  💬 Pre-filled message: {message}")
             else:
-                url = f"whatsapp://send?phone={phone_clean}"
-                print(f"  💻 Opening WhatsApp Desktop chat with {phone_number}")
+                url = f"https://wa.me/{phone_clean}"
+                print(f"  💻 Opening WhatsApp chat with {phone_number}")
             
-            system = platform.system()
-            
-            if system == "Windows":
-                subprocess.Popen(["start", url], shell=True)
-            elif system == "Darwin":
-                subprocess.Popen(["open", url])
-            elif system == "Linux":
-                subprocess.Popen(["xdg-open", url])
-            else:
-                return {
-                    "success": False,
-                    "message": f"❌ Unsupported operating system: {system}"
-                }
+            webbrowser.open(url)
             
             return {
                 "success": True,
-                "message": f"✅ WhatsApp Desktop chat opened with {phone_number}"
+                "message": f"✅ WhatsApp chat opened with {phone_number}"
             }
         
         except Exception as e:
             return {
                 "success": False,
-                "message": f"❌ Error opening WhatsApp Desktop chat: {str(e)}"
+                "message": f"❌ Error opening WhatsApp chat: {str(e)}"
             }
     
     def launch_desktop_app(self):
