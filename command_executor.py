@@ -1,10 +1,11 @@
 import os
 import platform
 import webbrowser
+import time
 from gui_automation import GUIAutomation
 from contact_manager import ContactManager
 from messaging_service import MessagingService
-from gemini_controller import generate_code
+from code_generator import generate_code, explain_code, improve_code, debug_code
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -238,7 +239,7 @@ class CommandExecutor:
             
             elif action == "generate_code":
                 description = parameters.get("description", "")
-                language = parameters.get("language", "python")
+                language = parameters.get("language", None)
                 
                 if not description:
                     return {
@@ -246,18 +247,34 @@ class CommandExecutor:
                         "message": "No code description provided"
                     }
                 
-                print(f"  🤖 Generating {language} code for: {description}...")
-                code = generate_code(description, language)
+                print(f"  🤖 Generating code for: {description}...")
+                result = generate_code(description, language)
                 
-                return {
-                    "success": True,
-                    "message": f"Generated {language} code",
-                    "generated_code": code
-                }
+                if result.get("success"):
+                    code = result["code"]
+                    detected_lang = result["language"]
+                    
+                    print(f"\n{'='*60}")
+                    print(f"  Generated {detected_lang.upper()} Code:")
+                    print(f"{'='*60}")
+                    print(code)
+                    print(f"{'='*60}\n")
+                    
+                    return {
+                        "success": True,
+                        "message": f"✅ Generated {detected_lang} code successfully!",
+                        "generated_code": code,
+                        "language": detected_lang
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "message": f"❌ Error: {result.get('error', 'Code generation failed')}"
+                    }
             
             elif action == "write_code_to_editor":
                 description = parameters.get("description", "")
-                language = parameters.get("language", "python")
+                language = parameters.get("language", None)
                 editor = parameters.get("editor", "notepad")
                 
                 if not description:
@@ -266,22 +283,127 @@ class CommandExecutor:
                         "message": "No code description provided"
                     }
                 
-                print(f"  🤖 Generating {language} code for: {description}...")
-                code = generate_code(description, language)
+                print(f"  🤖 Generating code for: {description}...")
+                result = generate_code(description, language)
                 
+                if not result.get("success"):
+                    return {
+                        "success": False,
+                        "message": f"❌ Code generation failed: {result.get('error', 'Unknown error')}"
+                    }
+                
+                code = result["code"]
+                detected_lang = result["language"]
+                
+                print(f"\n  ✅ Generated {detected_lang} code ({len(code)} characters)")
                 print(f"  📝 Opening {editor}...")
+                
                 self.gui.open_application(editor)
+                time.sleep(2)
                 
-                import time
-                time.sleep(1)
-                
-                print(f"  ⌨️  Typing code...")
+                print(f"  ⌨️  Typing code into editor...")
                 self.gui.type_text(code, interval=0.01)
+                
+                print(f"  ✅ Done! Code written to {editor}")
                 
                 return {
                     "success": True,
-                    "message": f"Generated and wrote {language} code to {editor}"
+                    "message": f"✅ Generated and wrote {detected_lang} code to {editor}!",
+                    "generated_code": code,
+                    "language": detected_lang
                 }
+            
+            elif action == "explain_code":
+                code = parameters.get("code", "")
+                language = parameters.get("language", "python")
+                
+                if not code:
+                    return {
+                        "success": False,
+                        "message": "No code provided to explain"
+                    }
+                
+                print(f"  🤔 Analyzing {language} code...")
+                explanation = explain_code(code, language)
+                
+                print(f"\n{'='*60}")
+                print(f"  Code Explanation:")
+                print(f"{'='*60}")
+                print(explanation)
+                print(f"{'='*60}\n")
+                
+                return {
+                    "success": True,
+                    "message": "Code explained successfully",
+                    "explanation": explanation
+                }
+            
+            elif action == "improve_code":
+                code = parameters.get("code", "")
+                language = parameters.get("language", "python")
+                
+                if not code:
+                    return {
+                        "success": False,
+                        "message": "No code provided to improve"
+                    }
+                
+                print(f"  🔧 Improving {language} code...")
+                result = improve_code(code, language)
+                
+                if result.get("success"):
+                    improved = result["code"]
+                    
+                    print(f"\n{'='*60}")
+                    print(f"  Improved Code:")
+                    print(f"{'='*60}")
+                    print(improved)
+                    print(f"{'='*60}\n")
+                    
+                    return {
+                        "success": True,
+                        "message": "Code improved successfully",
+                        "improved_code": improved
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "message": f"Error: {result.get('error')}"
+                    }
+            
+            elif action == "debug_code":
+                code = parameters.get("code", "")
+                error_message = parameters.get("error_message", "")
+                language = parameters.get("language", "python")
+                
+                if not code:
+                    return {
+                        "success": False,
+                        "message": "No code provided to debug"
+                    }
+                
+                print(f"  🐛 Debugging {language} code...")
+                result = debug_code(code, error_message, language)
+                
+                if result.get("success"):
+                    fixed = result["code"]
+                    
+                    print(f"\n{'='*60}")
+                    print(f"  Fixed Code:")
+                    print(f"{'='*60}")
+                    print(fixed)
+                    print(f"{'='*60}\n")
+                    
+                    return {
+                        "success": True,
+                        "message": "Code debugged and fixed",
+                        "fixed_code": fixed
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "message": f"Error: {result.get('error')}"
+                    }
             
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")

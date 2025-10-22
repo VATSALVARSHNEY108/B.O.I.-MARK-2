@@ -40,7 +40,16 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
    - Demo mode for testing without real credentials
    - Automatically uses available contact methods
 
-6. **gui_app.py** - Graphical User Interface (Primary Interface)
+6. **code_generator.py** - Comprehensive Code Generation Module
+   - **NEW**: Advanced AI code generation system
+   - Auto-detects programming language from description
+   - Supports 10+ languages (Python, JavaScript, Java, C++, etc.)
+   - Clean code output with markdown removal
+   - Additional features: explain_code, improve_code, debug_code
+   - Language templates with file extensions and editors
+   - Robust error handling and validation
+
+7. **gui_app.py** - Graphical User Interface (Primary Interface)
    - **NEW**: Beautiful modern GUI with dark theme
    - Text input field with quick example buttons
    - Real-time output display with color-coded messages
@@ -48,7 +57,7 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
    - Threading for non-blocking command execution
    - Built with tkinter
 
-7. **main.py** - CLI Interface (Alternative)
+8. **main.py** - CLI Interface (Alternative)
    - Interactive command-line interface
    - User-friendly prompts and help system
    - Environment validation (checks for API key)
@@ -57,12 +66,17 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 
 ## Features Implemented
 
-### **NEW** AI Code Generation
+### **NEW** AI Code Generation (Comprehensive)
 - **Intelligent Code Writing**: Describe what you want in plain English
-- **Multi-Language Support**: Python, JavaScript, Java, C++, and more
+- **Auto-Language Detection**: Automatically detects language from description
+- **10+ Languages**: Python, JavaScript, Java, C, C++, C#, Ruby, Go, HTML, CSS
 - **Auto-Type to Editor**: Opens notepad/editor and types the code
-- **Educational Output**: Includes comments and best practices
-- Examples: "Write code for checking palindrome", "Generate bubble sort in Python"
+- **Educational Output**: Includes detailed comments and best practices
+- **Code Explanation**: Explain what any code does
+- **Code Improvement**: Get better versions of existing code
+- **Code Debugging**: Fix errors in broken code
+- **Clean Output**: Automatically removes markdown formatting
+- Examples: "Write code for checking palindrome", "Generate bubble sort"
 
 ### Natural Language Processing
 - AI-powered command interpretation using Gemini
@@ -153,6 +167,11 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - ✅ **NEW**: Created beautiful GUI application with tkinter
 - ✅ **NEW**: Modern dark theme interface with quick examples
 - ✅ **NEW**: Real-time output display and status indicators
+- ✅ **NEW**: Created comprehensive code_generator.py module
+- ✅ **NEW**: Auto-language detection from description
+- ✅ **NEW**: Added explain_code, improve_code, debug_code functions
+- ✅ **NEW**: Robust code cleaning and markdown removal
+- ✅ **NEW**: Support for 10+ programming languages
 
 ### Usage Notes
 - Application runs in **DEMO MODE** in Replit's cloud environment (no GUI available)

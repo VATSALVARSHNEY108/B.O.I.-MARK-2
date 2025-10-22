@@ -62,8 +62,11 @@ DESKTOP AUTOMATION:
 - wait: Wait for seconds (parameters: seconds)
 
 CODE GENERATION:
-- generate_code: Generate code using AI (parameters: description, language [optional, default: python])
+- generate_code: Generate code using AI and display it (parameters: description, language [optional, auto-detected])
 - write_code_to_editor: Generate code and write it to text editor (parameters: description, language [optional], editor [optional, default: notepad])
+- explain_code: Explain what code does (parameters: code, language [optional])
+- improve_code: Improve existing code (parameters: code, language [optional])
+- debug_code: Fix code errors (parameters: code, error_message, language [optional])
 
 MESSAGING & CONTACTS:
 - send_sms: Send SMS text message (parameters: contact_name OR phone, message)
@@ -79,8 +82,12 @@ IMPORTANT:
 - If user says "email John" or "send email to Sarah", use send_email
 - If user says "send this photo/file to John", use send_file with file_path
 - Extract contact names accurately (e.g., "John", "Sarah", "Mom", "Boss")
-- If user says "write code for X" or "generate code for X", use write_code_to_editor as a multi-step workflow that generates code, opens editor, and types it
-- Extract the programming task description accurately
+- If user says "write code for X" or "generate code for X", use write_code_to_editor action with description parameter
+- Extract the programming task description accurately from the user's command
+- Language is optional and will be auto-detected from the description if not specified
+- For "explain this code" or "what does this code do", use explain_code
+- For "improve this code" or "make this code better", use improve_code
+- For "fix this code" or "debug this error", use debug_code
 
 For multi-step tasks, return steps as a list. Each step should have action and parameters.
 
@@ -147,50 +154,3 @@ def get_ai_suggestion(context: str) -> str:
     except Exception as e:
         return f"Error getting suggestion: {str(e)}"
 
-def generate_code(description: str, language: str = "python") -> str:
-    """
-    Generate code using Gemini AI based on a description.
-    
-    Args:
-        description: Description of what the code should do
-        language: Programming language (default: python)
-    
-    Returns:
-        Generated code as a string
-    """
-    prompt = f"""Generate clean, well-commented {language} code for the following task:
-
-Task: {description}
-
-Requirements:
-- Write complete, working code
-- Include comments explaining the logic
-- Follow best practices for {language}
-- Make it beginner-friendly
-- Include example usage if applicable
-
-Respond ONLY with the code, no explanations before or after."""
-
-    try:
-        response = client.models.generate_content(
-            model="gemini-2.0-flash-exp",
-            contents=prompt
-        )
-        
-        if response.text:
-            code = response.text.strip()
-            # Remove markdown code blocks if present
-            if code.startswith("```"):
-                lines = code.split("\n")
-                # Remove first line (```python or similar)
-                lines = lines[1:]
-                # Remove last line if it's ```
-                if lines and lines[-1].strip() == "```":
-                    lines = lines[:-1]
-                code = "\n".join(lines)
-            return code
-        else:
-            return f"# Error: Could not generate code for {description}"
-            
-    except Exception as e:
-        return f"# Error generating code: {str(e)}"
