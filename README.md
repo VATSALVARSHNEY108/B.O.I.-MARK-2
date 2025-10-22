@@ -34,6 +34,7 @@ An **incredibly intelligent** desktop automation tool powered by Google's Gemini
 - **Screenshots**: Capture screen content
 - **Clipboard**: Copy and paste operations
 - **Web Search**: Quick web searches
+- **YouTube Integration**: Search and play YouTube videos
 - **File Operations**: Create files with content
 
 ### 📱 Messaging & Communication (Advanced)
@@ -86,6 +87,9 @@ python main.py
 - "Take a screenshot"
 - "Press enter"
 - "Search Google for Python tutorials"
+- "Search YouTube for funny cats"
+- "Play music video on YouTube"
+- "Open YouTube video [video URL]"
 
 **Multi-Step Workflows:**
 - "Open notepad and type my name"

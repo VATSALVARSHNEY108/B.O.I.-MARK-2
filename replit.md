@@ -136,6 +136,7 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - Screenshots
 - Clipboard operations (copy/paste)
 - Web search integration
+- **YouTube Integration**: Search and play videos
 - File creation
 - Wait/pause functionality
 
@@ -189,7 +190,7 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 
 ## Current State
 
-### Recent Changes (October 21, 2025)
+### Recent Changes (October 22, 2025)
 - ✅ Initial project setup with Python 3.11
 - ✅ Integrated Gemini AI for natural language processing
 - ✅ Implemented GUI automation module with PyAutoGUI
@@ -223,6 +224,9 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - ✅ **NEW**: Added workflow_templates.py for reusable workflows
 - ✅ **NEW**: Integrated 50+ new intelligent features
 - ✅ **NEW**: Created comprehensive FEATURES_GUIDE.md documentation
+- ✅ **NEW**: Added YouTube integration (search_youtube, open_youtube)
+- ✅ **NEW**: YouTube search and auto-play first video functionality
+- ✅ **NEW**: Updated Gemini AI prompt to understand YouTube commands
 
 ### Usage Notes
 - Application runs in **DEMO MODE** in Replit's cloud environment (no GUI available)
@@ -246,6 +250,9 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - "Take a screenshot"
 - "Press enter"
 - "Search Google for Python tutorials"
+- "Search YouTube for funny cats"
+- "Play music video on YouTube"
+- "Open YouTube video [URL]"
 
 ### **NEW** Messaging Commands
 - "Send this photo to John"

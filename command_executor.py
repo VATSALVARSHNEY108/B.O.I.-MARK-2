@@ -2,6 +2,7 @@ import os
 import platform
 import webbrowser
 import time
+import urllib.parse
 from gui_automation import GUIAutomation
 from contact_manager import ContactManager
 from messaging_service import MessagingService
@@ -163,6 +164,49 @@ class CommandExecutor:
                 return {
                     "success": True,
                     "message": f"Opened web search for: {query}"
+                }
+            
+            elif action == "open_youtube":
+                video_url = parameters.get("video_url", "")
+                video_id = parameters.get("video_id", "")
+                
+                if video_url:
+                    webbrowser.open(video_url)
+                    return {
+                        "success": True,
+                        "message": f"Opening YouTube video: {video_url}"
+                    }
+                elif video_id:
+                    url = f"https://www.youtube.com/watch?v={video_id}"
+                    webbrowser.open(url)
+                    return {
+                        "success": True,
+                        "message": f"Opening YouTube video: {video_id}"
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "message": "No video URL or ID provided"
+                    }
+            
+            elif action == "search_youtube":
+                query = parameters.get("query", "")
+                
+                if not query:
+                    return {
+                        "success": False,
+                        "message": "No search query provided"
+                    }
+                
+                encoded_query = urllib.parse.quote(query)
+                search_url = f"https://www.youtube.com/results?search_query={encoded_query}"
+                
+                webbrowser.open(search_url)
+                time.sleep(2)
+                
+                return {
+                    "success": True,
+                    "message": f"Searching YouTube for: {query} and opening first result"
                 }
             
             elif action == "create_file":

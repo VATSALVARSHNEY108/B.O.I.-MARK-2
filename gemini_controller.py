@@ -58,6 +58,8 @@ DESKTOP AUTOMATION:
 - copy: Copy text to clipboard (parameters: text)
 - paste: Paste from clipboard (parameters: none)
 - search_web: Search the web (parameters: query)
+- open_youtube: Open a YouTube video (parameters: video_url OR video_id)
+- search_youtube: Search YouTube and open first result (parameters: query)
 - create_file: Create a file (parameters: filename, content)
 - wait: Wait for seconds (parameters: seconds)
 
@@ -113,6 +115,9 @@ IMPORTANT:
 - For "explain this code" or "what does this code do", use explain_code
 - For "improve this code" or "make this code better", use improve_code
 - For "fix this code" or "debug this error", use debug_code
+- For "search YouTube for X" or "play X on YouTube", use search_youtube with query parameter
+- For "open youtube video [URL]" or "play this video [URL]", use open_youtube with video_url parameter
+- Extract YouTube search queries accurately (e.g., "funny cats", "music video", "tutorial")
 
 For multi-step tasks, return steps as a list. Each step should have action and parameters.
 
