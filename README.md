@@ -5,21 +5,24 @@ An **incredibly intelligent** desktop automation tool powered by Google's Gemini
 ## Features
 
 ### 🤖 AI Code Generation (Comprehensive!)
+- **Instant Templates**: Built-in code for common problems (works even if API is down!)
 - **Write Code Automatically**: Just describe what you want - "Write code for checking palindrome"
 - **Auto-Language Detection**: Automatically detects language from your description
 - **10+ Programming Languages**: Python, JavaScript, Java, C, C++, C#, Ruby, Go, HTML, CSS
-- **Auto-Type to Editor**: Generates code and types it directly into notepad or any text editor
+- **Auto-Paste to Editor**: Generates code and pastes it perfectly into notepad
 - **Smart & Educational**: Includes detailed comments and best practices
 - **Code Explanation**: Understand what any code does
 - **Code Improvement**: Get optimized versions of existing code
 - **Code Debugging**: Fix errors automatically
 - **Clean Output**: Removes markdown formatting automatically
+- **Built-in Templates**: Palindrome, Reverse Number, Fibonacci, Factorial, Prime, Bubble Sort, Binary Search
 - **Examples**:
-  - "Write code for checking palindrome"
-  - "Generate bubble sort algorithm"
-  - "Create JavaScript code for form validation"
-  - "Explain this code: [your code]"
-  - "Improve this code: [your code]"
+  - "Write code for checking palindrome" ⚡ (instant template!)
+  - "Write code for checking reverse number" ⚡ (instant template!)
+  - "Generate fibonacci sequence" ⚡ (instant template!)
+  - "Write code for factorial" ⚡ (instant template!)
+  - "Generate bubble sort algorithm" ⚡ (instant template!)
+  - "Create JavaScript code for form validation" (uses AI)
 
 ### 🎯 Natural Language Control
 - Issue commands in plain English - no coding required

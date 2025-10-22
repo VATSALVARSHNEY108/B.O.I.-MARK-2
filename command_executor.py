@@ -336,6 +336,10 @@ class CommandExecutor:
                 if result.get("success"):
                     code = result["code"]
                     detected_lang = result["language"]
+                    source = result.get("source", "ai")
+                    
+                    if source == "template":
+                        print(f"  ⚡ Using built-in template (instant!)")
                     
                     print(f"\n{'='*60}")
                     print(f"  Generated {detected_lang.upper()} Code:")
@@ -377,6 +381,10 @@ class CommandExecutor:
                 
                 code = result["code"]
                 detected_lang = result["language"]
+                source = result.get("source", "ai")
+                
+                if source == "template":
+                    print(f"  ⚡ Using built-in template (instant!)")
                 
                 print(f"\n  ✅ Generated {detected_lang} code ({len(code)} characters)")
                 print(f"  📝 Opening {editor}...")

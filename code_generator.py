@@ -6,6 +6,7 @@ Handles intelligent code generation for multiple programming languages
 import os
 from google import genai
 from google.genai import types
+from code_templates import get_template_code, list_available_templates
 
 client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
@@ -104,7 +105,7 @@ def clean_code_output(code: str) -> str:
 
 def generate_code(description: str, language: str | None = None) -> dict:
     """
-    Generate code using Gemini AI
+    Generate code using templates (fast) or Gemini AI (fallback)
     
     Args:
         description: What the code should do
@@ -124,6 +125,20 @@ def generate_code(description: str, language: str | None = None) -> dict:
         "editor": "notepad"
     })
     
+    # Try to get template code first (instant, reliable)
+    template_code = get_template_code(description, language)
+    if template_code:
+        return {
+            "success": True,
+            "code": template_code,
+            "language": language,
+            "extension": language_info["extension"],
+            "editor": language_info["editor"],
+            "description": description,
+            "source": "template"
+        }
+    
+    # Fall back to AI generation if no template available
     prompt = f"""You are an expert {language} programmer. Generate clean, well-documented code for the following task:
 
 TASK: {description}
@@ -158,7 +173,8 @@ Generate the {language} code now:"""
                 "language": language,
                 "extension": language_info["extension"],
                 "editor": language_info["editor"],
-                "description": description
+                "description": description,
+                "source": "ai"
             }
         else:
             return {
@@ -171,7 +187,7 @@ Generate the {language} code now:"""
         return {
             "success": False,
             "error": str(e),
-            "code": f"# Error generating code: {str(e)}"
+            "code": f"# Error generating code: {str(e)}\n# Try one of these: {', '.join(list_available_templates())}"
         }
 
 def generate_multiple_versions(description: str, language: str | None = None, count: int = 1) -> list:
