@@ -1,6 +1,6 @@
 # AI Desktop Automation Controller
 
-An intelligent desktop automation tool powered by Google's Gemini AI that understands natural language commands and executes them on your computer.
+An **incredibly intelligent** desktop automation tool powered by Google's Gemini AI with **50+ features** including AI Vision, system monitoring, advanced file management, code execution, and workflow automation. Control your computer with natural language!
 
 ## Features
 

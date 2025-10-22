@@ -49,7 +49,50 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
    - Language templates with file extensions and editors
    - Robust error handling and validation
 
-7. **gui_app.py** - Graphical User Interface (Primary Interface)
+7. **code_executor.py** - Code Execution Module
+   - **NEW**: Safely execute generated code
+   - Run Python and JavaScript code
+   - Safety validation before execution
+   - Timeout protection
+   - Capture output and errors
+
+8. **conversation_memory.py** - Memory & Context System
+   - **NEW**: Tracks conversation history
+   - Remembers previous commands and results
+   - Searchable history
+   - Usage statistics
+   - Persistent storage
+
+9. **screenshot_analyzer.py** - AI Vision Module
+   - **NEW**: Analyze screenshots with Gemini Vision
+   - Extract text from images (OCR)
+   - Find UI elements
+   - Compare screenshots
+   - Image understanding
+
+10. **system_monitor.py** - System Monitoring
+    - **NEW**: Monitor CPU, RAM, disk usage
+    - Network statistics
+    - Battery information
+    - Process management
+    - System health reports
+
+11. **advanced_file_operations.py** - File Management
+    - **NEW**: Advanced file operations
+    - Search files by pattern
+    - Find large files
+    - Calculate directory sizes
+    - Find duplicates
+    - Organize files by extension
+
+12. **workflow_templates.py** - Workflow Management
+    - **NEW**: Save and reuse workflows
+    - Template system
+    - Usage tracking
+    - Default templates
+    - Persistent storage
+
+13. **gui_app.py** - Graphical User Interface (Primary Interface)
    - **NEW**: Beautiful modern GUI with dark theme
    - Text input field with quick example buttons
    - Real-time output display with color-coded messages
@@ -57,7 +100,7 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
    - Threading for non-blocking command execution
    - Built with tkinter
 
-8. **main.py** - CLI Interface (Alternative)
+14. **main.py** - CLI Interface (Alternative)
    - Interactive command-line interface
    - User-friendly prompts and help system
    - Environment validation (checks for API key)
@@ -172,6 +215,14 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - ✅ **NEW**: Added explain_code, improve_code, debug_code functions
 - ✅ **NEW**: Robust code cleaning and markdown removal
 - ✅ **NEW**: Support for 10+ programming languages
+- ✅ **NEW**: Added code_executor.py for safe code execution
+- ✅ **NEW**: Added conversation_memory.py for context tracking
+- ✅ **NEW**: Added screenshot_analyzer.py for AI Vision
+- ✅ **NEW**: Added system_monitor.py for health monitoring
+- ✅ **NEW**: Added advanced_file_operations.py for file management
+- ✅ **NEW**: Added workflow_templates.py for reusable workflows
+- ✅ **NEW**: Integrated 50+ new intelligent features
+- ✅ **NEW**: Created comprehensive FEATURES_GUIDE.md documentation
 
 ### Usage Notes
 - Application runs in **DEMO MODE** in Replit's cloud environment (no GUI available)

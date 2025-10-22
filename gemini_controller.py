@@ -61,12 +61,37 @@ DESKTOP AUTOMATION:
 - create_file: Create a file (parameters: filename, content)
 - wait: Wait for seconds (parameters: seconds)
 
-CODE GENERATION:
+CODE GENERATION & EXECUTION:
 - generate_code: Generate code using AI and display it (parameters: description, language [optional, auto-detected])
 - write_code_to_editor: Generate code and write it to text editor (parameters: description, language [optional], editor [optional, default: notepad])
 - explain_code: Explain what code does (parameters: code, language [optional])
 - improve_code: Improve existing code (parameters: code, language [optional])
 - debug_code: Fix code errors (parameters: code, error_message, language [optional])
+- execute_code: Run code and show output (parameters: code, language [default: python])
+
+SCREENSHOT ANALYSIS (VISION AI):
+- analyze_screenshot: Analyze screenshot using AI vision (parameters: image_path, query [optional])
+- extract_text: Extract text from screenshot (OCR) (parameters: image_path)
+
+SYSTEM MONITORING:
+- system_report: Full system health report (CPU, RAM, disk, network)
+- check_cpu: Check CPU usage
+- check_memory: Check RAM usage
+- check_disk: Check disk space
+
+FILE MANAGEMENT:
+- search_files: Search for files (parameters: pattern, directory [optional])
+- find_large_files: Find large files (parameters: directory [optional], min_size_mb [optional])
+- directory_size: Get folder size (parameters: directory)
+
+WORKFLOW TEMPLATES:
+- save_workflow: Save workflow template (parameters: name, steps, description)
+- load_workflow: Run saved workflow (parameters: name)
+- list_workflows: Show all saved workflows
+
+CONVERSATION MEMORY:
+- show_history: Show recent command history
+- show_statistics: Show usage statistics
 
 MESSAGING & CONTACTS:
 - send_sms: Send SMS text message (parameters: contact_name OR phone, message)

@@ -6,6 +6,12 @@ from gui_automation import GUIAutomation
 from contact_manager import ContactManager
 from messaging_service import MessagingService
 from code_generator import generate_code, explain_code, improve_code, debug_code
+from conversation_memory import ConversationMemory
+from screenshot_analyzer import analyze_screenshot, extract_text_from_screenshot, get_screenshot_summary
+from system_monitor import get_cpu_usage, get_memory_usage, get_disk_usage, get_full_system_report, get_running_processes
+from advanced_file_operations import search_files, find_large_files, find_duplicate_files, organize_files_by_extension, find_old_files, get_directory_size
+from workflow_templates import WorkflowManager
+from code_executor import execute_python_code, execute_javascript_code, validate_code_safety
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -14,6 +20,8 @@ class CommandExecutor:
         self.gui = GUIAutomation()
         self.contact_manager = ContactManager()
         self.messaging = MessagingService(self.contact_manager)
+        self.memory = ConversationMemory()
+        self.workflow_manager = WorkflowManager()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -403,6 +411,232 @@ class CommandExecutor:
                     return {
                         "success": False,
                         "message": f"Error: {result.get('error')}"
+                    }
+            
+            elif action == "analyze_screenshot":
+                image_path = parameters.get("image_path", "screenshot.png")
+                query = parameters.get("query", "Describe what you see")
+                
+                print(f"  🔍 Analyzing screenshot: {image_path}...")
+                analysis = analyze_screenshot(image_path, query)
+                
+                print(f"\n{'='*60}")
+                print(f"  Screenshot Analysis:")
+                print(f"{'='*60}")
+                print(analysis)
+                print(f"{'='*60}\n")
+                
+                return {
+                    "success": True,
+                    "message": "Screenshot analyzed",
+                    "analysis": analysis
+                }
+            
+            elif action == "extract_text":
+                image_path = parameters.get("image_path", "screenshot.png")
+                
+                print(f"  📝 Extracting text from: {image_path}...")
+                text = extract_text_from_screenshot(image_path)
+                
+                print(f"\n  Extracted Text:\n{text}\n")
+                
+                return {
+                    "success": True,
+                    "message": "Text extracted from screenshot",
+                    "text": text
+                }
+            
+            elif action == "system_report":
+                print(f"  📊 Generating system report...")
+                report = get_full_system_report()
+                
+                print(report)
+                
+                return {
+                    "success": True,
+                    "message": "System report generated",
+                    "report": report
+                }
+            
+            elif action == "check_cpu":
+                cpu = get_cpu_usage()
+                msg = f"CPU Usage: {cpu['usage_percent']}% ({cpu['status']})"
+                print(f"  {msg}")
+                return {"success": True, "message": msg, "data": cpu}
+            
+            elif action == "check_memory":
+                mem = get_memory_usage()
+                msg = f"Memory: {mem['used_gb']}/{mem['total_gb']} ({mem['usage_percent']}% - {mem['status']})"
+                print(f"  {msg}")
+                return {"success": True, "message": msg, "data": mem}
+            
+            elif action == "check_disk":
+                disk = get_disk_usage()
+                msg = f"Disk: {disk['used_gb']}/{disk['total_gb']} ({disk['usage_percent']}% - {disk['status']})"
+                print(f"  {msg}")
+                return {"success": True, "message": msg, "data": disk}
+            
+            elif action == "search_files":
+                pattern = parameters.get("pattern", "*")
+                directory = parameters.get("directory", ".")
+                
+                print(f"  🔍 Searching for files: {pattern}")
+                files = search_files(pattern, directory)
+                
+                msg = f"Found {len(files)} files matching '{pattern}'"
+                print(f"\n  {msg}")
+                for f in files[:20]:
+                    print(f"    • {f}")
+                if len(files) > 20:
+                    print(f"    ... and {len(files)-20} more")
+                
+                return {
+                    "success": True,
+                    "message": msg,
+                    "files": files
+                }
+            
+            elif action == "find_large_files":
+                directory = parameters.get("directory", ".")
+                min_size = parameters.get("min_size_mb", 10)
+                
+                print(f"  🔍 Finding large files (>{min_size}MB)...")
+                large_files = find_large_files(directory, min_size)
+                
+                print(f"\n  Found {len(large_files)} large files:")
+                for f in large_files[:10]:
+                    print(f"    • {f['size_mb']} - {f['path']}")
+                
+                return {
+                    "success": True,
+                    "message": f"Found {len(large_files)} large files",
+                    "files": large_files
+                }
+            
+            elif action == "directory_size":
+                directory = parameters.get("directory", ".")
+                
+                print(f"  📊 Calculating directory size...")
+                size_info = get_directory_size(directory)
+                
+                msg = f"{directory}: {size_info['total_size_gb']} ({size_info['file_count']} files)"
+                print(f"  {msg}")
+                
+                return {
+                    "success": True,
+                    "message": msg,
+                    "data": size_info
+                }
+            
+            elif action == "save_workflow":
+                name = parameters.get("name", "")
+                steps = parameters.get("steps", [])
+                description = parameters.get("description", "")
+                
+                if not name or not steps:
+                    return {
+                        "success": False,
+                        "message": "Workflow name and steps required"
+                    }
+                
+                success = self.workflow_manager.save_workflow(name, steps, description)
+                return {
+                    "success": success,
+                    "message": f"Workflow '{name}' saved" if success else "Failed to save workflow"
+                }
+            
+            elif action == "load_workflow":
+                name = parameters.get("name", "")
+                
+                workflow = self.workflow_manager.load_workflow(name)
+                if workflow:
+                    return self.execute_workflow(workflow["steps"])
+                else:
+                    return {
+                        "success": False,
+                        "message": f"Workflow '{name}' not found"
+                    }
+            
+            elif action == "list_workflows":
+                workflows = self.workflow_manager.list_workflows()
+                
+                print(f"\n  📋 Saved Workflows ({len(workflows)}):")
+                for w in workflows:
+                    print(f"    • {w['name']}: {w['description']} ({w['steps_count']} steps, used {w['usage_count']} times)")
+                
+                return {
+                    "success": True,
+                    "message": f"Found {len(workflows)} workflows",
+                    "workflows": workflows
+                }
+            
+            elif action == "show_history":
+                history = self.memory.get_recent_history(10)
+                
+                print(f"\n  📜 Recent Command History:")
+                for entry in history:
+                    status = "✅" if entry["result"]["success"] else "❌"
+                    print(f"    {status} {entry['user_input']}")
+                
+                return {
+                    "success": True,
+                    "message": f"Showing {len(history)} recent commands",
+                    "history": history
+                }
+            
+            elif action == "show_statistics":
+                stats = self.memory.get_statistics()
+                
+                msg = f"Total: {stats['total_commands']}, Success: {stats['successful']}, Failed: {stats['failed']}, Success Rate: {stats['success_rate']}"
+                print(f"\n  📊 Statistics: {msg}")
+                
+                return {
+                    "success": True,
+                    "message": msg,
+                    "statistics": stats
+                }
+            
+            elif action == "execute_code":
+                code = parameters.get("code", "")
+                language = parameters.get("language", "python").lower()
+                
+                if not code:
+                    return {
+                        "success": False,
+                        "message": "No code provided to execute"
+                    }
+                
+                safety_check = validate_code_safety(code, language)
+                if not safety_check["is_safe"]:
+                    return {
+                        "success": False,
+                        "message": f"Code safety check failed: {', '.join(safety_check['warnings'])}"
+                    }
+                
+                print(f"  ▶️  Executing {language} code...")
+                
+                if language == "python":
+                    result = execute_python_code(code)
+                elif language == "javascript":
+                    result = execute_javascript_code(code)
+                else:
+                    return {
+                        "success": False,
+                        "message": f"Execution not supported for {language}"
+                    }
+                
+                if result["success"]:
+                    print(f"\n  ✅ Output:\n{result['output']}")
+                    return {
+                        "success": True,
+                        "message": "Code executed successfully",
+                        "output": result["output"]
+                    }
+                else:
+                    print(f"\n  ❌ Error:\n{result['error']}")
+                    return {
+                        "success": False,
+                        "message": f"Execution failed: {result['error']}"
                     }
             
             elif action == "error":
