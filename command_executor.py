@@ -384,8 +384,12 @@ class CommandExecutor:
                 self.gui.open_application(editor)
                 time.sleep(2)
                 
-                print(f"  ⌨️  Typing code into editor...")
-                self.gui.type_text(code, interval=0.01)
+                print(f"  📋 Copying code to clipboard...")
+                self.gui.copy_to_clipboard(code)
+                time.sleep(0.5)
+                
+                print(f"  📝 Pasting code into editor...")
+                self.gui.paste_from_clipboard()
                 
                 print(f"  ✅ Done! Code written to {editor}")
                 
