@@ -102,14 +102,18 @@ class GUIAutomation:
             return False
     
     def click_at_position(self, x: int, y: int, button: str = 'left') -> bool:
-        """Click at a specific screen position - wrapper for clarity"""
+        """Click at a specific screen position with a single click"""
         try:
             if self.demo_mode:
-                self._log_demo(f"Would click at position ({x}, {y})")
+                self._log_demo(f"Would single click at position ({x}, {y})")
                 return True
             
-            print(f"  🖱️  Clicking at position ({x}, {y})")
-            pyautogui.click(x, y, button=button)
+            print(f"  🖱️  Single clicking at position ({x}, {y})")
+            # Move to position first, then do a single left-click
+            pyautogui.moveTo(x, y, duration=0.2)
+            time.sleep(0.1)
+            # Explicitly set clicks=1 for single click only
+            pyautogui.click(x, y, button='left', clicks=1)
             return True
         except Exception as e:
             print(f"Error clicking at position: {e}")
