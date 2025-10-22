@@ -106,11 +106,20 @@ MESSAGING & CONTACTS:
 - list_contacts: List all contacts (parameters: none)
 - get_contact: Get contact details (parameters: name)
 
+WHATSAPP MESSAGING:
+- send_whatsapp: Send WhatsApp message instantly (parameters: phone, message)
+- send_whatsapp_scheduled: Schedule WhatsApp message (parameters: phone, message, hour, minute)
+- send_whatsapp_group: Send message to WhatsApp group (parameters: group_id, message)
+- send_whatsapp_image: Send image via WhatsApp (parameters: phone, image_path, caption [optional])
+
 IMPORTANT:
 - For "send to [name]" commands, use contact_name parameter
 - If user says "text John" or "message Sarah", use send_sms
 - If user says "email John" or "send email to Sarah", use send_email
 - If user says "send this photo/file to John", use send_file with file_path
+- If user says "whatsapp [name/number]" or "send whatsapp to [name/number]", use send_whatsapp
+- For WhatsApp, phone must include country code (e.g., "+1234567890")
+- If user says "schedule whatsapp at 3pm", use send_whatsapp_scheduled with hour=15
 - Extract contact names accurately (e.g., "John", "Sarah", "Mom", "Boss")
 - If user says "write code for X" or "generate code for X", use write_code_to_editor action with description parameter
 - Extract the programming task description accurately from the user's command

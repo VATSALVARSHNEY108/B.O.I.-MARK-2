@@ -7,6 +7,7 @@ from gui_automation import GUIAutomation
 from contact_manager import ContactManager
 from messaging_service import MessagingService
 from youtube_automation import create_youtube_automation
+from whatsapp_automation import create_whatsapp_automation
 from code_generator import generate_code, explain_code, improve_code, debug_code
 from conversation_memory import ConversationMemory
 from screenshot_analyzer import analyze_screenshot, extract_text_from_screenshot, get_screenshot_summary
@@ -25,6 +26,7 @@ class CommandExecutor:
         self.memory = ConversationMemory()
         self.workflow_manager = WorkflowManager()
         self.youtube = create_youtube_automation(self.gui)
+        self.whatsapp = create_whatsapp_automation()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -278,6 +280,67 @@ class CommandExecutor:
                 message = parameters.get("message", "")
                 method = parameters.get("method", "auto")
                 result = self.messaging.send_file(contact_name, file_path, message, method)
+                return result
+            
+            elif action == "send_whatsapp":
+                phone = parameters.get("phone", "")
+                message = parameters.get("message", "")
+                
+                if not phone:
+                    return {
+                        "success": False,
+                        "message": "No phone number provided"
+                    }
+                
+                if not message:
+                    return {
+                        "success": False,
+                        "message": "No message provided"
+                    }
+                
+                result = self.whatsapp.send_message_instantly(phone, message)
+                return result
+            
+            elif action == "send_whatsapp_scheduled":
+                phone = parameters.get("phone", "")
+                message = parameters.get("message", "")
+                hour = parameters.get("hour", 0)
+                minute = parameters.get("minute", 0)
+                
+                if not phone or not message:
+                    return {
+                        "success": False,
+                        "message": "Phone number and message are required"
+                    }
+                
+                result = self.whatsapp.send_message_scheduled(phone, message, hour, minute)
+                return result
+            
+            elif action == "send_whatsapp_group":
+                group_id = parameters.get("group_id", "")
+                message = parameters.get("message", "")
+                
+                if not group_id or not message:
+                    return {
+                        "success": False,
+                        "message": "Group ID and message are required"
+                    }
+                
+                result = self.whatsapp.send_to_group_instantly(group_id, message)
+                return result
+            
+            elif action == "send_whatsapp_image":
+                phone = parameters.get("phone", "")
+                image_path = parameters.get("image_path", "")
+                caption = parameters.get("caption", "")
+                
+                if not phone or not image_path:
+                    return {
+                        "success": False,
+                        "message": "Phone number and image path are required"
+                    }
+                
+                result = self.whatsapp.send_image(phone, image_path, caption)
                 return result
             
             elif action == "add_contact":
