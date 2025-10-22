@@ -22,8 +22,8 @@ class YouTubeAutomation:
     
     def play_video_method_1(self, query):
         """
-        Method 1: Open YouTube homepage, search, then navigate to first video
-        Most reliable across different browsers
+        Method 1: Open YouTube homepage, search, then click first video with mouse
+        Most reliable across different browsers - uses mouse click instead of keyboard
         """
         print(f"  🎬 Method 1: Opening YouTube homepage...")
         webbrowser.open("https://www.youtube.com")
@@ -41,68 +41,50 @@ class YouTubeAutomation:
         # Press Enter to search
         print(f"  🔎 Executing search...")
         self.gui.press_key('enter')
-        time.sleep(3)
+        time.sleep(4)
         
-        # Navigate to first video
-        print(f"  🎯 Navigating to first video...")
-        for i in range(6):
-            self.gui.press_key('tab')
-            time.sleep(0.3)
-        
-        # Play video
-        print(f"  ▶️  Playing video...")
-        self.gui.press_key('enter')
+        # Click on first video thumbnail using mouse
+        print(f"  🎯 Clicking first video thumbnail...")
+        # Typical position of first video thumbnail on YouTube search results
+        # This is approximate and works for most screen resolutions
+        self.gui.click_at_position(400, 400)
         
         return True
     
     def play_video_method_2(self, query):
         """
-        Method 2: Direct search URL, then keyboard navigation
-        Faster but may need adjustment based on browser
+        Method 2: Direct search URL, then mouse click on first video
+        Faster and more reliable - uses mouse instead of keyboard navigation
         """
         print(f"  🎬 Method 2: Using direct search URL...")
         encoded_query = urllib.parse.quote(query)
         search_url = f"https://www.youtube.com/results?search_query={encoded_query}"
         
         webbrowser.open(search_url)
-        time.sleep(3)
+        time.sleep(4)
         
-        print(f"  🎯 Navigating to first video...")
-        # Tab through to first video (may vary by browser)
-        for i in range(4):
-            self.gui.press_key('tab')
-            time.sleep(0.3)
-        
-        # Play video
-        print(f"  ▶️  Playing video...")
-        self.gui.press_key('enter')
+        print(f"  🎯 Clicking first video...")
+        # Click on the first video thumbnail
+        self.gui.click_at_position(400, 400)
         
         return True
     
     def play_video_method_3(self, query):
         """
-        Method 3: Search URL with auto-play trick
-        Opens search results and uses keyboard shortcut
+        Method 3: Search URL with mouse click at alternative position
+        Opens search results and clicks at a different screen position
         """
-        print(f"  🎬 Method 3: Using search with keyboard shortcuts...")
+        print(f"  🎬 Method 3: Using search with alternative click position...")
         encoded_query = urllib.parse.quote(query)
         search_url = f"https://www.youtube.com/results?search_query={encoded_query}"
         
         webbrowser.open(search_url)
-        time.sleep(3)
+        time.sleep(4)
         
-        # Try using keyboard navigation
-        print(f"  🎯 Using smart navigation...")
-        # Press Tab a few times to get to first video
-        self.gui.press_key('tab')
-        time.sleep(0.2)
-        self.gui.press_key('tab')
-        time.sleep(0.2)
-        self.gui.press_key('tab')
-        time.sleep(0.2)
-        
-        # Press Enter
-        self.gui.press_key('enter')
+        # Click at alternative position for first video
+        print(f"  🎯 Clicking first video (alternative position)...")
+        # Try clicking slightly to the right in case of different layouts
+        self.gui.click_at_position(500, 350)
         
         return True
     
@@ -188,14 +170,14 @@ class YouTubeAutomation:
                 "message": f"❌ Error: {str(e)}"
             }
     
-    def play_first_result(self, wait_time=3, tab_count=6):
+    def play_first_result(self, wait_time=3, use_mouse=True):
         """
         Play the first video from current YouTube search results page.
         This assumes you're already on a YouTube search results page.
         
         Args:
             wait_time: Seconds to wait for page to load (default: 3)
-            tab_count: Number of Tab presses to reach first video (default: 6)
+            use_mouse: Use mouse click instead of keyboard (default: True)
         
         Returns:
             Success status and message
@@ -204,15 +186,22 @@ class YouTubeAutomation:
             print(f"  ⏳ Waiting {wait_time}s for page to load...")
             time.sleep(wait_time)
             
-            print(f"  🎯 Navigating to first video...")
-            # Tab through page elements to reach first video
-            for i in range(tab_count):
-                self.gui.press_key('tab')
-                time.sleep(0.3)
+            if use_mouse:
+                print(f"  🎯 Clicking first video with mouse...")
+                # Click on first video thumbnail position
+                self.gui.click_at_position(400, 400)
+            else:
+                print(f"  🎯 Navigating to first video with keyboard...")
+                # Fallback: use keyboard navigation but skip voice search button
+                # Usually voice search is one of the early tab stops, so we skip more
+                for i in range(8):  # Increased from 6 to skip voice search
+                    self.gui.press_key('tab')
+                    time.sleep(0.3)
+                
+                # Play the video
+                print(f"  ▶️  Playing first video...")
+                self.gui.press_key('enter')
             
-            # Play the video
-            print(f"  ▶️  Playing first video...")
-            self.gui.press_key('enter')
             time.sleep(1)
             
             return {
@@ -226,7 +215,7 @@ class YouTubeAutomation:
                 "message": f"❌ Error playing first result: {str(e)}"
             }
     
-    def search_and_play(self, query, wait_time=3, tab_count=6):
+    def search_and_play(self, query, wait_time=3, use_mouse=True):
         """
         Search YouTube and immediately play the first result.
         Combines search_only() and play_first_result().
@@ -234,7 +223,7 @@ class YouTubeAutomation:
         Args:
             query: Search query
             wait_time: Seconds to wait after search (default: 3)
-            tab_count: Number of Tab presses to reach first video (default: 6)
+            use_mouse: Use mouse click instead of keyboard (default: True)
         
         Returns:
             Success status and message
@@ -247,7 +236,7 @@ class YouTubeAutomation:
             webbrowser.open(search_url)
             
             # Then play first result
-            result = self.play_first_result(wait_time, tab_count)
+            result = self.play_first_result(wait_time, use_mouse)
             
             if result["success"]:
                 result["message"] = f"✅ Searched and playing: {query}"
