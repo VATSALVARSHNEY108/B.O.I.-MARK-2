@@ -6,6 +6,7 @@ import urllib.parse
 from gui_automation import GUIAutomation
 from contact_manager import ContactManager
 from messaging_service import MessagingService
+from youtube_automation import create_youtube_automation
 from code_generator import generate_code, explain_code, improve_code, debug_code
 from conversation_memory import ConversationMemory
 from screenshot_analyzer import analyze_screenshot, extract_text_from_screenshot, get_screenshot_summary
@@ -23,6 +24,7 @@ class CommandExecutor:
         self.messaging = MessagingService(self.contact_manager)
         self.memory = ConversationMemory()
         self.workflow_manager = WorkflowManager()
+        self.youtube = create_youtube_automation(self.gui)
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -171,18 +173,12 @@ class CommandExecutor:
                 video_id = parameters.get("video_id", "")
                 
                 if video_url:
-                    webbrowser.open(video_url)
-                    return {
-                        "success": True,
-                        "message": f"Opening YouTube video: {video_url}"
-                    }
+                    result = self.youtube.open_video_url(video_url)
+                    return result
                 elif video_id:
                     url = f"https://www.youtube.com/watch?v={video_id}"
-                    webbrowser.open(url)
-                    return {
-                        "success": True,
-                        "message": f"Opening YouTube video: {video_id}"
-                    }
+                    result = self.youtube.open_video_url(url)
+                    return result
                 else:
                     return {
                         "success": False,
@@ -198,19 +194,13 @@ class CommandExecutor:
                         "message": "No search query provided"
                     }
                 
-                encoded_query = urllib.parse.quote(query)
-                search_url = f"https://www.youtube.com/results?search_query={encoded_query}"
-                
-                webbrowser.open(search_url)
-                time.sleep(2)
-                
-                return {
-                    "success": True,
-                    "message": f"Searching YouTube for: {query} and opening first result"
-                }
+                # Use smart YouTube automation for search
+                result = self.youtube.search_only(query)
+                return result
             
             elif action == "play_youtube_video":
                 query = parameters.get("query", "")
+                method = parameters.get("method", "auto")
                 
                 if not query:
                     return {
@@ -218,27 +208,13 @@ class CommandExecutor:
                         "message": "No search query provided"
                     }
                 
-                print(f"  🔍 Searching YouTube for: {query}")
-                encoded_query = urllib.parse.quote(query)
-                search_url = f"https://www.youtube.com/results?search_query={encoded_query}"
+                print(f"  🎬 Smart YouTube Player Activated")
+                print(f"  🔍 Query: {query}")
                 
-                webbrowser.open(search_url)
-                print(f"  ⏳ Waiting for YouTube to load...")
-                time.sleep(3)
+                # Use the smart YouTube automation module
+                result = self.youtube.smart_play_video(query, method)
                 
-                print(f"  🎯 Selecting first video...")
-                self.gui.press_key('tab')
-                time.sleep(0.5)
-                self.gui.press_key('tab')
-                time.sleep(0.5)
-                self.gui.press_key('tab')
-                time.sleep(0.5)
-                self.gui.press_key('enter')
-                
-                return {
-                    "success": True,
-                    "message": f"Playing first video for: {query}"
-                }
+                return result
             
             elif action == "create_file":
                 filename = parameters.get("filename", "")

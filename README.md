@@ -37,7 +37,7 @@ An **incredibly intelligent** desktop automation tool powered by Google's Gemini
 - **Screenshots**: Capture screen content
 - **Clipboard**: Copy and paste operations
 - **Web Search**: Quick web searches
-- **YouTube Integration**: Search and play YouTube videos
+- **Smart YouTube Integration**: Intelligent video search and auto-play with 3 fallback methods
 - **File Operations**: Create files with content
 
 ### 📱 Messaging & Communication (Advanced)

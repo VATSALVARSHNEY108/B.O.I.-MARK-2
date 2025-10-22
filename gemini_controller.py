@@ -116,11 +116,13 @@ IMPORTANT:
 - For "explain this code" or "what does this code do", use explain_code
 - For "improve this code" or "make this code better", use improve_code
 - For "fix this code" or "debug this error", use debug_code
-- For "play video X" or "play X video", use play_youtube_video to auto-play first result
+- For "play video X" or "play X" or "watch X video", use play_youtube_video to auto-play first result
 - For "search YouTube for X", use search_youtube to just show search results
 - For "open youtube video [URL]" or "play this video [URL]", use open_youtube with video_url parameter
 - Extract YouTube search queries accurately (e.g., "funny cats", "music video", "tutorial")
-- When user says "play video", they want the first video to auto-play, so use play_youtube_video
+- When user says "play", "watch", "show me", they want auto-play, so use play_youtube_video
+- Default to play_youtube_video for any video-related requests unless explicitly asked to just search
+- Examples that should use play_youtube_video: "play song X", "watch funny videos", "show me tutorial", "play music"
 
 For multi-step tasks, return steps as a list. Each step should have action and parameters.
 
