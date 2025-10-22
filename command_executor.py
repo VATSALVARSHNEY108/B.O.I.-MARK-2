@@ -216,6 +216,31 @@ class CommandExecutor:
                 
                 return result
             
+            elif action == "play_first_result":
+                wait_time = parameters.get("wait_time", 3)
+                tab_count = parameters.get("tab_count", 6)
+                
+                print(f"  ▶️  Playing first video from current search results...")
+                result = self.youtube.play_first_result(wait_time, tab_count)
+                
+                return result
+            
+            elif action == "search_and_play":
+                query = parameters.get("query", "")
+                wait_time = parameters.get("wait_time", 3)
+                tab_count = parameters.get("tab_count", 6)
+                
+                if not query:
+                    return {
+                        "success": False,
+                        "message": "No search query provided"
+                    }
+                
+                print(f"  🎬 Searching and playing: {query}")
+                result = self.youtube.search_and_play(query, wait_time, tab_count)
+                
+                return result
+            
             elif action == "create_file":
                 filename = parameters.get("filename", "")
                 content = parameters.get("content", "")

@@ -240,6 +240,9 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - ✅ **NEW**: Smart YouTube player with 3 different fallback methods
 - ✅ **NEW**: Enhanced AI understanding of video-related commands
 - ✅ **NEW**: Automatic search, navigation, and playback in one command
+- ✅ **NEW**: Added play_first_result() function to play first video from search page
+- ✅ **NEW**: Added search_and_play() function for combined search + play action
+- ✅ **NEW**: Support for "play the first video" command after searching
 
 ### Usage Notes
 - Application runs in **DEMO MODE** in Replit's cloud environment (no GUI available)

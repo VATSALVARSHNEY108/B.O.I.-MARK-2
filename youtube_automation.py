@@ -187,6 +187,80 @@ class YouTubeAutomation:
                 "success": False,
                 "message": f"❌ Error: {str(e)}"
             }
+    
+    def play_first_result(self, wait_time=3, tab_count=6):
+        """
+        Play the first video from current YouTube search results page.
+        This assumes you're already on a YouTube search results page.
+        
+        Args:
+            wait_time: Seconds to wait for page to load (default: 3)
+            tab_count: Number of Tab presses to reach first video (default: 6)
+        
+        Returns:
+            Success status and message
+        """
+        try:
+            print(f"  ⏳ Waiting {wait_time}s for page to load...")
+            time.sleep(wait_time)
+            
+            print(f"  🎯 Navigating to first video...")
+            # Tab through page elements to reach first video
+            for i in range(tab_count):
+                self.gui.press_key('tab')
+                time.sleep(0.3)
+            
+            # Play the video
+            print(f"  ▶️  Playing first video...")
+            self.gui.press_key('enter')
+            time.sleep(1)
+            
+            return {
+                "success": True,
+                "message": "✅ Playing first video from search results"
+            }
+        
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"❌ Error playing first result: {str(e)}"
+            }
+    
+    def search_and_play(self, query, wait_time=3, tab_count=6):
+        """
+        Search YouTube and immediately play the first result.
+        Combines search_only() and play_first_result().
+        
+        Args:
+            query: Search query
+            wait_time: Seconds to wait after search (default: 3)
+            tab_count: Number of Tab presses to reach first video (default: 6)
+        
+        Returns:
+            Success status and message
+        """
+        try:
+            # First, perform the search
+            print(f"  🔍 Searching YouTube for: {query}")
+            encoded_query = urllib.parse.quote(query)
+            search_url = f"https://www.youtube.com/results?search_query={encoded_query}"
+            webbrowser.open(search_url)
+            
+            # Then play first result
+            result = self.play_first_result(wait_time, tab_count)
+            
+            if result["success"]:
+                result["message"] = f"✅ Searched and playing: {query}"
+                result["query"] = query
+            
+            return result
+        
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"❌ Error: {str(e)}",
+                "query": query
+            }
 
 
 def create_youtube_automation(gui_automation):

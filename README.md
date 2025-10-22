@@ -92,6 +92,7 @@ python main.py
 - "Search Google for Python tutorials"
 - "Play video funny cats" (auto-plays first YouTube video)
 - "Play video music" (searches and plays first result)
+- "Play the first video" (plays first result from current search page)
 - "Search YouTube for tutorials" (just shows search results)
 - "Open YouTube video [video URL]"
 

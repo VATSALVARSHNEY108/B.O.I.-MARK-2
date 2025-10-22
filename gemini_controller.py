@@ -61,6 +61,8 @@ DESKTOP AUTOMATION:
 - open_youtube: Open a YouTube video (parameters: video_url OR video_id)
 - search_youtube: Search YouTube and show results (parameters: query)
 - play_youtube_video: Search YouTube and auto-play first video (parameters: query)
+- play_first_result: Play the first video from current YouTube search page (parameters: none)
+- search_and_play: Search YouTube and play first result (parameters: query) - Alternative to play_youtube_video
 - create_file: Create a file (parameters: filename, content)
 - wait: Wait for seconds (parameters: seconds)
 
