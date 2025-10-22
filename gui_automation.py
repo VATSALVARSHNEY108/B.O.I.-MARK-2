@@ -12,7 +12,9 @@ try:
     import pyperclip
     GUI_AVAILABLE = True
     pyautogui.FAILSAFE = True
-    pyautogui.PAUSE = 0.5
+    pyautogui.PAUSE = 0.1
+    pyautogui.MINIMUM_DURATION = 0
+    pyautogui.MINIMUM_SLEEP = 0
 except Exception as e:
     GUI_AVAILABLE = False
     print(f"⚠️  GUI automation not available in this environment: {e}")
@@ -25,14 +27,96 @@ class GUIAutomation:
         self.demo_mode = not GUI_AVAILABLE
         if GUI_AVAILABLE:
             self.screen_width, self.screen_height = pyautogui.size()
+            print(f"📺 Screen size detected: {self.screen_width}x{self.screen_height}")
         else:
             self.screen_width, self.screen_height = 1920, 1080
             print(f"📺 Simulated screen size: {self.screen_width}x{self.screen_height}")
+        
+        self.system = platform.system()
     
     def _log_demo(self, action: str):
         """Log demo mode actions"""
         if self.demo_mode:
             print(f"  [DEMO] {action}")
+    
+    def single_click(self, x: int, y: int) -> bool:
+        """Perform a single left-click at position using mouseDown/mouseUp to avoid double-click"""
+        try:
+            if self.demo_mode:
+                self._log_demo(f"Would single click at ({x}, {y})")
+                return True
+            
+            print(f"  🖱️  Single click at ({x}, {y})")
+            pyautogui.moveTo(x, y, duration=0.15)
+            time.sleep(0.15)
+            pyautogui.mouseDown(x, y, button='left')
+            time.sleep(0.05)
+            pyautogui.mouseUp(x, y, button='left')
+            time.sleep(0.2)
+            return True
+        except Exception as e:
+            print(f"Error single clicking: {e}")
+            return False
+    
+    def double_click(self, x: int, y: int) -> bool:
+        """Perform a double-click at position"""
+        try:
+            if self.demo_mode:
+                self._log_demo(f"Would double click at ({x}, {y})")
+                return True
+            
+            print(f"  🖱️  Double click at ({x}, {y})")
+            pyautogui.moveTo(x, y, duration=0.15)
+            time.sleep(0.1)
+            pyautogui.click(x, y, clicks=2, interval=0.1)
+            return True
+        except Exception as e:
+            print(f"Error double clicking: {e}")
+            return False
+    
+    def click_at_position(self, x: int, y: int) -> bool:
+        """Single click at a specific position - wrapper for clarity"""
+        return self.single_click(x, y)
+    
+    def get_relative_position(self, width_percent: float, height_percent: float) -> tuple:
+        """Get screen position based on percentage of screen size"""
+        x = int(self.screen_width * width_percent / 100)
+        y = int(self.screen_height * height_percent / 100)
+        return (x, y)
+    
+    def focus_browser_address_bar(self) -> bool:
+        """Focus the browser's address bar"""
+        try:
+            if self.demo_mode:
+                self._log_demo("Would focus browser address bar")
+                return True
+            
+            print(f"  🌐 Focusing browser address bar...")
+            if self.system == "Darwin":
+                pyautogui.hotkey('command', 'l')
+            else:
+                pyautogui.hotkey('ctrl', 'l')
+            time.sleep(0.3)
+            return True
+        except Exception as e:
+            print(f"Error focusing address bar: {e}")
+            return False
+    
+    def activate_window(self) -> bool:
+        """Click on the window to activate/focus it"""
+        try:
+            if self.demo_mode:
+                self._log_demo("Would activate window")
+                return True
+            
+            center_x = self.screen_width // 2
+            center_y = self.screen_height // 2
+            pyautogui.click(center_x, center_y)
+            time.sleep(0.2)
+            return True
+        except Exception as e:
+            print(f"Error activating window: {e}")
+            return False
     
     def open_application(self, app_name: str) -> bool:
         """Open an application based on the operating system"""
@@ -41,21 +125,19 @@ class GUIAutomation:
                 self._log_demo(f"Would open application: {app_name}")
                 return True
             
-            system = platform.system()
-            
-            if system == "Windows":
+            if self.system == "Windows":
                 pyautogui.press('win')
                 time.sleep(0.5)
                 pyautogui.write(app_name, interval=0.1)
                 time.sleep(0.5)
                 pyautogui.press('enter')
-            elif system == "Darwin":
+            elif self.system == "Darwin":
                 pyautogui.hotkey('command', 'space')
                 time.sleep(0.5)
                 pyautogui.write(app_name, interval=0.1)
                 time.sleep(0.5)
                 pyautogui.press('enter')
-            elif system == "Linux":
+            elif self.system == "Linux":
                 pyautogui.hotkey('alt', 'f2')
                 time.sleep(0.5)
                 pyautogui.write(app_name, interval=0.1)
@@ -82,6 +164,25 @@ class GUIAutomation:
             print(f"Error typing text: {e}")
             return False
     
+    def paste_text(self, text: str) -> bool:
+        """Paste text using clipboard"""
+        try:
+            if self.demo_mode:
+                self._log_demo(f"Would paste: '{text[:50]}...'")
+                return True
+            
+            pyperclip.copy(text)
+            time.sleep(0.1)
+            if self.system == "Darwin":
+                pyautogui.hotkey('command', 'v')
+            else:
+                pyautogui.hotkey('ctrl', 'v')
+            time.sleep(0.1)
+            return True
+        except Exception as e:
+            print(f"Error pasting text: {e}")
+            return False
+    
     def click(self, x: int | None = None, y: int | None = None, button: str = 'left', clicks: int = 1) -> bool:
         """Click at specified position or current position"""
         try:
@@ -93,30 +194,15 @@ class GUIAutomation:
                 return True
             
             if x is not None and y is not None:
-                pyautogui.click(x, y, button=button, clicks=clicks)
+                if clicks == 1:
+                    return self.single_click(x, y)
+                else:
+                    pyautogui.click(x, y, button=button, clicks=clicks, interval=0.1)
             else:
                 pyautogui.click(button=button, clicks=clicks)
             return True
         except Exception as e:
             print(f"Error clicking: {e}")
-            return False
-    
-    def click_at_position(self, x: int, y: int, button: str = 'left') -> bool:
-        """Click at a specific screen position with a single click"""
-        try:
-            if self.demo_mode:
-                self._log_demo(f"Would single click at position ({x}, {y})")
-                return True
-            
-            print(f"  🖱️  Single clicking at position ({x}, {y})")
-            # Move to position first, then do a single left-click
-            pyautogui.moveTo(x, y, duration=0.2)
-            time.sleep(0.1)
-            # Explicitly set clicks=1 for single click only
-            pyautogui.click(x, y, button='left', clicks=1)
-            return True
-        except Exception as e:
-            print(f"Error clicking at position: {e}")
             return False
     
     def move_mouse(self, x: int, y: int, duration: float = 0.5) -> bool:
@@ -139,7 +225,7 @@ class GUIAutomation:
                 self._log_demo(f"Would press key: {key} ({presses} time(s))")
                 return True
             
-            pyautogui.press(key, presses=presses)
+            pyautogui.press(key, presses=presses, interval=0.1)
             return True
         except Exception as e:
             print(f"Error pressing key: {e}")
@@ -193,8 +279,7 @@ class GUIAutomation:
                 self._log_demo("Would paste from clipboard")
                 return True
             
-            system = platform.system()
-            if system == "Darwin":
+            if self.system == "Darwin":
                 pyautogui.hotkey('command', 'v')
             else:
                 pyautogui.hotkey('ctrl', 'v')
