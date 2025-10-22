@@ -209,6 +209,37 @@ class CommandExecutor:
                     "message": f"Searching YouTube for: {query} and opening first result"
                 }
             
+            elif action == "play_youtube_video":
+                query = parameters.get("query", "")
+                
+                if not query:
+                    return {
+                        "success": False,
+                        "message": "No search query provided"
+                    }
+                
+                print(f"  🔍 Searching YouTube for: {query}")
+                encoded_query = urllib.parse.quote(query)
+                search_url = f"https://www.youtube.com/results?search_query={encoded_query}"
+                
+                webbrowser.open(search_url)
+                print(f"  ⏳ Waiting for YouTube to load...")
+                time.sleep(3)
+                
+                print(f"  🎯 Selecting first video...")
+                self.gui.press_key('tab')
+                time.sleep(0.5)
+                self.gui.press_key('tab')
+                time.sleep(0.5)
+                self.gui.press_key('tab')
+                time.sleep(0.5)
+                self.gui.press_key('enter')
+                
+                return {
+                    "success": True,
+                    "message": f"Playing first video for: {query}"
+                }
+            
             elif action == "create_file":
                 filename = parameters.get("filename", "")
                 content = parameters.get("content", "")

@@ -226,6 +226,8 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - ✅ **NEW**: Created comprehensive FEATURES_GUIDE.md documentation
 - ✅ **NEW**: Added YouTube integration (search_youtube, open_youtube)
 - ✅ **NEW**: YouTube search and auto-play first video functionality
+- ✅ **NEW**: Added play_youtube_video action for auto-playing first search result
+- ✅ **NEW**: "Play video X" command automatically searches and plays first video
 - ✅ **NEW**: Updated Gemini AI prompt to understand YouTube commands
 
 ### Usage Notes
@@ -250,8 +252,9 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - "Take a screenshot"
 - "Press enter"
 - "Search Google for Python tutorials"
-- "Search YouTube for funny cats"
-- "Play music video on YouTube"
+- "Play video funny cats" (auto-plays first YouTube video)
+- "Play video music" (searches and plays first result)
+- "Search YouTube for tutorials" (just shows search results)
 - "Open YouTube video [URL]"
 
 ### **NEW** Messaging Commands

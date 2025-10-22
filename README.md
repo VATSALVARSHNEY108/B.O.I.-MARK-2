@@ -87,8 +87,9 @@ python main.py
 - "Take a screenshot"
 - "Press enter"
 - "Search Google for Python tutorials"
-- "Search YouTube for funny cats"
-- "Play music video on YouTube"
+- "Play video funny cats" (auto-plays first YouTube video)
+- "Play video music" (searches and plays first result)
+- "Search YouTube for tutorials" (just shows search results)
 - "Open YouTube video [video URL]"
 
 **Multi-Step Workflows:**

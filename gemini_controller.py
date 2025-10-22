@@ -59,7 +59,8 @@ DESKTOP AUTOMATION:
 - paste: Paste from clipboard (parameters: none)
 - search_web: Search the web (parameters: query)
 - open_youtube: Open a YouTube video (parameters: video_url OR video_id)
-- search_youtube: Search YouTube and open first result (parameters: query)
+- search_youtube: Search YouTube and show results (parameters: query)
+- play_youtube_video: Search YouTube and auto-play first video (parameters: query)
 - create_file: Create a file (parameters: filename, content)
 - wait: Wait for seconds (parameters: seconds)
 
@@ -115,9 +116,11 @@ IMPORTANT:
 - For "explain this code" or "what does this code do", use explain_code
 - For "improve this code" or "make this code better", use improve_code
 - For "fix this code" or "debug this error", use debug_code
-- For "search YouTube for X" or "play X on YouTube", use search_youtube with query parameter
+- For "play video X" or "play X video", use play_youtube_video to auto-play first result
+- For "search YouTube for X", use search_youtube to just show search results
 - For "open youtube video [URL]" or "play this video [URL]", use open_youtube with video_url parameter
 - Extract YouTube search queries accurately (e.g., "funny cats", "music video", "tutorial")
+- When user says "play video", they want the first video to auto-play, so use play_youtube_video
 
 For multi-step tasks, return steps as a list. Each step should have action and parameters.
 
