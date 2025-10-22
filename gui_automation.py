@@ -101,6 +101,20 @@ class GUIAutomation:
             print(f"Error clicking: {e}")
             return False
     
+    def click_at_position(self, x: int, y: int, button: str = 'left') -> bool:
+        """Click at a specific screen position - wrapper for clarity"""
+        try:
+            if self.demo_mode:
+                self._log_demo(f"Would click at position ({x}, {y})")
+                return True
+            
+            print(f"  🖱️  Clicking at position ({x}, {y})")
+            pyautogui.click(x, y, button=button)
+            return True
+        except Exception as e:
+            print(f"Error clicking at position: {e}")
+            return False
+    
     def move_mouse(self, x: int, y: int, duration: float = 0.5) -> bool:
         """Move mouse to specified position"""
         try:

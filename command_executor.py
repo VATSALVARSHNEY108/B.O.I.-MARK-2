@@ -218,17 +218,17 @@ class CommandExecutor:
             
             elif action == "play_first_result":
                 wait_time = parameters.get("wait_time", 3)
-                tab_count = parameters.get("tab_count", 6)
+                use_mouse = parameters.get("use_mouse", True)
                 
                 print(f"  ▶️  Playing first video from current search results...")
-                result = self.youtube.play_first_result(wait_time, tab_count)
+                result = self.youtube.play_first_result(wait_time, use_mouse)
                 
                 return result
             
             elif action == "search_and_play":
                 query = parameters.get("query", "")
                 wait_time = parameters.get("wait_time", 3)
-                tab_count = parameters.get("tab_count", 6)
+                use_mouse = parameters.get("use_mouse", True)
                 
                 if not query:
                     return {
@@ -237,7 +237,7 @@ class CommandExecutor:
                     }
                 
                 print(f"  🎬 Searching and playing: {query}")
-                result = self.youtube.search_and_play(query, wait_time, tab_count)
+                result = self.youtube.search_and_play(query, wait_time, use_mouse)
                 
                 return result
             
