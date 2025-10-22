@@ -40,22 +40,17 @@ class GUIAutomation:
             print(f"  [DEMO] {action}")
     
     def single_click(self, x: int, y: int) -> bool:
-        """Perform a single left-click at position using mouseDown/mouseUp to avoid double-click"""
+        """Simple single click at position"""
         try:
             if self.demo_mode:
-                self._log_demo(f"Would single click at ({x}, {y})")
+                self._log_demo(f"Would click at ({x}, {y})")
                 return True
             
-            print(f"  🖱️  Single click at ({x}, {y})")
-            pyautogui.moveTo(x, y, duration=0.15)
-            time.sleep(0.15)
-            pyautogui.mouseDown(x, y, button='left')
-            time.sleep(0.05)
-            pyautogui.mouseUp(x, y, button='left')
-            time.sleep(0.2)
+            print(f"  🖱️  Clicking at ({x}, {y})")
+            pyautogui.click(x, y)
             return True
         except Exception as e:
-            print(f"Error single clicking: {e}")
+            print(f"Error clicking: {e}")
             return False
     
     def double_click(self, x: int, y: int) -> bool:

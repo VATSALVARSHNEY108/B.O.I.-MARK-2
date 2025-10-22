@@ -22,29 +22,16 @@ class YouTubeAutomation:
     
     def play_video_method_1(self, query):
         """
-        Method 1: Open YouTube, use address bar to search, then click first video
-        Most reliable - uses address bar instead of search box
+        Simple method: Search YouTube and click first video
         """
-        print(f"  🎬 Method 1: Opening YouTube and searching via address bar...")
-        
-        webbrowser.open("https://www.youtube.com")
-        time.sleep(3)
-        
         print(f"  🔍 Searching for: {query}")
         encoded_query = urllib.parse.quote(query)
         search_url = f"https://www.youtube.com/results?search_query={encoded_query}"
         
-        self.gui.focus_browser_address_bar()
-        time.sleep(0.3)
-        
-        self.gui.paste_text(search_url)
-        time.sleep(0.3)
-        
-        print(f"  🔎 Executing search...")
-        self.gui.press_key('enter')
+        webbrowser.open(search_url)
         time.sleep(4)
         
-        print(f"  🎯 Clicking first video thumbnail...")
+        print(f"  🖱️  Clicking first video...")
         x, y = self.gui.get_relative_position(25, 35)
         self.gui.single_click(x, y)
         
@@ -52,35 +39,34 @@ class YouTubeAutomation:
     
     def play_video_method_2(self, query):
         """
-        Method 2: Direct search URL with address bar, then click first video
-        Faster and more reliable
+        Alternative position for different screen layouts
         """
-        print(f"  🎬 Method 2: Using direct search URL via address bar...")
+        print(f"  🔍 Searching for: {query}")
         encoded_query = urllib.parse.quote(query)
         search_url = f"https://www.youtube.com/results?search_query={encoded_query}"
         
         webbrowser.open(search_url)
         time.sleep(4)
         
-        print(f"  🎯 Clicking first video...")
-        x, y = self.gui.get_relative_position(25, 35)
+        print(f"  🖱️  Clicking first video (center position)...")
+        x, y = self.gui.get_relative_position(30, 38)
         self.gui.single_click(x, y)
         
         return True
     
     def play_video_method_3(self, query):
         """
-        Method 3: Alternative position for different screen layouts
+        Lower position for larger screens
         """
-        print(f"  🎬 Method 3: Using alternative click position...")
+        print(f"  🔍 Searching for: {query}")
         encoded_query = urllib.parse.quote(query)
         search_url = f"https://www.youtube.com/results?search_query={encoded_query}"
         
         webbrowser.open(search_url)
         time.sleep(4)
         
-        print(f"  🎯 Clicking first video (alternative position)...")
-        x, y = self.gui.get_relative_position(30, 40)
+        print(f"  🖱️  Clicking first video (lower position)...")
+        x, y = self.gui.get_relative_position(28, 42)
         self.gui.single_click(x, y)
         
         return True
