@@ -1,10 +1,15 @@
 """
 WhatsApp Automation Module
-Send messages via WhatsApp Web
+Send messages via WhatsApp Web and Desktop
 """
 
 import pywhatkit as pwk
 import time
+import webbrowser
+import subprocess
+import platform
+import os
+from urllib.parse import quote
 
 
 class WhatsAppAutomation:
@@ -153,6 +158,167 @@ class WhatsAppAutomation:
             return {
                 "success": False,
                 "message": f"❌ Error sending WhatsApp image: {str(e)}"
+            }
+
+
+    def open_whatsapp_desktop(self):
+        """
+        Open WhatsApp Desktop application directly.
+        
+        Returns:
+            Success status and message
+        """
+        try:
+            system = platform.system()
+            
+            if system == "Windows":
+                print("  💻 Opening WhatsApp Desktop on Windows...")
+                subprocess.Popen(["start", "whatsapp://"], shell=True)
+            
+            elif system == "Darwin":
+                print("  💻 Opening WhatsApp Desktop on Mac...")
+                subprocess.Popen(["open", "whatsapp://"])
+            
+            elif system == "Linux":
+                print("  💻 Opening WhatsApp Desktop on Linux...")
+                subprocess.Popen(["xdg-open", "whatsapp://"])
+            
+            else:
+                return {
+                    "success": False,
+                    "message": f"❌ Unsupported operating system: {system}"
+                }
+            
+            return {
+                "success": True,
+                "message": "✅ WhatsApp Desktop opened successfully"
+            }
+        
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"❌ Error opening WhatsApp Desktop: {str(e)}"
+            }
+    
+    def open_chat_in_desktop(self, phone_number, message=None):
+        """
+        Open WhatsApp Desktop and navigate to a specific chat.
+        Optionally pre-fill a message.
+        
+        Args:
+            phone_number: Phone number with country code (e.g., "+1234567890")
+            message: Optional message to pre-fill
+        
+        Returns:
+            Success status and message
+        """
+        try:
+            phone_clean = phone_number.replace("+", "").replace(" ", "").replace("-", "")
+            
+            if message:
+                encoded_message = quote(message)
+                url = f"whatsapp://send?phone={phone_clean}&text={encoded_message}"
+                print(f"  💻 Opening WhatsApp Desktop chat with {phone_number}")
+                print(f"  💬 Pre-filled message: {message}")
+            else:
+                url = f"whatsapp://send?phone={phone_clean}"
+                print(f"  💻 Opening WhatsApp Desktop chat with {phone_number}")
+            
+            system = platform.system()
+            
+            if system == "Windows":
+                subprocess.Popen(["start", url], shell=True)
+            elif system == "Darwin":
+                subprocess.Popen(["open", url])
+            elif system == "Linux":
+                subprocess.Popen(["xdg-open", url])
+            else:
+                return {
+                    "success": False,
+                    "message": f"❌ Unsupported operating system: {system}"
+                }
+            
+            return {
+                "success": True,
+                "message": f"✅ WhatsApp Desktop chat opened with {phone_number}"
+            }
+        
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"❌ Error opening WhatsApp Desktop chat: {str(e)}"
+            }
+    
+    def launch_desktop_app(self):
+        """
+        Launch WhatsApp Desktop application using executable path.
+        Alternative method if URL scheme doesn't work.
+        
+        Returns:
+            Success status and message
+        """
+        try:
+            system = platform.system()
+            
+            if system == "Windows":
+                app_paths = [
+                    os.path.join(os.environ.get("LOCALAPPDATA", ""), "WhatsApp", "WhatsApp.exe"),
+                    os.path.join(os.environ.get("PROGRAMFILES", ""), "WhatsApp", "WhatsApp.exe"),
+                    os.path.join(os.environ.get("PROGRAMFILES(X86)", ""), "WhatsApp", "WhatsApp.exe"),
+                ]
+                
+                for path in app_paths:
+                    if os.path.exists(path):
+                        print(f"  💻 Launching WhatsApp from: {path}")
+                        subprocess.Popen([path])
+                        return {
+                            "success": True,
+                            "message": "✅ WhatsApp Desktop launched successfully"
+                        }
+                
+                return {
+                    "success": False,
+                    "message": "❌ WhatsApp Desktop not found. Please install it from whatsapp.com/download"
+                }
+            
+            elif system == "Darwin":
+                app_path = "/Applications/WhatsApp.app"
+                if os.path.exists(app_path):
+                    print(f"  💻 Launching WhatsApp from: {app_path}")
+                    subprocess.Popen(["open", "-a", "WhatsApp"])
+                    return {
+                        "success": True,
+                        "message": "✅ WhatsApp Desktop launched successfully"
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "message": "❌ WhatsApp Desktop not found. Please install it from whatsapp.com/download"
+                    }
+            
+            elif system == "Linux":
+                try:
+                    subprocess.Popen(["whatsapp"])
+                    return {
+                        "success": True,
+                        "message": "✅ WhatsApp Desktop launched successfully"
+                    }
+                except FileNotFoundError:
+                    return {
+                        "success": False,
+                        "message": "❌ WhatsApp Desktop not found. Please install it"
+                    }
+            
+            else:
+                return {
+                    "success": False,
+                    "message": f"❌ Unsupported operating system: {system}"
+                }
+        
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"❌ Error launching WhatsApp Desktop: {str(e)}"
             }
 
 
