@@ -8,7 +8,17 @@ from google import genai
 from google.genai import types
 import base64
 
-client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+client = None
+
+def get_client():
+    """Get or initialize the Gemini client"""
+    global client
+    if client is None:
+        api_key = os.environ.get("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY environment variable not set")
+        client = genai.Client(api_key=api_key)
+    return client
 
 def analyze_screenshot(image_path: str, query: str = "Describe what you see in this image") -> str:
     """
@@ -25,7 +35,8 @@ def analyze_screenshot(image_path: str, query: str = "Describe what you see in t
         with open(image_path, "rb") as image_file:
             image_data = image_file.read()
         
-        response = client.models.generate_content(
+        api_client = get_client()
+        response = api_client.models.generate_content(
             model="gemini-2.0-flash-exp",
             contents=[
                 types.Content(
@@ -78,7 +89,8 @@ def compare_screenshots(image1_path: str, image2_path: str) -> str:
             image1_data = f1.read()
             image2_data = f2.read()
         
-        response = client.models.generate_content(
+        api_client = get_client()
+        response = api_client.models.generate_content(
             model="gemini-2.0-flash-exp",
             contents=[
                 types.Content(

@@ -7,7 +7,18 @@ from google.genai import types
 # Load environment variables from .env file
 load_dotenv()
 
-client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+# Initialize client - will be set when API key is available
+client = None
+
+def get_client():
+    """Get or initialize the Gemini client"""
+    global client
+    if client is None:
+        api_key = os.environ.get("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY environment variable not set")
+        client = genai.Client(api_key=api_key)
+    return client
 
 def validate_command_structure(data: dict) -> dict:
     """
@@ -242,7 +253,8 @@ For multi-step workflows, each step in steps array should have: {"action": "..."
 """
 
     try:
-        response = client.models.generate_content(
+        api_client = get_client()
+        response = api_client.models.generate_content(
             model="gemini-2.0-flash-exp",
             contents=[
                 types.Content(role="user", parts=[types.Part(text=f"Parse this command: {user_input}")])
@@ -284,7 +296,8 @@ def get_ai_suggestion(context: str) -> str:
     Get AI suggestions or help for automation tasks.
     """
     try:
-        response = client.models.generate_content(
+        api_client = get_client()
+        response = api_client.models.generate_content(
             model="gemini-2.0-flash-exp",
             contents=f"As a desktop automation assistant, help with this: {context}"
         )

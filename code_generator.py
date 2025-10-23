@@ -8,7 +8,17 @@ from google import genai
 from google.genai import types
 from code_templates import get_template_code, list_available_templates
 
-client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+client = None
+
+def get_client():
+    """Get or initialize the Gemini client"""
+    global client
+    if client is None:
+        api_key = os.environ.get("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY environment variable not set")
+        client = genai.Client(api_key=api_key)
+    return client
 
 LANGUAGE_TEMPLATES = {
     "python": {
@@ -156,7 +166,8 @@ REQUIREMENTS:
 Generate the {language} code now:"""
 
     try:
-        response = client.models.generate_content(
+        api_client = get_client()
+        response = api_client.models.generate_content(
             model="gemini-2.0-flash-exp",
             contents=prompt,
             config=types.GenerateContentConfig(
@@ -213,7 +224,8 @@ Provide a clear, beginner-friendly explanation of:
 3. Key concepts used"""
 
     try:
-        response = client.models.generate_content(
+        api_client = get_client()
+        response = api_client.models.generate_content(
             model="gemini-2.0-flash-exp",
             contents=prompt
         )
@@ -237,7 +249,8 @@ Improvements to make:
 Return ONLY the improved code, no explanations."""
 
     try:
-        response = client.models.generate_content(
+        api_client = get_client()
+        response = api_client.models.generate_content(
             model="gemini-2.0-flash-exp",
             contents=prompt
         )
@@ -272,7 +285,8 @@ CODE:
 Provide the corrected code with the bug fixed. Return ONLY the fixed code."""
 
     try:
-        response = client.models.generate_content(
+        api_client = get_client()
+        response = api_client.models.generate_content(
             model="gemini-2.0-flash-exp",
             contents=prompt
         )
