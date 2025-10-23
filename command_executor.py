@@ -17,6 +17,15 @@ from system_monitor import get_cpu_usage, get_memory_usage, get_disk_usage, get_
 from advanced_file_operations import search_files, find_large_files, find_duplicate_files, organize_files_by_extension, find_old_files, get_directory_size
 from workflow_templates import WorkflowManager
 from code_executor import execute_python_code, execute_javascript_code, validate_code_safety
+from system_control import SystemController
+from app_scheduler import AppScheduler
+from download_organizer import DownloadOrganizer
+from voice_assistant import VoiceAssistant
+from smart_typing import SmartTyping
+from file_manager import FileManager
+from web_automation import WebAutomation
+from productivity_monitor import ProductivityMonitor
+from fun_features import FunFeatures
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -31,6 +40,15 @@ class CommandExecutor:
         self.whatsapp = create_whatsapp_automation()
         self.screen_suggester = create_screen_suggester()
         self.email_sender = create_email_sender()
+        self.system_control = SystemController()
+        self.app_scheduler = AppScheduler()
+        self.download_organizer = DownloadOrganizer()
+        self.voice_assistant = VoiceAssistant()
+        self.smart_typing = SmartTyping()
+        self.file_manager = FileManager()
+        self.web_automation = WebAutomation()
+        self.productivity_monitor = ProductivityMonitor()
+        self.fun_features = FunFeatures()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -881,6 +899,166 @@ class CommandExecutor:
                         "success": False,
                         "message": f"Execution failed: {result['error']}"
                     }
+            
+            elif action == "mute_mic":
+                result = self.system_control.mute_microphone()
+                return {"success": True, "message": result}
+            
+            elif action == "unmute_mic":
+                result = self.system_control.unmute_microphone()
+                return {"success": True, "message": result}
+            
+            elif action == "set_brightness":
+                level = parameters.get("level", 50)
+                result = self.system_control.set_brightness(level)
+                return {"success": True, "message": result}
+            
+            elif action == "auto_brightness":
+                result = self.system_control.auto_brightness()
+                return {"success": True, "message": result}
+            
+            elif action == "schedule_sleep":
+                time_str = parameters.get("time", "23:00")
+                result = self.system_control.schedule_sleep(time_str)
+                return {"success": True, "message": result}
+            
+            elif action == "clear_temp_files":
+                result = self.system_control.clear_temp_files()
+                return {"success": True, "message": result}
+            
+            elif action == "check_disk_space":
+                result = self.system_control.check_disk_space()
+                return {"success": True, "message": result}
+            
+            elif action == "open_apps_scheduled":
+                time_str = parameters.get("time", "09:00")
+                apps = parameters.get("apps", [])
+                result = self.app_scheduler.open_apps_at_time(time_str, apps)
+                return {"success": True, "message": result}
+            
+            elif action == "close_heavy_apps":
+                result = self.app_scheduler.detect_idle_and_close_heavy_apps()
+                return {"success": True, "message": result}
+            
+            elif action == "get_heavy_apps":
+                result = self.app_scheduler.get_heavy_apps()
+                return {"success": True, "message": result}
+            
+            elif action == "close_app":
+                app_name = parameters.get("app_name", "")
+                result = self.app_scheduler.close_app(app_name)
+                return {"success": True, "message": result}
+            
+            elif action == "organize_downloads":
+                result = self.download_organizer.organize_downloads()
+                return {"success": True, "message": result}
+            
+            elif action == "enable_auto_organize":
+                result = self.download_organizer.enable_auto_organize()
+                return {"success": True, "message": result}
+            
+            elif action == "listen_voice":
+                command = self.voice_assistant.listen_once()
+                return {"success": True, "message": f"Heard: {command}"}
+            
+            elif action == "expand_snippet":
+                shortcut = parameters.get("shortcut", "")
+                text = self.smart_typing.get_snippet(shortcut)
+                if text:
+                    import pyperclip
+                    pyperclip.copy(text)
+                    return {"success": True, "message": f"Snippet copied: {text[:50]}..."}
+                return {"success": False, "message": f"Snippet not found: {shortcut}"}
+            
+            elif action == "list_snippets":
+                result = self.smart_typing.list_snippets()
+                return {"success": True, "message": result}
+            
+            elif action == "generate_email_template":
+                email_type = parameters.get("type", "professional")
+                result = self.smart_typing.generate_email_template(email_type)
+                return {"success": True, "message": result}
+            
+            elif action == "auto_rename_files":
+                folder = parameters.get("folder", ".")
+                pattern = parameters.get("pattern", "clean")
+                result = self.file_manager.auto_rename_files(folder, pattern)
+                return {"success": True, "message": result}
+            
+            elif action == "find_duplicates":
+                folder = parameters.get("folder", ".")
+                result = self.file_manager.find_duplicates(folder)
+                return {"success": True, "message": result}
+            
+            elif action == "compress_old_files":
+                folder = parameters.get("folder", ".")
+                days = parameters.get("days_old", 90)
+                result = self.file_manager.compress_old_files(folder, days)
+                return {"success": True, "message": result}
+            
+            elif action == "backup_folder":
+                source = parameters.get("source", ".")
+                result = self.file_manager.backup_folder(source)
+                return {"success": True, "message": result}
+            
+            elif action == "get_clipboard_history":
+                limit = parameters.get("limit", 10)
+                result = self.web_automation.get_clipboard_history(limit)
+                return {"success": True, "message": result}
+            
+            elif action == "search_clipboard":
+                query = parameters.get("query", "")
+                result = self.web_automation.search_clipboard_history(query)
+                return {"success": True, "message": result}
+            
+            elif action == "list_scrapers":
+                result = self.web_automation.list_scrapers()
+                return {"success": True, "message": result}
+            
+            elif action == "screen_time_dashboard":
+                days = parameters.get("days", 7)
+                result = self.productivity_monitor.get_screen_time_dashboard(days)
+                return {"success": True, "message": result}
+            
+            elif action == "block_distractions":
+                result = self.productivity_monitor.block_distractions()
+                return {"success": True, "message": result}
+            
+            elif action == "enable_focus_mode":
+                hours = parameters.get("hours", 2)
+                result = self.productivity_monitor.enable_focus_mode(hours)
+                return {"success": True, "message": result}
+            
+            elif action == "productivity_score":
+                result = self.productivity_monitor.get_productivity_score()
+                return {"success": True, "message": result}
+            
+            elif action == "send_reminder":
+                reminder_type = parameters.get("type", "water")
+                result = self.productivity_monitor.send_reminder(reminder_type)
+                return {"success": True, "message": result}
+            
+            elif action == "daily_summary":
+                result = self.productivity_monitor.generate_daily_summary()
+                return {"success": True, "message": result}
+            
+            elif action == "get_compliment":
+                result = self.fun_features.get_random_compliment()
+                return {"success": True, "message": result}
+            
+            elif action == "celebrate_task":
+                result = self.fun_features.celebrate_task_completion()
+                return {"success": True, "message": result}
+            
+            elif action == "set_mood":
+                mood = parameters.get("mood", "neutral")
+                result = self.fun_features.set_mood_theme(mood)
+                return {"success": True, "message": result}
+            
+            elif action == "chatbot":
+                user_input = parameters.get("message", "")
+                result = self.fun_features.chatbot_respond(user_input)
+                return {"success": True, "message": result}
             
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")

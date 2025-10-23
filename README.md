@@ -1,6 +1,6 @@
 # AI Desktop Automation Controller
 
-An **incredibly intelligent** desktop automation tool powered by Google's Gemini AI with **50+ features** including AI Vision, system monitoring, advanced file management, code execution, and workflow automation. Control your computer with natural language!
+An **incredibly intelligent** desktop automation tool powered by Google's Gemini AI with **80+ features** including AI Vision, system control, productivity monitoring, voice commands, smart typing, auto-organization, and complete desktop automation. Control your entire computer with natural language!
 
 ## Features
 
@@ -39,6 +39,61 @@ An **incredibly intelligent** desktop automation tool powered by Google's Gemini
 - **Web Search**: Quick web searches
 - **Smart YouTube Integration**: Intelligent video search and auto-play with 3 fallback methods
 - **File Operations**: Create files with content
+
+### 🎛️ System Control (NEW!)
+- **Auto-Mute/Unmute**: Control microphone during meetings
+- **Brightness Control**: Auto-adjust based on time of day
+- **Sleep/Wake Scheduling**: Your computer can have a bedtime!
+- **Auto-Cleanup**: Clear temp files and recycle bin when disk is full
+- **Disk Space Monitoring**: Track usage and auto-optimize
+
+### 📱 App Automation (NEW!)
+- **Scheduled App Opening**: Open apps automatically at set times
+- **Idle Detection**: Close heavy apps when you're away
+- **Heavy App Monitoring**: Track memory-hungry apps
+- **Download Organization**: Auto-sort downloads into folders
+- **Website Launcher**: Open multiple sites with one command
+
+### 🎤 Voice Commands (NEW!)
+- **Hands-Free Control**: Speak commands instead of typing
+- **Natural Voice Recognition**: "Open Chrome", "Play music", "Take screenshot"
+- **Continuous Listening**: Always-on voice assistant mode
+- **Multi-Language Support**: Works with Google Speech Recognition
+
+### ⌨️ Smart Typing (NEW!)
+- **Text Snippets**: Expand shortcuts like //email → your@email.com
+- **Email Templates**: Professional, casual, follow-up, thank you
+- **Auto-Correct**: Common typo corrections
+- **Password Generator**: Create strong passwords
+- **Lorem Ipsum**: Generate placeholder text
+
+### 📁 Advanced File Management (NEW!)
+- **Auto-Rename**: Clean up messy filenames automatically
+- **Duplicate Detection**: Find and remove duplicate files
+- **File Compression**: Compress old files to save space
+- **Auto-Backup**: Schedule automatic backups of important folders
+- **Backup History**: Track all your backups
+
+### 🌐 Web Automation (NEW!)
+- **Clipboard History**: Track and search last 100 copied items
+- **Auto-Login**: Safely store and use website credentials
+- **Web Scraper Shortcuts**: Quick data fetching from favorite sites
+- **Quick Search**: Search Google, GitHub, YouTube instantly
+
+### 📊 Productivity Monitoring (NEW!)
+- **Screen Time Dashboard**: Track time spent in each app
+- **Distraction Blocker**: Auto-close social media and time-wasters
+- **Focus Mode**: Deep work mode for 2-4 hours
+- **Productivity Score**: Get daily percentage scores
+- **Smart Reminders**: Water, breaks, posture, stretching, eye rest
+- **Activity Logger**: Complete daily activity summaries
+
+### 🎉 Fun Features (NEW!)
+- **Random Compliments**: Motivational messages after tasks
+- **Task Celebrations**: Celebrate your wins! 🎉
+- **Mood Themes**: Set desktop themes based on mood
+- **Mini Chatbot**: Friendly AI companion for breaks
+- **Playlist Suggestions**: Music based on your mood
 
 ### 📱 Messaging & Communication (Advanced)
 - **SMS Messaging**: Send text messages to contacts via Twilio
@@ -107,6 +162,44 @@ python main.py
 - "Email my boss about the meeting"
 - "Add contact Mom with phone 555-1234 and email mom@example.com"
 - Type `contacts` - List all contacts
+
+**System Control (NEW!):**
+- "Mute my microphone"
+- "Set brightness to 80%"
+- "Schedule sleep at 11 PM"
+- "Clear temp files"
+- "Check disk space"
+
+**App Automation (NEW!):**
+- "Open VS Code and Chrome at 9 AM"
+- "Close heavy apps"
+- "Organize downloads"
+- "Show heavy apps"
+
+**Voice & Typing (NEW!):**
+- "Listen for voice commands"
+- "Show my snippets"
+- "Generate professional email template"
+
+**File Management (NEW!):**
+- "Auto-rename files in Downloads"
+- "Find duplicate files"
+- "Backup my Documents folder"
+- "Compress old files"
+
+**Productivity (NEW!):**
+- "Show screen time"
+- "Enable focus mode for 2 hours"
+- "Block distractions"
+- "Show my productivity score"
+- "Remind me to drink water"
+- "Show daily summary"
+
+**Fun (NEW!):**
+- "Give me a compliment"
+- "Celebrate this task"
+- "Set mood to focused"
+- "Chat with bot: Hello!"
 
 **Utility Commands:**
 - Type `help` - Show available features

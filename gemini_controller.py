@@ -124,6 +124,56 @@ WHATSAPP MESSAGING:
 - send_whatsapp_group: Send message to WhatsApp group (parameters: group_id, message)
 - send_whatsapp_image: Send image via WhatsApp (parameters: phone, image_path, caption [optional])
 
+SYSTEM CONTROL:
+- mute_mic: Mute microphone (parameters: none)
+- unmute_mic: Unmute microphone (parameters: none)
+- set_brightness: Set screen brightness (parameters: level [0-100])
+- auto_brightness: Auto-adjust brightness based on time of day (parameters: none)
+- schedule_sleep: Schedule PC sleep (parameters: time [HH:MM format])
+- clear_temp_files: Clear temporary files and cache (parameters: none)
+- check_disk_space: Check disk space and auto-cleanup if needed (parameters: none)
+
+APP AUTOMATION:
+- open_apps_scheduled: Open apps at scheduled time (parameters: time [HH:MM], apps [list])
+- close_heavy_apps: Close heavy apps when idle (parameters: none)
+- get_heavy_apps: List currently running heavy apps (parameters: none)
+- close_app: Close specific application (parameters: app_name)
+- organize_downloads: Organize downloads folder (parameters: none)
+- enable_auto_organize: Enable automatic download organization (parameters: none)
+
+VOICE ASSISTANT:
+- listen_voice: Listen for voice command (parameters: none)
+
+SMART TYPING:
+- expand_snippet: Expand text snippet shortcut (parameters: shortcut)
+- list_snippets: List all text snippets (parameters: none)
+- generate_email_template: Generate email template (parameters: type [professional/casual/followup/thank_you])
+
+FILE MANAGEMENT ADVANCED:
+- auto_rename_files: Auto-rename messy files (parameters: folder, pattern [clean/timestamp/numbered])
+- find_duplicates: Find duplicate files (parameters: folder)
+- compress_old_files: Compress old files (parameters: folder, days_old [default: 90])
+- backup_folder: Backup folder to destination (parameters: source)
+
+WEB AUTOMATION:
+- get_clipboard_history: Get clipboard history (parameters: limit [default: 10])
+- search_clipboard: Search clipboard history (parameters: query)
+- list_scrapers: List web scraper shortcuts (parameters: none)
+
+PRODUCTIVITY & MONITORING:
+- screen_time_dashboard: Show screen time statistics (parameters: days [default: 7])
+- block_distractions: Block distraction apps (parameters: none)
+- enable_focus_mode: Enable focus mode (parameters: hours [default: 2])
+- productivity_score: Get productivity score for today (parameters: none)
+- send_reminder: Send productivity reminder (parameters: type [water/break/posture/stretch/eyes])
+- daily_summary: Generate daily activity summary (parameters: none)
+
+FUN FEATURES:
+- get_compliment: Get a random compliment (parameters: none)
+- celebrate_task: Celebrate task completion (parameters: none)
+- set_mood: Set mood theme (parameters: mood [happy/calm/energetic/focused/neutral])
+- chatbot: Chat with mini companion (parameters: message)
+
 IMPORTANT:
 - For "send to [name]" commands, use contact_name parameter
 - If user says "text John" or "message Sarah", use send_sms

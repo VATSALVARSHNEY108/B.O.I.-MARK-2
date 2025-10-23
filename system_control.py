@@ -1,0 +1,240 @@
+"""
+System Control Module
+Handles system-level automation: brightness, audio, sleep/wake, disk cleanup
+"""
+
+import platform
+import subprocess
+import os
+import shutil
+import time
+from datetime import datetime, timedelta
+import json
+
+class SystemController:
+    def __init__(self):
+        self.os = platform.system()
+        self.config_file = "system_config.json"
+        self.load_config()
+    
+    def load_config(self):
+        """Load system configuration"""
+        if os.path.exists(self.config_file):
+            with open(self.config_file, 'r') as f:
+                self.config = json.load(f)
+        else:
+            self.config = {
+                "sleep_schedule": {"enabled": False, "time": "23:00"},
+                "wake_schedule": {"enabled": False, "time": "07:00"},
+                "auto_cleanup": {"enabled": False, "disk_limit": 90},
+                "brightness_schedule": {"enabled": False, "day_brightness": 80, "night_brightness": 30}
+            }
+            self.save_config()
+    
+    def save_config(self):
+        """Save system configuration"""
+        with open(self.config_file, 'w') as f:
+            json.dump(self.config, f, indent=2)
+    
+    def mute_microphone(self):
+        """Mute system microphone"""
+        try:
+            if self.os == "Windows":
+                subprocess.run(["nircmd.exe", "mutesysvolume", "1", "microphone"], check=False)
+                return "✅ Microphone muted"
+            elif self.os == "Darwin":
+                subprocess.run(["osascript", "-e", "set volume input volume 0"], check=False)
+                return "✅ Microphone muted"
+            elif self.os == "Linux":
+                subprocess.run(["amixer", "set", "Capture", "nocap"], check=False)
+                return "✅ Microphone muted"
+        except Exception as e:
+            return f"❌ Failed to mute microphone: {str(e)}"
+    
+    def unmute_microphone(self):
+        """Unmute system microphone"""
+        try:
+            if self.os == "Windows":
+                subprocess.run(["nircmd.exe", "mutesysvolume", "0", "microphone"], check=False)
+                return "✅ Microphone unmuted"
+            elif self.os == "Darwin":
+                subprocess.run(["osascript", "-e", "set volume input volume 50"], check=False)
+                return "✅ Microphone unmuted"
+            elif self.os == "Linux":
+                subprocess.run(["amixer", "set", "Capture", "cap"], check=False)
+                return "✅ Microphone unmuted"
+        except Exception as e:
+            return f"❌ Failed to unmute microphone: {str(e)}"
+    
+    def set_brightness(self, level):
+        """Set screen brightness (0-100)"""
+        try:
+            level = max(0, min(100, int(level)))
+            
+            if self.os == "Windows":
+                subprocess.run(f"powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1,{level})", shell=True, check=False)
+                return f"✅ Brightness set to {level}%"
+            elif self.os == "Darwin":
+                subprocess.run(f"brightness {level/100}", shell=True, check=False)
+                return f"✅ Brightness set to {level}%"
+            elif self.os == "Linux":
+                subprocess.run(f"xrandr --output $(xrandr | grep ' connected' | awk '{{print $1}}') --brightness {level/100}", shell=True, check=False)
+                return f"✅ Brightness set to {level}%"
+        except Exception as e:
+            return f"❌ Failed to set brightness: {str(e)}"
+    
+    def auto_brightness(self):
+        """Auto-adjust brightness based on time of day"""
+        try:
+            current_hour = datetime.now().hour
+            
+            if 6 <= current_hour < 18:
+                brightness = self.config["brightness_schedule"]["day_brightness"]
+            else:
+                brightness = self.config["brightness_schedule"]["night_brightness"]
+            
+            return self.set_brightness(brightness)
+        except Exception as e:
+            return f"❌ Auto-brightness failed: {str(e)}"
+    
+    def schedule_sleep(self, time_str="23:00"):
+        """Schedule PC to sleep at specific time"""
+        try:
+            hours, minutes = map(int, time_str.split(':'))
+            now = datetime.now()
+            sleep_time = now.replace(hour=hours, minute=minutes, second=0)
+            
+            if sleep_time < now:
+                sleep_time += timedelta(days=1)
+            
+            seconds_until_sleep = (sleep_time - now).total_seconds()
+            
+            if self.os == "Windows":
+                subprocess.Popen(f'shutdown /s /t {int(seconds_until_sleep)}', shell=True)
+                return f"✅ Sleep scheduled for {time_str}"
+            elif self.os == "Darwin":
+                subprocess.Popen(f'sudo shutdown -s +{int(seconds_until_sleep/60)}', shell=True)
+                return f"✅ Sleep scheduled for {time_str}"
+            elif self.os == "Linux":
+                subprocess.Popen(f'sudo shutdown -h +{int(seconds_until_sleep/60)}', shell=True)
+                return f"✅ Sleep scheduled for {time_str}"
+        except Exception as e:
+            return f"❌ Failed to schedule sleep: {str(e)}"
+    
+    def cancel_sleep(self):
+        """Cancel scheduled sleep"""
+        try:
+            if self.os == "Windows":
+                subprocess.run("shutdown /a", shell=True, check=False)
+                return "✅ Sleep cancelled"
+            elif self.os in ["Darwin", "Linux"]:
+                subprocess.run("sudo shutdown -c", shell=True, check=False)
+                return "✅ Sleep cancelled"
+        except Exception as e:
+            return f"❌ Failed to cancel sleep: {str(e)}"
+    
+    def schedule_wake(self, time_str="07:00"):
+        """Schedule PC to wake at specific time (Windows only)"""
+        try:
+            if self.os == "Windows":
+                hours, minutes = map(int, time_str.split(':'))
+                subprocess.run(f'powershell "powercfg /waketimers /create /type wakeup /time {hours}:{minutes}"', shell=True, check=False)
+                return f"✅ Wake scheduled for {time_str}"
+            else:
+                return "ℹ️ Wake scheduling is only supported on Windows"
+        except Exception as e:
+            return f"❌ Failed to schedule wake: {str(e)}"
+    
+    def clear_temp_files(self):
+        """Clear temporary files and cache"""
+        try:
+            cleared_size = 0
+            cleared_files = 0
+            
+            temp_dirs = []
+            if self.os == "Windows":
+                user_profile = os.environ.get('USERPROFILE')
+                temp_dirs = [
+                    os.environ.get('TEMP'),
+                    os.environ.get('TMP'),
+                ]
+                if user_profile:
+                    temp_dirs.append(os.path.join(user_profile, 'AppData', 'Local', 'Temp'))
+            elif self.os in ["Darwin", "Linux"]:
+                temp_dirs = ['/tmp', os.path.expanduser('~/.cache')]
+            
+            for temp_dir in temp_dirs:
+                if temp_dir and os.path.exists(temp_dir):
+                    for item in os.listdir(temp_dir):
+                        item_path = os.path.join(temp_dir, item)
+                        try:
+                            if os.path.isfile(item_path):
+                                size = os.path.getsize(item_path)
+                                os.remove(item_path)
+                                cleared_size += size
+                                cleared_files += 1
+                            elif os.path.isdir(item_path):
+                                size = sum(os.path.getsize(os.path.join(dirpath, filename))
+                                          for dirpath, _, filenames in os.walk(item_path)
+                                          for filename in filenames)
+                                shutil.rmtree(item_path)
+                                cleared_size += size
+                                cleared_files += 1
+                        except:
+                            continue
+            
+            cleared_mb = cleared_size / (1024 * 1024)
+            return f"✅ Cleared {cleared_files} items ({cleared_mb:.2f} MB)"
+        except Exception as e:
+            return f"❌ Failed to clear temp files: {str(e)}"
+    
+    def empty_recycle_bin(self):
+        """Empty recycle bin"""
+        try:
+            if self.os == "Windows":
+                try:
+                    import winshell
+                    winshell.recycle_bin().empty(confirm=False, show_progress=False, sound=False)
+                    return "✅ Recycle bin emptied"
+                except ImportError:
+                    subprocess.run("rd /s /q %temp%", shell=True, check=False)
+                    return "✅ Temp cleaned (winshell not available)"
+            elif self.os == "Darwin":
+                subprocess.run("rm -rf ~/.Trash/*", shell=True, check=False)
+                return "✅ Trash emptied"
+            elif self.os == "Linux":
+                subprocess.run("rm -rf ~/.local/share/Trash/*", shell=True, check=False)
+                return "✅ Trash emptied"
+        except Exception as e:
+            return f"❌ Failed to empty recycle bin: {str(e)}"
+    
+    def check_disk_space(self):
+        """Check disk space and auto-cleanup if needed"""
+        try:
+            usage = shutil.disk_usage("/")
+            percent_used = (usage.used / usage.total) * 100
+            
+            result = f"💾 Disk Usage: {percent_used:.1f}% ({usage.used//(1024**3)}GB / {usage.total//(1024**3)}GB)\n"
+            
+            if self.config["auto_cleanup"]["enabled"] and percent_used > self.config["auto_cleanup"]["disk_limit"]:
+                result += "\n⚠️ Disk space limit exceeded. Running auto-cleanup...\n"
+                cleanup_msg = self.clear_temp_files()
+                result += cleanup_msg + "\n"
+                bin_msg = self.empty_recycle_bin()
+                result += bin_msg
+            
+            return result
+        except Exception as e:
+            return f"❌ Failed to check disk space: {str(e)}"
+    
+    def auto_cleanup_on_limit(self, limit_percent=90):
+        """Configure auto-cleanup when disk hits limit"""
+        self.config["auto_cleanup"]["enabled"] = True
+        self.config["auto_cleanup"]["disk_limit"] = limit_percent
+        self.save_config()
+        return f"✅ Auto-cleanup enabled at {limit_percent}% disk usage"
+
+if __name__ == "__main__":
+    controller = SystemController()
+    print("System Control Module - Testing")
+    print(controller.check_disk_space())
