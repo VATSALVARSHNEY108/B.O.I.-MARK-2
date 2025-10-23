@@ -3,9 +3,17 @@ AI Screen Analyzer & Suggester
 Takes a screenshot and provides AI-powered improvement suggestions
 """
 
-import pyautogui
 import os
 from datetime import datetime
+
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception as e:
+    print(f"⚠️  PyAutoGUI not available: {e}")
+    pyautogui = None
+    PYAUTOGUI_AVAILABLE = False
+
 from screenshot_analyzer import (
     suggest_improvements,
     analyze_screen_for_errors,
@@ -31,6 +39,10 @@ class ScreenSuggester:
         Returns:
             Path to the screenshot file
         """
+        if not PYAUTOGUI_AVAILABLE:
+            print(f"  ❌ Screenshot not available in this environment")
+            return None
+            
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"screen_{timestamp}.png"
         filepath = os.path.join(self.screenshots_dir, filename)

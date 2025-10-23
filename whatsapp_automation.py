@@ -3,13 +3,21 @@ WhatsApp Automation Module
 Send messages via WhatsApp Web and Desktop
 """
 
-import pywhatkit as pwk
 import time
 import webbrowser
 import subprocess
 import platform
 import os
 from urllib.parse import quote
+
+try:
+    import pywhatkit as pwk
+    PYWHATKIT_AVAILABLE = True
+except Exception as e:
+    print(f"⚠️  PyWhatKit not available: {e}")
+    print("WhatsApp automation will use web-based method")
+    pwk = None
+    PYWHATKIT_AVAILABLE = False
 
 
 class WhatsAppAutomation:
@@ -30,6 +38,11 @@ class WhatsAppAutomation:
         Returns:
             Success status and message
         """
+        if not PYWHATKIT_AVAILABLE:
+            print(f"  📱 Using WhatsApp Web (desktop automation not available)")
+            print(f"  💬 Message: {message}")
+            return self._send_via_web(phone_number, message)
+        
         try:
             print(f"  📱 Sending WhatsApp message to {phone_number}")
             print(f"  💬 Message: {message}")
@@ -52,6 +65,41 @@ class WhatsAppAutomation:
                 "message": f"❌ Error sending WhatsApp message: {str(e)}"
             }
     
+    def _send_via_web(self, phone_number, message):
+        """Send message via WhatsApp Web URL"""
+        try:
+            if not phone_number or not isinstance(phone_number, str):
+                return {
+                    "success": False,
+                    "message": "❌ Invalid phone number provided"
+                }
+            
+            if message is None:
+                message = ""
+            
+            clean_number = phone_number.replace("+", "").replace("-", "").replace(" ", "")
+            
+            if not clean_number or not clean_number.isdigit():
+                return {
+                    "success": False,
+                    "message": f"❌ Invalid phone number format: {phone_number}. Use format: +1234567890"
+                }
+            
+            encoded_message = quote(str(message))
+            url = f"https://web.whatsapp.com/send?phone={clean_number}&text={encoded_message}"
+            
+            webbrowser.open(url)
+            
+            return {
+                "success": True,
+                "message": f"✅ Opened WhatsApp Web for {phone_number}. Please press Enter in the browser to send."
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"❌ Error opening WhatsApp Web: {str(e)}"
+            }
+    
     def send_message_scheduled(self, phone_number, message, hour, minute):
         """
         Schedule a WhatsApp message for a specific time.
@@ -65,6 +113,11 @@ class WhatsAppAutomation:
         Returns:
             Success status and message
         """
+        if not PYWHATKIT_AVAILABLE:
+            print(f"  ⚠️  Scheduled messages not available in web mode")
+            print(f"  📱 Opening WhatsApp Web instead (you can send manually)")
+            return self._send_via_web(phone_number, message)
+        
         try:
             print(f"  📱 Scheduling WhatsApp message to {phone_number}")
             print(f"  ⏰ Scheduled for: {hour}:{minute:02d}")
@@ -101,6 +154,12 @@ class WhatsAppAutomation:
         Returns:
             Success status and message
         """
+        if not PYWHATKIT_AVAILABLE:
+            return {
+                "success": False,
+                "message": "❌ Group messaging requires desktop automation. Please use WhatsApp Web/Desktop manually for group messages."
+            }
+        
         try:
             print(f"  📱 Sending WhatsApp message to group")
             print(f"  💬 Message: {message}")
@@ -135,6 +194,12 @@ class WhatsAppAutomation:
         Returns:
             Success status and message
         """
+        if not PYWHATKIT_AVAILABLE:
+            return {
+                "success": False,
+                "message": "❌ Image sending requires desktop automation. Please use WhatsApp Web/Desktop manually to send images."
+            }
+        
         try:
             print(f"  📱 Sending WhatsApp image to {phone_number}")
             print(f"  🖼️  Image: {image_path}")

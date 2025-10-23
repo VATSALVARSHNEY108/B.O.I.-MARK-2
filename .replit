@@ -5,7 +5,7 @@ integrations = ["python_gemini:1.0.0"]
 
 [nix]
 channel = "stable-25_05"
-packages = ["cargo", "espeak-ng", "libiconv", "libxcrypt", "openssl", "pkg-config", "rustc", "scrot", "xvfb-run"]
+packages = ["cargo", "espeak-ng", "libiconv", "libxcrypt", "openssl", "pkg-config", "rustc", "scrot", "xvfb-run", "xorg.xorgserver", "xorg.xinit"]
 
 [workflows]
 runButton = "Project"
@@ -24,8 +24,8 @@ name = "GUI App"
 author = "agent"
 
 [workflows.workflow.metadata]
-outputType = "console"
+outputType = "vnc"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python gui_app.py"
+args = "bash -c \"export DISPLAY=:99; Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 & sleep 2; python gui_app.py\""
