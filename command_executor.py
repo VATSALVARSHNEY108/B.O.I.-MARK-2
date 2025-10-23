@@ -27,6 +27,13 @@ from web_automation import WebAutomation
 from productivity_monitor import ProductivityMonitor
 from fun_features import FunFeatures
 from spotify_desktop_automation import create_spotify_desktop_automation
+from weather_news_service import WeatherNewsService
+from translation_service import TranslationService
+from advanced_calculator import AdvancedCalculator
+from pomodoro_timer import PomodoroTimer
+from password_vault import PasswordVault
+from quick_notes import QuickNotes
+from calendar_manager import CalendarManager
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -51,6 +58,13 @@ class CommandExecutor:
         self.productivity_monitor = ProductivityMonitor()
         self.fun_features = FunFeatures()
         self.spotify = create_spotify_desktop_automation()
+        self.weather_news = WeatherNewsService()
+        self.translator = TranslationService()
+        self.calculator = AdvancedCalculator()
+        self.pomodoro = PomodoroTimer()
+        self.password_vault = PasswordVault()
+        self.notes = QuickNotes()
+        self.calendar = CalendarManager()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -1136,6 +1150,172 @@ class CommandExecutor:
             elif action == "spotify_mute":
                 result = self.spotify.mute()
                 return result
+            
+            elif action == "get_weather":
+                city = parameters.get("city", "New York")
+                result = self.weather_news.get_weather(city)
+                return {"success": True, "message": result}
+            
+            elif action == "get_forecast":
+                city = parameters.get("city", "New York")
+                days = parameters.get("days", 3)
+                result = self.weather_news.get_forecast(city, days)
+                return {"success": True, "message": result}
+            
+            elif action == "get_news":
+                category = parameters.get("category", "general")
+                count = parameters.get("count", 5)
+                result = self.weather_news.get_news_headlines(category, count)
+                return {"success": True, "message": result}
+            
+            elif action == "translate_text":
+                text = parameters.get("text", "")
+                target_lang = parameters.get("target_lang", "es")
+                source_lang = parameters.get("source_lang", "auto")
+                result = self.translator.translate(text, target_lang, source_lang)
+                return {"success": True, "message": result}
+            
+            elif action == "detect_language":
+                text = parameters.get("text", "")
+                result = self.translator.detect_language(text)
+                return {"success": True, "message": result}
+            
+            elif action == "list_languages":
+                result = self.translator.get_supported_languages()
+                return {"success": True, "message": result}
+            
+            elif action == "calculate":
+                expression = parameters.get("expression", "")
+                result = self.calculator.calculate(expression)
+                return {"success": True, "message": result}
+            
+            elif action == "convert_units":
+                value = parameters.get("value", 0)
+                from_unit = parameters.get("from_unit", "")
+                to_unit = parameters.get("to_unit", "")
+                result = self.calculator.convert_units(value, from_unit, to_unit)
+                return {"success": True, "message": result}
+            
+            elif action == "convert_currency":
+                amount = parameters.get("amount", 0)
+                from_currency = parameters.get("from_currency", "USD")
+                to_currency = parameters.get("to_currency", "EUR")
+                result = self.calculator.convert_currency(amount, from_currency, to_currency)
+                return {"success": True, "message": result}
+            
+            elif action == "get_currency_rate":
+                from_currency = parameters.get("from_currency", "USD")
+                to_currency = parameters.get("to_currency", "EUR")
+                result = self.calculator.get_currency_rate(from_currency, to_currency)
+                return {"success": True, "message": result}
+            
+            elif action == "start_pomodoro":
+                duration = parameters.get("duration", None)
+                result = self.pomodoro.start_session(duration)
+                return {"success": True, "message": result}
+            
+            elif action == "start_break":
+                break_type = parameters.get("type", "short")
+                result = self.pomodoro.start_break(break_type)
+                return {"success": True, "message": result}
+            
+            elif action == "pause_pomodoro":
+                result = self.pomodoro.pause_session()
+                return {"success": True, "message": result}
+            
+            elif action == "resume_pomodoro":
+                result = self.pomodoro.resume_session()
+                return {"success": True, "message": result}
+            
+            elif action == "stop_pomodoro":
+                result = self.pomodoro.stop_session()
+                return {"success": True, "message": result}
+            
+            elif action == "pomodoro_stats":
+                result = self.pomodoro.get_stats()
+                return {"success": True, "message": result}
+            
+            elif action == "add_password":
+                name = parameters.get("name", "")
+                username = parameters.get("username", "")
+                password = parameters.get("password", "")
+                url = parameters.get("url", "")
+                result = self.password_vault.add_password(name, username, password, url)
+                return {"success": True, "message": result}
+            
+            elif action == "get_password":
+                name = parameters.get("name", "")
+                result = self.password_vault.get_password(name)
+                return {"success": True, "message": result}
+            
+            elif action == "list_passwords":
+                result = self.password_vault.list_passwords()
+                return {"success": True, "message": result}
+            
+            elif action == "generate_password":
+                length = parameters.get("length", 16)
+                result = self.password_vault.generate_strong_password(length)
+                return {"success": True, "message": result}
+            
+            elif action == "delete_password":
+                name = parameters.get("name", "")
+                result = self.password_vault.delete_password(name)
+                return {"success": True, "message": result}
+            
+            elif action == "add_note":
+                content = parameters.get("content", "")
+                category = parameters.get("category", "general")
+                tags = parameters.get("tags", [])
+                result = self.notes.add_note(content, category, tags)
+                return {"success": True, "message": result}
+            
+            elif action == "list_notes":
+                category = parameters.get("category", None)
+                result = self.notes.list_notes(category)
+                return {"success": True, "message": result}
+            
+            elif action == "search_notes":
+                query = parameters.get("query", "")
+                result = self.notes.search_notes(query)
+                return {"success": True, "message": result}
+            
+            elif action == "delete_note":
+                note_id = parameters.get("id", 0)
+                result = self.notes.delete_note(note_id)
+                return {"success": True, "message": result}
+            
+            elif action == "pin_note":
+                note_id = parameters.get("id", 0)
+                result = self.notes.pin_note(note_id)
+                return {"success": True, "message": result}
+            
+            elif action == "add_event":
+                title = parameters.get("title", "")
+                date = parameters.get("date", "")
+                time = parameters.get("time", "")
+                duration = parameters.get("duration", 60)
+                description = parameters.get("description", "")
+                result = self.calendar.add_event(title, date, time, duration, description)
+                return {"success": True, "message": result}
+            
+            elif action == "list_events":
+                days = parameters.get("days", 7)
+                result = self.calendar.list_events(days)
+                return {"success": True, "message": result}
+            
+            elif action == "today_events":
+                result = self.calendar.get_today_events()
+                return {"success": True, "message": result}
+            
+            elif action == "search_events":
+                query = parameters.get("query", "")
+                result = self.calendar.search_events(query)
+                return {"success": True, "message": result}
+            
+            elif action == "delete_event":
+                event_id = parameters.get("id", 0)
+                result = self.calendar.delete_event(event_id)
+                return {"success": True, "message": result}
             
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")

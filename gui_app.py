@@ -75,6 +75,7 @@ class AutomationControllerGUI:
         self.create_messaging_tab(notebook)
         self.create_system_tab(notebook)
         self.create_productivity_tab(notebook)
+        self.create_utilities_tab(notebook)
         self.create_fun_tab(notebook)
         
         right_panel = tk.Frame(main_container, bg="#1e1e2e")
@@ -372,6 +373,56 @@ class AutomationControllerGUI:
             ("📝 Smart Reply", "Generate smart reply"),
             ("✉️ Email Template", "Generate professional email template"),
             ("📊 Workflow Dashboard", "Show workflow dashboard"),
+        ]
+        
+        for text, command in actions:
+            btn = tk.Button(scrollable_frame,
+                          text=text,
+                          bg="#45475a",
+                          fg="#cdd6f4",
+                          font=("Arial", 9),
+                          relief="flat",
+                          cursor="hand2",
+                          command=lambda c=command: self.quick_command(c),
+                          anchor="w",
+                          padx=10,
+                          pady=8)
+            btn.pack(fill="x", padx=5, pady=2)
+    
+    def create_utilities_tab(self, notebook):
+        tab = tk.Frame(notebook, bg="#313244")
+        notebook.add(tab, text="🔧 Utilities")
+        
+        canvas = tk.Canvas(tab, bg="#313244", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(tab, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="#313244")
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        actions = [
+            ("🌤️ Get Weather", "Get weather for New York"),
+            ("📰 Get News", "Get latest technology news"),
+            ("🌍 Translate to Spanish", "Translate 'Hello, how are you?' to Spanish"),
+            ("🧮 Calculate", "Calculate 2 + 2 * 5"),
+            ("💱 Currency Conversion", "Convert 100 USD to EUR"),
+            ("🍅 Start Pomodoro", "Start Pomodoro session"),
+            ("📊 Pomodoro Stats", "Show Pomodoro statistics"),
+            ("🔐 Generate Password", "Generate a strong password"),
+            ("🗝️ List Passwords", "List all saved passwords"),
+            ("📝 Add Note", "Add note: Meeting tomorrow at 3 PM"),
+            ("📋 List Notes", "List all my notes"),
+            ("📅 Add Event", "Add event: Team meeting tomorrow at 2 PM"),
+            ("📆 Today's Events", "Show today's events"),
+            ("🗓️ Upcoming Events", "Show upcoming events"),
         ]
         
         for text, command in actions:

@@ -1,7 +1,7 @@
 # AI Desktop Automation Controller
 
 ## Overview
-An intelligent desktop automation tool powered by Google's Gemini AI, designed to interpret natural language commands and execute them on desktop computers. The project aims to make computer automation accessible to non-technical users by providing over 90 features, including **Spotify music control**, system control, voice commands, productivity monitoring, smart typing, auto-organization, file management, web automation, and fun features. It integrates advanced AI capabilities for code generation, screen analysis, and natural language understanding to streamline various desktop tasks and enhance user interaction.
+An intelligent desktop automation tool powered by Google's Gemini AI, designed to interpret natural language commands and execute them on desktop computers. The project aims to make computer automation accessible to non-technical users by providing **120+ features**, including **Spotify music control**, system control, voice commands, productivity monitoring, smart typing, auto-organization, file management, web automation, fun features, and **7 new utility modules** (Weather & News, Translation, Calculator, Pomodoro Timer, Password Vault, Quick Notes, and Calendar Manager). It integrates advanced AI capabilities for code generation, screen analysis, and natural language understanding to streamline various desktop tasks and enhance user interaction.
 
 ## User Preferences
 None specified yet.
@@ -37,6 +37,13 @@ The AI Desktop Automation Controller is built with Python 3.11 and features a mo
 - **Spotify Integration (`spotify_automation.py`):** Full Spotify playback control via natural language commands, including play/pause, skip tracks, volume control, search and play songs, playlist browsing, shuffle/repeat modes, and current track information. Uses Replit's Spotify connector for automatic OAuth and token management.
 - **YouTube Integration:** Intelligent video search, auto-play (with multiple fallback methods), and direct video opening.
 - **Enhanced Email Sending:** Supports simple text, HTML, and templated emails with attachments, multiple recipients, CC/BCC, and integration with Gmail via SMTP.
+- **Weather & News Service (`weather_news_service.py`):** Get real-time weather information for any city, 3-day forecasts, and news headlines by category. Weather uses free wttr.in API; news requires NEWS_API_KEY environment variable.
+- **Translation Service (`translation_service.py`):** Translate text between 28+ languages, detect language, and view supported languages using Google Translate API.
+- **Advanced Calculator (`advanced_calculator.py`):** Perform complex calculations with safety validation, convert between units (length, weight, temperature, volume), and get real-time currency exchange rates.
+- **Pomodoro Timer (`pomodoro_timer.py`):** Focus timer with customizable work/break intervals, pause/resume functionality, and productivity statistics tracking.
+- **Password Vault (`password_vault.py`):** Encrypted password storage using Fernet encryption, strong password generation, strength checking, and secure retrieval. Note: Basic file-based security with chmod 600 protection.
+- **Quick Notes (`quick_notes.py`):** Fast note-taking with categories, tags, search functionality, pinning, and export capabilities.
+- **Calendar Manager (`calendar_manager.py`):** Event scheduling with natural date parsing (today/tomorrow), reminders, search, and upcoming events view.
 
 ### Safety & Error Handling
 - PyAutoGUI failsafe for emergency stops.
@@ -57,3 +64,4 @@ The AI Desktop Automation Controller is built with Python 3.11 and features a mo
 - **cryptography:** For encrypted credential storage.
 - **requests:** For HTTP API calls (Spotify integration).
 - **Replit Spotify Connector:** For OAuth and token management with Spotify API.
+- **NEWS_API_KEY (optional):** For news headlines feature. Get free key from newsapi.org.
