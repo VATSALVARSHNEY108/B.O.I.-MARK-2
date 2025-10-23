@@ -251,7 +251,16 @@ class SpotifyAutomation:
     def play_track(self, query):
         """Search and play first matching track"""
         search_result = self.search(query, 'track', 1)
-        if search_result.get('success') and search_result.get('results'):
+        
+        # Check if search failed at API level
+        if not search_result.get('success'):
+            return {
+                "success": False,
+                "message": f"Spotify search failed: {search_result.get('message', 'Unknown error')}"
+            }
+        
+        # Check if results were found
+        if search_result.get('results'):
             track = search_result['results'][0]
             play_result = self.play(track['uri'])
             if play_result.get('success'):
@@ -260,7 +269,9 @@ class SpotifyAutomation:
                     "message": f"🎵 Playing: {track['display']}"
                 }
             return play_result
-        return {"success": False, "message": f"Track '{query}' not found"}
+        
+        # No results found
+        return {"success": False, "message": f"Track '{query}' not found on Spotify. Try being more specific or check the spelling."}
     
     def get_playlists(self, limit=20):
         """Get user's playlists"""
