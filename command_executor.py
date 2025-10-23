@@ -11,6 +11,7 @@ from whatsapp_automation import create_whatsapp_automation
 from code_generator import generate_code, explain_code, improve_code, debug_code
 from conversation_memory import ConversationMemory
 from screenshot_analyzer import analyze_screenshot, extract_text_from_screenshot, get_screenshot_summary
+from screen_suggester import create_screen_suggester
 from system_monitor import get_cpu_usage, get_memory_usage, get_disk_usage, get_full_system_report, get_running_processes
 from advanced_file_operations import search_files, find_large_files, find_duplicate_files, organize_files_by_extension, find_old_files, get_directory_size
 from workflow_templates import WorkflowManager
@@ -27,6 +28,7 @@ class CommandExecutor:
         self.workflow_manager = WorkflowManager()
         self.youtube = create_youtube_automation(self.gui)
         self.whatsapp = create_whatsapp_automation()
+        self.screen_suggester = create_screen_suggester()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -595,6 +597,46 @@ class CommandExecutor:
                     "success": True,
                     "message": "Text extracted from screenshot",
                     "text": text
+                }
+            
+            elif action == "suggest_screen_improvements":
+                result = self.screen_suggester.analyze_and_suggest()
+                return {
+                    "success": True,
+                    "message": "AI suggestions generated",
+                    "suggestions": result
+                }
+            
+            elif action == "check_screen_errors":
+                result = self.screen_suggester.check_for_errors()
+                return {
+                    "success": True,
+                    "message": "Screen checked for errors",
+                    "errors": result
+                }
+            
+            elif action == "get_screen_tips":
+                result = self.screen_suggester.get_quick_tips()
+                return {
+                    "success": True,
+                    "message": "Quick tips generated",
+                    "tips": result
+                }
+            
+            elif action == "analyze_screen_code":
+                result = self.screen_suggester.analyze_code()
+                return {
+                    "success": True,
+                    "message": "Code analyzed",
+                    "analysis": result
+                }
+            
+            elif action == "analyze_screen_design":
+                result = self.screen_suggester.analyze_website()
+                return {
+                    "success": True,
+                    "message": "Design analyzed",
+                    "analysis": result
                 }
             
             elif action == "system_report":

@@ -96,3 +96,138 @@ def compare_screenshots(image1_path: str, image2_path: str) -> str:
     
     except Exception as e:
         return f"Error comparing screenshots: {str(e)}"
+
+
+def suggest_improvements(image_path: str) -> str:
+    """
+    Analyze screenshot and suggest small improvements.
+    AI looks at UI/UX, design, layout, and suggests actionable changes.
+    
+    Args:
+        image_path: Path to the screenshot
+    
+    Returns:
+        List of improvement suggestions
+    """
+    prompt = """Analyze this screenshot and suggest small, actionable improvements. Focus on:
+
+1. **UI/UX Issues**: Buttons too small, unclear labels, poor contrast, accessibility problems
+2. **Design & Layout**: Spacing issues, alignment problems, color choices, font sizes
+3. **User Experience**: Confusing navigation, missing feedback, unclear call-to-actions
+4. **Content**: Text readability, information hierarchy, missing important details
+5. **Technical Issues**: Broken layouts, overlapping elements, cut-off text
+
+Provide 3-5 specific, actionable suggestions in this format:
+
+**Suggestion 1: [Title]**
+- **Issue**: [What's wrong]
+- **Fix**: [How to improve it]
+- **Impact**: [Why it matters]
+
+Keep suggestions practical and easy to implement. Focus on quick wins that make the biggest difference."""
+    
+    return analyze_screenshot(image_path, prompt)
+
+
+def analyze_screen_for_errors(image_path: str) -> str:
+    """
+    Check screenshot for visible errors, bugs, or problems.
+    
+    Args:
+        image_path: Path to the screenshot
+    
+    Returns:
+        List of detected issues
+    """
+    prompt = """Look at this screenshot carefully and identify any errors, bugs, or problems:
+
+1. **Visible Errors**: Error messages, warnings, broken images, 404 pages
+2. **Layout Problems**: Overlapping elements, cut-off text, misaligned items
+3. **Broken Functionality**: Disabled buttons, missing images, broken links
+4. **Console Errors**: Any visible error messages or warnings
+5. **Design Bugs**: Missing styles, wrong colors, inconsistent spacing
+
+List each issue clearly with:
+- **What**: Describe the problem
+- **Where**: Location on screen
+- **Severity**: Critical / High / Medium / Low
+
+If no issues found, say "No visible errors detected ✅" """
+    
+    return analyze_screenshot(image_path, prompt)
+
+
+def get_quick_tips(image_path: str) -> str:
+    """
+    Get quick, actionable tips for what's on screen.
+    Perfect for getting instant suggestions.
+    
+    Args:
+        image_path: Path to the screenshot
+    
+    Returns:
+        Quick tips and suggestions
+    """
+    prompt = """Give me 3 quick, actionable tips for this screen:
+
+1. One thing that looks good ✅
+2. One small thing to improve 🔧
+3. One thing to watch out for ⚠️
+
+Be specific and practical. Keep each tip to 1-2 sentences."""
+    
+    return analyze_screenshot(image_path, prompt)
+
+
+def analyze_code_on_screen(image_path: str) -> str:
+    """
+    Analyze code visible in screenshot and suggest improvements.
+    
+    Args:
+        image_path: Path to the screenshot
+    
+    Returns:
+        Code analysis and suggestions
+    """
+    prompt = """Analyze the code visible in this screenshot. Look for:
+
+1. **Code Quality**: Naming conventions, code structure, best practices
+2. **Potential Bugs**: Logic errors, null checks, edge cases
+3. **Performance**: Inefficient operations, unnecessary loops
+4. **Readability**: Comments, formatting, variable names
+5. **Security**: Potential vulnerabilities, unsafe operations
+
+Provide specific suggestions with line references if possible.
+Focus on the most important improvements."""
+    
+    return analyze_screenshot(image_path, prompt)
+
+
+def analyze_website_design(image_path: str) -> str:
+    """
+    Analyze website design and provide professional suggestions.
+    
+    Args:
+        image_path: Path to the screenshot
+    
+    Returns:
+        Design analysis and recommendations
+    """
+    prompt = """Analyze this website design professionally:
+
+**Good Points** (What works well):
+- List 2-3 things done well
+
+**Areas for Improvement**:
+1. **Visual Hierarchy**: How to improve focus and flow
+2. **Color & Typography**: Font, size, and color improvements  
+3. **Spacing & Layout**: White space, alignment, balance
+4. **Responsiveness**: Mobile-friendliness concerns
+5. **Accessibility**: Color contrast, text size, readability
+
+**Quick Wins** (Easy changes with big impact):
+- 3 specific, actionable changes
+
+Keep suggestions practical for implementation."""
+    
+    return analyze_screenshot(image_path, prompt)

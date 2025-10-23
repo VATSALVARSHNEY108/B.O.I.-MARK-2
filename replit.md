@@ -284,15 +284,29 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - `position` - Display mouse coordinates
 - `exit` - Stop controller
 
+### **NEW** AI Screen Analysis & Suggestions (Smart Assistant)
+- ✅ **Auto Screenshot + AI Analysis**: Takes screenshot and analyzes it
+- ✅ **Improvement Suggestions**: AI suggests UI/UX, design, layout improvements
+- ✅ **Error Detection**: Finds visible errors, bugs, broken elements
+- ✅ **Quick Tips**: Get 3 instant actionable tips
+- ✅ **Code Review**: AI reviews code on screen for quality, bugs, performance
+- ✅ **Website Analysis**: Professional design review with specific recommendations
+- ✅ **Voice Commands**: "Suggest improvements", "Check for errors", "Give me tips"
+- ✅ **Standalone Tool**: Run `screen_suggester.py` for instant analysis
+
+### WhatsApp Desktop Integration
+- ✅ **Direct App Opening**: Opens installed WhatsApp Desktop (no browser needed)
+- ✅ **Contact Chat Opening**: Opens specific contact chats directly
+- ✅ **Message Pre-fill**: Opens chat with message ready to send
+- ✅ **Cross-Platform**: Works on Windows, Mac, and Linux
+- ✅ **HTML Launcher**: Simple web interface to open WhatsApp
+- ✅ **URL Scheme Support**: Uses wa.me links for better compatibility
+
 ## Future Enhancements (Not Yet Implemented)
 - Voice control with speech recognition
 - Task scheduling and reminders
-- Persistent workflow storage
 - Visual workflow builder GUI
-- Data extraction from screenshots using Gemini vision
 - Adaptive error recovery
-- Activity logging and history
-- WhatsApp integration
 - Slack/Discord messaging
 - Calendar integration
 

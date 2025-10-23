@@ -81,6 +81,11 @@ CODE GENERATION & EXECUTION:
 SCREENSHOT ANALYSIS (VISION AI):
 - analyze_screenshot: Analyze screenshot using AI vision (parameters: image_path, query [optional])
 - extract_text: Extract text from screenshot (OCR) (parameters: image_path)
+- suggest_screen_improvements: Take screenshot and get AI improvement suggestions (parameters: none)
+- check_screen_errors: Take screenshot and check for visible errors/bugs (parameters: none)
+- get_screen_tips: Take screenshot and get 3 quick tips (parameters: none)
+- analyze_screen_code: Take screenshot and analyze visible code (parameters: none)
+- analyze_screen_design: Take screenshot and analyze website/app design (parameters: none)
 
 SYSTEM MONITORING:
 - system_report: Full system health report (CPU, RAM, disk, network)
@@ -123,6 +128,11 @@ IMPORTANT:
 - If user says "send this photo/file to John", use send_file with file_path
 - If user says "whatsapp [name/number]" or "send whatsapp to [name/number]", use send_whatsapp
 - For WhatsApp, phone must include country code (e.g., "+1234567890")
+- If user says "suggest improvements", "analyze my screen", "what can I improve", use suggest_screen_improvements
+- If user says "check for errors", "find bugs on screen", use check_screen_errors
+- If user says "give me tips", "quick suggestions", use get_screen_tips
+- If user says "analyze this code", "review code on screen", use analyze_screen_code
+- If user says "analyze this design", "review this website", use analyze_screen_design
 - If user says "schedule whatsapp at 3pm", use send_whatsapp_scheduled with hour=15
 - Extract contact names accurately (e.g., "John", "Sarah", "Mom", "Boss")
 - If user says "write code for X" or "generate code for X", use write_code_to_editor action with description parameter
