@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import tkinter as tk
-from tkinter import ttk, scrolledtext, messagebox
+from tkinter import ttk, scrolledtext, messagebox, filedialog
 import threading
 import os
 from dotenv import load_dotenv
@@ -14,7 +14,7 @@ class AutomationControllerGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("🤖 AI Desktop Automation Controller")
-        self.root.geometry("900x700")
+        self.root.geometry("1200x800")
         self.root.configure(bg="#1e1e2e")
         
         self.executor = CommandExecutor()
@@ -35,14 +35,12 @@ class AutomationControllerGUI:
                        background="#1e1e2e", 
                        foreground="#89b4fa",
                        font=("Arial", 10))
-        style.configure("Action.TButton",
-                       background="#89b4fa",
-                       foreground="#1e1e2e",
-                       font=("Arial", 10, "bold"),
-                       borderwidth=0,
-                       padding=10)
+        style.configure("Category.TLabel",
+                       background="#313244",
+                       foreground="#f9e2af",
+                       font=("Arial", 11, "bold"))
         
-        header_frame = tk.Frame(self.root, bg="#1e1e2e", pady=20)
+        header_frame = tk.Frame(self.root, bg="#1e1e2e", pady=15)
         header_frame.pack(fill="x")
         
         title = ttk.Label(header_frame, 
@@ -51,47 +49,42 @@ class AutomationControllerGUI:
         title.pack()
         
         subtitle = ttk.Label(header_frame,
-                            text="Powered by Gemini AI • Code Generation & Desktop Automation",
+                            text="Powered by Gemini AI • Complete Desktop Automation Suite",
                             style="Info.TLabel")
         subtitle.pack()
         
-        main_frame = tk.Frame(self.root, bg="#1e1e2e", padx=20)
-        main_frame.pack(fill="both", expand=True)
+        main_container = tk.Frame(self.root, bg="#1e1e2e")
+        main_container.pack(fill="both", expand=True, padx=20, pady=10)
         
-        examples_frame = tk.LabelFrame(main_frame, 
-                                      text="  💡 Quick Examples  ",
-                                      bg="#313244",
-                                      fg="#cdd6f4",
-                                      font=("Arial", 10, "bold"),
-                                      padx=10,
-                                      pady=10)
-        examples_frame.pack(fill="x", pady=(0, 15))
+        left_panel = tk.Frame(main_container, bg="#1e1e2e", width=400)
+        left_panel.pack(side="left", fill="both", expand=False, padx=(0, 10))
+        left_panel.pack_propagate(False)
         
-        examples = [
-            ("🤖 Write code for checking palindrome", self.example1),
-            ("📝 Open notepad and type Hello World", self.example2),
-            ("📸 Take a screenshot", self.example3),
-            ("🔍 Search Google for Python tutorials", self.example4),
-        ]
+        categories_label = tk.Label(left_panel,
+                                   text="🎯 Quick Actions",
+                                   bg="#1e1e2e",
+                                   fg="#cdd6f4",
+                                   font=("Arial", 13, "bold"))
+        categories_label.pack(pady=(0, 10))
         
-        for text, command in examples:
-            btn = tk.Button(examples_frame,
-                          text=text,
-                          bg="#45475a",
-                          fg="#cdd6f4",
-                          font=("Arial", 9),
-                          relief="flat",
-                          cursor="hand2",
-                          command=command,
-                          padx=10,
-                          pady=5)
-            btn.pack(side="left", padx=5, expand=True, fill="x")
+        notebook = ttk.Notebook(left_panel)
+        notebook.pack(fill="both", expand=True)
         
-        input_frame = tk.Frame(main_frame, bg="#1e1e2e")
+        self.create_code_tab(notebook)
+        self.create_desktop_tab(notebook)
+        self.create_messaging_tab(notebook)
+        self.create_system_tab(notebook)
+        self.create_productivity_tab(notebook)
+        self.create_fun_tab(notebook)
+        
+        right_panel = tk.Frame(main_container, bg="#1e1e2e")
+        right_panel.pack(side="right", fill="both", expand=True)
+        
+        input_frame = tk.Frame(right_panel, bg="#1e1e2e")
         input_frame.pack(fill="x", pady=(0, 15))
         
         input_label = tk.Label(input_frame,
-                              text="🎯 What would you like to do?",
+                              text="💬 Enter Command or Use Quick Actions",
                               bg="#1e1e2e",
                               fg="#cdd6f4",
                               font=("Arial", 11, "bold"))
@@ -122,14 +115,14 @@ class AutomationControllerGUI:
                                     pady=10)
         self.execute_btn.pack(side="right")
         
-        output_label = tk.Label(main_frame,
-                               text="📋 Output",
+        output_label = tk.Label(right_panel,
+                               text="📋 Output Console",
                                bg="#1e1e2e",
                                fg="#cdd6f4",
                                font=("Arial", 11, "bold"))
         output_label.pack(anchor="w", pady=(0, 5))
         
-        self.output_area = scrolledtext.ScrolledText(main_frame,
+        self.output_area = scrolledtext.ScrolledText(right_panel,
                                                      bg="#313244",
                                                      fg="#cdd6f4",
                                                      font=("Consolas", 10),
@@ -154,7 +147,7 @@ class AutomationControllerGUI:
             "pady": 8
         }
         
-        help_btn = tk.Button(bottom_frame, text="❓ Help", command=self.show_help, **button_config)
+        help_btn = tk.Button(bottom_frame, text="❓ Full Help", command=self.show_help, **button_config)
         help_btn.pack(side="left", padx=5)
         
         contacts_btn = tk.Button(bottom_frame, text="👥 Contacts", command=self.show_contacts, **button_config)
@@ -170,6 +163,280 @@ class AutomationControllerGUI:
                                     font=("Arial", 9))
         self.status_label.pack(side="right")
     
+    def create_code_tab(self, notebook):
+        tab = tk.Frame(notebook, bg="#313244")
+        notebook.add(tab, text="💻 Code")
+        
+        canvas = tk.Canvas(tab, bg="#313244", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(tab, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="#313244")
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        actions = [
+            ("🤖 Generate Palindrome Checker", "Write code for checking palindrome"),
+            ("🔢 Generate Bubble Sort", "Generate Python code for bubble sort"),
+            ("🧮 Generate Calculator", "Create JavaScript code for calculator"),
+            ("📊 Generate Data Analysis", "Write Python code for data analysis"),
+            ("🔐 Generate Password Generator", "Create code for password generator"),
+            ("🌐 Generate Web Scraper", "Write Python code for web scraping"),
+            ("📝 Generate Todo App", "Create JavaScript todo app"),
+            ("🎮 Generate Game Logic", "Write Python code for tic-tac-toe game"),
+        ]
+        
+        for text, command in actions:
+            btn = tk.Button(scrollable_frame,
+                          text=text,
+                          bg="#45475a",
+                          fg="#cdd6f4",
+                          font=("Arial", 9),
+                          relief="flat",
+                          cursor="hand2",
+                          command=lambda c=command: self.quick_command(c),
+                          anchor="w",
+                          padx=10,
+                          pady=8)
+            btn.pack(fill="x", padx=5, pady=2)
+    
+    def create_desktop_tab(self, notebook):
+        tab = tk.Frame(notebook, bg="#313244")
+        notebook.add(tab, text="🖥️ Desktop")
+        
+        canvas = tk.Canvas(tab, bg="#313244", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(tab, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="#313244")
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        actions = [
+            ("📝 Open Notepad", "Open notepad"),
+            ("📸 Take Screenshot", "Take a screenshot"),
+            ("🔍 Search Google", "Search Google for Python tutorials"),
+            ("🌐 Open Browser", "Open chrome"),
+            ("📋 Copy Text", "Copy text Hello World to clipboard"),
+            ("📁 Create File", "Create file test.txt with content Hello"),
+            ("⌨️ Type Text", "Type Hello World"),
+            ("🖱️ Analyze Screen", "Analyze current screen"),
+            ("📊 Get System Info", "Show system information"),
+        ]
+        
+        for text, command in actions:
+            btn = tk.Button(scrollable_frame,
+                          text=text,
+                          bg="#45475a",
+                          fg="#cdd6f4",
+                          font=("Arial", 9),
+                          relief="flat",
+                          cursor="hand2",
+                          command=lambda c=command: self.quick_command(c),
+                          anchor="w",
+                          padx=10,
+                          pady=8)
+            btn.pack(fill="x", padx=5, pady=2)
+    
+    def create_messaging_tab(self, notebook):
+        tab = tk.Frame(notebook, bg="#313244")
+        notebook.add(tab, text="📱 Messaging")
+        
+        canvas = tk.Canvas(tab, bg="#313244", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(tab, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="#313244")
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        actions = [
+            ("👥 Add Contact", "Add contact John with phone 555-1234"),
+            ("📋 List Contacts", "List all contacts"),
+            ("📧 Send Email", "Send email to example@email.com"),
+            ("💬 Send WhatsApp", "Send WhatsApp message"),
+            ("📨 Email with Template", "Send template email"),
+            ("📎 Email with Attachment", "Send email with attachment"),
+            ("🎥 Open YouTube", "Search YouTube for music"),
+            ("▶️ Play YouTube Video", "Play YouTube video"),
+        ]
+        
+        for text, command in actions:
+            btn = tk.Button(scrollable_frame,
+                          text=text,
+                          bg="#45475a",
+                          fg="#cdd6f4",
+                          font=("Arial", 9),
+                          relief="flat",
+                          cursor="hand2",
+                          command=lambda c=command: self.quick_command(c),
+                          anchor="w",
+                          padx=10,
+                          pady=8)
+            btn.pack(fill="x", padx=5, pady=2)
+    
+    def create_system_tab(self, notebook):
+        tab = tk.Frame(notebook, bg="#313244")
+        notebook.add(tab, text="⚙️ System")
+        
+        canvas = tk.Canvas(tab, bg="#313244", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(tab, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="#313244")
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        actions = [
+            ("📊 System Report", "Get full system report"),
+            ("💾 Check Disk Usage", "Show disk usage"),
+            ("🧠 Check Memory", "Show memory usage"),
+            ("⚡ CPU Usage", "Get CPU usage"),
+            ("📂 Organize Downloads", "Organize downloads folder"),
+            ("🔍 Find Large Files", "Find large files"),
+            ("📁 Find Duplicates", "Find duplicate files"),
+            ("🗜️ Compress Old Files", "Compress files older than 90 days"),
+            ("💤 Sleep Computer", "Put computer to sleep"),
+            ("🔒 Lock Computer", "Lock the computer"),
+            ("🔊 Volume Control", "Set volume to 50"),
+        ]
+        
+        for text, command in actions:
+            btn = tk.Button(scrollable_frame,
+                          text=text,
+                          bg="#45475a",
+                          fg="#cdd6f4",
+                          font=("Arial", 9),
+                          relief="flat",
+                          cursor="hand2",
+                          command=lambda c=command: self.quick_command(c),
+                          anchor="w",
+                          padx=10,
+                          pady=8)
+            btn.pack(fill="x", padx=5, pady=2)
+    
+    def create_productivity_tab(self, notebook):
+        tab = tk.Frame(notebook, bg="#313244")
+        notebook.add(tab, text="📈 Productivity")
+        
+        canvas = tk.Canvas(tab, bg="#313244", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(tab, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="#313244")
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        actions = [
+            ("📊 Screen Time Dashboard", "Show screen time dashboard"),
+            ("🎯 Enable Focus Mode", "Enable focus mode for 2 hours"),
+            ("🚫 Block Distractions", "Block distracting websites"),
+            ("📈 Productivity Score", "Get my productivity score"),
+            ("💧 Water Reminder", "Send water reminder"),
+            ("📋 Daily Summary", "Generate daily summary"),
+            ("📝 Smart Reply", "Generate smart reply"),
+            ("✉️ Email Template", "Generate professional email template"),
+            ("📊 Workflow Dashboard", "Show workflow dashboard"),
+        ]
+        
+        for text, command in actions:
+            btn = tk.Button(scrollable_frame,
+                          text=text,
+                          bg="#45475a",
+                          fg="#cdd6f4",
+                          font=("Arial", 9),
+                          relief="flat",
+                          cursor="hand2",
+                          command=lambda c=command: self.quick_command(c),
+                          anchor="w",
+                          padx=10,
+                          pady=8)
+            btn.pack(fill="x", padx=5, pady=2)
+    
+    def create_fun_tab(self, notebook):
+        tab = tk.Frame(notebook, bg="#313244")
+        notebook.add(tab, text="🎉 Fun")
+        
+        canvas = tk.Canvas(tab, bg="#313244", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(tab, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="#313244")
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        actions = [
+            ("😊 Get Compliment", "Give me a compliment"),
+            ("🎊 Celebrate Task", "Celebrate task completion"),
+            ("🎨 Set Mood: Happy", "Set mood to happy"),
+            ("🌙 Set Mood: Calm", "Set mood to calm"),
+            ("⚡ Set Mood: Energetic", "Set mood to energetic"),
+            ("💬 Chat with Bot", "Talk to chatbot"),
+            ("🎲 Random Fact", "Tell me a random fact"),
+            ("🌟 Motivate Me", "Give me motivation"),
+        ]
+        
+        for text, command in actions:
+            btn = tk.Button(scrollable_frame,
+                          text=text,
+                          bg="#45475a",
+                          fg="#cdd6f4",
+                          font=("Arial", 9),
+                          relief="flat",
+                          cursor="hand2",
+                          command=lambda c=command: self.quick_command(c),
+                          anchor="w",
+                          padx=10,
+                          pady=8)
+            btn.pack(fill="x", padx=5, pady=2)
+    
+    def quick_command(self, command):
+        self.command_input.delete(0, "end")
+        self.command_input.insert(0, command)
+        self.execute_command()
+    
     def check_api_key(self):
         if not os.environ.get("GEMINI_API_KEY"):
             self.log_output("❌ ERROR: GEMINI_API_KEY not found in environment variables", "error")
@@ -177,7 +444,7 @@ class AutomationControllerGUI:
             self.set_status("❌ API Key Missing", "#f38ba8")
         else:
             self.log_output("✅ Connected to Gemini AI", "success")
-            self.log_output("💡 Ready to execute commands! Try the examples above or type your own.", "info")
+            self.log_output("💡 Ready to execute commands! Try the quick actions or type your own command.", "info")
             self.set_status("✅ Ready", "#a6e3a1")
     
     def set_status(self, text, color="#a6e3a1"):
@@ -260,50 +527,112 @@ class AutomationControllerGUI:
     
     def show_help(self):
         help_text = """
-📚 Available Features:
+╔══════════════════════════════════════════════════════════════╗
+║          🤖 AI DESKTOP AUTOMATION CONTROLLER HELP            ║
+╚══════════════════════════════════════════════════════════════╝
 
-🤖 AI Code Generation:
-   • Write code for checking palindrome
-   • Generate Python code for bubble sort
-   • Create JavaScript code for calculator
+📚 AVAILABLE FEATURES:
 
-🖥️ Desktop Automation:
-   • Open notepad
-   • Type Hello World
-   • Take a screenshot
-   • Press enter
-   • Search Google for Python tutorials
+┌─ 💻 CODE GENERATION ─────────────────────────────────────────┐
+│ • Generate code in any language (Python, JavaScript, etc.)   │
+│ • Explain existing code                                      │
+│ • Improve and optimize code                                  │
+│ • Debug code and find errors                                 │
+│ • Write code directly to editor                              │
+│                                                               │
+│ Examples:                                                     │
+│   - "Write code for checking palindrome"                     │
+│   - "Generate Python code for bubble sort"                   │
+│   - "Create JavaScript calculator"                           │
+└───────────────────────────────────────────────────────────────┘
 
-📱 Messaging (Advanced):
-   • Text Sarah that I'm running late
-   • Email my boss about the meeting
-   • Add contact Mom with phone 555-1234
+┌─ 🖥️ DESKTOP AUTOMATION ──────────────────────────────────────┐
+│ • Open applications                                           │
+│ • Type text and press keys                                   │
+│ • Take screenshots                                            │
+│ • Click and move mouse                                        │
+│ • Search the web                                              │
+│ • Analyze screen content                                      │
+│                                                               │
+│ Examples:                                                     │
+│   - "Open notepad and type Hello World"                      │
+│   - "Take a screenshot"                                       │
+│   - "Search Google for Python tutorials"                     │
+└───────────────────────────────────────────────────────────────┘
 
-💡 Multi-Step Workflows:
-   • Open notepad and type Hello World
-   • Create file test.txt with content Hello
+┌─ 📱 MESSAGING & COMMUNICATION ───────────────────────────────┐
+│ • Send emails (plain, HTML, with attachments)                │
+│ • Send WhatsApp messages                                      │
+│ • Manage contacts                                             │
+│ • YouTube automation                                          │
+│ • Email templates                                             │
+│                                                               │
+│ Examples:                                                     │
+│   - "Add contact Mom with phone 555-1234"                    │
+│   - "Send email to boss about meeting"                       │
+│   - "Send WhatsApp message to John"                          │
+│   - "Play YouTube video about Python"                        │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ ⚙️ SYSTEM & FILE MANAGEMENT ────────────────────────────────┐
+│ • System monitoring (CPU, memory, disk)                       │
+│ • File organization and cleanup                              │
+│ • Find large/duplicate files                                 │
+│ • Compress and backup files                                  │
+│ • System control (sleep, lock, volume)                       │
+│ • Process management                                          │
+│                                                               │
+│ Examples:                                                     │
+│   - "Show system information"                                │
+│   - "Find large files"                                        │
+│   - "Organize downloads folder"                              │
+│   - "Set volume to 50"                                        │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ 📈 PRODUCTIVITY FEATURES ───────────────────────────────────┐
+│ • Screen time tracking                                        │
+│ • Focus mode and distraction blocking                        │
+│ • Productivity scoring                                        │
+│ • Smart reminders                                             │
+│ • Daily summaries                                             │
+│ • Smart typing and replies                                    │
+│                                                               │
+│ Examples:                                                     │
+│   - "Enable focus mode for 2 hours"                          │
+│   - "Show screen time dashboard"                             │
+│   - "Send water reminder"                                     │
+│   - "Generate daily summary"                                  │
+└───────────────────────────────────────────────────────────────┘
+
+┌─ 🎉 FUN FEATURES ────────────────────────────────────────────┐
+│ • Get random compliments                                      │
+│ • Celebrate task completion                                   │
+│ • Set mood themes                                             │
+│ • Chatbot conversations                                       │
+│ • Motivation and inspiration                                  │
+│                                                               │
+│ Examples:                                                     │
+│   - "Give me a compliment"                                   │
+│   - "Celebrate task completion"                              │
+│   - "Set mood to energetic"                                   │
+└───────────────────────────────────────────────────────────────┘
+
+💡 TIP: Use the tabbed quick actions panel on the left to quickly
+        access common commands, or type natural language commands!
+
+🎯 MULTI-STEP WORKFLOWS:
+   You can combine multiple actions in one command:
+   • "Open notepad and type my todo list"
+   • "Take screenshot and analyze it"
+   • "Search YouTube and play first result"
+
+❓ For more help, type 'help' or visit the quick actions tabs!
 """
         self.log_output(help_text, "info")
     
     def show_contacts(self):
         result = self.executor.execute_single_action("list_contacts", {})
         self.log_output(result["message"], "info")
-    
-    def example1(self):
-        self.command_input.delete(0, "end")
-        self.command_input.insert(0, "Write code for checking palindrome")
-    
-    def example2(self):
-        self.command_input.delete(0, "end")
-        self.command_input.insert(0, "Open notepad and type Hello World")
-    
-    def example3(self):
-        self.command_input.delete(0, "end")
-        self.command_input.insert(0, "Take a screenshot")
-    
-    def example4(self):
-        self.command_input.delete(0, "end")
-        self.command_input.insert(0, "Search Google for Python tutorials")
 
 def main():
     root = tk.Tk()

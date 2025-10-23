@@ -23,9 +23,9 @@ args = "GUI App"
 name = "GUI App"
 author = "agent"
 
+[workflows.workflow.metadata]
+outputType = "console"
+
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python gui_app.py"
-
-[workflows.workflow.metadata]
-outputType = "vnc"
