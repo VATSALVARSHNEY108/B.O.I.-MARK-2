@@ -1,0 +1,67 @@
+C:\Users\VATSAL VARSHNEY\PycharmProjects\train-llm-from-scratch\.venv1\Scripts\python.exe C:/Users/VATSAL VARSHNEY/AppData/Local/Programs/PyCharm/plugins/python-ce/helpers/packaging_tool.py install pomodoro-timer
+Collecting pomodoro-timer
+  Using cached pomodoro_timer-0.1.1-py3-none-any.whl.metadata (688 bytes)
+Collecting simpleaudio (from pomodoro-timer)
+  Using cached simpleaudio-1.0.4.tar.gz (2.0 MB)
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Using cached pomodoro_timer-0.1.1-py3-none-any.whl (4.3 MB)
+Building wheels for collected packages: simpleaudio
+  Building wheel for simpleaudio (setup.py): started
+  Building wheel for simpleaudio (setup.py): finished with status 'error'
+  Running setup.py clean for simpleaudio
+Failed to build simpleaudio
+
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /simple/pomodoro-timer/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /simple/pomodoro-timer/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /simple/pomodoro-timer/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /simple/pomodoro-timer/
+  DEPRECATION: Building 'simpleaudio' using the legacy setup.py bdist_wheel mechanism, which will be removed in a future version. pip 25.3 will enforce this behaviour change. A possible replacement is to use the standardized build interface by setting the `--use-pep517` option, (possibly combined with `--no-build-isolation`), or adding a `pyproject.toml` file to the source tree of 'simpleaudio'. Discussion can be found at https://github.com/pypa/pip/issues/6334
+  error: subprocess-exited-with-error
+  
+  python setup.py bdist_wheel did not run successfully.
+  exit code: 1
+  
+  [31 lines of output]
+  C:\Users\VATSAL VARSHNEY\PycharmProjects\train-llm-from-scratch\.venv1\Lib\site-packages\setuptools\_distutils\dist.py:289: UserWarning: Unknown distribution option: 'test_suite'
+    warnings.warn(msg)
+  C:\Users\VATSAL VARSHNEY\PycharmProjects\train-llm-from-scratch\.venv1\Lib\site-packages\setuptools\dist.py:759: SetuptoolsDeprecationWarning: License classifiers are deprecated.
+  !!
+  
+          ********************************************************************************
+          Please consider removing the following classifiers in favor of a SPDX license expression:
+  
+          License :: OSI Approved :: MIT License
+  
+          See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+          ********************************************************************************
+  
+  !!
+    self._finalize_license_expression()
+  running bdist_wheel
+  running build
+  running build_py
+  creating build\lib.win-amd64-cpython-311\simpleaudio
+  copying simpleaudio\__init__.py -> build\lib.win-amd64-cpython-311\simpleaudio
+  copying simpleaudio\shiny.py -> build\lib.win-amd64-cpython-311\simpleaudio
+  copying simpleaudio\functionchecks.py -> build\lib.win-amd64-cpython-311\simpleaudio
+  creating build\lib.win-amd64-cpython-311\simpleaudio\test_audio
+  copying simpleaudio\test_audio\c.wav -> build\lib.win-amd64-cpython-311\simpleaudio\test_audio
+  copying simpleaudio\test_audio\e.wav -> build\lib.win-amd64-cpython-311\simpleaudio\test_audio
+  copying simpleaudio\test_audio\g.wav -> build\lib.win-amd64-cpython-311\simpleaudio\test_audio
+  copying simpleaudio\test_audio\left_right.wav -> build\lib.win-amd64-cpython-311\simpleaudio\test_audio
+  copying simpleaudio\test_audio\notes_2_16_44.wav -> build\lib.win-amd64-cpython-311\simpleaudio\test_audio
+  running build_ext
+  building 'simpleaudio._simpleaudio' extension
+  error: Microsoft Visual C++ 14.0 or greater is required. Get it with "Microsoft C++ Build Tools": https://visualstudio.microsoft.com/visual-cpp-build-tools/
+  [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+  ERROR: Failed building wheel for simpleaudio
+error: failed-wheel-build-for-install
+
+Failed to build installable wheels for some pyproject.toml based projects
+
+simpleaudio
+
+Process finished with exit code 1
