@@ -34,6 +34,7 @@ from pomodoro_timer import PomodoroTimer
 from password_vault import PasswordVault
 from quick_notes import QuickNotes
 from calendar_manager import CalendarManager
+from ecosystem_manager import EcosystemManager
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -65,6 +66,14 @@ class CommandExecutor:
         self.password_vault = PasswordVault()
         self.notes = QuickNotes()
         self.calendar = CalendarManager()
+        self.ecosystem = EcosystemManager(
+            self.calendar,
+            self.notes,
+            self.pomodoro,
+            self.productivity_monitor,
+            self.weather_news,
+            self.password_vault
+        )
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -1315,6 +1324,54 @@ class CommandExecutor:
             elif action == "delete_event":
                 event_id = parameters.get("id", 0)
                 result = self.calendar.delete_event(event_id)
+                return {"success": True, "message": result}
+            
+            elif action == "ecosystem_dashboard":
+                result = self.ecosystem.get_unified_dashboard()
+                return {"success": True, "message": result}
+            
+            elif action == "morning_briefing":
+                result = self.ecosystem.morning_briefing()
+                return {"success": True, "message": result}
+            
+            elif action == "evening_summary":
+                result = self.ecosystem.evening_summary()
+                return {"success": True, "message": result}
+            
+            elif action == "smart_search":
+                query = parameters.get("query", "")
+                result = self.ecosystem.smart_search(query)
+                return {"success": True, "message": result}
+            
+            elif action == "auto_organize":
+                result = self.ecosystem.auto_organize()
+                return {"success": True, "message": result}
+            
+            elif action == "productivity_insights":
+                result = self.ecosystem.get_productivity_insights()
+                return {"success": True, "message": result}
+            
+            elif action == "create_workflow":
+                name = parameters.get("name", "")
+                actions = parameters.get("actions", [])
+                result = self.ecosystem.create_workflow(name, actions)
+                return {"success": True, "message": result}
+            
+            elif action == "list_workflows":
+                result = self.ecosystem.list_workflows()
+                return {"success": True, "message": result}
+            
+            elif action == "run_workflow":
+                name = parameters.get("name", "")
+                result = self.ecosystem.run_workflow(name)
+                return {"success": True, "message": result}
+            
+            elif action == "smart_suggestions":
+                suggestions = self.ecosystem.generate_smart_suggestions()
+                result = "\n💡 SMART SUGGESTIONS:\n" + "="*50 + "\n"
+                for i, suggestion in enumerate(suggestions, 1):
+                    result += f"{i}. {suggestion}\n"
+                result += "="*50
                 return {"success": True, "message": result}
             
             elif action == "error":

@@ -24,8 +24,8 @@ name = "GUI App"
 author = "agent"
 
 [workflows.workflow.metadata]
-outputType = "vnc"
+outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "bash -c \"export DISPLAY=:99; Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 & sleep 2; python gui_app.py\""
+args = "python gui_app.py"
