@@ -26,7 +26,7 @@ from file_manager import FileManager
 from web_automation import WebAutomation
 from productivity_monitor import ProductivityMonitor
 from fun_features import FunFeatures
-from spotify_automation import create_spotify_automation
+from spotify_desktop_automation import create_spotify_desktop_automation
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -50,7 +50,7 @@ class CommandExecutor:
         self.web_automation = WebAutomation()
         self.productivity_monitor = ProductivityMonitor()
         self.fun_features = FunFeatures()
-        self.spotify = create_spotify_automation()
+        self.spotify = create_spotify_desktop_automation()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -1117,6 +1117,24 @@ class CommandExecutor:
             elif action == "spotify_repeat":
                 state = parameters.get("state", "context")
                 result = self.spotify.repeat(state)
+                return result
+            
+            elif action == "spotify_open":
+                result = self.spotify.open_spotify()
+                return result
+            
+            elif action == "spotify_volume_up":
+                steps = parameters.get("steps", 1)
+                result = self.spotify.volume_up(steps)
+                return result
+            
+            elif action == "spotify_volume_down":
+                steps = parameters.get("steps", 1)
+                result = self.spotify.volume_down(steps)
+                return result
+            
+            elif action == "spotify_mute":
+                result = self.spotify.mute()
                 return result
             
             elif action == "error":
