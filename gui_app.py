@@ -49,7 +49,7 @@ class AutomationControllerGUI:
         title.pack()
         
         subtitle = ttk.Label(header_frame,
-                            text="Powered by Gemini AI • Complete Desktop Automation Suite",
+                            text="Powered by Gemini AI • Complete Desktop Automation Suite with Spotify Control",
                             style="Info.TLabel")
         subtitle.pack()
         

@@ -1,11 +1,11 @@
-modules = ["python-3.11"]
+modules = ["python-3.11", "python3"]
 [agent]
 expertMode = true
-integrations = ["python_gemini:1.0.0"]
+integrations = ["python_gemini:1.0.0", "spotify:1.0.0"]
 
 [nix]
 channel = "stable-25_05"
-packages = ["cargo", "espeak-ng", "libiconv", "libxcrypt", "openssl", "pkg-config", "rustc", "scrot", "xvfb-run", "xorg.xorgserver", "xorg.xinit"]
+packages = ["cargo", "espeak-ng", "libiconv", "libxcrypt", "openssl", "pkg-config", "rustc", "scrot", "xorg.xinit", "xorg.xorgserver", "xvfb-run"]
 
 [workflows]
 runButton = "Project"

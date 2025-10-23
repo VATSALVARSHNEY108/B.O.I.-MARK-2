@@ -26,6 +26,7 @@ from file_manager import FileManager
 from web_automation import WebAutomation
 from productivity_monitor import ProductivityMonitor
 from fun_features import FunFeatures
+from spotify_automation import create_spotify_automation
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -49,6 +50,7 @@ class CommandExecutor:
         self.web_automation = WebAutomation()
         self.productivity_monitor = ProductivityMonitor()
         self.fun_features = FunFeatures()
+        self.spotify = create_spotify_automation()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -1059,6 +1061,63 @@ class CommandExecutor:
                 user_input = parameters.get("message", "")
                 result = self.fun_features.chatbot_respond(user_input)
                 return {"success": True, "message": result}
+            
+            elif action == "spotify_play":
+                uri = parameters.get("uri")
+                result = self.spotify.play(uri)
+                return result
+            
+            elif action == "spotify_pause":
+                result = self.spotify.pause()
+                return result
+            
+            elif action == "spotify_next":
+                result = self.spotify.next_track()
+                return result
+            
+            elif action == "spotify_previous":
+                result = self.spotify.previous_track()
+                return result
+            
+            elif action == "spotify_volume":
+                volume = parameters.get("volume", 50)
+                result = self.spotify.set_volume(volume)
+                return result
+            
+            elif action == "spotify_current":
+                result = self.spotify.get_current_track()
+                return result
+            
+            elif action == "spotify_search":
+                query = parameters.get("query", "")
+                search_type = parameters.get("type", "track")
+                limit = parameters.get("limit", 5)
+                if not query:
+                    return {"success": False, "message": "No search query provided"}
+                result = self.spotify.search(query, search_type, limit)
+                return result
+            
+            elif action == "spotify_play_track":
+                query = parameters.get("query", "")
+                if not query:
+                    return {"success": False, "message": "No song/artist specified"}
+                result = self.spotify.play_track(query)
+                return result
+            
+            elif action == "spotify_playlists":
+                limit = parameters.get("limit", 20)
+                result = self.spotify.get_playlists(limit)
+                return result
+            
+            elif action == "spotify_shuffle":
+                state = parameters.get("state", True)
+                result = self.spotify.shuffle(state)
+                return result
+            
+            elif action == "spotify_repeat":
+                state = parameters.get("state", "context")
+                result = self.spotify.repeat(state)
+                return result
             
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")

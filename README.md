@@ -1,6 +1,6 @@
 # AI Desktop Automation Controller
 
-An **incredibly intelligent** desktop automation tool powered by Google's Gemini AI with **80+ features** including AI Vision, system control, productivity monitoring, voice commands, smart typing, auto-organization, and complete desktop automation. Control your entire computer with natural language!
+An **incredibly intelligent** desktop automation tool powered by Google's Gemini AI with **90+ features** including Spotify music control, AI Vision, system control, productivity monitoring, voice commands, smart typing, auto-organization, and complete desktop automation. Control your entire computer with natural language!
 
 ## Features
 
@@ -95,6 +95,23 @@ An **incredibly intelligent** desktop automation tool powered by Google's Gemini
 - **Mini Chatbot**: Friendly AI companion for breaks
 - **Playlist Suggestions**: Music based on your mood
 
+### 🎵 Spotify Music Control (NEW!)
+- **Voice-Controlled Playback**: Play, pause, skip tracks with natural commands
+- **Smart Search & Play**: "Play [song name] on Spotify" - searches and plays instantly
+- **Volume Control**: Set volume with voice commands
+- **Track Information**: See what's currently playing
+- **Playlist Management**: Browse and play your Spotify playlists
+- **Shuffle & Repeat**: Control playback modes
+- **Next/Previous**: Navigate through tracks
+- **Examples**:
+  - "Play Shape of You on Spotify"
+  - "Pause music"
+  - "Next song"
+  - "What's playing?"
+  - "Set volume to 50"
+  - "Show my playlists"
+  - "Shuffle on"
+
 ### 📱 Messaging & Communication (Advanced)
 - **SMS Messaging**: Send text messages to contacts via Twilio
 - **Email**: Send emails with attachments via Gmail
@@ -185,6 +202,17 @@ python main.py
 - "Auto-rename files in Downloads"
 - "Find duplicate files"
 - "Backup my Documents folder"
+
+**Spotify Music (NEW!):**
+- "Play Bohemian Rhapsody on Spotify"
+- "Pause music"
+- "Next song"
+- "Previous track"
+- "What's playing?"
+- "Set volume to 70"
+- "Show my playlists"
+- "Shuffle on"
+- "Repeat off"
 - "Compress old files"
 
 **Productivity (NEW!):**

@@ -1,7 +1,7 @@
 # AI Desktop Automation Controller
 
 ## Overview
-An intelligent desktop automation tool powered by Google's Gemini AI, designed to interpret natural language commands and execute them on desktop computers. The project aims to make computer automation accessible to non-technical users by providing over 80 features, including system control, voice commands, productivity monitoring, smart typing, auto-organization, file management, web automation, and fun features. It integrates advanced AI capabilities for code generation, screen analysis, and natural language understanding to streamline various desktop tasks and enhance user interaction.
+An intelligent desktop automation tool powered by Google's Gemini AI, designed to interpret natural language commands and execute them on desktop computers. The project aims to make computer automation accessible to non-technical users by providing over 90 features, including **Spotify music control**, system control, voice commands, productivity monitoring, smart typing, auto-organization, file management, web automation, and fun features. It integrates advanced AI capabilities for code generation, screen analysis, and natural language understanding to streamline various desktop tasks and enhance user interaction.
 
 ## User Preferences
 None specified yet.
@@ -34,6 +34,7 @@ The AI Desktop Automation Controller is built with Python 3.11 and features a mo
 - **Smart Typing Assistant (`smart_typing.py`):** Provides text snippet expansion, email template generation, form filling automation, auto-correction, and password generation.
 - **Productivity Tracking (`productivity_monitor.py`):** Tracks screen time, blocks distractions, enables focus mode, scores productivity, provides smart reminders, and logs activity.
 - **Fun Features (`fun_features.py`):** Includes a random compliments system, task celebration messages, mood themes, a mini chatbot, and playlist suggestions.
+- **Spotify Integration (`spotify_automation.py`):** Full Spotify playback control via natural language commands, including play/pause, skip tracks, volume control, search and play songs, playlist browsing, shuffle/repeat modes, and current track information. Uses Replit's Spotify connector for automatic OAuth and token management.
 - **YouTube Integration:** Intelligent video search, auto-play (with multiple fallback methods), and direct video opening.
 - **Enhanced Email Sending:** Supports simple text, HTML, and templated emails with attachments, multiple recipients, CC/BCC, and integration with Gmail via SMTP.
 
@@ -54,3 +55,5 @@ The AI Desktop Automation Controller is built with Python 3.11 and features a mo
 - **speechrecognition:** For voice commands.
 - **pyttsx3:** For text-to-speech responses.
 - **cryptography:** For encrypted credential storage.
+- **requests:** For HTTP API calls (Spotify integration).
+- **Replit Spotify Connector:** For OAuth and token management with Spotify API.

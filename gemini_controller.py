@@ -174,6 +174,19 @@ FUN FEATURES:
 - set_mood: Set mood theme (parameters: mood [happy/calm/energetic/focused/neutral])
 - chatbot: Chat with mini companion (parameters: message)
 
+SPOTIFY MUSIC CONTROL:
+- spotify_play: Play/resume Spotify (parameters: uri [optional - spotify URI for specific track/playlist/album])
+- spotify_pause: Pause Spotify playback (parameters: none)
+- spotify_next: Skip to next track (parameters: none)
+- spotify_previous: Go to previous track (parameters: none)
+- spotify_volume: Set volume (parameters: volume [0-100])
+- spotify_current: Get currently playing track info (parameters: none)
+- spotify_search: Search Spotify (parameters: query, type [track/artist/album/playlist], limit [default: 5])
+- spotify_play_track: Search and play a song (parameters: query [song name or "song by artist"])
+- spotify_playlists: Get user's playlists (parameters: limit [default: 20])
+- spotify_shuffle: Toggle shuffle (parameters: state [true/false, default: true])
+- spotify_repeat: Set repeat mode (parameters: state [track/context/off, default: context])
+
 IMPORTANT:
 - For "send to [name]" commands, use contact_name parameter
 - If user says "text John" or "message Sarah", use send_sms
@@ -201,6 +214,17 @@ IMPORTANT:
 - When user says "play", "watch", "show me", they want auto-play, so use play_youtube_video
 - Default to play_youtube_video for any video-related requests unless explicitly asked to just search
 - Examples that should use play_youtube_video: "play song X", "watch funny videos", "show me tutorial", "play music"
+- For Spotify commands like "play song X on Spotify", "pause Spotify", "next song", "previous track", use spotify_ actions
+- If user says "play [song name] on Spotify" or "play Spotify song [name]", use spotify_play_track
+- If user says "what's playing" or "current song" or "what song is this", use spotify_current
+- If user says "pause music" or "pause Spotify", use spotify_pause
+- If user says "resume", "play Spotify", "continue playing", use spotify_play
+- If user says "next" or "skip", use spotify_next
+- If user says "previous" or "back", use spotify_previous
+- If user says "volume 50" or "set volume to 80", use spotify_volume
+- If user says "shuffle on/off", use spotify_shuffle
+- If user says "my playlists" or "show my playlists", use spotify_playlists
+- If user says "search Spotify for X", use spotify_search
 
 For multi-step tasks, return steps as a list. Each step should have action and parameters.
 
