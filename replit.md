@@ -10,9 +10,9 @@ None specified yet.
 The AI Desktop Automation Controller is built with Python 3.11 and features a modular architecture.
 
 ### UI/UX Decisions
-- **GUI Application (`gui_app.py`):** Features a modern dark theme with a text input field, quick example buttons, real-time color-coded output display, status indicators, and a help system. It utilizes `tkinter` and threading for non-blocking command execution.
+- **Enhanced GUI Application (`gui_app.py`):** Features a modern dark theme with a tabbed interface organizing 50+ functions into 6 categories (Code Generation, Desktop Automation, Messaging, System Control, Productivity, and Fun Features). Includes quick-access buttons for all major functions, text input field, real-time color-coded output display, status indicators, and comprehensive help documentation. Utilizes `tkinter` with scrollable panels and threading for non-blocking command execution. Fully functional in cloud/headless environments with graceful degradation.
 - **CLI Interface (`main.py`):** Provides an alternative interactive command-line interface with user-friendly prompts and special commands.
-- **WhatsApp Desktop Integration:** Uses direct app opening, contact chat opening, and message pre-fill, supporting cross-platform functionality via `wa.me` links.
+- **WhatsApp Desktop Integration:** Dual-mode support: desktop automation via PyWhatKit (when available) and web-based fallback using WhatsApp Web URLs with pre-filled messages. Includes input validation and clear error messaging for unsupported operations in cloud environments.
 
 ### Technical Implementations & Feature Specifications
 - **AI Command Parser (`gemini_controller.py`):** Integrates with the Gemini API (gemini-2.0-flash-exp model) to parse natural language into structured JSON actions, provide AI suggestions, handle single and multi-step workflows, and manage messaging/contact commands.
