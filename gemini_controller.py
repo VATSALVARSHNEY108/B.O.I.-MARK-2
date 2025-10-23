@@ -110,6 +110,9 @@ CONVERSATION MEMORY:
 MESSAGING & CONTACTS:
 - send_sms: Send SMS text message (parameters: contact_name OR phone, message)
 - send_email: Send email (parameters: contact_name OR email, subject, body)
+- send_html_email: Send HTML formatted email (parameters: to, subject, html_content)
+- send_email_with_attachment: Send email with file attachment (parameters: to, subject, body, attachments [list])
+- send_template_email: Send email using template (parameters: to, template [welcome/notification/report/invitation], template_vars)
 - send_file: Send file to contact (parameters: contact_name, file_path, message [optional])
 - add_contact: Add a new contact (parameters: name, phone [optional], email [optional])
 - list_contacts: List all contacts (parameters: none)

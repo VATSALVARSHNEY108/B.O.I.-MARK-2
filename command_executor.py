@@ -12,6 +12,7 @@ from code_generator import generate_code, explain_code, improve_code, debug_code
 from conversation_memory import ConversationMemory
 from screenshot_analyzer import analyze_screenshot, extract_text_from_screenshot, get_screenshot_summary
 from screen_suggester import create_screen_suggester
+from email_sender import create_email_sender
 from system_monitor import get_cpu_usage, get_memory_usage, get_disk_usage, get_full_system_report, get_running_processes
 from advanced_file_operations import search_files, find_large_files, find_duplicate_files, organize_files_by_extension, find_old_files, get_directory_size
 from workflow_templates import WorkflowManager
@@ -29,6 +30,7 @@ class CommandExecutor:
         self.youtube = create_youtube_automation(self.gui)
         self.whatsapp = create_whatsapp_automation()
         self.screen_suggester = create_screen_suggester()
+        self.email_sender = create_email_sender()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -274,6 +276,54 @@ class CommandExecutor:
                 subject = parameters.get("subject", "")
                 body = parameters.get("body", "")
                 result = self.messaging.send_email(contact_name=contact_name, email=email, subject=subject, body=body)
+                return result
+            
+            elif action == "send_html_email":
+                to = parameters.get("to", "")
+                subject = parameters.get("subject", "")
+                html_content = parameters.get("html_content", "")
+                
+                if not to or not subject:
+                    return {
+                        "success": False,
+                        "message": "Email address and subject are required"
+                    }
+                
+                result = self.email_sender.send_html_email(to, subject, html_content)
+                return result
+            
+            elif action == "send_email_with_attachment":
+                to = parameters.get("to", "")
+                subject = parameters.get("subject", "")
+                body = parameters.get("body", "")
+                attachments = parameters.get("attachments", [])
+                
+                if not to or not subject:
+                    return {
+                        "success": False,
+                        "message": "Email address and subject are required"
+                    }
+                
+                result = self.email_sender.send_email(
+                    to=[to],
+                    subject=subject,
+                    body=body,
+                    attachments=attachments
+                )
+                return result
+            
+            elif action == "send_template_email":
+                to = parameters.get("to", "")
+                template = parameters.get("template", "")
+                template_vars = parameters.get("template_vars", {})
+                
+                if not to or not template:
+                    return {
+                        "success": False,
+                        "message": "Email address and template name are required"
+                    }
+                
+                result = self.email_sender.send_template_email(to, template, **template_vars)
                 return result
             
             elif action == "send_file":

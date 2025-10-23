@@ -278,6 +278,13 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - "Send report.pdf to my manager"
 - "Add contact Mom with phone 555-1234 and email mom@example.com"
 
+### **NEW** Email Commands
+- "Send email to john@example.com about the meeting"
+- "Send HTML email with formatted content"
+- "Send welcome email to newuser@example.com"
+- "Email report.pdf to manager@example.com"
+- "Send notification email about system update"
+
 ### Utility Commands
 - `help` - Show features
 - `contacts` - List all contacts
@@ -301,6 +308,18 @@ An intelligent desktop automation tool powered by Google's Gemini AI that interp
 - ✅ **Cross-Platform**: Works on Windows, Mac, and Linux
 - ✅ **HTML Launcher**: Simple web interface to open WhatsApp
 - ✅ **URL Scheme Support**: Uses wa.me links for better compatibility
+
+### **NEW** Enhanced Email Sending
+- ✅ **Simple Text Emails**: Send plain text emails quickly
+- ✅ **HTML Emails**: Send beautifully formatted HTML emails
+- ✅ **Email Templates**: Pre-made templates (welcome, notification, report, invitation)
+- ✅ **Attachments**: Send files with emails (multiple files supported)
+- ✅ **Multiple Recipients**: Send to many people at once
+- ✅ **CC & BCC Support**: Carbon copy and blind carbon copy
+- ✅ **Contact Integration**: Send to saved contacts by name
+- ✅ **Gmail Integration**: Uses Gmail SMTP (secure app passwords)
+- ✅ **Quick Email Tool**: `quick_email.py` for instant email sending
+- ✅ **Voice Commands**: "Send email to...", "Email with attachment..."
 
 ## Future Enhancements (Not Yet Implemented)
 - Voice control with speech recognition
