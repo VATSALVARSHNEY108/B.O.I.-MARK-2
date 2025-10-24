@@ -1,7 +1,7 @@
 # AI Desktop Automation Controller
 
 ## Overview
-The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. Its core purpose is to provide a unified ecosystem with over 150 features, including system control, voice commands, productivity monitoring, smart typing, auto-organization, file management, web automation, advanced AI capabilities, and integrations with over 500 web tools via an In-One-Box Streamlit application. The project aims to be a comprehensive productivity powerhouse by integrating advanced AI for code generation, screen analysis, natural language understanding, and comprehensive AI-powered features across 7 categories: Chatbots, Text Generation, Language Processing, Image Generation, Data Analysis, Computer Vision, and Voice & Audio. Key capabilities include Spotify music control and utility modules: Weather & News, Translation, Calculator, Password Vault, Quick Notes, and Calendar Manager.
+The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. Its core purpose is to provide a unified ecosystem with over 200 features, including system control, voice commands, productivity monitoring, smart typing, auto-organization, file management, web automation, advanced AI capabilities, and integrations with over 500 web tools via an In-One-Box Streamlit application. The project aims to be a comprehensive productivity powerhouse by integrating advanced AI for code generation, screen analysis, natural language understanding, and comprehensive AI-powered features across 17 categories: Chatbots, Text Generation, Language Processing, Image Generation, Data Analysis, Computer Vision, Voice & Audio, Audio/Video Conversion, Audio/Video Editing, Audio/Video Compression, Audio/Video Analysis, Streaming Tools, Subtitle Tools, Metadata Editors, Audio Enhancement, Video Enhancement, and Media Utilities. Key capabilities include Spotify music control and utility modules: Weather & News, Translation, Calculator, Password Vault, Quick Notes, and Calendar Manager.
 
 ## User Preferences
 None specified yet.
@@ -45,7 +45,7 @@ The AI Desktop Automation Controller is built with Python 3.11 and utilizes a mo
 - **Calendar Manager (`calendar_manager.py`):** Event scheduling with natural date parsing, reminders, and event viewing.
 - **Web Tools Launcher (`web_tools_launcher.py`):** Manages and launches the In-One-Box Streamlit web app, providing access to 500+ tools.
 - **Tools Mapper (`tools_mapper.py`):** Intelligently maps natural language commands to specific web tools across 15 categories, supporting commands like "generate QR code" or "convert image."
-- **AI Features Module (`ai_features.py`):** Comprehensive AI capabilities organized into 7 categories with 30+ features:
+- **AI Features Module (`ai_features.py`):** Comprehensive AI capabilities organized into 17 categories with 80+ features:
   - **Chatbots:** Conversational AI, customer service bot, educational assistant, domain expert
   - **Text Generation:** Story writer, content creator, article generator, copywriting assistant, technical writer
   - **Language Processing:** Text translator, sentiment analysis, text summarizer, language detector, content moderator
@@ -53,6 +53,16 @@ The AI Desktop Automation Controller is built with Python 3.11 and utilizes a mo
   - **Data Analysis:** Pattern recognition, trend analysis, predictive modeling, data insights, statistical analysis
   - **Computer Vision:** Image recognition guide, object detection guide, scene analysis guide
   - **Voice & Audio:** Speech text generator, audio analysis guide
+  - **Audio/Video Conversion:** Format converter, codec transformer, quality adjuster, batch converter, resolution changer
+  - **Audio/Video Editing:** Media trimmer, splitter, merger, volume adjuster, speed controller
+  - **Audio/Video Compression:** Size optimizer, bitrate adjuster, quality compressor, batch compression, format-specific compression
+  - **Audio/Video Analysis:** Metadata extractor, format detector, quality analyzer, duration calculator, codec identifier
+  - **Streaming Tools:** Stream configuration, broadcast settings, encoding optimizer, quality settings, platform optimizer
+  - **Subtitle Tools:** Subtitle editor, timing adjuster, format converter, subtitle generator, synchronizer
+  - **Metadata Editors:** Tag editor, cover art manager, information extractor, batch editor, ID3 editor
+  - **Audio Enhancement:** Noise reduction, equalizer, normalizer, amplifier, echo remover
+  - **Video Enhancement:** Stabilizer, color corrector, brightness adjuster, contrast enhancer, frame rate converter
+  - **Media Utilities:** Playlist creator, media organizer, batch processor, file renamer, duplicate finder
 - **Ecosystem Manager:** Connects all modules, enabling cross-feature workflows, smart suggestions, unified dashboards, and context-aware automation. Features include smart dashboards, morning/evening briefings, cross-module search, auto-organization, custom workflows, smart suggestions, and productivity insights.
 
 ## External Dependencies
