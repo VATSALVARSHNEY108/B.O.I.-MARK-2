@@ -11,10 +11,9 @@ from typing import Dict, List, Any
 class EcosystemManager:
     """Central hub that connects and coordinates all automation features"""
     
-    def __init__(self, calendar, notes, pomodoro, productivity, weather_news, password_vault):
+    def __init__(self, calendar, notes, productivity, weather_news, password_vault):
         self.calendar = calendar
         self.notes = notes
-        self.pomodoro = pomodoro
         self.productivity = productivity
         self.weather_news = weather_news
         self.password_vault = password_vault
@@ -58,7 +57,6 @@ class EcosystemManager:
                 pass
         return {
             "auto_note_from_event": True,
-            "pomodoro_from_calendar": True,
             "weather_in_morning": True,
             "auto_backup_passwords": True,
             "smart_reminders": True
@@ -82,11 +80,6 @@ class EcosystemManager:
         output += "-" * 60 + "\n"
         events_result = self.calendar.get_today_events()
         output += events_result + "\n"
-        
-        output += "\n🍅 PRODUCTIVITY STATUS\n"
-        output += "-" * 60 + "\n"
-        pomodoro_stats = self.pomodoro.get_stats()
-        output += pomodoro_stats + "\n"
         
         output += "\n📝 RECENT NOTES\n"
         output += "-" * 60 + "\n"
@@ -123,13 +116,7 @@ class EcosystemManager:
             
             if today_events:
                 next_event = today_events[0]
-                suggestions.append(f"📅 Upcoming: {next_event.get('title', 'Event')} - Start a Pomodoro to prepare!")
-            
-            pomodoro_data = self.pomodoro.stats
-            if pomodoro_data.get('sessions_today', 0) == 0:
-                suggestions.append("🍅 You haven't started any focus sessions today. Begin a Pomodoro?")
-            elif pomodoro_data.get('sessions_today', 0) >= 4:
-                suggestions.append("✨ Great focus today! Consider a longer break.")
+                suggestions.append(f"📅 Upcoming: {next_event.get('title', 'Event')} - Get prepared!")
             
             if len(self.notes.notes) > 10:
                 suggestions.append("📝 Your notes are growing! Consider organizing them by category.")
@@ -138,7 +125,7 @@ class EcosystemManager:
             if 6 <= current_hour < 9:
                 suggestions.append("☀️ Good morning! Check weather and review today's calendar events.")
             elif 9 <= current_hour < 12:
-                suggestions.append("💼 Peak productivity time! Start a Pomodoro session.")
+                suggestions.append("💼 Peak productivity time! Focus on your important tasks.")
             elif 12 <= current_hour < 14:
                 suggestions.append("🍽️ Lunch time! Take a break and stay hydrated.")
             elif 18 <= current_hour < 22:
@@ -160,11 +147,6 @@ class EcosystemManager:
         note_content = f"Event: {event_title}\nDate: {event_date} {event_time}\nAuto-created from calendar"
         result = self.notes.add_note(note_content, category="events", tags=["calendar", "auto"])
         return result
-    
-    def suggest_pomodoro_for_event(self, event_title, minutes_before=15):
-        """Suggest starting a Pomodoro session before an event"""
-        suggestion = f"💡 Event '{event_title}' coming up! Start a Pomodoro session {minutes_before} minutes before to prepare?"
-        return suggestion
     
     def morning_briefing(self):
         """Generate comprehensive morning briefing"""
@@ -190,7 +172,7 @@ class EcosystemManager:
         output += "🎯 RECOMMENDED ACTIONS:\n"
         output += "-" * 60 + "\n"
         output += "1. Review your calendar events\n"
-        output += "2. Start a Pomodoro session for your first task\n"
+        output += "2. Focus on your most important task\n"
         output += "3. Check any pinned notes\n"
         output += "4. Set focus mode if you have important work\n"
         
@@ -205,11 +187,6 @@ class EcosystemManager:
         output = "\n" + "="*60 + "\n"
         output += "🌙 EVENING SUMMARY\n"
         output += "="*60 + "\n\n"
-        
-        output += "✅ TODAY'S ACCOMPLISHMENTS:\n"
-        output += "-" * 60 + "\n"
-        pomodoro_stats = self.pomodoro.get_stats()
-        output += pomodoro_stats + "\n\n"
         
         output += "📝 NOTES CREATED TODAY:\n"
         output += "-" * 60 + "\n"
@@ -421,14 +398,6 @@ class EcosystemManager:
         output += "📊 PRODUCTIVITY INSIGHTS\n"
         output += "="*60 + "\n\n"
         
-        pomodoro_data = self.pomodoro.stats
-        sessions_today = pomodoro_data.get('sessions_today', 0)
-        total_sessions = pomodoro_data.get('total_sessions', 0)
-        
-        output += f"🍅 Pomodoro Sessions:\n"
-        output += f"   Today: {sessions_today} sessions\n"
-        output += f"   Total: {total_sessions} sessions\n\n"
-        
         output += f"📝 Notes Summary:\n"
         output += f"   Total notes: {len(self.notes.notes)}\n"
         output += f"   Categories: {len(set(n.get('category', 'general') for n in self.notes.notes))}\n\n"
@@ -440,11 +409,6 @@ class EcosystemManager:
         
         output += "💡 RECOMMENDATIONS:\n"
         output += "-" * 60 + "\n"
-        
-        if sessions_today < 3:
-            output += "• Consider more Pomodoro sessions for better focus\n"
-        else:
-            output += "• Great focus today! Keep it up!\n"
         
         if len(today_events) > 5:
             output += "• Busy schedule today - prioritize and delegate\n"

@@ -30,7 +30,6 @@ from spotify_desktop_automation import create_spotify_desktop_automation
 from weather_news_service import WeatherNewsService
 from translation_service import TranslationService
 from advanced_calculator import AdvancedCalculator
-from pomodoro_timer import PomodoroTimer
 from password_vault import PasswordVault
 from quick_notes import QuickNotes
 from calendar_manager import CalendarManager
@@ -62,14 +61,12 @@ class CommandExecutor:
         self.weather_news = WeatherNewsService()
         self.translator = TranslationService()
         self.calculator = AdvancedCalculator()
-        self.pomodoro = PomodoroTimer()
         self.password_vault = PasswordVault()
         self.notes = QuickNotes()
         self.calendar = CalendarManager()
         self.ecosystem = EcosystemManager(
             self.calendar,
             self.notes,
-            self.pomodoro,
             self.productivity_monitor,
             self.weather_news,
             self.password_vault
@@ -1216,32 +1213,6 @@ class CommandExecutor:
                 from_currency = parameters.get("from_currency", "USD")
                 to_currency = parameters.get("to_currency", "EUR")
                 result = self.calculator.get_currency_rate(from_currency, to_currency)
-                return {"success": True, "message": result}
-            
-            elif action == "start_pomodoro":
-                duration = parameters.get("duration", None)
-                result = self.pomodoro.start_session(duration)
-                return {"success": True, "message": result}
-            
-            elif action == "start_break":
-                break_type = parameters.get("type", "short")
-                result = self.pomodoro.start_break(break_type)
-                return {"success": True, "message": result}
-            
-            elif action == "pause_pomodoro":
-                result = self.pomodoro.pause_session()
-                return {"success": True, "message": result}
-            
-            elif action == "resume_pomodoro":
-                result = self.pomodoro.resume_session()
-                return {"success": True, "message": result}
-            
-            elif action == "stop_pomodoro":
-                result = self.pomodoro.stop_session()
-                return {"success": True, "message": result}
-            
-            elif action == "pomodoro_stats":
-                result = self.pomodoro.get_stats()
                 return {"success": True, "message": result}
             
             elif action == "add_password":

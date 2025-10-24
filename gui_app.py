@@ -415,8 +415,6 @@ class AutomationControllerGUI:
             ("🌍 Translate to Spanish", "Translate 'Hello, how are you?' to Spanish"),
             ("🧮 Calculate", "Calculate 2 + 2 * 5"),
             ("💱 Currency Conversion", "Convert 100 USD to EUR"),
-            ("🍅 Start Pomodoro", "Start Pomodoro session"),
-            ("📊 Pomodoro Stats", "Show Pomodoro statistics"),
             ("🔐 Generate Password", "Generate a strong password"),
             ("🗝️ List Passwords", "List all saved passwords"),
             ("📝 Add Note", "Add note: Meeting tomorrow at 3 PM"),
