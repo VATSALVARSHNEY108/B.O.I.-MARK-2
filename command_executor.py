@@ -1272,10 +1272,10 @@ class CommandExecutor:
             elif action == "add_event":
                 title = parameters.get("title", "")
                 date = parameters.get("date", "")
-                time = parameters.get("time", "")
+                event_time = parameters.get("time", "")
                 duration = parameters.get("duration", 60)
                 description = parameters.get("description", "")
-                result = self.calendar.add_event(title, date, time, duration, description)
+                result = self.calendar.add_event(title, date, event_time, duration, description)
                 return {"success": True, "message": result}
             
             elif action == "list_events":
