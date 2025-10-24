@@ -1553,6 +1553,267 @@ class CommandExecutor:
                 result = self.ai_features.audio_analysis_guide(audio_type)
                 return {"success": True, "message": result}
             
+            elif action == "format_converter":
+                input_format = parameters.get("input_format", "")
+                output_format = parameters.get("output_format", "")
+                file_description = parameters.get("file_description", "")
+                result = self.ai_features.format_converter(input_format, output_format, file_description)
+                return {"success": True, "message": result}
+            
+            elif action == "codec_transformer":
+                source_codec = parameters.get("source_codec", "")
+                target_codec = parameters.get("target_codec", "")
+                result = self.ai_features.codec_transformer(source_codec, target_codec)
+                return {"success": True, "message": result}
+            
+            elif action == "quality_adjuster":
+                media_type = parameters.get("media_type", "video")
+                target_quality = parameters.get("target_quality", "high")
+                result = self.ai_features.quality_adjuster(media_type, target_quality)
+                return {"success": True, "message": result}
+            
+            elif action == "batch_converter":
+                conversion_task = parameters.get("conversion_task", "")
+                file_count = parameters.get("file_count", 1)
+                result = self.ai_features.batch_converter(conversion_task, file_count)
+                return {"success": True, "message": result}
+            
+            elif action == "resolution_changer":
+                current_resolution = parameters.get("current_resolution", "")
+                target_resolution = parameters.get("target_resolution", "")
+                result = self.ai_features.resolution_changer(current_resolution, target_resolution)
+                return {"success": True, "message": result}
+            
+            elif action == "media_trimmer":
+                media_type = parameters.get("media_type", "video")
+                trim_specification = parameters.get("trim_specification", "")
+                result = self.ai_features.media_trimmer(media_type, trim_specification)
+                return {"success": True, "message": result}
+            
+            elif action == "media_splitter":
+                split_criteria = parameters.get("split_criteria", "")
+                result = self.ai_features.media_splitter(split_criteria)
+                return {"success": True, "message": result}
+            
+            elif action == "media_merger":
+                merge_description = parameters.get("merge_description", "")
+                result = self.ai_features.media_merger(merge_description)
+                return {"success": True, "message": result}
+            
+            elif action == "volume_adjuster":
+                adjustment_type = parameters.get("adjustment_type", "normalize")
+                result = self.ai_features.volume_adjuster(adjustment_type)
+                return {"success": True, "message": result}
+            
+            elif action == "speed_controller":
+                speed_change = parameters.get("speed_change", "")
+                result = self.ai_features.speed_controller(speed_change)
+                return {"success": True, "message": result}
+            
+            elif action == "size_optimizer":
+                target_size = parameters.get("target_size", "")
+                media_type = parameters.get("media_type", "video")
+                result = self.ai_features.size_optimizer(target_size, media_type)
+                return {"success": True, "message": result}
+            
+            elif action == "bitrate_adjuster":
+                bitrate_target = parameters.get("bitrate_target", "")
+                result = self.ai_features.bitrate_adjuster(bitrate_target)
+                return {"success": True, "message": result}
+            
+            elif action == "quality_compressor":
+                compression_level = parameters.get("compression_level", "medium")
+                result = self.ai_features.quality_compressor(compression_level)
+                return {"success": True, "message": result}
+            
+            elif action == "batch_compression":
+                compression_task = parameters.get("compression_task", "")
+                result = self.ai_features.batch_compression(compression_task)
+                return {"success": True, "message": result}
+            
+            elif action == "format_specific_compression":
+                format_name = parameters.get("format_name", "")
+                result = self.ai_features.format_specific_compression(format_name)
+                return {"success": True, "message": result}
+            
+            elif action == "metadata_extractor":
+                file_type = parameters.get("file_type", "")
+                result = self.ai_features.metadata_extractor(file_type)
+                return {"success": True, "message": result}
+            
+            elif action == "format_detector":
+                detection_task = parameters.get("detection_task", "")
+                result = self.ai_features.format_detector(detection_task)
+                return {"success": True, "message": result}
+            
+            elif action == "quality_analyzer":
+                analysis_type = parameters.get("analysis_type", "")
+                result = self.ai_features.quality_analyzer(analysis_type)
+                return {"success": True, "message": result}
+            
+            elif action == "duration_calculator":
+                calculation_task = parameters.get("calculation_task", "")
+                result = self.ai_features.duration_calculator(calculation_task)
+                return {"success": True, "message": result}
+            
+            elif action == "codec_identifier":
+                identification_task = parameters.get("identification_task", "")
+                result = self.ai_features.codec_identifier(identification_task)
+                return {"success": True, "message": result}
+            
+            elif action == "stream_configuration":
+                platform = parameters.get("platform", "")
+                stream_type = parameters.get("stream_type", "")
+                result = self.ai_features.stream_configuration(platform, stream_type)
+                return {"success": True, "message": result}
+            
+            elif action == "broadcast_settings":
+                broadcast_type = parameters.get("broadcast_type", "")
+                result = self.ai_features.broadcast_settings(broadcast_type)
+                return {"success": True, "message": result}
+            
+            elif action == "encoding_optimizer":
+                encoding_scenario = parameters.get("encoding_scenario", "")
+                result = self.ai_features.encoding_optimizer(encoding_scenario)
+                return {"success": True, "message": result}
+            
+            elif action == "quality_settings":
+                target_quality = parameters.get("target_quality", "high")
+                use_case = parameters.get("use_case", "")
+                result = self.ai_features.quality_settings(target_quality, use_case)
+                return {"success": True, "message": result}
+            
+            elif action == "platform_optimizer":
+                platform_name = parameters.get("platform_name", "")
+                result = self.ai_features.platform_optimizer(platform_name)
+                return {"success": True, "message": result}
+            
+            elif action == "subtitle_editor":
+                editing_task = parameters.get("editing_task", "")
+                result = self.ai_features.subtitle_editor(editing_task)
+                return {"success": True, "message": result}
+            
+            elif action == "timing_adjuster":
+                adjustment_needed = parameters.get("adjustment_needed", "")
+                result = self.ai_features.timing_adjuster(adjustment_needed)
+                return {"success": True, "message": result}
+            
+            elif action == "subtitle_format_converter":
+                from_format = parameters.get("from_format", "")
+                to_format = parameters.get("to_format", "")
+                result = self.ai_features.subtitle_format_converter(from_format, to_format)
+                return {"success": True, "message": result}
+            
+            elif action == "subtitle_generator":
+                generation_method = parameters.get("generation_method", "")
+                result = self.ai_features.subtitle_generator(generation_method)
+                return {"success": True, "message": result}
+            
+            elif action == "subtitle_synchronizer":
+                sync_task = parameters.get("sync_task", "")
+                result = self.ai_features.subtitle_synchronizer(sync_task)
+                return {"success": True, "message": result}
+            
+            elif action == "tag_editor":
+                tag_operation = parameters.get("tag_operation", "")
+                result = self.ai_features.tag_editor(tag_operation)
+                return {"success": True, "message": result}
+            
+            elif action == "cover_art_manager":
+                art_task = parameters.get("art_task", "")
+                result = self.ai_features.cover_art_manager(art_task)
+                return {"success": True, "message": result}
+            
+            elif action == "information_extractor":
+                extraction_target = parameters.get("extraction_target", "")
+                result = self.ai_features.information_extractor(extraction_target)
+                return {"success": True, "message": result}
+            
+            elif action == "metadata_batch_editor":
+                batch_task = parameters.get("batch_task", "")
+                result = self.ai_features.metadata_batch_editor(batch_task)
+                return {"success": True, "message": result}
+            
+            elif action == "id3_editor":
+                id3_operation = parameters.get("id3_operation", "")
+                result = self.ai_features.id3_editor(id3_operation)
+                return {"success": True, "message": result}
+            
+            elif action == "noise_reduction":
+                noise_type = parameters.get("noise_type", "")
+                result = self.ai_features.noise_reduction(noise_type)
+                return {"success": True, "message": result}
+            
+            elif action == "audio_equalizer":
+                eq_goal = parameters.get("eq_goal", "")
+                result = self.ai_features.audio_equalizer(eq_goal)
+                return {"success": True, "message": result}
+            
+            elif action == "audio_normalizer":
+                normalization_type = parameters.get("normalization_type", "")
+                result = self.ai_features.audio_normalizer(normalization_type)
+                return {"success": True, "message": result}
+            
+            elif action == "audio_amplifier":
+                amplification_goal = parameters.get("amplification_goal", "")
+                result = self.ai_features.audio_amplifier(amplification_goal)
+                return {"success": True, "message": result}
+            
+            elif action == "echo_remover":
+                echo_scenario = parameters.get("echo_scenario", "")
+                result = self.ai_features.echo_remover(echo_scenario)
+                return {"success": True, "message": result}
+            
+            elif action == "video_stabilizer":
+                stabilization_task = parameters.get("stabilization_task", "")
+                result = self.ai_features.video_stabilizer(stabilization_task)
+                return {"success": True, "message": result}
+            
+            elif action == "color_corrector":
+                correction_goal = parameters.get("correction_goal", "")
+                result = self.ai_features.color_corrector(correction_goal)
+                return {"success": True, "message": result}
+            
+            elif action == "brightness_adjuster":
+                adjustment_task = parameters.get("adjustment_task", "")
+                result = self.ai_features.brightness_adjuster(adjustment_task)
+                return {"success": True, "message": result}
+            
+            elif action == "contrast_enhancer":
+                enhancement_goal = parameters.get("enhancement_goal", "")
+                result = self.ai_features.contrast_enhancer(enhancement_goal)
+                return {"success": True, "message": result}
+            
+            elif action == "frame_rate_converter":
+                conversion_spec = parameters.get("conversion_spec", "")
+                result = self.ai_features.frame_rate_converter(conversion_spec)
+                return {"success": True, "message": result}
+            
+            elif action == "playlist_creator":
+                playlist_type = parameters.get("playlist_type", "")
+                result = self.ai_features.playlist_creator(playlist_type)
+                return {"success": True, "message": result}
+            
+            elif action == "media_organizer":
+                organization_task = parameters.get("organization_task", "")
+                result = self.ai_features.media_organizer(organization_task)
+                return {"success": True, "message": result}
+            
+            elif action == "media_batch_processor":
+                processing_task = parameters.get("processing_task", "")
+                result = self.ai_features.media_batch_processor(processing_task)
+                return {"success": True, "message": result}
+            
+            elif action == "media_file_renamer":
+                renaming_pattern = parameters.get("renaming_pattern", "")
+                result = self.ai_features.media_file_renamer(renaming_pattern)
+                return {"success": True, "message": result}
+            
+            elif action == "media_duplicate_finder":
+                search_criteria = parameters.get("search_criteria", "")
+                result = self.ai_features.media_duplicate_finder(search_criteria)
+                return {"success": True, "message": result}
+            
             elif action == "list_ai_features":
                 result = self.ai_features.list_ai_features()
                 message = "🤖 AVAILABLE AI FEATURES:\n" + "="*60 + "\n\n"
