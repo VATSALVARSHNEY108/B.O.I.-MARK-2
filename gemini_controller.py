@@ -222,12 +222,71 @@ AI FEATURES - IMAGE GENERATION:
 - image_description_generator: Generate AI art prompts (parameters: concept, style [optional, default: realistic])
 - style_transfer_description: Generate style transfer descriptions (parameters: content, style)
 
-AI FEATURES - DATA ANALYSIS:
-- analyze_data_patterns: Pattern recognition in data (parameters: data_description)
-- trend_analysis: Analyze trends over time (parameters: data_description, time_period [optional])
-- predictive_modeling: Make predictions based on scenarios (parameters: scenario, variables [optional, list])
-- data_insights: Extract actionable insights from data (parameters: data_description)
-- statistical_analysis: Perform statistical analysis (parameters: data_description)
+AI FEATURES - DATA ANALYSIS (100+ Features):
+
+DATA IMPORT/EXPORT:
+- import_csv: Import data from CSV file (parameters: filepath, name [optional, default: data])
+- import_json: Import data from JSON file (parameters: filepath, name [optional, default: data])
+- import_excel: Import data from Excel file (parameters: filepath, sheet_name [optional], name [optional, default: data])
+- export_csv: Export data to CSV file (parameters: name, output_path)
+- export_json: Export data to JSON file (parameters: name, output_path)
+- convert_format: Convert data between formats CSV/JSON/Excel (parameters: input_file, output_file, output_format)
+
+DATA CLEANING:
+- handle_missing_values: Handle missing values (parameters: name, strategy [drop/mean/median/mode/forward], column [optional])
+- remove_duplicates: Remove duplicate rows (parameters: name, subset [optional, list])
+- validate_data: Validate data quality (parameters: name, rules [optional])
+- convert_data_types: Convert column data type (parameters: name, column, new_type [int/float/string/datetime/category])
+- detect_outliers: Detect outliers using IQR or Z-score (parameters: name, column, method [iqr/zscore, default: iqr])
+
+DATA ANALYSIS:
+- statistical_summary: Generate comprehensive statistical summary (parameters: name)
+- correlation_analysis: Analyze correlations between columns (parameters: name, method [pearson/spearman/kendall, default: pearson])
+- data_profiling: Comprehensive data profiling report (parameters: name)
+- distribution_analysis: Analyze distribution of a column (parameters: name, column)
+- trend_analysis: Analyze trends over time (parameters: name, time_column, value_column)
+
+DATA VISUALIZATION:
+- create_chart: Create various charts bar/line/scatter/histogram/pie (parameters: name, chart_type, x_column, y_column [optional], title [optional])
+- create_heatmap: Create correlation heatmap (parameters: name, title [optional])
+- create_dashboard: Create comprehensive dashboard with multiple visualizations (parameters: name)
+
+DATA TRANSFORMATION:
+- create_pivot_table: Create pivot table (parameters: name, index, columns, values, agg_func [mean/sum/count/min/max, default: mean])
+- aggregate_data: Aggregate data by groups (parameters: name, group_by [list], agg_dict)
+- calculate_column: Create calculated column (parameters: name, new_column, expression)
+- merge_datasets: Merge two datasets (parameters: name1, name2, on, how [inner/left/right/outer, default: inner], result_name [optional])
+- split_column: Split column into multiple columns (parameters: name, column, delimiter, new_columns [list])
+
+MACHINE LEARNING:
+- linear_regression: Perform linear regression (parameters: name, target_column, feature_columns [list])
+- advanced_regression: Perform Ridge/Lasso/ElasticNet regression (parameters: name, target_column, feature_columns [list], model_type [ridge/lasso/elasticnet])
+- classification_model: Perform classification logistic/random_forest/decision_tree (parameters: name, target_column, feature_columns [list], model_type)
+- ensemble_methods: Ensemble learning Random Forest/Gradient Boosting (parameters: name, target_column, feature_columns [list], task [classification/regression])
+- clustering_analysis: Perform clustering KMeans/DBSCAN/Hierarchical (parameters: name, feature_columns [list], n_clusters [default: 3], method [kmeans/dbscan/hierarchical])
+- feature_selection: Select best features using statistical tests (parameters: name, target_column, feature_columns [list], k [default: 5])
+- cross_validation: Perform cross-validation (parameters: name, target_column, feature_columns [list], cv_folds [default: 5])
+
+TEXT ANALYTICS:
+- text_mining: Extract insights from text word frequency/vocabulary (parameters: text)
+- sentiment_analysis: Analyze sentiment of text (parameters: text)
+- word_frequency: Analyze word frequency in text column (parameters: name, text_column, top_n [default: 20])
+
+TIME SERIES:
+- trend_decomposition: Decompose time series into trend/seasonal/residual (parameters: name, time_column, value_column, period [default: 12])
+- seasonality_analysis: Analyze seasonality patterns (parameters: name, time_column, value_column)
+- time_series_forecast: Forecast future values (parameters: name, time_column, value_column, periods [default: 10])
+- moving_averages: Calculate moving averages and EMA (parameters: name, column, window [default: 7])
+
+STATISTICAL TESTS:
+- t_test: Perform independent t-test (parameters: name, column1, column2)
+- chi_square_test: Perform chi-square test of independence (parameters: name, column1, column2)
+- anova_test: Perform one-way ANOVA test (parameters: name, group_column, value_column)
+- normality_test: Test for normality Shapiro-Wilk (parameters: name, column)
+
+DATA QUALITY:
+- quality_assessment: Comprehensive data quality assessment (parameters: name)
+- completeness_check: Check data completeness by column (parameters: name)
 
 AI FEATURES - COMPUTER VISION:
 - image_recognition_guide: Image recognition guidance (parameters: image_description)

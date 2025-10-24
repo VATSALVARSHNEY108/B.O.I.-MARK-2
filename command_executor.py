@@ -37,6 +37,7 @@ from ecosystem_manager import EcosystemManager
 from web_tools_launcher import create_web_tools_launcher
 from tools_mapper import create_tools_mapper
 from ai_features import create_ai_features
+from data_analysis import create_data_analysis_suite
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -77,6 +78,7 @@ class CommandExecutor:
         self.web_tools = create_web_tools_launcher()
         self.tools_mapper = create_tools_mapper()
         self.ai_features = create_ai_features()
+        self.data_analysis = create_data_analysis_suite()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -1824,6 +1826,261 @@ class CommandExecutor:
                     message += "\n"
                 message += "="*60
                 return {"success": True, "message": message}
+            
+            elif action == "import_csv":
+                filepath = parameters.get("filepath", "")
+                name = parameters.get("name", "data")
+                return self.data_analysis.import_csv(filepath, name)
+            
+            elif action == "import_json":
+                filepath = parameters.get("filepath", "")
+                name = parameters.get("name", "data")
+                return self.data_analysis.import_json(filepath, name)
+            
+            elif action == "import_excel":
+                filepath = parameters.get("filepath", "")
+                sheet_name = parameters.get("sheet_name", None)
+                name = parameters.get("name", "data")
+                return self.data_analysis.import_excel(filepath, sheet_name, name)
+            
+            elif action == "export_csv":
+                name = parameters.get("name", "data")
+                output_path = parameters.get("output_path", "output.csv")
+                return self.data_analysis.export_csv(name, output_path)
+            
+            elif action == "export_json":
+                name = parameters.get("name", "data")
+                output_path = parameters.get("output_path", "output.json")
+                return self.data_analysis.export_json(name, output_path)
+            
+            elif action == "convert_format":
+                input_file = parameters.get("input_file", "")
+                output_file = parameters.get("output_file", "")
+                output_format = parameters.get("output_format", "csv")
+                return self.data_analysis.convert_format(input_file, output_file, output_format)
+            
+            elif action == "handle_missing_values":
+                name = parameters.get("name", "data")
+                strategy = parameters.get("strategy", "drop")
+                column = parameters.get("column", None)
+                return self.data_analysis.handle_missing_values(name, strategy, column)
+            
+            elif action == "remove_duplicates":
+                name = parameters.get("name", "data")
+                subset = parameters.get("subset", None)
+                return self.data_analysis.remove_duplicates(name, subset)
+            
+            elif action == "validate_data":
+                name = parameters.get("name", "data")
+                rules = parameters.get("rules", None)
+                return self.data_analysis.validate_data(name, rules)
+            
+            elif action == "convert_data_types":
+                name = parameters.get("name", "data")
+                column = parameters.get("column", "")
+                new_type = parameters.get("new_type", "string")
+                return self.data_analysis.convert_data_types(name, column, new_type)
+            
+            elif action == "detect_outliers":
+                name = parameters.get("name", "data")
+                column = parameters.get("column", "")
+                method = parameters.get("method", "iqr")
+                return self.data_analysis.detect_outliers(name, column, method)
+            
+            elif action == "statistical_summary":
+                name = parameters.get("name", "data")
+                return self.data_analysis.statistical_summary(name)
+            
+            elif action == "correlation_analysis":
+                name = parameters.get("name", "data")
+                method = parameters.get("method", "pearson")
+                return self.data_analysis.correlation_analysis(name, method)
+            
+            elif action == "data_profiling":
+                name = parameters.get("name", "data")
+                return self.data_analysis.data_profiling(name)
+            
+            elif action == "distribution_analysis":
+                name = parameters.get("name", "data")
+                column = parameters.get("column", "")
+                return self.data_analysis.distribution_analysis(name, column)
+            
+            elif action == "trend_analysis":
+                name = parameters.get("name", "data")
+                time_column = parameters.get("time_column", "")
+                value_column = parameters.get("value_column", "")
+                return self.data_analysis.trend_analysis(name, time_column, value_column)
+            
+            elif action == "create_chart":
+                name = parameters.get("name", "data")
+                chart_type = parameters.get("chart_type", "bar")
+                x_column = parameters.get("x_column", "")
+                y_column = parameters.get("y_column", None)
+                title = parameters.get("title", None)
+                return self.data_analysis.create_chart(name, chart_type, x_column, y_column, title)
+            
+            elif action == "create_heatmap":
+                name = parameters.get("name", "data")
+                title = parameters.get("title", None)
+                return self.data_analysis.create_heatmap(name, title)
+            
+            elif action == "create_dashboard":
+                name = parameters.get("name", "data")
+                return self.data_analysis.create_dashboard(name)
+            
+            elif action == "create_pivot_table":
+                name = parameters.get("name", "data")
+                index = parameters.get("index", "")
+                columns = parameters.get("columns", "")
+                values = parameters.get("values", "")
+                agg_func = parameters.get("agg_func", "mean")
+                return self.data_analysis.create_pivot_table(name, index, columns, values, agg_func)
+            
+            elif action == "aggregate_data":
+                name = parameters.get("name", "data")
+                group_by = parameters.get("group_by", [])
+                agg_dict = parameters.get("agg_dict", {})
+                return self.data_analysis.aggregate_data(name, group_by, agg_dict)
+            
+            elif action == "calculate_column":
+                name = parameters.get("name", "data")
+                new_column = parameters.get("new_column", "")
+                expression = parameters.get("expression", "")
+                return self.data_analysis.calculate_column(name, new_column, expression)
+            
+            elif action == "merge_datasets":
+                name1 = parameters.get("name1", "")
+                name2 = parameters.get("name2", "")
+                on = parameters.get("on", "")
+                how = parameters.get("how", "inner")
+                result_name = parameters.get("result_name", "merged")
+                return self.data_analysis.merge_datasets(name1, name2, on, how, result_name)
+            
+            elif action == "split_column":
+                name = parameters.get("name", "data")
+                column = parameters.get("column", "")
+                delimiter = parameters.get("delimiter", ",")
+                new_columns = parameters.get("new_columns", [])
+                return self.data_analysis.split_column(name, column, delimiter, new_columns)
+            
+            elif action == "linear_regression":
+                name = parameters.get("name", "data")
+                target_column = parameters.get("target_column", "")
+                feature_columns = parameters.get("feature_columns", [])
+                return self.data_analysis.linear_regression(name, target_column, feature_columns)
+            
+            elif action == "advanced_regression":
+                name = parameters.get("name", "data")
+                target_column = parameters.get("target_column", "")
+                feature_columns = parameters.get("feature_columns", [])
+                model_type = parameters.get("model_type", "ridge")
+                return self.data_analysis.advanced_regression(name, target_column, feature_columns, model_type)
+            
+            elif action == "classification_model":
+                name = parameters.get("name", "data")
+                target_column = parameters.get("target_column", "")
+                feature_columns = parameters.get("feature_columns", [])
+                model_type = parameters.get("model_type", "logistic")
+                return self.data_analysis.classification_model(name, target_column, feature_columns, model_type)
+            
+            elif action == "ensemble_methods":
+                name = parameters.get("name", "data")
+                target_column = parameters.get("target_column", "")
+                feature_columns = parameters.get("feature_columns", [])
+                task = parameters.get("task", "classification")
+                return self.data_analysis.ensemble_methods(name, target_column, feature_columns, task)
+            
+            elif action == "clustering_analysis":
+                name = parameters.get("name", "data")
+                feature_columns = parameters.get("feature_columns", [])
+                n_clusters = parameters.get("n_clusters", 3)
+                method = parameters.get("method", "kmeans")
+                return self.data_analysis.clustering_analysis(name, feature_columns, n_clusters, method)
+            
+            elif action == "feature_selection":
+                name = parameters.get("name", "data")
+                target_column = parameters.get("target_column", "")
+                feature_columns = parameters.get("feature_columns", [])
+                k = parameters.get("k", 5)
+                return self.data_analysis.feature_selection(name, target_column, feature_columns, k)
+            
+            elif action == "cross_validation":
+                name = parameters.get("name", "data")
+                target_column = parameters.get("target_column", "")
+                feature_columns = parameters.get("feature_columns", [])
+                cv_folds = parameters.get("cv_folds", 5)
+                return self.data_analysis.cross_validation(name, target_column, feature_columns, cv_folds)
+            
+            elif action == "text_mining":
+                text = parameters.get("text", "")
+                return self.data_analysis.text_mining(text)
+            
+            elif action == "sentiment_analysis":
+                text = parameters.get("text", "")
+                return self.data_analysis.sentiment_analysis(text)
+            
+            elif action == "word_frequency":
+                name = parameters.get("name", "data")
+                text_column = parameters.get("text_column", "")
+                top_n = parameters.get("top_n", 20)
+                return self.data_analysis.word_frequency(name, text_column, top_n)
+            
+            elif action == "trend_decomposition":
+                name = parameters.get("name", "data")
+                time_column = parameters.get("time_column", "")
+                value_column = parameters.get("value_column", "")
+                period = parameters.get("period", 12)
+                return self.data_analysis.trend_decomposition(name, time_column, value_column, period)
+            
+            elif action == "seasonality_analysis":
+                name = parameters.get("name", "data")
+                time_column = parameters.get("time_column", "")
+                value_column = parameters.get("value_column", "")
+                return self.data_analysis.seasonality_analysis(name, time_column, value_column)
+            
+            elif action == "time_series_forecast":
+                name = parameters.get("name", "data")
+                time_column = parameters.get("time_column", "")
+                value_column = parameters.get("value_column", "")
+                periods = parameters.get("periods", 10)
+                return self.data_analysis.time_series_forecast(name, time_column, value_column, periods)
+            
+            elif action == "moving_averages":
+                name = parameters.get("name", "data")
+                column = parameters.get("column", "")
+                window = parameters.get("window", 7)
+                return self.data_analysis.moving_averages(name, column, window)
+            
+            elif action == "t_test":
+                name = parameters.get("name", "data")
+                column1 = parameters.get("column1", "")
+                column2 = parameters.get("column2", "")
+                return self.data_analysis.t_test(name, column1, column2)
+            
+            elif action == "chi_square_test":
+                name = parameters.get("name", "data")
+                column1 = parameters.get("column1", "")
+                column2 = parameters.get("column2", "")
+                return self.data_analysis.chi_square_test(name, column1, column2)
+            
+            elif action == "anova_test":
+                name = parameters.get("name", "data")
+                group_column = parameters.get("group_column", "")
+                value_column = parameters.get("value_column", "")
+                return self.data_analysis.anova_test(name, group_column, value_column)
+            
+            elif action == "normality_test":
+                name = parameters.get("name", "data")
+                column = parameters.get("column", "")
+                return self.data_analysis.normality_test(name, column)
+            
+            elif action == "quality_assessment":
+                name = parameters.get("name", "data")
+                return self.data_analysis.quality_assessment(name)
+            
+            elif action == "completeness_check":
+                name = parameters.get("name", "data")
+                return self.data_analysis.completeness_check(name)
             
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")
