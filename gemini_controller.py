@@ -198,6 +198,31 @@ SPOTIFY MUSIC CONTROL (Desktop Automation - uses keyboard shortcuts):
 - spotify_shuffle: Toggle shuffle (parameters: none)
 - spotify_repeat: Toggle repeat (parameters: none)
 
+WEB TOOLS (500+ TOOLS - IN-ONE-BOX WEB APP):
+- launch_web_tools: Launch the comprehensive web tools application (parameters: none)
+- open_web_tool: Open a specific web tool category (parameters: category, tool [optional])
+- list_web_tools: Show all available web tool categories (parameters: none)
+- web_tools_status: Check if web tools app is running (parameters: none)
+- stop_web_tools: Stop the web tools application (parameters: none)
+- parse_web_tool_command: Parse natural language to find and open web tool (parameters: query)
+
+Available Web Tool Categories:
+- Text Tools (50+ tools): QR codes, Base64, hashes, word counter, case converter, etc.
+- Image Tools (40+ tools): Format conversion, resizing, compression, filters, etc.
+- File Tools (45+ tools): Compression, encryption, conversion, duplicate finder, etc.
+- Coding Tools (35+ tools): Code formatter, minifier, JSON validator, regex tester, etc.
+- Color Tools (20+ tools): Color picker, palette generator, gradient maker, etc.
+- CSS Tools (25+ tools): CSS generator, box shadow, flexbox generator, etc.
+- Data Tools (30+ tools): CSV/JSON converter, data validator, SQL formatter, etc.
+- Security Tools (25+ tools): Password generator, encryption, hash generator, etc.
+- Math/Science Tools (30+ tools): Calculator, unit converter, equation solver, etc.
+- SEO/Marketing Tools (35+ tools): Keyword research, meta tags, sitemap creator, etc.
+- Social Media Tools (30+ tools): Post scheduler, hashtag generator, analytics, etc.
+- Audio/Video Tools (35+ tools): Format conversion, trimming, compression, etc.
+- Web Developer Tools (40+ tools): HTML/CSS/JS formatters, performance tester, etc.
+- AI Tools (30+ tools): Text generation, image analysis, language translation, etc.
+- News & Events Tools (20+ tools): News aggregator, RSS reader, weather forecast, etc.
+
 IMPORTANT:
 - For "send to [name]" commands, use contact_name parameter
 - If user says "text John" or "message Sarah", use send_sms
@@ -237,6 +262,13 @@ IMPORTANT:
 - If user says "mute Spotify" or "mute music", use spotify_mute
 - If user says "shuffle" or "shuffle on/off", use spotify_shuffle
 - If user says "repeat" or "loop", use spotify_repeat
+- For web tools, if user says "generate QR code", "convert image", "create hash", etc., use parse_web_tool_command with query parameter
+- If user says "open text tools", "launch image converter", "show color picker", use open_web_tool with appropriate category
+- If user says "list web tools", "what web tools available", "show all tools", use list_web_tools
+- If user says "launch web app", "open web tools", "start toolkit", use launch_web_tools
+- Examples for web tools: "generate QR code" → parse_web_tool_command with query="generate QR code"
+- Examples for web tools: "convert image to PNG" → parse_web_tool_command with query="convert image to PNG"
+- Examples for web tools: "open text tools" → open_web_tool with category="Text Tools"
 
 For multi-step tasks, return steps as a list. Each step should have action and parameters.
 

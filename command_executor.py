@@ -34,6 +34,8 @@ from password_vault import PasswordVault
 from quick_notes import QuickNotes
 from calendar_manager import CalendarManager
 from ecosystem_manager import EcosystemManager
+from web_tools_launcher import create_web_tools_launcher
+from tools_mapper import create_tools_mapper
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -71,6 +73,8 @@ class CommandExecutor:
             self.weather_news,
             self.password_vault
         )
+        self.web_tools = create_web_tools_launcher()
+        self.tools_mapper = create_tools_mapper()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -1344,6 +1348,56 @@ class CommandExecutor:
                     result += f"{i}. {suggestion}\n"
                 result += "="*50
                 return {"success": True, "message": result}
+            
+            elif action == "launch_web_tools":
+                result = self.web_tools.launch_web_app()
+                if result["success"]:
+                    webbrowser.open(result["url"])
+                return result
+            
+            elif action == "open_web_tool":
+                category = parameters.get("category", "")
+                tool_name = parameters.get("tool", None)
+                
+                if not category:
+                    return {
+                        "success": False,
+                        "message": "❌ No tool category specified"
+                    }
+                
+                result = self.web_tools.open_web_tool(category, tool_name)
+                return result
+            
+            elif action == "list_web_tools":
+                result = self.web_tools.list_available_tools()
+                return result
+            
+            elif action == "web_tools_status":
+                result = self.web_tools.get_status()
+                return result
+            
+            elif action == "stop_web_tools":
+                result = self.web_tools.stop_web_app()
+                return result
+            
+            elif action == "parse_web_tool_command":
+                query = parameters.get("query", "")
+                if not query:
+                    return {
+                        "success": False,
+                        "message": "❌ No query provided"
+                    }
+                
+                parsed = self.tools_mapper.parse_command(query)
+                
+                if parsed["category"]:
+                    result = self.web_tools.open_web_tool(parsed["category"], parsed["tool"])
+                    return result
+                else:
+                    return {
+                        "success": False,
+                        "message": f"❌ Could not find a matching tool for: {query}"
+                    }
             
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")
