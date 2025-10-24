@@ -1,7 +1,7 @@
 # AI Desktop Automation Controller
 
 ## Overview
-The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. Its core purpose is to provide a unified ecosystem with over 200 features, including system control, voice commands, productivity monitoring, smart typing, auto-organization, file management, web automation, advanced AI capabilities, and integrations with over 500 web tools via an In-One-Box Streamlit application. The project aims to be a comprehensive productivity powerhouse by integrating advanced AI for code generation, screen analysis, natural language understanding, and comprehensive AI-powered features across 17 categories: Chatbots, Text Generation, Language Processing, Image Generation, Data Analysis, Computer Vision, Voice & Audio, Audio/Video Conversion, Audio/Video Editing, Audio/Video Compression, Audio/Video Analysis, Streaming Tools, Subtitle Tools, Metadata Editors, Audio Enhancement, Video Enhancement, and Media Utilities. Key capabilities include Spotify music control and utility modules: Weather & News, Translation, Calculator, Password Vault, Quick Notes, and Calendar Manager.
+The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. Its core purpose is to provide a unified ecosystem with over 220 features, including a comprehensive 100+ feature data analysis suite, system control, voice commands, productivity monitoring, smart typing, auto-organization, file management, web automation, advanced AI capabilities, and integrations with over 500 web tools via an In-One-Box Streamlit application. The project aims to be a comprehensive productivity powerhouse by integrating advanced AI for code generation, screen analysis, natural language understanding, professional-grade data analysis (with machine learning, statistical testing, and visualization), and comprehensive AI-powered features across 17 categories: Chatbots, Text Generation, Language Processing, Image Generation, Data Analysis, Computer Vision, Voice & Audio, Audio/Video Conversion, Audio/Video Editing, Audio/Video Compression, Audio/Video Analysis, Streaming Tools, Subtitle Tools, Metadata Editors, Audio Enhancement, Video Enhancement, and Media Utilities. Key capabilities include Spotify music control, comprehensive data analysis toolkit, and utility modules: Weather & News, Translation, Calculator, Password Vault, Quick Notes, and Calendar Manager.
 
 ## User Preferences
 None specified yet.
@@ -63,6 +63,17 @@ The AI Desktop Automation Controller is built with Python 3.11 and utilizes a mo
   - **Audio Enhancement:** Noise reduction, equalizer, normalizer, amplifier, echo remover
   - **Video Enhancement:** Stabilizer, color corrector, brightness adjuster, contrast enhancer, frame rate converter
   - **Media Utilities:** Playlist creator, media organizer, batch processor, file renamer, duplicate finder
+- **Data Analysis Suite (`data_analysis.py`):** Professional-grade data analysis toolkit with 100+ features across 10 categories:
+  - **Data Import/Export:** CSV, JSON, Excel file support with format conversion
+  - **Data Cleaning:** Missing value handler, duplicate remover, data validator, type converter, outlier detector (IQR, Z-score)
+  - **Data Analysis:** Statistical summary, correlation analysis (Pearson/Spearman/Kendall), data profiling, distribution analysis, trend analysis
+  - **Data Visualization:** Chart generator (bar, line, scatter, histogram, pie), heatmap creator, dashboard builder
+  - **Data Transformation:** Pivot tables, data aggregator, column calculator, data merger (inner/left/right/outer joins), column splitter
+  - **Machine Learning:** Linear/Ridge/Lasso/ElasticNet regression, classification (Logistic/Random Forest/Decision Tree), ensemble methods, clustering (K-Means/DBSCAN/Hierarchical), feature selection, cross validation
+  - **Text Analytics:** Text mining, sentiment analysis, word frequency analysis
+  - **Time Series:** Trend decomposition, seasonality analysis, forecasting (exponential smoothing), moving averages (MA/EMA)
+  - **Statistical Tests:** T-Test, Chi-Square test, ANOVA, normality test (Shapiro-Wilk)
+  - **Data Quality:** Quality assessment (0-100% score), completeness check, validation
 - **Ecosystem Manager:** Connects all modules, enabling cross-feature workflows, smart suggestions, unified dashboards, and context-aware automation. Features include smart dashboards, morning/evening briefings, cross-module search, auto-organization, custom workflows, smart suggestions, and productivity insights.
 
 ## External Dependencies
@@ -83,3 +94,12 @@ The AI Desktop Automation Controller is built with Python 3.11 and utilizes a mo
 - **wttr.in API:** Weather data.
 - **Google Translate API:** Language translation.
 - **NEWS_API_KEY (optional):** For news headlines (from newsapi.org).
+- **Data Science Libraries:**
+  - **pandas:** Data manipulation and analysis.
+  - **numpy:** Numerical computing.
+  - **scikit-learn:** Machine learning algorithms.
+  - **matplotlib:** Data visualization and plotting.
+  - **seaborn:** Statistical data visualization.
+  - **statsmodels:** Statistical modeling and testing.
+  - **nltk:** Natural language processing.
+  - **openpyxl:** Excel file operations.
