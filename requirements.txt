@@ -40,3 +40,12 @@ streamlit==1.40.2
 # pandas==2.2.3                    # For data analysis features
 # numpy==2.1.3                     # Required by pandas
 # Pillow==11.0.0                   # For advanced image processing
+matplotlib
+nltk
+numpy
+openpyxl
+pandas
+scikit-learn
+seaborn
+sift-stack-py
+statsmodels
