@@ -230,7 +230,7 @@ Create engaging, high-quality content for the specified type and tone:"""
         except Exception as e:
             return f"Error in content creator: {str(e)}"
 
-    def article_generator(self, title: str, keywords: List[str] = None, word_count: int = 800) -> str:
+    def article_generator(self, title: str, keywords: Optional[List[str]] = None, word_count: int = 800) -> str:
         """
         Article Generator - Generate full articles
         """
@@ -330,7 +330,7 @@ Provide only the translation:"""
         except Exception as e:
             return f"Error in text translator: {str(e)}"
 
-    def sentiment_analysis(self, text: str) -> dict:
+    def sentiment_analysis(self, text: str) -> str:
         """
         Sentiment Analysis - Analyze emotional tone of text
         """
@@ -412,7 +412,7 @@ Response format: Language Name (ISO Code) - Confidence Level"""
         except Exception as e:
             return f"Error in language detector: {str(e)}"
 
-    def content_moderator(self, text: str) -> dict:
+    def content_moderator(self, text: str) -> str:
         """
         Content Moderator - Check content for inappropriate material
         """
@@ -557,7 +557,7 @@ Provide comprehensive trend analysis:"""
         except Exception as e:
             return f"Error in trend analysis: {str(e)}"
 
-    def predictive_modeling(self, scenario: str, variables: List[str] = None) -> str:
+    def predictive_modeling(self, scenario: str, variables: Optional[List[str]] = None) -> str:
         """
         Predictive Modeling - Make predictions based on scenarios
         """
