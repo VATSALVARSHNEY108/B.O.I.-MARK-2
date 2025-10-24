@@ -21,9 +21,13 @@ class WebToolsLauncher:
         
     def is_port_in_use(self, port):
         """Check if a port is already in use"""
-        for conn in psutil.net_connections():
-            if conn.laddr.port == port and conn.status == 'LISTEN':
-                return True
+        try:
+            for conn in psutil.net_connections():
+                if conn.laddr.port == port and conn.status == 'LISTEN':
+                    return True
+        except (psutil.AccessDenied, PermissionError):
+            # If we can't check ports, assume it's available
+            pass
         return False
     
     def is_app_running(self):
@@ -48,22 +52,23 @@ class WebToolsLauncher:
             if not os.path.exists("app.py"):
                 return {
                     "success": False,
-                    "message": "❌ Web tools app not found. Please clone the In-One-Box repository first."
+                    "message": "❌ Web tools app not found.\n💡 Clone the In-One-Box repository to this directory:\n   git clone https://github.com/VATSALVARSHNEY108/In-One-Box-.git\n   Then move the files to the current directory."
                 }
             
             # Launch Streamlit app in background
+            # Redirect stdout/stderr to DEVNULL to prevent pipe deadlock
             if platform.system() == "Windows":
                 self.process = subprocess.Popen(
                     ["streamlit", "run", "app.py", "--server.port", str(self.streamlit_port)],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
                     creationflags=subprocess.CREATE_NO_WINDOW
                 )
             else:
                 self.process = subprocess.Popen(
                     ["streamlit", "run", "app.py", "--server.port", str(self.streamlit_port)],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL
                 )
             
             # Wait for app to start
