@@ -28,6 +28,9 @@ pywhatkit==5.4
 # File System Monitoring
 watchdog==6.0.0
 
+# Web Tools Integration
+streamlit==1.40.2
+
 # Optional Dependencies (for specific features)
 # Uncomment if you need these features:
 

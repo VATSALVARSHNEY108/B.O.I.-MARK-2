@@ -1,7 +1,18 @@
 # AI Desktop Automation Controller
 
 ## Overview
-An intelligent desktop automation tool powered by Google's Gemini AI, designed to interpret natural language commands and execute them on desktop computers. The project features a **unified ecosystem** where all 120+ features work together intelligently, including **Spotify music control**, system control, voice commands, productivity monitoring, smart typing, auto-organization, file management, web automation, fun features, and **7 utility modules** (Weather & News, Translation, Calculator, Pomodoro Timer, Password Vault, Quick Notes, and Calendar Manager). The **Ecosystem Manager** connects all modules, enabling cross-feature workflows, smart suggestions, unified dashboards, and context-aware automation. It integrates advanced AI capabilities for code generation, screen analysis, and natural language understanding to create a comprehensive productivity powerhouse.
+An intelligent desktop automation tool powered by Google's Gemini AI, designed to interpret natural language commands and execute them on desktop computers. The project features a **unified ecosystem** where all 120+ features work together intelligently, including **500+ Web Tools Integration** (via In-One-Box Streamlit app), **Spotify music control**, system control, voice commands, productivity monitoring, smart typing, auto-organization, file management, web automation, fun features, and **7 utility modules** (Weather & News, Translation, Calculator, Password Vault, Quick Notes, and Calendar Manager). The **Ecosystem Manager** connects all modules, enabling cross-feature workflows, smart suggestions, unified dashboards, and context-aware automation. It integrates advanced AI capabilities for code generation, screen analysis, and natural language understanding to create a comprehensive productivity powerhouse.
+
+## Recent Changes (2025-10-24 - WEB TOOLS INTEGRATION)
+- ✅ **HYBRID INTEGRATION**: Added 500+ Web Tools via In-One-Box Streamlit app
+  - **web_tools_launcher.py**: Launch and manage Streamlit web app from desktop
+  - **tools_mapper.py**: Intelligent mapping of natural language to specific web tools
+  - **15 Tool Categories**: Text, Image, File, Coding, Color, CSS, Data, Security, Math, SEO, Social Media, Audio/Video, Web Dev, AI, News & Events
+  - **AI-Powered Access**: Natural language commands like "generate QR code", "convert image to PNG"
+  - **Seamless Integration**: Desktop automation launches and controls web tools
+- ✅ **GUI ENHANCEMENT**: Added dedicated Web Tools tab with 30+ quick actions
+- ✅ **GEMINI INTEGRATION**: Updated AI controller to recognize 500+ web tool commands
+- ✅ **COMMAND EXECUTOR**: Integrated web tools functionality into main automation system
 
 ## Recent Changes (2025-10-23 - FINAL)
 - ✅ **COMPLETE**: Fixed all Gemini API key initialization issues across all modules
@@ -33,7 +44,7 @@ None specified yet.
 The AI Desktop Automation Controller is built with Python 3.11 and features a modular architecture.
 
 ### UI/UX Decisions
-- **Enhanced GUI Application (`gui_app.py`):** Features a modern dark theme with a tabbed interface organizing 50+ functions into 6 categories (Code Generation, Desktop Automation, Messaging, System Control, Productivity, and Fun Features). Includes quick-access buttons for all major functions, text input field, real-time color-coded output display, status indicators, and comprehensive help documentation. Utilizes `tkinter` with scrollable panels and threading for non-blocking command execution. Fully functional in cloud/headless environments with graceful degradation.
+- **Enhanced GUI Application (`gui_app.py`):** Features a modern dark theme with a tabbed interface organizing 50+ functions into 9 categories (Code Generation, Desktop Automation, Messaging, System Control, Productivity, Utilities, Ecosystem, Fun Features, and Web Tools). The new Web Tools tab provides access to 500+ web-based tools through natural language commands. Includes quick-access buttons for all major functions, text input field, real-time color-coded output display, status indicators, and comprehensive help documentation. Utilizes `tkinter` with scrollable panels and threading for non-blocking command execution. Fully functional in cloud/headless environments with graceful degradation.
 - **CLI Interface (`main.py`):** Provides an alternative interactive command-line interface with user-friendly prompts and special commands.
 - **WhatsApp Desktop Integration:** Dual-mode support: desktop automation via PyWhatKit (when available) and web-based fallback using WhatsApp Web URLs with pre-filled messages. Includes input validation and clear error messaging for unsupported operations in cloud environments.
 
@@ -67,6 +78,8 @@ The AI Desktop Automation Controller is built with Python 3.11 and features a mo
 - **Password Vault (`password_vault.py`):** Encrypted password storage using Fernet encryption, strong password generation, strength checking, and secure retrieval. Note: Basic file-based security with chmod 600 protection.
 - **Quick Notes (`quick_notes.py`):** Fast note-taking with categories, tags, search functionality, pinning, and export capabilities.
 - **Calendar Manager (`calendar_manager.py`):** Event scheduling with natural date parsing (today/tomorrow), reminders, search, and upcoming events view.
+- **Web Tools Launcher (`web_tools_launcher.py`):** Launches and manages the In-One-Box Streamlit web app, providing access to 500+ comprehensive tools. Features port management, app status checking, automatic browser opening, and seamless integration with desktop automation.
+- **Tools Mapper (`tools_mapper.py`):** Intelligent natural language processing to map user commands to specific web tools. Supports 15 tool categories with keyword-based routing, auto-suggestions, and tool descriptions. Handles commands like "generate QR code", "convert image", "open color picker" and routes them to appropriate web tools.
 
 ### Safety & Error Handling
 - PyAutoGUI failsafe for emergency stops.
@@ -79,12 +92,40 @@ The AI Desktop Automation Controller is built with Python 3.11 and features a mo
 - **pyperclip:** For clipboard operations.
 - **psutil:** For process management and system monitoring.
 - **python-dotenv:** For managing environment variables.
+- **streamlit:** For running the In-One-Box web tools application (500+ tools).
 - **Twilio:** For SMS messaging (requires `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_PHONE_NUMBER`).
 - **Gmail SMTP:** For email sending (requires `GMAIL_USER`, `GMAIL_APP_PASSWORD`).
 - **watchdog:** For real-time file system watching (download organizer).
 - **speechrecognition:** For voice commands.
 - **pyttsx3:** For text-to-speech responses.
 - **cryptography:** For encrypted credential storage.
-- **requests:** For HTTP API calls (Spotify integration).
+- **requests:** For HTTP API calls (Spotify integration, web tools status).
 - **Replit Spotify Connector:** For OAuth and token management with Spotify API.
 - **NEWS_API_KEY (optional):** For news headlines feature. Get free key from newsapi.org.
+
+## Web Tools Integration (In-One-Box)
+The project integrates with the user's In-One-Box Streamlit repository (https://github.com/VATSALVARSHNEY108/In-One-Box-.git) to provide access to 500+ web-based tools through natural language commands. The hybrid integration allows the desktop automation to launch and control the web app, providing a seamless experience where users can access comprehensive toolsets via AI-powered commands.
+
+### Tool Categories (15):
+1. **Text Tools** (50+ tools): QR codes, Base64, hashes, word counter, case converter, lorem ipsum, password generator
+2. **Image Tools** (40+ tools): Format conversion, resizing, compression, watermarks, filters, background remover
+3. **File Tools** (45+ tools): Compression, encryption, bulk renaming, duplicate finder
+4. **Coding Tools** (35+ tools): Code formatter, minifier, JSON validator, regex tester, API tester
+5. **Color Tools** (20+ tools): Color picker, palette generator, gradient maker, converter, contrast checker
+6. **CSS Tools** (25+ tools): CSS generator, box shadow, border radius, flexbox/grid generators
+7. **Data Tools** (30+ tools): CSV converter, JSON editor, XML parser, data validator, SQL formatter
+8. **Security/Privacy Tools** (25+ tools): Password generator, hash generator, encryptor, security scanner
+9. **Math/Science Tools** (30+ tools): Calculator, unit converter, equation solver, statistics, graph plotter
+10. **SEO/Marketing Tools** (35+ tools): Keyword research, meta tags, sitemap creator, backlink checker
+11. **Social Media Tools** (30+ tools): Post scheduler, analytics, hashtag generator, caption creator
+12. **Audio/Video Tools** (35+ tools): Audio/video converter, trimmer, compressor
+13. **Web Developer Tools** (40+ tools): HTML/CSS/JS formatters, performance tester, SEO analyzer
+14. **AI Tools** (30+ tools): Text generation, image analysis, content creation, language translation
+15. **News & Events Tools** (20+ tools): News aggregator, RSS reader, event calendar, weather forecast
+
+### Usage Examples:
+- "Generate QR code" → Opens Text Tools with QR code generator
+- "Convert image to PNG" → Opens Image Tools with format converter
+- "Open color picker" → Opens Color Tools
+- "Launch web tools" → Starts the full Streamlit application
+- "List web tools" → Shows all available tool categories
