@@ -238,6 +238,76 @@ AI FEATURES - VOICE & AUDIO:
 - generate_speech_text: Generate text for speech synthesis (parameters: topic, duration_minutes [optional, default: 5], tone [optional, default: professional])
 - audio_analysis_guide: Audio analysis guidance (parameters: audio_type)
 
+AI FEATURES - AUDIO/VIDEO CONVERSION:
+- format_converter: Convert media formats (parameters: input_format, output_format, file_description [optional])
+- codec_transformer: Transform codecs (parameters: source_codec, target_codec)
+- quality_adjuster: Adjust media quality (parameters: media_type, target_quality)
+- batch_converter: Batch convert files (parameters: conversion_task, file_count [optional, default: 1])
+- resolution_changer: Change video resolution (parameters: current_resolution, target_resolution)
+
+AI FEATURES - AUDIO/VIDEO EDITING:
+- media_trimmer: Trim audio/video (parameters: media_type, trim_specification)
+- media_splitter: Split media files (parameters: split_criteria)
+- media_merger: Merge media files (parameters: merge_description)
+- volume_adjuster: Adjust audio volume (parameters: adjustment_type)
+- speed_controller: Control playback speed (parameters: speed_change)
+
+AI FEATURES - AUDIO/VIDEO COMPRESSION:
+- size_optimizer: Optimize file size (parameters: target_size, media_type)
+- bitrate_adjuster: Adjust bitrate (parameters: bitrate_target)
+- quality_compressor: Quality-based compression (parameters: compression_level)
+- batch_compression: Batch compress files (parameters: compression_task)
+- format_specific_compression: Format-specific compression (parameters: format_name)
+
+AI FEATURES - AUDIO/VIDEO ANALYSIS:
+- metadata_extractor: Extract metadata (parameters: file_type)
+- format_detector: Detect file format (parameters: detection_task)
+- quality_analyzer: Analyze media quality (parameters: analysis_type)
+- duration_calculator: Calculate duration (parameters: calculation_task)
+- codec_identifier: Identify codecs (parameters: identification_task)
+
+AI FEATURES - STREAMING TOOLS:
+- stream_configuration: Configure streaming (parameters: platform, stream_type)
+- broadcast_settings: Broadcast settings (parameters: broadcast_type)
+- encoding_optimizer: Optimize encoding (parameters: encoding_scenario)
+- quality_settings: Quality settings for streaming (parameters: target_quality, use_case [optional])
+- platform_optimizer: Platform-specific optimization (parameters: platform_name)
+
+AI FEATURES - SUBTITLE TOOLS:
+- subtitle_editor: Edit subtitles (parameters: editing_task)
+- timing_adjuster: Adjust subtitle timing (parameters: adjustment_needed)
+- subtitle_format_converter: Convert subtitle formats (parameters: from_format, to_format)
+- subtitle_generator: Generate subtitles (parameters: generation_method)
+- subtitle_synchronizer: Synchronize subtitles (parameters: sync_task)
+
+AI FEATURES - METADATA EDITORS:
+- tag_editor: Edit media tags (parameters: tag_operation)
+- cover_art_manager: Manage cover art (parameters: art_task)
+- information_extractor: Extract file information (parameters: extraction_target)
+- metadata_batch_editor: Batch edit metadata (parameters: batch_task)
+- id3_editor: Edit ID3 tags (parameters: id3_operation)
+
+AI FEATURES - AUDIO ENHANCEMENT:
+- noise_reduction: Reduce audio noise (parameters: noise_type)
+- audio_equalizer: Equalize audio (parameters: eq_goal)
+- audio_normalizer: Normalize audio levels (parameters: normalization_type)
+- audio_amplifier: Amplify audio (parameters: amplification_goal)
+- echo_remover: Remove echo from audio (parameters: echo_scenario)
+
+AI FEATURES - VIDEO ENHANCEMENT:
+- video_stabilizer: Stabilize shaky video (parameters: stabilization_task)
+- color_corrector: Correct video colors (parameters: correction_goal)
+- brightness_adjuster: Adjust video brightness (parameters: adjustment_task)
+- contrast_enhancer: Enhance video contrast (parameters: enhancement_goal)
+- frame_rate_converter: Convert frame rate (parameters: conversion_spec)
+
+AI FEATURES - MEDIA UTILITIES:
+- playlist_creator: Create playlists (parameters: playlist_type)
+- media_organizer: Organize media files (parameters: organization_task)
+- media_batch_processor: Batch process media (parameters: processing_task)
+- media_file_renamer: Rename media files (parameters: renaming_pattern)
+- media_duplicate_finder: Find duplicate media (parameters: search_criteria)
+
 AI FEATURES GENERAL:
 - list_ai_features: List all available AI features organized by category (parameters: none)
 
