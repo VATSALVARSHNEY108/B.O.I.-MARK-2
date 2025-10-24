@@ -78,6 +78,7 @@ class AutomationControllerGUI:
         self.create_utilities_tab(notebook)
         self.create_ecosystem_tab(notebook)
         self.create_fun_tab(notebook)
+        self.create_web_tools_tab(notebook)
         
         right_panel = tk.Frame(main_container, bg="#1e1e2e")
         right_panel.pack(side="right", fill="both", expand=True)
@@ -531,6 +532,89 @@ class AutomationControllerGUI:
                           padx=10,
                           pady=8)
             btn.pack(fill="x", padx=5, pady=2)
+    
+    def create_web_tools_tab(self, notebook):
+        tab = tk.Frame(notebook, bg="#313244")
+        notebook.add(tab, text="🛠️ Web Tools")
+        
+        canvas = tk.Canvas(tab, bg="#313244", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(tab, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="#313244")
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        header = tk.Label(scrollable_frame,
+                         text="🚀 500+ WEB TOOLS - IN-ONE-BOX",
+                         bg="#313244",
+                         fg="#89b4fa",
+                         font=("Arial", 11, "bold"))
+        header.pack(pady=10)
+        
+        info = tk.Label(scrollable_frame,
+                       text="Access comprehensive web-based tools through AI commands",
+                       bg="#313244",
+                       fg="#cdd6f4",
+                       font=("Arial", 8))
+        info.pack(pady=(0, 15))
+        
+        actions = [
+            ("🚀 Launch Web Tools App", "Launch web tools"),
+            ("📊 Check Web Tools Status", "Check web tools status"),
+            ("📋 List All Web Tools", "List all web tools"),
+            ("", ""),
+            ("🔤 Generate QR Code", "Generate QR code from text"),
+            ("🖼️ Convert Image Format", "Convert image to PNG"),
+            ("🗜️ Compress Image", "Compress image file"),
+            ("🔐 Generate Password", "Generate strong password"),
+            ("🔢 Hash Generator", "Generate SHA256 hash"),
+            ("📏 Base64 Encode", "Encode text to base64"),
+            ("📝 Word Counter", "Count words in text"),
+            ("🎨 Color Picker", "Open color picker tool"),
+            ("🌈 Gradient Generator", "Generate CSS gradient"),
+            ("📦 JSON Validator", "Open JSON validator"),
+            ("🔍 Regex Tester", "Test regular expression"),
+            ("💻 Code Formatter", "Format and beautify code"),
+            ("🧮 Unit Converter", "Convert units"),
+            ("📊 CSV Converter", "Convert CSV to JSON"),
+            ("🔗 URL Shortener", "Shorten URL link"),
+            ("📷 Image Resizer", "Resize image dimensions"),
+            ("", ""),
+            ("🔤 Open Text Tools", "Open text tools"),
+            ("🖼️ Open Image Tools", "Open image tools"),
+            ("💻 Open Coding Tools", "Open coding tools"),
+            ("🎨 Open Color Tools", "Open color tools"),
+            ("🔐 Open Security Tools", "Open security tools"),
+            ("🧮 Open Math Tools", "Open math and science tools"),
+            ("📊 Open Data Tools", "Open data tools"),
+            ("📁 Open File Tools", "Open file tools"),
+        ]
+        
+        for text, command in actions:
+            if text == "":
+                separator = tk.Frame(scrollable_frame, height=2, bg="#45475a")
+                separator.pack(fill="x", padx=5, pady=5)
+            else:
+                btn = tk.Button(scrollable_frame,
+                              text=text,
+                              bg="#45475a",
+                              fg="#cdd6f4",
+                              font=("Arial", 9),
+                              relief="flat",
+                              cursor="hand2",
+                              command=lambda c=command: self.quick_command(c),
+                              anchor="w",
+                              padx=10,
+                              pady=8)
+                btn.pack(fill="x", padx=5, pady=2)
     
     def quick_command(self, command):
         self.command_input.delete(0, "end")
