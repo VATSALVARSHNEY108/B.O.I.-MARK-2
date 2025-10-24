@@ -198,6 +198,49 @@ SPOTIFY MUSIC CONTROL (Desktop Automation - uses keyboard shortcuts):
 - spotify_shuffle: Toggle shuffle (parameters: none)
 - spotify_repeat: Toggle repeat (parameters: none)
 
+AI FEATURES - CHATBOTS:
+- conversational_ai: General purpose conversational AI chatbot (parameters: message, context [optional, default: general])
+- customer_service_bot: Customer support assistant (parameters: query, company_context [optional])
+- educational_assistant: Learning and education help (parameters: topic, question, level [optional, default: intermediate])
+- domain_expert: Specialized domain knowledge expert (parameters: domain, question)
+
+AI FEATURES - TEXT GENERATION:
+- story_writer: Create creative stories (parameters: prompt, genre [optional, default: general], length [optional: short/medium/long])
+- content_creator: Generate various content types (parameters: topic, content_type [optional, default: blog post], tone [optional, default: professional])
+- article_generator: Write full articles (parameters: title, keywords [optional, list], word_count [optional, default: 800])
+- copywriting_assistant: Create persuasive marketing copy (parameters: product, goal [optional, default: persuade])
+- technical_writer: Create technical documentation (parameters: topic, audience [optional, default: technical])
+
+AI FEATURES - LANGUAGE PROCESSING:
+- text_translator: Translate text between languages (parameters: text, target_language, source_language [optional, default: auto])
+- sentiment_analysis: Analyze emotional tone of text (parameters: text)
+- text_summarizer: Summarize long text (parameters: text, length [optional: brief/medium/detailed])
+- language_detector: Identify the language of text (parameters: text)
+- content_moderator: Check content for inappropriate material (parameters: text)
+
+AI FEATURES - IMAGE GENERATION:
+- image_description_generator: Generate AI art prompts (parameters: concept, style [optional, default: realistic])
+- style_transfer_description: Generate style transfer descriptions (parameters: content, style)
+
+AI FEATURES - DATA ANALYSIS:
+- analyze_data_patterns: Pattern recognition in data (parameters: data_description)
+- trend_analysis: Analyze trends over time (parameters: data_description, time_period [optional])
+- predictive_modeling: Make predictions based on scenarios (parameters: scenario, variables [optional, list])
+- data_insights: Extract actionable insights from data (parameters: data_description)
+- statistical_analysis: Perform statistical analysis (parameters: data_description)
+
+AI FEATURES - COMPUTER VISION:
+- image_recognition_guide: Image recognition guidance (parameters: image_description)
+- object_detection_guide: Object detection strategies (parameters: scenario)
+- scene_analysis_guide: Scene understanding and analysis (parameters: scene_type)
+
+AI FEATURES - VOICE & AUDIO:
+- generate_speech_text: Generate text for speech synthesis (parameters: topic, duration_minutes [optional, default: 5], tone [optional, default: professional])
+- audio_analysis_guide: Audio analysis guidance (parameters: audio_type)
+
+AI FEATURES GENERAL:
+- list_ai_features: List all available AI features organized by category (parameters: none)
+
 WEB TOOLS (500+ TOOLS - IN-ONE-BOX WEB APP):
 - launch_web_tools: Launch the comprehensive web tools application (parameters: none)
 - open_web_tool: Open a specific web tool category (parameters: category, tool [optional])
