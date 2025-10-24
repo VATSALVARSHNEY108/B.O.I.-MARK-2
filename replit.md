@@ -1,7 +1,7 @@
 # AI Desktop Automation Controller
 
 ## Overview
-The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. Its core purpose is to provide a unified ecosystem with over 120 features, including system control, voice commands, productivity monitoring, smart typing, auto-organization, file management, web automation, and integrations with over 500 web tools via an In-One-Box Streamlit application. The project aims to be a comprehensive productivity powerhouse by integrating advanced AI for code generation, screen analysis, and natural language understanding. Key capabilities include Spotify music control and 7 utility modules: Weather & News, Translation, Calculator, Password Vault, Quick Notes, and Calendar Manager.
+The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. Its core purpose is to provide a unified ecosystem with over 150 features, including system control, voice commands, productivity monitoring, smart typing, auto-organization, file management, web automation, advanced AI capabilities, and integrations with over 500 web tools via an In-One-Box Streamlit application. The project aims to be a comprehensive productivity powerhouse by integrating advanced AI for code generation, screen analysis, natural language understanding, and comprehensive AI-powered features across 7 categories: Chatbots, Text Generation, Language Processing, Image Generation, Data Analysis, Computer Vision, and Voice & Audio. Key capabilities include Spotify music control and utility modules: Weather & News, Translation, Calculator, Password Vault, Quick Notes, and Calendar Manager.
 
 ## User Preferences
 None specified yet.
@@ -10,7 +10,7 @@ None specified yet.
 The AI Desktop Automation Controller is built with Python 3.11 and utilizes a modular architecture to ensure scalability and maintainability.
 
 ### UI/UX Decisions
-- **GUI Application (`gui_app.py`):** Features a modern dark-themed, tabbed interface, organizing over 50 functions across 9 categories. It includes quick-access buttons, a text input field, real-time color-coded output, status indicators, and comprehensive help documentation. Built with `tkinter`, it uses threading for non-blocking execution and is designed for graceful degradation in headless environments.
+- **GUI Application (`gui_app.py`):** Features a modern dark-themed, tabbed interface, organizing over 50 functions across 10 categories including a dedicated AI Features tab. It includes quick-access buttons, a text input field, real-time color-coded output, status indicators, and comprehensive help documentation. Built with `tkinter`, it uses threading for non-blocking execution and is designed for graceful degradation in headless environments.
 - **CLI Interface (`main.py`):** Provides an interactive command-line alternative with user-friendly prompts.
 - **WhatsApp Desktop Integration:** Supports dual-mode operation for messaging via PyWhatKit or web-based fallback using WhatsApp Web URLs.
 
@@ -45,6 +45,14 @@ The AI Desktop Automation Controller is built with Python 3.11 and utilizes a mo
 - **Calendar Manager (`calendar_manager.py`):** Event scheduling with natural date parsing, reminders, and event viewing.
 - **Web Tools Launcher (`web_tools_launcher.py`):** Manages and launches the In-One-Box Streamlit web app, providing access to 500+ tools.
 - **Tools Mapper (`tools_mapper.py`):** Intelligently maps natural language commands to specific web tools across 15 categories, supporting commands like "generate QR code" or "convert image."
+- **AI Features Module (`ai_features.py`):** Comprehensive AI capabilities organized into 7 categories with 30+ features:
+  - **Chatbots:** Conversational AI, customer service bot, educational assistant, domain expert
+  - **Text Generation:** Story writer, content creator, article generator, copywriting assistant, technical writer
+  - **Language Processing:** Text translator, sentiment analysis, text summarizer, language detector, content moderator
+  - **Image Generation:** AI art prompt generator, style transfer descriptions
+  - **Data Analysis:** Pattern recognition, trend analysis, predictive modeling, data insights, statistical analysis
+  - **Computer Vision:** Image recognition guide, object detection guide, scene analysis guide
+  - **Voice & Audio:** Speech text generator, audio analysis guide
 - **Ecosystem Manager:** Connects all modules, enabling cross-feature workflows, smart suggestions, unified dashboards, and context-aware automation. Features include smart dashboards, morning/evening briefings, cross-module search, auto-organization, custom workflows, smart suggestions, and productivity insights.
 
 ## External Dependencies
