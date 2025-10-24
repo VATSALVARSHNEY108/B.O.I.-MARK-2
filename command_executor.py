@@ -36,6 +36,7 @@ from calendar_manager import CalendarManager
 from ecosystem_manager import EcosystemManager
 from web_tools_launcher import create_web_tools_launcher
 from tools_mapper import create_tools_mapper
+from ai_features import create_ai_features
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -75,6 +76,7 @@ class CommandExecutor:
         )
         self.web_tools = create_web_tools_launcher()
         self.tools_mapper = create_tools_mapper()
+        self.ai_features = create_ai_features()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -1398,6 +1400,169 @@ class CommandExecutor:
                         "success": False,
                         "message": f"❌ Could not find a matching tool for: {query}"
                     }
+            
+            elif action == "conversational_ai":
+                message = parameters.get("message", "")
+                context = parameters.get("context", "general")
+                result = self.ai_features.conversational_ai(message, context)
+                return {"success": True, "message": result}
+            
+            elif action == "customer_service_bot":
+                query = parameters.get("query", "")
+                company_context = parameters.get("company_context", "")
+                result = self.ai_features.customer_service_bot(query, company_context)
+                return {"success": True, "message": result}
+            
+            elif action == "educational_assistant":
+                topic = parameters.get("topic", "")
+                question = parameters.get("question", "")
+                level = parameters.get("level", "intermediate")
+                result = self.ai_features.educational_assistant(topic, question, level)
+                return {"success": True, "message": result}
+            
+            elif action == "domain_expert":
+                domain = parameters.get("domain", "")
+                question = parameters.get("question", "")
+                result = self.ai_features.domain_expert(domain, question)
+                return {"success": True, "message": result}
+            
+            elif action == "story_writer":
+                prompt = parameters.get("prompt", "")
+                genre = parameters.get("genre", "general")
+                length = parameters.get("length", "medium")
+                result = self.ai_features.story_writer(prompt, genre, length)
+                return {"success": True, "message": result}
+            
+            elif action == "content_creator":
+                topic = parameters.get("topic", "")
+                content_type = parameters.get("content_type", "blog post")
+                tone = parameters.get("tone", "professional")
+                result = self.ai_features.content_creator(topic, content_type, tone)
+                return {"success": True, "message": result}
+            
+            elif action == "article_generator":
+                title = parameters.get("title", "")
+                keywords = parameters.get("keywords", [])
+                word_count = parameters.get("word_count", 800)
+                result = self.ai_features.article_generator(title, keywords, word_count)
+                return {"success": True, "message": result}
+            
+            elif action == "copywriting_assistant":
+                product = parameters.get("product", "")
+                goal = parameters.get("goal", "persuade")
+                result = self.ai_features.copywriting_assistant(product, goal)
+                return {"success": True, "message": result}
+            
+            elif action == "technical_writer":
+                topic = parameters.get("topic", "")
+                audience = parameters.get("audience", "technical")
+                result = self.ai_features.technical_writer(topic, audience)
+                return {"success": True, "message": result}
+            
+            elif action == "text_translator":
+                text = parameters.get("text", "")
+                target_language = parameters.get("target_language", "")
+                source_language = parameters.get("source_language", "auto")
+                result = self.ai_features.text_translator(text, target_language, source_language)
+                return {"success": True, "message": result}
+            
+            elif action == "sentiment_analysis":
+                text = parameters.get("text", "")
+                result = self.ai_features.sentiment_analysis(text)
+                return {"success": True, "message": result}
+            
+            elif action == "text_summarizer":
+                text = parameters.get("text", "")
+                length = parameters.get("length", "medium")
+                result = self.ai_features.text_summarizer(text, length)
+                return {"success": True, "message": result}
+            
+            elif action == "language_detector":
+                text = parameters.get("text", "")
+                result = self.ai_features.language_detector(text)
+                return {"success": True, "message": result}
+            
+            elif action == "content_moderator":
+                text = parameters.get("text", "")
+                result = self.ai_features.content_moderator(text)
+                return {"success": True, "message": result}
+            
+            elif action == "image_description_generator":
+                concept = parameters.get("concept", "")
+                style = parameters.get("style", "realistic")
+                result = self.ai_features.image_description_generator(concept, style)
+                return {"success": True, "message": result}
+            
+            elif action == "style_transfer_description":
+                content = parameters.get("content", "")
+                style = parameters.get("style", "")
+                result = self.ai_features.style_transfer_description(content, style)
+                return {"success": True, "message": result}
+            
+            elif action == "analyze_data_patterns":
+                data_description = parameters.get("data_description", "")
+                result = self.ai_features.analyze_data_patterns(data_description)
+                return {"success": True, "message": result}
+            
+            elif action == "trend_analysis":
+                data_description = parameters.get("data_description", "")
+                time_period = parameters.get("time_period", "")
+                result = self.ai_features.trend_analysis(data_description, time_period)
+                return {"success": True, "message": result}
+            
+            elif action == "predictive_modeling":
+                scenario = parameters.get("scenario", "")
+                variables = parameters.get("variables", [])
+                result = self.ai_features.predictive_modeling(scenario, variables)
+                return {"success": True, "message": result}
+            
+            elif action == "data_insights":
+                data_description = parameters.get("data_description", "")
+                result = self.ai_features.data_insights(data_description)
+                return {"success": True, "message": result}
+            
+            elif action == "statistical_analysis":
+                data_description = parameters.get("data_description", "")
+                result = self.ai_features.statistical_analysis(data_description)
+                return {"success": True, "message": result}
+            
+            elif action == "image_recognition_guide":
+                image_description = parameters.get("image_description", "")
+                result = self.ai_features.image_recognition_guide(image_description)
+                return {"success": True, "message": result}
+            
+            elif action == "object_detection_guide":
+                scenario = parameters.get("scenario", "")
+                result = self.ai_features.object_detection_guide(scenario)
+                return {"success": True, "message": result}
+            
+            elif action == "scene_analysis_guide":
+                scene_type = parameters.get("scene_type", "")
+                result = self.ai_features.scene_analysis_guide(scene_type)
+                return {"success": True, "message": result}
+            
+            elif action == "generate_speech_text":
+                topic = parameters.get("topic", "")
+                duration_minutes = parameters.get("duration_minutes", 5)
+                tone = parameters.get("tone", "professional")
+                result = self.ai_features.generate_speech_text(topic, duration_minutes, tone)
+                return {"success": True, "message": result}
+            
+            elif action == "audio_analysis_guide":
+                audio_type = parameters.get("audio_type", "")
+                result = self.ai_features.audio_analysis_guide(audio_type)
+                return {"success": True, "message": result}
+            
+            elif action == "list_ai_features":
+                result = self.ai_features.list_ai_features()
+                message = "🤖 AVAILABLE AI FEATURES:\n" + "="*60 + "\n\n"
+                for category, features in result.items():
+                    message += f"📁 {category}:\n"
+                    for feature in features:
+                        message += f"  • {feature}\n"
+                    message += "\n"
+                message += "="*60
+                return {"success": True, "message": message}
             
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")
