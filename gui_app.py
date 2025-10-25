@@ -706,6 +706,39 @@ class AutomationControllerGUI:
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
         
+        rag_section = tk.Label(scrollable_frame,
+                              text="🧠 DESKTOP RAG - SMART FILE INTELLIGENCE",
+                              bg="#1e1e2e",
+                              fg="#f9e2af",
+                              font=("Segoe UI", 11, "bold"))
+        rag_section.pack(pady=(15, 8), anchor="w", padx=8)
+        
+        rag_actions = [
+            ("🚀 Quick Index My Files", "Index my desktop files"),
+            ("📂 Index Specific Folder", "Index C:\\Users folder"),
+            ("🔍 Search Files", "Search files for Python"),
+            ("💬 Ask About My Files", "What Python projects do I have?"),
+            ("📊 Summarize Folder", "Summarize my Documents folder"),
+            ("🔎 Find Duplicate Files", "Find duplicate files in my computer"),
+            ("📈 Show RAG Statistics", "Show desktop index statistics"),
+        ]
+        
+        for text, command in rag_actions:
+            btn = tk.Button(scrollable_frame,
+                          text=text,
+                          bg="#313244",
+                          fg="#ffffff",
+                          font=("Segoe UI", 10),
+                          relief="flat",
+                          cursor="hand2",
+                          command=lambda c=command: self.quick_command(c),
+                          anchor="w",
+                          padx=15,
+                          pady=10,
+                          activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+        
         ai_section = tk.Label(scrollable_frame,
                              text="💬 AI ASSISTANTS & TEXT GENERATION",
                              bg="#1e1e2e",

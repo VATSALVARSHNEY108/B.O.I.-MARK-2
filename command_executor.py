@@ -51,6 +51,7 @@ from cloud_ecosystem import create_cloud_ecosystem
 from chat_monitor import ChatMonitor
 from visual_chat_monitor import create_visual_chat_monitor
 from smart_screen_monitor import create_smart_screen_monitor
+from desktop_rag import create_desktop_rag
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -105,6 +106,7 @@ class CommandExecutor:
         self.chat_monitor = ChatMonitor()
         self.visual_chat_monitor = create_visual_chat_monitor()
         self.smart_screen_monitor = create_smart_screen_monitor()
+        self.desktop_rag = create_desktop_rag()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -2761,6 +2763,94 @@ class CommandExecutor:
             elif action == "restore_from_cloud":
                 backup_date = parameters.get("backup_date", "latest")
                 return self.cloud_ecosystem.restore_from_cloud(backup_date)
+            
+            elif action == "index_directory_rag":
+                directory = parameters.get("directory", ".")
+                max_files = parameters.get("max_files", 1000)
+                recursive = parameters.get("recursive", True)
+                result = self.desktop_rag.index_directory(directory, max_files, recursive)
+                if result.get("success"):
+                    return {"success": True, "message": f"✅ Indexed {result['indexed_files']} files in {result['time_taken']}\n📊 Total in index: {result['total_in_index']}"}
+                else:
+                    return {"success": False, "message": f"❌ Error: {result.get('error', 'Unknown error')}"}
+            
+            elif action == "quick_index_rag":
+                result = self.desktop_rag.quick_index_common_folders()
+                if result.get("success"):
+                    return {"success": True, "message": f"✅ Quick indexed {result['total_files_indexed']} files from {result['folders_indexed']} common folders"}
+                else:
+                    return {"success": False, "message": f"❌ Error indexing folders"}
+            
+            elif action == "search_files_rag":
+                query = parameters.get("query", "")
+                max_results = parameters.get("max_results", 10)
+                matches = self.desktop_rag.search_files(query, max_results)
+                if matches:
+                    result_msg = f"🔍 Found {len(matches)} matches for '{query}':\n\n"
+                    for i, match in enumerate(matches[:10], 1):
+                        result_msg += f"{i}. {match['name']}\n   Path: {match['path']}\n   Relevance: {match['relevance_score']}\n\n"
+                    return {"success": True, "message": result_msg}
+                else:
+                    return {"success": True, "message": f"No files found matching '{query}'"}
+            
+            elif action == "ask_about_files":
+                question = parameters.get("question", "")
+                result = self.desktop_rag.ask_about_files(question)
+                if result.get("success"):
+                    msg = f"💬 Question: {question}\n\n"
+                    msg += f"📊 AI Answer:\n{result['answer']}\n\n"
+                    msg += f"📁 Files analyzed: {result['files_analyzed']}\n"
+                    if result.get('relevant_files'):
+                        msg += "\nRelevant files:\n"
+                        for f in result['relevant_files'][:5]:
+                            msg += f"  • {f}\n"
+                    return {"success": True, "message": msg}
+                else:
+                    return {"success": False, "message": f"❌ Error: {result.get('error', 'Unknown error')}"}
+            
+            elif action == "summarize_folder_rag":
+                folder_path = parameters.get("folder_path", ".")
+                result = self.desktop_rag.summarize_folder(folder_path)
+                if result.get("success"):
+                    msg = f"📊 Folder Summary: {folder_path}\n\n"
+                    msg += f"📁 Files: {result['file_count']}\n"
+                    msg += f"💾 Size: {result['total_size_mb']} MB\n\n"
+                    msg += f"AI Analysis:\n{result['summary']}\n"
+                    return {"success": True, "message": msg}
+                else:
+                    return {"success": False, "message": f"❌ Error: {result.get('error', 'Unknown error')}"}
+            
+            elif action == "find_duplicates_rag":
+                result = self.desktop_rag.find_duplicates_smart()
+                if result.get("success"):
+                    msg = f"🔍 Smart Duplicate Detection\n\n"
+                    msg += f"Found {result['duplicates_found']} potential duplicates\n"
+                    msg += f"💾 Potential savings: {result['potential_savings_mb']:.2f} MB\n\n"
+                    if result.get('duplicates'):
+                        msg += "Top duplicates:\n"
+                        for dup in result['duplicates'][:10]:
+                            msg += f"\n  • {dup['name']}\n"
+                            msg += f"    File 1: {dup['file1']}\n"
+                            msg += f"    File 2: {dup['file2']}\n"
+                            msg += f"    Confidence: {dup['confidence']}\n"
+                    return {"success": True, "message": msg}
+                else:
+                    return {"success": False, "message": "❌ Error finding duplicates"}
+            
+            elif action == "get_rag_stats":
+                stats = self.desktop_rag.get_index_stats()
+                msg = f"📊 Desktop RAG Index Statistics\n\n"
+                msg += f"Total files indexed: {stats['total_files']}\n"
+                if stats['total_files'] > 0:
+                    msg += f"Files with text content: {stats['files_with_text_content']}\n"
+                    msg += f"Total size: {stats['total_size_mb']} MB\n"
+                    msg += f"Last updated: {stats['last_updated']}\n\n"
+                    msg += "Top file types:\n"
+                    for ext, count in list(stats['file_types'].items())[:10]:
+                        msg += f"  {ext}: {count} files\n"
+                else:
+                    msg += "\nNo files indexed yet. Try 'Index my desktop files' first."
+                return {"success": True, "message": msg}
             
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")
