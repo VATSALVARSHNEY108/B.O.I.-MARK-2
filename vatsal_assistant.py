@@ -125,7 +125,7 @@ Respond naturally as VATSAL would, with sophistication and efficiency."""
         return self.context_memory.get(key, {}).get('value')
     
     def process_with_personality(self, user_input, command_result=None):
-        """Process user input with JARVIS personality"""
+        """Process user input with VATSAL personality"""
         if not self.ai_available:
             return self._fallback_response(user_input, command_result)
         
@@ -142,7 +142,7 @@ Previous conversation context:
 User command: {user_input}
 Command result: {command_result}
 
-Respond as JARVIS would - acknowledge the result, provide insights if relevant, and offer next steps or suggestions."""
+Respond as VATSAL would - acknowledge the result, provide insights if relevant, and offer next steps or suggestions."""
             else:
                 prompt = f"""{self.system_prompt}
 
@@ -151,7 +151,7 @@ Previous conversation context:
 
 User: {user_input}
 
-Respond as JARVIS would - helpful, sophisticated, and ready to assist."""
+Respond as VATSAL would - helpful, sophisticated, and ready to assist."""
             
             response = self.chat.send_message(prompt)
             
@@ -180,7 +180,7 @@ Respond as JARVIS would - helpful, sophisticated, and ready to assist."""
         context_lines = []
         for item in recent:
             context_lines.append(f"User: {item['user']}")
-            context_lines.append(f"JARVIS: {item['assistant']}")
+            context_lines.append(f"VATSAL: {item['assistant']}")
         
         return "\n".join(context_lines)
     
@@ -239,7 +239,7 @@ Respond as JARVIS would - helpful, sophisticated, and ready to assist."""
         return random.choice(suggestions.get(time_of_day, suggestions['morning']))
     
     def acknowledge_command(self, command):
-        """Acknowledge command in JARVIS style"""
+        """Acknowledge command in VATSAL style"""
         acknowledgments = [
             f"Certainly, Sir. Executing '{command}' now.",
             f"Right away. Processing '{command}'.",

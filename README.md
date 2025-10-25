@@ -16,8 +16,8 @@ An intelligent AI desktop automation application powered by Google Gemini AI wit
 - Proactive suggestions based on usage patterns
 - Toggle personality mode ON/OFF
 
-### 🎯 **JARVIS AI - Advanced Conversational Assistant** (NEW!)
-- **Like JARVIS & FRIDAY** from Marvel - sophisticated personality
+### 🎯 **VATSAL AI - Advanced Conversational Assistant** (NEW!)
+- **Like VATSAL & FRIDAY** from Marvel - sophisticated personality
 - **Asks questions first** - clarifies intent before executing
 - **Multi-turn dialogue** - natural back-and-forth conversations
 - **Proactive intelligence** - suggests actions based on context

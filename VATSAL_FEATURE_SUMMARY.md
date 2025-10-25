@@ -1,48 +1,48 @@
-# 🤖 JARVIS Feature Implementation Summary
+# 🤖 VATSAL Feature Implementation Summary
 
-## What's New: JARVIS AI Assistant
+## What's New: VATSAL AI Assistant
 
-Your automation controller now has a **JARVIS-style AI companion** inspired by Tony Stark's intelligent assistants from Iron Man!
+Your automation controller now has a **VATSAL-style AI companion** inspired by Tony Stark's intelligent assistants from Iron Man!
 
 ---
 
 ## ✨ Key Additions
 
-### 1. **New File: `jarvis_assistant.py`**
-- Complete JARVIS personality system
+### 1. **New File: `vatsal_assistant.py`**
+- Complete VATSAL personality system
 - Contextual conversation memory
 - Time-aware greetings and suggestions
 - Proactive assistance features
 - Professional acknowledgments and responses
 
 ### 2. **Enhanced GUI Application**
-- **New Title**: "JARVIS - AI Desktop Automation Controller"
-- **Subtitle**: "Just A Rather Very Intelligent System"
-- **JARVIS Mode Toggle**: Button in header to switch personality ON/OFF
+- **New Title**: "VATSAL - AI Desktop Automation Controller"
+- **Subtitle**: "Vatsal - Advanced Intelligent System"
+- **VATSAL Mode Toggle**: Button in header to switch personality ON/OFF
 - **Live Clock**: Real-time date and time display
 - **Suggestion Button**: Get proactive recommendations anytime
-- **Enhanced Responses**: JARVIS adds personality to every interaction
+- **Enhanced Responses**: VATSAL adds personality to every interaction
 
 ### 3. **Documentation**
-- `JARVIS_GUIDE.md`: Complete guide to using JARVIS features
-- Updated `replit.md`: Project documentation with JARVIS info
-- Enhanced About dialog with JARVIS details
+- `VATSAL_GUIDE.md`: Complete guide to using VATSAL features
+- Updated `replit.md`: Project documentation with VATSAL info
+- Enhanced About dialog with VATSAL details
 
 ---
 
-## 🎯 How JARVIS Works
+## 🎯 How VATSAL Works
 
 ### Conversational Intelligence
-When JARVIS Mode is **ON**, every command gets:
+When VATSAL Mode is **ON**, every command gets:
 
 1. **Professional Acknowledgment**
    ```
-   🤖 JARVIS: Certainly, Sir. Executing 'take screenshot' now.
+   🤖 VATSAL: Certainly, Sir. Executing 'take screenshot' now.
    ```
 
 2. **Personality-Driven Response**
    ```
-   🤖 JARVIS:
+   🤖 VATSAL:
    Screenshot captured successfully, Sir. I've saved it to your 
    screenshots folder with a timestamp. Would you like me to open 
    it for review or analyze its contents?
@@ -61,7 +61,7 @@ When JARVIS Mode is **ON**, every command gets:
    ```
 
 ### Time-Aware Greetings
-JARVIS greets you based on time of day:
+VATSAL greets you based on time of day:
 - **Morning**: "Good morning, Sir. All systems are operational..."
 - **Afternoon**: "Good afternoon. How may I be of assistance?"
 - **Evening**: "Good evening. Hope your day was productive..."
@@ -102,8 +102,8 @@ JARVIS greets you based on time of day:
 
 ## 🚀 New Features
 
-### 1. JARVIS Mode Toggle
-Click the **"🤖 JARVIS Mode: ON/OFF"** button to:
+### 1. VATSAL Mode Toggle
+Click the **"🤖 VATSAL Mode: ON/OFF"** button to:
 - Enable personality-driven responses
 - Get conversational interactions
 - Receive proactive suggestions
@@ -123,7 +123,7 @@ After executing a command:
 - Quick re-run with modifications
 
 ### 4. Enhanced Error Handling
-JARVIS provides:
+VATSAL provides:
 - Helpful alternative suggestions
 - Conversational error messages
 - Context-aware troubleshooting
@@ -139,13 +139,13 @@ Command: Take a screenshot
 Result: Screenshot saved to screenshots/screenshot_123.png
 ```
 
-### After (JARVIS Mode):
+### After (VATSAL Mode):
 ```
 📝 You: Take a screenshot
 
-🤖 JARVIS: Certainly, Sir. Executing 'take screenshot' now.
+🤖 VATSAL: Certainly, Sir. Executing 'take screenshot' now.
 
-🤖 JARVIS:
+🤖 VATSAL:
 Screenshot captured successfully, Sir. I've saved it to your screenshots 
 folder with a timestamp. Would you like me to open it for review or 
 analyze its contents?
@@ -161,13 +161,13 @@ Screenshot saved to: screenshots/screenshot_2025-10-25_10-30-45.png
 ## 🔧 Technical Details
 
 ### Files Modified:
-1. **`gui_app.py`** - Integrated JARVIS, enhanced UI, added toggle and features
+1. **`gui_app.py`** - Integrated VATSAL, enhanced UI, added toggle and features
 2. **`replit.md`** - Updated project documentation
 
 ### Files Created:
-1. **`jarvis_assistant.py`** - Complete JARVIS personality system (450+ lines)
-2. **`JARVIS_GUIDE.md`** - Comprehensive user guide
-3. **`JARVIS_FEATURE_SUMMARY.md`** - This summary document
+1. **`vatsal_assistant.py`** - Complete VATSAL personality system (450+ lines)
+2. **`VATSAL_GUIDE.md`** - Comprehensive user guide
+3. **`VATSAL_FEATURE_SUMMARY.md`** - This summary document
 
 ### Requirements:
 - Google Gemini API key (for full personality features)
@@ -176,7 +176,7 @@ Screenshot saved to: screenshots/screenshot_2025-10-25_10-30-45.png
 
 ---
 
-## 🎭 JARVIS Personality Traits
+## 🎭 VATSAL Personality Traits
 
 ### Sophisticated & Professional
 - Polite British-inspired tone
@@ -210,13 +210,13 @@ python gui_app.py
 export GOOGLE_API_KEY="your-gemini-api-key"
 ```
 
-### 3. Toggle JARVIS Mode
+### 3. Toggle VATSAL Mode
 - Click the toggle button in the header
 - Default: **ON** (personality mode)
 - Switch to **OFF** for standard responses
 
 ### 4. Enjoy the Experience!
-- Talk naturally to JARVIS
+- Talk naturally to VATSAL
 - Get proactive suggestions
 - Experience intelligent automation with personality
 
@@ -251,15 +251,15 @@ export GOOGLE_API_KEY="your-gemini-api-key"
 - **Developers** who want intelligent code assistance
 - **Professionals** who need sophisticated automation
 - **Power Users** who appreciate personality in tools
-- **Iron Man Fans** who always wanted their own JARVIS
+- **Iron Man Fans** who always wanted their own VATSAL
 - **Anyone** who wants a more pleasant automation experience
 
 ---
 
 ## 🚀 Next Steps
 
-1. **Read** `JARVIS_GUIDE.md` for complete feature documentation
-2. **Try** toggling JARVIS mode ON/OFF to compare experiences
+1. **Read** `VATSAL_GUIDE.md` for complete feature documentation
+2. **Try** toggling VATSAL mode ON/OFF to compare experiences
 3. **Explore** proactive suggestions by clicking the 💡 button
 4. **Enjoy** having your own AI assistant!
 
@@ -267,7 +267,7 @@ export GOOGLE_API_KEY="your-gemini-api-key"
 
 ## 💡 Fun Fact
 
-JARVIS stands for "**J**ust **A** **R**ather **V**ery **I**ntelligent **S**ystem" - a playful acronym inspired by Edwin Jarvis, Tony Stark's butler in the comics!
+VATSAL stands for "**J**ust **A** **R**ather **V**ery **I**ntelligent **S**ystem" - a playful acronym inspired by Edwin Vatsal, Tony Stark's butler in the comics!
 
 ---
 
@@ -275,5 +275,5 @@ JARVIS stands for "**J**ust **A** **R**ather **V**ery **I**ntelligent **S**ystem
 
 ---
 
-*JARVIS - Making automation sophisticated and enjoyable*  
-*Version 2.0.0 - JARVIS Edition*
+*VATSAL - Making automation sophisticated and enjoyable*  
+*Version 2.0.0 - VATSAL Edition*

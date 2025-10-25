@@ -10,7 +10,7 @@ from command_executor import CommandExecutor
 from vatsal_assistant import create_vatsal_assistant
 from advanced_smart_screen_monitor import create_advanced_smart_screen_monitor
 from ai_screen_monitoring_system import create_ai_screen_monitoring_system
-from jarvis_ai import create_jarvis_ai
+from vatsal_ai import create_vatsal_ai
 from datetime import datetime
 import asyncio
 
@@ -27,11 +27,11 @@ class AutomationControllerGUI:
         self.vatsal = create_vatsal_assistant()
         self.advanced_monitor = create_advanced_smart_screen_monitor()
         self.ai_monitor = create_ai_screen_monitoring_system()
-        self.jarvis = create_jarvis_ai()
+        self.vatsal_ai = create_vatsal_ai()
         self.vatsal_mode = True
         self.processing = False
         self.hover_colors = {}
-        self.jarvis_conversation_active = False
+        self.vatsal_conversation_active = False
         
         self.setup_ui()
         self.check_api_key()
@@ -149,7 +149,7 @@ class AutomationControllerGUI:
         notebook = ttk.Notebook(notebook_container)
         notebook.pack(fill="both", expand=True, padx=10, pady=10)
         
-        self.create_jarvis_tab(notebook)
+        self.create_vatsal_ai_tab(notebook)
         self.create_code_tab(notebook)
         self.create_desktop_tab(notebook)
         self.create_messaging_tab(notebook)
@@ -307,7 +307,7 @@ class AutomationControllerGUI:
         
         update_time()
     
-    def create_jarvis_tab(self, notebook):
+    def create_vatsal_ai_tab(self, notebook):
         """VATSAL AI - Advanced Conversational Assistant"""
         tab = tk.Frame(notebook, bg="#1e1e2e")
         notebook.add(tab, text="💬 VATSAL Chat")
@@ -329,7 +329,7 @@ class AutomationControllerGUI:
                        font=("Segoe UI", 9, "italic"))
         info.pack(pady=(0, 12))
         
-        self.jarvis_conversation_display = scrolledtext.ScrolledText(
+        self.vatsal_conversation_display = scrolledtext.ScrolledText(
             tab,
             bg="#0f0f1e",
             fg="#cdd6f4",
@@ -341,23 +341,23 @@ class AutomationControllerGUI:
             padx=10,
             pady=10
         )
-        self.jarvis_conversation_display.pack(fill="both", expand=True, padx=10, pady=10)
+        self.vatsal_conversation_display.pack(fill="both", expand=True, padx=10, pady=10)
         
-        self.jarvis_conversation_display.tag_config("vatsal", foreground="#89b4fa", font=("Consolas", 10, "bold"))
-        self.jarvis_conversation_display.tag_config("user", foreground="#a6e3a1", font=("Consolas", 10, "bold"))
-        self.jarvis_conversation_display.tag_config("timestamp", foreground="#6c7086", font=("Consolas", 8))
+        self.vatsal_conversation_display.tag_config("vatsal", foreground="#89b4fa", font=("Consolas", 10, "bold"))
+        self.vatsal_conversation_display.tag_config("user", foreground="#a6e3a1", font=("Consolas", 10, "bold"))
+        self.vatsal_conversation_display.tag_config("timestamp", foreground="#6c7086", font=("Consolas", 8))
         
         input_frame = tk.Frame(tab, bg="#1a1a2e")
         input_frame.pack(fill="x", padx=10, pady=(0, 10))
         
-        self.jarvis_input = tk.Entry(input_frame,
+        self.vatsal_input = tk.Entry(input_frame,
                                      bg="#313244",
                                      fg="#ffffff",
                                      font=("Segoe UI", 11),
                                      relief="flat",
                                      insertbackground="#89b4fa")
-        self.jarvis_input.pack(side="left", fill="x", expand=True, padx=(10, 5), pady=10, ipady=8)
-        self.jarvis_input.bind("<Return>", lambda e: self.send_to_jarvis())
+        self.vatsal_input.pack(side="left", fill="x", expand=True, padx=(10, 5), pady=10, ipady=8)
+        self.vatsal_input.bind("<Return>", lambda e: self.send_to_vatsal_ai())
         
         send_btn = tk.Button(input_frame,
                             text="Send",
@@ -366,7 +366,7 @@ class AutomationControllerGUI:
                             font=("Segoe UI", 10, "bold"),
                             relief="flat",
                             cursor="hand2",
-                            command=self.send_to_jarvis,
+                            command=self.send_to_vatsal_ai,
                             padx=20,
                             pady=8)
         send_btn.pack(side="right", padx=(5, 10))
@@ -382,7 +382,7 @@ class AutomationControllerGUI:
                              font=("Segoe UI", 9, "bold"),
                              relief="flat",
                              cursor="hand2",
-                             command=self.start_jarvis_conversation,
+                             command=self.start_vatsal_ai_conversation,
                              padx=15,
                              pady=8)
         start_btn.pack(side="left", padx=5)
@@ -395,7 +395,7 @@ class AutomationControllerGUI:
                                font=("Segoe UI", 9, "bold"),
                                relief="flat",
                                cursor="hand2",
-                               command=self.jarvis_get_suggestion,
+                               command=self.vatsal_ai_get_suggestion,
                                padx=15,
                                pady=8)
         suggest_btn.pack(side="left", padx=5)
@@ -408,7 +408,7 @@ class AutomationControllerGUI:
                              font=("Segoe UI", 9, "bold"),
                              relief="flat",
                              cursor="hand2",
-                             command=self.clear_jarvis_conversation,
+                             command=self.clear_vatsal_ai_conversation,
                              padx=15,
                              pady=8)
         clear_btn.pack(side="left", padx=5)
@@ -421,7 +421,7 @@ class AutomationControllerGUI:
                              font=("Segoe UI", 9, "bold"),
                              relief="flat",
                              cursor="hand2",
-                             command=self.show_jarvis_stats,
+                             command=self.show_vatsal_ai_stats,
                              padx=15,
                              pady=8)
         stats_btn.pack(side="left", padx=5)
@@ -1039,74 +1039,74 @@ class AutomationControllerGUI:
             return self.vatsal.process_with_personality(user_input, command_result)
         return command_result
     
-    def start_jarvis_conversation(self):
+    def start_vatsal_ai_conversation(self):
         """Start conversation with VATSAL"""
-        greeting = self.jarvis.initiate_conversation()
-        self._add_jarvis_message("VATSAL", greeting)
-        self.jarvis_conversation_active = True
+        greeting = self.vatsal_ai.initiate_conversation()
+        self._add_vatsal_ai_message("VATSAL", greeting)
+        self.vatsal_conversation_active = True
     
-    def send_to_jarvis(self):
+    def send_to_vatsal_ai(self):
         """Send message to VATSAL"""
-        user_message = self.jarvis_input.get().strip()
+        user_message = self.vatsal_input.get().strip()
         if not user_message:
             return
         
-        self.jarvis_input.delete(0, tk.END)
-        self._add_jarvis_message("YOU", user_message)
+        self.vatsal_input.delete(0, tk.END)
+        self._add_vatsal_ai_message("YOU", user_message)
         
-        thread = threading.Thread(target=self._process_jarvis_message, args=(user_message,))
+        thread = threading.Thread(target=self._process_vatsal_ai_message, args=(user_message,))
         thread.start()
     
-    def _process_jarvis_message(self, user_message):
+    def _process_vatsal_ai_message(self, user_message):
         """Process message with VATSAL in background"""
         try:
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
-            response = loop.run_until_complete(self.jarvis.process_message(user_message))
+            response = loop.run_until_complete(self.vatsal_ai.process_message(user_message))
             loop.close()
             
-            self._add_jarvis_message("VATSAL", response)
+            self._add_vatsal_ai_message("VATSAL", response)
         except Exception as e:
-            self._add_jarvis_message("VATSAL", f"My apologies, I encountered an error: {str(e)}")
+            self._add_vatsal_ai_message("VATSAL", f"My apologies, I encountered an error: {str(e)}")
     
-    def _add_jarvis_message(self, sender, message):
+    def _add_vatsal_ai_message(self, sender, message):
         """Add message to VATSAL conversation display"""
-        self.jarvis_conversation_display.config(state='normal')
+        self.vatsal_conversation_display.config(state='normal')
         
         timestamp = datetime.now().strftime("%I:%M:%S %p")
         
         if sender == "VATSAL":
-            self.jarvis_conversation_display.insert(tk.END, f"\n🤖 VATSAL", "vatsal")
-            self.jarvis_conversation_display.insert(tk.END, f" ({timestamp})\n", "timestamp")
-            self.jarvis_conversation_display.insert(tk.END, f"{message}\n", "")
+            self.vatsal_conversation_display.insert(tk.END, f"\n🤖 VATSAL", "vatsal")
+            self.vatsal_conversation_display.insert(tk.END, f" ({timestamp})\n", "timestamp")
+            self.vatsal_conversation_display.insert(tk.END, f"{message}\n", "")
         else:
-            self.jarvis_conversation_display.insert(tk.END, f"\n👤 {sender}", "user")
-            self.jarvis_conversation_display.insert(tk.END, f" ({timestamp})\n", "timestamp")
-            self.jarvis_conversation_display.insert(tk.END, f"{message}\n", "")
+            self.vatsal_conversation_display.insert(tk.END, f"\n👤 {sender}", "user")
+            self.vatsal_conversation_display.insert(tk.END, f" ({timestamp})\n", "timestamp")
+            self.vatsal_conversation_display.insert(tk.END, f"{message}\n", "")
         
-        self.jarvis_conversation_display.config(state='disabled')
-        self.jarvis_conversation_display.see(tk.END)
+        self.vatsal_conversation_display.config(state='disabled')
+        self.vatsal_conversation_display.see(tk.END)
     
-    def jarvis_get_suggestion(self):
+    def vatsal_ai_get_suggestion(self):
         """Get proactive suggestion from VATSAL"""
-        suggestion = self.jarvis.get_proactive_suggestion()
+        suggestion = self.vatsal_ai.get_proactive_suggestion()
         if suggestion:
-            self._add_jarvis_message("VATSAL", suggestion)
+            self._add_vatsal_ai_message("VATSAL", suggestion)
         else:
-            self._add_jarvis_message("VATSAL", "I don't have any suggestions at the moment, Sir. What would you like me to do?")
+            self._add_vatsal_ai_message("VATSAL", "I don't have any suggestions at the moment, Sir. What would you like me to do?")
     
-    def clear_jarvis_conversation(self):
+    def clear_vatsal_ai_conversation(self):
         """Clear VATSAL conversation history"""
-        self.jarvis.reset_conversation()
-        self.jarvis_conversation_display.config(state='normal')
-        self.jarvis_conversation_display.delete(1.0, tk.END)
-        self.jarvis_conversation_display.config(state='disabled')
-        self.jarvis_conversation_active = False
+        self.vatsal_ai.reset_conversation()
+        self.vatsal_conversation_display.config(state='normal')
+        self.vatsal_conversation_display.delete(1.0, tk.END)
+        self.vatsal_conversation_display.config(state='disabled')
+        self.vatsal_conversation_active = False
         messagebox.showinfo("Cleared", "Conversation history cleared.")
     
-    def show_jarvis_stats(self):
+    def show_vatsal_ai_stats(self):
         """Show VATSAL conversational AI statistics"""
-        stats = self.jarvis.get_stats()
+        stats = self.vatsal_ai.get_stats()
         
         stats_message = f"""
 📊 VATSAL Conversational AI Statistics

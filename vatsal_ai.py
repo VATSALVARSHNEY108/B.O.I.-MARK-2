@@ -1,7 +1,7 @@
 """
-JARVIS AI - Advanced Conversational Assistant
+VATSAL AI - Advanced Conversational Assistant
 A proactive AI with personality that asks questions, clarifies intent, and anticipates needs
-Similar to JARVIS and FRIDAY from Marvel
+An intelligent assistant inspired by advanced AI companions
 """
 
 import json
@@ -16,7 +16,7 @@ except ImportError:
     GeminiController = None
 
 
-class JarvisAI:
+class VatsalAI:
     """Advanced conversational AI with proactive personality"""
     
     def __init__(self, api_key: Optional[str] = None):
@@ -40,7 +40,7 @@ class JarvisAI:
         self.preferences = self.user_profile.get("preferences", {})
         self.habits = self.user_profile.get("habits", {})
         
-        # Personality traits (JARVIS-inspired)
+        # Personality traits (VATSAL-inspired)
         self.personality = {
             "politeness_level": "high",
             "formality": "sophisticated",
@@ -56,7 +56,7 @@ class JarvisAI:
         
     def _load_user_profile(self) -> Dict[str, Any]:
         """Load user profile and preferences"""
-        profile_file = "jarvis_user_profile.json"
+        profile_file = "vatsal_user_profile.json"
         if os.path.exists(profile_file):
             try:
                 with open(profile_file, 'r') as f:
@@ -81,7 +81,7 @@ class JarvisAI:
     def _save_user_profile(self):
         """Save user profile"""
         try:
-            with open("jarvis_user_profile.json", 'w') as f:
+            with open("vatsal_user_profile.json", 'w') as f:
                 json.dump(self.user_profile, f, indent=2)
         except Exception as e:
             print(f"Failed to save profile: {e}")
@@ -157,7 +157,7 @@ class JarvisAI:
         
         # Add response to history
         self.conversation_history.append({
-            "role": "jarvis",
+            "role": "vatsal",
             "message": response,
             "timestamp": datetime.now().isoformat()
         })
@@ -216,7 +216,7 @@ Respond as VATSAL would. Keep response concise (2-4 sentences).
         msg_lower = user_message.lower()
         
         # Check for greetings
-        if any(word in msg_lower for word in ["hello", "hi", "hey", "jarvis"]):
+        if any(word in msg_lower for word in ["hello", "hi", "hey", "vatsal"]):
             return f"Hello {self.user_name}. How may I assist you today?"
         
         # Check for questions
@@ -383,7 +383,7 @@ Respond as VATSAL would. Keep response concise (2-4 sentences).
         self._save_user_profile()
     
     def get_stats(self) -> Dict[str, Any]:
-        """Get JARVIS usage statistics"""
+        """Get VATSAL usage statistics"""
         return {
             "total_interactions": self.user_profile.get("interaction_count", 0),
             "last_interaction": self.user_profile.get("last_interaction"),
@@ -394,24 +394,24 @@ Respond as VATSAL would. Keep response concise (2-4 sentences).
         }
 
 
-def create_jarvis_ai(api_key: Optional[str] = None) -> JarvisAI:
-    """Factory function to create JARVIS AI instance"""
-    return JarvisAI(api_key)
+def create_vatsal_ai(api_key: Optional[str] = None) -> VatsalAI:
+    """Factory function to create VATSAL AI instance"""
+    return VatsalAI(api_key)
 
 
 # For testing
 if __name__ == "__main__":
     import asyncio
     
-    async def test_jarvis():
-        jarvis = create_jarvis_ai()
+    async def test_vatsal():
+        vatsal = create_vatsal_ai()
         
         print("\n" + "="*60)
         print("🤖 VATSAL AI - Advanced Conversational Assistant")
         print("="*60)
         
         # Initial greeting
-        print(f"\n{jarvis.initiate_conversation()}")
+        print(f"\n{vatsal.initiate_conversation()}")
         
         # Test conversation
         test_messages = [
@@ -422,14 +422,14 @@ if __name__ == "__main__":
         
         for msg in test_messages:
             print(f"\nUSER: {msg}")
-            response = await jarvis.process_message(msg)
+            response = await vatsal.process_message(msg)
             print(f"VATSAL: {response}")
         
         # Show stats
         print("\n" + "="*60)
         print("📊 VATSAL Stats:")
-        stats = jarvis.get_stats()
+        stats = vatsal.get_stats()
         for key, value in stats.items():
             print(f"  {key}: {value}")
     
-    asyncio.run(test_jarvis())
+    asyncio.run(test_vatsal())

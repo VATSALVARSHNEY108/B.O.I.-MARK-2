@@ -1,12 +1,12 @@
-# 🤖 JARVIS AI - Advanced Conversational Assistant
+# 🤖 VATSAL AI - Advanced Conversational Assistant
 
-**Your Personal AI Assistant with Personality - Like JARVIS & FRIDAY**
+**Your Personal AI Assistant with Personality - Like VATSAL & FRIDAY**
 
 ---
 
 ## 🌟 **Overview**
 
-JARVIS (Just A Rather Very Intelligent System) is an advanced conversational AI assistant integrated into VATSAL with a sophisticated personality, proactive intelligence, and natural dialogue capabilities. Unlike standard command-based assistants, JARVIS **asks questions first**, **clarifies intent**, and **anticipates your needs** - just like JARVIS and FRIDAY from Marvel.
+VATSAL (Vatsal - Advanced Intelligent System) is an advanced conversational AI assistant integrated into VATSAL with a sophisticated personality, proactive intelligence, and natural dialogue capabilities. Unlike standard command-based assistants, VATSAL **asks questions first**, **clarifies intent**, and **anticipates your needs** - just like VATSAL and FRIDAY from Marvel.
 
 ### **Key Features**
 
@@ -23,17 +23,17 @@ JARVIS (Just A Rather Very Intelligent System) is an advanced conversational AI 
 
 ## 🚀 **Getting Started**
 
-### **1. Access JARVIS Tab**
+### **1. Access VATSAL Tab**
 
 1. Open VATSAL GUI (`python gui_app.py`)
-2. Go to the **🤖 JARVIS** tab (first tab in Quick Actions)
+2. Go to the **🤖 VATSAL** tab (first tab in Quick Actions)
 3. You'll see the conversation interface
 
 ### **2. Start a Conversation**
 
 **Option A: Click "▶️ Start Conversation"**
 ```
-JARVIS will greet you proactively:
+VATSAL will greet you proactively:
 "Good morning, Sir. How may I assist you today?"
 ```
 
@@ -43,7 +43,7 @@ JARVIS will greet you proactively:
 
 ### **3. Have a Natural Conversation**
 
-JARVIS works differently from standard assistants:
+VATSAL works differently from standard assistants:
 
 **Standard Assistant:**
 ```
@@ -51,33 +51,33 @@ User: "Open Chrome"
 Assistant: [Opens Chrome immediately]
 ```
 
-**JARVIS:**
+**VATSAL:**
 ```
 User: "Open Chrome"
-JARVIS: "Just to confirm, Sir, you'd like me to open Chrome browser. 
+VATSAL: "Just to confirm, Sir, you'd like me to open Chrome browser. 
          Shall I proceed?"
 User: "Yes"
-JARVIS: "Right away, Sir." [Opens Chrome]
+VATSAL: "Right away, Sir." [Opens Chrome]
 ```
 
 ---
 
-## 💬 **How JARVIS Works**
+## 💬 **How VATSAL Works**
 
 ### **Conversation Flow**
 
 ```
 1️⃣ You give a command or ask a question
    ↓
-2️⃣ JARVIS analyzes and understands your intent
+2️⃣ VATSAL analyzes and understands your intent
    ↓
-3️⃣ JARVIS asks clarifying questions if needed
+3️⃣ VATSAL asks clarifying questions if needed
    ↓
 4️⃣ You confirm or provide more details
    ↓
-5️⃣ JARVIS executes and confirms completion
+5️⃣ VATSAL executes and confirms completion
    ↓
-6️⃣ JARVIS may suggest related actions
+6️⃣ VATSAL may suggest related actions
 ```
 
 ### **Example Conversations**
@@ -87,7 +87,7 @@ JARVIS: "Right away, Sir." [Opens Chrome]
 ```
 👤 YOU: I need to send an email
 
-🤖 JARVIS: Understood, Sir. To best assist you with sending an email, 
+🤖 VATSAL: Understood, Sir. To best assist you with sending an email, 
            I have a few options:
            
            1. Send to a contact from your address book
@@ -98,21 +98,21 @@ JARVIS: "Right away, Sir." [Opens Chrome]
 
 👤 YOU: Option 1
 
-🤖 JARVIS: Excellent choice, Sir. To which contact would you like to 
+🤖 VATSAL: Excellent choice, Sir. To which contact would you like to 
            send this email?
 ```
 
 #### **Example 2: Proactive Suggestions**
 
 ```
-🤖 JARVIS: Good morning, Sir. How may I assist you today?
+🤖 VATSAL: Good morning, Sir. How may I assist you today?
            
            May I suggest: Would you like a morning briefing with 
            news and weather?
 
 👤 YOU: Yes please
 
-🤖 JARVIS: Right away, Sir. Fetching your morning briefing...
+🤖 VATSAL: Right away, Sir. Fetching your morning briefing...
            [Displays news and weather]
 ```
 
@@ -121,18 +121,18 @@ JARVIS: "Right away, Sir." [Opens Chrome]
 ```
 👤 YOU: Play some music
 
-🤖 JARVIS: Of course, Sir. Would you prefer:
+🤖 VATSAL: Of course, Sir. Would you prefer:
            1. Spotify
            2. YouTube
            3. Open your music player
 
 👤 YOU: Spotify
 
-🤖 JARVIS: Spotify it is, Sir. What would you like to listen to?
+🤖 VATSAL: Spotify it is, Sir. What would you like to listen to?
 
 👤 YOU: Something relaxing
 
-🤖 JARVIS: Opening Spotify and playing relaxing music for you, Sir.
+🤖 VATSAL: Opening Spotify and playing relaxing music for you, Sir.
 ```
 
 ---
@@ -141,17 +141,17 @@ JARVIS: "Right away, Sir." [Opens Chrome]
 
 ### **1. Intelligent Questioning**
 
-JARVIS doesn't just execute - he **thinks first**:
+VATSAL doesn't just execute - he **thinks first**:
 
 **When you say:** "Open my work files"
-**JARVIS asks:**
+**VATSAL asks:**
 - "Which project are you working on, Sir?"
 - "Would you like me to open the entire folder or specific files?"
 - "Shall I also open your code editor?"
 
 ### **2. Proactive Intelligence**
 
-JARVIS offers suggestions based on:
+VATSAL offers suggestions based on:
 
 - **Time of day**
   - Morning: "Morning briefing?" "Calendar check?"
@@ -164,7 +164,7 @@ JARVIS offers suggestions based on:
 
 ### **3. Sophisticated Personality**
 
-JARVIS speaks like a British butler:
+VATSAL speaks like a British butler:
 
 - **Formal & Polite:** "Good morning, Sir"
 - **Professional:** "Right away, Sir"
@@ -173,7 +173,7 @@ JARVIS speaks like a British butler:
 
 ### **4. Conversation Memory**
 
-JARVIS remembers:
+VATSAL remembers:
 - Last 20 conversation exchanges
 - Your preferences
 - Frequently used tasks
@@ -181,10 +181,10 @@ JARVIS remembers:
 
 ### **5. Task Confirmation**
 
-Before executing important tasks, JARVIS confirms:
+Before executing important tasks, VATSAL confirms:
 
 ```
-🤖 JARVIS: "Just to confirm, Sir, you'd like me to [task]. 
+🤖 VATSAL: "Just to confirm, Sir, you'd like me to [task]. 
            Shall I proceed?"
            
 👤 YOU: "Yes" / "No" / "Actually, do this instead..."
@@ -192,7 +192,7 @@ Before executing important tasks, JARVIS confirms:
 
 ### **6. Learning & Adaptation**
 
-JARVIS learns:
+VATSAL learns:
 - Your preferred ways of doing things
 - Times you use certain features
 - Which suggestions you accept/reject
@@ -204,7 +204,7 @@ JARVIS learns:
 
 ### **Conversation Display**
 - **Beautiful dark theme** with color-coded messages
-- **JARVIS messages:** Blue text with 🤖 icon
+- **VATSAL messages:** Blue text with 🤖 icon
 - **Your messages:** Green text with 👤 icon
 - **Timestamps:** Every message shows time
 - **Auto-scroll:** Always shows latest messages
@@ -218,22 +218,22 @@ JARVIS learns:
 
 | Button | Function |
 |--------|----------|
-| ▶️ Start Conversation | JARVIS greets you and starts chat |
-| 💡 Get Suggestion | JARVIS offers proactive suggestions |
+| ▶️ Start Conversation | VATSAL greets you and starts chat |
+| 💡 Get Suggestion | VATSAL offers proactive suggestions |
 | 🗑️ Clear Chat | Clears conversation history |
-| 📊 View Stats | Shows JARVIS usage statistics |
+| 📊 View Stats | Shows VATSAL usage statistics |
 
 ---
 
-## 📊 **JARVIS Statistics**
+## 📊 **VATSAL Statistics**
 
 Click "📊 View Stats" to see:
 
-- **Total Interactions:** How many times you've talked to JARVIS
+- **Total Interactions:** How many times you've talked to VATSAL
 - **Conversation Length:** Current chat length
-- **Learned Tasks:** Tasks JARVIS has learned from you
-- **User Name:** What JARVIS calls you
-- **Last Interaction:** When you last used JARVIS
+- **Learned Tasks:** Tasks VATSAL has learned from you
+- **User Name:** What VATSAL calls you
+- **Last Interaction:** When you last used VATSAL
 
 ---
 
@@ -242,11 +242,11 @@ Click "📊 View Stats" to see:
 ### **1. Morning Routine**
 
 ```
-🤖 JARVIS: Good morning, Sir. How may I assist you today?
+🤖 VATSAL: Good morning, Sir. How may I assist you today?
 
 👤 YOU: Morning routine
 
-🤖 JARVIS: Right away, Sir. I'll:
+🤖 VATSAL: Right away, Sir. I'll:
            1. Fetch today's weather
            2. Show your calendar
            3. Display latest news
@@ -260,7 +260,7 @@ Click "📊 View Stats" to see:
 ```
 👤 YOU: I need to start working on the Python project
 
-🤖 JARVIS: Understood, Sir. Would you like me to:
+🤖 VATSAL: Understood, Sir. Would you like me to:
            1. Open VS Code
            2. Start the development server
            3. Open the project documentation
@@ -272,7 +272,7 @@ Click "📊 View Stats" to see:
 ```
 👤 YOU: What's the weather?
 
-🤖 JARVIS: Checking weather for you, Sir...
+🤖 VATSAL: Checking weather for you, Sir...
            [Shows weather]
            
            Would you also like the forecast for this week?
@@ -283,7 +283,7 @@ Click "📊 View Stats" to see:
 ```
 👤 YOU: I need to organize my downloads
 
-🤖 JARVIS: Excellent idea, Sir. I can:
+🤖 VATSAL: Excellent idea, Sir. I can:
            1. Auto-organize by file type
            2. Find and remove duplicates
            3. Archive old files
@@ -297,15 +297,15 @@ Click "📊 View Stats" to see:
 
 ### **Change Your Name**
 
-JARVIS calls you "Sir" by default. To change:
+VATSAL calls you "Sir" by default. To change:
 
 ```python
-jarvis.set_user_name("Boss")  # Or any name you prefer
+vatsal.set_user_name("Boss")  # Or any name you prefer
 ```
 
 ### **Personality Settings**
 
-Located in `jarvis_user_profile.json`:
+Located in `vatsal_user_profile.json`:
 
 ```json
 {
@@ -324,16 +324,16 @@ Located in `jarvis_user_profile.json`:
 
 ### **DO:**
 ✅ **Be conversational** - Talk naturally like to a person
-✅ **Ask questions** - JARVIS can explain and suggest
+✅ **Ask questions** - VATSAL can explain and suggest
 ✅ **Provide details** - More context = better help
-✅ **Confirm actions** - JARVIS always asks, respond clearly
-✅ **Use suggestions** - JARVIS learns what you like
+✅ **Confirm actions** - VATSAL always asks, respond clearly
+✅ **Use suggestions** - VATSAL learns what you like
 
 ### **DON'T:**
-❌ **Rush** - JARVIS may ask questions for clarity
+❌ **Rush** - VATSAL may ask questions for clarity
 ❌ **Use only keywords** - Speak in full sentences
-❌ **Expect instant execution** - JARVIS confirms first
-❌ **Ignore questions** - JARVIS needs your input
+❌ **Expect instant execution** - VATSAL confirms first
+❌ **Ignore questions** - VATSAL needs your input
 
 ---
 
@@ -341,12 +341,12 @@ Located in `jarvis_user_profile.json`:
 
 ### **1. Multi-Step Workflows**
 
-JARVIS can handle complex multi-step tasks:
+VATSAL can handle complex multi-step tasks:
 
 ```
 👤 YOU: Help me prepare for the meeting
 
-🤖 JARVIS: Of course, Sir. Let me prepare:
+🤖 VATSAL: Of course, Sir. Let me prepare:
            ✓ Opening calendar
            ✓ Fetching meeting notes
            ✓ Checking latest project updates
@@ -357,29 +357,29 @@ JARVIS can handle complex multi-step tasks:
 
 ### **2. Context Switching**
 
-JARVIS tracks conversation context:
+VATSAL tracks conversation context:
 
 ```
 👤 YOU: Send email to John
-🤖 JARVIS: Composing email to John...
+🤖 VATSAL: Composing email to John...
 👤 YOU: Actually, make it Sarah
-🤖 JARVIS: Understood, Sir. Switching to Sarah instead.
+🤖 VATSAL: Understood, Sir. Switching to Sarah instead.
 ```
 
 ### **3. Intelligent Interruptions**
 
 ```
 👤 YOU: Open Chrome and YouTube
-🤖 JARVIS: Opening Chrome first, Sir...
+🤖 VATSAL: Opening Chrome first, Sir...
 👤 YOU: Wait, stop
-🤖 JARVIS: Paused, Sir. What would you like me to do instead?
+🤖 VATSAL: Paused, Sir. What would you like me to do instead?
 ```
 
 ---
 
-## 🤝 **JARVIS vs Standard Commands**
+## 🤝 **VATSAL vs Standard Commands**
 
-| Feature | Standard Commands | JARVIS AI |
+| Feature | Standard Commands | VATSAL AI |
 |---------|------------------|-----------|
 | **Interaction** | One-way commands | Two-way conversation |
 | **Confirmation** | Executes immediately | Asks before executing |
@@ -398,46 +398,46 @@ JARVIS tracks conversation context:
 ```
 1. Click "▶️ Start Conversation"
 2. Type: "Help me organize my files"
-3. JARVIS asks: "Which directory would you like to organize?"
+3. VATSAL asks: "Which directory would you like to organize?"
 4. You answer: "Downloads"
-5. JARVIS suggests: Options for organization
+5. VATSAL suggests: Options for organization
 6. You choose: Option 1
-7. JARVIS confirms: "Shall I proceed?"
+7. VATSAL confirms: "Shall I proceed?"
 8. You confirm: "Yes"
-9. JARVIS executes and reports: "Completed, Sir. 45 files organized."
+9. VATSAL executes and reports: "Completed, Sir. 45 files organized."
 ```
 
 ### **Workflow 2: Morning Briefing**
 
 ```
-1. JARVIS greets: "Good morning, Sir"
-2. JARVIS suggests: "Would you like a morning briefing?"
+1. VATSAL greets: "Good morning, Sir"
+2. VATSAL suggests: "Would you like a morning briefing?"
 3. You: "Yes please"
-4. JARVIS fetches and displays:
+4. VATSAL fetches and displays:
    - Weather forecast
    - Top news headlines
    - Calendar events
    - Important emails
-5. JARVIS concludes: "Anything else I can help with, Sir?"
+5. VATSAL concludes: "Anything else I can help with, Sir?"
 ```
 
 ---
 
 ## 🔍 **Troubleshooting**
 
-### **JARVIS Not Responding?**
+### **VATSAL Not Responding?**
 - Check API key is set (GOOGLE_API_KEY)
 - Ensure internet connection
 - Look for errors in output console
 
-### **JARVIS Asks Too Many Questions?**
+### **VATSAL Asks Too Many Questions?**
 - This is intentional for clarity
 - Provide more details in initial request
-- JARVIS learns your preferences over time
+- VATSAL learns your preferences over time
 
 ### **Want to Reset?**
 - Click "🗑️ Clear Chat" to reset conversation
-- Delete `jarvis_user_profile.json` to reset learning
+- Delete `vatsal_user_profile.json` to reset learning
 
 ---
 
@@ -446,7 +446,7 @@ JARVIS tracks conversation context:
 ### **Architecture**
 
 ```
-jarvis_ai.py (Core Engine)
+vatsal_ai.py (Core Engine)
     ↓
 Gemini AI (Natural Language Understanding)
     ↓
@@ -459,15 +459,15 @@ GUI Integration (Beautiful Interface)
 
 ### **Files**
 
-- **`jarvis_ai.py`** - Core JARVIS engine
-- **`jarvis_user_profile.json`** - Your preferences and learning data
+- **`vatsal_ai.py`** - Core VATSAL engine
+- **`vatsal_user_profile.json`** - Your preferences and learning data
 - **GUI integration** - In `gui_app.py`
 
 ---
 
 ## 🎉 **Summary**
 
-JARVIS AI transforms VATSAL from a command executor into an **intelligent conversation partner**. Instead of just doing what you say, JARVIS:
+VATSAL AI transforms VATSAL from a command executor into an **intelligent conversation partner**. Instead of just doing what you say, VATSAL:
 
 ✨ **Understands** what you need
 ✨ **Asks** clarifying questions
@@ -477,8 +477,8 @@ JARVIS AI transforms VATSAL from a command executor into an **intelligent conver
 ✨ **Remembers** context
 ✨ **Adapts** to your style
 
-**Experience the future of AI assistance - have a conversation with JARVIS!** 🤖
+**Experience the future of AI assistance - have a conversation with VATSAL!** 🤖
 
 ---
 
-*"At your service, Sir." - JARVIS*
+*"At your service, Sir." - VATSAL*
