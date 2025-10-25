@@ -10,7 +10,9 @@ from command_executor import CommandExecutor
 from vatsal_assistant import create_vatsal_assistant
 from advanced_smart_screen_monitor import create_advanced_smart_screen_monitor
 from ai_screen_monitoring_system import create_ai_screen_monitoring_system
+from jarvis_ai import create_jarvis_ai
 from datetime import datetime
+import asyncio
 
 load_dotenv()
 
@@ -25,9 +27,11 @@ class AutomationControllerGUI:
         self.vatsal = create_vatsal_assistant()
         self.advanced_monitor = create_advanced_smart_screen_monitor()
         self.ai_monitor = create_ai_screen_monitoring_system()
+        self.jarvis = create_jarvis_ai()
         self.vatsal_mode = True
         self.processing = False
         self.hover_colors = {}
+        self.jarvis_conversation_active = False
         
         self.setup_ui()
         self.check_api_key()
@@ -145,6 +149,7 @@ class AutomationControllerGUI:
         notebook = ttk.Notebook(notebook_container)
         notebook.pack(fill="both", expand=True, padx=10, pady=10)
         
+        self.create_jarvis_tab(notebook)
         self.create_code_tab(notebook)
         self.create_desktop_tab(notebook)
         self.create_messaging_tab(notebook)
@@ -301,6 +306,126 @@ class AutomationControllerGUI:
             self.root.after(1000, update_time)
         
         update_time()
+    
+    def create_jarvis_tab(self, notebook):
+        """JARVIS AI - Advanced Conversational Assistant"""
+        tab = tk.Frame(notebook, bg="#1e1e2e")
+        notebook.add(tab, text="🤖 JARVIS")
+        
+        header_frame = tk.Frame(tab, bg="#1a1a2e")
+        header_frame.pack(fill="x", pady=(10, 0), padx=10)
+        
+        header = tk.Label(header_frame,
+                         text="🤖 JARVIS - Advanced AI Assistant",
+                         bg="#1a1a2e",
+                         fg="#89b4fa",
+                         font=("Segoe UI", 14, "bold"))
+        header.pack(pady=12)
+        
+        info = tk.Label(header_frame,
+                       text="Like JARVIS & FRIDAY • Asks questions • Proactive • Intelligent",
+                       bg="#1a1a2e",
+                       fg="#a6adc8",
+                       font=("Segoe UI", 9, "italic"))
+        info.pack(pady=(0, 12))
+        
+        self.jarvis_conversation_display = scrolledtext.ScrolledText(
+            tab,
+            bg="#0f0f1e",
+            fg="#cdd6f4",
+            font=("Consolas", 10),
+            wrap=tk.WORD,
+            height=15,
+            state='disabled',
+            relief="flat",
+            padx=10,
+            pady=10
+        )
+        self.jarvis_conversation_display.pack(fill="both", expand=True, padx=10, pady=10)
+        
+        self.jarvis_conversation_display.tag_config("jarvis", foreground="#89b4fa", font=("Consolas", 10, "bold"))
+        self.jarvis_conversation_display.tag_config("user", foreground="#a6e3a1", font=("Consolas", 10, "bold"))
+        self.jarvis_conversation_display.tag_config("timestamp", foreground="#6c7086", font=("Consolas", 8))
+        
+        input_frame = tk.Frame(tab, bg="#1a1a2e")
+        input_frame.pack(fill="x", padx=10, pady=(0, 10))
+        
+        self.jarvis_input = tk.Entry(input_frame,
+                                     bg="#313244",
+                                     fg="#ffffff",
+                                     font=("Segoe UI", 11),
+                                     relief="flat",
+                                     insertbackground="#89b4fa")
+        self.jarvis_input.pack(side="left", fill="x", expand=True, padx=(10, 5), pady=10, ipady=8)
+        self.jarvis_input.bind("<Return>", lambda e: self.send_to_jarvis())
+        
+        send_btn = tk.Button(input_frame,
+                            text="Send",
+                            bg="#89b4fa",
+                            fg="#0f0f1e",
+                            font=("Segoe UI", 10, "bold"),
+                            relief="flat",
+                            cursor="hand2",
+                            command=self.send_to_jarvis,
+                            padx=20,
+                            pady=8)
+        send_btn.pack(side="right", padx=(5, 10))
+        self.add_hover_effect(send_btn, "#89b4fa", "#74c7ec")
+        
+        button_frame = tk.Frame(tab, bg="#1e1e2e")
+        button_frame.pack(fill="x", padx=10, pady=(0, 10))
+        
+        start_btn = tk.Button(button_frame,
+                             text="▶️ Start Conversation",
+                             bg="#313244",
+                             fg="#ffffff",
+                             font=("Segoe UI", 9, "bold"),
+                             relief="flat",
+                             cursor="hand2",
+                             command=self.start_jarvis_conversation,
+                             padx=15,
+                             pady=8)
+        start_btn.pack(side="left", padx=5)
+        self.add_hover_effect(start_btn, "#313244", "#45475a")
+        
+        suggest_btn = tk.Button(button_frame,
+                               text="💡 Get Suggestion",
+                               bg="#313244",
+                               fg="#ffffff",
+                               font=("Segoe UI", 9, "bold"),
+                               relief="flat",
+                               cursor="hand2",
+                               command=self.jarvis_get_suggestion,
+                               padx=15,
+                               pady=8)
+        suggest_btn.pack(side="left", padx=5)
+        self.add_hover_effect(suggest_btn, "#313244", "#45475a")
+        
+        clear_btn = tk.Button(button_frame,
+                             text="🗑️ Clear Chat",
+                             bg="#313244",
+                             fg="#ffffff",
+                             font=("Segoe UI", 9, "bold"),
+                             relief="flat",
+                             cursor="hand2",
+                             command=self.clear_jarvis_conversation,
+                             padx=15,
+                             pady=8)
+        clear_btn.pack(side="left", padx=5)
+        self.add_hover_effect(clear_btn, "#313244", "#45475a")
+        
+        stats_btn = tk.Button(button_frame,
+                             text="📊 View Stats",
+                             bg="#313244",
+                             fg="#ffffff",
+                             font=("Segoe UI", 9, "bold"),
+                             relief="flat",
+                             cursor="hand2",
+                             command=self.show_jarvis_stats,
+                             padx=15,
+                             pady=8)
+        stats_btn.pack(side="left", padx=5)
+        self.add_hover_effect(stats_btn, "#313244", "#45475a")
     
     def create_code_tab(self, notebook):
         tab = tk.Frame(notebook, bg="#1e1e2e")
@@ -913,6 +1038,87 @@ class AutomationControllerGUI:
         if self.vatsal_mode and self.vatsal.ai_available:
             return self.vatsal.process_with_personality(user_input, command_result)
         return command_result
+    
+    def start_jarvis_conversation(self):
+        """Start conversation with JARVIS"""
+        greeting = self.jarvis.initiate_conversation()
+        self._add_jarvis_message("JARVIS", greeting)
+        self.jarvis_conversation_active = True
+    
+    def send_to_jarvis(self):
+        """Send message to JARVIS"""
+        user_message = self.jarvis_input.get().strip()
+        if not user_message:
+            return
+        
+        self.jarvis_input.delete(0, tk.END)
+        self._add_jarvis_message("YOU", user_message)
+        
+        thread = threading.Thread(target=self._process_jarvis_message, args=(user_message,))
+        thread.start()
+    
+    def _process_jarvis_message(self, user_message):
+        """Process message with JARVIS in background"""
+        try:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            response = loop.run_until_complete(self.jarvis.process_message(user_message))
+            loop.close()
+            
+            self._add_jarvis_message("JARVIS", response)
+        except Exception as e:
+            self._add_jarvis_message("JARVIS", f"My apologies, I encountered an error: {str(e)}")
+    
+    def _add_jarvis_message(self, sender, message):
+        """Add message to JARVIS conversation display"""
+        self.jarvis_conversation_display.config(state='normal')
+        
+        timestamp = datetime.now().strftime("%I:%M:%S %p")
+        
+        if sender == "JARVIS":
+            self.jarvis_conversation_display.insert(tk.END, f"\n🤖 JARVIS", "jarvis")
+            self.jarvis_conversation_display.insert(tk.END, f" ({timestamp})\n", "timestamp")
+            self.jarvis_conversation_display.insert(tk.END, f"{message}\n", "")
+        else:
+            self.jarvis_conversation_display.insert(tk.END, f"\n👤 {sender}", "user")
+            self.jarvis_conversation_display.insert(tk.END, f" ({timestamp})\n", "timestamp")
+            self.jarvis_conversation_display.insert(tk.END, f"{message}\n", "")
+        
+        self.jarvis_conversation_display.config(state='disabled')
+        self.jarvis_conversation_display.see(tk.END)
+    
+    def jarvis_get_suggestion(self):
+        """Get proactive suggestion from JARVIS"""
+        suggestion = self.jarvis.get_proactive_suggestion()
+        if suggestion:
+            self._add_jarvis_message("JARVIS", suggestion)
+        else:
+            self._add_jarvis_message("JARVIS", "I don't have any suggestions at the moment, Sir. What would you like me to do?")
+    
+    def clear_jarvis_conversation(self):
+        """Clear JARVIS conversation history"""
+        self.jarvis.reset_conversation()
+        self.jarvis_conversation_display.config(state='normal')
+        self.jarvis_conversation_display.delete(1.0, tk.END)
+        self.jarvis_conversation_display.config(state='disabled')
+        self.jarvis_conversation_active = False
+        messagebox.showinfo("Cleared", "Conversation history cleared.")
+    
+    def show_jarvis_stats(self):
+        """Show JARVIS usage statistics"""
+        stats = self.jarvis.get_stats()
+        
+        stats_message = f"""
+📊 JARVIS Statistics
+
+Total Interactions: {stats['total_interactions']}
+Conversation Length: {stats['conversation_length']} messages
+Learned Tasks: {stats['learned_tasks']}
+User Name: {stats['user_name']}
+Personality Mode: {stats['personality_mode']}
+Last Interaction: {stats.get('last_interaction', 'Never')}
+"""
+        messagebox.showinfo("JARVIS Stats", stats_message)
     
     def select_command_text(self):
         """Select all text in command input for easy editing"""
