@@ -772,6 +772,11 @@ class AutomationControllerGUI:
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
     
+    def select_command_text(self):
+        """Select all text in command input for easy editing"""
+        self.command_input.select_range(0, tk.END)
+        self.command_input.icursor(tk.END)
+    
     def check_api_key(self):
         api_key = os.getenv("GOOGLE_API_KEY")
         if not api_key:
@@ -836,6 +841,7 @@ class AutomationControllerGUI:
         finally:
             self.processing = False
             self.root.after(0, lambda: self.execute_btn.config(state="normal"))
+            self.root.after(0, self.select_command_text)
     
     def update_output(self, message, msg_type="info"):
         def _update():
