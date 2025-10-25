@@ -1,0 +1,23 @@
+(.venv) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\DesktopAutomator2> pip install --upgrade pyautogui pillow                                                         
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /simple/pyautogui/                                              
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /simple/pyautogui/                                              
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /simple/pyautogui/                                              
+Collecting pyautogui                                                               
+  Using cached pyautogui-0.9.54-py3-none-any.whl
+Collecting pillow
+  Using cached pillow-12.0.0-cp313-cp313-win_amd64.whl.metadata (9.0 kB)
+Requirement already satisfied: pymsgbox in c:\users\vatsal varshney\pycharmprojects\desktopautomator2\.venv\lib\site-packages (from pyautogui) (2.0.1)
+Requirement already satisfied: pytweening>=1.0.4 in c:\users\vatsal varshney\pycharmprojects\desktopautomator2\.venv\lib\site-packages (from pyautogui) (1.2.0)
+Requirement already satisfied: pyscreeze>=0.1.21 in c:\users\vatsal varshney\pycharmprojects\desktopautomator2\.venv\lib\site-packages (from pyautogui) (1.0.1)
+Requirement already satisfied: pygetwindow>=0.0.5 in c:\users\vatsal varshney\pycharmprojects\desktopautomator2\.venv\lib\site-packages (from pyautogui) (0.0.9)
+Requirement already satisfied: mouseinfo in c:\users\vatsal varshney\pycharmprojects\desktopautomator2\.venv\lib\site-packages (from pyautogui) (0.1.3)
+Requirement already satisfied: pyrect in c:\users\vatsal varshney\pycharmprojects\desktopautomator2\.venv\lib\site-packages (from pygetwindow>=0.0.5->pyautogui) (0.2.0)
+Requirement already satisfied: pyperclip in c:\users\vatsal varshney\pycharmprojects\desktopautomator2\.venv\lib\site-packages (from mouseinfo->pyautogui) (1.9.0)
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ProtocolError('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))': /packages/6d/2a/dd43dcfd6dae9b6a49ee28a8eedb98c7d5ff2de94a5d834565164667b97b/pillow-12.0.0-cp313-cp313-win_amd64.whl                               
+Downloading pillow-12.0.0-cp313-cp313-win_amd64.whl (7.0 MB)                       
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.0/7.0 MB 1.5 MB/s  0:00:04
+Installing collected packages: pillow, pyautogui
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.                                                                           
+streamlit 1.40.2 requires pillow<12,>=7.1.0, but you have pillow 12.0.0 which is incompatible.                                                                        
+Successfully installed pillow-12.0.0 pyautogui-0.9.54                              
+(.venv) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\DesktopAutomator2> 
