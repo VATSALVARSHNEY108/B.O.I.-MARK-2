@@ -48,6 +48,7 @@ from creative_utilities import create_creative_utilities
 from security_enhancements import create_security_enhancements
 from human_interaction import create_human_interaction
 from cloud_ecosystem import create_cloud_ecosystem
+from chat_monitor import ChatMonitor
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -99,6 +100,7 @@ class CommandExecutor:
         self.security_enhancements = create_security_enhancements()
         self.human_interaction = create_human_interaction()
         self.cloud_ecosystem = create_cloud_ecosystem()
+        self.chat_monitor = ChatMonitor()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -462,6 +464,162 @@ class CommandExecutor:
                 
                 result = self.whatsapp.send_image(phone, image_path, caption)
                 return result
+            
+            elif action == "read_unread_emails":
+                max_emails = parameters.get("max_emails", 10)
+                result = self.chat_monitor.read_unread_emails(max_emails)
+                
+                if result["success"] and result["emails"]:
+                    email_list = "\n\n".join([
+                        f"📧 Email {i+1}:\n"
+                        f"  From: {email['from']}\n"
+                        f"  Subject: {email['subject']}\n"
+                        f"  Preview: {email['body']}"
+                        for i, email in enumerate(result["emails"])
+                    ])
+                    return {
+                        "success": True,
+                        "message": f"📬 {result['message']}\n\n{email_list}",
+                        "emails": result["emails"]
+                    }
+                else:
+                    return result
+            
+            elif action == "read_sms_messages":
+                max_messages = parameters.get("max_messages", 10)
+                result = self.chat_monitor.read_sms_messages(max_messages)
+                
+                if result["success"] and result["messages"]:
+                    sms_list = "\n\n".join([
+                        f"📱 SMS {i+1}:\n"
+                        f"  From: {msg['from']}\n"
+                        f"  Message: {msg['body']}"
+                        for i, msg in enumerate(result["messages"])
+                    ])
+                    return {
+                        "success": True,
+                        "message": f"📨 {result['message']}\n\n{sms_list}",
+                        "messages": result["messages"]
+                    }
+                else:
+                    return result
+            
+            elif action == "monitor_chats":
+                platforms = parameters.get("platforms", None)
+                context = parameters.get("context", "professional")
+                
+                print(f"  📡 Monitoring chats and generating AI replies...")
+                result = self.chat_monitor.monitor_and_suggest_replies(platforms, context)
+                
+                emails = result.get("emails", [])
+                sms = result.get("sms", [])
+                replies = result.get("suggested_replies", [])
+                
+                output = []
+                
+                if emails:
+                    output.append(f"\n📧 Found {len(emails)} unread email(s)")
+                if sms:
+                    output.append(f"📱 Found {len(sms)} SMS message(s)")
+                
+                if replies:
+                    output.append(f"\n🤖 Generated {len(replies)} AI reply suggestion(s):\n")
+                    for i, reply in enumerate(replies):
+                        output.append(f"Reply #{i}:")
+                        output.append(f"  To: {reply['recipient']}")
+                        output.append(f"  Platform: {reply['platform']}")
+                        output.append(f"  Suggested Reply:\n  {reply['suggested_reply']}\n")
+                    
+                    output.append("\n💡 Use 'approve reply [number]' to send a suggested reply")
+                    output.append("💡 Use 'show pending replies' to see all suggestions again")
+                else:
+                    output.append("\n✅ No new messages to reply to")
+                
+                return {
+                    "success": True,
+                    "message": "\n".join(output),
+                    "result": result
+                }
+            
+            elif action == "generate_ai_reply":
+                platform = parameters.get("platform", "email")
+                sender = parameters.get("sender", "")
+                message_body = parameters.get("message", "")
+                subject = parameters.get("subject", "")
+                context = parameters.get("context", "professional")
+                
+                message_data = {
+                    "platform": platform,
+                    "from": sender,
+                    "body": message_body,
+                    "subject": subject
+                }
+                
+                print(f"  🤖 Generating AI reply...")
+                result = self.chat_monitor.generate_ai_reply(message_data, context)
+                
+                if result.get("success"):
+                    return {
+                        "success": True,
+                        "message": f"✅ AI Reply Generated:\n\n{result['suggested_reply']}\n\n💡 Use 'approve reply 0' to send this",
+                        "reply_data": result
+                    }
+                else:
+                    return result
+            
+            elif action == "show_pending_replies":
+                pending = self.chat_monitor.get_pending_replies()
+                
+                if not pending:
+                    return {
+                        "success": True,
+                        "message": "No pending replies. Use 'monitor chats' to check for new messages."
+                    }
+                
+                output = [f"📋 You have {len(pending)} pending reply suggestion(s):\n"]
+                for i, reply in enumerate(pending):
+                    output.append(f"Reply #{i}:")
+                    output.append(f"  To: {reply['recipient']}")
+                    output.append(f"  Platform: {reply['platform']}")
+                    output.append(f"  Suggested Reply:\n  {reply['suggested_reply']}\n")
+                
+                output.append("💡 Use 'approve reply [number]' to send")
+                output.append("💡 Use 'clear pending replies' to remove all")
+                
+                return {
+                    "success": True,
+                    "message": "\n".join(output),
+                    "pending_replies": pending
+                }
+            
+            elif action == "approve_reply":
+                reply_index = parameters.get("index", 0)
+                send_now = parameters.get("send_now", True)
+                
+                result = self.chat_monitor.approve_and_send_reply(reply_index, send_now)
+                return result
+            
+            elif action == "clear_pending_replies":
+                result = self.chat_monitor.clear_pending_replies()
+                return result
+            
+            elif action == "chat_summary":
+                summary = self.chat_monitor.get_chat_summary()
+                
+                output = [
+                    "📊 Chat Monitor Summary:",
+                    f"  📧 Emails monitored: {summary['total_emails_monitored']}",
+                    f"  📱 SMS monitored: {summary['total_sms_monitored']}",
+                    f"  🤖 Pending replies: {summary['pending_replies']}",
+                    f"  ✅ Gmail: {'Enabled' if summary['gmail_enabled'] else 'Not configured'}",
+                    f"  ✅ SMS: {'Enabled' if summary['sms_enabled'] else 'Not configured'}"
+                ]
+                
+                return {
+                    "success": True,
+                    "message": "\n".join(output),
+                    "summary": summary
+                }
             
             elif action == "add_contact":
                 name = parameters.get("name", "")
