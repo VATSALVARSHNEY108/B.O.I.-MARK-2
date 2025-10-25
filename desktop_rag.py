@@ -6,10 +6,14 @@ AI-powered system to interact with all desktop data intelligently
 import os
 import json
 import time
+import hashlib
+import csv
 from pathlib import Path
-from typing import List, Dict, Optional, Tuple
-from datetime import datetime
+from typing import List, Dict, Optional, Tuple, Set
+from datetime import datetime, timedelta
+from collections import defaultdict
 import mimetypes
+import re
 from gemini_controller import get_client
 from google.genai import types
 
@@ -28,15 +32,40 @@ class DesktopRAG:
     def __init__(self):
         """Initialize Desktop RAG system"""
         self.index_file = "desktop_index.json"
+        self.tags_file = "desktop_tags.json"
+        self.relationships_file = "desktop_relationships.json"
+        self.timeline_file = "desktop_timeline.json"
+        
         self.index = self._load_index()
+        self.tags = self._load_tags()
+        self.relationships = self._load_relationships()
+        self.timeline = self._load_timeline()
+        
         self.supported_text_extensions = {
             '.txt', '.md', '.py', '.js', '.html', '.css', '.json', 
             '.csv', '.xml', '.yaml', '.yml', '.log', '.ini', '.cfg',
             '.java', '.cpp', '.c', '.h', '.rs', '.go', '.rb', '.php',
-            '.sh', '.bat', '.ps1', '.sql', '.r', '.jsx', '.tsx', '.vue'
+            '.sh', '.bat', '.ps1', '.sql', '.r', '.jsx', '.tsx', '.vue',
+            '.ts', '.swift', '.kt', '.scala', '.pl', '.lua', '.vim',
+            '.asm', '.toml', '.dockerfile', '.gitignore', '.env'
         }
-        print("🧠 Smart Desktop RAG initialized")
+        
+        # Auto-categorization keywords
+        self.category_keywords = {
+            'code': ['class', 'function', 'def ', 'import', 'const ', 'var ', 'let ', 'public', 'private'],
+            'documentation': ['readme', 'doc', 'guide', 'tutorial', 'manual', '# ', '## '],
+            'configuration': ['config', 'settings', 'env', '.ini', '.cfg', '.toml'],
+            'data': ['csv', 'json', 'xml', 'dataset', 'data'],
+            'web': ['html', 'css', 'javascript', 'react', 'vue', 'angular'],
+            'database': ['sql', 'query', 'database', 'table', 'select', 'insert'],
+            'testing': ['test', 'spec', 'mock', 'assert', 'expect'],
+            'build': ['makefile', 'build', 'compile', 'package.json', 'requirements.txt'],
+        }
+        
+        print("🧠 Advanced Desktop RAG initialized")
         print(f"   📊 Indexed files: {len(self.index)}")
+        print(f"   🏷️  Tagged files: {sum(len(v) for v in self.tags.values())}")
+        print(f"   🔗 File relationships: {len(self.relationships)}")
     
     def _load_index(self) -> Dict:
         """Load existing index from disk"""
@@ -48,6 +77,36 @@ class DesktopRAG:
             print(f"⚠️  Could not load index: {e}")
         return {}
     
+    def _load_tags(self) -> Dict:
+        """Load tags from disk"""
+        try:
+            if os.path.exists(self.tags_file):
+                with open(self.tags_file, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+        except:
+            pass
+        return {}
+    
+    def _load_relationships(self) -> Dict:
+        """Load file relationships from disk"""
+        try:
+            if os.path.exists(self.relationships_file):
+                with open(self.relationships_file, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+        except:
+            pass
+        return {}
+    
+    def _load_timeline(self) -> List:
+        """Load file timeline from disk"""
+        try:
+            if os.path.exists(self.timeline_file):
+                with open(self.timeline_file, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+        except:
+            pass
+        return []
+    
     def _save_index(self):
         """Save index to disk"""
         try:
@@ -56,6 +115,30 @@ class DesktopRAG:
             print(f"✅ Index saved: {len(self.index)} files indexed")
         except Exception as e:
             print(f"❌ Failed to save index: {e}")
+    
+    def _save_tags(self):
+        """Save tags to disk"""
+        try:
+            with open(self.tags_file, 'w', encoding='utf-8') as f:
+                json.dump(self.tags, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"❌ Failed to save tags: {e}")
+    
+    def _save_relationships(self):
+        """Save relationships to disk"""
+        try:
+            with open(self.relationships_file, 'w', encoding='utf-8') as f:
+                json.dump(self.relationships, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"❌ Failed to save relationships: {e}")
+    
+    def _save_timeline(self):
+        """Save timeline to disk"""
+        try:
+            with open(self.timeline_file, 'w', encoding='utf-8') as f:
+                json.dump(self.timeline, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"❌ Failed to save timeline: {e}")
     
     def _extract_text_content(self, file_path: str) -> Optional[str]:
         """Extract text content from various file types"""
@@ -499,6 +582,474 @@ Provide:
                 default="Never"
             )
         }
+
+
+    def compute_file_hash(self, file_path: str) -> Optional[str]:
+        """Compute MD5 hash of file for exact duplicate detection"""
+        try:
+            hash_md5 = hashlib.md5()
+            with open(file_path, "rb") as f:
+                for chunk in iter(lambda: f.read(4096), b""):
+                    hash_md5.update(chunk)
+            return hash_md5.hexdigest()
+        except:
+            return None
+    
+    def find_exact_duplicates(self) -> Dict:
+        """Find exact duplicate files using content hashing"""
+        print("\n🔍 Finding exact duplicates (hash-based)...")
+        
+        hash_groups = defaultdict(list)
+        
+        for file_key, file_data in self.index.items():
+            file_hash = self.compute_file_hash(file_data["path"])
+            if file_hash:
+                hash_groups[file_hash].append(file_data)
+        
+        duplicates = []
+        total_waste = 0
+        
+        for file_hash, files in hash_groups.items():
+            if len(files) > 1:
+                group = {
+                    "hash": file_hash,
+                    "files": [f["path"] for f in files],
+                    "size": files[0]["size"],
+                    "count": len(files),
+                    "waste_mb": (files[0]["size"] * (len(files) - 1)) / (1024*1024)
+                }
+                duplicates.append(group)
+                total_waste += group["waste_mb"]
+        
+        return {
+            "success": True,
+            "duplicate_groups": len(duplicates),
+            "total_duplicates": sum(d["count"] for d in duplicates),
+            "potential_savings_mb": f"{total_waste:.2f}",
+            "details": sorted(duplicates, key=lambda x: x["waste_mb"], reverse=True)[:20]
+        }
+    
+    def auto_categorize_files(self) -> Dict:
+        """Automatically categorize files based on content analysis"""
+        print("\n🏷️  Auto-categorizing files...")
+        
+        categories = defaultdict(list)
+        
+        for file_key, file_data in self.index.items():
+            file_categories = set()
+            content = (file_data.get("content") or "").lower()
+            name = file_data["name"].lower()
+            
+            # Check against category keywords
+            for category, keywords in self.category_keywords.items():
+                for keyword in keywords:
+                    if keyword in content or keyword in name:
+                        file_categories.add(category)
+                        break
+            
+            # Auto-detect from extension
+            ext = file_data["extension"]
+            if ext in ['.py', '.js', '.java', '.cpp', '.c', '.rs', '.go']:
+                file_categories.add('code')
+            elif ext in ['.md', '.txt', '.pdf', '.doc']:
+                file_categories.add('documentation')
+            elif ext in ['.jpg', '.png', '.gif', '.svg']:
+                file_categories.add('images')
+            elif ext in ['.mp4', '.avi', '.mkv', '.mov']:
+                file_categories.add('videos')
+            elif ext in ['.mp3', '.wav', '.flac']:
+                file_categories.add('audio')
+            
+            for cat in file_categories:
+                categories[cat].append(file_data["path"])
+        
+        return {
+            "success": True,
+            "categories": {cat: len(files) for cat, files in categories.items()},
+            "details": {cat: files[:10] for cat, files in categories.items()}
+        }
+    
+    def add_tags(self, file_paths: List[str], tags: List[str]) -> Dict:
+        """Add tags to files"""
+        print(f"\n🏷️  Adding tags: {tags}")
+        
+        tagged_count = 0
+        
+        for file_path in file_paths:
+            if file_path in self.index:
+                for tag in tags:
+                    if tag not in self.tags:
+                        self.tags[tag] = []
+                    if file_path not in self.tags[tag]:
+                        self.tags[tag].append(file_path)
+                        tagged_count += 1
+        
+        self._save_tags()
+        
+        return {
+            "success": True,
+            "files_tagged": len(file_paths),
+            "tags_added": tagged_count
+        }
+    
+    def search_by_tags(self, tags: List[str]) -> List[Dict]:
+        """Search files by tags"""
+        matching_files = set()
+        
+        for tag in tags:
+            if tag in self.tags:
+                matching_files.update(self.tags[tag])
+        
+        results = []
+        for file_path in matching_files:
+            if file_path in self.index:
+                results.append(self.index[file_path])
+        
+        return results
+    
+    def analyze_file_relationships(self) -> Dict:
+        """Analyze relationships between files (imports, references)"""
+        print("\n🔗 Analyzing file relationships...")
+        
+        relationships = defaultdict(set)
+        
+        for file_key, file_data in self.index.items():
+            content = file_data.get("content", "")
+            if not content:
+                continue
+            
+            # Python imports
+            if file_data["extension"] == '.py':
+                imports = re.findall(r'from\s+(\w+)|import\s+(\w+)', content)
+                for match in imports:
+                    module = match[0] or match[1]
+                    relationships[file_key].add(f"imports:{module}")
+            
+            # JavaScript imports
+            elif file_data["extension"] in ['.js', '.jsx', '.ts', '.tsx']:
+                imports = re.findall(r'import.*from\s+[\'"](.+?)[\'"]', content)
+                for imp in imports:
+                    relationships[file_key].add(f"imports:{imp}")
+            
+            # File references (any file mentioning another)
+            for other_key, other_data in self.index.items():
+                if other_key != file_key:
+                    if other_data["name"] in content:
+                        relationships[file_key].add(f"references:{other_data['name']}")
+        
+        # Convert sets to lists for JSON
+        self.relationships = {k: list(v) for k, v in relationships.items()}
+        self._save_relationships()
+        
+        return {
+            "success": True,
+            "files_with_relationships": len(self.relationships),
+            "total_relationships": sum(len(v) for v in self.relationships.values())
+        }
+    
+    def get_file_timeline(self, days: int = 30) -> Dict:
+        """Get timeline of file modifications"""
+        print(f"\n📅 Analyzing file timeline (last {days} days)...")
+        
+        cutoff_date = datetime.now() - timedelta(days=days)
+        timeline = defaultdict(list)
+        
+        for file_key, file_data in self.index.items():
+            try:
+                mod_date = datetime.fromisoformat(file_data["modified"])
+                if mod_date >= cutoff_date:
+                    date_key = mod_date.strftime("%Y-%m-%d")
+                    timeline[date_key].append({
+                        "path": file_data["path"],
+                        "name": file_data["name"],
+                        "size": file_data["size"],
+                        "time": mod_date.strftime("%H:%M:%S")
+                    })
+            except:
+                continue
+        
+        return {
+            "success": True,
+            "days_analyzed": days,
+            "dates_with_activity": len(timeline),
+            "total_changes": sum(len(files) for files in timeline.values()),
+            "timeline": dict(sorted(timeline.items(), reverse=True)[:days])
+        }
+    
+    def export_index_to_csv(self, output_file: str = "desktop_index_export.csv") -> Dict:
+        """Export index to CSV file"""
+        print(f"\n📤 Exporting index to {output_file}...")
+        
+        try:
+            with open(output_file, 'w', newline='', encoding='utf-8') as f:
+                if not self.index:
+                    return {"success": False, "error": "No files indexed"}
+                
+                fieldnames = ['path', 'name', 'extension', 'size', 'modified', 'created', 'has_content']
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                
+                writer.writeheader()
+                for file_data in self.index.values():
+                    writer.writerow({
+                        'path': file_data['path'],
+                        'name': file_data['name'],
+                        'extension': file_data['extension'],
+                        'size': file_data['size'],
+                        'modified': file_data['modified'],
+                        'created': file_data['created'],
+                        'has_content': file_data.get('has_content', False)
+                    })
+            
+            return {
+                "success": True,
+                "exported_files": len(self.index),
+                "output_file": output_file
+            }
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    def get_advanced_analytics(self) -> Dict:
+        """Get comprehensive analytics about indexed files"""
+        print("\n📊 Generating advanced analytics...")
+        
+        analytics = {
+            "overview": {},
+            "size_distribution": {},
+            "temporal_patterns": {},
+            "file_health": {},
+            "recommendations": []
+        }
+        
+        # Overview
+        total_size = sum(f["size"] for f in self.index.values())
+        analytics["overview"] = {
+            "total_files": len(self.index),
+            "total_size_mb": f"{total_size / (1024*1024):.2f}",
+            "avg_file_size_kb": f"{(total_size / len(self.index) / 1024):.2f}" if self.index else "0",
+            "files_with_content": sum(1 for f in self.index.values() if f.get("has_content"))
+        }
+        
+        # Size distribution
+        size_ranges = {"<1KB": 0, "1-10KB": 0, "10-100KB": 0, "100KB-1MB": 0, "1-10MB": 0, ">10MB": 0}
+        for file_data in self.index.values():
+            size_kb = file_data["size"] / 1024
+            if size_kb < 1:
+                size_ranges["<1KB"] += 1
+            elif size_kb < 10:
+                size_ranges["1-10KB"] += 1
+            elif size_kb < 100:
+                size_ranges["10-100KB"] += 1
+            elif size_kb < 1024:
+                size_ranges["100KB-1MB"] += 1
+            elif size_kb < 10240:
+                size_ranges["1-10MB"] += 1
+            else:
+                size_ranges[">10MB"] += 1
+        analytics["size_distribution"] = size_ranges
+        
+        # Temporal patterns
+        recent_24h = 0
+        recent_week = 0
+        recent_month = 0
+        now = datetime.now()
+        
+        for file_data in self.index.values():
+            try:
+                mod_date = datetime.fromisoformat(file_data["modified"])
+                delta = now - mod_date
+                if delta.days == 0:
+                    recent_24h += 1
+                if delta.days < 7:
+                    recent_week += 1
+                if delta.days < 30:
+                    recent_month += 1
+            except:
+                continue
+        
+        analytics["temporal_patterns"] = {
+            "modified_last_24h": recent_24h,
+            "modified_last_week": recent_week,
+            "modified_last_month": recent_month
+        }
+        
+        # File health checks
+        large_files = [f for f in self.index.values() if f["size"] > 100*1024*1024]
+        old_files = []
+        for file_data in self.index.values():
+            try:
+                mod_date = datetime.fromisoformat(file_data["modified"])
+                if (now - mod_date).days > 365:
+                    old_files.append(file_data)
+            except:
+                continue
+        
+        analytics["file_health"] = {
+            "files_over_100mb": len(large_files),
+            "files_over_1_year_old": len(old_files),
+            "largest_file": max(self.index.values(), key=lambda x: x["size"])["name"] if self.index else None
+        }
+        
+        # AI-powered recommendations
+        if len(self.index) > 100:
+            analytics["recommendations"].append("Consider organizing files into more subdirectories")
+        if len(large_files) > 10:
+            analytics["recommendations"].append(f"You have {len(large_files)} very large files (>100MB) - consider archiving or compression")
+        if len(old_files) > 50:
+            analytics["recommendations"].append(f"You have {len(old_files)} files over 1 year old - consider cleanup")
+        if recent_24h > 50:
+            analytics["recommendations"].append("High file activity detected today - ensure backups are current")
+        
+        return {
+            "success": True,
+            "analytics": analytics
+        }
+    
+    def compare_files(self, file1_path: str, file2_path: str) -> Dict:
+        """Compare two files and find similarities/differences"""
+        print(f"\n🔄 Comparing files...")
+        
+        if file1_path not in self.index or file2_path not in self.index:
+            return {"success": False, "error": "One or both files not in index"}
+        
+        file1 = self.index[file1_path]
+        file2 = self.index[file2_path]
+        
+        comparison = {
+            "files": [file1["name"], file2["name"]],
+            "size_difference": abs(file1["size"] - file2["size"]),
+            "same_extension": file1["extension"] == file2["extension"],
+            "same_size": file1["size"] == file2["size"]
+        }
+        
+        # Content comparison
+        if file1.get("content") and file2.get("content"):
+            content1 = set(file1["content"].split())
+            content2 = set(file2["content"].split())
+            common_words = content1.intersection(content2)
+            total_words = content1.union(content2)
+            
+            similarity = len(common_words) / len(total_words) if total_words else 0
+            comparison["content_similarity_percent"] = f"{similarity * 100:.1f}"
+        
+        return {
+            "success": True,
+            "comparison": comparison
+        }
+    
+    def get_smart_recommendations(self) -> Dict:
+        """AI-powered recommendations for file organization and cleanup"""
+        print("\n💡 Generating smart recommendations...")
+        
+        try:
+            # Gather insights
+            stats = self.get_index_stats()
+            duplicates = self.find_duplicates_smart()
+            analytics = self.get_advanced_analytics()
+            
+            context = f"""File System Analysis:
+- Total files: {stats['total_files']}
+- Total size: {stats['total_size_mb']} MB
+- File types: {stats.get('file_types', {})}
+- Duplicate files found: {duplicates.get('duplicates_found', 0)}
+- Files over 1 year old: {analytics['analytics']['file_health'].get('files_over_1_year_old', 0)}
+- Large files (>100MB): {analytics['analytics']['file_health'].get('files_over_100mb', 0)}
+"""
+            
+            client = get_client()
+            
+            prompt = f"""As a file organization expert, analyze this desktop file system and provide actionable recommendations:
+
+{context}
+
+Provide:
+1. Top 3 cleanup opportunities
+2. Organization improvement suggestions
+3. Storage optimization tips
+4. Security concerns (if any)
+5. Workflow efficiency improvements
+
+Be specific and practical."""
+
+            response = client.models.generate_content(
+                model='gemini-2.0-flash-exp',
+                contents=prompt
+            )
+            
+            return {
+                "success": True,
+                "recommendations": response.text,
+                "based_on": {
+                    "total_files": stats['total_files'],
+                    "duplicates": duplicates.get('duplicates_found', 0)
+                }
+            }
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+    
+    def filter_files(self, 
+                    extension: Optional[str] = None,
+                    min_size: Optional[int] = None,
+                    max_size: Optional[int] = None,
+                    modified_after: Optional[str] = None,
+                    modified_before: Optional[str] = None,
+                    contains_text: Optional[str] = None) -> List[Dict]:
+        """Advanced filtering of indexed files"""
+        print("\n🔍 Filtering files with advanced criteria...")
+        
+        results = []
+        
+        for file_key, file_data in self.index.items():
+            # Extension filter
+            if extension and file_data["extension"] != extension:
+                continue
+            
+            # Size filters
+            if min_size and file_data["size"] < min_size:
+                continue
+            if max_size and file_data["size"] > max_size:
+                continue
+            
+            # Date filters
+            try:
+                if modified_after:
+                    mod_date = datetime.fromisoformat(file_data["modified"])
+                    after_date = datetime.fromisoformat(modified_after)
+                    if mod_date < after_date:
+                        continue
+                
+                if modified_before:
+                    mod_date = datetime.fromisoformat(file_data["modified"])
+                    before_date = datetime.fromisoformat(modified_before)
+                    if mod_date > before_date:
+                        continue
+            except:
+                pass
+            
+            # Text content filter
+            if contains_text:
+                content = file_data.get("content", "")
+                if contains_text.lower() not in content.lower():
+                    continue
+            
+            results.append(file_data)
+        
+        return results
+    
+    def backup_index(self, backup_name: Optional[str] = None) -> Dict:
+        """Create a backup of the current index"""
+        if not backup_name:
+            backup_name = f"desktop_index_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        
+        try:
+            import shutil
+            shutil.copy(self.index_file, backup_name)
+            return {
+                "success": True,
+                "backup_file": backup_name,
+                "files_backed_up": len(self.index)
+            }
+        except Exception as e:
+            return {"success": False, "error": str(e)}
 
 
 def create_desktop_rag():
