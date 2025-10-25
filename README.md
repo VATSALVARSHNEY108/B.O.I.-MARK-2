@@ -90,6 +90,20 @@ An intelligent AI desktop automation application powered by Google Gemini AI wit
 - Custom workflows
 - Productivity insights
 
+### 👁️ **AI Screen Monitoring System** (NEW!)
+- Real-time continuous monitoring with 8 AI analysis modes
+- Productivity tracking with behavioral learning
+- Security scanning and threat detection
+- Performance analysis and optimization suggestions
+- Error detection and debugging assistance
+- UX/Design expert reviews and accessibility audits
+- Code quality analysis and refactoring suggestions
+- Automation opportunity discovery
+- Advanced analytics with productivity trends
+- Intelligent triggers and automated actions
+- Privacy controls with pause/resume
+- Pattern learning and predictive insights
+
 ---
 
 ## 🚀 Quick Start

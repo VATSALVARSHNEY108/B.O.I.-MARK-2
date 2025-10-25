@@ -9,6 +9,7 @@ from gemini_controller import parse_command, get_ai_suggestion
 from command_executor import CommandExecutor
 from vatsal_assistant import create_vatsal_assistant
 from advanced_smart_screen_monitor import create_advanced_smart_screen_monitor
+from ai_screen_monitoring_system import create_ai_screen_monitoring_system
 from datetime import datetime
 
 load_dotenv()
@@ -23,6 +24,7 @@ class AutomationControllerGUI:
         self.executor = CommandExecutor()
         self.vatsal = create_vatsal_assistant()
         self.advanced_monitor = create_advanced_smart_screen_monitor()
+        self.ai_monitor = create_ai_screen_monitoring_system()
         self.vatsal_mode = True
         self.processing = False
         self.hover_colors = {}
@@ -671,23 +673,38 @@ class AutomationControllerGUI:
         info.pack(pady=(0, 15))
         
         screen_monitor_section = tk.Label(scrollable_frame,
-                                          text="🖥️ ADVANCED SMART SCREEN MONITOR",
+                                          text="👁️ AI SCREEN MONITORING SYSTEM (Next-Gen)",
                                           bg="#1e1e2e",
                                           fg="#f9e2af",
                                           font=("Segoe UI", 11, "bold"))
         screen_monitor_section.pack(pady=(10, 8), anchor="w", padx=8)
         
+        info_label = tk.Label(scrollable_frame,
+                             text="Real-time AI monitoring with intelligent triggers, analytics, and automated actions",
+                             bg="#1e1e2e",
+                             fg="#a6adc8",
+                             font=("Segoe UI", 9, "italic"))
+        info_label.pack(pady=(0, 8), anchor="w", padx=8)
+        
         screen_monitor_actions = [
-            ("🧠 Comprehensive AI Analysis", self.run_comprehensive_analysis),
-            ("🛡️ Security Scan", self.run_security_scan),
-            ("⚡ Performance Audit", self.run_performance_audit),
-            ("🎨 UX Expert Review", self.run_ux_review),
-            ("♿ Accessibility Audit", self.run_accessibility_audit),
-            ("💻 Code Review", self.run_code_review),
-            ("🎭 Design Critique", self.run_design_critique),
-            ("🤖 Find Automation Opportunities", self.run_automation_discovery),
-            ("📊 View Analytics Report", self.view_analytics_report),
-            ("🔄 Start Continuous Monitoring", self.start_continuous_monitoring),
+            ("📊 Productivity Analysis (Instant)", self.ai_monitor_productivity),
+            ("🔒 Security Scan (Instant)", self.ai_monitor_security),
+            ("⚡ Performance Analysis (Instant)", self.ai_monitor_performance),
+            ("🐛 Error Detection (Instant)", self.ai_monitor_errors),
+            ("🎨 UX/Design Review (Instant)", self.ai_monitor_ux),
+            ("♿ Accessibility Audit (Instant)", self.ai_monitor_accessibility),
+            ("💻 Code Review (Instant)", self.ai_monitor_code),
+            ("🤖 Automation Discovery (Instant)", self.ai_monitor_automation),
+            ("",  None),
+            ("🔄 Start Continuous Monitoring", self.ai_monitor_start_continuous),
+            ("⏸️ Pause/Resume Monitoring", self.ai_monitor_pause_resume),
+            ("🛑 Stop Monitoring", self.ai_monitor_stop),
+            ("",  None),
+            ("📈 View Analytics Dashboard", self.ai_monitor_view_analytics),
+            ("📊 Productivity Trends", self.ai_monitor_productivity_trends),
+            ("🚨 Recent Alerts", self.ai_monitor_view_alerts),
+            ("⚙️ Configure Settings", self.ai_monitor_configure),
+            ("🧹 Clear Analytics Data", self.ai_monitor_clear_analytics),
         ]
         
         for text, command in screen_monitor_actions:
@@ -1456,6 +1473,425 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                  bg="#89b4fa", fg="#0f0f1e",
                  font=("Segoe UI", 11, "bold"),
                  command=start_monitoring, padx=20, pady=8).pack(pady=15)
+    
+    def ai_monitor_productivity(self):
+        """Run instant productivity analysis with new AI monitor"""
+        def execute():
+            self.update_output("\n📊 Analyzing Productivity...\n", "command")
+            result = self.ai_monitor.analyze_now("productivity")
+            if result.get("success"):
+                data = result.get("data", {})
+                analysis = result.get("analysis", "")
+                score = data.get("productivity_score", 0)
+                
+                self.update_output(f"⭐ Productivity Score: {score}/10\n", "info")
+                self.update_output(f"{analysis}\n", "success")
+            else:
+                self.update_output(f"❌ {result.get('message', 'Analysis failed')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def ai_monitor_security(self):
+        """Run instant security scan"""
+        def execute():
+            self.update_output("\n🔒 Running Security Scan...\n", "command")
+            result = self.ai_monitor.analyze_now("security")
+            if result.get("success"):
+                data = result.get("data", {})
+                analysis = result.get("analysis", "")
+                risk_level = data.get("risk_level", "UNKNOWN")
+                
+                self.update_output(f"🛡️ Risk Level: {risk_level}\n", "info")
+                self.update_output(f"{analysis}\n", "success")
+            else:
+                self.update_output(f"❌ {result.get('message', 'Scan failed')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def ai_monitor_performance(self):
+        """Run instant performance analysis"""
+        def execute():
+            self.update_output("\n⚡ Analyzing Performance...\n", "command")
+            result = self.ai_monitor.analyze_now("performance")
+            if result.get("success"):
+                data = result.get("data", {})
+                analysis = result.get("analysis", "")
+                score = data.get("performance_score", 0)
+                
+                self.update_output(f"⚡ Performance Score: {score}/10\n", "info")
+                self.update_output(f"{analysis}\n", "success")
+            else:
+                self.update_output(f"❌ {result.get('message', 'Analysis failed')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def ai_monitor_errors(self):
+        """Run instant error detection"""
+        def execute():
+            self.update_output("\n🐛 Detecting Errors...\n", "command")
+            result = self.ai_monitor.analyze_now("errors")
+            if result.get("success"):
+                data = result.get("data", {})
+                analysis = result.get("analysis", "")
+                errors_found = data.get("errors_found", False)
+                error_count = data.get("error_count", 0)
+                
+                if errors_found:
+                    self.update_output(f"⚠️ {error_count} Error(s) Detected!\n", "info")
+                else:
+                    self.update_output(f"✅ No Errors Detected\n", "info")
+                
+                self.update_output(f"{analysis}\n", "success")
+            else:
+                self.update_output(f"❌ {result.get('message', 'Detection failed')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def ai_monitor_ux(self):
+        """Run instant UX/Design review"""
+        def execute():
+            self.update_output("\n🎨 Reviewing UX/Design...\n", "command")
+            result = self.ai_monitor.analyze_now("ux")
+            if result.get("success"):
+                data = result.get("data", {})
+                analysis = result.get("analysis", "")
+                ux_score = data.get("ux_score", 0)
+                
+                self.update_output(f"🎨 UX Score: {ux_score}/10\n", "info")
+                self.update_output(f"{analysis}\n", "success")
+            else:
+                self.update_output(f"❌ {result.get('message', 'Review failed')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def ai_monitor_accessibility(self):
+        """Run instant accessibility audit"""
+        def execute():
+            self.update_output("\n♿ Running Accessibility Audit...\n", "command")
+            result = self.ai_monitor.analyze_now("accessibility")
+            if result.get("success"):
+                data = result.get("data", {})
+                analysis = result.get("analysis", "")
+                acc_score = data.get("accessibility_score", 0)
+                
+                self.update_output(f"♿ Accessibility Score: {acc_score}/10\n", "info")
+                self.update_output(f"{analysis}\n", "success")
+            else:
+                self.update_output(f"❌ {result.get('message', 'Audit failed')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def ai_monitor_code(self):
+        """Run instant code review"""
+        def execute():
+            self.update_output("\n💻 Reviewing Code...\n", "command")
+            result = self.ai_monitor.analyze_now("code")
+            if result.get("success"):
+                data = result.get("data", {})
+                analysis = result.get("analysis", "")
+                code_detected = data.get("code_detected", False)
+                
+                if code_detected:
+                    quality_score = data.get("code_quality_score", 0)
+                    self.update_output(f"💻 Code Quality Score: {quality_score}/10\n", "info")
+                else:
+                    self.update_output(f"ℹ️ No Code Detected\n", "info")
+                
+                self.update_output(f"{analysis}\n", "success")
+            else:
+                self.update_output(f"❌ {result.get('message', 'Review failed')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def ai_monitor_automation(self):
+        """Run instant automation discovery"""
+        def execute():
+            self.update_output("\n🤖 Finding Automation Opportunities...\n", "command")
+            result = self.ai_monitor.analyze_now("automation")
+            if result.get("success"):
+                data = result.get("data", {})
+                analysis = result.get("analysis", "")
+                opportunities = data.get("automation_opportunities", [])
+                
+                self.update_output(f"🤖 {len(opportunities)} Automation Opportunity(ies) Found\n", "info")
+                self.update_output(f"{analysis}\n", "success")
+            else:
+                self.update_output(f"❌ {result.get('message', 'Discovery failed')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def ai_monitor_start_continuous(self):
+        """Start continuous AI monitoring"""
+        dialog = tk.Toplevel(self.root)
+        dialog.title("🔄 Start Continuous Monitoring")
+        dialog.geometry("550x500")
+        dialog.configure(bg="#1a1a2e")
+        
+        tk.Label(dialog, text="🔄 Continuous AI Monitoring",
+                bg="#1a1a2e", fg="#ffffff",
+                font=("Segoe UI", 14, "bold")).pack(pady=15)
+        
+        tk.Label(dialog, text="Select monitoring modes:",
+                bg="#1a1a2e", fg="#a6adc8",
+                font=("Segoe UI", 10, "bold")).pack(pady=(10, 5))
+        
+        modes_frame = tk.Frame(dialog, bg="#1a1a2e")
+        modes_frame.pack(pady=10)
+        
+        mode_vars = {}
+        for mode_id, mode_info in self.ai_monitor.ANALYSIS_MODES.items():
+            var = tk.BooleanVar(value=mode_id in ["productivity", "errors", "security"])
+            tk.Checkbutton(modes_frame, text=f"{mode_info['icon']} {mode_info['name']}",
+                          variable=var, bg="#1a1a2e", fg="#ffffff",
+                          selectcolor="#313244", font=("Segoe UI", 9)).pack(anchor="w")
+            mode_vars[mode_id] = var
+        
+        tk.Label(dialog, text="Check interval (seconds):",
+                bg="#1a1a2e", fg="#a6adc8",
+                font=("Segoe UI", 10)).pack(pady=(15, 5))
+        interval_entry = tk.Entry(dialog, font=("Segoe UI", 11), width=20)
+        interval_entry.insert(0, "30")
+        interval_entry.pack()
+        
+        def start():
+            selected_modes = [mode for mode, var in mode_vars.items() if var.get()]
+            interval = int(interval_entry.get())
+            dialog.destroy()
+            
+            def execute():
+                self.update_output(f"\n🔄 Starting Continuous Monitoring...\n", "command")
+                self.update_output(f"   📊 Modes: {', '.join(selected_modes)}\n", "info")
+                self.update_output(f"   ⏱️  Interval: {interval}s\n", "info")
+                
+                result = self.ai_monitor.start_monitoring(modes=selected_modes, interval=interval)
+                if result.get("success"):
+                    self.update_output(f"✅ {result['message']}\n", "success")
+                    self.update_output(f"   ℹ️ Monitoring is running in background. Use 'Stop Monitoring' to end.\n", "info")
+                else:
+                    self.update_output(f"❌ {result.get('message')}", "error")
+            
+            threading.Thread(target=execute, daemon=True).start()
+        
+        tk.Button(dialog, text="▶️ Start Monitoring",
+                 bg="#89b4fa", fg="#0f0f1e",
+                 font=("Segoe UI", 11, "bold"),
+                 command=start, padx=20, pady=8).pack(pady=15)
+    
+    def ai_monitor_pause_resume(self):
+        """Pause or resume monitoring"""
+        if self.ai_monitor.paused:
+            result = self.ai_monitor.resume_monitoring()
+            self.update_output(f"▶️ {result['message']}\n", "success")
+        else:
+            result = self.ai_monitor.pause_monitoring()
+            self.update_output(f"⏸️ {result['message']}\n", "success")
+    
+    def ai_monitor_stop(self):
+        """Stop continuous monitoring"""
+        result = self.ai_monitor.stop_monitoring()
+        if result.get("success"):
+            stats = result.get("stats", {})
+            self.update_output(f"\n✅ {result['message']}\n", "success")
+            self.update_output(f"   📊 Session Statistics:\n", "info")
+            self.update_output(f"      • Screenshots: {stats.get('total_screenshots', 0)}\n", "info")
+            self.update_output(f"      • AI Analyses: {stats.get('ai_analyses', 0)}\n", "info")
+            self.update_output(f"      • Changes Detected: {stats.get('changes_detected', 0)}\n", "info")
+            self.update_output(f"      • Alerts Triggered: {stats.get('alerts_triggered', 0)}\n", "info")
+        else:
+            self.update_output(f"❌ {result.get('message')}", "error")
+    
+    def ai_monitor_view_analytics(self):
+        """View analytics dashboard"""
+        def execute():
+            self.update_output("\n📈 Analytics Dashboard\n", "command")
+            self.update_output("=" * 60 + "\n", "info")
+            
+            summary = self.ai_monitor.get_analytics_summary()
+            
+            prod = summary.get("productivity", {})
+            sec = summary.get("security", {})
+            err = summary.get("errors", {})
+            perf = summary.get("performance", {})
+            patterns = summary.get("patterns", {})
+            session = summary.get("session", {})
+            
+            self.update_output(f"\n📊 Productivity Analytics:\n", "info")
+            self.update_output(f"   • Average Score: {prod.get('average_score', 0)}/10\n", "success")
+            self.update_output(f"   • Total Measurements: {prod.get('total_measurements', 0)}\n", "success")
+            
+            self.update_output(f"\n🔒 Security Analytics:\n", "info")
+            self.update_output(f"   • Total Issues: {sec.get('total_issues', 0)}\n", "success")
+            self.update_output(f"   • Critical Issues: {sec.get('critical_issues', 0)}\n", "success")
+            
+            self.update_output(f"\n🐛 Error Analytics:\n", "info")
+            self.update_output(f"   • Total Errors: {err.get('total_errors', 0)}\n", "success")
+            
+            self.update_output(f"\n⚡ Performance Analytics:\n", "info")
+            self.update_output(f"   • Measurements: {perf.get('measurements', 0)}\n", "success")
+            
+            self.update_output(f"\n🧠 Pattern Learning:\n", "info")
+            self.update_output(f"   • Patterns Learned: {patterns.get('patterns_learned', 0)}\n", "success")
+            
+            self.update_output(f"\n📊 Current Session:\n", "info")
+            self.update_output(f"   • Screenshots: {session.get('total_screenshots', 0)}\n", "success")
+            self.update_output(f"   • AI Analyses: {session.get('ai_analyses', 0)}\n", "success")
+            self.update_output(f"   • Changes Detected: {session.get('changes_detected', 0)}\n", "success")
+            self.update_output(f"   • Alerts: {session.get('alerts_triggered', 0)}\n", "success")
+            
+            self.update_output("\n" + "=" * 60 + "\n", "info")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def ai_monitor_productivity_trends(self):
+        """View productivity trends"""
+        def execute():
+            self.update_output("\n📊 Productivity Trends Analysis\n", "command")
+            self.update_output("=" * 60 + "\n", "info")
+            
+            trends = self.ai_monitor.get_productivity_trends()
+            
+            if "message" in trends:
+                self.update_output(f"{trends['message']}\n", "info")
+            else:
+                hourly = trends.get("hourly_averages", {})
+                peak_hour = trends.get("peak_productivity_hour", 0)
+                peak_score = trends.get("peak_productivity_score", 0)
+                low_hour = trends.get("lowest_productivity_hour", 0)
+                low_score = trends.get("lowest_productivity_score", 0)
+                
+                self.update_output(f"📈 Hourly Productivity Averages:\n", "info")
+                for hour in sorted(hourly.keys()):
+                    score = hourly[hour]
+                    bar = "█" * int(score)
+                    self.update_output(f"   {hour:02d}:00 | {bar} {score:.1f}/10\n", "success")
+                
+                self.update_output(f"\n🌟 Peak Productivity:\n", "info")
+                self.update_output(f"   • Hour: {peak_hour:02d}:00\n", "success")
+                self.update_output(f"   • Score: {peak_score:.1f}/10\n", "success")
+                
+                self.update_output(f"\n📉 Lowest Productivity:\n", "info")
+                self.update_output(f"   • Hour: {low_hour:02d}:00\n", "success")
+                self.update_output(f"   • Score: {low_score:.1f}/10\n", "success")
+            
+            self.update_output("\n" + "=" * 60 + "\n", "info")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def ai_monitor_view_alerts(self):
+        """View recent alerts"""
+        def execute():
+            self.update_output("\n🚨 Recent Alerts\n", "command")
+            self.update_output("=" * 60 + "\n", "info")
+            
+            alerts = self.ai_monitor.get_recent_alerts(limit=10)
+            
+            if not alerts:
+                self.update_output("ℹ️ No alerts yet\n", "info")
+            else:
+                for i, alert in enumerate(alerts, 1):
+                    severity = alert.get("severity", "UNKNOWN")
+                    alert_type = alert.get("type", "UNKNOWN")
+                    message = alert.get("message", "")
+                    timestamp = alert.get("timestamp", "")
+                    
+                    icon = "🔴" if severity == "CRITICAL" else "🟡" if severity == "HIGH" else "🟢"
+                    
+                    self.update_output(f"\n{i}. {icon} [{severity}] {alert_type}\n", "info")
+                    self.update_output(f"   {message}\n", "success")
+                    self.update_output(f"   ⏰ {timestamp}\n", "success")
+            
+            self.update_output("\n" + "=" * 60 + "\n", "info")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def ai_monitor_configure(self):
+        """Configure monitoring settings"""
+        dialog = tk.Toplevel(self.root)
+        dialog.title("⚙️ Monitoring Configuration")
+        dialog.geometry("500x550")
+        dialog.configure(bg="#1a1a2e")
+        
+        tk.Label(dialog, text="⚙️ Monitoring Settings",
+                bg="#1a1a2e", fg="#ffffff",
+                font=("Segoe UI", 14, "bold")).pack(pady=15)
+        
+        config = self.ai_monitor.get_config()
+        
+        tk.Label(dialog, text="Default check interval (seconds):",
+                bg="#1a1a2e", fg="#a6adc8",
+                font=("Segoe UI", 10)).pack(pady=(10, 5))
+        interval_entry = tk.Entry(dialog, font=("Segoe UI", 11), width=20)
+        interval_entry.insert(0, str(config.get("default_interval", 30)))
+        interval_entry.pack()
+        
+        change_detection_var = tk.BooleanVar(value=config.get("change_detection", True))
+        tk.Checkbutton(dialog, text="Enable change detection (skip identical screens)",
+                      variable=change_detection_var, bg="#1a1a2e", fg="#ffffff",
+                      selectcolor="#313244", font=("Segoe UI", 9)).pack(pady=5)
+        
+        smart_scheduling_var = tk.BooleanVar(value=config.get("smart_scheduling", True))
+        tk.Checkbutton(dialog, text="Enable smart scheduling",
+                      variable=smart_scheduling_var, bg="#1a1a2e", fg="#ffffff",
+                      selectcolor="#313244", font=("Segoe UI", 9)).pack(pady=5)
+        
+        privacy_mode_var = tk.BooleanVar(value=config.get("privacy_mode", False))
+        tk.Checkbutton(dialog, text="Privacy mode (no screenshots saved)",
+                      variable=privacy_mode_var, bg="#1a1a2e", fg="#ffffff",
+                      selectcolor="#313244", font=("Segoe UI", 9)).pack(pady=5)
+        
+        tk.Label(dialog, text="Auto Actions:",
+                bg="#1a1a2e", fg="#a6adc8",
+                font=("Segoe UI", 10, "bold")).pack(pady=(15, 5))
+        
+        auto_actions = config.get("auto_actions", {})
+        
+        screenshot_on_error_var = tk.BooleanVar(value=auto_actions.get("screenshot_on_error", True))
+        tk.Checkbutton(dialog, text="Auto-screenshot on errors",
+                      variable=screenshot_on_error_var, bg="#1a1a2e", fg="#ffffff",
+                      selectcolor="#313244", font=("Segoe UI", 9)).pack(pady=2)
+        
+        alert_on_security_var = tk.BooleanVar(value=auto_actions.get("alert_on_security", True))
+        tk.Checkbutton(dialog, text="Alert on security issues",
+                      variable=alert_on_security_var, bg="#1a1a2e", fg="#ffffff",
+                      selectcolor="#313244", font=("Segoe UI", 9)).pack(pady=2)
+        
+        log_productivity_var = tk.BooleanVar(value=auto_actions.get("log_productivity", True))
+        tk.Checkbutton(dialog, text="Log productivity metrics",
+                      variable=log_productivity_var, bg="#1a1a2e", fg="#ffffff",
+                      selectcolor="#313244", font=("Segoe UI", 9)).pack(pady=2)
+        
+        def save_settings():
+            updates = {
+                "default_interval": int(interval_entry.get()),
+                "change_detection": change_detection_var.get(),
+                "smart_scheduling": smart_scheduling_var.get(),
+                "privacy_mode": privacy_mode_var.get(),
+                "auto_actions": {
+                    "screenshot_on_error": screenshot_on_error_var.get(),
+                    "alert_on_security": alert_on_security_var.get(),
+                    "log_productivity": log_productivity_var.get()
+                }
+            }
+            
+            result = self.ai_monitor.update_config(updates)
+            self.update_output(f"✅ {result['message']}\n", "success")
+            dialog.destroy()
+        
+        tk.Button(dialog, text="💾 Save Settings",
+                 bg="#89b4fa", fg="#0f0f1e",
+                 font=("Segoe UI", 11, "bold"),
+                 command=save_settings, padx=20, pady=8).pack(pady=20)
+    
+    def ai_monitor_clear_analytics(self):
+        """Clear analytics data"""
+        response = messagebox.askyesno(
+            "Confirm Clear Analytics",
+            "Are you sure you want to clear all analytics data?\n\nThis will delete:\n• Productivity history\n• Security issues log\n• Error history\n• Performance metrics\n• Learned patterns\n\nThis action cannot be undone."
+        )
+        
+        if response:
+            result = self.ai_monitor.clear_analytics()
+            self.update_output(f"✅ {result['message']}\n", "success")
 
 def main():
     root = tk.Tk()
