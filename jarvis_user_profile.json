@@ -1,0 +1,12 @@
+{
+  "name": "Sir",
+  "preferences": {
+    "wake_time": "09:00",
+    "sleep_time": "23:00",
+    "notification_style": "polite",
+    "voice_enabled": true
+  },
+  "habits": {},
+  "interaction_count": 4,
+  "last_interaction": "2025-10-25T17:36:10.606176"
+}

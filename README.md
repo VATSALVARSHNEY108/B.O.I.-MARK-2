@@ -16,6 +16,18 @@ An intelligent AI desktop automation application powered by Google Gemini AI wit
 - Proactive suggestions based on usage patterns
 - Toggle personality mode ON/OFF
 
+### 🎯 **JARVIS AI - Advanced Conversational Assistant** (NEW!)
+- **Like JARVIS & FRIDAY** from Marvel - sophisticated personality
+- **Asks questions first** - clarifies intent before executing
+- **Multi-turn dialogue** - natural back-and-forth conversations
+- **Proactive intelligence** - suggests actions based on context
+- **Conversation memory** - remembers last 20 exchanges
+- **Behavioral learning** - learns your preferences over time
+- **Task confirmation** - always confirms important actions
+- **Time-aware greetings** - adapts to time of day
+- **Dedicated chat interface** - beautiful conversation panel
+- **Smart suggestions** - morning briefings, productivity tips
+
 ### 🖥️ **System Automation**
 - Take screenshots with timestamps
 - Monitor system info (CPU, RAM, disk usage)
