@@ -143,6 +143,15 @@ AI CHAT MONITORING & AUTO-REPLY (VISUAL - Controls Real Screen):
 - open_whatsapp_web: Open WhatsApp Web in browser (parameters: none)
 - read_whatsapp_screen: Take screenshot and analyze WhatsApp messages with AI Vision (parameters: none)
 
+SMART SCREEN MONITORING:
+- smart_analyze_screen: Analyze current screen with AI Vision (parameters: focus [optional: 'general'/'errors'/'productivity'/'code'/'design'])
+- detect_screen_changes: Monitor screen for changes over time (parameters: interval [seconds, default: 5], duration [seconds, default: 30])
+- monitor_for_content: Watch screen until specific content appears (parameters: target [what to look for], check_interval [default: 10], max_checks [default: 6])
+- productivity_check: Get AI productivity insights from current screen (parameters: none)
+- check_screen_errors: Scan screen for error messages or issues (parameters: none)
+- analyze_screen_code: Analyze any code visible on screen (parameters: none)
+- ask_about_screen: Take screenshot and answer specific question (parameters: question)
+
 AI CHAT MONITORING & AUTO-REPLY (API - Background):
 - read_unread_emails: Read unread emails from Gmail inbox via API (parameters: max_emails [default: 10])
 - read_sms_messages: Read recent SMS messages via Twilio API (parameters: max_messages [default: 10])

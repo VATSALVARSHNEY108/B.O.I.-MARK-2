@@ -52,6 +52,7 @@ The VATSAL AI Assistant (`vatsal_assistant.py`) is an intelligent AI companion (
 - **Ecosystem Manager:** Connects all modules for cross-feature workflows, smart suggestions, unified dashboards, and context-aware automation.
 - **Visual Chat Monitor (`visual_chat_monitor.py`):** AI-powered visual email/WhatsApp monitoring that controls the real browser interface. Opens Gmail/WhatsApp Web, uses AI Vision to read messages from screenshots, generates intelligent replies, and types them with user approval. Everything happens visually on screen.
 - **Chat Monitor API (`chat_monitor.py`):** Background chat monitoring using Gmail IMAP and Twilio SMS APIs. Reads unread emails and SMS messages, generates AI-powered replies, manages approval workflow. Requires Gmail App Password and Twilio credentials (optional - user declined Replit integrations, prefers environment variables).
+- **Smart Screen Monitor (`smart_screen_monitor.py`):** AI-powered screen monitoring that continuously watches and analyzes the screen. Provides productivity insights, error detection, code analysis, design feedback, change detection over time, and can answer specific questions about what's visible on screen.
 
 ## External Dependencies
 - **google-genai:** For Gemini AI integration.

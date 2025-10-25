@@ -50,6 +50,7 @@ from human_interaction import create_human_interaction
 from cloud_ecosystem import create_cloud_ecosystem
 from chat_monitor import ChatMonitor
 from visual_chat_monitor import create_visual_chat_monitor
+from smart_screen_monitor import create_smart_screen_monitor
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -103,6 +104,7 @@ class CommandExecutor:
         self.cloud_ecosystem = create_cloud_ecosystem()
         self.chat_monitor = ChatMonitor()
         self.visual_chat_monitor = create_visual_chat_monitor()
+        self.smart_screen_monitor = create_smart_screen_monitor()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -666,6 +668,101 @@ class CommandExecutor:
                     return {
                         "success": True,
                         "message": f"✅ WhatsApp analysis:\n\n{result['analysis']}"
+                    }
+                return result
+            
+            elif action == "smart_analyze_screen":
+                focus = parameters.get("focus", "general")
+                result = self.smart_screen_monitor.analyze_current_screen(focus)
+                
+                if result["success"]:
+                    return {
+                        "success": True,
+                        "message": f"👁️ Screen Analysis:\n\n{result['analysis']}"
+                    }
+                return result
+            
+            elif action == "detect_screen_changes":
+                interval = parameters.get("interval", 5)
+                duration = parameters.get("duration", 30)
+                result = self.smart_screen_monitor.detect_screen_changes(interval, duration)
+                
+                if result["success"]:
+                    return {
+                        "success": True,
+                        "message": f"📊 Screen Changes Detected:\n\n{result['changes']}"
+                    }
+                return result
+            
+            elif action == "monitor_for_content":
+                target = parameters.get("target", "")
+                check_interval = parameters.get("check_interval", 10)
+                max_checks = parameters.get("max_checks", 6)
+                
+                if not target:
+                    return {
+                        "success": False,
+                        "message": "No target content specified"
+                    }
+                
+                result = self.smart_screen_monitor.monitor_for_specific_content(target, check_interval, max_checks)
+                
+                if result.get("found"):
+                    return {
+                        "success": True,
+                        "message": f"✅ Found: {result['details']}"
+                    }
+                else:
+                    return {
+                        "success": True,
+                        "message": f"⏸️ {result['message']}"
+                    }
+            
+            elif action == "productivity_check":
+                result = self.smart_screen_monitor.get_productivity_insights()
+                
+                if result["success"]:
+                    return {
+                        "success": True,
+                        "message": f"📊 Productivity Check:\n\n{result['analysis']}"
+                    }
+                return result
+            
+            elif action == "check_screen_errors":
+                result = self.smart_screen_monitor.check_for_errors()
+                
+                if result["success"]:
+                    return {
+                        "success": True,
+                        "message": f"🔍 Error Check:\n\n{result['analysis']}"
+                    }
+                return result
+            
+            elif action == "analyze_screen_code":
+                result = self.smart_screen_monitor.analyze_code_on_screen()
+                
+                if result["success"]:
+                    return {
+                        "success": True,
+                        "message": f"💻 Code Analysis:\n\n{result['analysis']}"
+                    }
+                return result
+            
+            elif action == "ask_about_screen":
+                question = parameters.get("question", "")
+                
+                if not question:
+                    return {
+                        "success": False,
+                        "message": "No question provided"
+                    }
+                
+                result = self.smart_screen_monitor.smart_screenshot_with_context(question)
+                
+                if result["success"]:
+                    return {
+                        "success": True,
+                        "message": f"❓ Q: {result['question']}\n\n💡 A: {result['answer']}"
                     }
                 return result
             
