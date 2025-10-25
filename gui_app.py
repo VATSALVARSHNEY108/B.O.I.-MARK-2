@@ -308,22 +308,22 @@ class AutomationControllerGUI:
         update_time()
     
     def create_jarvis_tab(self, notebook):
-        """JARVIS AI - Advanced Conversational Assistant"""
+        """VATSAL AI - Advanced Conversational Assistant"""
         tab = tk.Frame(notebook, bg="#1e1e2e")
-        notebook.add(tab, text="🤖 JARVIS")
+        notebook.add(tab, text="💬 VATSAL Chat")
         
         header_frame = tk.Frame(tab, bg="#1a1a2e")
         header_frame.pack(fill="x", pady=(10, 0), padx=10)
         
         header = tk.Label(header_frame,
-                         text="🤖 JARVIS - Advanced AI Assistant",
+                         text="💬 VATSAL - Advanced AI Assistant",
                          bg="#1a1a2e",
                          fg="#89b4fa",
                          font=("Segoe UI", 14, "bold"))
         header.pack(pady=12)
         
         info = tk.Label(header_frame,
-                       text="Like JARVIS & FRIDAY • Asks questions • Proactive • Intelligent",
+                       text="Conversational AI • Asks questions • Proactive • Intelligent",
                        bg="#1a1a2e",
                        fg="#a6adc8",
                        font=("Segoe UI", 9, "italic"))
@@ -343,7 +343,7 @@ class AutomationControllerGUI:
         )
         self.jarvis_conversation_display.pack(fill="both", expand=True, padx=10, pady=10)
         
-        self.jarvis_conversation_display.tag_config("jarvis", foreground="#89b4fa", font=("Consolas", 10, "bold"))
+        self.jarvis_conversation_display.tag_config("vatsal", foreground="#89b4fa", font=("Consolas", 10, "bold"))
         self.jarvis_conversation_display.tag_config("user", foreground="#a6e3a1", font=("Consolas", 10, "bold"))
         self.jarvis_conversation_display.tag_config("timestamp", foreground="#6c7086", font=("Consolas", 8))
         
@@ -1040,13 +1040,13 @@ class AutomationControllerGUI:
         return command_result
     
     def start_jarvis_conversation(self):
-        """Start conversation with JARVIS"""
+        """Start conversation with VATSAL"""
         greeting = self.jarvis.initiate_conversation()
-        self._add_jarvis_message("JARVIS", greeting)
+        self._add_jarvis_message("VATSAL", greeting)
         self.jarvis_conversation_active = True
     
     def send_to_jarvis(self):
-        """Send message to JARVIS"""
+        """Send message to VATSAL"""
         user_message = self.jarvis_input.get().strip()
         if not user_message:
             return
@@ -1058,25 +1058,25 @@ class AutomationControllerGUI:
         thread.start()
     
     def _process_jarvis_message(self, user_message):
-        """Process message with JARVIS in background"""
+        """Process message with VATSAL in background"""
         try:
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             response = loop.run_until_complete(self.jarvis.process_message(user_message))
             loop.close()
             
-            self._add_jarvis_message("JARVIS", response)
+            self._add_jarvis_message("VATSAL", response)
         except Exception as e:
-            self._add_jarvis_message("JARVIS", f"My apologies, I encountered an error: {str(e)}")
+            self._add_jarvis_message("VATSAL", f"My apologies, I encountered an error: {str(e)}")
     
     def _add_jarvis_message(self, sender, message):
-        """Add message to JARVIS conversation display"""
+        """Add message to VATSAL conversation display"""
         self.jarvis_conversation_display.config(state='normal')
         
         timestamp = datetime.now().strftime("%I:%M:%S %p")
         
-        if sender == "JARVIS":
-            self.jarvis_conversation_display.insert(tk.END, f"\n🤖 JARVIS", "jarvis")
+        if sender == "VATSAL":
+            self.jarvis_conversation_display.insert(tk.END, f"\n🤖 VATSAL", "vatsal")
             self.jarvis_conversation_display.insert(tk.END, f" ({timestamp})\n", "timestamp")
             self.jarvis_conversation_display.insert(tk.END, f"{message}\n", "")
         else:
@@ -1088,15 +1088,15 @@ class AutomationControllerGUI:
         self.jarvis_conversation_display.see(tk.END)
     
     def jarvis_get_suggestion(self):
-        """Get proactive suggestion from JARVIS"""
+        """Get proactive suggestion from VATSAL"""
         suggestion = self.jarvis.get_proactive_suggestion()
         if suggestion:
-            self._add_jarvis_message("JARVIS", suggestion)
+            self._add_jarvis_message("VATSAL", suggestion)
         else:
-            self._add_jarvis_message("JARVIS", "I don't have any suggestions at the moment, Sir. What would you like me to do?")
+            self._add_jarvis_message("VATSAL", "I don't have any suggestions at the moment, Sir. What would you like me to do?")
     
     def clear_jarvis_conversation(self):
-        """Clear JARVIS conversation history"""
+        """Clear VATSAL conversation history"""
         self.jarvis.reset_conversation()
         self.jarvis_conversation_display.config(state='normal')
         self.jarvis_conversation_display.delete(1.0, tk.END)
@@ -1105,11 +1105,11 @@ class AutomationControllerGUI:
         messagebox.showinfo("Cleared", "Conversation history cleared.")
     
     def show_jarvis_stats(self):
-        """Show JARVIS usage statistics"""
+        """Show VATSAL conversational AI statistics"""
         stats = self.jarvis.get_stats()
         
         stats_message = f"""
-📊 JARVIS Statistics
+📊 VATSAL Conversational AI Statistics
 
 Total Interactions: {stats['total_interactions']}
 Conversation Length: {stats['conversation_length']} messages
@@ -1118,7 +1118,7 @@ User Name: {stats['user_name']}
 Personality Mode: {stats['personality_mode']}
 Last Interaction: {stats.get('last_interaction', 'Never')}
 """
-        messagebox.showinfo("JARVIS Stats", stats_message)
+        messagebox.showinfo("VATSAL Stats", stats_message)
     
     def select_command_text(self):
         """Select all text in command input for easy editing"""

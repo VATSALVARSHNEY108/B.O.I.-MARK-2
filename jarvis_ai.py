@@ -20,7 +20,7 @@ class JarvisAI:
     """Advanced conversational AI with proactive personality"""
     
     def __init__(self, api_key: Optional[str] = None):
-        self.name = "JARVIS"
+        self.name = "VATSAL"
         self.user_name = "Sir"
         
         # Initialize Gemini for advanced conversations
@@ -172,7 +172,7 @@ class JarvisAI:
         """Use Gemini AI for advanced conversation"""
         
         # Build context-aware prompt
-        prompt = f"""You are JARVIS, an advanced AI assistant with sophisticated personality.
+        prompt = f"""You are VATSAL, an advanced AI assistant with sophisticated personality.
 
 Your characteristics:
 - Highly intelligent and proactive
@@ -195,13 +195,13 @@ Your task:
 4. Be proactive - suggest related actions or improvements
 5. Maintain sophisticated, butler-like tone
 
-Respond as JARVIS would. Keep response concise (2-4 sentences).
+Respond as VATSAL would. Keep response concise (2-4 sentences).
 """
         
         try:
             response = await self.gemini.analyze_text_async(prompt)
             
-            # Check if JARVIS is asking a question
+            # Check if VATSAL is asking a question
             if '?' in response:
                 self.awaiting_response = True
                 self.current_context["last_question"] = response
@@ -390,7 +390,7 @@ Respond as JARVIS would. Keep response concise (2-4 sentences).
             "conversation_length": len(self.conversation_history),
             "learned_tasks": len(self.user_profile.get("learned_tasks", {})),
             "user_name": self.user_name,
-            "personality_mode": "JARVIS"
+            "personality_mode": "VATSAL"
         }
 
 
@@ -407,7 +407,7 @@ if __name__ == "__main__":
         jarvis = create_jarvis_ai()
         
         print("\n" + "="*60)
-        print("🤖 JARVIS AI - Advanced Conversational Assistant")
+        print("🤖 VATSAL AI - Advanced Conversational Assistant")
         print("="*60)
         
         # Initial greeting
@@ -423,11 +423,11 @@ if __name__ == "__main__":
         for msg in test_messages:
             print(f"\nUSER: {msg}")
             response = await jarvis.process_message(msg)
-            print(f"JARVIS: {response}")
+            print(f"VATSAL: {response}")
         
         # Show stats
         print("\n" + "="*60)
-        print("📊 JARVIS Stats:")
+        print("📊 VATSAL Stats:")
         stats = jarvis.get_stats()
         for key, value in stats.items():
             print(f"  {key}: {value}")
