@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from gemini_controller import parse_command, get_ai_suggestion
 from command_executor import CommandExecutor
 from vatsal_assistant import create_vatsal_assistant
+from advanced_smart_screen_monitor import create_advanced_smart_screen_monitor
 from datetime import datetime
 
 load_dotenv()
@@ -21,6 +22,7 @@ class AutomationControllerGUI:
         
         self.executor = CommandExecutor()
         self.vatsal = create_vatsal_assistant()
+        self.advanced_monitor = create_advanced_smart_screen_monitor()
         self.vatsal_mode = True
         self.processing = False
         self.hover_colors = {}
@@ -668,6 +670,49 @@ class AutomationControllerGUI:
                        font=("Segoe UI", 9))
         info.pack(pady=(0, 15))
         
+        screen_monitor_section = tk.Label(scrollable_frame,
+                                          text="🖥️ ADVANCED SMART SCREEN MONITOR",
+                                          bg="#1e1e2e",
+                                          fg="#f9e2af",
+                                          font=("Segoe UI", 11, "bold"))
+        screen_monitor_section.pack(pady=(10, 8), anchor="w", padx=8)
+        
+        screen_monitor_actions = [
+            ("🧠 Comprehensive AI Analysis", self.run_comprehensive_analysis),
+            ("🛡️ Security Scan", self.run_security_scan),
+            ("⚡ Performance Audit", self.run_performance_audit),
+            ("🎨 UX Expert Review", self.run_ux_review),
+            ("♿ Accessibility Audit", self.run_accessibility_audit),
+            ("💻 Code Review", self.run_code_review),
+            ("🎭 Design Critique", self.run_design_critique),
+            ("🤖 Find Automation Opportunities", self.run_automation_discovery),
+            ("📊 View Analytics Report", self.view_analytics_report),
+            ("🔄 Start Continuous Monitoring", self.start_continuous_monitoring),
+        ]
+        
+        for text, command in screen_monitor_actions:
+            btn = tk.Button(scrollable_frame,
+                          text=text,
+                          bg="#313244",
+                          fg="#ffffff",
+                          font=("Segoe UI", 10),
+                          relief="flat",
+                          cursor="hand2",
+                          command=command,
+                          anchor="w",
+                          padx=15,
+                          pady=10,
+                          activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+        
+        ai_section = tk.Label(scrollable_frame,
+                             text="💬 AI ASSISTANTS & TEXT GENERATION",
+                             bg="#1e1e2e",
+                             fg="#f9e2af",
+                             font=("Segoe UI", 11, "bold"))
+        ai_section.pack(pady=(15, 8), anchor="w", padx=8)
+        
         actions = [
             ("📋 List All AI Features", "List all AI features"),
             ("💬 Conversational AI", "Chat with AI about the weather"),
@@ -1191,6 +1236,193 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                              padx=30,
                              pady=10)
         close_btn.pack(pady=(0, 20))
+    
+    def run_comprehensive_analysis(self):
+        """Run comprehensive AI screen analysis"""
+        def execute():
+            self.update_output("\n🧠 Running Comprehensive AI Analysis...\n", "command")
+            result = self.advanced_monitor.advanced_screen_analysis("comprehensive")
+            if result["success"]:
+                self.update_output(result["analysis"], "success")
+                if result.get("structured_data"):
+                    scores = result["structured_data"].get("scores", {})
+                    if scores:
+                        self.update_output(f"\n📊 Scores: {scores}", "info")
+            else:
+                self.update_output(f"Error: {result.get('error', 'Unknown error')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def run_security_scan(self):
+        """Run security scan"""
+        def execute():
+            self.update_output("\n🛡️ Running Security Scan...\n", "command")
+            result = self.advanced_monitor.security_scan()
+            if result["success"]:
+                self.update_output(result["analysis"], "success")
+            else:
+                self.update_output(f"Error: {result.get('error', 'Unknown error')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def run_performance_audit(self):
+        """Run performance audit"""
+        def execute():
+            self.update_output("\n⚡ Running Performance Audit...\n", "command")
+            result = self.advanced_monitor.performance_audit()
+            if result["success"]:
+                self.update_output(result["analysis"], "success")
+            else:
+                self.update_output(f"Error: {result.get('error', 'Unknown error')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def run_ux_review(self):
+        """Run UX expert review"""
+        def execute():
+            self.update_output("\n🎨 Running UX Expert Review...\n", "command")
+            result = self.advanced_monitor.ux_expert_review()
+            if result["success"]:
+                self.update_output(result["analysis"], "success")
+            else:
+                self.update_output(f"Error: {result.get('error', 'Unknown error')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def run_accessibility_audit(self):
+        """Run accessibility audit"""
+        def execute():
+            self.update_output("\n♿ Running Accessibility Audit...\n", "command")
+            result = self.advanced_monitor.accessibility_audit()
+            if result["success"]:
+                self.update_output(result["analysis"], "success")
+            else:
+                self.update_output(f"Error: {result.get('error', 'Unknown error')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def run_code_review(self):
+        """Run code review"""
+        def execute():
+            self.update_output("\n💻 Running Code Review...\n", "command")
+            result = self.advanced_monitor.code_review()
+            if result["success"]:
+                self.update_output(result["analysis"], "success")
+            else:
+                self.update_output(f"Error: {result.get('error', 'Unknown error')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def run_design_critique(self):
+        """Run design critique"""
+        def execute():
+            self.update_output("\n🎭 Running Design Critique...\n", "command")
+            result = self.advanced_monitor.design_critique()
+            if result["success"]:
+                self.update_output(result["analysis"], "success")
+            else:
+                self.update_output(f"Error: {result.get('error', 'Unknown error')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def run_automation_discovery(self):
+        """Find automation opportunities"""
+        def execute():
+            self.update_output("\n🤖 Finding Automation Opportunities...\n", "command")
+            result = self.advanced_monitor.find_automation_opportunities()
+            if result["success"]:
+                self.update_output(result["analysis"], "success")
+            else:
+                self.update_output(f"Error: {result.get('error', 'Unknown error')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def view_analytics_report(self):
+        """View analytics report"""
+        def execute():
+            self.update_output("\n📊 Generating Analytics Report...\n", "command")
+            result = self.advanced_monitor.get_analytics_report()
+            if result["success"]:
+                self.update_output(result["report"], "success")
+            else:
+                self.update_output(f"Error: {result.get('error', 'Unknown error')}", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def start_continuous_monitoring(self):
+        """Start continuous monitoring with dialog"""
+        dialog = tk.Toplevel(self.root)
+        dialog.title("🔄 Continuous Monitoring Setup")
+        dialog.geometry("500x400")
+        dialog.configure(bg="#1a1a2e")
+        
+        tk.Label(dialog, text="⚙️ Configure Continuous Monitoring",
+                bg="#1a1a2e", fg="#ffffff",
+                font=("Segoe UI", 14, "bold")).pack(pady=15)
+        
+        tk.Label(dialog, text="Duration (minutes):",
+                bg="#1a1a2e", fg="#a6adc8",
+                font=("Segoe UI", 10)).pack(pady=(10, 5))
+        duration_entry = tk.Entry(dialog, font=("Segoe UI", 11), width=20)
+        duration_entry.insert(0, "60")
+        duration_entry.pack()
+        
+        tk.Label(dialog, text="Check Interval (seconds):",
+                bg="#1a1a2e", fg="#a6adc8",
+                font=("Segoe UI", 10)).pack(pady=(10, 5))
+        interval_entry = tk.Entry(dialog, font=("Segoe UI", 11), width=20)
+        interval_entry.insert(0, "30")
+        interval_entry.pack()
+        
+        triggers_frame = tk.Frame(dialog, bg="#1a1a2e")
+        triggers_frame.pack(pady=15)
+        
+        tk.Label(triggers_frame, text="Triggers:",
+                bg="#1a1a2e", fg="#a6adc8",
+                font=("Segoe UI", 10, "bold")).pack()
+        
+        error_var = tk.BooleanVar(value=True)
+        security_var = tk.BooleanVar(value=True)
+        perf_var = tk.BooleanVar(value=True)
+        
+        tk.Checkbutton(triggers_frame, text="Error Detection",
+                      variable=error_var, bg="#1a1a2e", fg="#ffffff",
+                      selectcolor="#313244", font=("Segoe UI", 9)).pack(anchor="w")
+        tk.Checkbutton(triggers_frame, text="Security Monitoring",
+                      variable=security_var, bg="#1a1a2e", fg="#ffffff",
+                      selectcolor="#313244", font=("Segoe UI", 9)).pack(anchor="w")
+        tk.Checkbutton(triggers_frame, text="Performance Issues",
+                      variable=perf_var, bg="#1a1a2e", fg="#ffffff",
+                      selectcolor="#313244", font=("Segoe UI", 9)).pack(anchor="w")
+        
+        def start_monitoring():
+            duration = int(duration_entry.get())
+            interval = int(interval_entry.get())
+            triggers = {
+                "errors": error_var.get(),
+                "security": security_var.get(),
+                "performance_issues": perf_var.get()
+            }
+            dialog.destroy()
+            
+            def execute():
+                self.update_output(f"\n🔄 Starting Continuous Monitoring for {duration} minutes...\n", "command")
+                result = self.advanced_monitor.continuous_monitoring(
+                    duration_minutes=duration,
+                    check_interval=interval,
+                    triggers=triggers
+                )
+                if result["success"]:
+                    self.update_output(f"✅ Monitoring completed! {result['total_checks']} checks performed, {result['alerts_triggered']} alerts triggered.", "success")
+                else:
+                    self.update_output(f"Error: {result.get('error', 'Unknown error')}", "error")
+            
+            threading.Thread(target=execute, daemon=True).start()
+        
+        tk.Button(dialog, text="▶️ Start Monitoring",
+                 bg="#89b4fa", fg="#0f0f1e",
+                 font=("Segoe UI", 11, "bold"),
+                 command=start_monitoring, padx=20, pady=8).pack(pady=15)
 
 def main():
     root = tk.Tk()
