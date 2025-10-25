@@ -135,6 +135,16 @@ WHATSAPP MESSAGING:
 - send_whatsapp_group: Send message to WhatsApp group (parameters: group_id, message)
 - send_whatsapp_image: Send image via WhatsApp (parameters: phone, image_path, caption [optional])
 
+AI CHAT MONITORING & AUTO-REPLY:
+- read_unread_emails: Read unread emails from Gmail inbox (parameters: max_emails [default: 10])
+- read_sms_messages: Read recent SMS messages (parameters: max_messages [default: 10])
+- monitor_chats: Monitor all platforms and generate AI reply suggestions (parameters: platforms [optional: list of 'email', 'sms'], context [optional: 'professional'/'casual'/'friendly', default: 'professional'])
+- generate_ai_reply: Generate AI-powered reply for a specific message (parameters: platform [email/sms], sender, message, subject [optional for email], context [optional: 'professional'/'casual'/'friendly'])
+- show_pending_replies: Show all pending AI-generated replies waiting for approval (parameters: none)
+- approve_reply: Approve and send a pending reply (parameters: index [reply number], send_now [default: true])
+- clear_pending_replies: Clear all pending reply suggestions (parameters: none)
+- chat_summary: Get summary of chat monitoring activity (parameters: none)
+
 SYSTEM CONTROL:
 - mute_mic: Mute microphone (parameters: none)
 - unmute_mic: Unmute microphone (parameters: none)
