@@ -39,7 +39,7 @@ class SmartScreenMonitor:
         if not screenshot_path:
             return {
                 "success": False,
-                "message": "Failed to take screenshot"
+                "message": "❌ Screenshot feature not available in cloud environment.\n\n💡 To use AI screen analysis features, download and run VATSAL locally on your Windows/Mac/Linux computer.\n\nCloud-compatible alternatives:\n• Generate code: 'Write Python code for [task]'\n• AI chat: 'Tell me about [topic]'\n• Data analysis: 'Import CSV file [filename]'\n• File operations: 'Create file [name] with content [text]'"
             }
         
         self.last_screenshot = screenshot_path
@@ -295,7 +295,7 @@ Answer with:
         if not screenshot_path:
             return {
                 "success": False,
-                "message": "Failed to take screenshot"
+                "message": "❌ Screenshot feature not available in cloud environment. This feature requires running VATSAL locally on your desktop."
             }
         
         print("   🤖 AI analyzing and answering...")
