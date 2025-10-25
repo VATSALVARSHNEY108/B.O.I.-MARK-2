@@ -239,20 +239,28 @@ class GUIAutomation:
             print(f"Error with hotkey: {e}")
             return False
     
-    def screenshot(self, filename: str = "screenshot.png") -> bool:
-        """Take a screenshot and save it"""
+    def screenshot(self, filename: str = "screenshot.png"):
+        """
+        Take a screenshot and save it
+        
+        Args:
+            filename: Name/path for the screenshot file
+            
+        Returns:
+            Path to the screenshot file on success, None on failure
+        """
         try:
             if self.demo_mode:
                 self._log_demo(f"Would take screenshot and save as: {filename}")
-                return True
+                return None
             
             screenshot = pyautogui.screenshot()
             screenshot.save(filename)
             print(f"Screenshot saved as {filename}")
-            return True
+            return filename
         except Exception as e:
             print(f"Error taking screenshot: {e}")
-            return False
+            return None
     
     def copy_to_clipboard(self, text: str) -> bool:
         """Copy text to clipboard"""

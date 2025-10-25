@@ -44,7 +44,7 @@ class VisualChatMonitor:
             Dict with emails found on screen
         """
         print("\n📸 Taking screenshot of Gmail inbox...")
-        screenshot_path = self.gui.take_screenshot("gmail_inbox")
+        screenshot_path = self.gui.screenshot("gmail_inbox")
         
         if not screenshot_path:
             return {
@@ -115,7 +115,7 @@ Format your response as a numbered list of emails."""
         time.sleep(3)
         
         print("   📸 Taking screenshot of opened email...")
-        screenshot_path = self.gui.take_screenshot("gmail_email_open")
+        screenshot_path = self.gui.screenshot("gmail_email_open")
         
         print("   🤖 Reading email content with AI Vision...")
         
@@ -327,7 +327,7 @@ Generate ONLY the reply text that should be typed, no additional commentary."""
             Dict with messages found on screen
         """
         print("\n📸 Taking screenshot of WhatsApp...")
-        screenshot_path = self.gui.take_screenshot("whatsapp_screen")
+        screenshot_path = self.gui.screenshot("whatsapp_screen")
         
         if not screenshot_path:
             return {

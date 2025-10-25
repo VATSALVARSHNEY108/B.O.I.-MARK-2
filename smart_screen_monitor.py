@@ -34,7 +34,7 @@ class SmartScreenMonitor:
             Dict with analysis results
         """
         print("\n📸 Taking screenshot of current screen...")
-        screenshot_path = self.gui.take_screenshot("screen_monitor")
+        screenshot_path = self.gui.screenshot("screen_monitor")
         
         if not screenshot_path:
             return {
@@ -135,7 +135,7 @@ If no design work visible, say "No design detected"."""
         
         for i in range(iterations):
             print(f"\n   📸 Screenshot {i+1}/{iterations}")
-            screenshot_path = self.gui.take_screenshot(f"monitor_{i}")
+            screenshot_path = self.gui.screenshot(f"monitor_{i}")
             
             if screenshot_path:
                 screenshots.append({
@@ -209,7 +209,7 @@ Last screenshot: {screenshots[-1]['time']}"""
         
         for i in range(max_checks):
             print(f"\n   📸 Check {i+1}/{max_checks}")
-            screenshot_path = self.gui.take_screenshot(f"target_monitor_{i}")
+            screenshot_path = self.gui.screenshot(f"target_monitor_{i}")
             
             if screenshot_path:
                 prompt = f"""Look at this screenshot and determine:
@@ -290,7 +290,7 @@ Answer with:
             Dict with answer
         """
         print(f"\n📸 Taking screenshot to answer: '{question}'")
-        screenshot_path = self.gui.take_screenshot("context_screenshot")
+        screenshot_path = self.gui.screenshot("context_screenshot")
         
         if not screenshot_path:
             return {

@@ -32,7 +32,7 @@ class ScreenSuggester:
         os.makedirs(self.screenshots_dir, exist_ok=True)
         print("🤖 AI Screen Suggester ready!")
     
-    def take_screenshot(self) -> str:
+    def take_screenshot(self):
         """
         Take a screenshot and save it.
         
