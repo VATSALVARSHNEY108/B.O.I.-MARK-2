@@ -3,15 +3,26 @@ Spotify Desktop Automation using Keyboard Shortcuts
 Controls Spotify desktop app via GUI automation
 """
 
-import pyautogui
 import time
 import platform
+from typing import Any
+
+pyautogui: Any = None
+PYAUTOGUI_AVAILABLE = False
+
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception as e:
+    print(f"⚠️  PyAutoGUI not available for Spotify automation: {e}")
+    print("Spotify desktop automation will run in demo mode")
 
 
 class SpotifyDesktopAutomation:
     """Control Spotify desktop app using keyboard shortcuts and GUI automation"""
     
     def __init__(self):
+        self.demo_mode = not PYAUTOGUI_AVAILABLE
         self.is_windows = platform.system() == "Windows"
         self.is_mac = platform.system() == "Darwin"
         self.is_linux = platform.system() == "Linux"
@@ -31,6 +42,10 @@ class SpotifyDesktopAutomation:
     def _press_shortcut(self, shortcut_name):
         """Press a Spotify keyboard shortcut"""
         try:
+            if self.demo_mode:
+                print(f"  [DEMO] Would press Spotify shortcut: {shortcut_name}")
+                return True
+                
             keys = self.shortcuts.get(shortcut_name, [])
             if keys:
                 pyautogui.hotkey(*keys)
