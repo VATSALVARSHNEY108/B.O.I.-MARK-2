@@ -4,7 +4,7 @@
 The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. Its core purpose is to interpret natural language commands to execute a wide range of tasks on desktop computers, offering a unified ecosystem with over 275 features. This includes advanced behavioral learning, workspace management, multimodal control, AI automation, data intelligence, collaboration tools, creative utilities, security enhancements, human-like interaction, cloud ecosystem integration, system control, voice commands, productivity monitoring, smart typing, auto-organization, file management, web automation, and comprehensive AI-powered features across 17 categories (Chatbots, Text Generation, Image Generation, Data Analysis, Computer Vision, Voice & Audio, Audio/Video Conversion, Editing, Compression, Analysis, Streaming, Subtitle Tools, Metadata Editors, Audio/Video Enhancement, Media Utilities). The project aims to be a comprehensive productivity powerhouse, integrating advanced AI for code generation, screen analysis, natural language understanding, professional-grade data analysis (with ML, statistical testing, and visualization), and utility modules like Spotify control, Weather & News, Translation, Calculator, Password Vault, Quick Notes, and Calendar Manager.
 
 ## User Preferences
-None specified yet.
+- **Chat Monitoring:** User prefers visual/screen-based chat monitoring where AI controls the real Gmail/WhatsApp interface on screen, rather than background API calls. This allows them to watch the AI work in real-time.
 
 ## System Architecture
 The AI Desktop Automation Controller is built with Python 3.11 and utilizes a modular architecture for scalability and maintainability.
@@ -50,6 +50,8 @@ The VATSAL AI Assistant (`vatsal_assistant.py`) is an intelligent AI companion (
 - **Human-like Interaction (`human_interaction.py`):** Incorporates conversation context recall, adaptive AI tone, user stress detection, goal tracking, and a gamified productivity system.
 - **Cloud & Extension Ecosystem (`cloud_ecosystem.py`):** Supports multi-item cloud sync, a custom plugin framework, a workflow marketplace, mobile device connectivity, and cloud backup/restore.
 - **Ecosystem Manager:** Connects all modules for cross-feature workflows, smart suggestions, unified dashboards, and context-aware automation.
+- **Visual Chat Monitor (`visual_chat_monitor.py`):** AI-powered visual email/WhatsApp monitoring that controls the real browser interface. Opens Gmail/WhatsApp Web, uses AI Vision to read messages from screenshots, generates intelligent replies, and types them with user approval. Everything happens visually on screen.
+- **Chat Monitor API (`chat_monitor.py`):** Background chat monitoring using Gmail IMAP and Twilio SMS APIs. Reads unread emails and SMS messages, generates AI-powered replies, manages approval workflow. Requires Gmail App Password and Twilio credentials (optional - user declined Replit integrations, prefers environment variables).
 
 ## External Dependencies
 - **google-genai:** For Gemini AI integration.

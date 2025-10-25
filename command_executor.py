@@ -49,6 +49,7 @@ from security_enhancements import create_security_enhancements
 from human_interaction import create_human_interaction
 from cloud_ecosystem import create_cloud_ecosystem
 from chat_monitor import ChatMonitor
+from visual_chat_monitor import create_visual_chat_monitor
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -101,6 +102,7 @@ class CommandExecutor:
         self.human_interaction = create_human_interaction()
         self.cloud_ecosystem = create_cloud_ecosystem()
         self.chat_monitor = ChatMonitor()
+        self.visual_chat_monitor = create_visual_chat_monitor()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -620,6 +622,52 @@ class CommandExecutor:
                     "message": "\n".join(output),
                     "summary": summary
                 }
+            
+            elif action == "visual_monitor_gmail":
+                context = parameters.get("context", "professional")
+                auto_send = parameters.get("auto_send", False)
+                
+                result = self.visual_chat_monitor.monitor_and_reply_visually(context, auto_send)
+                return result
+            
+            elif action == "open_gmail_browser":
+                result = self.visual_chat_monitor.open_gmail_in_browser()
+                return result
+            
+            elif action == "read_emails_from_screen":
+                result = self.visual_chat_monitor.read_emails_from_screen()
+                
+                if result["success"]:
+                    return {
+                        "success": True,
+                        "message": f"✅ Emails read from screen:\n\n{result['analysis']}"
+                    }
+                return result
+            
+            elif action == "read_email_on_screen":
+                email_number = parameters.get("email_number", 1)
+                result = self.visual_chat_monitor.read_specific_email_on_screen(email_number)
+                
+                if result["success"]:
+                    return {
+                        "success": True,
+                        "message": f"✅ Email content:\n\n{result['content']}"
+                    }
+                return result
+            
+            elif action == "open_whatsapp_web":
+                result = self.visual_chat_monitor.open_whatsapp_web()
+                return result
+            
+            elif action == "read_whatsapp_screen":
+                result = self.visual_chat_monitor.read_whatsapp_from_screen()
+                
+                if result["success"]:
+                    return {
+                        "success": True,
+                        "message": f"✅ WhatsApp analysis:\n\n{result['analysis']}"
+                    }
+                return result
             
             elif action == "add_contact":
                 name = parameters.get("name", "")

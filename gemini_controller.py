@@ -135,9 +135,17 @@ WHATSAPP MESSAGING:
 - send_whatsapp_group: Send message to WhatsApp group (parameters: group_id, message)
 - send_whatsapp_image: Send image via WhatsApp (parameters: phone, image_path, caption [optional])
 
-AI CHAT MONITORING & AUTO-REPLY:
-- read_unread_emails: Read unread emails from Gmail inbox (parameters: max_emails [default: 10])
-- read_sms_messages: Read recent SMS messages (parameters: max_messages [default: 10])
+AI CHAT MONITORING & AUTO-REPLY (VISUAL - Controls Real Screen):
+- visual_monitor_gmail: Complete visual workflow - opens Gmail, reads email, generates AI reply, types it for your approval (parameters: context [optional: 'professional'/'casual'/'friendly'], auto_send [optional: false])
+- open_gmail_browser: Open Gmail in your browser (parameters: none)
+- read_emails_from_screen: Take screenshot of Gmail and read visible emails with AI Vision (parameters: none)
+- read_email_on_screen: Click on an email and read its full content from screen (parameters: email_number [default: 1])
+- open_whatsapp_web: Open WhatsApp Web in browser (parameters: none)
+- read_whatsapp_screen: Take screenshot and analyze WhatsApp messages with AI Vision (parameters: none)
+
+AI CHAT MONITORING & AUTO-REPLY (API - Background):
+- read_unread_emails: Read unread emails from Gmail inbox via API (parameters: max_emails [default: 10])
+- read_sms_messages: Read recent SMS messages via Twilio API (parameters: max_messages [default: 10])
 - monitor_chats: Monitor all platforms and generate AI reply suggestions (parameters: platforms [optional: list of 'email', 'sms'], context [optional: 'professional'/'casual'/'friendly', default: 'professional'])
 - generate_ai_reply: Generate AI-powered reply for a specific message (parameters: platform [email/sms], sender, message, subject [optional for email], context [optional: 'professional'/'casual'/'friendly'])
 - show_pending_replies: Show all pending AI-generated replies waiting for approval (parameters: none)
