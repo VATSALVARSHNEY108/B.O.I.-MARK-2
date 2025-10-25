@@ -849,9 +849,12 @@ class AutomationControllerGUI:
             messagebox.showwarning("Empty Command", "Please enter a command.")
             return
         
+        # Clear the input box immediately
+        self.command_input.delete(0, tk.END)
+        
         self.processing = True
-        self.update_status("⚙️ Processing...", "#f9e2af")
-        self.execute_btn.config(state="disabled")
+        self.update_status("⚙️ Running...", "#f9e2af")
+        self.execute_btn.config(state="disabled", text="⏳ Running...")
         
         thread = threading.Thread(target=self._execute_in_thread, args=(command,))
         thread.start()
@@ -928,8 +931,7 @@ class AutomationControllerGUI:
         
         finally:
             self.processing = False
-            self.root.after(0, lambda: self.execute_btn.config(state="normal"))
-            self.root.after(0, self.select_command_text)
+            self.root.after(0, lambda: self.execute_btn.config(state="normal", text="▶ Execute"))
     
     def update_output(self, message, msg_type="info"):
         def _update():
