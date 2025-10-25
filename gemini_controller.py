@@ -395,6 +395,111 @@ Available Web Tool Categories:
 - AI Tools (30+ tools): Text generation, image analysis, language translation, etc.
 - News & Events Tools (20+ tools): News aggregator, RSS reader, weather forecast, etc.
 
+BEHAVIORAL LEARNING & INTELLIGENCE:
+- record_action: Record user action to learn patterns (parameters: action, context_info [optional])
+- predict_next_action: Predict what user might want to do next (parameters: none)
+- get_habit_summary: Get summary of learned behavioral patterns (parameters: none)
+- set_user_context: Set current context for context-aware automation (parameters: activity [coding/meeting/break], location [optional], energy_mode [power_save/balanced/performance])
+- get_context_recommendations: Get recommendations based on current context (parameters: none)
+- reset_learning: Reset all learned patterns (parameters: none)
+
+WORKSPACE MANAGEMENT:
+- save_work_environment: Save current desktop layout as virtual environment (parameters: name, description [optional])
+- load_work_environment: Load a saved virtual environment (parameters: name)
+- list_work_environments: List all saved work environments (parameters: none)
+- add_to_clipboard_history: Add item to smart clipboard (parameters: content, content_type [optional, default: text])
+- get_clipboard_history_smart: Get smart clipboard history (parameters: limit [optional, default: 20])
+- search_clipboard_smart: Search clipboard history with AI (parameters: query)
+- add_notification: Add notification to smart center (parameters: title, message, priority [normal/high/urgent], source [optional])
+- get_smart_notifications: Get AI-ranked notifications (parameters: show_all [optional, default: false])
+- group_windows_by_type: Auto-arrange windows by app category (parameters: none)
+- enable_focus_trigger: Enable automatic focus mode triggers (parameters: trigger_type [fullscreen/code_editor/meeting])
+- clear_clipboard_history: Clear clipboard history (parameters: none)
+- mark_notifications_read: Mark all notifications as read (parameters: none)
+
+MULTIMODAL CONTROL:
+- train_custom_phrase: Train AI to understand custom phrasing (parameters: phrase, meaning)
+- add_slang_term: Add slang dictionary entry (parameters: slang, translation)
+- enable_whisper_mode: Enable low-volume voice command detection (parameters: none)
+- disable_whisper_mode: Disable whisper mode (parameters: none)
+- add_gesture_mapping: Map gesture to action (parameters: gesture, action)
+- get_gesture_mappings: Get all gesture mappings (parameters: none)
+- set_context_aware_reply_mode: Set AI response style based on activity (parameters: mode [coding/gaming/studying/working/casual])
+- get_voice_profile_summary: Get voice personalization summary (parameters: none)
+- process_hybrid_input: Process combined voice and gesture input (parameters: voice_command, gesture [optional])
+- reset_voice_profile: Reset voice personalization (parameters: none)
+
+ADVANCED AI AUTOMATION:
+- summarize_email_ai: Shorten long email threads into bullet points (parameters: email_content)
+- generate_document_ai: Auto-create reports/notes/meeting summaries (parameters: doc_type [report/meeting_summary/notes], topic, details [optional])
+- review_code_ai: Lint and annotate code with suggestions (parameters: code, language [optional, default: python])
+- build_visual_workflow: Create visual automation workflow (parameters: workflow_name, steps [list])
+- list_visual_workflows: List all visual workflows (parameters: none)
+- suggest_macro_ai: Observe repeated actions and suggest automation (parameters: repeated_actions [list])
+- get_ai_connector_status: Check AI app connector status (parameters: none)
+
+DATA INTELLIGENCE:
+- detect_data_anomalies: Auto-detect unusual patterns in datasets (parameters: file_path, column [optional], threshold [optional, default: 3.0])
+- create_interactive_dashboard: Create real-time draggable dashboard (parameters: name, data_source, visualizations [list])
+- list_interactive_dashboards: List all interactive dashboards (parameters: none)
+- build_ai_query: Generate SQL or Pandas queries via plain English (parameters: description, query_type [pandas/sql])
+- setup_ml_pipeline: Build automated ML model training pipeline (parameters: pipeline_name, model_type [regression/classification])
+- encrypt_dataset_memory: Encrypt dataset in memory (parameters: file_path)
+- get_anomaly_alerts: Get recent data anomaly alerts (parameters: none)
+
+COLLABORATION TOOLS:
+- record_meeting_transcript: Record and summarize meetings (parameters: meeting_title, audio_content [optional])
+- list_meeting_transcripts: List all meeting transcripts (parameters: none)
+- schedule_optimal_email: Schedule email for optimal send time (parameters: recipient, subject, body, send_time [optional, default: optimal])
+- get_scheduled_emails: Get all scheduled emails (parameters: none)
+- create_messaging_hub: Initialize cross-app messaging hub (parameters: none)
+- voice_memo_to_note: Convert voice memo to structured note (parameters: voice_memo)
+- generate_presentation_ai: Auto-generate slides from outline (parameters: topic, outline [list])
+
+CREATIVE UTILITIES:
+- generate_image_from_text: Generate AI image from text description (parameters: description, style [optional, default: realistic])
+- create_voice_model: Train personal voice model (parameters: model_name, sample_text)
+- list_voice_models: List all voice models (parameters: none)
+- write_script_ai: Generate video/tutorial scripts (parameters: script_type [video/tutorial], topic, duration [optional, default: 5min])
+- summarize_audio_file: Condense long audio into bullet summary (parameters: audio_file, summary_type [optional, default: bullet])
+- list_generated_scripts: List all generated scripts (parameters: none)
+- list_audio_summaries: List all audio summaries (parameters: none)
+
+SECURITY ENHANCEMENTS:
+- enable_smart_access: Enable smart access control (parameters: method [facial_recognition/phone_proximity/biometric])
+- get_access_control_status: Get access control status (parameters: none)
+- enable_auto_vpn: Enable automatic VPN on untrusted networks (parameters: network_name [optional])
+- detect_security_threats: Scan for suspicious processes and threats (parameters: none)
+- schedule_data_wipe: Schedule secure file deletion (parameters: interval [daily/weekly/monthly], target [temp_files/cache])
+- add_trusted_device: Add device to trusted list (parameters: device_name, device_id)
+- list_trusted_devices: List all trusted devices (parameters: none)
+- get_threat_log: Get recent threat detection history (parameters: none)
+
+HUMAN INTERACTION:
+- remember_conversation: Remember conversation for future follow-ups (parameters: topic, details)
+- get_conversation_summary: Get conversation history summary (parameters: none)
+- set_ai_tone: Adjust AI response tone (parameters: tone [professional/casual/developer-friendly/friendly/formal])
+- get_tone_settings: Get current tone settings (parameters: none)
+- detect_user_stress: Detect stress and offer support (parameters: typing_speed [optional], message_tone [optional])
+- track_user_goal: Track personal/professional goal (parameters: goal_name, target, deadline [optional])
+- update_goal_progress: Update goal progress (parameters: goal_name, progress [0-100])
+- get_goals_summary: Get goals tracking summary (parameters: none)
+- award_productivity_xp: Award XP for task completion (parameters: xp_amount, reason)
+- get_achievements_summary: Get gamification achievements summary (parameters: none)
+
+CLOUD ECOSYSTEM:
+- enable_cloud_sync: Enable cloud sync for data/automations (parameters: items [optional, list])
+- sync_now: Perform immediate cloud sync (parameters: none)
+- install_custom_plugin: Install custom plugin extension (parameters: plugin_name, plugin_code [optional])
+- list_installed_plugins: List all installed plugins (parameters: none)
+- publish_workflow_marketplace: Share workflow to marketplace (parameters: workflow_name, description, workflow_data)
+- browse_workflow_marketplace: Browse available workflows (parameters: none)
+- download_marketplace_workflow: Download workflow from marketplace (parameters: workflow_name)
+- connect_mobile_device: Connect mobile device for remote control (parameters: device_name, device_type [optional, default: smartphone])
+- list_connected_mobile_devices: List connected mobile devices (parameters: none)
+- backup_to_cloud: Backup settings/notes/workflows to cloud (parameters: items [optional, list])
+- restore_from_cloud: Restore from cloud backup (parameters: backup_date [optional, default: latest])
+
 IMPORTANT:
 - For "send to [name]" commands, use contact_name parameter
 - If user says "text John" or "message Sarah", use send_sms

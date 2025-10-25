@@ -38,6 +38,16 @@ from web_tools_launcher import create_web_tools_launcher
 from tools_mapper import create_tools_mapper
 from ai_features import create_ai_features
 from data_analysis import create_data_analysis_suite
+from behavioral_learning import create_behavioral_learning
+from workspace_manager import create_workspace_manager
+from multimodal_control import create_multimodal_control
+from advanced_ai_automation import create_advanced_ai_automation
+from data_intelligence import create_data_intelligence
+from collaboration_tools import create_collaboration_tools
+from creative_utilities import create_creative_utilities
+from security_enhancements import create_security_enhancements
+from human_interaction import create_human_interaction
+from cloud_ecosystem import create_cloud_ecosystem
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -79,6 +89,16 @@ class CommandExecutor:
         self.tools_mapper = create_tools_mapper()
         self.ai_features = create_ai_features()
         self.data_analysis = create_data_analysis_suite()
+        self.behavioral_learning = create_behavioral_learning()
+        self.workspace_manager = create_workspace_manager()
+        self.multimodal_control = create_multimodal_control()
+        self.advanced_ai_automation = create_advanced_ai_automation()
+        self.data_intelligence = create_data_intelligence()
+        self.collaboration_tools = create_collaboration_tools()
+        self.creative_utilities = create_creative_utilities()
+        self.security_enhancements = create_security_enhancements()
+        self.human_interaction = create_human_interaction()
+        self.cloud_ecosystem = create_cloud_ecosystem()
     
     def execute(self, command_dict: dict) -> dict:
         """
@@ -2081,6 +2101,363 @@ class CommandExecutor:
             elif action == "completeness_check":
                 name = parameters.get("name", "data")
                 return self.data_analysis.completeness_check(name)
+            
+            elif action == "record_action":
+                action_name = parameters.get("action", "")
+                context_info = parameters.get("context_info")
+                return self.behavioral_learning.record_action(action_name, context_info)
+            
+            elif action == "predict_next_action":
+                predictions = self.behavioral_learning.predict_next_action()
+                output = "\n🔮 PREDICTIONS:\n"
+                for i, pred in enumerate(predictions, 1):
+                    output += f"{i}. {pred['action']} - {pred['reason']} ({pred['confidence']})\n"
+                return {"success": True, "message": output}
+            
+            elif action == "get_habit_summary":
+                return {"success": True, "message": self.behavioral_learning.get_habit_summary()}
+            
+            elif action == "set_user_context":
+                activity = parameters.get("activity")
+                location = parameters.get("location")
+                energy_mode = parameters.get("energy_mode")
+                return self.behavioral_learning.set_context(activity, location, energy_mode)
+            
+            elif action == "get_context_recommendations":
+                recs = self.behavioral_learning.get_context_recommendations()
+                output = "\n💡 CONTEXT RECOMMENDATIONS:\n"
+                for rec in recs:
+                    output += f"  • {rec}\n"
+                return {"success": True, "message": output}
+            
+            elif action == "reset_learning":
+                return self.behavioral_learning.reset_learning()
+            
+            elif action == "save_work_environment":
+                name = parameters.get("name", "")
+                description = parameters.get("description", "")
+                return self.workspace_manager.save_environment(name, description)
+            
+            elif action == "load_work_environment":
+                name = parameters.get("name", "")
+                return self.workspace_manager.load_environment(name)
+            
+            elif action == "list_work_environments":
+                return {"success": True, "message": self.workspace_manager.list_environments()}
+            
+            elif action == "add_to_clipboard_history":
+                content = parameters.get("content", "")
+                content_type = parameters.get("content_type", "text")
+                return self.workspace_manager.add_to_clipboard_history(content, content_type)
+            
+            elif action == "get_clipboard_history_smart":
+                limit = parameters.get("limit", 20)
+                return {"success": True, "message": self.workspace_manager.get_clipboard_history(limit)}
+            
+            elif action == "search_clipboard_smart":
+                query = parameters.get("query", "")
+                return {"success": True, "message": self.workspace_manager.search_clipboard(query)}
+            
+            elif action == "add_notification":
+                title = parameters.get("title", "")
+                message = parameters.get("message", "")
+                priority = parameters.get("priority", "normal")
+                source = parameters.get("source", "system")
+                return self.workspace_manager.add_notification(title, message, priority, source)
+            
+            elif action == "get_smart_notifications":
+                show_all = parameters.get("show_all", False)
+                return {"success": True, "message": self.workspace_manager.get_notifications(show_all)}
+            
+            elif action == "group_windows_by_type":
+                return self.workspace_manager.group_windows_by_type()
+            
+            elif action == "enable_focus_trigger":
+                trigger_type = parameters.get("trigger_type", "fullscreen")
+                return self.workspace_manager.enable_focus_trigger(trigger_type)
+            
+            elif action == "clear_clipboard_history":
+                return self.workspace_manager.clear_clipboard_history()
+            
+            elif action == "mark_notifications_read":
+                return self.workspace_manager.mark_notifications_read()
+            
+            elif action == "train_custom_phrase":
+                phrase = parameters.get("phrase", "")
+                meaning = parameters.get("meaning", "")
+                return self.multimodal_control.train_custom_phrase(phrase, meaning)
+            
+            elif action == "add_slang_term":
+                slang = parameters.get("slang", "")
+                translation = parameters.get("translation", "")
+                return self.multimodal_control.add_slang_term(slang, translation)
+            
+            elif action == "enable_whisper_mode":
+                return self.multimodal_control.enable_whisper_mode()
+            
+            elif action == "disable_whisper_mode":
+                return self.multimodal_control.disable_whisper_mode()
+            
+            elif action == "add_gesture_mapping":
+                gesture = parameters.get("gesture", "")
+                action_target = parameters.get("action", "")
+                return self.multimodal_control.add_gesture_mapping(gesture, action_target)
+            
+            elif action == "get_gesture_mappings":
+                return {"success": True, "message": self.multimodal_control.get_gesture_mappings()}
+            
+            elif action == "set_context_aware_reply_mode":
+                mode = parameters.get("mode", "casual")
+                return self.multimodal_control.set_context_aware_reply_mode(mode)
+            
+            elif action == "get_voice_profile_summary":
+                return {"success": True, "message": self.multimodal_control.get_voice_profile_summary()}
+            
+            elif action == "process_hybrid_input":
+                voice_command = parameters.get("voice_command", "")
+                gesture = parameters.get("gesture")
+                return self.multimodal_control.process_hybrid_input(voice_command, gesture)
+            
+            elif action == "reset_voice_profile":
+                return self.multimodal_control.reset_voice_profile()
+            
+            elif action == "summarize_email_ai":
+                email_content = parameters.get("email_content", "")
+                return {"success": True, "message": self.advanced_ai_automation.summarize_email(email_content)}
+            
+            elif action == "generate_document_ai":
+                doc_type = parameters.get("doc_type", "report")
+                topic = parameters.get("topic", "")
+                details = parameters.get("details")
+                return self.advanced_ai_automation.generate_document(doc_type, topic, details)
+            
+            elif action == "review_code_ai":
+                code = parameters.get("code", "")
+                language = parameters.get("language", "python")
+                return {"success": True, "message": self.advanced_ai_automation.review_code(code, language)}
+            
+            elif action == "build_visual_workflow":
+                workflow_name = parameters.get("workflow_name", "")
+                steps = parameters.get("steps", [])
+                return self.advanced_ai_automation.build_workflow(workflow_name, steps)
+            
+            elif action == "list_visual_workflows":
+                return {"success": True, "message": self.advanced_ai_automation.list_workflows()}
+            
+            elif action == "suggest_macro_ai":
+                repeated_actions = parameters.get("repeated_actions", [])
+                return self.advanced_ai_automation.suggest_macro(repeated_actions)
+            
+            elif action == "get_ai_connector_status":
+                return self.advanced_ai_automation.get_ai_connector_status()
+            
+            elif action == "detect_data_anomalies":
+                file_path = parameters.get("file_path", "")
+                column = parameters.get("column")
+                threshold = parameters.get("threshold", 3.0)
+                return self.data_intelligence.detect_anomalies(file_path, column, threshold)
+            
+            elif action == "create_interactive_dashboard":
+                name = parameters.get("name", "")
+                data_source = parameters.get("data_source", "")
+                visualizations = parameters.get("visualizations", [])
+                return self.data_intelligence.create_interactive_dashboard(name, data_source, visualizations)
+            
+            elif action == "list_interactive_dashboards":
+                return {"success": True, "message": self.data_intelligence.list_dashboards()}
+            
+            elif action == "build_ai_query":
+                description = parameters.get("description", "")
+                query_type = parameters.get("query_type", "pandas")
+                return {"success": True, "message": self.data_intelligence.build_query(description, query_type)}
+            
+            elif action == "setup_ml_pipeline":
+                pipeline_name = parameters.get("pipeline_name", "")
+                model_type = parameters.get("model_type", "regression")
+                return self.data_intelligence.setup_ml_pipeline(pipeline_name, model_type)
+            
+            elif action == "encrypt_dataset_memory":
+                file_path = parameters.get("file_path", "")
+                return self.data_intelligence.encrypt_dataset(file_path)
+            
+            elif action == "get_anomaly_alerts":
+                return {"success": True, "message": self.data_intelligence.get_anomaly_alerts()}
+            
+            elif action == "record_meeting_transcript":
+                meeting_title = parameters.get("meeting_title", "")
+                audio_content = parameters.get("audio_content")
+                return self.collaboration_tools.record_meeting(meeting_title, audio_content)
+            
+            elif action == "list_meeting_transcripts":
+                return {"success": True, "message": self.collaboration_tools.list_transcripts()}
+            
+            elif action == "schedule_optimal_email":
+                recipient = parameters.get("recipient", "")
+                subject = parameters.get("subject", "")
+                body = parameters.get("body", "")
+                send_time = parameters.get("send_time", "optimal")
+                return self.collaboration_tools.schedule_email(recipient, subject, body, send_time)
+            
+            elif action == "get_scheduled_emails":
+                return {"success": True, "message": self.collaboration_tools.get_email_schedules()}
+            
+            elif action == "create_messaging_hub":
+                return self.collaboration_tools.create_messaging_hub()
+            
+            elif action == "voice_memo_to_note":
+                voice_memo = parameters.get("voice_memo", "")
+                return self.collaboration_tools.voice_to_note(voice_memo)
+            
+            elif action == "generate_presentation_ai":
+                topic = parameters.get("topic", "")
+                outline = parameters.get("outline", [])
+                return self.collaboration_tools.generate_presentation(topic, outline)
+            
+            elif action == "generate_image_from_text":
+                description = parameters.get("description", "")
+                style = parameters.get("style", "realistic")
+                return self.creative_utilities.generate_image_from_text(description, style)
+            
+            elif action == "create_voice_model":
+                model_name = parameters.get("model_name", "")
+                sample_text = parameters.get("sample_text", "")
+                return self.creative_utilities.create_voice_model(model_name, sample_text)
+            
+            elif action == "list_voice_models":
+                return {"success": True, "message": self.creative_utilities.list_voice_models()}
+            
+            elif action == "write_script_ai":
+                script_type = parameters.get("script_type", "video")
+                topic = parameters.get("topic", "")
+                duration = parameters.get("duration", "5min")
+                return self.creative_utilities.write_script(script_type, topic, duration)
+            
+            elif action == "summarize_audio_file":
+                audio_file = parameters.get("audio_file", "")
+                summary_type = parameters.get("summary_type", "bullet")
+                return self.creative_utilities.summarize_audio(audio_file, summary_type)
+            
+            elif action == "list_generated_scripts":
+                return {"success": True, "message": self.creative_utilities.list_scripts()}
+            
+            elif action == "list_audio_summaries":
+                return {"success": True, "message": self.creative_utilities.list_audio_summaries()}
+            
+            elif action == "enable_smart_access":
+                method = parameters.get("method", "facial_recognition")
+                return self.security_enhancements.enable_smart_access_control(method)
+            
+            elif action == "get_access_control_status":
+                return {"success": True, "message": self.security_enhancements.get_access_control_status()}
+            
+            elif action == "enable_auto_vpn":
+                network_name = parameters.get("network_name")
+                return self.security_enhancements.enable_auto_vpn(network_name)
+            
+            elif action == "detect_security_threats":
+                return self.security_enhancements.detect_threats()
+            
+            elif action == "schedule_data_wipe":
+                interval = parameters.get("interval", "weekly")
+                target = parameters.get("target", "temp_files")
+                return self.security_enhancements.schedule_data_wipe(interval, target)
+            
+            elif action == "add_trusted_device":
+                device_name = parameters.get("device_name", "")
+                device_id = parameters.get("device_id", "")
+                return self.security_enhancements.add_trusted_device(device_name, device_id)
+            
+            elif action == "list_trusted_devices":
+                return {"success": True, "message": self.security_enhancements.list_trusted_devices()}
+            
+            elif action == "get_threat_log":
+                return {"success": True, "message": self.security_enhancements.get_threat_log()}
+            
+            elif action == "remember_conversation":
+                topic = parameters.get("topic", "")
+                details = parameters.get("details", "")
+                return self.human_interaction.remember_conversation(topic, details)
+            
+            elif action == "get_conversation_summary":
+                return {"success": True, "message": self.human_interaction.get_conversation_summary()}
+            
+            elif action == "set_ai_tone":
+                tone = parameters.get("tone", "casual")
+                return self.human_interaction.set_tone(tone)
+            
+            elif action == "get_tone_settings":
+                return {"success": True, "message": self.human_interaction.get_tone_settings()}
+            
+            elif action == "detect_user_stress":
+                typing_speed = parameters.get("typing_speed")
+                message_tone = parameters.get("message_tone")
+                return self.human_interaction.detect_stress(typing_speed, message_tone)
+            
+            elif action == "track_user_goal":
+                goal_name = parameters.get("goal_name", "")
+                target = parameters.get("target", "")
+                deadline = parameters.get("deadline")
+                return self.human_interaction.track_goal(goal_name, target, deadline)
+            
+            elif action == "update_goal_progress":
+                goal_name = parameters.get("goal_name", "")
+                progress = parameters.get("progress", 0)
+                return self.human_interaction.update_goal_progress(goal_name, progress)
+            
+            elif action == "get_goals_summary":
+                return {"success": True, "message": self.human_interaction.get_goals_summary()}
+            
+            elif action == "award_productivity_xp":
+                xp_amount = parameters.get("xp_amount", 0)
+                reason = parameters.get("reason", "")
+                return self.human_interaction.award_xp(xp_amount, reason)
+            
+            elif action == "get_achievements_summary":
+                return {"success": True, "message": self.human_interaction.get_achievements_summary()}
+            
+            elif action == "enable_cloud_sync":
+                items = parameters.get("items")
+                return self.cloud_ecosystem.enable_cloud_sync(items)
+            
+            elif action == "sync_now":
+                return self.cloud_ecosystem.sync_now()
+            
+            elif action == "install_custom_plugin":
+                plugin_name = parameters.get("plugin_name", "")
+                plugin_code = parameters.get("plugin_code")
+                return self.cloud_ecosystem.install_plugin(plugin_name, plugin_code)
+            
+            elif action == "list_installed_plugins":
+                return {"success": True, "message": self.cloud_ecosystem.list_plugins()}
+            
+            elif action == "publish_workflow_marketplace":
+                workflow_name = parameters.get("workflow_name", "")
+                description = parameters.get("description", "")
+                workflow_data = parameters.get("workflow_data", {})
+                return self.cloud_ecosystem.publish_workflow(workflow_name, description, workflow_data)
+            
+            elif action == "browse_workflow_marketplace":
+                return {"success": True, "message": self.cloud_ecosystem.browse_marketplace()}
+            
+            elif action == "download_marketplace_workflow":
+                workflow_name = parameters.get("workflow_name", "")
+                return self.cloud_ecosystem.download_workflow(workflow_name)
+            
+            elif action == "connect_mobile_device":
+                device_name = parameters.get("device_name", "")
+                device_type = parameters.get("device_type", "smartphone")
+                return self.cloud_ecosystem.connect_mobile_device(device_name, device_type)
+            
+            elif action == "list_connected_mobile_devices":
+                return {"success": True, "message": self.cloud_ecosystem.list_mobile_devices()}
+            
+            elif action == "backup_to_cloud":
+                items = parameters.get("items")
+                return self.cloud_ecosystem.backup_to_cloud(items)
+            
+            elif action == "restore_from_cloud":
+                backup_date = parameters.get("backup_date", "latest")
+                return self.cloud_ecosystem.restore_from_cloud(backup_date)
             
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")
