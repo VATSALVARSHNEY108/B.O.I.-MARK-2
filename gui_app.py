@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 from gemini_controller import parse_command, get_ai_suggestion
 from command_executor import CommandExecutor
-from jarvis_assistant import create_jarvis_assistant
+from vatsal_assistant import create_vatsal_assistant
 from datetime import datetime
 
 load_dotenv()
@@ -15,20 +15,20 @@ load_dotenv()
 class AutomationControllerGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("🤖 JARVIS - AI Desktop Automation Controller")
+        self.root.title("🤖 VATSAL - AI Desktop Automation Controller")
         self.root.geometry("1400x900")
         self.root.configure(bg="#0f0f1e")
         
         self.executor = CommandExecutor()
-        self.jarvis = create_jarvis_assistant()
-        self.jarvis_mode = True
+        self.vatsal = create_vatsal_assistant()
+        self.vatsal_mode = True
         self.processing = False
         self.hover_colors = {}
         
         self.setup_ui()
         self.check_api_key()
         self.start_time_update()
-        self.show_jarvis_greeting()
+        self.show_vatsal_greeting()
     
     def setup_ui(self):
         style = ttk.Style()
@@ -68,14 +68,14 @@ class AutomationControllerGUI:
         title_frame.pack(pady=15)
         
         title = tk.Label(title_frame, 
-                         text="🤖 JARVIS - AI Desktop Automation Controller",
+                         text="🤖 VATSAL - AI Desktop Automation Controller",
                          bg="#1a1a2e",
                          fg="#ffffff",
                          font=("Segoe UI", 26, "bold"))
         title.pack()
         
         subtitle = tk.Label(title_frame,
-                            text="⚡ Just A Rather Very Intelligent System • Powered by Gemini AI",
+                            text="⚡ Virtual Assistant To Serve And Learn • Powered by Gemini AI",
                             bg="#1a1a2e",
                             fg="#89b4fa",
                             font=("Segoe UI", 11))
@@ -104,18 +104,18 @@ class AutomationControllerGUI:
         separator2 = tk.Label(stats_frame, text="•", bg="#1a1a2e", fg="#45475a", font=("Segoe UI", 10))
         separator2.pack(side="left", padx=5)
         
-        self.jarvis_toggle_btn = tk.Button(stats_frame,
-                                                  text="🤖 JARVIS Mode: ON",
+        self.vatsal_toggle_btn = tk.Button(stats_frame,
+                                                  text="🤖 VATSAL Mode: ON",
                                                   bg="#89b4fa",
                                                   fg="#0f0f1e",
                                                   font=("Segoe UI", 9, "bold"),
                                                   relief="flat",
                                                   cursor="hand2",
-                                                  command=self.toggle_jarvis_mode,
+                                                  command=self.toggle_vatsal_mode,
                                                   padx=15,
                                                   pady=5)
-        self.jarvis_toggle_btn.pack(side="left", padx=15)
-        self.add_hover_effect(self.jarvis_toggle_btn, "#89b4fa", "#74c7ec")
+        self.vatsal_toggle_btn.pack(side="left", padx=15)
+        self.add_hover_effect(self.vatsal_toggle_btn, "#89b4fa", "#74c7ec")
         
         main_container = tk.Frame(self.root, bg="#0f0f1e")
         main_container.pack(fill="both", expand=True, padx=30, pady=10)
@@ -786,37 +786,37 @@ class AutomationControllerGUI:
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
     
-    def toggle_jarvis_mode(self):
-        """Toggle JARVIS personality mode"""
-        self.jarvis_mode = not self.jarvis_mode
-        if self.jarvis_mode:
-            self.jarvis_toggle_btn.config(text="🤖 JARVIS Mode: ON", bg="#89b4fa")
+    def toggle_vatsal_mode(self):
+        """Toggle VATSAL personality mode"""
+        self.vatsal_mode = not self.vatsal_mode
+        if self.vatsal_mode:
+            self.vatsal_toggle_btn.config(text="🤖 VATSAL Mode: ON", bg="#89b4fa")
             self.update_output("\n" + "="*60 + "\n", "info")
-            self.update_output("🤖 JARVIS Mode Activated\n", "success")
-            self.update_output(self.jarvis.get_status_update('ready') + "\n", "info")
+            self.update_output("🤖 VATSAL Mode Activated\n", "success")
+            self.update_output(self.vatsal.get_status_update('ready') + "\n", "info")
             self.update_output("="*60 + "\n\n", "info")
         else:
-            self.jarvis_toggle_btn.config(text="🤖 JARVIS Mode: OFF", bg="#45475a")
+            self.vatsal_toggle_btn.config(text="🤖 VATSAL Mode: OFF", bg="#45475a")
             self.update_output("\n" + "="*60 + "\n", "info")
             self.update_output("Standard Mode Activated\n", "warning")
             self.update_output("="*60 + "\n\n", "info")
     
-    def show_jarvis_greeting(self):
-        """Show JARVIS greeting message"""
-        greeting = self.jarvis.get_greeting()
+    def show_vatsal_greeting(self):
+        """Show VATSAL greeting message"""
+        greeting = self.vatsal.get_greeting()
         self.update_output("\n" + "="*60 + "\n", "info")
-        self.update_output("🤖 JARVIS AI Assistant\n", "success")
+        self.update_output("🤖 VATSAL AI Assistant\n", "success")
         self.update_output("="*60 + "\n", "info")
         self.update_output(f"{greeting}\n\n", "info")
         
         # Show proactive suggestion
-        suggestion = self.jarvis.get_proactive_suggestion()
+        suggestion = self.vatsal.get_proactive_suggestion()
         self.update_output(f"{suggestion}\n\n", "command")
     
-    def get_jarvis_response(self, user_input, command_result=None):
-        """Get JARVIS personality response"""
-        if self.jarvis_mode and self.jarvis.ai_available:
-            return self.jarvis.process_with_personality(user_input, command_result)
+    def get_vatsal_response(self, user_input, command_result=None):
+        """Get VATSAL personality response"""
+        if self.vatsal_mode and self.vatsal.ai_available:
+            return self.vatsal.process_with_personality(user_input, command_result)
         return command_result
     
     def select_command_text(self):
@@ -862,22 +862,22 @@ class AutomationControllerGUI:
             self.update_output(f"📝 You: {command}\n", "command")
             self.update_output(f"{'='*60}\n\n", "info")
             
-            # JARVIS acknowledgment
-            if self.jarvis_mode:
-                ack = self.jarvis.acknowledge_command(command)
-                self.update_output(f"🤖 JARVIS: {ack}\n\n", "info")
+            # VATSAL acknowledgment
+            if self.vatsal_mode:
+                ack = self.vatsal.acknowledge_command(command)
+                self.update_output(f"🤖 VATSAL: {ack}\n\n", "info")
             
             command_dict = parse_command(command)
             
             if command_dict.get("action") == "error":
                 error_msg = command_dict.get('description', 'Error processing command')
                 
-                if self.jarvis_mode:
-                    jarvis_response = self.jarvis.process_with_personality(
+                if self.vatsal_mode:
+                    vatsal_response = self.vatsal.process_with_personality(
                         command, 
                         f"Error: {error_msg}"
                     )
-                    self.update_output(f"🤖 JARVIS: {jarvis_response}\n", "error")
+                    self.update_output(f"🤖 VATSAL: {vatsal_response}\n", "error")
                 else:
                     self.update_output(f"❌ {error_msg}\n", "error")
                     suggestion = get_ai_suggestion(f"User tried: {command}, but got error. Suggest alternatives.")
@@ -889,10 +889,10 @@ class AutomationControllerGUI:
             result = self.executor.execute(command_dict)
             
             if result["success"]:
-                # Get JARVIS response if mode is enabled
-                if self.jarvis_mode:
-                    jarvis_response = self.get_jarvis_response(command, result['message'])
-                    self.update_output(f"🤖 JARVIS:\n{jarvis_response}\n\n", "success")
+                # Get VATSAL response if mode is enabled
+                if self.vatsal_mode:
+                    vatsal_response = self.get_vatsal_response(command, result['message'])
+                    self.update_output(f"🤖 VATSAL:\n{vatsal_response}\n\n", "success")
                     
                     # Show technical result in smaller text
                     self.update_output(f"📊 Technical Details:\n{result['message']}\n", "info")
@@ -903,25 +903,25 @@ class AutomationControllerGUI:
                 
                 # Occasionally show proactive suggestions
                 import random
-                if random.random() < 0.3 and self.jarvis_mode:  # 30% chance
-                    suggestion = self.jarvis.get_proactive_suggestion()
+                if random.random() < 0.3 and self.vatsal_mode:  # 30% chance
+                    suggestion = self.vatsal.get_proactive_suggestion()
                     self.update_output(f"\n{suggestion}\n", "command")
                 
             else:
-                if self.jarvis_mode:
-                    jarvis_response = self.jarvis.process_with_personality(
+                if self.vatsal_mode:
+                    vatsal_response = self.vatsal.process_with_personality(
                         command, 
                         f"Error: {result['message']}"
                     )
-                    self.update_output(f"🤖 JARVIS: {jarvis_response}\n", "error")
+                    self.update_output(f"🤖 VATSAL: {vatsal_response}\n", "error")
                 else:
                     self.update_output(f"❌ Error:\n{result['message']}\n", "error")
                 
                 self.update_status("❌ Error", "#f38ba8")
             
         except Exception as e:
-            if self.jarvis_mode:
-                self.update_output(f"🤖 JARVIS: Apologies, Sir. Encountered an unexpected error: {str(e)}\n", "error")
+            if self.vatsal_mode:
+                self.update_output(f"🤖 VATSAL: Apologies, Sir. Encountered an unexpected error: {str(e)}\n", "error")
             else:
                 self.update_output(f"❌ Error: {str(e)}\n", "error")
             self.update_status("❌ Error", "#f38ba8")
@@ -1112,18 +1112,18 @@ For more information, visit the documentation or contact support.
         close_btn.pack(pady=(0, 20))
     
     def show_suggestion(self):
-        """Show JARVIS proactive suggestion"""
-        suggestion = self.jarvis.get_proactive_suggestion()
+        """Show VATSAL proactive suggestion"""
+        suggestion = self.vatsal.get_proactive_suggestion()
         self.update_output(f"\n{suggestion}\n\n", "command")
     
     def show_about(self):
         about_window = tk.Toplevel(self.root)
-        about_window.title("ℹ️ About JARVIS")
+        about_window.title("ℹ️ About VATSAL")
         about_window.geometry("700x600")
         about_window.configure(bg="#1a1a2e")
         
         header = tk.Label(about_window,
-                         text="🤖 JARVIS AI Assistant",
+                         text="🤖 VATSAL AI Assistant",
                          bg="#1a1a2e",
                          fg="#ffffff",
                          font=("Segoe UI", 18, "bold"),
@@ -1131,7 +1131,7 @@ For more information, visit the documentation or contact support.
         header.pack()
         
         version = tk.Label(about_window,
-                          text="Version 2.0.0 - JARVIS Edition",
+                          text="Version 2.0.0 - VATSAL Edition",
                           bg="#1a1a2e",
                           fg="#89b4fa",
                           font=("Segoe UI", 11))
@@ -1142,12 +1142,12 @@ For more information, visit the documentation or contact support.
         
         description = tk.Label(description_frame,
                               text="""
-⚡ Just A Rather Very Intelligent System
+⚡ Virtual Assistant To Serve And Learn
 
 Powered by Google Gemini AI
 
-JARVIS is your intelligent AI assistant inspired by 
-Tony Stark's advanced AI companions.
+VATSAL is your intelligent AI assistant with sophisticated 
+personality and advanced capabilities.
 
 ✓ 80+ AI-powered features
 ✓ Sophisticated personality & conversational AI
@@ -1161,14 +1161,14 @@ Tony Stark's advanced AI companions.
 ✓ Productivity tracking
 ✓ Smart scheduling & workflows
 
-JARVIS Mode Features:
+VATSAL Mode Features:
 • Personalized responses with wit and charm
 • Contextual understanding of your commands
 • Proactive suggestions based on time and usage
 • Conversational memory across sessions
 • Professional yet friendly communication
 
-Toggle JARVIS Mode ON/OFF anytime from the header.
+Toggle VATSAL Mode ON/OFF anytime from the header.
 
 © 2025 AI Automation Suite
                               """,

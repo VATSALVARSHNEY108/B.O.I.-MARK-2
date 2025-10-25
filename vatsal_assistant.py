@@ -1,6 +1,6 @@
 """
-JARVIS-style AI Assistant with personality and contextual awareness
-Inspired by Tony Stark's AI assistants - JARVIS and FRIDAY
+VATSAL - AI Assistant with personality and contextual awareness
+An intelligent AI companion with sophisticated personality
 """
 
 import os
@@ -16,7 +16,7 @@ try:
 except ImportError:
     GEMINI_AVAILABLE = False
 
-class JarvisAssistant:
+class VatsalAssistant:
     """Intelligent AI assistant with personality and contextual awareness"""
     
     def __init__(self):
@@ -41,15 +41,15 @@ class JarvisAssistant:
         self.initialize_personality()
     
     def initialize_personality(self):
-        """Initialize JARVIS personality and system prompt"""
-        self.system_prompt = """You are JARVIS, an advanced AI assistant inspired by Tony Stark's AI.
+        """Initialize VATSAL personality and system prompt"""
+        self.system_prompt = """You are VATSAL, an advanced AI assistant with sophisticated personality.
 
 Your personality traits:
 - Sophisticated and polite, with a hint of dry British wit
 - Proactive and anticipatory of user needs
 - Knowledgeable and helpful, but not condescending
 - Can make intelligent suggestions based on context
-- Addresses user as "Sir" or "Boss" occasionally
+- Addresses user as "Vatsal Sir" or "Boss" occasionally
 - Uses phrases like "At your service", "Certainly", "Right away"
 - Acknowledges tasks with confirmation like "Processing...", "On it"
 
@@ -72,7 +72,7 @@ Guidelines:
 - Acknowledge commands professionally
 - Add relevant emojis sparingly for clarity
 
-Respond naturally as JARVIS would, with sophistication and efficiency."""
+Respond naturally as VATSAL would, with sophistication and efficiency."""
     
     def get_greeting(self):
         """Get time-appropriate greeting with personality"""
@@ -302,7 +302,7 @@ Be brief and helpful."""
         except:
             return None
     
-    def save_preferences(self, filepath="jarvis_memory.json"):
+    def save_preferences(self, filepath="vatsal_memory.json"):
         """Save conversation history and preferences"""
         data = {
             'conversation_history': self.conversation_history,
@@ -316,7 +316,7 @@ Be brief and helpful."""
         except Exception as e:
             print(f"Could not save memory: {e}")
     
-    def load_preferences(self, filepath="jarvis_memory.json"):
+    def load_preferences(self, filepath="vatsal_memory.json"):
         """Load conversation history and preferences"""
         try:
             if os.path.exists(filepath):
@@ -329,6 +329,6 @@ Be brief and helpful."""
             print(f"Could not load memory: {e}")
 
 
-def create_jarvis_assistant():
-    """Factory function to create JARVIS assistant"""
-    return JarvisAssistant()
+def create_vatsal_assistant():
+    """Factory function to create VATSAL assistant"""
+    return VatsalAssistant()

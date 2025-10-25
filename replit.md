@@ -10,23 +10,23 @@ None specified yet.
 The AI Desktop Automation Controller is built with Python 3.11 and utilizes a modular architecture to ensure scalability and maintainability.
 
 ### UI/UX Decisions
-- **GUI Application (`gui_app.py`):** Features a modern dark-themed, tabbed interface with enhanced visual design (Version 2.0.0 - JARVIS Edition). Organizing over 50 functions across 10 categories including a dedicated AI Features tab. The interface now includes:
+- **GUI Application (`gui_app.py`):** Features a modern dark-themed, tabbed interface with enhanced visual design (Version 2.0.0 - VATSAL Edition). Organizing over 50 functions across 10 categories including a dedicated AI Features tab. The interface now includes:
   - Larger 1400x900 window with improved spacing and modern Segoe UI fonts
   - Live clock displaying real-time date and time in the header
   - Card-based design with gradient effects and hover animations
   - Quick-access buttons with smooth color transitions
   - Real-time color-coded output console with enhanced readability
-  - JARVIS Mode toggle button for personality-driven interactions
+  - VATSAL Mode toggle button for personality-driven interactions
   - Proactive suggestion button for context-aware recommendations
   - Enhanced status indicators and comprehensive help documentation
   - Built with `tkinter`, uses threading for non-blocking execution
   - Designed for graceful degradation in headless environments
-- **JARVIS AI Assistant (`jarvis_assistant.py`):** Intelligent AI companion inspired by Tony Stark's JARVIS, featuring:
+- **VATSAL AI Assistant (`vatsal_assistant.py`):** Intelligent AI companion (Virtual Assistant To Serve And Learn), featuring:
   - Sophisticated personality with British-inspired wit and charm
   - Contextual awareness and conversation memory (last 10 exchanges)
   - Time-aware greetings and proactive suggestions
   - Professional acknowledgments using phrases like "At your service", "Certainly, Sir"
-  - Addresses user as "Sir" or "Boss" with polite, helpful tone
+  - Addresses user as "Vatsal Sir" or "Boss" with polite, helpful tone
   - Context-aware responses that understand command flow
   - Proactive suggestions based on time of day and usage patterns
   - Conversational error handling with helpful alternatives
