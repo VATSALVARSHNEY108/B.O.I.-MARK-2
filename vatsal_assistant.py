@@ -11,10 +11,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 try:
-    import google.generativeai as genai
+    from google import genai
+    from google.genai import types
     GEMINI_AVAILABLE = True
 except ImportError:
     GEMINI_AVAILABLE = False
+    genai = None
+    types = None
 
 class VatsalAssistant:
     """Intelligent AI assistant with personality and contextual awareness"""
@@ -23,16 +26,18 @@ class VatsalAssistant:
         self.conversation_history = []
         self.user_preferences = {}
         self.context_memory = {}
-        self.personality = "sophisticated"  # sophisticated, friendly, professional
+        self.personality = "sophisticated"
         
-        # Initialize Gemini
+        # Initialize Gemini with new SDK
         if GEMINI_AVAILABLE:
             api_key = os.getenv("GEMINI_API_KEY")
             if api_key:
-                genai.configure(api_key=api_key)
-                self.model = genai.GenerativeModel('gemini-pro')
-                self.chat = self.model.start_chat(history=[])
-                self.ai_available = True
+                try:
+                    self.client = genai.Client(api_key=api_key)
+                    self.model = "gemini-2.0-flash-exp"
+                    self.ai_available = True
+                except Exception:
+                    self.ai_available = False
             else:
                 self.ai_available = False
         else:
@@ -153,12 +158,22 @@ User: {user_input}
 
 Respond as VATSAL would - helpful, sophisticated, and ready to assist."""
             
-            response = self.chat.send_message(prompt)
+            # Use new SDK API
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.8,
+                    max_output_tokens=1000,
+                )
+            )
+            
+            response_text = response.text.strip()
             
             # Store in conversation history
             self.conversation_history.append({
                 'user': user_input,
-                'assistant': response.text,
+                'assistant': response_text,
                 'timestamp': datetime.now().isoformat()
             })
             
@@ -166,7 +181,7 @@ Respond as VATSAL would - helpful, sophisticated, and ready to assist."""
             if len(self.conversation_history) > 10:
                 self.conversation_history = self.conversation_history[-10:]
             
-            return response.text
+            return response_text
             
         except Exception as e:
             return self._fallback_response(user_input, command_result)
