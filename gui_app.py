@@ -1130,9 +1130,9 @@ class AutomationControllerGUI:
         self.command_input.icursor(tk.END)
     
     def check_api_key(self):
-        api_key = os.getenv("GOOGLE_API_KEY")
+        api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
-            self.update_output("⚠️ WARNING: GOOGLE_API_KEY not found in environment variables.\n", "warning")
+            self.update_output("⚠️ WARNING: GEMINI_API_KEY not found in environment variables.\n", "warning")
             self.update_output("Please set your Gemini API key to use AI features.\n\n", "info")
             self.update_status("⚠️ API Key Missing", "#f9e2af")
         else:
@@ -1336,7 +1336,7 @@ And much more! Explore all tabs for 80+ features.
 
 🔑 REQUIREMENTS:
 
-• Gemini API key (set GOOGLE_API_KEY environment variable)
+• Gemini API key (set GEMINI_API_KEY environment variable)
 • Various system permissions for automation features
 
 ⚡ TIPS:

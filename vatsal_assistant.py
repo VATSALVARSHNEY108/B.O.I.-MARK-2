@@ -27,7 +27,7 @@ class VatsalAssistant:
         
         # Initialize Gemini
         if GEMINI_AVAILABLE:
-            api_key = os.getenv("GOOGLE_API_KEY")
+            api_key = os.getenv("GEMINI_API_KEY")
             if api_key:
                 genai.configure(api_key=api_key)
                 self.model = genai.GenerativeModel('gemini-pro')
