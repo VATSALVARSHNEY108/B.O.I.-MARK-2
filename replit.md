@@ -18,6 +18,14 @@ The VATSAL AI Assistant (`vatsal_assistant.py`) is an intelligent AI companion (
 
 **NEW:** The VATSAL AI Assistant (`vatsal_assistant.py`) is an advanced conversational assistant with personality, context awareness, and learning capabilities. **A simple, powerful intelligent chatbot (`vatsal_ai.py`)** can be run directly for general Q&A - just type `python vatsal_ai.py` to chat about any topic. It uses Google Gemini AI to provide intelligent, context-aware responses on general knowledge, programming, science, creative writing, and more. The chatbot is simple, clean, and easy to use - no complexity, just ask questions and get intelligent answers.
 
+**LATEST:** **Simple VATSAL Chatbot (`simple_chatbot.py`)** - The easiest way to chat with VATSAL! A streamlined, beginner-friendly chatbot with:
+- Clean, simple interface - just ask questions naturally
+- Powered by Google Gemini 2.5 Flash (latest model)
+- Conversation memory (remembers last 10 exchanges)
+- Easy commands: type to chat, 'reset' for fresh start, 'quit' to exit
+- Perfect for general questions, coding help, learning, and friendly conversations
+- Run with: `python simple_chatbot.py` or use the "Simple Chatbot" workflow
+
 ### Technical Implementations
 - **AI Command Parser (`gemini_controller.py`):** Integrates with Gemini API (gemini-2.0-flash-exp) for natural language processing, converting commands into structured JSON actions, and managing multi-step workflows.
 - **GUI Automation Module (`gui_automation.py`):** Wraps PyAutoGUI for cross-platform desktop control (mouse, keyboard, applications, clipboard).
