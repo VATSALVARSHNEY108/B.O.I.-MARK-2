@@ -32,7 +32,7 @@ The VATSAL AI Assistant (`vatsal_assistant.py`) is an intelligent AI companion w
 
 ### Technical Implementations
 - **AI Command Parser (`gemini_controller.py`):** Integrates with Gemini API (gemini-2.0-flash-exp) for natural language processing, converting commands into structured JSON actions.
-- **GUI Automation Module (`gui_automation.py`):** Utilizes PyAutoGUI for cross-platform desktop control.
+- **GUI Automation Module (`gui_automation.py`):** Utilizes PyAutoGUI for cross-platform desktop control, including folder navigation and file manager integration. Supports opening folders on Desktop, Documents, Downloads, and custom paths across Windows, macOS, and Linux.
 - **Messaging Service (`messaging_service.py`):** Handles SMS (Twilio), email (Gmail), and WhatsApp Desktop integration.
 - **Code Generation & Execution Modules (`code_generator.py`, `code_executor.py`):** AI-powered code generation, explanation, debugging, and safe execution for Python/JavaScript.
 - **AI Vision Module (`screenshot_analyzer.py`):** Uses Gemini Vision for OCR, UI element identification, and screen analysis.
