@@ -26,6 +26,13 @@ The VATSAL AI Assistant (`vatsal_assistant.py`) is an intelligent AI companion (
 - Perfect for general questions, coding help, learning, and friendly conversations
 - Run with: `python simple_chatbot.py` or use the "Simple Chatbot" workflow
 
+**🎉 INTEGRATED CHATBOT SUITE** - All three chatbot systems are now unified in the GUI App!
+- Access all chatbots from the **💬 VATSAL Chat** tab in the GUI
+- Switch between **Simple Chat**, **VATSAL AI**, and **VATSAL Assistant** with one click
+- Each chatbot maintains its own personality and features
+- Unified interface with chat history, statistics, and controls
+- See `CHATBOT_INTEGRATION_GUIDE.md` for complete usage instructions
+
 ### Technical Implementations
 - **AI Command Parser (`gemini_controller.py`):** Integrates with Gemini API (gemini-2.0-flash-exp) for natural language processing, converting commands into structured JSON actions, and managing multi-step workflows.
 - **GUI Automation Module (`gui_automation.py`):** Wraps PyAutoGUI for cross-platform desktop control (mouse, keyboard, applications, clipboard).

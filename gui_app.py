@@ -10,9 +10,8 @@ from command_executor import CommandExecutor
 from vatsal_assistant import create_vatsal_assistant
 from advanced_smart_screen_monitor import create_advanced_smart_screen_monitor
 from ai_screen_monitoring_system import create_ai_screen_monitoring_system
-from vatsal_ai import create_vatsal_ai
+from simple_chatbot import SimpleChatbot
 from datetime import datetime
-import asyncio
 
 load_dotenv()
 
@@ -27,11 +26,18 @@ class AutomationControllerGUI:
         self.vatsal = create_vatsal_assistant()
         self.advanced_monitor = create_advanced_smart_screen_monitor()
         self.ai_monitor = create_ai_screen_monitoring_system()
-        self.vatsal_ai = create_vatsal_ai()
+        
+        try:
+            self.simple_chatbot = SimpleChatbot()
+        except Exception as e:
+            self.simple_chatbot = None
+            print(f"Simple chatbot initialization failed: {e}")
+        
         self.vatsal_mode = True
         self.processing = False
         self.hover_colors = {}
         self.vatsal_conversation_active = False
+        self.active_chatbot = "simple"
         
         self.setup_ui()
         self.check_api_key()
@@ -308,7 +314,7 @@ class AutomationControllerGUI:
         update_time()
     
     def create_vatsal_ai_tab(self, notebook):
-        """VATSAL AI - Advanced Conversational Assistant"""
+        """VATSAL AI - Advanced Conversational Assistant with Multiple Chatbot Options"""
         tab = tk.Frame(notebook, bg="#1e1e2e")
         notebook.add(tab, text="💬 VATSAL Chat")
         
@@ -316,18 +322,46 @@ class AutomationControllerGUI:
         header_frame.pack(fill="x", pady=(10, 0), padx=10)
         
         header = tk.Label(header_frame,
-                         text="💬 VATSAL - Learning AI Chatbot",
+                         text="💬 VATSAL - AI Chatbot Suite",
                          bg="#1a1a2e",
                          fg="#89b4fa",
                          font=("Segoe UI", 14, "bold"))
         header.pack(pady=12)
         
-        info = tk.Label(header_frame,
-                       text="Learns from every conversation • Remembers preferences • Context-aware responses",
+        selector_frame = tk.Frame(header_frame, bg="#1a1a2e")
+        selector_frame.pack(pady=(0, 12))
+        
+        tk.Label(selector_frame,
+                text="Choose Chatbot:",
+                bg="#1a1a2e",
+                fg="#a6adc8",
+                font=("Segoe UI", 9, "bold")).pack(side="left", padx=(0, 10))
+        
+        chatbot_options = [
+            ("🚀 Simple Chat", "simple", "Easy & straightforward"),
+            ("🤖 VATSAL Assistant", "assistant", "Sophisticated personality")
+        ]
+        
+        for label, mode, desc in chatbot_options:
+            btn = tk.Button(selector_frame,
+                          text=f"{label}\n{desc}",
+                          bg="#313244" if self.active_chatbot != mode else "#89b4fa",
+                          fg="#ffffff" if self.active_chatbot != mode else "#0f0f1e",
+                          font=("Segoe UI", 8, "bold"),
+                          relief="flat",
+                          cursor="hand2",
+                          command=lambda m=mode: self.switch_chatbot(m),
+                          padx=12,
+                          pady=6)
+            btn.pack(side="left", padx=3)
+            setattr(self, f"chatbot_btn_{mode}", btn)
+        
+        self.chatbot_info_label = tk.Label(header_frame,
+                       text=self.get_chatbot_description("simple"),
                        bg="#1a1a2e",
                        fg="#a6adc8",
                        font=("Segoe UI", 9, "italic"))
-        info.pack(pady=(0, 12))
+        self.chatbot_info_label.pack(pady=(0, 12))
         
         self.vatsal_conversation_display = scrolledtext.ScrolledText(
             tab,
@@ -1039,9 +1073,47 @@ class AutomationControllerGUI:
             return self.vatsal.process_with_personality(user_input, command_result)
         return command_result
     
+    def switch_chatbot(self, mode):
+        """Switch between different chatbot modes"""
+        self.active_chatbot = mode
+        
+        for m in ["simple", "assistant"]:
+            btn = getattr(self, f"chatbot_btn_{m}", None)
+            if btn:
+                if m == mode:
+                    btn.config(bg="#89b4fa", fg="#0f0f1e")
+                else:
+                    btn.config(bg="#313244", fg="#ffffff")
+        
+        self.chatbot_info_label.config(text=self.get_chatbot_description(mode))
+        
+        self.vatsal_conversation_display.config(state='normal')
+        self.vatsal_conversation_display.delete(1.0, tk.END)
+        self.vatsal_conversation_display.config(state='disabled')
+        
+        mode_names = {
+            "simple": "Simple Chat",
+            "assistant": "VATSAL Assistant"
+        }
+        self._add_vatsal_ai_message("SYSTEM", f"Switched to {mode_names[mode]} mode. Say hello to start chatting!")
+    
+    def get_chatbot_description(self, mode):
+        """Get description for each chatbot mode"""
+        descriptions = {
+            "simple": "🚀 Simple & clean chatbot - Perfect for quick questions and friendly conversations",
+            "assistant": "🤖 Sophisticated VATSAL - Professional personality with proactive suggestions"
+        }
+        return descriptions.get(mode, "")
+    
     def start_vatsal_ai_conversation(self):
-        """Start conversation with VATSAL"""
-        greeting = self.vatsal_ai.initiate_conversation()
+        """Start conversation with the active chatbot"""
+        if self.active_chatbot == "simple" and self.simple_chatbot:
+            greeting = self.simple_chatbot.greeting()
+        elif self.active_chatbot == "assistant":
+            greeting = self.vatsal.get_greeting()
+        else:
+            greeting = "Hello! I'm VATSAL, ready to chat!"
+        
         self._add_vatsal_ai_message("VATSAL", greeting)
         self.vatsal_conversation_active = True
     
@@ -1058,12 +1130,14 @@ class AutomationControllerGUI:
         thread.start()
     
     def _process_vatsal_ai_message(self, user_message):
-        """Process message with VATSAL in background"""
+        """Process message with the active chatbot in background"""
         try:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            response = loop.run_until_complete(self.vatsal_ai.process_message(user_message))
-            loop.close()
+            if self.active_chatbot == "simple" and self.simple_chatbot:
+                response = self.simple_chatbot.chat(user_message)
+            elif self.active_chatbot == "assistant":
+                response = self.vatsal.process_with_personality(user_message)
+            else:
+                response = "Chatbot not available. Please check configuration."
             
             self._add_vatsal_ai_message("VATSAL", response)
         except Exception as e:
@@ -1096,33 +1170,52 @@ class AutomationControllerGUI:
             self._add_vatsal_ai_message("VATSAL", "Hello! I'm VATSAL, and I learn from every conversation with you. The more we chat, the better I understand you. What would you like to talk about?")
     
     def clear_vatsal_ai_conversation(self):
-        """Clear VATSAL conversation history (but keeps long-term memory)"""
-        self.vatsal_ai.reset_conversation()
+        """Clear conversation history for the active chatbot"""
+        if self.active_chatbot == "simple" and self.simple_chatbot:
+            self.simple_chatbot.reset()
+            msg = "Chat cleared! Ready for a fresh conversation."
+        elif self.active_chatbot == "assistant":
+            self.vatsal.conversation_history = []
+            msg = "Chat cleared! VATSAL Assistant is ready for new commands."
+        else:
+            msg = "Chat cleared."
+        
         self.vatsal_conversation_display.config(state='normal')
         self.vatsal_conversation_display.delete(1.0, tk.END)
         self.vatsal_conversation_display.config(state='disabled')
         self.vatsal_conversation_active = False
-        messagebox.showinfo("Cleared", "Current chat cleared. Long-term memory preserved - I still remember our past conversations!")
+        messagebox.showinfo("Cleared", msg)
     
     def show_vatsal_ai_stats(self):
-        """Show VATSAL chatbot statistics"""
-        stats = self.vatsal_ai.get_stats()
-        
-        top_topics = ", ".join(stats.get('top_topics', [])) if stats.get('top_topics') else "None yet"
-        
-        stats_message = f"""
-📊 VATSAL Learning Chatbot Statistics
+        """Show statistics for the active chatbot"""
+        if self.active_chatbot == "simple" and self.simple_chatbot:
+            conv_count = len(self.simple_chatbot.conversation_history)
+            stats_message = f"""
+📊 Simple Chatbot Statistics
 
-👤 User Name: {stats.get('user_name', 'Unknown')}
-💬 Current Session: {stats.get('current_messages', 0)} messages
-📚 Total Conversations: {stats.get('total_conversations', 0)}
-✉️ All-Time Messages: {stats.get('total_messages', 0)}
-🎯 Learned Preferences: {stats.get('learned_preferences', 0)}
-🔥 Top Topics: {top_topics}
-🤖 AI Available: {'Yes' if stats.get('ai_available') else 'No'}
-⏰ First Chat: {stats.get('first_interaction', 'Never')[:19] if stats.get('first_interaction') != 'Never' else 'Never'}
+💬 Current Conversation: {conv_count // 2} exchanges
+🤖 Model: Gemini 2.5 Flash
+🧠 Memory: Last 10 exchanges
+✅ Status: Active and ready!
 """
-        messagebox.showinfo("VATSAL Learning Stats", stats_message)
+            title = "Simple Chatbot Stats"
+        elif self.active_chatbot == "assistant":
+            conv_count = len(self.vatsal.conversation_history)
+            stats_message = f"""
+📊 VATSAL Assistant Statistics
+
+💬 Conversation History: {conv_count} exchanges
+🎭 Personality: Sophisticated & Proactive
+🧠 Context Memory: {len(self.vatsal.context_memory)} items
+🤖 AI Available: {'Yes' if self.vatsal.ai_available else 'No'}
+✨ Features: Time-aware greetings, Proactive suggestions
+"""
+            title = "VATSAL Assistant Stats"
+        else:
+            stats_message = "No statistics available."
+            title = "Stats"
+        
+        messagebox.showinfo(title, stats_message)
     
     def select_command_text(self):
         """Select all text in command input for easy editing"""
