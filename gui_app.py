@@ -13,6 +13,7 @@ from ai_screen_monitoring_system import create_ai_screen_monitoring_system
 from simple_chatbot import SimpleChatbot
 from file_automation import create_file_automation
 from clipboard_text_handler import ClipboardTextHandler
+from smart_automation import SmartAutomationManager
 from datetime import datetime
 
 load_dotenv()
@@ -30,6 +31,7 @@ class AutomationControllerGUI:
         self.ai_monitor = create_ai_screen_monitoring_system()
         self.file_automation = create_file_automation()
         self.clipboard_handler = ClipboardTextHandler()
+        self.smart_automation = SmartAutomationManager()
         
         try:
             self.simple_chatbot = SimpleChatbot()
@@ -1011,6 +1013,51 @@ class AutomationControllerGUI:
                           activebackground="#45475a")
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
+        
+        smart_automation_section = tk.Label(scrollable_frame,
+                                           text="🎯 SMART AUTOMATION & AI",
+                                           bg="#1e1e2e",
+                                           fg="#f9e2af",
+                                           font=("Segoe UI", 11, "bold"))
+        smart_automation_section.pack(pady=(15, 8), anchor="w", padx=8)
+        
+        smart_info = tk.Label(scrollable_frame,
+                             text="9 intelligent automation features powered by AI",
+                             bg="#1e1e2e",
+                             fg="#a6adc8",
+                             font=("Segoe UI", 9, "italic"))
+        smart_info.pack(pady=(0, 8), anchor="w", padx=8)
+        
+        smart_actions = [
+            ("🐛 Auto-Bug Fixer", self.smart_auto_bug_fixer),
+            ("📅 Meeting Scheduler AI", self.smart_meeting_scheduler),
+            ("📁 Smart File Recommendations", self.smart_file_recommender),
+            ("📝 Auto-Documentation Generator", self.smart_doc_generator),
+            ("⚡ Intelligent Command Shortcuts", self.smart_command_shortcuts),
+            ("🔀 Project Context Switcher", self.smart_context_switcher),
+            ("🎯 Task Auto-Prioritizer", self.smart_task_prioritizer),
+            ("🔧 Workflow Auto-Optimizer", self.smart_workflow_optimizer),
+            ("📋 Smart Template Generator", self.smart_template_generator),
+            ("", None),
+            ("📊 Smart Automation Dashboard", self.smart_automation_dashboard),
+        ]
+        
+        for text, command in smart_actions:
+            if text:
+                btn = tk.Button(scrollable_frame,
+                              text=text,
+                              bg="#313244",
+                              fg="#ffffff",
+                              font=("Segoe UI", 10),
+                              relief="flat",
+                              cursor="hand2",
+                              command=command,
+                              anchor="w",
+                              padx=15,
+                              pady=10,
+                              activebackground="#45475a")
+                btn.pack(fill="x", padx=8, pady=3)
+                self.add_hover_effect(btn, "#313244", "#45475a")
         
         ai_section = tk.Label(scrollable_frame,
                              text="💬 AI ASSISTANTS & TEXT GENERATION",
@@ -2243,6 +2290,406 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
         if response:
             result = self.ai_monitor.clear_analytics()
             self.update_output(f"✅ {result['message']}\n", "success")
+    
+    def smart_auto_bug_fixer(self):
+        """Auto-Bug Fixer interface"""
+        def execute():
+            self.update_output("\n🐛 Auto-Bug Fixer\n", "command")
+            self.update_output("=" * 60 + "\n", "info")
+            
+            error_text = self.show_input_dialog(
+                "Auto-Bug Fixer",
+                "Enter error log or error message to analyze:"
+            )
+            
+            if error_text:
+                self.update_output(f"Analyzing error...\n", "info")
+                analysis = self.smart_automation.bug_fixer.analyze_error_log(error_text)
+                
+                self.update_output(f"\n📋 Error Analysis\n", "success")
+                self.update_output(f"Type: {analysis.get('error_type', 'Unknown')}\n", "info")
+                self.update_output(f"Severity: {analysis.get('severity', 'Unknown')}\n", "info")
+                self.update_output(f"\n🔍 Root Cause:\n{analysis.get('root_cause', 'N/A')}\n", "info")
+                
+                if analysis.get('fix_steps'):
+                    self.update_output(f"\n✅ Fix Steps:\n", "success")
+                    for i, step in enumerate(analysis.get('fix_steps', []), 1):
+                        self.update_output(f"{i}. {step}\n", "info")
+                
+                if analysis.get('prevention_tips'):
+                    self.update_output(f"\n💡 Prevention Tips:\n", "success")
+                    for tip in analysis.get('prevention_tips', []):
+                        self.update_output(f"• {tip}\n", "info")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def smart_meeting_scheduler(self):
+        """Meeting Scheduler AI interface"""
+        def execute():
+            self.update_output("\n📅 Meeting Scheduler AI\n", "command")
+            self.update_output("=" * 60 + "\n", "info")
+            
+            title = self.show_input_dialog("Meeting Title", "Enter meeting title:")
+            if not title:
+                return
+            
+            duration = self.show_input_dialog("Duration", "Duration in minutes (e.g., 30):")
+            if not duration:
+                return
+            
+            attendees = self.show_input_dialog("Attendees", "Enter attendee emails (comma-separated):")
+            if not attendees:
+                return
+            
+            attendee_list = [a.strip() for a in attendees.split(',') if a.strip()]
+            
+            self.update_output("Finding optimal meeting time...\n", "info")
+            result = self.smart_automation.meeting_scheduler.schedule_meeting(
+                title, int(duration), attendee_list
+            )
+            
+            if result.get('success'):
+                time_slot = result['scheduled_time']
+                self.update_output(f"\n✅ Meeting Scheduled!\n", "success")
+                self.update_output(f"Title: {title}\n", "info")
+                self.update_output(f"Time: {time_slot.get('start', 'N/A')}\n", "info")
+                self.update_output(f"Duration: {duration} minutes\n", "info")
+                self.update_output(f"Event ID: {result.get('event_id', 'N/A')}\n", "info")
+                
+                if result.get('alternatives'):
+                    self.update_output(f"\n📋 Alternative Times:\n", "success")
+                    for alt in result['alternatives']:
+                        self.update_output(f"• {alt.get('start', 'N/A')}\n", "info")
+            else:
+                self.update_output(f"❌ {result.get('message', 'Failed to schedule')}\n", "error")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def smart_file_recommender(self):
+        """Smart File Recommendations interface"""
+        def execute():
+            self.update_output("\n📁 Smart File Recommendations\n", "command")
+            self.update_output("=" * 60 + "\n", "info")
+            
+            task = self.show_input_dialog(
+                "Current Task",
+                "What are you working on? (optional, press Enter to skip):"
+            )
+            
+            self.update_output("Analyzing file patterns...\n", "info")
+            recommendations = self.smart_automation.file_recommender.recommend_files(
+                current_task=task if task else None,
+                limit=10
+            )
+            
+            if recommendations:
+                self.update_output(f"\n✅ Recommended Files ({len(recommendations)}):\n", "success")
+                for i, rec in enumerate(recommendations, 1):
+                    self.update_output(f"\n{i}. {rec.get('file', 'Unknown')}\n", "info")
+                    self.update_output(f"   Reason: {rec.get('reason', 'N/A')}\n", "success")
+                    self.update_output(f"   Score: {rec.get('score', 0)}/100\n", "info")
+            else:
+                self.update_output("ℹ️ No recommendations available yet. Start working with files to build patterns!\n", "info")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def smart_doc_generator(self):
+        """Auto-Documentation Generator interface"""
+        def execute():
+            self.update_output("\n📝 Auto-Documentation Generator\n", "command")
+            self.update_output("=" * 60 + "\n", "info")
+            
+            doc_type = self.show_input_dialog(
+                "Documentation Type",
+                "What to generate?\n1. README for project\n2. Function documentation\n3. API documentation\n\nEnter number (1-3):"
+            )
+            
+            if doc_type == "1":
+                self.update_output("Generating README.md...\n", "info")
+                readme = self.smart_automation.doc_generator.generate_readme(".")
+                self.update_output(f"\n✅ README Generated!\n", "success")
+                self.update_output(f"{readme[:500]}...\n", "info")
+                self.update_output(f"\nSaved to: auto_generated_docs/README_generated.md\n", "success")
+            elif doc_type == "2":
+                file_path = self.show_input_dialog("File Path", "Enter file path to document:")
+                if file_path:
+                    self.update_output(f"Generating documentation for {file_path}...\n", "info")
+                    result = self.smart_automation.doc_generator.document_file(file_path)
+                    if result.get('success'):
+                        self.update_output(f"\n✅ Documentation Generated!\n", "success")
+                        self.update_output(f"Saved to: {result.get('docs_path', 'N/A')}\n", "info")
+                    else:
+                        self.update_output(f"❌ {result.get('error', 'Failed')}\n", "error")
+            elif doc_type == "3":
+                self.update_output("API documentation feature requires code input.\n", "info")
+                self.update_output("Use 'Function documentation' option instead.\n", "info")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def smart_command_shortcuts(self):
+        """Intelligent Command Shortcuts interface"""
+        def execute():
+            self.update_output("\n⚡ Intelligent Command Shortcuts\n", "command")
+            self.update_output("=" * 60 + "\n", "info")
+            
+            action = self.show_input_dialog(
+                "Command Shortcuts",
+                "What would you like to do?\n1. View suggestions\n2. Create shortcut\n3. View most used\n\nEnter number (1-3):"
+            )
+            
+            if action == "1":
+                self.update_output("Analyzing command patterns...\n", "info")
+                suggestions = self.smart_automation.command_shortcuts.suggest_shortcuts()
+                
+                if suggestions:
+                    self.update_output(f"\n✅ Shortcut Suggestions ({len(suggestions)}):\n", "success")
+                    for i, sug in enumerate(suggestions, 1):
+                        self.update_output(f"\n{i}. {sug.get('shortcut', 'N/A')}\n", "info")
+                        self.update_output(f"   {sug.get('description', 'N/A')}\n", "success")
+                        self.update_output(f"   Commands: {', '.join(sug.get('commands', []))}\n", "info")
+                else:
+                    self.update_output("ℹ️ No patterns detected yet. Keep using commands!\n", "info")
+            
+            elif action == "2":
+                name = self.show_input_dialog("Shortcut Name", "Enter shortcut name:")
+                if name:
+                    self.update_output(f"Shortcut '{name}' created!\n", "success")
+            
+            elif action == "3":
+                shortcuts = self.smart_automation.command_shortcuts.get_most_used_shortcuts(5)
+                if shortcuts:
+                    self.update_output(f"\n✅ Most Used Shortcuts:\n", "success")
+                    for i, shortcut in enumerate(shortcuts, 1):
+                        self.update_output(f"\n{i}. {shortcut.get('name', 'N/A')}\n", "info")
+                        self.update_output(f"   Used: {shortcut.get('usage_count', 0)} times\n", "success")
+                else:
+                    self.update_output("ℹ️ No shortcuts created yet.\n", "info")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def smart_context_switcher(self):
+        """Project Context Switcher interface"""
+        def execute():
+            self.update_output("\n🔀 Project Context Switcher\n", "command")
+            self.update_output("=" * 60 + "\n", "info")
+            
+            contexts = self.smart_automation.context_switcher.list_contexts()
+            
+            if contexts:
+                self.update_output(f"\n📋 Saved Contexts ({len(contexts)}):\n", "success")
+                for i, ctx in enumerate(contexts, 1):
+                    self.update_output(f"\n{i}. {ctx.get('name', 'N/A')}\n", "info")
+                    self.update_output(f"   Path: {ctx.get('project_path', 'N/A')}\n", "success")
+                    self.update_output(f"   Files: {ctx.get('file_count', 0)}\n", "info")
+                    self.update_output(f"   Last accessed: {ctx.get('last_accessed', 'N/A')[:19]}\n", "info")
+            else:
+                self.update_output("ℹ️ No saved contexts yet.\n", "info")
+            
+            current = self.smart_automation.context_switcher.get_current_context()
+            if current:
+                self.update_output(f"\n✅ Current Context: {current.get('name', 'None')}\n", "success")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def smart_task_prioritizer(self):
+        """Task Auto-Prioritizer interface"""
+        def execute():
+            self.update_output("\n🎯 Task Auto-Prioritizer\n", "command")
+            self.update_output("=" * 60 + "\n", "info")
+            
+            self.update_output("Prioritizing tasks with AI...\n", "info")
+            prioritized = self.smart_automation.task_prioritizer.prioritize_tasks()
+            
+            if prioritized:
+                self.update_output(f"\n✅ Prioritized Tasks ({len(prioritized)}):\n", "success")
+                for i, task in enumerate(prioritized[:10], 1):
+                    score = task.get('priority_score', 0)
+                    self.update_output(f"\n{i}. [{score:.0f}/100] {task.get('title', 'N/A')}\n", "info")
+                    if task.get('deadline'):
+                        self.update_output(f"   Deadline: {task['deadline'][:10]}\n", "success")
+                    if task.get('priority_reason'):
+                        self.update_output(f"   Why: {task['priority_reason']}\n", "info")
+                
+                suggestions = self.smart_automation.task_prioritizer.get_task_suggestions()
+                if suggestions:
+                    self.update_output(f"\n💡 Suggestions:\n", "success")
+                    for suggestion in suggestions:
+                        self.update_output(f"• {suggestion}\n", "info")
+            else:
+                self.update_output("ℹ️ No tasks to prioritize. Add tasks first!\n", "info")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def smart_workflow_optimizer(self):
+        """Workflow Auto-Optimizer interface"""
+        def execute():
+            self.update_output("\n🔧 Workflow Auto-Optimizer\n", "command")
+            self.update_output("=" * 60 + "\n", "info")
+            
+            self.update_output("Analyzing workflow patterns...\n", "info")
+            report = self.smart_automation.workflow_optimizer.get_efficiency_report()
+            
+            self.update_output(f"\n📊 Efficiency Report\n", "success")
+            self.update_output(f"Total Actions: {report.get('total_actions', 0)}\n", "info")
+            self.update_output(f"Detected Patterns: {report.get('detected_patterns', 0)}\n", "info")
+            self.update_output(f"Optimizable Actions: {report.get('optimizable_actions', 0)}\n", "info")
+            self.update_output(f"Efficiency Score: {report.get('efficiency_score', 0)}/100\n", "success")
+            
+            if report.get('top_patterns'):
+                self.update_output(f"\n🔄 Top Repeated Patterns:\n", "success")
+                for pattern in report['top_patterns'][:5]:
+                    self.update_output(f"• {pattern.get('pattern', 'N/A')} ({pattern.get('occurrences', 0)}x)\n", "info")
+            
+            if report.get('recommendations'):
+                self.update_output(f"\n💡 Recommendations:\n", "success")
+                for rec in report['recommendations']:
+                    self.update_output(f"• {rec}\n", "info")
+            
+            self.update_output("\nGenerating optimization suggestions...\n", "info")
+            optimizations = self.smart_automation.workflow_optimizer.suggest_optimizations()
+            
+            if optimizations:
+                self.update_output(f"\n✅ Optimization Suggestions:\n", "success")
+                for i, opt in enumerate(optimizations[:5], 1):
+                    self.update_output(f"\n{i}. Pattern: {opt.get('pattern', 'N/A')}\n", "info")
+                    self.update_output(f"   Suggestion: {opt.get('suggestion', 'N/A')}\n", "success")
+                    self.update_output(f"   Time Saved: {opt.get('time_saved', 'N/A')}\n", "info")
+                    self.update_output(f"   Difficulty: {opt.get('difficulty', 'N/A')}\n", "info")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def smart_template_generator(self):
+        """Smart Template Generator interface"""
+        def execute():
+            self.update_output("\n📋 Smart Template Generator\n", "command")
+            self.update_output("=" * 60 + "\n", "info")
+            
+            template_type = self.show_input_dialog(
+                "Template Type",
+                "What type of template?\n1. Code template\n2. Email template\n3. Document template\n\nEnter number (1-3):"
+            )
+            
+            if template_type == "1":
+                language = self.show_input_dialog("Language", "Programming language (e.g., python, javascript):")
+                template_kind = self.show_input_dialog("Type", "Template type (e.g., class, function, api):")
+                
+                if language and template_kind:
+                    self.update_output(f"Generating {language} {template_kind} template...\n", "info")
+                    template = self.smart_automation.template_generator.generate_code_template(
+                        language, template_kind
+                    )
+                    self.update_output(f"\n✅ Code Template Generated!\n", "success")
+                    self.update_output(f"{template[:500]}...\n", "info")
+            
+            elif template_type == "2":
+                purpose = self.show_input_dialog("Purpose", "Email purpose (e.g., job application, follow-up):")
+                tone = self.show_input_dialog("Tone", "Tone (professional/casual/friendly):", "professional")
+                
+                if purpose:
+                    self.update_output(f"Generating email template...\n", "info")
+                    template = self.smart_automation.template_generator.generate_email_template(
+                        purpose, tone if tone else "professional"
+                    )
+                    self.update_output(f"\n✅ Email Template Generated!\n", "success")
+                    self.update_output(f"{template[:400]}...\n", "info")
+            
+            elif template_type == "3":
+                doc_type = self.show_input_dialog("Document Type", "Document type (e.g., proposal, report):")
+                
+                if doc_type:
+                    self.update_output(f"Generating document template...\n", "info")
+                    template = self.smart_automation.template_generator.generate_document_template(doc_type)
+                    self.update_output(f"\n✅ Document Template Generated!\n", "success")
+                    self.update_output(f"{template[:400]}...\n", "info")
+            
+            templates = self.smart_automation.template_generator.list_templates()
+            self.update_output(f"\n📋 Total Templates Created: {len(templates)}\n", "success")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def smart_automation_dashboard(self):
+        """Show Smart Automation Dashboard"""
+        def execute():
+            self.update_output("\n📊 Smart Automation Dashboard\n", "command")
+            self.update_output("=" * 60 + "\n", "info")
+            
+            summary = self.smart_automation.get_dashboard_summary()
+            
+            self.update_output(f"\n🐛 Auto-Bug Fixer\n", "success")
+            self.update_output(f"Fixes Applied: {summary['auto_bug_fixer']['fixes_applied']}\n", "info")
+            
+            self.update_output(f"\n📅 Meeting Scheduler\n", "success")
+            self.update_output(f"Upcoming Meetings: {summary['meeting_scheduler']['upcoming_meetings']}\n", "info")
+            
+            self.update_output(f"\n📁 File Recommender\n", "success")
+            self.update_output(f"Tracked Files: {summary['file_recommender']['tracked_files']}\n", "info")
+            
+            self.update_output(f"\n⚡ Command Shortcuts\n", "success")
+            self.update_output(f"Shortcuts Created: {summary['command_shortcuts']['shortcuts_created']}\n", "info")
+            
+            self.update_output(f"\n🔀 Project Contexts\n", "success")
+            self.update_output(f"Saved Contexts: {summary['project_contexts']['saved_contexts']}\n", "info")
+            
+            self.update_output(f"\n🎯 Task Prioritizer\n", "success")
+            self.update_output(f"Pending Tasks: {summary['task_prioritizer']['pending_tasks']}\n", "info")
+            
+            self.update_output(f"\n🔧 Workflow Optimizer\n", "success")
+            self.update_output(f"Patterns Detected: {summary['workflow_optimizer']['patterns_detected']}\n", "info")
+            self.update_output(f"Efficiency Score: {summary['workflow_optimizer']['efficiency_score']}/100\n", "info")
+            
+            self.update_output(f"\n📋 Template Generator\n", "success")
+            self.update_output(f"Templates Created: {summary['template_generator']['templates_created']}\n", "info")
+            
+            self.update_output("\n" + "=" * 60 + "\n", "info")
+        
+        threading.Thread(target=execute, daemon=True).start()
+    
+    def show_input_dialog(self, title, prompt, default=""):
+        """Helper method to show input dialog"""
+        dialog = tk.Toplevel(self.root)
+        dialog.title(title)
+        dialog.geometry("500x200")
+        dialog.configure(bg="#1a1a2e")
+        dialog.transient(self.root)
+        dialog.grab_set()
+        
+        tk.Label(dialog, text=prompt,
+                bg="#1a1a2e", fg="#ffffff",
+                font=("Segoe UI", 10),
+                wraplength=450).pack(pady=20, padx=20)
+        
+        entry = tk.Entry(dialog, font=("Segoe UI", 11), width=40)
+        entry.insert(0, default)
+        entry.pack(pady=10)
+        entry.focus()
+        
+        result: list = [None]
+        
+        def on_ok():
+            result[0] = entry.get()
+            dialog.destroy()
+        
+        def on_cancel():
+            dialog.destroy()
+        
+        entry.bind("<Return>", lambda e: on_ok())
+        entry.bind("<Escape>", lambda e: on_cancel())
+        
+        btn_frame = tk.Frame(dialog, bg="#1a1a2e")
+        btn_frame.pack(pady=10)
+        
+        tk.Button(btn_frame, text="OK", command=on_ok,
+                 bg="#89b4fa", fg="#0f0f1e",
+                 font=("Segoe UI", 10, "bold"),
+                 padx=20, pady=5).pack(side="left", padx=5)
+        
+        tk.Button(btn_frame, text="Cancel", command=on_cancel,
+                 bg="#313244", fg="#ffffff",
+                 font=("Segoe UI", 10),
+                 padx=20, pady=5).pack(side="left", padx=5)
+        
+        dialog.wait_window()
+        return result[0]
 
 def main():
     root = tk.Tk()
