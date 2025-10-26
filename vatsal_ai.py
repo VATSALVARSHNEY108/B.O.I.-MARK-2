@@ -1,11 +1,13 @@
 """
-VATSAL AI - Simple Conversational Chatbot
-A friendly AI chatbot for natural conversations
+VATSAL AI - Powerful Learning Chatbot
+A smart AI chatbot that learns from all past conversations and remembers context
 """
 
+import json
 import os
 from datetime import datetime
 from typing import List, Dict, Any, Optional
+from collections import Counter
 
 try:
     from gemini_controller import GeminiController
@@ -14,43 +16,111 @@ except ImportError:
 
 
 class VatsalAI:
-    """Simple conversational AI chatbot"""
+    """Powerful learning conversational AI chatbot with persistent memory"""
     
     def __init__(self, api_key: Optional[str] = None):
         self.name = "VATSAL"
+        self.memory_file = "vatsal_memory.json"
         
         # Initialize Gemini for conversations
         if GeminiController:
             self.gemini = GeminiController(api_key)
         else:
             self.gemini = None
-            
-        # Conversation history (keep last 20 messages)
-        self.conversation_history: List[Dict[str, str]] = []
+        
+        # Load persistent memory
+        self.memory = self._load_memory()
+        
+        # Current session conversation
+        self.current_conversation: List[Dict[str, str]] = []
+        
+        # User profile and learning data
+        self.user_profile = self.memory.get("user_profile", {
+            "name": "User",
+            "preferences": {},
+            "interests": [],
+            "common_topics": [],
+            "conversation_style": "friendly"
+        })
+        
+        # All past conversations (loaded from memory)
+        self.all_conversations = self.memory.get("conversations", [])
+        
+        # Statistics
+        self.stats = self.memory.get("stats", {
+            "total_conversations": 0,
+            "total_messages": 0,
+            "favorite_topics": {},
+            "first_interaction": None,
+            "last_interaction": None
+        })
+    
+    def _load_memory(self) -> Dict[str, Any]:
+        """Load persistent memory from file"""
+        if os.path.exists(self.memory_file):
+            try:
+                with open(self.memory_file, 'r') as f:
+                    return json.load(f)
+            except:
+                pass
+        return {}
+    
+    def _save_memory(self):
+        """Save memory to persistent storage"""
+        try:
+            self.memory = {
+                "user_profile": self.user_profile,
+                "conversations": self.all_conversations[-50:],  # Keep last 50 conversations
+                "stats": self.stats,
+                "last_saved": datetime.now().isoformat()
+            }
+            with open(self.memory_file, 'w') as f:
+                json.dump(self.memory, f, indent=2)
+        except Exception as e:
+            print(f"Failed to save memory: {e}")
     
     def initiate_conversation(self) -> str:
-        """Start a conversation with a greeting"""
+        """Start a conversation with a personalized greeting"""
         current_hour = datetime.now().hour
         
+        # Time-based greeting
         if 5 <= current_hour < 12:
-            greeting = "Good morning! How can I help you today?"
+            time_greeting = "Good morning"
         elif 12 <= current_hour < 17:
-            greeting = "Good afternoon! What can I do for you?"
+            time_greeting = "Good afternoon"
         elif 17 <= current_hour < 21:
-            greeting = "Good evening! How may I assist you?"
+            time_greeting = "Good evening"
         else:
-            greeting = "Hello! How can I help you?"
+            time_greeting = "Hello"
+        
+        # Personalize based on history
+        user_name = self.user_profile.get("name", "")
+        if user_name and user_name != "User":
+            greeting = f"{time_greeting}, {user_name}!"
+        else:
+            greeting = f"{time_greeting}!"
+        
+        # Add context if returning user
+        if self.stats.get("total_conversations", 0) > 0:
+            greeting += " Welcome back! How can I help you today?"
+        else:
+            greeting += " I'm VATSAL, your AI assistant. I learn from our conversations to help you better. What can I help you with?"
         
         return greeting
     
     async def process_message(self, user_message: str) -> str:
-        """Process user message and return response"""
+        """Process user message with learning and context awareness"""
         
-        # Add user message to history
-        self.conversation_history.append({
+        # Add user message to current conversation
+        message_data = {
             "role": "user",
-            "message": user_message
-        })
+            "message": user_message,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.current_conversation.append(message_data)
+        
+        # Learn from the message
+        self._learn_from_message(user_message)
         
         # Get AI response
         if self.gemini:
@@ -58,41 +128,157 @@ class VatsalAI:
         else:
             response = self._simple_response(user_message)
         
-        # Add response to history
-        self.conversation_history.append({
+        # Add response to current conversation
+        response_data = {
             "role": "assistant",
-            "message": response
-        })
+            "message": response,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.current_conversation.append(response_data)
         
-        # Keep only last 20 messages (10 exchanges)
-        if len(self.conversation_history) > 20:
-            self.conversation_history = self.conversation_history[-20:]
+        # Update statistics
+        self._update_stats()
+        
+        # Save every 5 messages to preserve memory
+        if len(self.current_conversation) % 5 == 0:
+            self._save_conversation_to_memory()
+            self._save_memory()
         
         return response
     
     async def _chat_with_gemini(self, user_message: str) -> str:
-        """Use Gemini AI for natural conversation"""
+        """Use Gemini AI with full context and learning"""
         
-        # Build conversation context
-        context = self._get_conversation_context()
+        # Build comprehensive context
+        recent_context = self._get_recent_context(limit=10)
+        learned_info = self._get_learned_info()
+        past_topics = self._get_relevant_past_topics(user_message)
         
-        prompt = f"""You are VATSAL, a friendly and helpful AI assistant chatbot.
+        prompt = f"""You are VATSAL, an intelligent AI assistant that learns from every conversation.
 
-Be conversational, friendly, and helpful. Answer questions naturally and provide useful information.
-Keep responses concise (2-3 sentences unless more detail is needed).
+LEARNED INFORMATION ABOUT USER:
+{learned_info}
 
-Previous conversation:
-{context}
+RELEVANT PAST TOPICS:
+{past_topics}
 
-User: {user_message}
+RECENT CONVERSATION:
+{recent_context}
 
-Respond naturally as VATSAL:"""
+CURRENT MESSAGE: {user_message}
+
+Instructions:
+1. Use what you've learned about the user to personalize your response
+2. Reference past conversations when relevant
+3. Be conversational, friendly, and helpful
+4. Show that you remember previous discussions
+5. Provide insightful, context-aware responses
+6. Keep responses concise (2-4 sentences) unless detail is needed
+
+Respond as VATSAL:"""
         
         try:
             response = await self.gemini.analyze_text_async(prompt)
             return response
         except Exception as e:
             return self._simple_response(user_message)
+    
+    def _learn_from_message(self, message: str):
+        """Learn patterns, preferences, and topics from user messages"""
+        msg_lower = message.lower()
+        
+        # Detect user name if mentioned
+        if "my name is" in msg_lower or "i'm" in msg_lower or "i am" in msg_lower:
+            words = message.split()
+            for i, word in enumerate(words):
+                if word.lower() in ["is", "i'm", "am"] and i + 1 < len(words):
+                    potential_name = words[i + 1].strip('.,!?')
+                    if potential_name and potential_name[0].isupper() and len(potential_name) > 1:
+                        self.user_profile["name"] = potential_name
+        
+        # Detect preferences (I like, I love, I prefer, I enjoy)
+        preference_indicators = ["i like", "i love", "i prefer", "i enjoy", "i'm interested in", "i want"]
+        for indicator in preference_indicators:
+            if indicator in msg_lower:
+                preference = msg_lower.split(indicator)[1].split('.')[0].split(',')[0].strip()
+                if preference and len(preference) > 2:
+                    if "preferences" not in self.user_profile:
+                        self.user_profile["preferences"] = []
+                    if preference not in self.user_profile["preferences"]:
+                        self.user_profile["preferences"].append(preference)
+        
+        # Track topics (extract keywords)
+        keywords = self._extract_keywords(message)
+        if keywords:
+            for keyword in keywords:
+                topic = keyword.lower()
+                if topic not in self.stats["favorite_topics"]:
+                    self.stats["favorite_topics"][topic] = 0
+                self.stats["favorite_topics"][topic] += 1
+    
+    def _extract_keywords(self, text: str) -> List[str]:
+        """Extract important keywords from text"""
+        # Simple keyword extraction (words longer than 4 characters)
+        words = text.lower().split()
+        stop_words = {"what", "when", "where", "which", "who", "whom", "this", "that", "these", 
+                      "those", "with", "from", "about", "could", "would", "should", "have", "been"}
+        keywords = [w.strip('.,!?') for w in words if len(w) > 4 and w not in stop_words]
+        return keywords[:5]  # Top 5 keywords
+    
+    def _get_recent_context(self, limit: int = 10) -> str:
+        """Get recent conversation context"""
+        recent = self.current_conversation[-limit:] if len(self.current_conversation) > limit else self.current_conversation
+        
+        context_lines = []
+        for item in recent:
+            role = "User" if item["role"] == "user" else "VATSAL"
+            context_lines.append(f"{role}: {item['message']}")
+        
+        return "\n".join(context_lines) if context_lines else "No recent conversation"
+    
+    def _get_learned_info(self) -> str:
+        """Get summary of learned information about user"""
+        info_lines = []
+        
+        if self.user_profile.get("name") and self.user_profile["name"] != "User":
+            info_lines.append(f"- User's name: {self.user_profile['name']}")
+        
+        if self.user_profile.get("preferences"):
+            prefs = ", ".join(self.user_profile["preferences"][-5:])  # Last 5 preferences
+            info_lines.append(f"- User's preferences: {prefs}")
+        
+        if self.stats.get("favorite_topics"):
+            top_topics = sorted(self.stats["favorite_topics"].items(), key=lambda x: x[1], reverse=True)[:3]
+            topics = ", ".join([t[0] for t in top_topics])
+            info_lines.append(f"- Common topics: {topics}")
+        
+        total_convos = self.stats.get("total_conversations", 0)
+        if total_convos > 0:
+            info_lines.append(f"- We've had {total_convos} conversations before")
+        
+        return "\n".join(info_lines) if info_lines else "New user - no previous learning data"
+    
+    def _get_relevant_past_topics(self, current_message: str) -> str:
+        """Find relevant topics from past conversations"""
+        if not self.all_conversations:
+            return "No past conversations"
+        
+        # Simple relevance check - look for keyword matches in past conversations
+        keywords = set(self._extract_keywords(current_message))
+        relevant = []
+        
+        for convo in self.all_conversations[-10:]:  # Check last 10 conversations
+            for msg in convo:
+                if msg["role"] == "user":
+                    msg_keywords = set(self._extract_keywords(msg["message"]))
+                    if keywords & msg_keywords:  # If there's overlap
+                        relevant.append(f"Past: {msg['message'][:100]}")
+                        if len(relevant) >= 3:
+                            break
+            if len(relevant) >= 3:
+                break
+        
+        return "\n".join(relevant) if relevant else "No directly relevant past topics"
     
     def _simple_response(self, user_message: str) -> str:
         """Simple fallback response without AI"""
@@ -104,41 +290,87 @@ Respond naturally as VATSAL:"""
         
         # Thanks
         if any(word in msg_lower for word in ["thank", "thanks"]):
-            return "You're welcome! Is there anything else I can help with?"
+            return "You're welcome! I'm always learning from our conversations to help you better."
         
         # Goodbye
         if any(word in msg_lower for word in ["bye", "goodbye", "see you"]):
-            return "Goodbye! Have a great day!"
+            self._save_conversation_to_memory()
+            self._save_memory()
+            return "Goodbye! I'll remember our conversation for next time. Have a great day!"
         
         # Questions
         if '?' in user_message:
-            return "That's an interesting question! I'd be happy to help answer that."
+            return "That's an interesting question! I'd love to help answer that."
         
         # Default
         return "I understand. How can I assist you with that?"
     
-    def _get_conversation_context(self, limit: int = 6) -> str:
-        """Get recent conversation as text"""
-        recent = self.conversation_history[-limit:] if len(self.conversation_history) > limit else self.conversation_history
+    def _update_stats(self):
+        """Update conversation statistics"""
+        self.stats["total_messages"] = self.stats.get("total_messages", 0) + 1
+        self.stats["last_interaction"] = datetime.now().isoformat()
         
-        context_lines = []
-        for item in recent:
-            role = "User" if item["role"] == "user" else "VATSAL"
-            context_lines.append(f"{role}: {item['message']}")
-        
-        return "\n".join(context_lines) if context_lines else "No previous conversation"
+        if not self.stats.get("first_interaction"):
+            self.stats["first_interaction"] = datetime.now().isoformat()
+    
+    def _save_conversation_to_memory(self):
+        """Save current conversation to long-term memory"""
+        if self.current_conversation:
+            self.all_conversations.append(self.current_conversation.copy())
+            self.stats["total_conversations"] = len(self.all_conversations)
+    
+    def end_conversation(self):
+        """Properly end conversation and save everything"""
+        self._save_conversation_to_memory()
+        self._save_memory()
+        self.current_conversation = []
     
     def reset_conversation(self):
-        """Clear conversation history"""
-        self.conversation_history = []
+        """Clear current conversation but keep long-term memory"""
+        self._save_conversation_to_memory()
+        self._save_memory()
+        self.current_conversation = []
+    
+    def reset_all_memory(self):
+        """Completely reset all memory (use with caution)"""
+        self.current_conversation = []
+        self.all_conversations = []
+        self.user_profile = {
+            "name": "User",
+            "preferences": [],
+            "interests": [],
+            "common_topics": [],
+            "conversation_style": "friendly"
+        }
+        self.stats = {
+            "total_conversations": 0,
+            "total_messages": 0,
+            "favorite_topics": {},
+            "first_interaction": None,
+            "last_interaction": None
+        }
+        self._save_memory()
     
     def get_stats(self) -> Dict[str, Any]:
-        """Get basic chatbot statistics"""
+        """Get comprehensive chatbot statistics"""
         return {
-            "total_messages": len(self.conversation_history),
-            "conversation_length": len(self.conversation_history) // 2,
-            "ai_available": self.gemini is not None
+            "current_messages": len(self.current_conversation),
+            "total_conversations": self.stats.get("total_conversations", 0),
+            "total_messages": self.stats.get("total_messages", 0),
+            "learned_preferences": len(self.user_profile.get("preferences", [])),
+            "top_topics": self._get_top_topics(5),
+            "user_name": self.user_profile.get("name", "Unknown"),
+            "ai_available": self.gemini is not None,
+            "first_interaction": self.stats.get("first_interaction", "Never"),
+            "last_interaction": self.stats.get("last_interaction", "Never")
         }
+    
+    def _get_top_topics(self, limit: int = 5) -> List[str]:
+        """Get most discussed topics"""
+        if not self.stats.get("favorite_topics"):
+            return []
+        sorted_topics = sorted(self.stats["favorite_topics"].items(), key=lambda x: x[1], reverse=True)
+        return [topic[0] for topic in sorted_topics[:limit]]
 
 
 def create_vatsal_ai(api_key: Optional[str] = None) -> VatsalAI:
@@ -154,17 +386,18 @@ if __name__ == "__main__":
         vatsal = create_vatsal_ai()
         
         print("\n" + "="*60)
-        print("🤖 VATSAL AI - Simple Chatbot")
+        print("🤖 VATSAL AI - Powerful Learning Chatbot")
         print("="*60)
         
         # Initial greeting
         print(f"\n{vatsal.initiate_conversation()}")
         
-        # Test conversation
+        # Test conversation with learning
         test_messages = [
-            "Hello!",
-            "What's the weather like?",
-            "Thanks for your help!"
+            "Hi! My name is Alex",
+            "I love programming and AI",
+            "What do you remember about me?",
+            "Thanks for remembering!"
         ]
         
         for msg in test_messages:
@@ -172,9 +405,12 @@ if __name__ == "__main__":
             response = await vatsal.process_message(msg)
             print(f"VATSAL: {response}")
         
+        # End conversation to save
+        vatsal.end_conversation()
+        
         # Show stats
         print("\n" + "="*60)
-        print("📊 Stats:")
+        print("📊 Learning Stats:")
         stats = vatsal.get_stats()
         for key, value in stats.items():
             print(f"  {key}: {value}")

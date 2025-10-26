@@ -316,14 +316,14 @@ class AutomationControllerGUI:
         header_frame.pack(fill="x", pady=(10, 0), padx=10)
         
         header = tk.Label(header_frame,
-                         text="💬 VATSAL - AI Chatbot",
+                         text="💬 VATSAL - Learning AI Chatbot",
                          bg="#1a1a2e",
                          fg="#89b4fa",
                          font=("Segoe UI", 14, "bold"))
         header.pack(pady=12)
         
         info = tk.Label(header_frame,
-                       text="Friendly Conversational AI • Chat naturally • Ask questions",
+                       text="Learns from every conversation • Remembers preferences • Context-aware responses",
                        bg="#1a1a2e",
                        fg="#a6adc8",
                        font=("Segoe UI", 9, "italic"))
@@ -1089,29 +1089,40 @@ class AutomationControllerGUI:
     
     def vatsal_ai_get_suggestion(self):
         """Get a friendly prompt from VATSAL"""
-        self._add_vatsal_ai_message("VATSAL", "Hello! What would you like to chat about? I'm here to help with questions, conversations, or anything else you need!")
+        stats = self.vatsal_ai.get_stats()
+        if stats.get('total_conversations', 0) > 0:
+            self._add_vatsal_ai_message("VATSAL", "Hello! I remember our past conversations. What would you like to chat about today? I'm always learning and improving!")
+        else:
+            self._add_vatsal_ai_message("VATSAL", "Hello! I'm VATSAL, and I learn from every conversation with you. The more we chat, the better I understand you. What would you like to talk about?")
     
     def clear_vatsal_ai_conversation(self):
-        """Clear VATSAL conversation history"""
+        """Clear VATSAL conversation history (but keeps long-term memory)"""
         self.vatsal_ai.reset_conversation()
         self.vatsal_conversation_display.config(state='normal')
         self.vatsal_conversation_display.delete(1.0, tk.END)
         self.vatsal_conversation_display.config(state='disabled')
         self.vatsal_conversation_active = False
-        messagebox.showinfo("Cleared", "Conversation history cleared.")
+        messagebox.showinfo("Cleared", "Current chat cleared. Long-term memory preserved - I still remember our past conversations!")
     
     def show_vatsal_ai_stats(self):
         """Show VATSAL chatbot statistics"""
         stats = self.vatsal_ai.get_stats()
         
+        top_topics = ", ".join(stats.get('top_topics', [])) if stats.get('top_topics') else "None yet"
+        
         stats_message = f"""
-📊 VATSAL Chatbot Statistics
+📊 VATSAL Learning Chatbot Statistics
 
-Total Messages: {stats['total_messages']}
-Conversation Exchanges: {stats['conversation_length']}
-AI Available: {'Yes' if stats['ai_available'] else 'No'}
+👤 User Name: {stats.get('user_name', 'Unknown')}
+💬 Current Session: {stats.get('current_messages', 0)} messages
+📚 Total Conversations: {stats.get('total_conversations', 0)}
+✉️ All-Time Messages: {stats.get('total_messages', 0)}
+🎯 Learned Preferences: {stats.get('learned_preferences', 0)}
+🔥 Top Topics: {top_topics}
+🤖 AI Available: {'Yes' if stats.get('ai_available') else 'No'}
+⏰ First Chat: {stats.get('first_interaction', 'Never')[:19] if stats.get('first_interaction') != 'Never' else 'Never'}
 """
-        messagebox.showinfo("VATSAL Stats", stats_message)
+        messagebox.showinfo("VATSAL Learning Stats", stats_message)
     
     def select_command_text(self):
         """Select all text in command input for easy editing"""
