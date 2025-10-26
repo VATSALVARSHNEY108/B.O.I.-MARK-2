@@ -57,15 +57,20 @@ class CommunicationEnhancements:
     
     def transcribe_voice_message(self, audio_file_path: str = None, audio_url: str = None) -> Dict:
         """
-        Feature 1: Voice Message Transcription
+        Feature 1: Voice Message Transcription (Framework/Stub)
         Convert WhatsApp/Telegram audio messages to text
+        
+        NOTE: This is a framework implementation. To enable full transcription:
+        - Integrate with Google Speech-to-Text API, OpenAI Whisper, or similar
+        - Add audio file download capability for URLs
+        - Implement audio format conversion if needed
         
         Args:
             audio_file_path: Path to local audio file
             audio_url: URL to audio file (for WhatsApp/Telegram)
         
         Returns:
-            Dict with transcription text and metadata
+            Dict with transcription text and metadata (currently placeholder)
         """
         try:
             if not audio_file_path and not audio_url:
@@ -76,9 +81,25 @@ class CommunicationEnhancements:
             
             source = audio_file_path if audio_file_path else audio_url
             
-            print(f"🎤 Transcribing voice message from: {source}")
+            print(f"🎤 Voice transcription framework called for: {source}")
+            print(f"⚠️  NOTE: This is a framework implementation.")
+            print(f"   To enable: Integrate speech-to-text API (Google/Whisper/etc)")
             
-            transcription_text = f"[Transcribed audio from {source}]\n\nSample transcription: This feature would use speech-to-text API to convert audio messages to text. Integration with services like Google Speech-to-Text, Whisper API, or similar would provide real-time transcription."
+            transcription_text = f"""[Voice Transcription Framework]
+
+Source: {source}
+
+⚠️ FRAMEWORK IMPLEMENTATION
+This feature requires integration with a speech-to-text service.
+
+To enable full functionality:
+1. Add API credentials for speech-to-text service (Google Cloud Speech-to-Text, OpenAI Whisper, etc.)
+2. Install required audio processing libraries
+3. Implement audio download for URL sources
+4. Add audio format validation and conversion
+
+Current status: Framework ready for integration
+"""
             
             result = {
                 "success": True,
@@ -86,8 +107,10 @@ class CommunicationEnhancements:
                 "source": source,
                 "timestamp": datetime.now().isoformat(),
                 "duration": "N/A",
-                "language": "auto-detected",
-                "confidence": 0.95
+                "language": "N/A",
+                "confidence": 0.0,
+                "framework_mode": True,
+                "note": "Framework implementation - requires speech-to-text API integration"
             }
             
             return result
