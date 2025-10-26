@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Enhanced Intelligent Chatbot powered by Google Gemini AI
-Advanced features: context awareness, personality, statistics, and more!
+Fully compatible with GUI app with advanced features
 """
 
 import os
@@ -16,7 +16,7 @@ load_dotenv()
 
 
 class EnhancedGeminiChatbot:
-    """Enhanced intelligent chatbot using Gemini AI with advanced features"""
+    """Enhanced intelligent chatbot using Gemini AI with full GUI compatibility"""
     
     def __init__(self, api_key=None):
         if api_key is None:
@@ -31,6 +31,7 @@ class EnhancedGeminiChatbot:
         self.total_messages = 0
         self.user_name = "User"
         self.personality = "friendly"
+        self.ai_available = True
         
         self.system_prompt = """You are VATSAL, an intelligent and helpful AI assistant.
 
@@ -39,7 +40,7 @@ Your personality:
 - Enthusiastic about helping users
 - Clear and concise in your explanations
 - Patient and understanding
-- Occasionally use relevant emojis to make conversations engaging
+- Professional yet warm
 
 Your capabilities:
 - Answer questions on any topic
@@ -109,11 +110,34 @@ Guidelines:
             error_msg = f"I apologize, but I encountered an error: {str(e)}"
             return error_msg
     
+    async def process_message(self, user_message: str) -> str:
+        """Process message asynchronously (GUI compatibility)"""
+        return self.chat(user_message)
+    
+    def initiate_conversation(self) -> str:
+        """Start a new conversation with a greeting (GUI compatibility)"""
+        hour = datetime.now().hour
+        
+        if 5 <= hour < 12:
+            greeting = "Good morning! 🌅"
+        elif 12 <= hour < 17:
+            greeting = "Good afternoon! ☀️"
+        elif 17 <= hour < 22:
+            greeting = "Good evening! 🌆"
+        else:
+            greeting = "Hello there! 🌙"
+        
+        return f"{greeting} I'm VATSAL, your AI assistant. I'm here to help with anything you need - from answering questions to having a friendly chat. What would you like to talk about?"
+    
     def reset(self):
         """Clear conversation history and start fresh"""
         self.conversation_history = []
         self.session_start = datetime.now()
         return "✨ Conversation reset! Let's start fresh. How can I help you?"
+    
+    def reset_conversation(self):
+        """Reset conversation (GUI compatibility - same as reset)"""
+        return self.reset()
     
     def set_user_name(self, name: str):
         """Set user's name for personalization"""
@@ -121,15 +145,24 @@ Guidelines:
         return f"Nice to meet you, {name}! 👋"
     
     def get_stats(self) -> dict:
-        """Get chatbot statistics"""
+        """Get chatbot statistics (enhanced for GUI compatibility)"""
         session_duration = (datetime.now() - self.session_start).total_seconds()
+        
+        # Calculate conversation length
+        conversation_length = len([msg for msg in self.conversation_history if msg["role"] == "user"])
         
         return {
             "total_messages": self.total_messages,
+            "current_messages": conversation_length,
             "conversation_length": len(self.conversation_history),
+            "total_conversations": 1 if self.conversation_history else 0,
             "session_duration_minutes": round(session_duration / 60, 1),
             "session_start": self.session_start.strftime("%Y-%m-%d %H:%M:%S"),
-            "user_name": self.user_name
+            "user_name": self.user_name,
+            "ai_available": self.ai_available,
+            "learned_preferences": 0,
+            "top_topics": [],
+            "first_interaction": self.session_start.isoformat() if self.conversation_history else "Never"
         }
     
     def save_conversation(self, filepath: str = "conversation_history.json"):
@@ -197,7 +230,46 @@ Guidelines:
 
 def create_vatsal_ai(api_key=None):
     """Create chatbot instance (for compatibility with GUI app)"""
-    return EnhancedGeminiChatbot(api_key)
+    try:
+        return EnhancedGeminiChatbot(api_key)
+    except Exception as e:
+        # Return a fallback object if API key is not available
+        class FallbackChatbot:
+            def __init__(self):
+                self.user_name = "User"
+                self.ai_available = False
+                
+            def chat(self, message):
+                return "API key not configured. Please add GEMINI_API_KEY to your secrets."
+            
+            async def process_message(self, message):
+                return self.chat(message)
+            
+            def initiate_conversation(self):
+                return "⚠️ GEMINI_API_KEY not found. Please configure it in Replit Secrets."
+            
+            def reset(self):
+                return "Chatbot not available without API key."
+            
+            def reset_conversation(self):
+                return self.reset()
+            
+            def get_stats(self):
+                return {
+                    "total_messages": 0,
+                    "current_messages": 0,
+                    "conversation_length": 0,
+                    "total_conversations": 0,
+                    "session_duration_minutes": 0,
+                    "session_start": "N/A",
+                    "user_name": "User",
+                    "ai_available": False,
+                    "learned_preferences": 0,
+                    "top_topics": [],
+                    "first_interaction": "Never"
+                }
+        
+        return FallbackChatbot()
 
 
 def print_header():
@@ -205,7 +277,7 @@ def print_header():
     print("\n" + "="*75)
     print("🤖 VATSAL - Enhanced AI Chatbot (Powered by Google Gemini)")
     print("="*75)
-    print("✨ New Features:")
+    print("✨ Features:")
     print("   • 💬 Natural conversation with context awareness")
     print("   • 🧠 Enhanced memory (remembers last 15 messages)")
     print("   • 📊 Session statistics and analytics")
@@ -263,7 +335,7 @@ def main():
         print()
     
     # Initial greeting
-    print("🤖 VATSAL: Hello! I'm your intelligent AI assistant. Ask me anything! 😊\n")
+    print(f"🤖 VATSAL: {chatbot.initiate_conversation()}\n")
     
     # Main conversation loop
     while True:
