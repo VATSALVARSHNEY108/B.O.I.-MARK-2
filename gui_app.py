@@ -11,6 +11,7 @@ from vatsal_assistant import create_vatsal_assistant
 from advanced_smart_screen_monitor import create_advanced_smart_screen_monitor
 from ai_screen_monitoring_system import create_ai_screen_monitoring_system
 from simple_chatbot import SimpleChatbot
+from file_automation import create_file_automation
 from datetime import datetime
 
 load_dotenv()
@@ -26,6 +27,7 @@ class AutomationControllerGUI:
         self.vatsal = create_vatsal_assistant()
         self.advanced_monitor = create_advanced_smart_screen_monitor()
         self.ai_monitor = create_ai_screen_monitoring_system()
+        self.file_automation = create_file_automation()
         
         try:
             self.simple_chatbot = SimpleChatbot()
@@ -158,6 +160,7 @@ class AutomationControllerGUI:
         self.create_vatsal_ai_tab(notebook)
         self.create_code_tab(notebook)
         self.create_desktop_tab(notebook)
+        self.create_file_automation_tab(notebook)
         self.create_messaging_tab(notebook)
         self.create_system_tab(notebook)
         self.create_productivity_tab(notebook)
@@ -519,6 +522,56 @@ class AutomationControllerGUI:
             ("⌨️ Type Text", "Type Hello World"),
             ("🖱️ Analyze Screen", "Analyze current screen"),
             ("📊 Get System Info", "Show system information"),
+        ]
+        
+        for text, command in actions:
+            btn = tk.Button(scrollable_frame,
+                          text=text,
+                          bg="#313244",
+                          fg="#ffffff",
+                          font=("Segoe UI", 10),
+                          relief="flat",
+                          cursor="hand2",
+                          command=lambda c=command: self.quick_command(c),
+                          anchor="w",
+                          padx=15,
+                          pady=10,
+                          activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+    
+    def create_file_automation_tab(self, notebook):
+        tab = tk.Frame(notebook, bg="#1e1e2e")
+        notebook.add(tab, text="📁 File Auto")
+        
+        canvas = tk.Canvas(tab, bg="#1e1e2e", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(tab, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="#1e1e2e")
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        actions = [
+            ("📅 Rename by Date", "Rename files in Downloads folder by date"),
+            ("🔢 Rename Sequential", "Rename files sequentially with numbers"),
+            ("📂 Rename by Type", "Rename files by their type"),
+            ("📁 Rename by Project", "Rename files using folder name as prefix"),
+            ("🔍 Start Folder Monitor", "Monitor Downloads folder for new files"),
+            ("⏹️ Stop Folder Monitor", "Stop monitoring folder"),
+            ("📊 View Active Monitors", "Show all active folder monitors"),
+            ("🗜️ Compress Folder", "Compress Documents folder to ZIP"),
+            ("📦 Extract ZIP", "Extract archive.zip to current folder"),
+            ("🗂️ Compress Old Files", "Compress files older than 30 days"),
+            ("📁 Batch Compress", "Compress multiple files into one archive"),
+            ("🔄 Auto-Archive by Age", "Automatically archive old files"),
         ]
         
         for text, command in actions:
