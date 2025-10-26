@@ -173,14 +173,20 @@ Instructions:
 3. Be conversational, friendly, and helpful
 4. Show that you remember previous discussions
 5. Provide insightful, context-aware responses
-6. Keep responses concise (2-4 sentences) unless detail is needed
+6. Answer questions clearly and directly
+7. Keep responses concise (2-4 sentences) unless detail is needed
 
 Respond as VATSAL:"""
         
         try:
             response = await self.gemini.analyze_text_async(prompt)
-            return response
+            if response and len(response.strip()) > 5:
+                return response
+            else:
+                print("Empty Gemini response, using fallback")
+                return self._simple_response(user_message)
         except Exception as e:
+            print(f"Gemini error: {e}")
             return self._simple_response(user_message)
     
     def _learn_from_message(self, message: str):
@@ -281,11 +287,11 @@ Respond as VATSAL:"""
         return "\n".join(relevant) if relevant else "No directly relevant past topics"
     
     def _simple_response(self, user_message: str) -> str:
-        """Simple fallback response without AI"""
+        """Enhanced fallback response with built-in knowledge"""
         msg_lower = user_message.lower()
         
         # Greetings
-        if any(word in msg_lower for word in ["hello", "hi", "hey"]):
+        if any(word in msg_lower for word in ["hello", "hi", "hey", "good morning", "good afternoon"]):
             return "Hello! How can I help you today?"
         
         # Thanks
@@ -298,12 +304,55 @@ Respond as VATSAL:"""
             self._save_memory()
             return "Goodbye! I'll remember our conversation for next time. Have a great day!"
         
-        # Questions
-        if '?' in user_message:
-            return "That's an interesting question! I'd love to help answer that."
+        # Technical questions - Built-in knowledge
+        if any(term in msg_lower for term in ["deep learning", "deeplearning", "machine learning", "ml", "ai", "neural network"]):
+            if "deep learning" in msg_lower or "deeplearning" in msg_lower:
+                return """Deep learning is a subset of machine learning that uses multi-layered neural networks to learn from data. 
+                
+Think of it like this: Traditional programming uses rules to process data. Deep learning learns the rules from the data itself by using layers of artificial neurons. Each layer learns increasingly complex patterns - from simple edges in images to recognizing faces.
+
+Popular applications: Image recognition, speech recognition, natural language processing, self-driving cars.
+
+Common frameworks: TensorFlow, PyTorch, Keras.
+
+Would you like to know more about a specific aspect?"""
+            
+            if "machine learning" in msg_lower or "ml" in msg_lower:
+                return "Machine learning is AI that learns from data without being explicitly programmed. It includes supervised learning (labeled data), unsupervised learning (finding patterns), and reinforcement learning (learning from rewards)."
+            
+            if "neural network" in msg_lower:
+                return "Neural networks are computing systems inspired by biological brains. They consist of layers of interconnected nodes (neurons) that process and transform data to learn patterns and make predictions."
         
-        # Default
-        return "I understand. How can I assist you with that?"
+        # Programming questions
+        if any(term in msg_lower for term in ["python", "javascript", "programming", "coding", "code"]):
+            return "I'd be happy to help with programming! Could you be more specific about what you'd like to know? For example, ask about a specific language, concept, or problem you're facing."
+        
+        # General questions (with or without ?)
+        if any(word in msg_lower for word in ["what", "how", "why", "when", "where", "who", "explain", "tell me"]):
+            return "That's a great question! I'd love to help you with that. Could you provide a bit more detail so I can give you the best answer?"
+        
+        # Technical request
+        if "technical" in msg_lower or "explain" in msg_lower:
+            context = self._get_recent_context(limit=2)
+            if context and "deep learning" in context.lower():
+                return """Deep Learning (Technical):
+
+Architecture: Multi-layer neural networks (typically 3+ hidden layers) with non-linear activation functions.
+
+Key Components:
+- Input Layer: Receives raw data
+- Hidden Layers: Extract hierarchical features through transformations
+- Output Layer: Produces predictions
+
+Training: Uses backpropagation algorithm with gradient descent optimization to minimize loss functions.
+
+Types: CNNs (images), RNNs/LSTMs (sequences), Transformers (NLP), GANs (generation).
+
+Requires: Large datasets, GPUs/TPUs for computation, frameworks like PyTorch/TensorFlow."""
+            return "I can provide technical details! What specific topic would you like me to explain technically?"
+        
+        # Default - more engaging
+        return "I'm here to help! Could you tell me more about what you'd like to know or do? Feel free to ask me anything - I'm always learning!"
     
     def _update_stats(self):
         """Update conversation statistics"""
