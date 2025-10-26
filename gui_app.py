@@ -316,14 +316,14 @@ class AutomationControllerGUI:
         header_frame.pack(fill="x", pady=(10, 0), padx=10)
         
         header = tk.Label(header_frame,
-                         text="💬 VATSAL - Advanced AI Assistant",
+                         text="💬 VATSAL - AI Chatbot",
                          bg="#1a1a2e",
                          fg="#89b4fa",
                          font=("Segoe UI", 14, "bold"))
         header.pack(pady=12)
         
         info = tk.Label(header_frame,
-                       text="Conversational AI • Asks questions • Proactive • Intelligent",
+                       text="Friendly Conversational AI • Chat naturally • Ask questions",
                        bg="#1a1a2e",
                        fg="#a6adc8",
                        font=("Segoe UI", 9, "italic"))
@@ -389,7 +389,7 @@ class AutomationControllerGUI:
         self.add_hover_effect(start_btn, "#313244", "#45475a")
         
         suggest_btn = tk.Button(button_frame,
-                               text="💡 Get Suggestion",
+                               text="💡 Help Me Start",
                                bg="#313244",
                                fg="#ffffff",
                                font=("Segoe UI", 9, "bold"),
@@ -1088,12 +1088,8 @@ class AutomationControllerGUI:
         self.vatsal_conversation_display.see(tk.END)
     
     def vatsal_ai_get_suggestion(self):
-        """Get proactive suggestion from VATSAL"""
-        suggestion = self.vatsal_ai.get_proactive_suggestion()
-        if suggestion:
-            self._add_vatsal_ai_message("VATSAL", suggestion)
-        else:
-            self._add_vatsal_ai_message("VATSAL", "I don't have any suggestions at the moment, Sir. What would you like me to do?")
+        """Get a friendly prompt from VATSAL"""
+        self._add_vatsal_ai_message("VATSAL", "Hello! What would you like to chat about? I'm here to help with questions, conversations, or anything else you need!")
     
     def clear_vatsal_ai_conversation(self):
         """Clear VATSAL conversation history"""
@@ -1105,18 +1101,15 @@ class AutomationControllerGUI:
         messagebox.showinfo("Cleared", "Conversation history cleared.")
     
     def show_vatsal_ai_stats(self):
-        """Show VATSAL conversational AI statistics"""
+        """Show VATSAL chatbot statistics"""
         stats = self.vatsal_ai.get_stats()
         
         stats_message = f"""
-📊 VATSAL Conversational AI Statistics
+📊 VATSAL Chatbot Statistics
 
-Total Interactions: {stats['total_interactions']}
-Conversation Length: {stats['conversation_length']} messages
-Learned Tasks: {stats['learned_tasks']}
-User Name: {stats['user_name']}
-Personality Mode: {stats['personality_mode']}
-Last Interaction: {stats.get('last_interaction', 'Never')}
+Total Messages: {stats['total_messages']}
+Conversation Exchanges: {stats['conversation_length']}
+AI Available: {'Yes' if stats['ai_available'] else 'No'}
 """
         messagebox.showinfo("VATSAL Stats", stats_message)
     
