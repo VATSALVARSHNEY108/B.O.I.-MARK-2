@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
 """
-Simple Intelligent Chatbot powered by Google Gemini AI
-Ask any question and get intelligent answers!
+Enhanced Intelligent Chatbot powered by Google Gemini AI
+Advanced features: context awareness, personality, statistics, and more!
 """
 
 import os
 import sys
+import json
+from datetime import datetime
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
-# Load environment variables
 load_dotenv()
 
 
-class SimpleChatbot:
-    """Simple intelligent chatbot using Gemini AI"""
+class EnhancedGeminiChatbot:
+    """Enhanced intelligent chatbot using Gemini AI with advanced features"""
     
     def __init__(self, api_key=None):
         if api_key is None:
@@ -26,85 +27,224 @@ class SimpleChatbot:
         self.client = genai.Client(api_key=api_key)
         self.model = "gemini-2.0-flash-exp"
         self.conversation_history = []
-    
+        self.session_start = datetime.now()
+        self.total_messages = 0
+        self.user_name = "User"
+        self.personality = "friendly"
+        
+        self.system_prompt = """You are VATSAL, an intelligent and helpful AI assistant.
+
+Your personality:
+- Friendly, approachable, and knowledgeable
+- Enthusiastic about helping users
+- Clear and concise in your explanations
+- Patient and understanding
+- Occasionally use relevant emojis to make conversations engaging
+
+Your capabilities:
+- Answer questions on any topic
+- Help with coding and technical problems
+- Provide explanations and tutorials
+- Assist with writing and creativity
+- Offer advice and suggestions
+- Engage in meaningful conversations
+
+Guidelines:
+- Keep responses concise but complete (2-5 sentences unless more detail is needed)
+- Use examples when helpful
+- Break down complex topics into simple terms
+- Ask clarifying questions if needed
+- Be encouraging and positive
+- Remember context from the conversation"""
+
     def chat(self, user_message: str) -> str:
-        """Send a message and get AI response"""
+        """Send a message and get AI response with enhanced context"""
         
-        # Add user message to history
-        self.conversation_history.append(f"User: {user_message}")
-        
-        # Build conversation context (last 10 messages)
-        context = "\n".join(self.conversation_history[-10:])
-        prompt = f"{context}\n\nAssistant:"
-        
-        # System instruction for the AI
-        system_instruction = """You are a helpful, friendly, and knowledgeable AI assistant.
-Provide clear, simple, and accurate answers to questions.
-Be concise but complete in your explanations.
-Use examples when helpful.
-For technical topics, explain in simple terms first."""
-        
-        # Get response from Gemini
-        response = self.client.models.generate_content(
-            model=self.model,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=system_instruction,
-                temperature=0.7,
-                max_output_tokens=1000,
+        try:
+            self.total_messages += 1
+            
+            # Add user message to history
+            self.conversation_history.append({
+                "role": "user",
+                "content": user_message,
+                "timestamp": datetime.now().isoformat()
+            })
+            
+            # Build conversation context (last 15 messages for better context)
+            recent_history = self.conversation_history[-15:]
+            
+            # Format conversation for the prompt
+            conversation_text = ""
+            for msg in recent_history:
+                role = "User" if msg["role"] == "user" else "VATSAL"
+                conversation_text += f"{role}: {msg['content']}\n"
+            
+            # Create the full prompt with context
+            full_prompt = f"{conversation_text}VATSAL:"
+            
+            # Get response from Gemini
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=full_prompt,
+                config=types.GenerateContentConfig(
+                    system_instruction=self.system_prompt,
+                    temperature=0.8,
+                    max_output_tokens=1500,
+                    top_p=0.95,
+                )
             )
-        )
-        
-        ai_response = response.text.strip()
-        
-        # Add AI response to history
-        self.conversation_history.append(f"Assistant: {ai_response}")
-        
-        return ai_response
+            
+            ai_response = response.text.strip()
+            
+            # Add AI response to history
+            self.conversation_history.append({
+                "role": "assistant",
+                "content": ai_response,
+                "timestamp": datetime.now().isoformat()
+            })
+            
+            return ai_response
+            
+        except Exception as e:
+            error_msg = f"I apologize, but I encountered an error: {str(e)}"
+            return error_msg
     
     def reset(self):
-        """Clear conversation history"""
+        """Clear conversation history and start fresh"""
         self.conversation_history = []
-        return "Conversation reset! Starting fresh."
+        self.session_start = datetime.now()
+        return "✨ Conversation reset! Let's start fresh. How can I help you?"
+    
+    def set_user_name(self, name: str):
+        """Set user's name for personalization"""
+        self.user_name = name
+        return f"Nice to meet you, {name}! 👋"
+    
+    def get_stats(self) -> dict:
+        """Get chatbot statistics"""
+        session_duration = (datetime.now() - self.session_start).total_seconds()
+        
+        return {
+            "total_messages": self.total_messages,
+            "conversation_length": len(self.conversation_history),
+            "session_duration_minutes": round(session_duration / 60, 1),
+            "session_start": self.session_start.strftime("%Y-%m-%d %H:%M:%S"),
+            "user_name": self.user_name
+        }
+    
+    def save_conversation(self, filepath: str = "conversation_history.json"):
+        """Save conversation history to a file"""
+        try:
+            data = {
+                "session_start": self.session_start.isoformat(),
+                "user_name": self.user_name,
+                "total_messages": self.total_messages,
+                "conversation": self.conversation_history
+            }
+            
+            with open(filepath, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
+            
+            return f"✅ Conversation saved to {filepath}"
+        except Exception as e:
+            return f"❌ Error saving conversation: {str(e)}"
+    
+    def load_conversation(self, filepath: str = "conversation_history.json"):
+        """Load conversation history from a file"""
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            self.conversation_history = data.get("conversation", [])
+            self.total_messages = data.get("total_messages", 0)
+            self.user_name = data.get("user_name", "User")
+            
+            return f"✅ Conversation loaded from {filepath}"
+        except FileNotFoundError:
+            return "❌ No saved conversation found"
+        except Exception as e:
+            return f"❌ Error loading conversation: {str(e)}"
+    
+    def get_summary(self) -> str:
+        """Get a summary of the conversation"""
+        if not self.conversation_history:
+            return "No conversation to summarize yet."
+        
+        try:
+            # Get conversation text
+            conversation_text = ""
+            for msg in self.conversation_history:
+                role = "User" if msg["role"] == "user" else "AI"
+                conversation_text += f"{role}: {msg['content']}\n"
+            
+            # Ask AI to summarize
+            summary_prompt = f"Please provide a brief summary of this conversation:\n\n{conversation_text}\n\nSummary:"
+            
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=summary_prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.3,
+                    max_output_tokens=300,
+                )
+            )
+            
+            return response.text.strip()
+            
+        except Exception as e:
+            return f"Error generating summary: {str(e)}"
 
 
 def create_vatsal_ai(api_key=None):
     """Create chatbot instance (for compatibility with GUI app)"""
-    return SimpleChatbot(api_key)
+    return EnhancedGeminiChatbot(api_key)
 
 
 def print_header():
     """Display chatbot header"""
-    print("\n" + "="*70)
-    print("🤖 Intelligent AI Chatbot (Powered by Google Gemini)")
-    print("="*70)
-    print("💡 Ask me anything! I can help with:")
+    print("\n" + "="*75)
+    print("🤖 VATSAL - Enhanced AI Chatbot (Powered by Google Gemini)")
+    print("="*75)
+    print("✨ New Features:")
+    print("   • 💬 Natural conversation with context awareness")
+    print("   • 🧠 Enhanced memory (remembers last 15 messages)")
+    print("   • 📊 Session statistics and analytics")
+    print("   • 💾 Save and load conversations")
+    print("   • 🎯 Personalized responses")
+    print("\n💡 Ask me anything! I can help with:")
     print("   • General knowledge & facts")
-    print("   • Programming & coding")
-    print("   • Math & science")
-    print("   • Writing & creativity")
-    print("   • Explanations & how-to guides")
+    print("   • Programming & coding help")
+    print("   • Math, science & technology")
+    print("   • Writing & creative tasks")
+    print("   • Explanations & tutorials")
     print("   • And much more!")
     print("\n💬 Commands:")
-    print("   • Type your question to get an answer")
-    print("   • Type 'reset' to start a new conversation")
-    print("   • Type 'quit' or 'exit' to end")
-    print("="*70 + "\n")
+    print("   • Just type your question or message")
+    print("   • 'reset' - Start a new conversation")
+    print("   • 'stats' - View session statistics")
+    print("   • 'summary' - Get conversation summary")
+    print("   • 'save' - Save conversation to file")
+    print("   • 'load' - Load previous conversation")
+    print("   • 'quit' or 'exit' - End chat")
+    print("="*75 + "\n")
 
 
 def main():
-    """Run the chatbot"""
+    """Run the enhanced chatbot"""
     
     # Check for API key
     if not os.getenv("GEMINI_API_KEY"):
         print("❌ Error: GEMINI_API_KEY not found!")
-        print("Please set your Gemini API key in environment variables.")
+        print("\n📝 To fix this:")
+        print("   1. Go to Replit Secrets (🔒 icon)")
+        print("   2. Add: GEMINI_API_KEY = your_api_key")
+        print("   3. Get API key from: https://aistudio.google.com/app/apikey")
         sys.exit(1)
     
     # Initialize chatbot
-    print("🔧 Initializing AI chatbot...")
+    print("🔧 Initializing Enhanced AI Chatbot...")
     try:
-        chatbot = SimpleChatbot()
+        chatbot = EnhancedGeminiChatbot()
         print("✅ Chatbot ready!\n")
     except Exception as e:
         print(f"❌ Error: {e}")
@@ -113,14 +253,23 @@ def main():
     # Display header
     print_header()
     
+    # Get user's name (optional)
+    try:
+        name_input = input("👤 What's your name? (or press Enter to skip): ").strip()
+        if name_input:
+            print(chatbot.set_user_name(name_input))
+        print()
+    except:
+        print()
+    
     # Initial greeting
-    print("🤖 AI: Hello! I'm your intelligent AI assistant. Ask me anything!\n")
+    print("🤖 VATSAL: Hello! I'm your intelligent AI assistant. Ask me anything! 😊\n")
     
     # Main conversation loop
     while True:
         try:
             # Get user input
-            user_input = input("👤 You: ").strip()
+            user_input = input(f"👤 {chatbot.user_name}: ").strip()
             
             # Skip empty input
             if not user_input:
@@ -128,7 +277,7 @@ def main():
             
             # Handle exit commands
             if user_input.lower() in ['quit', 'exit', 'bye', 'goodbye']:
-                print("\n🤖 AI: Goodbye! Have a great day! 👋\n")
+                print("\n🤖 VATSAL: It was great chatting with you! Goodbye! 👋✨\n")
                 break
             
             # Handle reset command
@@ -137,13 +286,43 @@ def main():
                 print(f"\n🔄 {message}\n")
                 continue
             
+            # Handle stats command
+            if user_input.lower() == 'stats':
+                stats = chatbot.get_stats()
+                print(f"\n📊 Session Statistics:")
+                print(f"   • Messages: {stats['total_messages']}")
+                print(f"   • Conversation length: {stats['conversation_length']} exchanges")
+                print(f"   • Session duration: {stats['session_duration_minutes']} minutes")
+                print(f"   • Started: {stats['session_start']}")
+                print(f"   • User: {stats['user_name']}\n")
+                continue
+            
+            # Handle summary command
+            if user_input.lower() == 'summary':
+                print("\n📝 Generating conversation summary...\n")
+                summary = chatbot.get_summary()
+                print(f"📋 Summary: {summary}\n")
+                continue
+            
+            # Handle save command
+            if user_input.lower() == 'save':
+                message = chatbot.save_conversation()
+                print(f"\n{message}\n")
+                continue
+            
+            # Handle load command
+            if user_input.lower() == 'load':
+                message = chatbot.load_conversation()
+                print(f"\n{message}\n")
+                continue
+            
             # Get AI response
-            print("\n🤖 AI: ", end="", flush=True)
+            print("\n🤖 VATSAL: ", end="", flush=True)
             response = chatbot.chat(user_input)
             print(f"{response}\n")
         
         except KeyboardInterrupt:
-            print("\n\n🤖 AI: Goodbye! 👋\n")
+            print("\n\n🤖 VATSAL: Goodbye! Take care! 👋\n")
             break
         
         except Exception as e:
