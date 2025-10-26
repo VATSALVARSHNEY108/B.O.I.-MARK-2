@@ -19,11 +19,19 @@ An intelligent chatbot powered by Google Gemini AI that can answer any type of q
 
 ### Running the Chatbot
 
-Simply run the chatbot script in your terminal:
+You can run the chatbot in two ways:
 
+**Option 1: Run the main AI file directly (Recommended)**
+```bash
+python vatsal_ai.py
+```
+
+**Option 2: Run the standalone chatbot script**
 ```bash
 python vatsal_chatbot.py
 ```
+
+Both options provide the same intelligent chatbot experience!
 
 ### Interactive Commands
 
