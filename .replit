@@ -23,6 +23,10 @@ args = "GUI App"
 task = "workflow.run"
 args = "Test Gemini"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Simple Chatbot"
+
 [[workflows.workflow]]
 name = "GUI App"
 author = "agent"
@@ -41,6 +45,17 @@ author = "agent"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python test_gemini.py"
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow]]
+name = "Simple Chatbot"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python simple_chatbot.py"
 
 [workflows.workflow.metadata]
 outputType = "console"
