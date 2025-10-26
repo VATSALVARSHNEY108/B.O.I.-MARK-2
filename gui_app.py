@@ -341,7 +341,7 @@ class AutomationControllerGUI:
             fg="#cdd6f4",
             font=("Consolas", 10),
             wrap=tk.WORD,
-            height=20,
+            height=12,
             state='disabled',
             relief="flat",
             padx=10,
