@@ -310,3 +310,127 @@ class GUIAutomation:
         except Exception as e:
             print(f"Error waiting: {e}")
             return False
+    
+    def get_desktop_path(self) -> str:
+        """Get the path to the user's Desktop folder"""
+        home = os.path.expanduser("~")
+        
+        if self.system == "Windows":
+            desktop = os.path.join(home, "Desktop")
+        elif self.system == "Darwin":
+            desktop = os.path.join(home, "Desktop")
+        else:
+            desktop = os.path.join(home, "Desktop")
+            if not os.path.exists(desktop):
+                desktop = home
+        
+        return desktop
+    
+    def open_folder(self, folder_path: str = None, folder_name: str = None) -> bool:
+        """
+        Open a folder in the file manager
+        
+        Args:
+            folder_path: Full path to the folder
+            folder_name: Name of folder (will search in Desktop, Documents, Downloads, Home)
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            target_path = None
+            
+            if folder_path:
+                target_path = os.path.expanduser(folder_path)
+            elif folder_name:
+                home = os.path.expanduser("~")
+                desktop = self.get_desktop_path()
+                
+                search_locations = [
+                    desktop,
+                    os.path.join(home, "Documents"),
+                    os.path.join(home, "Downloads"),
+                    home,
+                    os.path.join(desktop, folder_name),
+                    os.path.join(home, "Documents", folder_name),
+                    os.path.join(home, "Downloads", folder_name)
+                ]
+                
+                for location in search_locations:
+                    if os.path.exists(location):
+                        if location.endswith(folder_name) or os.path.basename(location) == folder_name:
+                            target_path = location
+                            break
+                        elif os.path.isdir(os.path.join(location, folder_name)):
+                            target_path = os.path.join(location, folder_name)
+                            break
+                
+                if not target_path:
+                    print(f"⚠️  Folder '{folder_name}' not found in common locations")
+                    return False
+            else:
+                target_path = self.get_desktop_path()
+            
+            if not os.path.exists(target_path):
+                print(f"⚠️  Path does not exist: {target_path}")
+                return False
+            
+            if self.demo_mode:
+                self._log_demo(f"Would open folder: {target_path}")
+                return True
+            
+            print(f"📂 Opening folder: {target_path}")
+            
+            if self.system == "Windows":
+                os.startfile(target_path)
+            elif self.system == "Darwin":
+                os.system(f'open "{target_path}"')
+            else:
+                os.system(f'xdg-open "{target_path}" 2>/dev/null &')
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error opening folder: {e}")
+            return False
+    
+    def open_desktop_folder(self, folder_name: str = None) -> bool:
+        """
+        Open a folder on the Desktop or the Desktop itself
+        
+        Args:
+            folder_name: Name of folder on Desktop (None to open Desktop itself)
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            desktop_path = self.get_desktop_path()
+            
+            if folder_name:
+                target_path = os.path.join(desktop_path, folder_name)
+                if not os.path.exists(target_path):
+                    print(f"⚠️  Folder '{folder_name}' not found on Desktop")
+                    print(f"   Searched: {target_path}")
+                    return False
+            else:
+                target_path = desktop_path
+            
+            if self.demo_mode:
+                self._log_demo(f"Would open Desktop folder: {target_path}")
+                return True
+            
+            print(f"📂 Opening Desktop folder: {target_path}")
+            
+            if self.system == "Windows":
+                os.startfile(target_path)
+            elif self.system == "Darwin":
+                os.system(f'open "{target_path}"')
+            else:
+                os.system(f'xdg-open "{target_path}" 2>/dev/null &')
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error opening Desktop folder: {e}")
+            return False
