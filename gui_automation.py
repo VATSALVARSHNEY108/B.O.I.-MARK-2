@@ -320,9 +320,11 @@ class GUIAutomation:
         elif self.system == "Darwin":
             desktop = os.path.join(home, "Desktop")
         else:
-            desktop = os.path.join(home, "Desktop")
-            if not os.path.exists(desktop):
+            desktop_path = os.path.join(home, "Desktop")
+            if not os.path.exists(desktop_path):
                 desktop = home
+            else:
+                desktop = desktop_path
         
         return desktop
     
@@ -381,12 +383,13 @@ class GUIAutomation:
             
             print(f"📂 Opening folder: {target_path}")
             
+            import subprocess
             if self.system == "Windows":
-                os.startfile(target_path)
+                subprocess.Popen(['explorer', target_path])
             elif self.system == "Darwin":
-                os.system(f'open "{target_path}"')
+                subprocess.Popen(['open', target_path])
             else:
-                os.system(f'xdg-open "{target_path}" 2>/dev/null &')
+                subprocess.Popen(['xdg-open', target_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             
             return True
             
@@ -422,12 +425,13 @@ class GUIAutomation:
             
             print(f"📂 Opening Desktop folder: {target_path}")
             
+            import subprocess
             if self.system == "Windows":
-                os.startfile(target_path)
+                subprocess.Popen(['explorer', target_path])
             elif self.system == "Darwin":
-                os.system(f'open "{target_path}"')
+                subprocess.Popen(['open', target_path])
             else:
-                os.system(f'xdg-open "{target_path}" 2>/dev/null &')
+                subprocess.Popen(['xdg-open', target_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             
             return True
             

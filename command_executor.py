@@ -252,6 +252,44 @@ class CommandExecutor:
                     "message": f"Opened web search for: {query}"
                 }
             
+            elif action == "open_folder":
+                folder_path = parameters.get("folder_path")
+                folder_name = parameters.get("folder_name")
+                success = self.gui.open_folder(folder_path=folder_path, folder_name=folder_name)
+                if success:
+                    target = folder_path if folder_path else folder_name
+                    return {
+                        "success": True,
+                        "message": f"Opened folder: {target}"
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "message": "Failed to open folder"
+                    }
+            
+            elif action == "open_desktop_folder":
+                folder_name = parameters.get("folder_name")
+                success = self.gui.open_desktop_folder(folder_name=folder_name)
+                if success:
+                    msg = f"Opened Desktop folder: {folder_name}" if folder_name else "Opened Desktop"
+                    return {
+                        "success": True,
+                        "message": msg
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "message": f"Failed to open Desktop folder: {folder_name}" if folder_name else "Failed to open Desktop"
+                    }
+            
+            elif action == "open_desktop":
+                success = self.gui.open_desktop_folder()
+                return {
+                    "success": success,
+                    "message": "Opened Desktop" if success else "Failed to open Desktop"
+                }
+            
             elif action == "open_youtube":
                 video_url = parameters.get("video_url", "")
                 video_id = parameters.get("video_id", "")
