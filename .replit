@@ -59,3 +59,7 @@ args = "python simple_chatbot.py"
 
 [workflows.workflow.metadata]
 outputType = "console"
+
+[[ports]]
+localPort = 43633
+externalPort = 80

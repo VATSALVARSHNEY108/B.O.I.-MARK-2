@@ -347,7 +347,7 @@ class AutomationControllerGUI:
             padx=10,
             pady=10
         )
-        self.vatsal_conversation_display.pack(fill="both", expand=True, padx=10, pady=(10, 5))
+        self.vatsal_conversation_display.pack(fill="both", expand=False, padx=10, pady=(10, 5))
         
         self.vatsal_conversation_display.tag_config("vatsal", foreground="#89b4fa", font=("Consolas", 10, "bold"))
         self.vatsal_conversation_display.tag_config("user", foreground="#a6e3a1", font=("Consolas", 10, "bold"))
