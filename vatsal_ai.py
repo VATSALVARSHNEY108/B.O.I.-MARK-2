@@ -1,38 +1,228 @@
-arns from data without being explicitly programmed. It includes supervised learning (labeled data), unsupervised learning (finding patterns), and reinforcement learning (learning from rewards)."
-            
-            if "neural network" in msg_lower:
-                return "Neural networks are computing systems inspired by biological brains. They consist of layers of interconnected nodes (neurons) that process and transform data to learn patterns and make predictions."
+"""
+VATSAL AI - Intelligent Chatbot with Gemini AI
+A smart AI chatbot powered by Google Gemini that can answer any type of question
+"""
+
+import json
+import os
+from datetime import datetime
+from typing import List, Dict, Any, Optional
+from google import genai
+from google.genai import types
+
+
+class VatsalAI:
+    """Intelligent conversational AI chatbot powered by Google Gemini"""
+    
+    def __init__(self, api_key: Optional[str] = None):
+        self.name = "VATSAL"
+        self.memory_file = "vatsal_memory.json"
         
-        # Programming questions
-        if any(term in msg_lower for term in ["python", "javascript", "programming", "coding", "code"]):
-            return "I'd be happy to help with programming! Could you be more specific about what you'd like to know? For example, ask about a specific language, concept, or problem you're facing."
+        # Initialize Gemini AI client
+        if api_key is None:
+            api_key = os.getenv("GEMINI_API_KEY")
         
-        # General questions (with or without ?)
-        if any(word in msg_lower for word in ["what", "how", "why", "when", "where", "who", "explain", "tell me"]):
-            return "That's a great question! I'd love to help you with that. Could you provide a bit more detail so I can give you the best answer?"
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY not found in environment variables")
         
-        # Technical request
-        if "technical" in msg_lower or "explain" in msg_lower:
-            context = self._get_recent_context(limit=2)
-            if context and "deep learning" in context.lower():
-                return """Deep Learning (Technical):
-
-Architecture: Multi-layer neural networks (typically 3+ hidden layers) with non-linear activation functions.
-
-Key Components:
-- Input Layer: Receives raw data
-- Hidden Layers: Extract hierarchical features through transformations
-- Output Layer: Produces predictions
-
-Training: Uses backpropagation algorithm with gradient descent optimization to minimize loss functions.
-
-Types: CNNs (images), RNNs/LSTMs (sequences), Transformers (NLP), GANs (generation).
-
-Requires: Large datasets, GPUs/TPUs for computation, frameworks like PyTorch/TensorFlow."""
-            return "I can provide technical details! What specific topic would you like me to explain technically?"
+        self.client = genai.Client(api_key=api_key)
+        self.model_name = "gemini-2.0-flash-exp"
         
-        # Default - more engaging
-        return "I'm here to help! Could you tell me more about what you'd like to know or do? Feel free to ask me anything - I'm always learning!"
+        # Load persistent memory
+        self.memory = self._load_memory()
+        
+        # Current session conversation
+        self.current_conversation: List[Dict[str, str]] = []
+        
+        # User profile and learning data
+        self.user_profile = self.memory.get("user_profile", {
+            "name": "User",
+            "preferences": {},
+            "interests": [],
+            "common_topics": [],
+            "conversation_style": "friendly"
+        })
+        
+        # All past conversations (loaded from memory)
+        self.all_conversations = self.memory.get("conversations", [])
+        
+        # Statistics
+        self.stats = self.memory.get("stats", {
+            "total_conversations": 0,
+            "total_messages": 0,
+            "favorite_topics": {},
+            "first_interaction": None,
+            "last_interaction": None
+        })
+    
+    def _load_memory(self) -> Dict[str, Any]:
+        """Load persistent memory from file"""
+        if os.path.exists(self.memory_file):
+            try:
+                with open(self.memory_file, 'r') as f:
+                    return json.load(f)
+            except:
+                pass
+        return {}
+    
+    def _save_memory(self):
+        """Save memory to persistent storage"""
+        try:
+            self.memory = {
+                "user_profile": self.user_profile,
+                "conversations": self.all_conversations[-50:],
+                "stats": self.stats,
+                "last_saved": datetime.now().isoformat()
+            }
+            with open(self.memory_file, 'w') as f:
+                json.dump(self.memory, f, indent=2)
+        except Exception as e:
+            print(f"Failed to save memory: {e}")
+    
+    def initiate_conversation(self) -> str:
+        """Start a conversation with a personalized greeting"""
+        current_hour = datetime.now().hour
+        
+        if 5 <= current_hour < 12:
+            time_greeting = "Good morning"
+        elif 12 <= current_hour < 17:
+            time_greeting = "Good afternoon"
+        elif 17 <= current_hour < 21:
+            time_greeting = "Good evening"
+        else:
+            time_greeting = "Hello"
+        
+        user_name = self.user_profile.get("name", "")
+        if user_name and user_name != "User":
+            greeting = f"{time_greeting}, {user_name}!"
+        else:
+            greeting = f"{time_greeting}!"
+        
+        if self.stats.get("total_conversations", 0) > 0:
+            greeting += " Welcome back! How can I help you today?"
+        else:
+            greeting += " I'm VATSAL, your AI assistant. I learn from our conversations to help you better. What can I help you with?"
+        
+        return greeting
+    
+    async def process_message(self, user_message: str) -> str:
+        """Process user message with Gemini AI"""
+        
+        message_data = {
+            "role": "user",
+            "message": user_message,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.current_conversation.append(message_data)
+        
+        self._learn_from_message(user_message)
+        
+        try:
+            response = await self._get_gemini_response(user_message)
+        except Exception as e:
+            response = f"I apologize, but I encountered an error: {str(e)}. Please try again."
+        
+        response_data = {
+            "role": "assistant",
+            "message": response,
+            "timestamp": datetime.now().isoformat()
+        }
+        self.current_conversation.append(response_data)
+        
+        self._update_stats()
+        
+        return response
+    
+    async def _get_gemini_response(self, user_message: str) -> str:
+        """Get response from Gemini AI with context"""
+        
+        context = self._build_context()
+        
+        system_instruction = f"""You are VATSAL, an intelligent and helpful AI assistant. 
+Your personality: Friendly, knowledgeable, and concise.
+
+Guidelines:
+- Provide clear, simple, and direct answers
+- Be helpful and informative
+- Keep responses concise but complete
+- Use examples when helpful
+- Be encouraging and positive
+- For technical topics, explain in simple terms first, then add details if needed
+
+{context}"""
+        
+        conversation_history = self._get_recent_context(limit=10)
+        
+        full_prompt = f"{conversation_history}\n\nUser: {user_message}\n\nVATSAL:"
+        
+        response = self.client.models.generate_content(
+            model=self.model_name,
+            contents=full_prompt,
+            config=types.GenerateContentConfig(
+                system_instruction=system_instruction,
+                temperature=0.7,
+                max_output_tokens=1000,
+            )
+        )
+        
+        return response.text.strip()
+    
+    def _build_context(self) -> str:
+        """Build context from user profile and conversation history"""
+        context_parts = []
+        
+        if self.user_profile.get("name") and self.user_profile["name"] != "User":
+            context_parts.append(f"User's name: {self.user_profile['name']}")
+        
+        if self.user_profile.get("interests"):
+            context_parts.append(f"User's interests: {', '.join(self.user_profile['interests'][:5])}")
+        
+        if self.user_profile.get("common_topics"):
+            context_parts.append(f"Common topics: {', '.join(self.user_profile['common_topics'][:5])}")
+        
+        if context_parts:
+            return "Context:\n" + "\n".join(context_parts)
+        return ""
+    
+    def _get_recent_context(self, limit: int = 5) -> str:
+        """Get recent conversation context"""
+        if not self.current_conversation:
+            return ""
+        
+        recent = self.current_conversation[-limit*2:]
+        context_lines = []
+        
+        for msg in recent:
+            role = "User" if msg["role"] == "user" else "VATSAL"
+            context_lines.append(f"{role}: {msg['message']}")
+        
+        return "\n".join(context_lines) if context_lines else ""
+    
+    def _learn_from_message(self, message: str):
+        """Learn from user messages"""
+        msg_lower = message.lower()
+        
+        if "my name is" in msg_lower or "i'm " in msg_lower or "i am " in msg_lower:
+            words = message.split()
+            for i, word in enumerate(words):
+                if word.lower() in ["name", "i'm", "i am"] and i < len(words) - 1:
+                    potential_name = words[i + 1].strip(",.!?")
+                    if potential_name and len(potential_name) > 1:
+                        self.user_profile["name"] = potential_name.capitalize()
+        
+        keywords = ["python", "javascript", "ai", "programming", "music", "sports", "science", "math"]
+        for keyword in keywords:
+            if keyword in msg_lower:
+                if keyword not in self.user_profile.get("interests", []):
+                    if "interests" not in self.user_profile:
+                        self.user_profile["interests"] = []
+                    self.user_profile["interests"].append(keyword)
+                
+                if keyword not in self.stats.get("favorite_topics", {}):
+                    if "favorite_topics" not in self.stats:
+                        self.stats["favorite_topics"] = {}
+                    self.stats["favorite_topics"][keyword] = 0
+                self.stats["favorite_topics"][keyword] += 1
     
     def _update_stats(self):
         """Update conversation statistics"""
@@ -66,7 +256,7 @@ Requires: Large datasets, GPUs/TPUs for computation, frameworks like PyTorch/Ten
         self.all_conversations = []
         self.user_profile = {
             "name": "User",
-            "preferences": [],
+            "preferences": {},
             "interests": [],
             "common_topics": [],
             "conversation_style": "friendly"
@@ -89,7 +279,7 @@ Requires: Large datasets, GPUs/TPUs for computation, frameworks like PyTorch/Ten
             "learned_preferences": len(self.user_profile.get("preferences", [])),
             "top_topics": self._get_top_topics(5),
             "user_name": self.user_profile.get("name", "Unknown"),
-            "ai_available": self.gemini is not None,
+            "ai_available": True,
             "first_interaction": self.stats.get("first_interaction", "Never"),
             "last_interaction": self.stats.get("last_interaction", "Never")
         }
@@ -119,7 +309,7 @@ if __name__ == "__main__":
     def print_header():
         """Display chatbot header"""
         print("\n" + "="*70)
-        print("🤖 VATSAL AI - Intelligent Chatbot")
+        print("🤖 VATSAL AI - Intelligent Chatbot (Powered by Google Gemini)")
         print("="*70)
         print("💡 Ask me anything! I can help with:")
         print("   • General knowledge questions")
@@ -135,13 +325,11 @@ if __name__ == "__main__":
     
     async def run_chatbot():
         """Main chatbot conversation loop"""
-        # Check for API key
         if not os.getenv("GEMINI_API_KEY"):
             print("❌ Error: GEMINI_API_KEY not found!")
             print("Please set your Gemini API key in the .env file or environment variables.")
             sys.exit(1)
         
-        # Create chatbot instance
         print("🔧 Initializing VATSAL AI chatbot...")
         try:
             vatsal = create_vatsal_ai()
@@ -150,26 +338,20 @@ if __name__ == "__main__":
             print(f"❌ Error initializing chatbot: {e}")
             sys.exit(1)
         
-        # Display header
         print_header()
         
-        # Initial greeting
         greeting = vatsal.initiate_conversation()
         print(f"🤖 VATSAL: {greeting}\n")
         
-        # Conversation loop
         conversation_active = True
         
         while conversation_active:
             try:
-                # Get user input
                 user_input = input("👤 You: ").strip()
                 
-                # Handle empty input
                 if not user_input:
                     continue
                 
-                # Handle special commands
                 if user_input.lower() in ['quit', 'exit', 'bye', 'goodbye']:
                     print("\n🤖 VATSAL: Goodbye! It was nice talking with you. Your conversation has been saved!")
                     vatsal.end_conversation()
@@ -199,7 +381,6 @@ if __name__ == "__main__":
                     print(f"🤖 VATSAL: {greeting}\n")
                     continue
                 
-                # Process the message with AI
                 print("🤖 VATSAL: ", end="", flush=True)
                 response = await vatsal.process_message(user_input)
                 print(f"{response}\n")
@@ -218,7 +399,6 @@ if __name__ == "__main__":
         print("Thank you for using VATSAL AI! 👋")
         print("="*70 + "\n")
     
-    # Run the chatbot
     try:
         asyncio.run(run_chatbot())
     except Exception as e:

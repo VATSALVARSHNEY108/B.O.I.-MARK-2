@@ -52,11 +52,23 @@
         "message": "Hello! How can I help you today?",
         "timestamp": "2025-10-26T02:50:31.124802"
       }
+    ],
+    [
+      {
+        "role": "user",
+        "message": "What is LLM?",
+        "timestamp": "2025-10-26T12:51:17.357822"
+      },
+      {
+        "role": "assistant",
+        "message": "LLM stands for Large Language Model. It's a type of artificial intelligence model that is trained on a massive amount of text data to understand, generate, and manipulate human language. Think of it as a computer program that has read a huge number of books and articles, and can now use that knowledge to answer questions, write stories, translate languages, and more.",
+        "timestamp": "2025-10-26T12:51:18.876721"
+      }
     ]
   ],
   "stats": {
-    "total_conversations": 3,
-    "total_messages": 4,
+    "total_conversations": 4,
+    "total_messages": 5,
     "favorite_topics": {
       "hello": 2,
       "vatsal": 1,
@@ -67,7 +79,7 @@
       "intelligence": 1
     },
     "first_interaction": "2025-10-26T02:46:38.246887",
-    "last_interaction": "2025-10-26T02:50:31.124807"
+    "last_interaction": "2025-10-26T12:51:18.876732"
   },
-  "last_saved": "2025-10-26T02:50:31.125052"
+  "last_saved": "2025-10-26T12:51:18.876896"
 }
