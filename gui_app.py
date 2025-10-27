@@ -527,250 +527,250 @@ class AutomationControllerGUI:
         - Phase 3: Monitor & Execute
         """
         tab = tk.Frame(notebook, bg="#1e1e2e")
-    notebook.add(tab, text="🎯 Smart Control")
-    
-    # Header
-    header_frame = tk.Frame(tab, bg="#1a1a2e")
-    header_frame.pack(fill="x", pady=(10, 0), padx=10)
-    
-    header = tk.Label(header_frame,
-                      text="🎯 Comprehensive Desktop Controller",
-                      bg="#1a1a2e",
-                      fg="#f9e2af",
-                      font=("Segoe UI", 14, "bold"))
-    header.pack(pady=12)
-    
-    info = tk.Label(header_frame,
-                    text="🧠 Understands → 📋 Plans → 👁️ Monitors • AI-Powered 3-Phase Automation",
-                    bg="#1a1a2e",
-                    fg="#a6adc8",
-                    font=("Segoe UI", 9, "italic"))
-    info.pack(pady=(0, 12))
-    
-    # Phase indicator
-    phase_frame = tk.Frame(tab, bg="#1e1e2e")
-    phase_frame.pack(fill="x", padx=10, pady=5)
-    
-    self.phase_labels = {}
-    phases = [
-        ("🧠", "UNDERSTAND", "#89b4fa"),
-        ("📋", "PLAN", "#f9e2af"),
-        ("👁️", "MONITOR", "#a6e3a1")
-    ]
-    
-    for icon, name, color in phases:
-        phase_container = tk.Frame(phase_frame, bg="#313244", relief="flat")
-        phase_container.pack(side="left", expand=True, fill="x", padx=5, pady=5)
+        notebook.add(tab, text="🎯 Smart Control")
         
-        label = tk.Label(phase_container,
-                        text=f"{icon} {name}",
-                        bg="#313244",
-                        fg=color,
-                        font=("Segoe UI", 9, "bold"),
-                        pady=8)
-        label.pack()
-        self.phase_labels[name] = label
-    
-    # Main container with two columns
-    main_container = tk.Frame(tab, bg="#1e1e2e")
-    main_container.pack(fill="both", expand=True, padx=10, pady=5)
-    
-    # Left column - Input and controls
-    left_column = tk.Frame(main_container, bg="#1e1e2e")
-    left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
-    
-    # Input section
-    input_section = tk.Frame(left_column, bg="#1e1e2e")
-    input_section.pack(fill="x", pady=(5, 10))
-    
-    input_label = tk.Label(input_section,
-                          text="🎯 Enter your automation command:",
-                          bg="#1e1e2e",
-                          fg="#a6adc8",
-                          font=("Segoe UI", 9, "bold"))
-    input_label.pack(anchor="w", padx=5, pady=(0, 5))
-    
-    # Input box with send button
-    input_box_frame = tk.Frame(input_section, bg="#1e1e2e")
-    input_box_frame.pack(fill="x", padx=5)
-    
-    self.comprehensive_input = tk.Entry(input_box_frame,
-                                       bg="#313244",
-                                       fg="#ffffff",
-                                       font=("Segoe UI", 11),
-                                       relief="solid",
-                                       bd=2,
-                                       insertbackground="#f9e2af")
-    self.comprehensive_input.pack(side="left", fill="x", expand=True, ipady=8)
-    self.comprehensive_input.bind("<Return>", lambda e: self.execute_comprehensive_command())
-    
-    execute_btn = tk.Button(input_box_frame,
-                           text="▶️ Execute",
-                           bg="#f9e2af",
-                           fg="#0f0f1e",
-                           font=("Segoe UI", 10, "bold"),
+        # Header
+        header_frame = tk.Frame(tab, bg="#1a1a2e")
+        header_frame.pack(fill="x", pady=(10, 0), padx=10)
+        
+        header = tk.Label(header_frame,
+                          text="🎯 Comprehensive Desktop Controller",
+                          bg="#1a1a2e",
+                          fg="#f9e2af",
+                          font=("Segoe UI", 14, "bold"))
+        header.pack(pady=12)
+        
+        info = tk.Label(header_frame,
+                        text="🧠 Understands → 📋 Plans → 👁️ Monitors • AI-Powered 3-Phase Automation",
+                        bg="#1a1a2e",
+                        fg="#a6adc8",
+                        font=("Segoe UI", 9, "italic"))
+        info.pack(pady=(0, 12))
+        
+        # Phase indicator
+        phase_frame = tk.Frame(tab, bg="#1e1e2e")
+        phase_frame.pack(fill="x", padx=10, pady=5)
+        
+        self.phase_labels = {}
+        phases = [
+            ("🧠", "UNDERSTAND", "#89b4fa"),
+            ("📋", "PLAN", "#f9e2af"),
+            ("👁️", "MONITOR", "#a6e3a1")
+        ]
+        
+        for icon, name, color in phases:
+            phase_container = tk.Frame(phase_frame, bg="#313244", relief="flat")
+            phase_container.pack(side="left", expand=True, fill="x", padx=5, pady=5)
+            
+            label = tk.Label(phase_container,
+                            text=f"{icon} {name}",
+                            bg="#313244",
+                            fg=color,
+                            font=("Segoe UI", 9, "bold"),
+                            pady=8)
+            label.pack()
+            self.phase_labels[name] = label
+        
+        # Main container with two columns
+        main_container = tk.Frame(tab, bg="#1e1e2e")
+        main_container.pack(fill="both", expand=True, padx=10, pady=5)
+        
+        # Left column - Input and controls
+        left_column = tk.Frame(main_container, bg="#1e1e2e")
+        left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
+        
+        # Input section
+        input_section = tk.Frame(left_column, bg="#1e1e2e")
+        input_section.pack(fill="x", pady=(5, 10))
+        
+        input_label = tk.Label(input_section,
+                              text="🎯 Enter your automation command:",
+                              bg="#1e1e2e",
+                              fg="#a6adc8",
+                              font=("Segoe UI", 9, "bold"))
+        input_label.pack(anchor="w", padx=5, pady=(0, 5))
+        
+        # Input box with send button
+        input_box_frame = tk.Frame(input_section, bg="#1e1e2e")
+        input_box_frame.pack(fill="x", padx=5)
+        
+        self.comprehensive_input = tk.Entry(input_box_frame,
+                                           bg="#313244",
+                                           fg="#ffffff",
+                                           font=("Segoe UI", 11),
+                                           relief="solid",
+                                           bd=2,
+                                           insertbackground="#f9e2af")
+        self.comprehensive_input.pack(side="left", fill="x", expand=True, ipady=8)
+        self.comprehensive_input.bind("<Return>", lambda e: self.execute_comprehensive_command())
+        
+        execute_btn = tk.Button(input_box_frame,
+                               text="▶️ Execute",
+                               bg="#f9e2af",
+                               fg="#0f0f1e",
+                               font=("Segoe UI", 10, "bold"),
+                               relief="flat",
+                               cursor="hand2",
+                               command=self.execute_comprehensive_command,
+                               padx=20,
+                               pady=8)
+        execute_btn.pack(side="right", padx=(5, 0))
+        self.add_hover_effect(execute_btn, "#f9e2af", "#f5c2e7")
+        
+        # Quick actions section
+        quick_frame = tk.Frame(left_column, bg="#1e1e2e")
+        quick_frame.pack(fill="x", pady=5)
+        
+        quick_label = tk.Label(quick_frame,
+                              text="⚡ Quick Actions:",
+                              bg="#1e1e2e",
+                              fg="#a6adc8",
+                              font=("Segoe UI", 9, "bold"))
+        quick_label.pack(anchor="w", padx=5, pady=(0, 5))
+        
+        # Quick action buttons
+        quick_buttons_frame = tk.Frame(quick_frame, bg="#1e1e2e")
+        quick_buttons_frame.pack(fill="x", padx=5)
+        
+        quick_actions = [
+            ("📸 Screenshot", "Take a screenshot"),
+            ("🌐 Open Chrome", "Open Chrome and go to Google"),
+            ("🔍 Google Search", "Search Google for Python tutorials"),
+            ("💻 Open VS Code", "Launch VS Code and create new file")
+        ]
+        
+        for i, (btn_text, command) in enumerate(quick_actions):
+            if i % 2 == 0:
+                row_frame = tk.Frame(quick_buttons_frame, bg="#1e1e2e")
+                row_frame.pack(fill="x", pady=2)
+            
+            btn = tk.Button(row_frame,
+                           text=btn_text,
+                           bg="#313244",
+                           fg="#ffffff",
+                           font=("Segoe UI", 8, "bold"),
                            relief="flat",
                            cursor="hand2",
-                           command=self.execute_comprehensive_command,
-                           padx=20,
-                           pady=8)
-    execute_btn.pack(side="right", padx=(5, 0))
-    self.add_hover_effect(execute_btn, "#f9e2af", "#f5c2e7")
-    
-    # Quick actions section
-    quick_frame = tk.Frame(left_column, bg="#1e1e2e")
-    quick_frame.pack(fill="x", pady=5)
-    
-    quick_label = tk.Label(quick_frame,
-                          text="⚡ Quick Actions:",
-                          bg="#1e1e2e",
-                          fg="#a6adc8",
-                          font=("Segoe UI", 9, "bold"))
-    quick_label.pack(anchor="w", padx=5, pady=(0, 5))
-    
-    # Quick action buttons
-    quick_buttons_frame = tk.Frame(quick_frame, bg="#1e1e2e")
-    quick_buttons_frame.pack(fill="x", padx=5)
-    
-    quick_actions = [
-        ("📸 Screenshot", "Take a screenshot"),
-        ("🌐 Open Chrome", "Open Chrome and go to Google"),
-        ("🔍 Google Search", "Search Google for Python tutorials"),
-        ("💻 Open VS Code", "Launch VS Code and create new file")
-    ]
-    
-    for i, (btn_text, command) in enumerate(quick_actions):
-        if i % 2 == 0:
-            row_frame = tk.Frame(quick_buttons_frame, bg="#1e1e2e")
-            row_frame.pack(fill="x", pady=2)
+                           command=lambda cmd=command: self.load_comprehensive_command(cmd),
+                           padx=10,
+                           pady=6)
+            btn.pack(side="left", expand=True, fill="x", padx=2)
+            self.add_hover_effect(btn, "#313244", "#45475a")
         
-        btn = tk.Button(row_frame,
-                       text=btn_text,
-                       bg="#313244",
-                       fg="#ffffff",
-                       font=("Segoe UI", 8, "bold"),
-                       relief="flat",
-                       cursor="hand2",
-                       command=lambda cmd=command: self.load_comprehensive_command(cmd),
-                       padx=10,
-                       pady=6)
-        btn.pack(side="left", expand=True, fill="x", padx=2)
-        self.add_hover_effect(btn, "#313244", "#45475a")
-    
-    # Example prompts
-    examples_frame = tk.Frame(left_column, bg="#1e1e2e")
-    examples_frame.pack(fill="x", pady=(10, 5))
-    
-    examples_label = tk.Label(examples_frame,
-                             text="💡 Example Prompts:",
-                             bg="#1e1e2e",
-                             fg="#a6adc8",
-                             font=("Segoe UI", 9, "bold"))
-    examples_label.pack(anchor="w", padx=5)
-    
-    examples_text = tk.Text(examples_frame,
-                           bg="#0f0f1e",
-                           fg="#89dceb",
-                           font=("Consolas", 8),
-                           height=4,
+        # Example prompts
+        examples_frame = tk.Frame(left_column, bg="#1e1e2e")
+        examples_frame.pack(fill="x", pady=(10, 5))
+        
+        examples_label = tk.Label(examples_frame,
+                                 text="💡 Example Prompts:",
+                                 bg="#1e1e2e",
+                                 fg="#a6adc8",
+                                 font=("Segoe UI", 9, "bold"))
+        examples_label.pack(anchor="w", padx=5)
+        
+        examples_text = tk.Text(examples_frame,
+                               bg="#0f0f1e",
+                               fg="#89dceb",
+                               font=("Consolas", 8),
+                               height=4,
+                               relief="flat",
+                               padx=8,
+                               pady=8,
+                               wrap=tk.WORD)
+        examples_text.pack(fill="x", padx=5, pady=5)
+        examples_text.insert("1.0", 
+            "• Open Chrome, navigate to GitHub, and screenshot\n"
+            "• Launch Spotify and play jazz music\n"
+            "• Search Google for Python tutorials, open first 3 results\n"
+            "• Create a new folder on Desktop named 'Projects'")
+        examples_text.config(state='disabled')
+        
+        # Right column - Output
+        right_column = tk.Frame(main_container, bg="#1e1e2e")
+        right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
+        
+        output_label = tk.Label(right_column,
+                               text="📊 Execution Output:",
+                               bg="#1e1e2e",
+                               fg="#a6adc8",
+                               font=("Segoe UI", 9, "bold"))
+        output_label.pack(anchor="w", padx=5, pady=(0, 5))
+        
+        # Output display with scrollbar
+        self.comprehensive_output = scrolledtext.ScrolledText(
+            right_column,
+            bg="#0f0f1e",
+            fg="#cdd6f4",
+            font=("Consolas", 9),
+            wrap=tk.WORD,
+            state='disabled',
+            relief="flat",
+            padx=10,
+            pady=10
+        )
+        self.comprehensive_output.pack(fill="both", expand=True, padx=5, pady=5)
+        
+        # Configure text tags for colored output
+        self.comprehensive_output.tag_config("phase1", foreground="#89b4fa", font=("Consolas", 9, "bold"))
+        self.comprehensive_output.tag_config("phase2", foreground="#f9e2af", font=("Consolas", 9, "bold"))
+        self.comprehensive_output.tag_config("phase3", foreground="#a6e3a1", font=("Consolas", 9, "bold"))
+        self.comprehensive_output.tag_config("success", foreground="#a6e3a1", font=("Consolas", 9, "bold"))
+        self.comprehensive_output.tag_config("error", foreground="#f38ba8", font=("Consolas", 9, "bold"))
+        self.comprehensive_output.tag_config("info", foreground="#89dceb")
+        self.comprehensive_output.tag_config("highlight", foreground="#f9e2af", font=("Consolas", 9, "bold"))
+        
+        # Bottom buttons
+        bottom_frame = tk.Frame(tab, bg="#1e1e2e")
+        bottom_frame.pack(fill="x", padx=10, pady=(5, 10))
+        
+        buttons = [
+            ("📖 View Guide", self.show_comprehensive_guide, "#89b4fa"),
+            ("🔄 Clear Output", self.clear_comprehensive_output, "#313244"),
+            ("📸 View Screenshots", self.view_comprehensive_screenshots, "#89dceb"),
+            ("📊 View Stats", self.show_comprehensive_stats, "#a6e3a1")
+        ]
+        
+        for btn_text, command, color in buttons:
+            btn = tk.Button(bottom_frame,
+                           text=btn_text,
+                           bg=color,
+                           fg="#0f0f1e" if color != "#313244" else "#ffffff",
+                           font=("Segoe UI", 9, "bold"),
                            relief="flat",
-                           padx=8,
-                           pady=8,
-                           wrap=tk.WORD)
-    examples_text.pack(fill="x", padx=5, pady=5)
-    examples_text.insert("1.0", 
-        "• Open Chrome, navigate to GitHub, and screenshot\n"
-        "• Launch Spotify and play jazz music\n"
-        "• Search Google for Python tutorials, open first 3 results\n"
-        "• Create a new folder on Desktop named 'Projects'")
-    examples_text.config(state='disabled')
-    
-    # Right column - Output
-    right_column = tk.Frame(main_container, bg="#1e1e2e")
-    right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
-    
-    output_label = tk.Label(right_column,
-                           text="📊 Execution Output:",
-                           bg="#1e1e2e",
-                           fg="#a6adc8",
-                           font=("Segoe UI", 9, "bold"))
-    output_label.pack(anchor="w", padx=5, pady=(0, 5))
-    
-    # Output display with scrollbar
-    self.comprehensive_output = scrolledtext.ScrolledText(
-        right_column,
-        bg="#0f0f1e",
-        fg="#cdd6f4",
-        font=("Consolas", 9),
-        wrap=tk.WORD,
-        state='disabled',
-        relief="flat",
-        padx=10,
-        pady=10
-    )
-    self.comprehensive_output.pack(fill="both", expand=True, padx=5, pady=5)
-    
-    # Configure text tags for colored output
-    self.comprehensive_output.tag_config("phase1", foreground="#89b4fa", font=("Consolas", 9, "bold"))
-    self.comprehensive_output.tag_config("phase2", foreground="#f9e2af", font=("Consolas", 9, "bold"))
-    self.comprehensive_output.tag_config("phase3", foreground="#a6e3a1", font=("Consolas", 9, "bold"))
-    self.comprehensive_output.tag_config("success", foreground="#a6e3a1", font=("Consolas", 9, "bold"))
-    self.comprehensive_output.tag_config("error", foreground="#f38ba8", font=("Consolas", 9, "bold"))
-    self.comprehensive_output.tag_config("info", foreground="#89dceb")
-    self.comprehensive_output.tag_config("highlight", foreground="#f9e2af", font=("Consolas", 9, "bold"))
-    
-    # Bottom buttons
-    bottom_frame = tk.Frame(tab, bg="#1e1e2e")
-    bottom_frame.pack(fill="x", padx=10, pady=(5, 10))
-    
-    buttons = [
-        ("📖 View Guide", self.show_comprehensive_guide, "#89b4fa"),
-        ("🔄 Clear Output", self.clear_comprehensive_output, "#313244"),
-        ("📸 View Screenshots", self.view_comprehensive_screenshots, "#89dceb"),
-        ("📊 View Stats", self.show_comprehensive_stats, "#a6e3a1")
-    ]
-    
-    for btn_text, command, color in buttons:
-        btn = tk.Button(bottom_frame,
-                       text=btn_text,
-                       bg=color,
-                       fg="#0f0f1e" if color != "#313244" else "#ffffff",
-                       font=("Segoe UI", 9, "bold"),
-                       relief="flat",
-                       cursor="hand2",
-                       command=command,
-                       padx=15,
-                       pady=8)
-        btn.pack(side="left", padx=5)
-        hover_color = "#74c7ec" if color == "#89b4fa" else "#45475a" if color == "#313244" else color
-        self.add_hover_effect(btn, color, hover_color)
-    
-    # Status indicator
-    status_container = tk.Frame(bottom_frame, bg="#313244", relief="flat")
-    status_container.pack(side="right", padx=5)
-    
-    self.comprehensive_status = tk.Label(status_container,
-                                        text="✅ Ready",
-                                        bg="#313244",
-                                        fg="#a6e3a1",
-                                        font=("Segoe UI", 9, "bold"),
-                                        padx=15,
-                                        pady=8)
-    self.comprehensive_status.pack()
-    
-    # Initial welcome message
-    self.append_comprehensive_output("=" * 60 + "\n", "info")
-    self.append_comprehensive_output("🎯 COMPREHENSIVE DESKTOP CONTROLLER\n", "highlight")
-    self.append_comprehensive_output("=" * 60 + "\n\n", "info")
-    self.append_comprehensive_output("Welcome! This system:\n", "info")
-    self.append_comprehensive_output("  🧠 Phase 1: ", "phase1")
-    self.append_comprehensive_output("Understands your prompt deeply\n", "info")
-    self.append_comprehensive_output("  📋 Phase 2: ", "phase2")
-    self.append_comprehensive_output("Breaks it into executable steps\n", "info")
-    self.append_comprehensive_output("  👁️  Phase 3: ", "phase3")
-    self.append_comprehensive_output("Monitors screen in real-time\n\n", "info")
-    self.append_comprehensive_output("💡 Try a command above or use Quick Actions!\n", "highlight")
-    self.append_comprehensive_output("=" * 60 + "\n", "info")
+                           cursor="hand2",
+                           command=command,
+                           padx=15,
+                           pady=8)
+            btn.pack(side="left", padx=5)
+            hover_color = "#74c7ec" if color == "#89b4fa" else "#45475a" if color == "#313244" else color
+            self.add_hover_effect(btn, color, hover_color)
+        
+        # Status indicator
+        status_container = tk.Frame(bottom_frame, bg="#313244", relief="flat")
+        status_container.pack(side="right", padx=5)
+        
+        self.comprehensive_status = tk.Label(status_container,
+                                            text="✅ Ready",
+                                            bg="#313244",
+                                            fg="#a6e3a1",
+                                            font=("Segoe UI", 9, "bold"),
+                                            padx=15,
+                                            pady=8)
+        self.comprehensive_status.pack()
+        
+        # Initial welcome message
+        self.append_comprehensive_output("=" * 60 + "\n", "info")
+        self.append_comprehensive_output("🎯 COMPREHENSIVE DESKTOP CONTROLLER\n", "highlight")
+        self.append_comprehensive_output("=" * 60 + "\n\n", "info")
+        self.append_comprehensive_output("Welcome! This system:\n", "info")
+        self.append_comprehensive_output("  🧠 Phase 1: ", "phase1")
+        self.append_comprehensive_output("Understands your prompt deeply\n", "info")
+        self.append_comprehensive_output("  📋 Phase 2: ", "phase2")
+        self.append_comprehensive_output("Breaks it into executable steps\n", "info")
+        self.append_comprehensive_output("  👁️  Phase 3: ", "phase3")
+        self.append_comprehensive_output("Monitors screen in real-time\n\n", "info")
+        self.append_comprehensive_output("💡 Try a command above or use Quick Actions!\n", "highlight")
+        self.append_comprehensive_output("=" * 60 + "\n", "info")
 
     def create_vlm_tab(self, notebook):
         """
@@ -778,294 +778,294 @@ class AutomationControllerGUI:
         Self-learning AI that observes, learns, and controls
         """
         tab = tk.Frame(notebook, bg="#1e1e2e")
-    notebook.add(tab, text="🧠 Learning AI")
-    
-    # Header
-    header_frame = tk.Frame(tab, bg="#1a1a2e")
-    header_frame.pack(fill="x", pady=(10, 0), padx=10)
-    
-    header = tk.Label(header_frame,
-                      text="🧠 Virtual Language Model",
-                      bg="#1a1a2e",
-                      fg="#cba6f7",
-                      font=("Segoe UI", 14, "bold"))
-    header.pack(pady=12)
-    
-    info = tk.Label(header_frame,
-                    text="👁️ Observes Screen → 📚 Learns Patterns → 🎯 Controls Desktop",
-                    bg="#1a1a2e",
-                    fg="#a6adc8",
-                    font=("Segoe UI", 9, "italic"))
-    info.pack(pady=(0, 12))
-    
-    # Main container with two columns
-    main_container = tk.Frame(tab, bg="#1e1e2e")
-    main_container.pack(fill="both", expand=True, padx=10, pady=5)
-    
-    # Left column - Controls
-    left_column = tk.Frame(main_container, bg="#1e1e2e")
-    left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
-    
-    # Learning stats
-    stats_frame = tk.Frame(left_column, bg="#313244", relief="flat")
-    stats_frame.pack(fill="x", pady=5, padx=5)
-    
-    stats_title = tk.Label(stats_frame,
-                          text="📊 Learning Statistics",
-                          bg="#313244",
+        notebook.add(tab, text="🧠 Learning AI")
+        
+        # Header
+        header_frame = tk.Frame(tab, bg="#1a1a2e")
+        header_frame.pack(fill="x", pady=(10, 0), padx=10)
+        
+        header = tk.Label(header_frame,
+                          text="🧠 Virtual Language Model",
+                          bg="#1a1a2e",
                           fg="#cba6f7",
-                          font=("Segoe UI", 10, "bold"))
-    stats_title.pack(pady=8)
-    
-    self.vlm_stats_display = tk.Text(stats_frame,
-                                     bg="#0f0f1e",
-                                     fg="#cdd6f4",
-                                     font=("Consolas", 9),
-                                     height=6,
-                                     relief="flat",
-                                     padx=10,
-                                     pady=10,
-                                     state='disabled')
-    self.vlm_stats_display.pack(fill="x", padx=5, pady=(0, 8))
-    
-    # Goal input section
-    goal_frame = tk.Frame(left_column, bg="#1e1e2e")
-    goal_frame.pack(fill="x", pady=(10, 5))
-    
-    goal_label = tk.Label(goal_frame,
-                         text="🎯 Goal for AI:",
-                         bg="#1e1e2e",
-                         fg="#a6adc8",
-                         font=("Segoe UI", 9, "bold"))
-    goal_label.pack(anchor="w", padx=5, pady=(0, 5))
-    
-    goal_input_frame = tk.Frame(goal_frame, bg="#1e1e2e")
-    goal_input_frame.pack(fill="x", padx=5)
-    
-    self.vlm_goal_input = tk.Entry(goal_input_frame,
-                                   bg="#313244",
-                                   fg="#ffffff",
-                                   font=("Segoe UI", 11),
-                                   relief="solid",
-                                   bd=2,
-                                   insertbackground="#cba6f7")
-    self.vlm_goal_input.pack(side="left", fill="x", expand=True, ipady=8)
-    
-    # Action buttons
-    actions_frame = tk.Frame(left_column, bg="#1e1e2e")
-    actions_frame.pack(fill="x", pady=10, padx=5)
-    
-    actions_label = tk.Label(actions_frame,
-                            text="⚡ Actions:",
-                            bg="#1e1e2e",
-                            fg="#a6adc8",
-                            font=("Segoe UI", 9, "bold"))
-    actions_label.pack(anchor="w", pady=(0, 5))
-    
-    # Row 1
-    row1 = tk.Frame(actions_frame, bg="#1e1e2e")
-    row1.pack(fill="x", pady=2)
-    
-    observe_btn = tk.Button(row1,
-                           text="👁️ Observe Screen",
-                           bg="#89b4fa",
-                           fg="#0f0f1e",
-                           font=("Segoe UI", 9, "bold"),
-                           relief="flat",
-                           cursor="hand2",
-                           command=self.vlm_observe,
-                           padx=15,
-                           pady=8)
-    observe_btn.pack(side="left", expand=True, fill="x", padx=2)
-    self.add_hover_effect(observe_btn, "#89b4fa", "#74c7ec")
-    
-    decide_btn = tk.Button(row1,
-                          text="🤔 Decide Action",
-                          bg="#f9e2af",
-                          fg="#0f0f1e",
-                          font=("Segoe UI", 9, "bold"),
-                          relief="flat",
-                          cursor="hand2",
-                          command=self.vlm_decide,
-                          padx=15,
-                          pady=8)
-    decide_btn.pack(side="left", expand=True, fill="x", padx=2)
-    self.add_hover_effect(decide_btn, "#f9e2af", "#f5c2e7")
-    
-    # Row 2
-    row2 = tk.Frame(actions_frame, bg="#1e1e2e")
-    row2.pack(fill="x", pady=2)
-    
-    execute_btn = tk.Button(row2,
-                           text="▶️ Execute",
-                           bg="#a6e3a1",
-                           fg="#0f0f1e",
+                          font=("Segoe UI", 14, "bold"))
+        header.pack(pady=12)
+        
+        info = tk.Label(header_frame,
+                        text="👁️ Observes Screen → 📚 Learns Patterns → 🎯 Controls Desktop",
+                        bg="#1a1a2e",
+                        fg="#a6adc8",
+                        font=("Segoe UI", 9, "italic"))
+        info.pack(pady=(0, 12))
+        
+        # Main container with two columns
+        main_container = tk.Frame(tab, bg="#1e1e2e")
+        main_container.pack(fill="both", expand=True, padx=10, pady=5)
+        
+        # Left column - Controls
+        left_column = tk.Frame(main_container, bg="#1e1e2e")
+        left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
+        
+        # Learning stats
+        stats_frame = tk.Frame(left_column, bg="#313244", relief="flat")
+        stats_frame.pack(fill="x", pady=5, padx=5)
+        
+        stats_title = tk.Label(stats_frame,
+                              text="📊 Learning Statistics",
+                              bg="#313244",
+                              fg="#cba6f7",
+                              font=("Segoe UI", 10, "bold"))
+        stats_title.pack(pady=8)
+        
+        self.vlm_stats_display = tk.Text(stats_frame,
+                                         bg="#0f0f1e",
+                                         fg="#cdd6f4",
+                                         font=("Consolas", 9),
+                                         height=6,
+                                         relief="flat",
+                                         padx=10,
+                                         pady=10,
+                                         state='disabled')
+        self.vlm_stats_display.pack(fill="x", padx=5, pady=(0, 8))
+        
+        # Goal input section
+        goal_frame = tk.Frame(left_column, bg="#1e1e2e")
+        goal_frame.pack(fill="x", pady=(10, 5))
+        
+        goal_label = tk.Label(goal_frame,
+                             text="🎯 Goal for AI:",
+                             bg="#1e1e2e",
+                             fg="#a6adc8",
+                             font=("Segoe UI", 9, "bold"))
+        goal_label.pack(anchor="w", padx=5, pady=(0, 5))
+        
+        goal_input_frame = tk.Frame(goal_frame, bg="#1e1e2e")
+        goal_input_frame.pack(fill="x", padx=5)
+        
+        self.vlm_goal_input = tk.Entry(goal_input_frame,
+                                       bg="#313244",
+                                       fg="#ffffff",
+                                       font=("Segoe UI", 11),
+                                       relief="solid",
+                                       bd=2,
+                                       insertbackground="#cba6f7")
+        self.vlm_goal_input.pack(side="left", fill="x", expand=True, ipady=8)
+        
+        # Action buttons
+        actions_frame = tk.Frame(left_column, bg="#1e1e2e")
+        actions_frame.pack(fill="x", pady=10, padx=5)
+        
+        actions_label = tk.Label(actions_frame,
+                                text="⚡ Actions:",
+                                bg="#1e1e2e",
+                                fg="#a6adc8",
+                                font=("Segoe UI", 9, "bold"))
+        actions_label.pack(anchor="w", pady=(0, 5))
+        
+        # Row 1
+        row1 = tk.Frame(actions_frame, bg="#1e1e2e")
+        row1.pack(fill="x", pady=2)
+        
+        observe_btn = tk.Button(row1,
+                               text="👁️ Observe Screen",
+                               bg="#89b4fa",
+                               fg="#0f0f1e",
+                               font=("Segoe UI", 9, "bold"),
+                               relief="flat",
+                               cursor="hand2",
+                               command=self.vlm_observe,
+                               padx=15,
+                               pady=8)
+        observe_btn.pack(side="left", expand=True, fill="x", padx=2)
+        self.add_hover_effect(observe_btn, "#89b4fa", "#74c7ec")
+        
+        decide_btn = tk.Button(row1,
+                              text="🤔 Decide Action",
+                              bg="#f9e2af",
+                              fg="#0f0f1e",
+                              font=("Segoe UI", 9, "bold"),
+                              relief="flat",
+                              cursor="hand2",
+                              command=self.vlm_decide,
+                              padx=15,
+                              pady=8)
+        decide_btn.pack(side="left", expand=True, fill="x", padx=2)
+        self.add_hover_effect(decide_btn, "#f9e2af", "#f5c2e7")
+        
+        # Row 2
+        row2 = tk.Frame(actions_frame, bg="#1e1e2e")
+        row2.pack(fill="x", pady=2)
+        
+        execute_btn = tk.Button(row2,
+                               text="▶️ Execute",
+                               bg="#a6e3a1",
+                               fg="#0f0f1e",
                            font=("Segoe UI", 9, "bold"),
                            relief="flat",
                            cursor="hand2",
                            command=self.vlm_execute,
                            padx=15,
                            pady=8)
-    execute_btn.pack(side="left", expand=True, fill="x", padx=2)
-    self.add_hover_effect(execute_btn, "#a6e3a1", "#94e2d5")
-    
-    learn_btn = tk.Button(row2,
-                         text="🧠 Learn Session",
-                         bg="#cba6f7",
-                         fg="#0f0f1e",
-                         font=("Segoe UI", 9, "bold"),
-                         relief="flat",
-                         cursor="hand2",
-                         command=self.vlm_learn_session,
-                         padx=15,
-                         pady=8)
-    learn_btn.pack(side="left", expand=True, fill="x", padx=2)
-    self.add_hover_effect(learn_btn, "#cba6f7", "#b4befe")
-    
-    # Row 3
-    row3 = tk.Frame(actions_frame, bg="#1e1e2e")
-    row3.pack(fill="x", pady=2)
-    
-    query_btn = tk.Button(row3,
-                         text="💬 Query Knowledge",
-                         bg="#313244",
-                         fg="#ffffff",
-                         font=("Segoe UI", 9, "bold"),
-                         relief="flat",
-                         cursor="hand2",
-                         command=self.vlm_query,
-                         padx=15,
-                         pady=8)
-    query_btn.pack(side="left", expand=True, fill="x", padx=2)
-    self.add_hover_effect(query_btn, "#313244", "#45475a")
-    
-    refresh_btn = tk.Button(row3,
-                           text="🔄 Refresh Stats",
-                           bg="#313244",
-                           fg="#ffffff",
-                           font=("Segoe UI", 9, "bold"),
-                           relief="flat",
-                           cursor="hand2",
-                           command=self.vlm_refresh_stats,
-                           padx=15,
-                           pady=8)
-    refresh_btn.pack(side="left", expand=True, fill="x", padx=2)
-    self.add_hover_effect(refresh_btn, "#313244", "#45475a")
-    
-    # Knowledge display
-    knowledge_frame = tk.Frame(left_column, bg="#1e1e2e")
-    knowledge_frame.pack(fill="both", expand=True, pady=(10, 5))
-    
-    knowledge_label = tk.Label(knowledge_frame,
-                              text="📚 Learned Knowledge:",
-                              bg="#1e1e2e",
-                              fg="#a6adc8",
-                              font=("Segoe UI", 9, "bold"))
-    knowledge_label.pack(anchor="w", padx=5, pady=(0, 5))
-    
-    self.vlm_knowledge_display = scrolledtext.ScrolledText(
-        knowledge_frame,
-        bg="#0f0f1e",
-        fg="#cdd6f4",
-        font=("Consolas", 8),
-        wrap=tk.WORD,
-        state='disabled',
-        relief="flat",
-        padx=10,
-        pady=10
-    )
-    self.vlm_knowledge_display.pack(fill="both", expand=True, padx=5, pady=5)
-    
-    # Right column - Output
-    right_column = tk.Frame(main_container, bg="#1e1e2e")
-    right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
-    
-    output_label = tk.Label(right_column,
-                           text="📊 Activity Log:",
-                           bg="#1e1e2e",
-                           fg="#a6adc8",
-                           font=("Segoe UI", 9, "bold"))
-    output_label.pack(anchor="w", padx=5, pady=(0, 5))
-    
-    self.vlm_output = scrolledtext.ScrolledText(
-        right_column,
-        bg="#0f0f1e",
-        fg="#cdd6f4",
-        font=("Consolas", 9),
-        wrap=tk.WORD,
-        state='disabled',
-        relief="flat",
-        padx=10,
-        pady=10
-    )
-    self.vlm_output.pack(fill="both", expand=True, padx=5, pady=5)
-    
-    # Configure text tags
-    self.vlm_output.tag_config("success", foreground="#a6e3a1", font=("Consolas", 9, "bold"))
-    self.vlm_output.tag_config("error", foreground="#f38ba8", font=("Consolas", 9, "bold"))
-    self.vlm_output.tag_config("info", foreground="#89dceb")
-    self.vlm_output.tag_config("highlight", foreground="#cba6f7", font=("Consolas", 9, "bold"))
-    self.vlm_output.tag_config("decision", foreground="#f9e2af", font=("Consolas", 9, "bold"))
-    
-    # Bottom status
-    bottom_frame = tk.Frame(tab, bg="#1e1e2e")
-    bottom_frame.pack(fill="x", padx=10, pady=(5, 10))
-    
-    help_btn = tk.Button(bottom_frame,
-                        text="📖 How It Works",
-                        bg="#89b4fa",
-                        fg="#0f0f1e",
-                        font=("Segoe UI", 9, "bold"),
-                        relief="flat",
-                        cursor="hand2",
-                        command=self.show_vlm_help,
-                        padx=15,
-                        pady=8)
-    help_btn.pack(side="left", padx=5)
-    self.add_hover_effect(help_btn, "#89b4fa", "#74c7ec")
-    
-    clear_btn = tk.Button(bottom_frame,
-                         text="🗑️ Clear Output",
-                         bg="#313244",
-                         fg="#ffffff",
-                         font=("Segoe UI", 9, "bold"),
-                         relief="flat",
-                         cursor="hand2",
-                         command=self.vlm_clear_output,
-                         padx=15,
-                         pady=8)
-    clear_btn.pack(side="left", padx=5)
-    self.add_hover_effect(clear_btn, "#313244", "#45475a")
-    
-    # Status
-    status_container = tk.Frame(bottom_frame, bg="#313244", relief="flat")
-    status_container.pack(side="right", padx=5)
-    
-    self.vlm_status = tk.Label(status_container,
-                              text="✅ Ready to Learn",
-                              bg="#313244",
-                              fg="#a6e3a1",
-                              font=("Segoe UI", 9, "bold"),
-                              padx=15,
-                              pady=8)
-    self.vlm_status.pack()
-    
-    # Initialize with welcome message
-    self.vlm_append_output("=" * 60 + "\n", "info")
-    self.vlm_append_output("🧠 VIRTUAL LANGUAGE MODEL\n", "highlight")
-    self.vlm_append_output("=" * 60 + "\n\n", "info")
-    self.vlm_append_output("Welcome to the self-learning AI system!\n\n", "info")
-    self.vlm_append_output("This AI can:\n", "info")
-    self.vlm_append_output("  👁️  Observe and analyze your screen\n", "info")
-    self.vlm_append_output("  📚 Learn UI patterns and workflows\n", "info")
-    self.vlm_append_output("  🤔 Make intelligent decisions\n", "info")
-    self.vlm_append_output("  🎯 Execute actions based on learned knowledge\n", "info")
-    self.vlm_append_output("  💬 Answer questions about what it learned\n\n", "info")
-    self.vlm_append_output("💡 Try: Click 'Observe Screen' to let it see your desktop!\n", "highlight")
-    self.vlm_append_output("=" * 60 + "\n", "info")
-    
-    # Load initial stats
-    self.vlm_refresh_stats()
+        execute_btn.pack(side="left", expand=True, fill="x", padx=2)
+        self.add_hover_effect(execute_btn, "#a6e3a1", "#94e2d5")
+        
+        learn_btn = tk.Button(row2,
+                             text="🧠 Learn Session",
+                             bg="#cba6f7",
+                             fg="#0f0f1e",
+                             font=("Segoe UI", 9, "bold"),
+                             relief="flat",
+                             cursor="hand2",
+                             command=self.vlm_learn_session,
+                             padx=15,
+                             pady=8)
+        learn_btn.pack(side="left", expand=True, fill="x", padx=2)
+        self.add_hover_effect(learn_btn, "#cba6f7", "#b4befe")
+        
+        # Row 3
+        row3 = tk.Frame(actions_frame, bg="#1e1e2e")
+        row3.pack(fill="x", pady=2)
+        
+        query_btn = tk.Button(row3,
+                             text="💬 Query Knowledge",
+                             bg="#313244",
+                             fg="#ffffff",
+                             font=("Segoe UI", 9, "bold"),
+                             relief="flat",
+                             cursor="hand2",
+                             command=self.vlm_query,
+                             padx=15,
+                             pady=8)
+        query_btn.pack(side="left", expand=True, fill="x", padx=2)
+        self.add_hover_effect(query_btn, "#313244", "#45475a")
+        
+        refresh_btn = tk.Button(row3,
+                               text="🔄 Refresh Stats",
+                               bg="#313244",
+                               fg="#ffffff",
+                               font=("Segoe UI", 9, "bold"),
+                               relief="flat",
+                               cursor="hand2",
+                               command=self.vlm_refresh_stats,
+                               padx=15,
+                               pady=8)
+        refresh_btn.pack(side="left", expand=True, fill="x", padx=2)
+        self.add_hover_effect(refresh_btn, "#313244", "#45475a")
+        
+        # Knowledge display
+        knowledge_frame = tk.Frame(left_column, bg="#1e1e2e")
+        knowledge_frame.pack(fill="both", expand=True, pady=(10, 5))
+        
+        knowledge_label = tk.Label(knowledge_frame,
+                                  text="📚 Learned Knowledge:",
+                                  bg="#1e1e2e",
+                                  fg="#a6adc8",
+                                  font=("Segoe UI", 9, "bold"))
+        knowledge_label.pack(anchor="w", padx=5, pady=(0, 5))
+        
+        self.vlm_knowledge_display = scrolledtext.ScrolledText(
+            knowledge_frame,
+            bg="#0f0f1e",
+            fg="#cdd6f4",
+            font=("Consolas", 8),
+            wrap=tk.WORD,
+            state='disabled',
+            relief="flat",
+            padx=10,
+            pady=10
+        )
+        self.vlm_knowledge_display.pack(fill="both", expand=True, padx=5, pady=5)
+        
+        # Right column - Output
+        right_column = tk.Frame(main_container, bg="#1e1e2e")
+        right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
+        
+        output_label = tk.Label(right_column,
+                               text="📊 Activity Log:",
+                               bg="#1e1e2e",
+                               fg="#a6adc8",
+                               font=("Segoe UI", 9, "bold"))
+        output_label.pack(anchor="w", padx=5, pady=(0, 5))
+        
+        self.vlm_output = scrolledtext.ScrolledText(
+            right_column,
+            bg="#0f0f1e",
+            fg="#cdd6f4",
+            font=("Consolas", 9),
+            wrap=tk.WORD,
+            state='disabled',
+            relief="flat",
+            padx=10,
+            pady=10
+        )
+        self.vlm_output.pack(fill="both", expand=True, padx=5, pady=5)
+        
+        # Configure text tags
+        self.vlm_output.tag_config("success", foreground="#a6e3a1", font=("Consolas", 9, "bold"))
+        self.vlm_output.tag_config("error", foreground="#f38ba8", font=("Consolas", 9, "bold"))
+        self.vlm_output.tag_config("info", foreground="#89dceb")
+        self.vlm_output.tag_config("highlight", foreground="#cba6f7", font=("Consolas", 9, "bold"))
+        self.vlm_output.tag_config("decision", foreground="#f9e2af", font=("Consolas", 9, "bold"))
+        
+        # Bottom status
+        bottom_frame = tk.Frame(tab, bg="#1e1e2e")
+        bottom_frame.pack(fill="x", padx=10, pady=(5, 10))
+        
+        help_btn = tk.Button(bottom_frame,
+                            text="📖 How It Works",
+                            bg="#89b4fa",
+                            fg="#0f0f1e",
+                            font=("Segoe UI", 9, "bold"),
+                            relief="flat",
+                            cursor="hand2",
+                            command=self.show_vlm_help,
+                            padx=15,
+                            pady=8)
+        help_btn.pack(side="left", padx=5)
+        self.add_hover_effect(help_btn, "#89b4fa", "#74c7ec")
+        
+        clear_btn = tk.Button(bottom_frame,
+                             text="🗑️ Clear Output",
+                             bg="#313244",
+                             fg="#ffffff",
+                             font=("Segoe UI", 9, "bold"),
+                             relief="flat",
+                             cursor="hand2",
+                             command=self.vlm_clear_output,
+                             padx=15,
+                             pady=8)
+        clear_btn.pack(side="left", padx=5)
+        self.add_hover_effect(clear_btn, "#313244", "#45475a")
+        
+        # Status
+        status_container = tk.Frame(bottom_frame, bg="#313244", relief="flat")
+        status_container.pack(side="right", padx=5)
+        
+        self.vlm_status = tk.Label(status_container,
+                                  text="✅ Ready to Learn",
+                                  bg="#313244",
+                                  fg="#a6e3a1",
+                                  font=("Segoe UI", 9, "bold"),
+                                  padx=15,
+                                  pady=8)
+        self.vlm_status.pack()
+        
+        # Initialize with welcome message
+        self.vlm_append_output("=" * 60 + "\n", "info")
+        self.vlm_append_output("🧠 VIRTUAL LANGUAGE MODEL\n", "highlight")
+        self.vlm_append_output("=" * 60 + "\n\n", "info")
+        self.vlm_append_output("Welcome to the self-learning AI system!\n\n", "info")
+        self.vlm_append_output("This AI can:\n", "info")
+        self.vlm_append_output("  👁️  Observe and analyze your screen\n", "info")
+        self.vlm_append_output("  📚 Learn UI patterns and workflows\n", "info")
+        self.vlm_append_output("  🤔 Make intelligent decisions\n", "info")
+        self.vlm_append_output("  🎯 Execute actions based on learned knowledge\n", "info")
+        self.vlm_append_output("  💬 Answer questions about what it learned\n\n", "info")
+        self.vlm_append_output("💡 Try: Click 'Observe Screen' to let it see your desktop!\n", "highlight")
+        self.vlm_append_output("=" * 60 + "\n", "info")
+        
+        # Load initial stats
+        self.vlm_refresh_stats()
 
     def create_web_automation_tab(self, notebook):
         """Web Automation with Selenium"""
