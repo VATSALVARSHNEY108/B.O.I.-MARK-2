@@ -13,9 +13,14 @@ import subprocess
 
 class ProductivityMonitor:
     def __init__(self):
-        self.activity_log_file = "activity_log.json"
-        self.productivity_config_file = "productivity_config.json"
-        self.screen_time_file = "screen_time.json"
+        # Use shared productivity_data directory
+        from pathlib import Path
+        self.data_dir = Path(__file__).parent.absolute() / "productivity_data"
+        self.data_dir.mkdir(exist_ok=True)
+        
+        self.activity_log_file = self.data_dir / "activity_log.json"
+        self.productivity_config_file = self.data_dir / "productivity_config.json"
+        self.screen_time_file = self.data_dir / "screen_time.json"
         
         self.load_activity_log()
         self.load_config()
@@ -92,9 +97,12 @@ class ProductivityMonitor:
         """Get currently active window/app"""
         try:
             if platform.system() == "Windows":
-                import win32gui
-                window = win32gui.GetForegroundWindow()
-                return win32gui.GetWindowText(window)
+                try:
+                    import win32gui
+                    window = win32gui.GetForegroundWindow()
+                    return win32gui.GetWindowText(window)
+                except ImportError:
+                    return "Windows (win32gui not available)"
             elif platform.system() == "Darwin":
                 script = 'tell application "System Events" to get name of first application process whose frontmost is true'
                 return subprocess.check_output(['osascript', '-e', script]).decode('utf-8').strip()
