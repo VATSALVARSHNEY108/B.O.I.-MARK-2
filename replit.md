@@ -19,6 +19,36 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 *When asked about the creator through VATSAL chatbots, they will proudly introduce Vatsal Varshney and provide his contact information.*
 
 ## Recent Enhancements (October 2025)
+### Intelligent Task Automator - Advanced AI-Powered Automation - October 27, 2025 🆕
+Created a comprehensive intelligent automation system that provides complete mouse, keyboard, and screen control for complex multi-step tasks:
+- **Natural Language Task Parser** (`intelligent_task_automator.py`): AI-powered command interpretation using Gemini AI
+  - Breaks down complex commands into executable steps automatically
+  - Example: "open leetcode problem 34 and write code in editorial" → 5+ automated steps
+  - Supports adaptive execution based on screen content
+  - Multi-step workflow engine with error recovery
+- **AI Vision Screen Understanding**: Uses Gemini Vision to analyze screen content in real-time
+  - Identifies UI elements (buttons, inputs, links) and their locations
+  - Understands page context and suggests next automation actions
+  - Provides actionable insights for intelligent navigation
+- **Website-Specific Automation Controllers** (`web_automation_advanced.py`): Specialized automators for popular platforms
+  - **LeetCode**: Open problems by number/slug, navigate to editorial, write solutions, run tests, submit
+  - **GitHub**: Search repos, view trending, open repositories, create issues
+  - **CodeForces**: Open contests, navigate to problems, submit solutions
+  - **StackOverflow**: Search questions, browse by tags, ask questions
+  - **YouTube**: Search videos, open channels, navigate playlists
+  - **Google**: Web search, image search, navigate results
+- **Multi-Step Execution Engine**: Handles complex workflows with intelligent recovery
+  - Interactive mode with step-by-step confirmations
+  - Non-interactive mode for automated batch execution
+  - Progress tracking and detailed result reporting
+  - Graceful error handling and retry logic
+- **Supported Actions**: Navigate, search, click, type, scroll, wait, screenshot, analyze_screen
+- **CLI Interface**: Full command-line tool for testing and automation
+  - Shows capabilities, examples, and interactive execution
+  - Real-time feedback and progress updates
+
+This system transforms natural language commands into sophisticated browser/desktop automation workflows, making complex tasks as simple as speaking your intent. Perfect for coding practice, research, content consumption, and productivity workflows. **Note**: Requires local execution (Windows/Mac/Linux with display) for full functionality. Runs in demo mode on Replit cloud.
+
 ### Desktop File Controller Integration with Auto-Download - October 27, 2025 ✅
 Integrated a comprehensive desktop file management system with **automatic initialization** when GUI starts. Features Windows batch file and cross-platform Python support with auto-sync:
 - **Windows Batch Controller** (`desktop_file_controller.bat`): Standalone menu-driven tool with 13 file management features
