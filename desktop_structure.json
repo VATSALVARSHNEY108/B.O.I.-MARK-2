@@ -1,0 +1,43 @@
+{
+  "generated": "2025-10-27T05:30:21.700015",
+  "desktop_path": "/home/runner/Desktop",
+  "folders": [
+    {
+      "name": "coding",
+      "path": "/home/runner/Desktop/coding",
+      "size": 0,
+      "item_count": 2
+    },
+    {
+      "name": "projects",
+      "path": "/home/runner/Desktop/projects",
+      "size": 0,
+      "item_count": 1
+    },
+    {
+      "name": "documents",
+      "path": "/home/runner/Desktop/documents",
+      "size": 0,
+      "item_count": 1
+    },
+    {
+      "name": "downloads",
+      "path": "/home/runner/Desktop/downloads",
+      "size": 0,
+      "item_count": 0
+    },
+    {
+      "name": "work",
+      "path": "/home/runner/Desktop/work",
+      "size": 0,
+      "item_count": 0
+    },
+    {
+      "name": "personal",
+      "path": "/home/runner/Desktop/personal",
+      "size": 0,
+      "item_count": 0
+    }
+  ],
+  "files": []
+}

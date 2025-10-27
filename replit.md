@@ -4,8 +4,8 @@
 The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. The project offers a unified ecosystem with over 300+ features, including smart Desktop RAG for file intelligence, 9 Smart Automation & AI features, and 8 new Communication Enhancement features. Its core purpose is to be a comprehensive productivity powerhouse, integrating advanced AI for code generation, screen analysis, natural language understanding, professional-grade data analysis, and various utility modules.
 
 ## Recent Enhancements (October 2025)
-### Desktop File Controller Integration - October 27, 2025 ✅
-Integrated a comprehensive desktop file management system into the GUI application with both Windows batch file and cross-platform Python support:
+### Desktop File Controller Integration with Auto-Download - October 27, 2025 ✅
+Integrated a comprehensive desktop file management system with **automatic initialization** when GUI starts. Features Windows batch file and cross-platform Python support with auto-sync:
 - **Windows Batch Controller** (`desktop_file_controller.bat`): Standalone menu-driven tool with 13 file management features
   - Create/delete/move/copy/rename files and folders
   - Auto-organize files by type (Documents, Images, Videos, Music, Archives, Programs)
@@ -20,8 +20,14 @@ Integrated a comprehensive desktop file management system into the GUI applicati
   - Real-time output feedback in GUI console
   - Smart file type detection and automatic categorization
 - **GUI Integration**: Added Desktop File Controller section in 🖥️ Desktop tab with dedicated buttons and visual feedback
+- **Auto-Sync on Startup** (`desktop_sync_manager.py`): Automatically runs when GUI starts (2-second delay)
+  - Creates test desktop folders (coding, projects, documents, downloads, work, personal)
+  - Prepares batch file for download with instructions
+  - Generates desktop structure JSON
+  - Displays download instructions in GUI console
+  - Fully automated - no manual setup required
 
-The Desktop File Controller provides an easy way to manage desktop files directly from the VATSAL GUI or via standalone batch file on Windows.
+The Desktop File Controller provides an easy way to manage desktop files directly from the VATSAL GUI or via standalone batch file on Windows. **On GUI startup, it automatically sets up test folders and prepares the batch file for download!**
 
 ### Enhanced Simple Chatbot with Smart Suggestions (`simple_chatbot.py`) - October 27, 2025 ✅
 Upgraded the Simple VATSAL Chatbot to be a true AI assistant that can both chat AND execute actual automation commands:

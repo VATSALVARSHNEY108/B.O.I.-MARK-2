@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk, scrolledtext, messagebox, filedialog
 import threading
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 from gemini_controller import parse_command, get_ai_suggestion
 from command_executor import CommandExecutor
@@ -16,6 +17,7 @@ from clipboard_text_handler import ClipboardTextHandler
 from smart_automation import SmartAutomationManager
 from datetime import datetime
 from desktop_controller_integration import DesktopFileController
+from desktop_sync_manager import auto_initialize_on_gui_start
 
 load_dotenv()
 
@@ -51,6 +53,10 @@ class AutomationControllerGUI:
         self.setup_ui()
         self.check_api_key()
         self.start_time_update()
+        
+        # Auto-initialize desktop sync on startup
+        threading.Thread(target=self.auto_desktop_sync, daemon=True).start()
+        
         self.show_vatsal_greeting()
 
     def setup_ui(self):
@@ -2904,6 +2910,48 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                 self.update_output("ℹ️ Search cancelled.\n", "info")
         
         threading.Thread(target=execute, daemon=True).start()
+
+    def auto_desktop_sync(self):
+        """Auto-initialize desktop sync on GUI startup"""
+        import time
+        time.sleep(2)  # Wait for GUI to fully load
+        
+        try:
+            self.update_output("\n" + "="*60 + "\n", "info")
+            self.update_output("🚀 AUTO-STARTING DESKTOP SYNC MANAGER\n", "command")
+            self.update_output("="*60 + "\n", "info")
+            
+            # Run the auto initialization
+            results = auto_initialize_on_gui_start()
+            
+            if results["success"]:
+                self.update_output("\n✅ Desktop Sync Complete!\n", "success")
+                self.update_output(f"📂 Desktop Path: {Path.home() / 'Desktop'}\n", "info")
+                
+                # Show what was created
+                for step in results["steps"]:
+                    if step["status"] == "success" and "details" in step:
+                        details = step["details"]
+                        if "total_folders" in details:
+                            self.update_output(f"📁 Total folders: {details['total_folders']}\n", "info")
+                        if "created_folders" in details and details["created_folders"]:
+                            self.update_output(f"   New: {', '.join(details['created_folders'])}\n", "info")
+                
+                self.update_output("\n📥 BATCH FILE READY FOR DOWNLOAD:\n", "success")
+                self.update_output("   1. Find 'desktop_file_controller.bat' in file browser\n", "info")
+                self.update_output("   2. Right-click → Download\n", "info")
+                self.update_output("   3. Save to your Windows PC\n", "info")
+                self.update_output("   4. Double-click to run!\n\n", "info")
+                
+                self.update_output("💡 TIP: Use Desktop tab buttons to test functionality\n", "info")
+                
+            else:
+                self.update_output("\n⚠️  Desktop sync had some issues.\n", "error")
+            
+            self.update_output("="*60 + "\n\n", "info")
+            
+        except Exception as e:
+            self.update_output(f"\n⚠️  Desktop sync error: {str(e)}\n", "error")
 
 
 def main():
