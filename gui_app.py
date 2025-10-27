@@ -56,7 +56,7 @@ class AutomationControllerGUI:
         except Exception as e:
             self.simple_chatbot = None
             print(f"Simple chatbot initialization failed: {e}")
-        
+
         self.productivity_dashboard = ProductivityDashboard()
         self.pomodoro_coach = PomodoroAICoach()
         self.task_predictor = TaskTimePredictor()
@@ -79,10 +79,10 @@ class AutomationControllerGUI:
         self.setup_ui()
         self.check_api_key()
         self.start_time_update()
-        
+
         # Auto-initialize desktop sync on startup
         threading.Thread(target=self.auto_desktop_sync, daemon=True).start()
-        
+
         self.show_vatsal_greeting()
 
     def setup_ui(self):
@@ -123,14 +123,14 @@ class AutomationControllerGUI:
         title_frame.pack(pady=15)
 
         title = tk.Label(title_frame,
-                         text="🤖 VATSAL - AI Desktop Automation Controller",
+                         text="🤖 V.A.T.S.A.L.",
                          bg="#1a1a2e",
                          fg="#ffffff",
                          font=("Segoe UI", 26, "bold"))
         title.pack()
 
         subtitle = tk.Label(title_frame,
-                            text="⚡ Virtual Assistant To Serve And Learn • Powered by Gemini AI",
+                            text="⚡ Vastly Advanced Technological System Above Limitations",
                             bg="#1a1a2e",
                             fg="#89b4fa",
                             font=("Segoe UI", 11))
@@ -374,7 +374,7 @@ class AutomationControllerGUI:
         header.pack(pady=12)
 
         info = tk.Label(header_frame,
-                        text="🚀 Powered by Gemini 2.5 Flash • Simple & straightforward conversations",
+                        text="For direct and Quick Questions and Answers , giveing bot",
                         bg="#1a1a2e",
                         fg="#a6adc8",
                         font=("Segoe UI", 9, "italic"))
@@ -555,12 +555,12 @@ class AutomationControllerGUI:
         scrollbar.pack(side="right", fill="y")
 
         tk.Label(scrollable_frame,
-                text="🗂️ Desktop File Controller",
-                bg="#1e1e2e",
-                fg="#f9e2af",
-                font=("Segoe UI", 12, "bold"),
-                pady=10).pack(fill="x", padx=8)
-        
+                 text="🗂️ Desktop File Controller",
+                 bg="#1e1e2e",
+                 fg="#f9e2af",
+                 font=("Segoe UI", 12, "bold"),
+                 pady=10).pack(fill="x", padx=8)
+
         file_controller_actions = [
             ("🗂️ Launch Batch Controller", lambda: self.launch_batch_controller()),
             ("📋 List Desktop Items", lambda: self.list_desktop_items()),
@@ -568,7 +568,7 @@ class AutomationControllerGUI:
             ("📁 Organize Desktop", lambda: self.organize_desktop()),
             ("🔍 Search Desktop Files", lambda: self.search_desktop_files()),
         ]
-        
+
         for text, command in file_controller_actions:
             btn = tk.Button(scrollable_frame,
                             text=text,
@@ -584,13 +584,13 @@ class AutomationControllerGUI:
                             activebackground="#585b70")
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#45475a", "#585b70")
-        
+
         tk.Label(scrollable_frame,
-                text="🖥️ Desktop Quick Actions",
-                bg="#1e1e2e",
-                fg="#f9e2af",
-                font=("Segoe UI", 12, "bold"),
-                pady=10).pack(fill="x", padx=8, pady=(15,0))
+                 text="🖥️ Desktop Quick Actions",
+                 bg="#1e1e2e",
+                 fg="#f9e2af",
+                 font=("Segoe UI", 12, "bold"),
+                 pady=10).pack(fill="x", padx=8, pady=(15, 0))
 
         actions = [
             ("📝 Open Notepad", "Open notepad"),
@@ -1314,10 +1314,10 @@ class AutomationControllerGUI:
 
         # Task Time Predictor Section
         task_section = tk.Label(scrollable_frame,
-                               text="⏱️ TASK TIME PREDICTOR",
-                               bg="#1e1e2e",
-                               fg="#f9e2af",
-                               font=("Segoe UI", 11, "bold"))
+                                text="⏱️ TASK TIME PREDICTOR",
+                                bg="#1e1e2e",
+                                fg="#f9e2af",
+                                font=("Segoe UI", 11, "bold"))
         task_section.pack(pady=(15, 8), anchor="w", padx=8)
 
         task_actions = [
@@ -1345,10 +1345,10 @@ class AutomationControllerGUI:
 
         # Energy & Focus Section
         energy_section = tk.Label(scrollable_frame,
-                                 text="🔋 ENERGY & FOCUS TRACKING",
-                                 bg="#1e1e2e",
-                                 fg="#f9e2af",
-                                 font=("Segoe UI", 11, "bold"))
+                                  text="🔋 ENERGY & FOCUS TRACKING",
+                                  bg="#1e1e2e",
+                                  fg="#f9e2af",
+                                  font=("Segoe UI", 11, "bold"))
         energy_section.pack(pady=(15, 8), anchor="w", padx=8)
 
         energy_actions = [
@@ -1459,10 +1459,10 @@ class AutomationControllerGUI:
 
         # Quick Notes Section
         notes_section = tk.Label(scrollable_frame,
-                                text="📝 QUICK NOTES",
-                                bg="#1e1e2e",
-                                fg="#f9e2af",
-                                font=("Segoe UI", 11, "bold"))
+                                 text="📝 QUICK NOTES",
+                                 bg="#1e1e2e",
+                                 fg="#f9e2af",
+                                 font=("Segoe UI", 11, "bold"))
         notes_section.pack(pady=(15, 8), anchor="w", padx=8)
 
         notes_actions = [
@@ -1490,10 +1490,10 @@ class AutomationControllerGUI:
 
         # Calendar Section
         calendar_section = tk.Label(scrollable_frame,
-                                   text="📅 CALENDAR MANAGER",
-                                   bg="#1e1e2e",
-                                   fg="#f9e2af",
-                                   font=("Segoe UI", 11, "bold"))
+                                    text="📅 CALENDAR MANAGER",
+                                    bg="#1e1e2e",
+                                    fg="#f9e2af",
+                                    font=("Segoe UI", 11, "bold"))
         calendar_section.pack(pady=(15, 8), anchor="w", padx=8)
 
         calendar_actions = [
@@ -3125,12 +3125,13 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
 
     def launch_batch_controller(self):
         """Launch Windows batch file controller"""
+
         def execute():
             self.update_output("\n🗂️ Desktop File Controller\n", "command")
             self.update_output("=" * 60 + "\n", "info")
-            
+
             result = self.desktop_controller.launch_batch_controller()
-            
+
             if result["success"]:
                 self.update_output(f"✅ {result['message']}\n", "success")
                 self.update_output("The batch file controller window has been opened.\n", "info")
@@ -3141,23 +3142,24 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                 self.update_output("• Create New Folder\n", "info")
                 self.update_output("• Organize Desktop\n", "info")
                 self.update_output("• Search Desktop Files\n", "info")
-        
+
         threading.Thread(target=execute, daemon=True).start()
 
     def list_desktop_items(self):
         """List all items on desktop"""
+
         def execute():
             self.update_output("\n📋 Desktop Contents\n", "command")
             self.update_output("=" * 60 + "\n", "info")
-            
+
             result = self.desktop_controller.list_items()
-            
+
             if result["success"]:
                 self.update_output(f"📁 Total items: {result['count']}\n\n", "success")
-                
+
                 folders = [item for item in result["items"] if item["type"] == "Folder"]
                 files = [item for item in result["items"] if item["type"] == "File"]
-                
+
                 if folders:
                     self.update_output(f"📂 Folders ({len(folders)}):\n", "success")
                     for item in folders[:15]:
@@ -3165,34 +3167,35 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                     if len(folders) > 15:
                         self.update_output(f"  ... and {len(folders) - 15} more folders\n", "info")
                     self.update_output("\n", "info")
-                
+
                 if files:
                     self.update_output(f"📄 Files ({len(files)}):\n", "success")
                     for item in files[:15]:
                         self.update_output(f"  📄 {item['name']}\n", "info")
                     if len(files) > 15:
                         self.update_output(f"  ... and {len(files) - 15} more files\n", "info")
-                
+
                 self.update_output(f"\n📊 Desktop Path: {self.desktop_controller.desktop_path}\n", "info")
             else:
                 self.update_output(f"❌ {result['message']}\n", "error")
-        
+
         threading.Thread(target=execute, daemon=True).start()
 
     def create_desktop_folder(self):
         """Create a new folder on desktop"""
+
         def execute():
             folder_name = self.show_input_dialog(
                 "Create Folder",
                 "Enter the name for the new folder:"
             )
-            
+
             if folder_name:
                 self.update_output("\n➕ Creating Folder...\n", "command")
                 self.update_output("=" * 60 + "\n", "info")
-                
+
                 result = self.desktop_controller.create_folder(folder_name)
-                
+
                 if result["success"]:
                     self.update_output(f"✅ {result['message']}\n", "success")
                     self.update_output(f"📁 Path: {result['path']}\n", "info")
@@ -3200,11 +3203,12 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                     self.update_output(f"❌ {result['message']}\n", "error")
             else:
                 self.update_output("ℹ️ Folder creation cancelled.\n", "info")
-        
+
         threading.Thread(target=execute, daemon=True).start()
 
     def organize_desktop(self):
         """Organize desktop files by type"""
+
         def execute():
             self.update_output("\n📁 Organizing Desktop...\n", "command")
             self.update_output("=" * 60 + "\n", "info")
@@ -3215,40 +3219,41 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
             self.update_output("• Music (mp3, wav, flac)\n", "info")
             self.update_output("• Archives (zip, rar, 7z)\n", "info")
             self.update_output("• Programs (exe, msi)\n\n", "info")
-            
+
             result = self.desktop_controller.organize_by_type()
-            
+
             if result["success"]:
                 self.update_output(f"✅ {result['message']}\n", "success")
                 self.update_output("Your desktop is now organized!\n", "info")
             else:
                 self.update_output(f"❌ {result['message']}\n", "error")
-        
+
         threading.Thread(target=execute, daemon=True).start()
 
     def search_desktop_files(self):
         """Search for files on desktop"""
+
         def execute():
             search_term = self.show_input_dialog(
                 "Search Desktop",
                 "Enter search term (filename or part of filename):"
             )
-            
+
             if search_term:
                 self.update_output(f"\n🔍 Searching Desktop for '{search_term}'...\n", "command")
                 self.update_output("=" * 60 + "\n", "info")
-                
+
                 result = self.desktop_controller.search_files(search_term)
-                
+
                 if result["success"]:
                     if result["count"] > 0:
                         self.update_output(f"✅ Found {result['count']} matching items:\n\n", "success")
-                        
+
                         for item in result["results"][:20]:
                             icon = "📁" if item["type"] == "Folder" else "📄"
                             self.update_output(f"{icon} {item['name']}\n", "info")
                             self.update_output(f"   Path: {item['path']}\n", "info")
-                        
+
                         if result['count'] > 20:
                             self.update_output(f"\n... and {result['count'] - 20} more results\n", "info")
                     else:
@@ -3257,11 +3262,11 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                     self.update_output(f"❌ {result['message']}\n", "error")
             else:
                 self.update_output("ℹ️ Search cancelled.\n", "info")
-        
+
         threading.Thread(target=execute, daemon=True).start()
 
     # ===== PRODUCTIVITY HUB METHODS =====
-    
+
     def start_pomodoro_session(self):
         """Start a new Pomodoro session"""
         task_name = self.show_input_dialog("Pomodoro Task", "What are you working on?", "Focused Work")
@@ -3272,53 +3277,54 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
             self.update_output(f"Duration: {result['duration']} minutes\n", "info")
             if result.get('ai_coach'):
                 self.update_output(f"\n💬 AI Coach: {result['ai_coach']}\n", "command")
-    
+
     def start_short_break(self):
         """Start a short break"""
         result = self.pomodoro_coach.start_break(is_long=False)
         self.update_output(f"\n☕ {result['message']}\n", "success")
         if result.get('ai_coach'):
             self.update_output(f"💬 AI Coach: {result['ai_coach']}\n", "info")
-    
+
     def start_long_break(self):
         """Start a long break"""
         result = self.pomodoro_coach.start_break(is_long=True)
         self.update_output(f"\n🌳 {result['message']}\n", "success")
         if result.get('ai_coach'):
             self.update_output(f"💬 AI Coach: {result['ai_coach']}\n", "info")
-    
+
     def toggle_pomodoro(self):
         """Pause/resume Pomodoro"""
         result = self.pomodoro_coach.pause_session()
         self.update_output(f"\n⏸️ {result['message']}\n", "info")
-    
+
     def stop_pomodoro(self):
         """Stop current Pomodoro session"""
         result = self.pomodoro_coach.stop_session()
         self.update_output(f"\n🛑 {result['message']}\n", "info")
-    
+
     def view_pomodoro_stats(self):
         """View Pomodoro statistics"""
         stats = self.pomodoro_coach.get_statistics()
         self.update_output(f"\n📊 POMODORO STATISTICS\n", "success")
-        self.update_output(f"{'='*60}\n", "info")
+        self.update_output(f"{'=' * 60}\n", "info")
         self.update_output(f"Total Pomodoros: {stats['total_pomodoros']}\n", "info")
         self.update_output(f"Completed Today: {stats['pomodoros_today']}\n", "info")
         self.update_output(f"Total Work Time: {stats['total_work_hours']:.1f} hours\n", "info")
         self.update_output(f"Completion Rate: {stats['completion_rate']:.1f}%\n", "success")
-    
+
     def start_task_tracking(self):
         """Start tracking a new task"""
         task_name = self.show_input_dialog("Task Name", "What task are you starting?")
         if task_name:
-            category = self.show_input_dialog("Task Category", "Category (coding/meeting/email/documentation/etc):", "general")
+            category = self.show_input_dialog("Task Category", "Category (coding/meeting/email/documentation/etc):",
+                                              "general")
             result = self.task_predictor.start_task(task_name, category or "general")
             self.update_output(f"\n▶️ Task Started: {task_name}\n", "success")
             self.update_output(f"Task ID: #{result['task_id']}\n", "info")
             self.update_output(f"Estimated Time: {result['estimated_minutes']} minutes\n", "info")
             self.update_output(f"Predicted Time: {result['predicted_minutes']} minutes\n", "command")
             self.update_output(f"Confidence: {result['confidence']}\n", "info")
-    
+
     def complete_task(self):
         """Complete current task"""
         task_id = self.show_input_dialog("Task ID", "Enter task ID to complete:")
@@ -3335,97 +3341,97 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                     self.update_output(f"❌ {result['message']}\n", "error")
             except ValueError:
                 self.update_output("❌ Invalid task ID\n", "error")
-    
+
     def view_task_predictions(self):
         """View task time predictions"""
         report = self.task_predictor.get_accuracy_report()
         self.update_output(f"\n📈 TASK PREDICTION REPORT\n", "success")
-        self.update_output(f"{'='*60}\n", "info")
+        self.update_output(f"{'=' * 60}\n", "info")
         self.update_output(f"Total Tasks: {report['total_tasks']}\n", "info")
         self.update_output(f"Average Accuracy: {report['average_accuracy']:.1f}%\n", "success")
         self.update_output(f"Best Category: {report['best_category']}\n", "info")
-    
+
     def view_task_analytics(self):
         """View task analytics"""
         insights = self.task_predictor.get_insights()
         self.update_output(f"\n📊 TASK ANALYTICS\n", "success")
-        self.update_output(f"{'='*60}\n", "info")
+        self.update_output(f"{'=' * 60}\n", "info")
         for insight in insights:
             self.update_output(f"• {insight}\n", "info")
-    
+
     def check_energy_level(self):
         """Check current energy level"""
         energy = self.energy_tracker.get_current_energy()
         self.update_output(f"\n🔋 CURRENT ENERGY LEVEL\n", "success")
-        self.update_output(f"{'='*60}\n", "info")
+        self.update_output(f"{'=' * 60}\n", "info")
         self.update_output(f"Level: {energy['level']:.0f}/100 {energy['emoji']}\n", "info")
         self.update_output(f"Status: {energy['category']}\n", "success")
         self.update_output(f"Trend: {energy['trend']}\n", "info")
         if energy.get('suggestion'):
             self.update_output(f"\n💡 {energy['suggestion']}\n", "command")
-    
+
     def view_energy_trends(self):
         """View energy trends"""
         trends = self.energy_tracker.get_daily_summary()
         self.update_output(f"\n📈 ENERGY TRENDS\n", "success")
-        self.update_output(f"{'='*60}\n", "info")
+        self.update_output(f"{'=' * 60}\n", "info")
         self.update_output(f"Average Energy: {trends['average_energy']:.0f}/100\n", "info")
         self.update_output(f"Peak Time: {trends['peak_hour']}:00\n", "success")
         self.update_output(f"Low Time: {trends['low_hour']}:00\n", "info")
-    
+
     def get_break_suggestion(self):
         """Get AI break suggestion"""
         suggestion = self.break_suggester.should_take_break()
         self.update_output(f"\n🎯 BREAK SUGGESTION\n", "success")
-        self.update_output(f"{'='*60}\n", "info")
+        self.update_output(f"{'=' * 60}\n", "info")
         self.update_output(f"{suggestion['message']}\n", "info")
         if suggestion['should_break']:
             self.update_output(f"\n💡 Suggested break type: {suggestion['break_type']}\n", "command")
             self.update_output(f"Duration: {suggestion['duration']} minutes\n", "info")
-    
+
     def check_distractions(self):
         """Check for distractions"""
         result = self.distraction_detector.detect_distraction()
         self.update_output(f"\n⚠️ DISTRACTION CHECK\n", "success")
-        self.update_output(f"{'='*60}\n", "info")
+        self.update_output(f"{'=' * 60}\n", "info")
         if result['is_distracted']:
             self.update_output(f"Status: Distracted ⚠️\n", "error")
             self.update_output(f"App: {result['app']}\n", "info")
             self.update_output(f"Category: {result['category']}\n", "info")
         else:
             self.update_output(f"Status: Focused ✅\n", "success")
-    
+
     def view_focus_report(self):
         """View focus report"""
         report = self.distraction_detector.get_daily_report()
         self.update_output(f"\n📊 FOCUS REPORT\n", "success")
-        self.update_output(f"{'='*60}\n", "info")
+        self.update_output(f"{'=' * 60}\n", "info")
         self.update_output(f"Distractions Today: {report['distractions_today']}\n", "info")
         self.update_output(f"Focus Time: {report['focus_time']} minutes\n", "success")
         self.update_output(f"Distraction Time: {report['distraction_time']} minutes\n", "error")
-    
+
     def view_productivity_dashboard(self):
         """View complete productivity dashboard"""
         dashboard = self.productivity_dashboard.get_comprehensive_dashboard()
         self.update_output(f"\n📊 PRODUCTIVITY DASHBOARD\n", "success")
-        self.update_output(f"{'='*60}\n", "info")
+        self.update_output(f"{'=' * 60}\n", "info")
         self.update_output(f"Period: {dashboard['period']}\n", "info")
         overview = dashboard['overview']
         self.update_output(f"\nWork Sessions: {overview['total_work_sessions']}\n", "info")
         self.update_output(f"Tasks Completed: {overview['total_tasks_completed']}\n", "info")
         self.update_output(f"Productivity Score: {overview['productivity_score']:.0f}/100\n", "success")
-    
+
     def view_weekly_summary(self):
         """View weekly summary"""
         dashboard = self.productivity_dashboard.get_comprehensive_dashboard(days=7)
         self.update_output(f"\n📅 WEEKLY SUMMARY\n", "success")
-        self.update_output(f"{'='*60}\n", "info")
+        self.update_output(f"{'=' * 60}\n", "info")
         time_analysis = dashboard['time_analysis']
         if not time_analysis.get('no_data'):
             self.update_output(f"Total Work Time: {time_analysis['total_work_minutes']} minutes\n", "info")
             self.update_output(f"Daily Average: {time_analysis['avg_work_minutes_per_day']:.0f} minutes\n", "info")
             self.update_output(f"Most Productive Hour: {time_analysis['most_productive_hour']}:00\n", "success")
-    
+
     def view_productivity_trends(self):
         """View productivity trends"""
         self.update_output(f"\n📈 PRODUCTIVITY TRENDS\n", "success")
@@ -3433,17 +3439,17 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
         dashboard = self.productivity_dashboard.get_comprehensive_dashboard(days=30)
         for rec in dashboard['recommendations']:
             self.update_output(f"💡 {rec}\n", "command")
-    
+
     def get_productivity_recommendations(self):
         """Get productivity recommendations"""
         dashboard = self.productivity_dashboard.get_comprehensive_dashboard()
         self.update_output(f"\n🎯 PRODUCTIVITY RECOMMENDATIONS\n", "success")
-        self.update_output(f"{'='*60}\n", "info")
+        self.update_output(f"{'=' * 60}\n", "info")
         for i, rec in enumerate(dashboard['recommendations'], 1):
             self.update_output(f"{i}. {rec}\n", "info")
-    
+
     # ===== TOOLS & UTILITIES METHODS =====
-    
+
     def add_password_dialog(self):
         """Add new password to vault"""
         name = self.show_input_dialog("Service Name", "Service name (e.g., Gmail, GitHub):")
@@ -3454,19 +3460,19 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
             if username and password:
                 result = self.password_vault.add_password(name, username, password, url)
                 self.update_output(result, "success")
-    
+
     def view_password_dialog(self):
         """View a password from vault"""
         name = self.show_input_dialog("Service Name", "Which service password to view?")
         if name:
             result = self.password_vault.get_password(name)
             self.update_output(result, "info")
-    
+
     def list_passwords(self):
         """List all saved passwords"""
         result = self.password_vault.list_passwords()
         self.update_output(result, "info")
-    
+
     def generate_password(self):
         """Generate a secure password"""
         length = self.show_input_dialog("Password Length", "Length (8-32 characters):", "16")
@@ -3476,7 +3482,7 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
             self.update_output(result, "success")
         except:
             self.update_output("❌ Invalid length\n", "error")
-    
+
     def add_note_dialog(self):
         """Add a new note"""
         content = self.show_input_dialog("Note Content", "Enter your note:")
@@ -3484,24 +3490,24 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
             category = self.show_input_dialog("Category", "Category (optional):", "general")
             result = self.notes.add_note(content, category or "general")
             self.update_output(result, "success")
-    
+
     def list_notes(self):
         """List all notes"""
         result = self.notes.list_notes()
         self.update_output(result, "info")
-    
+
     def search_notes_dialog(self):
         """Search notes"""
         query = self.show_input_dialog("Search Notes", "Search term:")
         if query:
             result = self.notes.search_notes(query)
             self.update_output(result, "info")
-    
+
     def view_pinned_notes(self):
         """View pinned notes"""
         result = self.notes.get_pinned_notes()
         self.update_output(result, "info")
-    
+
     def add_event_dialog(self):
         """Add a calendar event"""
         title = self.show_input_dialog("Event Title", "Event name:")
@@ -3511,46 +3517,46 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
             if date:
                 result = self.calendar.add_event(title, date, time)
                 self.update_output(result, "success")
-    
+
     def view_today_events(self):
         """View today's events"""
         result = self.calendar.get_today_events()
         self.update_output(result, "info")
-    
+
     def view_week_events(self):
         """View this week's events"""
         result = self.calendar.get_week_events()
         self.update_output(result, "info")
-    
+
     def view_reminders(self):
         """View upcoming reminders"""
         result = self.calendar.get_upcoming_reminders()
         self.update_output(result, "info")
-    
+
     def get_weather_dialog(self):
         """Get weather for a city"""
         city = self.show_input_dialog("City", "Enter city name:", "New York")
         if city:
             result = self.weather_news.get_weather(city)
             self.update_output(result, "info")
-    
+
     def get_forecast(self):
         """Get weather forecast"""
         city = self.show_input_dialog("City", "Enter city name:", "New York")
         if city:
             result = self.weather_news.get_forecast(city, days=3)
             self.update_output(result, "info")
-    
+
     def get_news(self):
         """Get latest news"""
         result = self.weather_news.get_news_headlines("general", 5)
         self.update_output(result, "info")
-    
+
     def get_tech_news(self):
         """Get tech news"""
         result = self.weather_news.get_news_headlines("technology", 5)
         self.update_output(result, "info")
-    
+
     def translate_text_dialog(self):
         """Translate text"""
         text = self.show_input_dialog("Text to Translate", "Enter text:")
@@ -3559,14 +3565,14 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
             if target:
                 result = self.translator.translate(text, target)
                 self.update_output(result, "info")
-    
+
     def detect_language_dialog(self):
         """Detect text language"""
         text = self.show_input_dialog("Text", "Enter text to detect language:")
         if text:
             result = self.translator.detect_language(text)
             self.update_output(result, "info")
-    
+
     def show_supported_languages(self):
         """Show supported languages"""
         result = self.translator.get_supported_languages()
@@ -3576,47 +3582,49 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
         """Auto-initialize desktop sync on GUI startup - Scans and stores desktop data"""
         import time
         time.sleep(2)  # Wait for GUI to fully load
-        
+
         try:
-            self.update_output("\n" + "="*60 + "\n", "info")
+            self.update_output("\n" + "=" * 60 + "\n", "info")
             self.update_output("🚀 DESKTOP FILE & FOLDER AUTOMATOR - STARTING\n", "command")
-            self.update_output("="*60 + "\n", "info")
-            
+            self.update_output("=" * 60 + "\n", "info")
+
             # Create Desktop Sync Manager instance
             manager = DesktopSyncManager()
-            
+
             # Step 1: Scan the desktop
             self.update_output("\n🔍 Scanning your desktop...\n", "command")
             scan_result = manager.scan_desktop()
-            
+
             if not scan_result["success"]:
                 self.update_output(f"❌ Error: {scan_result['message']}\n", "error")
                 return
-            
+
             scan_data = scan_result["data"]
             stats = scan_data["statistics"]
-            
+
             # Step 2: Display summary in GUI
             self.update_output("\n📊 DESKTOP ANALYSIS SUMMARY\n", "success")
-            self.update_output("="*60 + "\n", "info")
+            self.update_output("=" * 60 + "\n", "info")
             self.update_output(f"📂 Desktop Location: {scan_data['desktop_path']}\n", "info")
-            self.update_output(f"📅 Scanned: {datetime.fromisoformat(scan_data['scan_time']).strftime('%Y-%m-%d %H:%M:%S')}\n\n", "info")
-            
+            self.update_output(
+                f"📅 Scanned: {datetime.fromisoformat(scan_data['scan_time']).strftime('%Y-%m-%d %H:%M:%S')}\n\n",
+                "info")
+
             self.update_output(f"📁 Total Folders: {stats['total_folders']}\n", "info")
             self.update_output(f"📄 Total Files: {stats['total_files']}\n", "info")
-            
+
             # Format file size
             total_size = stats['total_size_bytes']
             size_str = manager.format_size(total_size)
             self.update_output(f"💾 Total Size: {size_str}\n", "info")
-            
+
             # Show file types
             if stats["file_types"]:
                 self.update_output(f"\n📑 File Types Found:\n", "command")
                 for ext, count in sorted(stats["file_types"].items(), key=lambda x: x[1], reverse=True)[:10]:
                     ext_display = ext if ext != "no_extension" else "(no extension)"
                     self.update_output(f"   {ext_display}: {count} file(s)\n", "info")
-            
+
             # Show top folders
             if scan_data["folders"]:
                 self.update_output(f"\n📂 Folders on Desktop:\n", "command")
@@ -3624,16 +3632,16 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                     self.update_output(f"   • {folder['name']} ({folder['item_count']} items)\n", "info")
                 if len(scan_data["folders"]) > 10:
                     self.update_output(f"   ... and {len(scan_data['folders']) - 10} more folders\n", "info")
-            
+
             # Step 3: Save the data
             self.update_output("\n💾 Saving desktop data...\n", "command")
             save_result = manager.save_desktop_data(scan_data)
-            
+
             if save_result["success"]:
                 self.update_output(f"✅ Data saved to: {save_result['file']}\n", "success")
             else:
                 self.update_output(f"⚠️  Could not save data: {save_result['message']}\n", "error")
-            
+
             # Step 4: Check batch file
             batch_result = manager.prepare_batch_file_download()
             if batch_result["success"]:
@@ -3647,13 +3655,13 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                 self.update_output("\n📥 BATCH FILE SETUP:\n", "command")
                 self.update_output("   Download 'desktop_file_controller.bat' from Replit\n", "info")
                 self.update_output(f"   Place in: {manager.script_dir}\n", "info")
-            
-            self.update_output("\n" + "="*60 + "\n", "info")
+
+            self.update_output("\n" + "=" * 60 + "\n", "info")
             self.update_output("✅ DESKTOP SCAN COMPLETE!\n", "success")
             self.update_output("💡 All desktop data has been analyzed and saved\n", "info")
             self.update_output("🗂️  Use the Desktop tab buttons to manage your files\n", "info")
-            self.update_output("="*60 + "\n\n", "info")
-            
+            self.update_output("=" * 60 + "\n\n", "info")
+
         except Exception as e:
             self.update_output(f"\n⚠️  Desktop sync error: {str(e)}\n", "error")
             import traceback
