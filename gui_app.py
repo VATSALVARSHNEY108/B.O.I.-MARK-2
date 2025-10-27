@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import tkinter as tk
-from tkinter import ttk, scrolledtext, messagebox, filedialog
+from tkinter import ttk, scrolledtext, messagebox, filedialog, simpledialog
 import threading
 import os
 from dotenv import load_dotenv
@@ -19,6 +19,8 @@ from pathlib import Path
 from desktop_controller_integration import DesktopFileController
 from desktop_sync_manager import auto_initialize_on_gui_start, DesktopSyncManager
 from comprehensive_desktop_controller import ComprehensiveDesktopController
+from virtual_language_model import VirtualLanguageModel
+from gui_automation import GUIAutomation
 
 from productivity_dashboard import ProductivityDashboard
 from pomodoro_ai_coach import PomodoroAICoach
@@ -83,6 +85,16 @@ class AutomationControllerGUI:
         except Exception as e:
             self.web_automator = None
             print(f"Web automator initialization failed: {e}")
+        
+        # Initialize Virtual Language Model
+        try:
+            gui_automation = GUIAutomation()
+            self.vlm = VirtualLanguageModel(gui_automation)
+            self.vlm_last_decision = None
+        except Exception as e:
+            self.vlm = None
+            self.vlm_last_decision = None
+            print(f"Virtual Language Model initialization failed: {e}")
 
         self.vatsal_mode = True
         self.processing = False
@@ -762,6 +774,303 @@ def create_comprehensive_controller_tab(self, notebook):
     self.append_comprehensive_output("Monitors screen in real-time\n\n", "info")
     self.append_comprehensive_output("💡 Try a command above or use Quick Actions!\n", "highlight")
     self.append_comprehensive_output("=" * 60 + "\n", "info")
+"""
+Virtual Language Model GUI Tab
+Self-learning AI that observes, learns, and controls
+"""
+
+def create_vlm_tab(self, notebook):
+    """Virtual Language Model Tab - Learning AI"""
+    tab = tk.Frame(notebook, bg="#1e1e2e")
+    notebook.add(tab, text="🧠 Learning AI")
+    
+    # Header
+    header_frame = tk.Frame(tab, bg="#1a1a2e")
+    header_frame.pack(fill="x", pady=(10, 0), padx=10)
+    
+    header = tk.Label(header_frame,
+                      text="🧠 Virtual Language Model",
+                      bg="#1a1a2e",
+                      fg="#cba6f7",
+                      font=("Segoe UI", 14, "bold"))
+    header.pack(pady=12)
+    
+    info = tk.Label(header_frame,
+                    text="👁️ Observes Screen → 📚 Learns Patterns → 🎯 Controls Desktop",
+                    bg="#1a1a2e",
+                    fg="#a6adc8",
+                    font=("Segoe UI", 9, "italic"))
+    info.pack(pady=(0, 12))
+    
+    # Main container with two columns
+    main_container = tk.Frame(tab, bg="#1e1e2e")
+    main_container.pack(fill="both", expand=True, padx=10, pady=5)
+    
+    # Left column - Controls
+    left_column = tk.Frame(main_container, bg="#1e1e2e")
+    left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
+    
+    # Learning stats
+    stats_frame = tk.Frame(left_column, bg="#313244", relief="flat")
+    stats_frame.pack(fill="x", pady=5, padx=5)
+    
+    stats_title = tk.Label(stats_frame,
+                          text="📊 Learning Statistics",
+                          bg="#313244",
+                          fg="#cba6f7",
+                          font=("Segoe UI", 10, "bold"))
+    stats_title.pack(pady=8)
+    
+    self.vlm_stats_display = tk.Text(stats_frame,
+                                     bg="#0f0f1e",
+                                     fg="#cdd6f4",
+                                     font=("Consolas", 9),
+                                     height=6,
+                                     relief="flat",
+                                     padx=10,
+                                     pady=10,
+                                     state='disabled')
+    self.vlm_stats_display.pack(fill="x", padx=5, pady=(0, 8))
+    
+    # Goal input section
+    goal_frame = tk.Frame(left_column, bg="#1e1e2e")
+    goal_frame.pack(fill="x", pady=(10, 5))
+    
+    goal_label = tk.Label(goal_frame,
+                         text="🎯 Goal for AI:",
+                         bg="#1e1e2e",
+                         fg="#a6adc8",
+                         font=("Segoe UI", 9, "bold"))
+    goal_label.pack(anchor="w", padx=5, pady=(0, 5))
+    
+    goal_input_frame = tk.Frame(goal_frame, bg="#1e1e2e")
+    goal_input_frame.pack(fill="x", padx=5)
+    
+    self.vlm_goal_input = tk.Entry(goal_input_frame,
+                                   bg="#313244",
+                                   fg="#ffffff",
+                                   font=("Segoe UI", 11),
+                                   relief="solid",
+                                   bd=2,
+                                   insertbackground="#cba6f7")
+    self.vlm_goal_input.pack(side="left", fill="x", expand=True, ipady=8)
+    
+    # Action buttons
+    actions_frame = tk.Frame(left_column, bg="#1e1e2e")
+    actions_frame.pack(fill="x", pady=10, padx=5)
+    
+    actions_label = tk.Label(actions_frame,
+                            text="⚡ Actions:",
+                            bg="#1e1e2e",
+                            fg="#a6adc8",
+                            font=("Segoe UI", 9, "bold"))
+    actions_label.pack(anchor="w", pady=(0, 5))
+    
+    # Row 1
+    row1 = tk.Frame(actions_frame, bg="#1e1e2e")
+    row1.pack(fill="x", pady=2)
+    
+    observe_btn = tk.Button(row1,
+                           text="👁️ Observe Screen",
+                           bg="#89b4fa",
+                           fg="#0f0f1e",
+                           font=("Segoe UI", 9, "bold"),
+                           relief="flat",
+                           cursor="hand2",
+                           command=self.vlm_observe,
+                           padx=15,
+                           pady=8)
+    observe_btn.pack(side="left", expand=True, fill="x", padx=2)
+    self.add_hover_effect(observe_btn, "#89b4fa", "#74c7ec")
+    
+    decide_btn = tk.Button(row1,
+                          text="🤔 Decide Action",
+                          bg="#f9e2af",
+                          fg="#0f0f1e",
+                          font=("Segoe UI", 9, "bold"),
+                          relief="flat",
+                          cursor="hand2",
+                          command=self.vlm_decide,
+                          padx=15,
+                          pady=8)
+    decide_btn.pack(side="left", expand=True, fill="x", padx=2)
+    self.add_hover_effect(decide_btn, "#f9e2af", "#f5c2e7")
+    
+    # Row 2
+    row2 = tk.Frame(actions_frame, bg="#1e1e2e")
+    row2.pack(fill="x", pady=2)
+    
+    execute_btn = tk.Button(row2,
+                           text="▶️ Execute",
+                           bg="#a6e3a1",
+                           fg="#0f0f1e",
+                           font=("Segoe UI", 9, "bold"),
+                           relief="flat",
+                           cursor="hand2",
+                           command=self.vlm_execute,
+                           padx=15,
+                           pady=8)
+    execute_btn.pack(side="left", expand=True, fill="x", padx=2)
+    self.add_hover_effect(execute_btn, "#a6e3a1", "#94e2d5")
+    
+    learn_btn = tk.Button(row2,
+                         text="🧠 Learn Session",
+                         bg="#cba6f7",
+                         fg="#0f0f1e",
+                         font=("Segoe UI", 9, "bold"),
+                         relief="flat",
+                         cursor="hand2",
+                         command=self.vlm_learn_session,
+                         padx=15,
+                         pady=8)
+    learn_btn.pack(side="left", expand=True, fill="x", padx=2)
+    self.add_hover_effect(learn_btn, "#cba6f7", "#b4befe")
+    
+    # Row 3
+    row3 = tk.Frame(actions_frame, bg="#1e1e2e")
+    row3.pack(fill="x", pady=2)
+    
+    query_btn = tk.Button(row3,
+                         text="💬 Query Knowledge",
+                         bg="#313244",
+                         fg="#ffffff",
+                         font=("Segoe UI", 9, "bold"),
+                         relief="flat",
+                         cursor="hand2",
+                         command=self.vlm_query,
+                         padx=15,
+                         pady=8)
+    query_btn.pack(side="left", expand=True, fill="x", padx=2)
+    self.add_hover_effect(query_btn, "#313244", "#45475a")
+    
+    refresh_btn = tk.Button(row3,
+                           text="🔄 Refresh Stats",
+                           bg="#313244",
+                           fg="#ffffff",
+                           font=("Segoe UI", 9, "bold"),
+                           relief="flat",
+                           cursor="hand2",
+                           command=self.vlm_refresh_stats,
+                           padx=15,
+                           pady=8)
+    refresh_btn.pack(side="left", expand=True, fill="x", padx=2)
+    self.add_hover_effect(refresh_btn, "#313244", "#45475a")
+    
+    # Knowledge display
+    knowledge_frame = tk.Frame(left_column, bg="#1e1e2e")
+    knowledge_frame.pack(fill="both", expand=True, pady=(10, 5))
+    
+    knowledge_label = tk.Label(knowledge_frame,
+                              text="📚 Learned Knowledge:",
+                              bg="#1e1e2e",
+                              fg="#a6adc8",
+                              font=("Segoe UI", 9, "bold"))
+    knowledge_label.pack(anchor="w", padx=5, pady=(0, 5))
+    
+    self.vlm_knowledge_display = scrolledtext.ScrolledText(
+        knowledge_frame,
+        bg="#0f0f1e",
+        fg="#cdd6f4",
+        font=("Consolas", 8),
+        wrap=tk.WORD,
+        state='disabled',
+        relief="flat",
+        padx=10,
+        pady=10
+    )
+    self.vlm_knowledge_display.pack(fill="both", expand=True, padx=5, pady=5)
+    
+    # Right column - Output
+    right_column = tk.Frame(main_container, bg="#1e1e2e")
+    right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
+    
+    output_label = tk.Label(right_column,
+                           text="📊 Activity Log:",
+                           bg="#1e1e2e",
+                           fg="#a6adc8",
+                           font=("Segoe UI", 9, "bold"))
+    output_label.pack(anchor="w", padx=5, pady=(0, 5))
+    
+    self.vlm_output = scrolledtext.ScrolledText(
+        right_column,
+        bg="#0f0f1e",
+        fg="#cdd6f4",
+        font=("Consolas", 9),
+        wrap=tk.WORD,
+        state='disabled',
+        relief="flat",
+        padx=10,
+        pady=10
+    )
+    self.vlm_output.pack(fill="both", expand=True, padx=5, pady=5)
+    
+    # Configure text tags
+    self.vlm_output.tag_config("success", foreground="#a6e3a1", font=("Consolas", 9, "bold"))
+    self.vlm_output.tag_config("error", foreground="#f38ba8", font=("Consolas", 9, "bold"))
+    self.vlm_output.tag_config("info", foreground="#89dceb")
+    self.vlm_output.tag_config("highlight", foreground="#cba6f7", font=("Consolas", 9, "bold"))
+    self.vlm_output.tag_config("decision", foreground="#f9e2af", font=("Consolas", 9, "bold"))
+    
+    # Bottom status
+    bottom_frame = tk.Frame(tab, bg="#1e1e2e")
+    bottom_frame.pack(fill="x", padx=10, pady=(5, 10))
+    
+    help_btn = tk.Button(bottom_frame,
+                        text="📖 How It Works",
+                        bg="#89b4fa",
+                        fg="#0f0f1e",
+                        font=("Segoe UI", 9, "bold"),
+                        relief="flat",
+                        cursor="hand2",
+                        command=self.show_vlm_help,
+                        padx=15,
+                        pady=8)
+    help_btn.pack(side="left", padx=5)
+    self.add_hover_effect(help_btn, "#89b4fa", "#74c7ec")
+    
+    clear_btn = tk.Button(bottom_frame,
+                         text="🗑️ Clear Output",
+                         bg="#313244",
+                         fg="#ffffff",
+                         font=("Segoe UI", 9, "bold"),
+                         relief="flat",
+                         cursor="hand2",
+                         command=self.vlm_clear_output,
+                         padx=15,
+                         pady=8)
+    clear_btn.pack(side="left", padx=5)
+    self.add_hover_effect(clear_btn, "#313244", "#45475a")
+    
+    # Status
+    status_container = tk.Frame(bottom_frame, bg="#313244", relief="flat")
+    status_container.pack(side="right", padx=5)
+    
+    self.vlm_status = tk.Label(status_container,
+                              text="✅ Ready to Learn",
+                              bg="#313244",
+                              fg="#a6e3a1",
+                              font=("Segoe UI", 9, "bold"),
+                              padx=15,
+                              pady=8)
+    self.vlm_status.pack()
+    
+    # Initialize with welcome message
+    self.vlm_append_output("=" * 60 + "\n", "info")
+    self.vlm_append_output("🧠 VIRTUAL LANGUAGE MODEL\n", "highlight")
+    self.vlm_append_output("=" * 60 + "\n\n", "info")
+    self.vlm_append_output("Welcome to the self-learning AI system!\n\n", "info")
+    self.vlm_append_output("This AI can:\n", "info")
+    self.vlm_append_output("  👁️  Observe and analyze your screen\n", "info")
+    self.vlm_append_output("  📚 Learn UI patterns and workflows\n", "info")
+    self.vlm_append_output("  🤔 Make intelligent decisions\n", "info")
+    self.vlm_append_output("  🎯 Execute actions based on learned knowledge\n", "info")
+    self.vlm_append_output("  💬 Answer questions about what it learned\n\n", "info")
+    self.vlm_append_output("💡 Try: Click 'Observe Screen' to let it see your desktop!\n", "highlight")
+    self.vlm_append_output("=" * 60 + "\n", "info")
+    
+    # Load initial stats
+    self.vlm_refresh_stats()
+
     def create_web_automation_tab(self, notebook):
         """Web Automation with Selenium"""
         tab = tk.Frame(notebook, bg="#1e1e2e")
@@ -4389,25 +4698,334 @@ Simple:
   • "Take a screenshot"
   • "Open Chrome"
 
-Moderate:
-  • "Open Chrome and go to Google"
-  • "Launch Spotify and play music"
-
-Complex:
-  • "Open Chrome, navigate to GitHub, find my repos, screenshot"
-  • "Search Google for Python, open top 3 results, screenshot each"
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-TIPS:
-✓ Be specific about what you want
-✓ Include the application name
-✓ Mention expected outcomes
-✓ Use natural language
-
 For full functionality, download and run locally!
 """
         messagebox.showinfo("Comprehensive Controller Guide", guide_text)
+    
+    # ==================== Virtual Language Model Methods ====================
+    
+    def vlm_append_output(self, text, tag=None):
+        """Append text to VLM output display"""
+        self.vlm_output.config(state='normal')
+        if tag:
+            self.vlm_output.insert(tk.END, text, tag)
+        else:
+            self.vlm_output.insert(tk.END, text)
+        self.vlm_output.see(tk.END)
+        self.vlm_output.config(state='disabled')
+        self.root.update_idletasks()
+    
+    def vlm_clear_output(self):
+        """Clear VLM output"""
+        self.vlm_output.config(state='normal')
+        self.vlm_output.delete(1.0, tk.END)
+        self.vlm_output.config(state='disabled')
+        
+        self.vlm_append_output("=" * 60 + "\n", "info")
+        self.vlm_append_output("🧠 Output cleared. Ready for new learning!\n", "success")
+        self.vlm_append_output("=" * 60 + "\n", "info")
+    
+    def vlm_refresh_stats(self):
+        """Refresh and display VLM statistics"""
+        if not self.vlm:
+            return
+        
+        stats = self.vlm.get_stats()
+        
+        self.vlm_stats_display.config(state='normal')
+        self.vlm_stats_display.delete(1.0, tk.END)
+        
+        stats_text = (
+            f"📊 Observations: {stats['observations']}\n"
+            f"🎨 UI Patterns: {stats['ui_patterns']}\n"
+            f"💻 Known Apps: {stats['known_applications']}\n"
+            f"📋 Workflows: {stats['learned_workflows']}\n"
+            f"✅ Success Rate: {stats['success_rate']:.1f}%"
+        )
+        
+        self.vlm_stats_display.insert(1.0, stats_text.strip())
+        self.vlm_stats_display.config(state='disabled')
+        
+        # Update knowledge display
+        self.vlm_knowledge_display.config(state='normal')
+        self.vlm_knowledge_display.delete(1.0, tk.END)
+        self.vlm_knowledge_display.insert(1.0, stats['knowledge_summary'])
+        self.vlm_knowledge_display.config(state='disabled')
+    
+    def vlm_observe(self):
+        """Let VLM observe the current screen"""
+        if not self.vlm:
+            messagebox.showwarning("VLM Not Available", "Virtual Language Model not initialized")
+            return
+        
+        self.vlm_status.config(text="👁️ Observing...", fg="#89b4fa")
+        self.vlm_append_output("\n" + "━" * 60 + "\n", "info")
+        self.vlm_append_output("👁️ OBSERVING SCREEN\n", "highlight")
+        self.vlm_append_output("━" * 60 + "\n", "info")
+        
+        # Run in thread
+        thread = threading.Thread(target=self._vlm_observe_thread, daemon=True)
+        thread.start()
+    
+    def _vlm_observe_thread(self):
+        """Observe in background thread"""
+        try:
+            result = self.vlm.observe_screen("user requested observation")
+            
+            if result.get("demo"):
+                self.vlm_append_output("\n⚠️ DEMO MODE\n", "error")
+                self.vlm_append_output("Screen observation requires display access.\n", "info")
+                self.vlm_append_output("Download and run locally for full functionality.\n\n", "info")
+            elif result.get("success"):
+                analysis = result.get("analysis", {})
+                
+                self.vlm_append_output("\n✅ Observation Complete!\n\n", "success")
+                self.vlm_append_output(f"📝 Description: {analysis.get('description', 'N/A')}\n", "info")
+                self.vlm_append_output(f"🎨 UI Elements Found: {len(analysis.get('ui_elements', []))}\n", "info")
+                
+                apps = analysis.get('visible_applications', [])
+                if apps:
+                    self.vlm_append_output(f"💻 Applications: {', '.join(apps)}\n", "info")
+                
+                self.vlm_append_output(f"\n💡 Learning Insights:\n", "highlight")
+                self.vlm_append_output(f"{analysis.get('learning_insights', 'N/A')}\n", "info")
+            else:
+                self.vlm_append_output("\n❌ Observation failed\n", "error")
+                self.vlm_append_output(f"Error: {result.get('message', 'Unknown error')}\n", "info")
+            
+            self.vlm_append_output("━" * 60 + "\n", "info")
+            self.vlm_refresh_stats()
+            self.vlm_status.config(text="✅ Ready to Learn", fg="#a6e3a1")
+            
+        except Exception as e:
+            self.vlm_append_output(f"\n❌ Error: {str(e)}\n", "error")
+            self.vlm_status.config(text="❌ Error", fg="#f38ba8")
+    
+    def vlm_decide(self):
+        """Let VLM decide an action"""
+        if not self.vlm:
+            messagebox.showwarning("VLM Not Available", "Virtual Language Model not initialized")
+            return
+        
+        goal = self.vlm_goal_input.get().strip()
+        
+        if not goal:
+            messagebox.showwarning("No Goal", "Please enter a goal first!")
+            return
+        
+        self.vlm_status.config(text="🤔 Deciding...", fg="#f9e2af")
+        self.vlm_append_output("\n" + "━" * 60 + "\n", "info")
+        self.vlm_append_output("🤔 MAKING DECISION\n", "decision")
+        self.vlm_append_output("━" * 60 + "\n", "info")
+        self.vlm_append_output(f"Goal: {goal}\n\n", "info")
+        
+        # Run in thread
+        thread = threading.Thread(target=self._vlm_decide_thread, args=(goal,), daemon=True)
+        thread.start()
+    
+    def _vlm_decide_thread(self, goal):
+        """Decide in background thread"""
+        try:
+            decision = self.vlm.decide_action(goal)
+            
+            self.vlm_append_output("✅ Decision Made!\n\n", "success")
+            self.vlm_append_output(f"🎯 Action: {decision.get('action', 'N/A')}\n", "decision")
+            self.vlm_append_output(f"📍 Target: {decision.get('target', 'N/A')}\n", "info")
+            self.vlm_append_output(f"💭 Reasoning: {decision.get('reasoning', 'N/A')}\n", "info")
+            self.vlm_append_output(f"📊 Confidence: {decision.get('confidence', 0):.2%}\n", "info")
+            
+            alternatives = decision.get('alternative_actions', [])
+            if alternatives:
+                self.vlm_append_output(f"\n🔄 Alternatives: {', '.join(alternatives)}\n", "info")
+            
+            self.vlm_append_output("\n💡 Click 'Execute' to perform this action!\n", "highlight")
+            self.vlm_append_output("━" * 60 + "\n", "info")
+            
+            # Store decision for execution
+            self.vlm_last_decision = decision
+            
+            self.vlm_status.config(text="✅ Decision Ready", fg="#a6e3a1")
+            
+        except Exception as e:
+            self.vlm_append_output(f"\n❌ Error: {str(e)}\n", "error")
+            self.vlm_status.config(text="❌ Error", fg="#f38ba8")
+    
+    def vlm_execute(self):
+        """Execute the last decided action"""
+        if not self.vlm:
+            messagebox.showwarning("VLM Not Available", "Virtual Language Model not initialized")
+            return
+        
+        goal = self.vlm_goal_input.get().strip()
+        
+        if not goal:
+            messagebox.showwarning("No Goal", "Please enter a goal first!")
+            return
+        
+        self.vlm_status.config(text="▶️ Executing...", fg="#a6e3a1")
+        
+        # Run in thread
+        thread = threading.Thread(target=self._vlm_execute_thread, args=(goal,), daemon=True)
+        thread.start()
+    
+    def _vlm_execute_thread(self, goal):
+        """Execute in background thread"""
+        try:
+            self.vlm_append_output("\n" + "━" * 60 + "\n", "info")
+            self.vlm_append_output("▶️ EXECUTING LEARNED ACTION\n", "success")
+            self.vlm_append_output("━" * 60 + "\n", "info")
+            
+            # First decide the action
+            self.vlm_append_output("🤔 Analyzing goal and deciding action...\n", "info")
+            decision = self.vlm.decide_action(goal)
+            
+            self.vlm_append_output(f"✅ Decision: {decision.get('action', 'N/A')}\n", "decision")
+            self.vlm_append_output(f"   Confidence: {decision.get('confidence', 0):.2%}\n\n", "info")
+            
+            # Execute the action
+            self.vlm_append_output("⚙️ Executing action...\n", "info")
+            result = self.vlm.execute_learned_action(decision)
+            
+            if result.get("demo"):
+                self.vlm_append_output("\n⚠️ DEMO MODE\n", "error")
+                self.vlm_append_output("Desktop control requires local execution.\n", "info")
+                self.vlm_append_output(f"Simulated: {result.get('message', 'N/A')}\n", "info")
+            elif result.get("success"):
+                self.vlm_append_output("\n✅ Action Executed Successfully!\n", "success")
+                self.vlm_append_output(f"Result: {result.get('message', 'N/A')}\n", "info")
+            else:
+                self.vlm_append_output("\n⚠️ Action Failed\n", "error")
+                self.vlm_append_output(f"Error: {result.get('message', 'Unknown error')}\n", "info")
+            
+            self.vlm_append_output("━" * 60 + "\n", "info")
+            
+            self.vlm_refresh_stats()
+            self.vlm_status.config(text="✅ Ready to Learn", fg="#a6e3a1")
+            
+        except Exception as e:
+            self.vlm_append_output(f"\n❌ Error: {str(e)}\n", "error")
+            self.vlm_status.config(text="❌ Error", fg="#f38ba8")
+    
+    def vlm_learn_session(self):
+        """Run an autonomous learning session"""
+        if not self.vlm:
+            messagebox.showwarning("VLM Not Available", "Virtual Language Model not initialized")
+            return
+        
+        # Ask for duration
+        duration = simpledialog.askinteger(
+            "Learning Session",
+            "How many minutes should the AI explore and learn?",
+            initialvalue=3,
+            minvalue=1,
+            maxvalue=30
+        )
+        
+        if not duration:
+            return
+        
+        if messagebox.askyesno(
+            "Start Learning Session",
+            f"The AI will autonomously explore and learn for {duration} minute(s).\n\n"
+            "It will:\n"
+            "• Observe the screen\n"
+            "• Identify UI patterns\n"
+            "• Learn workflows\n"
+            "• Make test actions\n\n"
+            "Continue?"
+        ):
+            self.vlm_status.config(text="🧠 Learning...", fg="#cba6f7")
+            thread = threading.Thread(target=self._vlm_learn_session_thread, args=(duration,), daemon=True)
+            thread.start()
+    
+    def _vlm_learn_session_thread(self, duration):
+        """Run learning session in background"""
+        try:
+            self.vlm_append_output("\n" + "=" * 60 + "\n", "info")
+            self.vlm_append_output("🧠 AUTONOMOUS LEARNING SESSION STARTING\n", "highlight")
+            self.vlm_append_output("=" * 60 + "\n", "info")
+            self.vlm_append_output(f"Duration: {duration} minute(s)\n\n", "info")
+            
+            self.vlm.autonomous_learning_session(duration)
+            
+            self.vlm_append_output("\n✅ Learning session complete!\n", "success")
+            self.vlm_append_output("=" * 60 + "\n", "info")
+            
+            self.vlm_refresh_stats()
+            self.vlm_status.config(text="✅ Learning Complete", fg="#a6e3a1")
+            
+        except Exception as e:
+            self.vlm_append_output(f"\n❌ Error: {str(e)}\n", "error")
+            self.vlm_status.config(text="❌ Error", fg="#f38ba8")
+    
+    def vlm_query(self):
+        """Query the learned knowledge"""
+        if not self.vlm:
+            messagebox.showwarning("VLM Not Available", "Virtual Language Model not initialized")
+            return
+        
+        question = simpledialog.askstring(
+            "Query Knowledge",
+            "Ask the AI about what it has learned:"
+        )
+        
+        if not question:
+            return
+        
+        self.vlm_status.config(text="💭 Thinking...", fg="#89dceb")
+        
+        thread = threading.Thread(target=self._vlm_query_thread, args=(question,), daemon=True)
+        thread.start()
+    
+    def _vlm_query_thread(self, question):
+        """Query in background thread"""
+        try:
+            self.vlm_append_output("\n" + "━" * 60 + "\n", "info")
+            self.vlm_append_output("💬 KNOWLEDGE QUERY\n", "highlight")
+            self.vlm_append_output("━" * 60 + "\n", "info")
+            self.vlm_append_output(f"Question: {question}\n\n", "info")
+            
+            answer = self.vlm.query_knowledge(question)
+            
+            self.vlm_append_output("🤖 Answer:\n", "success")
+            self.vlm_append_output(f"{answer}\n", "info")
+            self.vlm_append_output("━" * 60 + "\n", "info")
+            
+            self.vlm_status.config(text="✅ Ready to Learn", fg="#a6e3a1")
+            
+        except Exception as e:
+            self.vlm_append_output(f"\n❌ Error: {str(e)}\n", "error")
+            self.vlm_status.config(text="❌ Error", fg="#f38ba8")
+    
+    def show_vlm_help(self):
+        """Show VLM help dialog"""
+        help_text = (
+            "VIRTUAL LANGUAGE MODEL - HOW IT WORKS\n\n"
+            "WHAT IS IT?\n\n"
+            "A self-learning AI that:\n"
+            "  - Observes your screen with AI vision\n"
+            "  - Learns UI patterns and workflows\n"
+            "  - Builds a knowledge base over time\n"
+            "  - Makes intelligent decisions\n"
+            "  - Controls your desktop based on learned knowledge\n\n"
+            "HOW TO USE:\n\n"
+            "1. OBSERVE: Click 'Observe Screen' to let AI see your desktop\n"
+            "2. DECIDE: Enter a goal and click 'Decide Action'\n"
+            "3. EXECUTE: Click 'Execute' to perform the action\n"
+            "4. LEARN: Click 'Learn Session' for autonomous learning\n"
+            "5. QUERY: Click 'Query Knowledge' to ask what it learned\n\n"
+            "EXAMPLE WORKFLOW:\n\n"
+            "1. Click 'Observe Screen' - AI sees your desktop\n"
+            "2. Enter goal: 'Search for Python tutorials'\n"
+            "3. Click 'Decide Action' - AI plans the steps\n"
+            "4. Click 'Execute' - AI performs the search\n"
+            "5. AI learns from this experience!\n\n"
+            "MEMORY:\n\n"
+            "All learned knowledge is saved to vlm_memory.json\n"
+            "The AI remembers between sessions!\n\n"
+            "For full functionality, download and run locally!"
+        )
+        messagebox.showinfo("Virtual Language Model Help", help_text)
     
     def view_comprehensive_screenshots(self):
         """View generated screenshots"""
