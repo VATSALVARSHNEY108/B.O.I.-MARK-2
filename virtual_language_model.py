@@ -6,9 +6,11 @@ A self-learning AI system that observes the screen, builds knowledge, and contro
 import os
 import json
 import time
+import base64
 from datetime import datetime
 from typing import Dict, List, Any, Optional
-import google.genai as genai
+from google import genai
+from google.genai import types
 from gui_automation import GUIAutomation
 
 
@@ -25,9 +27,15 @@ class VirtualLanguageModel:
         if not self.api_key:
             print("⚠️  Warning: GEMINI_API_KEY not found")
             self.client = None
+            self.model = None
         else:
-            genai.configure(api_key=self.api_key)
-            self.client = genai.GenerativeModel('gemini-2.0-flash-exp')
+            try:
+                self.client = genai.Client(api_key=self.api_key)
+                self.model = 'gemini-2.0-flash-exp'
+            except Exception as e:
+                print(f"⚠️  Warning: Failed to initialize Gemini client: {e}")
+                self.client = None
+                self.model = None
         
         # Knowledge base - the model's "memory"
         self.visual_memory = []  # Screenshots and their interpretations
@@ -122,8 +130,9 @@ class VirtualLanguageModel:
             }
         
         try:
-            # Upload the image
-            image_file = genai.upload_file(screenshot_path)
+            # Read the image
+            with open(screenshot_path, 'rb') as f:
+                image_data = f.read()
             
             prompt = f"""
 You are a Virtual Language Model that learns from screen observations.
@@ -159,7 +168,23 @@ Provide a detailed analysis in JSON format:
 }}
 """
             
-            response = self.client.generate_content([prompt, image_file])
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=[
+                    types.Content(
+                        role="user",
+                        parts=[
+                            types.Part(text=prompt),
+                            types.Part(
+                                inline_data=types.Blob(
+                                    mime_type="image/png",
+                                    data=image_data
+                                )
+                            )
+                        ]
+                    )
+                ]
+            )
             
             # Parse JSON from response
             response_text = response.text.strip()
@@ -283,7 +308,10 @@ Provide your decision in JSON format:
 }}
 """
             
-            response = self.client.generate_content(prompt)
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=prompt
+            )
             response_text = response.text.strip()
             
             # Extract JSON
@@ -527,7 +555,10 @@ If you don't have the information, say so.
 """
         
         try:
-            response = self.client.generate_content(prompt)
+            response = self.client.models.generate_content(
+                model=self.model,
+                contents=prompt
+            )
             return response.text.strip()
         except Exception as e:
             return f"Error querying knowledge: {str(e)}"
