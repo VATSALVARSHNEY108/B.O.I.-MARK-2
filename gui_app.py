@@ -15,8 +15,9 @@ from file_automation import create_file_automation
 from clipboard_text_handler import ClipboardTextHandler
 from smart_automation import SmartAutomationManager
 from datetime import datetime
+from pathlib import Path
 from desktop_controller_integration import DesktopFileController
-from desktop_sync_manager import auto_initialize_on_gui_start
+from desktop_sync_manager import auto_initialize_on_gui_start, DesktopSyncManager
 
 load_dotenv()
 
@@ -2911,46 +2912,91 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
         threading.Thread(target=execute, daemon=True).start()
 
     def auto_desktop_sync(self):
-        """Auto-initialize desktop sync on GUI startup"""
+        """Auto-initialize desktop sync on GUI startup - Scans and stores desktop data"""
         import time
         time.sleep(2)  # Wait for GUI to fully load
         
         try:
             self.update_output("\n" + "="*60 + "\n", "info")
-            self.update_output("🚀 AUTO-STARTING DESKTOP SYNC MANAGER\n", "command")
+            self.update_output("🚀 DESKTOP FILE & FOLDER AUTOMATOR - STARTING\n", "command")
             self.update_output("="*60 + "\n", "info")
             
-            # Run the auto initialization
-            results = auto_initialize_on_gui_start()
+            # Create Desktop Sync Manager instance
+            manager = DesktopSyncManager()
             
-            if results["success"]:
-                self.update_output("\n✅ Desktop Sync Complete!\n", "success")
-                self.update_output(f"📂 Desktop Path: {Path.home() / 'Desktop'}\n", "info")
-                
-                # Show what was created
-                for step in results["steps"]:
-                    if step["status"] == "success" and "details" in step:
-                        details = step["details"]
-                        if "total_folders" in details:
-                            self.update_output(f"📁 Total folders: {details['total_folders']}\n", "info")
-                        if "created_folders" in details and details["created_folders"]:
-                            self.update_output(f"   New: {', '.join(details['created_folders'])}\n", "info")
-                
-                self.update_output("\n📥 BATCH FILE READY FOR DOWNLOAD:\n", "success")
-                self.update_output("   1. Find 'desktop_file_controller.bat' in file browser\n", "info")
-                self.update_output("   2. Right-click → Download\n", "info")
-                self.update_output("   3. Save to your Windows PC\n", "info")
-                self.update_output("   4. Double-click to run!\n\n", "info")
-                
-                self.update_output("💡 TIP: Use Desktop tab buttons to test functionality\n", "info")
-                
+            # Step 1: Scan the desktop
+            self.update_output("\n🔍 Scanning your desktop...\n", "command")
+            scan_result = manager.scan_desktop()
+            
+            if not scan_result["success"]:
+                self.update_output(f"❌ Error: {scan_result['message']}\n", "error")
+                return
+            
+            scan_data = scan_result["data"]
+            stats = scan_data["statistics"]
+            
+            # Step 2: Display summary in GUI
+            self.update_output("\n📊 DESKTOP ANALYSIS SUMMARY\n", "success")
+            self.update_output("="*60 + "\n", "info")
+            self.update_output(f"📂 Desktop Location: {scan_data['desktop_path']}\n", "info")
+            self.update_output(f"📅 Scanned: {datetime.fromisoformat(scan_data['scan_time']).strftime('%Y-%m-%d %H:%M:%S')}\n\n", "info")
+            
+            self.update_output(f"📁 Total Folders: {stats['total_folders']}\n", "info")
+            self.update_output(f"📄 Total Files: {stats['total_files']}\n", "info")
+            
+            # Format file size
+            total_size = stats['total_size_bytes']
+            size_str = manager.format_size(total_size)
+            self.update_output(f"💾 Total Size: {size_str}\n", "info")
+            
+            # Show file types
+            if stats["file_types"]:
+                self.update_output(f"\n📑 File Types Found:\n", "command")
+                for ext, count in sorted(stats["file_types"].items(), key=lambda x: x[1], reverse=True)[:10]:
+                    ext_display = ext if ext != "no_extension" else "(no extension)"
+                    self.update_output(f"   {ext_display}: {count} file(s)\n", "info")
+            
+            # Show top folders
+            if scan_data["folders"]:
+                self.update_output(f"\n📂 Folders on Desktop:\n", "command")
+                for folder in scan_data["folders"][:10]:
+                    self.update_output(f"   • {folder['name']} ({folder['item_count']} items)\n", "info")
+                if len(scan_data["folders"]) > 10:
+                    self.update_output(f"   ... and {len(scan_data['folders']) - 10} more folders\n", "info")
+            
+            # Step 3: Save the data
+            self.update_output("\n💾 Saving desktop data...\n", "command")
+            save_result = manager.save_desktop_data(scan_data)
+            
+            if save_result["success"]:
+                self.update_output(f"✅ Data saved to: {save_result['file']}\n", "success")
             else:
-                self.update_output("\n⚠️  Desktop sync had some issues.\n", "error")
+                self.update_output(f"⚠️  Could not save data: {save_result['message']}\n", "error")
             
+            # Step 4: Check batch file
+            batch_result = manager.prepare_batch_file_download()
+            if batch_result["success"]:
+                self.update_output("\n📥 BATCH FILE READY:\n", "success")
+                self.update_output(f"   Location: {batch_result['batch_file']}\n", "info")
+                if manager.is_windows:
+                    self.update_output("   🚀 Double-click to launch desktop automation!\n", "info")
+                else:
+                    self.update_output("   📥 Download to your Windows PC to use\n", "info")
+            else:
+                self.update_output("\n📥 BATCH FILE SETUP:\n", "command")
+                self.update_output("   Download 'desktop_file_controller.bat' from Replit\n", "info")
+                self.update_output(f"   Place in: {manager.script_dir}\n", "info")
+            
+            self.update_output("\n" + "="*60 + "\n", "info")
+            self.update_output("✅ DESKTOP SCAN COMPLETE!\n", "success")
+            self.update_output("💡 All desktop data has been analyzed and saved\n", "info")
+            self.update_output("🗂️  Use the Desktop tab buttons to manage your files\n", "info")
             self.update_output("="*60 + "\n\n", "info")
             
         except Exception as e:
             self.update_output(f"\n⚠️  Desktop sync error: {str(e)}\n", "error")
+            import traceback
+            self.update_output(f"Details: {traceback.format_exc()}\n", "error")
 
 
 def main():
