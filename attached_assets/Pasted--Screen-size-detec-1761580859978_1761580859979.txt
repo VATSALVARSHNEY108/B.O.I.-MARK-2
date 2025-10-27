@@ -1,0 +1,63 @@
+                                                                              
+📺 Screen size detected: 1920x1080
+📱 WhatsApp automation ready
+🤖 AI Screen Suggester ready!
+📧 Email Sender (DEMO MODE - credentials not configured)
+📱 Chat Monitor initialized
+   ⚠️  Gmail credentials not configured
+   ⚠️  Twilio credentials not configured
+📺 Screen size detected: 1920x1080
+📱 Visual Chat Monitor initialized
+   ✅ Will control real Gmail/WhatsApp on your screen
+📺 Screen size detected: 1920x1080
+👁️ Smart Screen Monitor initialized
+🧠 Advanced Desktop RAG initialized
+   📊 Indexed files: 0
+   🏷️  Tagged files: 0
+   🔗 File relationships: 0
+💬 Communication Enhancements initialized
+   ✅ 8 advanced features ready
+📺 Screen size detected: 1920x1080
+🚀 Advanced Smart Screen Monitor initialized
+   ✨ Enhanced with multi-modal AI intelligence
+📺 Screen size detected: 1920x1080
+🚀 AI Screen Monitoring System initialized
+   ✨ 8 AI analysis modes available
+   📊 Analytics tracking enabled
+   🧠 Pattern learning active
+📁 File Automation System initialized
+📺 Screen size detected: 1920x1080
+🔧 Initializing automation capabilities...
+📺 Screen size detected: 1920x1080
+📱 WhatsApp automation ready
+🤖 AI Screen Suggester ready!
+📧 Email Sender (DEMO MODE - credentials not configured)
+📱 Chat Monitor initialized
+   ⚠️  Gmail credentials not configured
+   ⚠️  Twilio credentials not configured
+📺 Screen size detected: 1920x1080
+📱 Visual Chat Monitor initialized
+   ✅ Will control real Gmail/WhatsApp on your screen
+📺 Screen size detected: 1920x1080
+👁️ Smart Screen Monitor initialized
+🧠 Advanced Desktop RAG initialized
+   📊 Indexed files: 0
+   🏷️  Tagged files: 0
+   🔗 File relationships: 0
+💬 Communication Enhancements initialized
+   ✅ 8 advanced features ready
+📺 Screen size detected: 1920x1080
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\DesktopAutomator2\gui_app.py", line 5100, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\DesktopAutomator2\gui_app.py", line 5095, in main
+    app = AutomationControllerGUI(root)
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\DesktopAutomator2\gui_app.py", line 105, in __init__
+    self.setup_ui()
+    ~~~~~~~~~~~~~^^
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\DesktopAutomator2\gui_app.py", line 195, in setup_ui
+    command=self.toggle_vatsal_mode,
+            ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'AutomationControllerGUI' object has no attribute 'toggle_vatsal_mode'                                                                                
+(.venv) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\DesktopAutomator2> 
