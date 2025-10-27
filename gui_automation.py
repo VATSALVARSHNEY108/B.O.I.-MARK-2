@@ -33,6 +33,7 @@ class GUIAutomation:
             print(f"📺 Simulated screen size: {self.screen_width}x{self.screen_height}")
         
         self.system = platform.system()
+        self.last_folder_suggestions = []  # Store suggestions for last failed folder operation
     
     def _log_demo(self, action: str):
         """Log demo mode actions"""
@@ -328,6 +329,59 @@ class GUIAutomation:
         
         return desktop
     
+    def find_similar_folders(self, folder_name: str, search_path: str, max_suggestions: int = 5):
+        """Find folders with similar names using fuzzy matching"""
+        try:
+            if not os.path.exists(search_path):
+                return []
+            
+            # Get all folders in the directory
+            all_items = os.listdir(search_path)
+            folders = [item for item in all_items if os.path.isdir(os.path.join(search_path, item))]
+            
+            if not folders:
+                return []
+            
+            # Normalize search term
+            search_lower = folder_name.lower()
+            
+            # Calculate similarity scores
+            suggestions = []
+            for folder in folders:
+                folder_lower = folder.lower()
+                score = 0
+                
+                # Exact match (case-insensitive)
+                if folder_lower == search_lower:
+                    score = 100
+                # Contains the search term
+                elif search_lower in folder_lower:
+                    score = 80
+                # Search term contains folder name
+                elif folder_lower in search_lower:
+                    score = 70
+                # First letters match
+                elif folder_lower.startswith(search_lower[:3] if len(search_lower) >= 3 else search_lower[0]):
+                    score = 60
+                # Contains any word from search
+                else:
+                    search_words = search_lower.split()
+                    folder_words = folder_lower.split()
+                    common_words = set(search_words) & set(folder_words)
+                    if common_words:
+                        score = 50
+                
+                if score > 0:
+                    suggestions.append((folder, score))
+            
+            # Sort by score (highest first) and return top suggestions
+            suggestions.sort(key=lambda x: x[1], reverse=True)
+            return [folder for folder, score in suggestions[:max_suggestions]]
+        
+        except Exception as e:
+            print(f"Error finding similar folders: {e}")
+            return []
+    
     def open_folder(self, folder_path: str = None, folder_name: str = None) -> bool:
         """
         Open a folder in the file manager
@@ -341,6 +395,7 @@ class GUIAutomation:
         """
         try:
             target_path = None
+            self.last_folder_suggestions = []  # Clear previous suggestions
             
             if folder_path:
                 target_path = os.path.expanduser(folder_path)
@@ -368,7 +423,13 @@ class GUIAutomation:
                             break
                 
                 if not target_path:
+                    # Find suggestions from Desktop first
+                    suggestions = self.find_similar_folders(folder_name, desktop)
+                    self.last_folder_suggestions = suggestions
+                    
                     print(f"⚠️  Folder '{folder_name}' not found in common locations")
+                    if suggestions:
+                        print(f"   💡 Similar folders on Desktop: {', '.join(suggestions[:3])}")
                     return False
             else:
                 target_path = self.get_desktop_path()
@@ -409,12 +470,19 @@ class GUIAutomation:
         """
         try:
             desktop_path = self.get_desktop_path()
+            self.last_folder_suggestions = []  # Clear previous suggestions
             
             if folder_name:
                 target_path = os.path.join(desktop_path, folder_name)
                 if not os.path.exists(target_path):
+                    # Find similar folders to suggest
+                    suggestions = self.find_similar_folders(folder_name, desktop_path)
+                    self.last_folder_suggestions = suggestions
+                    
                     print(f"⚠️  Folder '{folder_name}' not found on Desktop")
                     print(f"   Searched: {target_path}")
+                    if suggestions:
+                        print(f"   💡 Did you mean: {', '.join(suggestions[:3])}")
                     return False
             else:
                 target_path = desktop_path

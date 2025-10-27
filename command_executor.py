@@ -263,9 +263,20 @@ class CommandExecutor:
                         "message": f"Opened folder: {target}"
                     }
                 else:
+                    # Include suggestions if available
+                    base_msg = "Failed to open folder"
+                    if folder_name:
+                        base_msg = f"Failed to open folder: {folder_name}"
+                    
+                    suggestions = self.gui.last_folder_suggestions
+                    if suggestions:
+                        suggestions_text = ", ".join(f"'{s}'" for s in suggestions[:5])
+                        base_msg += f". Did you mean: {suggestions_text}?"
+                    
                     return {
                         "success": False,
-                        "message": "Failed to open folder"
+                        "message": base_msg,
+                        "suggestions": suggestions if suggestions else []
                     }
 
             elif action == "open_desktop_folder":
@@ -278,9 +289,16 @@ class CommandExecutor:
                         "message": msg
                     }
                 else:
+                    # Include suggestions if available
+                    base_msg = f"Failed to open Desktop folder: {folder_name}" if folder_name else "Failed to open Desktop"
+                    suggestions = self.gui.last_folder_suggestions
+                    if suggestions:
+                        suggestions_text = ", ".join(f"'{s}'" for s in suggestions[:5])
+                        base_msg += f". Did you mean: {suggestions_text}?"
                     return {
                         "success": False,
-                        "message": f"Failed to open Desktop folder: {folder_name}" if folder_name else "Failed to open Desktop"
+                        "message": base_msg,
+                        "suggestions": suggestions
                     }
 
             elif action == "open_desktop":
