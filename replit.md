@@ -45,6 +45,7 @@ The VATSAL AI Assistant (`vatsal_assistant.py`) is an intelligent AI companion w
 - **Human-like Interaction (`human_interaction.py`):** Incorporates conversation context recall and adaptive AI tone.
 - **Cloud & Extension Ecosystem (`cloud_ecosystem.py`):** Supports multi-item cloud sync, a custom plugin framework, and mobile device connectivity.
 - **Intelligent Task Automator (`intelligent_task_automator.py`):** Comprehensive intelligent automation system for mouse, keyboard, and screen control, including a Natural Language Task Parser, AI Vision Screen Understanding, and Website-Specific Automation Controllers (LeetCode, GitHub, YouTube, etc.).
+- **Comprehensive Desktop Controller (`comprehensive_desktop_controller.py`):** Advanced 3-phase automation system featuring Deep Prompt Understanding (analyzes intent, complexity, requirements), Intelligent Task Breakdown (creates detailed execution plans with checkpoints), and Real-Time Screen Monitoring (captures before/during/after states, AI verification of outcomes, adaptive execution with error recovery).
 - **Utility Modules:** Spotify Integration, YouTube Integration, Weather & News, Translation, Calculator, Password Vault, Quick Notes, and Calendar Manager.
 
 ## External Dependencies
