@@ -517,19 +517,16 @@ class AutomationControllerGUI:
         stats_btn.pack(side="left", padx=5)
         self.add_hover_effect(stats_btn, "#313244", "#45475a")
 
-"""
-Comprehensive Desktop Controller Tab for GUI
-This creates the UI tab for the 3-phase automation system
-"""
-
-def create_comprehensive_controller_tab(self, notebook):
-    """
-    3-Phase Desktop Automation Controller Tab
-    - Phase 1: Understand the Prompt
-    - Phase 2: Break into Steps
-    - Phase 3: Monitor & Execute
-    """
-    tab = tk.Frame(notebook, bg="#1e1e2e")
+    def create_comprehensive_controller_tab(self, notebook):
+        """
+        Comprehensive Desktop Controller Tab for GUI
+        This creates the UI tab for the 3-phase automation system
+        3-Phase Desktop Automation Controller Tab
+        - Phase 1: Understand the Prompt
+        - Phase 2: Break into Steps
+        - Phase 3: Monitor & Execute
+        """
+        tab = tk.Frame(notebook, bg="#1e1e2e")
     notebook.add(tab, text="🎯 Smart Control")
     
     # Header
@@ -774,14 +771,13 @@ def create_comprehensive_controller_tab(self, notebook):
     self.append_comprehensive_output("Monitors screen in real-time\n\n", "info")
     self.append_comprehensive_output("💡 Try a command above or use Quick Actions!\n", "highlight")
     self.append_comprehensive_output("=" * 60 + "\n", "info")
-"""
-Virtual Language Model GUI Tab
-Self-learning AI that observes, learns, and controls
-"""
 
-def create_vlm_tab(self, notebook):
-    """Virtual Language Model Tab - Learning AI"""
-    tab = tk.Frame(notebook, bg="#1e1e2e")
+    def create_vlm_tab(self, notebook):
+        """
+        Virtual Language Model GUI Tab
+        Self-learning AI that observes, learns, and controls
+        """
+        tab = tk.Frame(notebook, bg="#1e1e2e")
     notebook.add(tab, text="🧠 Learning AI")
     
     # Header
