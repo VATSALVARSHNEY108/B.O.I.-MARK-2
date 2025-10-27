@@ -4,7 +4,6 @@ import tkinter as tk
 from tkinter import ttk, scrolledtext, messagebox, filedialog
 import threading
 import os
-from pathlib import Path
 from dotenv import load_dotenv
 from gemini_controller import parse_command, get_ai_suggestion
 from command_executor import CommandExecutor
