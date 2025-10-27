@@ -1,0 +1,60 @@
+==========================================
+HOW TO FIX YOUR GUI APP ERROR - SIMPLE STEPS
+==========================================
+
+YOUR ERROR:
+AttributeError: 'AutomationControllerGUI' object has no attribute 'toggle_vatsal_mode'
+
+ROOT CAUSE:
+Your local virtual_language_model.py file has OLD Google Gemini API code that crashes before the GUI fully loads.
+
+SOLUTION (Choose ONE):
+
+==========================================
+OPTION 1: DOWNLOAD THE FIXED FILE (EASIEST)
+==========================================
+
+1. In Replit, find the file "virtual_language_model.py" in the file explorer
+2. Click the three dots (...) next to the file name
+3. Select "Download"
+4. Replace your local file at:
+   C:\Users\VATSAL VARSHNEY\PycharmProjects\DesktopAutomator2\virtual_language_model.py
+5. Run: python gui_app.py
+
+==========================================
+OPTION 2: MANUALLY UPDATE YOUR FILE
+==========================================
+
+Open your local virtual_language_model.py and make these 3 KEY changes:
+
+CHANGE 1 - Line 12 (imports):
+   OLD: import google.genai as genai
+   NEW: from google import genai
+        from google.genai import types
+        import base64
+
+CHANGE 2 - Line 29-30 (initialization):
+   OLD: genai.configure(api_key=self.api_key)
+        self.client = genai.GenerativeModel('gemini-2.0-flash-exp')
+   
+   NEW: try:
+            self.client = genai.Client(api_key=self.api_key)
+            self.model = 'gemini-2.0-flash-exp'
+        except Exception as e:
+            print(f"⚠️  Warning: Failed to initialize Gemini client: {e}")
+            self.client = None
+            self.model = None
+
+CHANGE 3 - Find ALL instances of (there are 3):
+   OLD: response = self.client.generate_content(...)
+   
+   NEW: response = self.client.models.generate_content(
+            model=self.model,
+            contents=...
+        )
+
+Save and run: python gui_app.py
+
+==========================================
+THAT'S IT! Your error will be fixed.
+==========================================
