@@ -1,0 +1,51 @@
+✅ Gemini AI is ready!
+Type a command or click a Quick Action button to get started.
+
+
+============================================================
+🤖 VATSAL AI Assistant
+============================================================
+Burning the midnight oil, are we? I'm here to help.
+
+💡 Working late? I can help with any tasks you have in mind.
+
+
+============================================================
+📝 You: open coding folder on desktop
+============================================================
+
+🤖 VATSAL: Certainly, Sir. Executing 'open coding folder on desktop' now.
+
+🤖 VATSAL: Right away, Boss. I attempted to open the "coding" folder on your desktop, but unfortunately, I encountered an error. It seems I was unable to locate a folder with that exact name in that location. 🧐
+
+Perhaps there's a slight variation in the folder name, or it might be located in a different directory? 🤔
+
+At your service, I can offer a few potential solutions:
+
+1.  *Double-check the folder name and location:* Ensure "coding" is indeed the correct name and that it's directly on the desktop.
+2.  *Provide the full path:* If you know the full path to the folder (e.g., "C:/Users/YourName/Desktop/MyCodingProjects"), please provide it, and I'll try again.
+3.  *Search the entire system:* I can initiate a system-wide search for a folder named "coding." Be warned, though, this might take a little while. ⏳
+
+Let me know how you'd like me to proceed, Vatsal Sir. I'm ready to assist in any way I can.
+
+============================================================
+📝 You: open LLM folder on desktop
+============================================================
+
+🤖 VATSAL: Certainly, Sir. Executing 'open LLM folder on desktop' now.
+
+🤖 VATSAL: Right away, Boss. I attempted to open the "LLM" folder on your desktop, but alas, I've encountered another error. It appears I'm having trouble locating that specific folder in that location as well. 😔
+
+Given the previous experience with the "coding" folder, it seems we might be facing a similar situation. Perhaps there's a slight discrepancy in the name, or the folder might reside elsewhere.
+
+Before we proceed, could you confirm if the "LLM" folder is indeed located directly on the desktop and that the name is precisely as you provided?
+
+In the meantime, I can offer the same potential solutions as before:
+
+1.  *Verify the folder name and location:* Double-check that "LLM" is the exact name and that it's directly on the desktop.
+2.  *Provide the full path:* If you know the full path to the folder, please provide it, and I'll try again. (e.g., "C:/Users/YourName/Desktop/MyLLMProjects")
+3.  *Initiate a system-wide search:* I can search the entire system for a folder named "LLM." Please be aware that this may take some time. ⏳
+
+Also, Vatsal Sir, if you're consistently having trouble with opening folders on the desktop, it might be worthwhile to investigate whether there are any unusual permissions or configurations affecting that location. Just a thought! 🤔
+
+Let me know which course of action you'd prefer, Boss. I'm at your service.
