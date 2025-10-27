@@ -84,6 +84,10 @@ Guidelines:
                     # Try to parse as a command
                     command_dict = parse_command(user_message)
                     
+                    # Defensive guard: ensure parse_command returned a valid dict
+                    if not isinstance(command_dict, dict):
+                        raise ValueError("Invalid command format returned")
+                    
                     # If it's a valid command (not an error), execute it
                     if command_dict.get("action") != "error":
                         print(f"\n🤖 VATSAL: Certainly, Sir. Executing '{user_message}' now.\n")
