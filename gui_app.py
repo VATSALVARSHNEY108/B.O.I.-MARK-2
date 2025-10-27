@@ -31,6 +31,7 @@ from quick_notes import QuickNotes
 from weather_news_service import WeatherNewsService
 from translation_service import TranslationService
 from smart_break_suggester import SmartBreakSuggester
+from selenium_web_automator import SeleniumWebAutomator
 
 load_dotenv()
 
@@ -69,6 +70,12 @@ class AutomationControllerGUI:
         self.weather_news = WeatherNewsService()
         self.translator = TranslationService()
         self.break_suggester = SmartBreakSuggester()
+        
+        try:
+            self.web_automator = SeleniumWebAutomator()
+        except Exception as e:
+            self.web_automator = None
+            print(f"Web automator initialization failed: {e}")
 
         self.vatsal_mode = True
         self.processing = False
@@ -197,6 +204,7 @@ class AutomationControllerGUI:
         notebook.pack(fill="both", expand=True, padx=10, pady=10)
 
         self.create_vatsal_ai_tab(notebook)
+        self.create_web_automation_tab(notebook)
         self.create_productivity_hub_tab(notebook)
         self.create_tools_utilities_tab(notebook)
         self.create_code_tab(notebook)
@@ -488,6 +496,160 @@ class AutomationControllerGUI:
                               pady=8)
         stats_btn.pack(side="left", padx=5)
         self.add_hover_effect(stats_btn, "#313244", "#45475a")
+
+    def create_web_automation_tab(self, notebook):
+        """Web Automation with Selenium"""
+        tab = tk.Frame(notebook, bg="#1e1e2e")
+        notebook.add(tab, text="🌐 Web Auto")
+        
+        header_frame = tk.Frame(tab, bg="#1a1a2e")
+        header_frame.pack(fill="x", pady=(10, 0), padx=10)
+        
+        header = tk.Label(header_frame,
+                          text="🌐 Intelligent Web Automation",
+                          bg="#1a1a2e",
+                          fg="#89dceb",
+                          font=("Segoe UI", 14, "bold"))
+        header.pack(pady=12)
+        
+        info = tk.Label(header_frame,
+                        text="🤖 AI-Powered Browser Control • Works in Replit Cloud",
+                        bg="#1a1a2e",
+                        fg="#a6adc8",
+                        font=("Segoe UI", 9, "italic"))
+        info.pack(pady=(0, 12))
+        
+        input_section = tk.Frame(tab, bg="#1e1e2e")
+        input_section.pack(fill="x", padx=10, pady=10)
+        
+        input_label = tk.Label(input_section,
+                               text="💬 Natural Language Command:",
+                               bg="#1e1e2e",
+                               fg="#a6adc8",
+                               font=("Segoe UI", 9, "bold"))
+        input_label.pack(anchor="w", padx=5, pady=(5, 2))
+        
+        input_box_frame = tk.Frame(input_section, bg="#1e1e2e")
+        input_box_frame.pack(fill="x", padx=5, pady=(0, 5))
+        
+        self.web_auto_input = tk.Entry(input_box_frame,
+                                       bg="#313244",
+                                       fg="#ffffff",
+                                       font=("Segoe UI", 11),
+                                       relief="solid",
+                                       bd=2,
+                                       insertbackground="#89dceb")
+        self.web_auto_input.pack(side="left", fill="x", expand=True, ipady=8)
+        self.web_auto_input.bind("<Return>", lambda e: self.execute_web_automation())
+        
+        execute_btn = tk.Button(input_box_frame,
+                                text="🚀 Execute",
+                                bg="#89dceb",
+                                fg="#0f0f1e",
+                                font=("Segoe UI", 10, "bold"),
+                                relief="flat",
+                                cursor="hand2",
+                                command=self.execute_web_automation,
+                                padx=20,
+                                pady=8)
+        execute_btn.pack(side="right", padx=(5, 0))
+        self.add_hover_effect(execute_btn, "#89dceb", "#74c7ec")
+        
+        quick_frame = tk.Frame(tab, bg="#1a1a2e")
+        quick_frame.pack(fill="both", expand=True, padx=10, pady=10)
+        
+        quick_label = tk.Label(quick_frame,
+                               text="⚡ Quick Actions",
+                               bg="#1a1a2e",
+                               fg="#f9e2af",
+                               font=("Segoe UI", 11, "bold"))
+        quick_label.pack(pady=10)
+        
+        canvas = tk.Canvas(quick_frame, bg="#1a1a2e", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(quick_frame, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="#1a1a2e")
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        quick_actions = [
+            ("🎯 LeetCode Problem 34", "open leetcode problem 34"),
+            ("🎯 LeetCode Problem 1", "open leetcode problem 1"),
+            ("📚 LeetCode Problemset", "open https://leetcode.com/problemset/all/"),
+            ("🔍 Search GitHub Python", "search github for python automation"),
+            ("🌟 GitHub Trending Python", "open https://github.com/trending/python"),
+            ("🌟 GitHub Trending", "open https://github.com/trending"),
+            ("💡 Search Google ML", "search google for machine learning"),
+            ("🔎 Search StackOverflow", "search stackoverflow for python async"),
+            ("📺 YouTube Python Tutorial", "search youtube for python tutorial"),
+            ("📺 YouTube Coding", "search youtube for coding tutorials"),
+        ]
+        
+        for text, command in quick_actions:
+            btn = tk.Button(scrollable_frame,
+                            text=text,
+                            bg="#313244",
+                            fg="#ffffff",
+                            font=("Segoe UI", 9),
+                            relief="flat",
+                            cursor="hand2",
+                            command=lambda c=command: self.quick_web_automation(c),
+                            anchor="w",
+                            padx=15,
+                            pady=8,
+                            activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=2)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+        
+        control_frame = tk.Frame(tab, bg="#1e1e2e")
+        control_frame.pack(fill="x", padx=10, pady=(0, 10))
+        
+        init_btn = tk.Button(control_frame,
+                             text="▶️ Start Browser",
+                             bg="#313244",
+                             fg="#ffffff",
+                             font=("Segoe UI", 9, "bold"),
+                             relief="flat",
+                             cursor="hand2",
+                             command=self.initialize_web_browser,
+                             padx=12,
+                             pady=6)
+        init_btn.pack(side="left", padx=5)
+        self.add_hover_effect(init_btn, "#313244", "#45475a")
+        
+        close_btn = tk.Button(control_frame,
+                              text="🔒 Close Browser",
+                              bg="#313244",
+                              fg="#ffffff",
+                              font=("Segoe UI", 9, "bold"),
+                              relief="flat",
+                              cursor="hand2",
+                              command=self.close_web_browser,
+                              padx=12,
+                              pady=6)
+        close_btn.pack(side="left", padx=5)
+        self.add_hover_effect(close_btn, "#313244", "#45475a")
+        
+        screenshot_btn = tk.Button(control_frame,
+                                   text="📸 Screenshot",
+                                   bg="#313244",
+                                   fg="#ffffff",
+                                   font=("Segoe UI", 9, "bold"),
+                                   relief="flat",
+                                   cursor="hand2",
+                                   command=self.take_web_screenshot,
+                                   padx=12,
+                                   pady=6)
+        screenshot_btn.pack(side="left", padx=5)
+        self.add_hover_effect(screenshot_btn, "#313244", "#45475a")
 
     def create_code_tab(self, notebook):
         tab = tk.Frame(notebook, bg="#1e1e2e")
@@ -1707,6 +1869,104 @@ class AutomationControllerGUI:
             title = "Stats"
 
         messagebox.showinfo(title, stats_message)
+    
+    def execute_web_automation(self):
+        """Execute web automation from input"""
+        if not self.web_automator:
+            self.update_output("❌ Web automation not available\n", "error")
+            return
+        
+        command = self.web_auto_input.get().strip()
+        if not command:
+            self.update_output("⚠️  Please enter a command\n", "warning")
+            return
+        
+        self.update_output(f"\n🤖 EXECUTING WEB AUTOMATION\n", "info")
+        self.update_output(f"📋 Command: {command}\n", "info")
+        
+        def run_automation():
+            try:
+                result = self.web_automator.execute_task(command, interactive=False)
+                
+                if result.get('success'):
+                    self.update_output(f"\n✅ Task completed successfully!\n", "success")
+                    self.update_output(f"📊 Success rate: {result['successful_steps']}/{result['total_steps']}\n", "info")
+                else:
+                    self.update_output(f"\n⚠️  Task completed with issues\n", "warning")
+                    
+                for i, step_result in enumerate(result.get('results', []), 1):
+                    if step_result.get('success'):
+                        self.update_output(f"   Step {i}: ✅ {step_result.get('message', 'Done')}\n", "success")
+                    else:
+                        self.update_output(f"   Step {i}: ❌ {step_result.get('error', 'Failed')}\n", "error")
+                
+                self.web_auto_input.delete(0, tk.END)
+                
+            except Exception as e:
+                self.update_output(f"❌ Error: {str(e)}\n", "error")
+        
+        thread = threading.Thread(target=run_automation, daemon=True)
+        thread.start()
+    
+    def quick_web_automation(self, command):
+        """Quick web automation action"""
+        if not self.web_automator:
+            self.update_output("❌ Web automation not available\n", "error")
+            return
+        
+        self.web_auto_input.delete(0, tk.END)
+        self.web_auto_input.insert(0, command)
+        self.execute_web_automation()
+    
+    def initialize_web_browser(self):
+        """Initialize the web browser"""
+        if not self.web_automator:
+            self.update_output("❌ Web automation not available\n", "error")
+            return
+        
+        self.update_output("🌐 Initializing browser...\n", "info")
+        
+        def init():
+            try:
+                if self.web_automator.initialize_browser():
+                    self.update_output("✅ Browser initialized successfully!\n", "success")
+                    self.update_output(f"📍 Ready for automation commands\n", "info")
+                else:
+                    self.update_output("❌ Failed to initialize browser\n", "error")
+            except Exception as e:
+                self.update_output(f"❌ Error: {str(e)}\n", "error")
+        
+        thread = threading.Thread(target=init, daemon=True)
+        thread.start()
+    
+    def close_web_browser(self):
+        """Close the web browser"""
+        if not self.web_automator:
+            self.update_output("❌ Web automation not available\n", "error")
+            return
+        
+        try:
+            self.web_automator.close_browser()
+            self.update_output("🔒 Browser closed\n", "info")
+        except Exception as e:
+            self.update_output(f"❌ Error closing browser: {str(e)}\n", "error")
+    
+    def take_web_screenshot(self):
+        """Take a screenshot of the current page"""
+        import time
+        if not self.web_automator:
+            self.update_output("❌ Web automation not available\n", "error")
+            return
+        
+        try:
+            filename = f"web_screenshot_{int(time.time())}.png"
+            if self.web_automator.take_screenshot(filename):
+                self.update_output(f"📸 Screenshot saved: {filename}\n", "success")
+                self.update_output(f"📍 URL: {self.web_automator.get_current_url()}\n", "info")
+            else:
+                self.update_output("❌ Screenshot failed - browser not initialized\n", "error")
+        except Exception as e:
+            self.update_output(f"❌ Error: {str(e)}\n", "error")
 
     def select_command_text(self):
         """Select all text in command input for easy editing"""

@@ -49,3 +49,5 @@ scikit-learn
 seaborn
 sift-stack-py
 statsmodels
+selenium
+webdriver-manager
