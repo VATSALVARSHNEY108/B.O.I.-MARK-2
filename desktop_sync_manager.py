@@ -92,54 +92,162 @@ Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
                 "message": f"Error preparing batch file: {str(e)}"
             }
     
-    def create_desktop_structure_json(self):
-        """Create JSON representation of desktop structure"""
+    def scan_desktop(self):
+        """Scan and analyze desktop files and folders"""
         try:
-            structure = {
-                "generated": datetime.now().isoformat(),
+            if not self.desktop.exists():
+                return {
+                    "success": False,
+                    "message": f"Desktop not found at {self.desktop}"
+                }
+            
+            scan_data = {
+                "scan_time": datetime.now().isoformat(),
                 "desktop_path": str(self.desktop),
                 "folders": [],
-                "files": []
+                "files": [],
+                "statistics": {
+                    "total_folders": 0,
+                    "total_files": 0,
+                    "total_size_bytes": 0,
+                    "file_types": {}
+                }
             }
-            
-            if not self.desktop.exists():
-                self.desktop.mkdir(parents=True, exist_ok=True)
             
             for item in self.desktop.iterdir():
                 item_info = {
                     "name": item.name,
                     "path": str(item),
-                    "size": item.stat().st_size if item.is_file() else 0
+                    "size": item.stat().st_size if item.is_file() else 0,
+                    "modified": datetime.fromtimestamp(item.stat().st_mtime).isoformat()
                 }
                 
                 if item.is_dir():
                     # Count items in folder
                     try:
-                        item_info["item_count"] = len(list(item.iterdir()))
+                        item_count = len(list(item.iterdir()))
+                        item_info["item_count"] = item_count
                     except:
                         item_info["item_count"] = 0
-                    structure["folders"].append(item_info)
+                    scan_data["folders"].append(item_info)
+                    scan_data["statistics"]["total_folders"] += 1
                 else:
-                    structure["files"].append(item_info)
-            
-            # Save to file
-            json_file = "desktop_structure.json"
-            with open(json_file, 'w') as f:
-                json.dump(structure, f, indent=2)
+                    # Get file extension
+                    ext = item.suffix.lower() if item.suffix else "no_extension"
+                    item_info["extension"] = ext
+                    scan_data["files"].append(item_info)
+                    scan_data["statistics"]["total_files"] += 1
+                    scan_data["statistics"]["total_size_bytes"] += item_info["size"]
+                    
+                    # Track file types
+                    if ext in scan_data["statistics"]["file_types"]:
+                        scan_data["statistics"]["file_types"][ext] += 1
+                    else:
+                        scan_data["statistics"]["file_types"][ext] = 1
             
             return {
                 "success": True,
-                "structure": structure,
-                "json_file": json_file,
-                "total_folders": len(structure["folders"]),
-                "total_files": len(structure["files"])
+                "data": scan_data
             }
             
         except Exception as e:
             return {
                 "success": False,
-                "message": f"Error creating structure: {str(e)}"
+                "message": f"Error scanning desktop: {str(e)}"
             }
+    
+    def save_desktop_data(self, scan_data):
+        """Save scanned desktop data to JSON file"""
+        try:
+            json_file = self.script_dir / "desktop_data.json"
+            with open(json_file, 'w', encoding='utf-8') as f:
+                json.dump(scan_data, f, indent=2)
+            
+            return {
+                "success": True,
+                "file": str(json_file),
+                "message": "Desktop data saved successfully"
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"Error saving data: {str(e)}"
+            }
+    
+    def load_desktop_data(self):
+        """Load previously saved desktop data"""
+        try:
+            json_file = self.script_dir / "desktop_data.json"
+            if not json_file.exists():
+                return {
+                    "success": False,
+                    "message": "No saved desktop data found"
+                }
+            
+            with open(json_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            return {
+                "success": True,
+                "data": data
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"Error loading data: {str(e)}"
+            }
+    
+    def display_desktop_summary(self, scan_data):
+        """Display a summary of the desktop scan"""
+        stats = scan_data["statistics"]
+        
+        print("\n" + "="*60)
+        print("📊 DESKTOP ANALYSIS SUMMARY")
+        print("="*60)
+        print(f"📂 Desktop Location: {scan_data['desktop_path']}")
+        print(f"📅 Scanned: {datetime.fromisoformat(scan_data['scan_time']).strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"\n📁 Total Folders: {stats['total_folders']}")
+        print(f"📄 Total Files: {stats['total_files']}")
+        print(f"💾 Total Size: {self.format_size(stats['total_size_bytes'])}")
+        
+        if stats["file_types"]:
+            print(f"\n📑 File Types Found:")
+            for ext, count in sorted(stats["file_types"].items(), key=lambda x: x[1], reverse=True)[:10]:
+                ext_display = ext if ext != "no_extension" else "(no extension)"
+                print(f"   {ext_display}: {count} file(s)")
+        
+        if scan_data["folders"]:
+            print(f"\n📂 Folders on Desktop:")
+            for folder in scan_data["folders"][:15]:
+                print(f"   • {folder['name']} ({folder['item_count']} items)")
+            if len(scan_data["folders"]) > 15:
+                print(f"   ... and {len(scan_data['folders']) - 15} more folders")
+        
+        print("="*60 + "\n")
+    
+    def format_size(self, bytes):
+        """Format bytes to human readable size"""
+        for unit in ['B', 'KB', 'MB', 'GB']:
+            if bytes < 1024.0:
+                return f"{bytes:.2f} {unit}"
+            bytes /= 1024.0
+        return f"{bytes:.2f} TB"
+    
+    def create_desktop_structure_json(self):
+        """Create JSON representation of desktop structure (legacy method)"""
+        scan_result = self.scan_desktop()
+        if not scan_result["success"]:
+            return scan_result
+        
+        save_result = self.save_desktop_data(scan_result["data"])
+        
+        return {
+            "success": True,
+            "structure": scan_result["data"],
+            "json_file": save_result.get("file", "desktop_data.json"),
+            "total_folders": scan_result["data"]["statistics"]["total_folders"],
+            "total_files": scan_result["data"]["statistics"]["total_files"]
+        }
     
     def setup_sample_desktop(self):
         """Create sample desktop structure for testing"""
@@ -231,8 +339,124 @@ Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
         return "Download instructions not generated yet. Run auto_startup_sequence() first."
 
 
+def interactive_startup():
+    """Interactive startup - scans desktop and asks user what to do"""
+    print("\n" + "="*60)
+    print("🚀 DESKTOP FILE & FOLDER AUTOMATOR")
+    print("="*60)
+    
+    manager = DesktopSyncManager()
+    
+    # Step 1: Scan the desktop
+    print("\n🔍 Scanning your desktop...")
+    scan_result = manager.scan_desktop()
+    
+    if not scan_result["success"]:
+        print(f"❌ Error: {scan_result['message']}")
+        return
+    
+    scan_data = scan_result["data"]
+    
+    # Step 2: Display summary
+    manager.display_desktop_summary(scan_data)
+    
+    # Step 3: Save the data
+    print("💾 Saving desktop data...")
+    save_result = manager.save_desktop_data(scan_data)
+    if save_result["success"]:
+        print(f"✅ Data saved to: {save_result['file']}\n")
+    
+    # Step 4: Ask user what to do
+    print("="*60)
+    print("📋 WHAT WOULD YOU LIKE TO DO?")
+    print("="*60)
+    print("1. 📥 Download/Setup batch file controller")
+    print("2. 🗂️  View detailed file analysis")
+    print("3. 🔄 Re-scan desktop")
+    print("4. 🚀 Launch desktop automation (batch file)")
+    print("5. 📊 View saved desktop history")
+    print("6. ❌ Exit")
+    print("="*60)
+    
+    try:
+        choice = input("\n👉 Enter your choice (1-6): ").strip()
+        
+        if choice == "1":
+            print("\n🔧 Setting up batch file...")
+            batch_result = manager.prepare_batch_file_download()
+            if batch_result["success"]:
+                print(f"✅ {batch_result['message']}")
+                print(f"\n📂 Batch file location: {batch_result['batch_file']}")
+                if manager.is_windows:
+                    print("\n🚀 You can now run the batch file:")
+                    print(f"   Double-click: {manager.batch_file_name}")
+                    launch = input("\n🚀 Launch batch file now? (y/n): ").strip().lower()
+                    if launch == 'y':
+                        os.system(f'start cmd /k "{manager.batch_file}"')
+            else:
+                print(f"❌ {batch_result['message']}")
+        
+        elif choice == "2":
+            print("\n📊 DETAILED FILE ANALYSIS")
+            print("="*60)
+            print(f"Total items: {len(scan_data['files']) + len(scan_data['folders'])}")
+            if scan_data['files']:
+                print(f"\n📄 Files ({len(scan_data['files'])}):")
+                for file in scan_data['files'][:20]:
+                    size = manager.format_size(file['size'])
+                    print(f"   • {file['name']} ({size}) - {file['extension']}")
+                if len(scan_data['files']) > 20:
+                    print(f"   ... and {len(scan_data['files']) - 20} more files")
+        
+        elif choice == "3":
+            print("\n🔄 Re-scanning desktop...")
+            interactive_startup()
+            return
+        
+        elif choice == "4":
+            if manager.batch_file.exists():
+                print(f"\n🚀 Launching {manager.batch_file_name}...")
+                if manager.is_windows:
+                    os.system(f'start cmd /k "{manager.batch_file}"')
+                else:
+                    print("❌ Batch file can only run on Windows")
+            else:
+                print(f"❌ Batch file not found. Please download it first (option 1)")
+        
+        elif choice == "5":
+            load_result = manager.load_desktop_data()
+            if load_result["success"]:
+                print("\n📊 SAVED DESKTOP DATA:")
+                manager.display_desktop_summary(load_result["data"])
+            else:
+                print(f"❌ {load_result['message']}")
+        
+        elif choice == "6":
+            print("\n👋 Goodbye!")
+            return
+        
+        else:
+            print("\n⚠️  Invalid choice. Please select 1-6.")
+    
+    except KeyboardInterrupt:
+        print("\n\n👋 Exiting...")
+        return
+    except Exception as e:
+        print(f"\n❌ Error: {str(e)}")
+    
+    # Ask if user wants to continue
+    print("\n" + "="*60)
+    continue_choice = input("📋 Continue with another action? (y/n): ").strip().lower()
+    if continue_choice == 'y':
+        interactive_startup()
+    else:
+        print("\n✅ Desktop data has been saved.")
+        print(f"💡 Run this script anytime to manage your desktop!")
+        print(f"🚀 Or double-click '{manager.batch_file_name}' for quick access\n")
+
+
 def auto_initialize_on_gui_start():
-    """Called automatically when GUI starts"""
+    """Called automatically when GUI starts (legacy function)"""
     print("\n" + "="*60)
     print("🚀 DESKTOP SYNC MANAGER - AUTO STARTUP")
     print("="*60)
@@ -283,5 +507,5 @@ def auto_initialize_on_gui_start():
 
 
 if __name__ == "__main__":
-    # Run standalone test
-    auto_initialize_on_gui_start()
+    # Run interactive startup
+    interactive_startup()
