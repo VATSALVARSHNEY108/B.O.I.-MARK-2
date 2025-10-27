@@ -3,6 +3,7 @@ Desktop Sync Manager - Auto-download batch file and sync desktop files
 """
 
 import os
+import sys
 import shutil
 import json
 from pathlib import Path
@@ -13,61 +14,76 @@ class DesktopSyncManager:
     """Manages desktop file synchronization and batch file distribution"""
     
     def __init__(self):
-        self.replit_desktop = Path.home() / "Desktop"
+        # Get script directory for finding batch file
+        self.script_dir = Path(__file__).parent.absolute()
+        
+        # Use actual Windows Desktop
+        self.desktop = Path.home() / "Desktop"
+        
+        # Config files
         self.sync_config_file = "desktop_sync_config.json"
-        self.batch_file = "desktop_file_controller.bat"
+        self.batch_file_name = "desktop_file_controller.bat"
+        self.batch_file = self.script_dir / self.batch_file_name
         self.downloads_ready_file = "downloads_ready.txt"
         
+        # Detect OS
+        self.is_windows = sys.platform.startswith('win')
+        
     def prepare_batch_file_download(self):
-        """Prepare batch file for download with instructions"""
+        """Prepare batch file for local Windows use"""
         try:
-            if not os.path.exists(self.batch_file):
+            # Check if batch file exists in script directory
+            if not self.batch_file.exists():
+                # Provide helpful message for Windows users
+                current_dir = os.getcwd()
+                script_dir = str(self.script_dir)
+                
                 return {
                     "success": False,
-                    "message": "Batch file not found in project"
+                    "message": f"Batch file '{self.batch_file_name}' not found!\n" + 
+                              f"   Current directory: {current_dir}\n" +
+                              f"   Script directory: {script_dir}\n" +
+                              f"   Looking for: {self.batch_file}\n\n" +
+                              f"   💡 Please download '{self.batch_file_name}' from Replit\n" +
+                              f"      and place it in: {script_dir}"
                 }
             
-            # Create download instructions
+            # Create ready-to-use instructions for local Windows
             instructions = f"""
 ╔══════════════════════════════════════════════════════════╗
-║        DESKTOP FILE CONTROLLER - READY TO DOWNLOAD       ║
+║        DESKTOP FILE CONTROLLER - READY TO USE            ║
 ╚══════════════════════════════════════════════════════════╝
 
-✅ Batch file ready: {self.batch_file}
-📦 File size: {os.path.getsize(self.batch_file)} bytes
+✅ Batch file found: {self.batch_file.name}
+📂 Location: {self.batch_file}
+📦 File size: {self.batch_file.stat().st_size} bytes
+💻 System: Windows {'✓' if self.is_windows else '(Running on non-Windows OS)'}
 
-📥 HOW TO DOWNLOAD:
+🎯 QUICK START:
+  1. Double-click '{self.batch_file.name}' to run
+  2. Or run from command prompt:
+     cd "{self.script_dir}"
+     {self.batch_file.name}
 
-Option 1 - Direct Download (Easiest):
-  1. Look for '{self.batch_file}' in the Replit file browser
-  2. Right-click → Download
-  3. Save to your Windows PC
-  4. Double-click to run!
-
-Option 2 - Download All Files:
-  1. Click ⋮ (three dots) in Replit menu
-  2. Select "Download as ZIP"
-  3. Extract on your PC
-  4. Double-click {self.batch_file}
-
-🎯 QUICK START AFTER DOWNLOAD:
-  1. Double-click {self.batch_file} on Windows
-  2. Choose option 6 to list your desktop
-  3. Use options 1-13 to manage files
+📂 Managing your Desktop:
+  - Desktop path: {self.desktop}
+  - Use the batch file menu to organize files
+  - Options 1-13 available for file management
 
 💡 The batch file will manage YOUR real Windows desktop!
 
 Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 """
             
-            with open(self.downloads_ready_file, 'w') as f:
+            with open(self.downloads_ready_file, 'w', encoding='utf-8') as f:
                 f.write(instructions)
             
             return {
                 "success": True,
-                "message": "Batch file ready for download",
+                "message": "Batch file ready to use on Windows",
                 "instructions_file": self.downloads_ready_file,
-                "batch_file": self.batch_file
+                "batch_file": str(self.batch_file),
+                "file_size": self.batch_file.stat().st_size
             }
             
         except Exception as e:
@@ -81,15 +97,15 @@ Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
         try:
             structure = {
                 "generated": datetime.now().isoformat(),
-                "desktop_path": str(self.replit_desktop),
+                "desktop_path": str(self.desktop),
                 "folders": [],
                 "files": []
             }
             
-            if not self.replit_desktop.exists():
-                self.replit_desktop.mkdir(parents=True, exist_ok=True)
+            if not self.desktop.exists():
+                self.desktop.mkdir(parents=True, exist_ok=True)
             
-            for item in self.replit_desktop.iterdir():
+            for item in self.desktop.iterdir():
                 item_info = {
                     "name": item.name,
                     "path": str(item),
@@ -129,7 +145,7 @@ Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
         """Create sample desktop structure for testing"""
         try:
             # Create desktop if it doesn't exist
-            self.replit_desktop.mkdir(parents=True, exist_ok=True)
+            self.desktop.mkdir(parents=True, exist_ok=True)
             
             # Create sample folders
             sample_folders = [
@@ -143,7 +159,7 @@ Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
             
             created = []
             for folder in sample_folders:
-                folder_path = self.replit_desktop / folder
+                folder_path = self.desktop / folder
                 if not folder_path.exists():
                     folder_path.mkdir()
                     created.append(folder)
@@ -160,7 +176,7 @@ Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
                 "success": True,
                 "created_folders": created,
                 "total_folders": len(sample_folders),
-                "desktop_path": str(self.replit_desktop)
+                "desktop_path": str(self.desktop)
             }
             
         except Exception as e:
@@ -231,23 +247,33 @@ def auto_initialize_on_gui_start():
         status_icon = "✅" if step["status"] == "success" else "❌"
         print(f"{status_icon} {step['step']}: {step['status'].upper()}")
         
-        if step["status"] == "success" and "details" in step:
+        if "details" in step:
             details = step["details"]
-            if "created_folders" in details and details["created_folders"]:
-                print(f"   Created: {', '.join(details['created_folders'])}")
-            if "total_folders" in details:
-                print(f"   Total folders: {details['total_folders']}")
-            if "batch_file" in details:
-                print(f"   Batch file: {details['batch_file']}")
+            if step["status"] == "success":
+                if "created_folders" in details and details["created_folders"]:
+                    print(f"   Created: {', '.join(details['created_folders'])}")
+                if "total_folders" in details:
+                    print(f"   Total folders: {details['total_folders']}")
+                if "batch_file" in details:
+                    print(f"   Batch file: {details['batch_file']}")
+            else:
+                if "message" in details:
+                    for line in details["message"].split('\n'):
+                        if line.strip():
+                            print(f"   {line}")
     
     print("\n" + "="*60)
     
     if results["success"]:
         print("✅ ALL SYSTEMS READY!")
-        print("\n📥 DOWNLOAD YOUR BATCH FILE:")
-        print(f"   Right-click '{manager.batch_file}' → Download")
+        if manager.is_windows:
+            print(f"\n🚀 READY TO USE: Double-click '{manager.batch_file_name}'")
+            print(f"   Location: {manager.batch_file}")
+        else:
+            print("\n📥 DOWNLOAD YOUR BATCH FILE:")
+            print(f"   Right-click '{manager.batch_file_name}' → Download to Windows PC")
         print("\n📂 Desktop synchronized with test folders")
-        print(f"   View: {manager.replit_desktop}")
+        print(f"   View: {manager.desktop}")
     else:
         print("⚠️  Some steps had issues. Check details above.")
     
