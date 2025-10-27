@@ -118,10 +118,55 @@ An intelligent AI desktop automation application powered by Google Gemini AI wit
 
 ---
 
+## 📥 Installation & Setup
+
+### **Option 1: Download and Run Locally (Recommended)**
+
+This will give you **full automation power** with complete desktop control:
+
+1. **Download this project** to your computer
+   ```bash
+   # Clone the repository or download as ZIP
+   git clone <your-repo-url>
+   cd your-project-folder
+   ```
+
+2. **Install Python 3.8+**
+   - Download from [python.org](https://www.python.org/downloads/)
+   - Make sure to check "Add Python to PATH" during installation
+   - Verify installation: `python --version`
+
+3. **Install requirements**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Set up GEMINI_API_KEY**
+   - Create a `.env` file in the project folder
+   - Add your API key:
+   ```
+   GEMINI_API_KEY=your-api-key-here
+   ```
+   - Get your free API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
+
+5. **Run the application**
+   ```bash
+   python gui_app.py
+   ```
+
+**Now it will actually control your mouse, keyboard, and screen!** 🎯
+
+### **Option 2: Test on Replit (Limited Features)**
+
+You can test basic features on Replit, but **desktop automation features won't work** in the cloud environment. For full functionality, use Option 1.
+
+---
+
 ## 🚀 Quick Start
 
+Once installed locally, simply run:
+
 ```bash
-# Run the application
 python gui_app.py
 ```
 
