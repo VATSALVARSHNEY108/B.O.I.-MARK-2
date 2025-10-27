@@ -19,6 +19,19 @@ from pathlib import Path
 from desktop_controller_integration import DesktopFileController
 from desktop_sync_manager import auto_initialize_on_gui_start, DesktopSyncManager
 
+from productivity_dashboard import ProductivityDashboard
+from pomodoro_ai_coach import PomodoroAICoach
+from task_time_predictor import TaskTimePredictor
+from energy_level_tracker import EnergyLevelTracker
+from distraction_detector import DistractionDetector
+from productivity_monitor import ProductivityMonitor
+from password_vault import PasswordVault
+from calendar_manager import CalendarManager
+from quick_notes import QuickNotes
+from weather_news_service import WeatherNewsService
+from translation_service import TranslationService
+from smart_break_suggester import SmartBreakSuggester
+
 load_dotenv()
 
 
@@ -43,6 +56,19 @@ class AutomationControllerGUI:
         except Exception as e:
             self.simple_chatbot = None
             print(f"Simple chatbot initialization failed: {e}")
+        
+        self.productivity_dashboard = ProductivityDashboard()
+        self.pomodoro_coach = PomodoroAICoach()
+        self.task_predictor = TaskTimePredictor()
+        self.energy_tracker = EnergyLevelTracker()
+        self.distraction_detector = DistractionDetector()
+        self.productivity_monitor = ProductivityMonitor()
+        self.password_vault = PasswordVault()
+        self.calendar = CalendarManager()
+        self.notes = QuickNotes()
+        self.weather_news = WeatherNewsService()
+        self.translator = TranslationService()
+        self.break_suggester = SmartBreakSuggester()
 
         self.vatsal_mode = True
         self.processing = False
@@ -124,7 +150,7 @@ class AutomationControllerGUI:
         separator1.pack(side="left", padx=5)
 
         features_label = tk.Label(stats_frame,
-                                  text="80+ AI Features Available",
+                                  text="100+ AI Features Available",
                                   bg="#1a1a2e",
                                   fg="#f9e2af",
                                   font=("Segoe UI", 10))
@@ -171,6 +197,8 @@ class AutomationControllerGUI:
         notebook.pack(fill="both", expand=True, padx=10, pady=10)
 
         self.create_vatsal_ai_tab(notebook)
+        self.create_productivity_hub_tab(notebook)
+        self.create_tools_utilities_tab(notebook)
         self.create_code_tab(notebook)
         self.create_desktop_tab(notebook)
         self.create_file_automation_tab(notebook)
@@ -1224,6 +1252,327 @@ class AutomationControllerGUI:
                             relief="flat",
                             cursor="hand2",
                             command=lambda c=command: self.quick_command(c),
+                            anchor="w",
+                            padx=15,
+                            pady=10,
+                            activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+
+    def create_productivity_hub_tab(self, notebook):
+        """Create comprehensive productivity hub tab with all productivity features"""
+        tab = tk.Frame(notebook, bg="#1e1e2e")
+        notebook.add(tab, text="📊 Productivity Hub")
+
+        canvas = tk.Canvas(tab, bg="#1e1e2e", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(tab, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="#1e1e2e")
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        # Pomodoro Section
+        pomodoro_section = tk.Label(scrollable_frame,
+                                    text="🍅 POMODORO AI COACH",
+                                    bg="#1e1e2e",
+                                    fg="#f9e2af",
+                                    font=("Segoe UI", 11, "bold"))
+        pomodoro_section.pack(pady=(10, 8), anchor="w", padx=8)
+
+        pomodoro_actions = [
+            ("🍅 Start Pomodoro (25 min)", lambda: self.start_pomodoro_session()),
+            ("☕ Take Short Break (5 min)", lambda: self.start_short_break()),
+            ("🌳 Take Long Break (15 min)", lambda: self.start_long_break()),
+            ("⏸️ Pause/Resume Session", lambda: self.toggle_pomodoro()),
+            ("🛑 Stop Session", lambda: self.stop_pomodoro()),
+            ("📊 View Pomodoro Stats", lambda: self.view_pomodoro_stats()),
+        ]
+
+        for text, command in pomodoro_actions:
+            btn = tk.Button(scrollable_frame,
+                            text=text,
+                            bg="#313244",
+                            fg="#ffffff",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            anchor="w",
+                            padx=15,
+                            pady=10,
+                            activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+
+        # Task Time Predictor Section
+        task_section = tk.Label(scrollable_frame,
+                               text="⏱️ TASK TIME PREDICTOR",
+                               bg="#1e1e2e",
+                               fg="#f9e2af",
+                               font=("Segoe UI", 11, "bold"))
+        task_section.pack(pady=(15, 8), anchor="w", padx=8)
+
+        task_actions = [
+            ("▶️ Start Task Tracking", lambda: self.start_task_tracking()),
+            ("✅ Complete Current Task", lambda: self.complete_task()),
+            ("📈 View Task Predictions", lambda: self.view_task_predictions()),
+            ("📊 Task Analytics", lambda: self.view_task_analytics()),
+        ]
+
+        for text, command in task_actions:
+            btn = tk.Button(scrollable_frame,
+                            text=text,
+                            bg="#313244",
+                            fg="#ffffff",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            anchor="w",
+                            padx=15,
+                            pady=10,
+                            activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+
+        # Energy & Focus Section
+        energy_section = tk.Label(scrollable_frame,
+                                 text="🔋 ENERGY & FOCUS TRACKING",
+                                 bg="#1e1e2e",
+                                 fg="#f9e2af",
+                                 font=("Segoe UI", 11, "bold"))
+        energy_section.pack(pady=(15, 8), anchor="w", padx=8)
+
+        energy_actions = [
+            ("🔋 Check Energy Level", lambda: self.check_energy_level()),
+            ("📈 Energy Trends", lambda: self.view_energy_trends()),
+            ("🎯 Get Break Suggestion", lambda: self.get_break_suggestion()),
+            ("⚠️ Distraction Check", lambda: self.check_distractions()),
+            ("📊 Focus Report", lambda: self.view_focus_report()),
+        ]
+
+        for text, command in energy_actions:
+            btn = tk.Button(scrollable_frame,
+                            text=text,
+                            bg="#313244",
+                            fg="#ffffff",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            anchor="w",
+                            padx=15,
+                            pady=10,
+                            activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+
+        # Productivity Dashboard Section
+        dashboard_section = tk.Label(scrollable_frame,
+                                     text="📊 PRODUCTIVITY DASHBOARD",
+                                     bg="#1e1e2e",
+                                     fg="#f9e2af",
+                                     font=("Segoe UI", 11, "bold"))
+        dashboard_section.pack(pady=(15, 8), anchor="w", padx=8)
+
+        dashboard_actions = [
+            ("📊 View Complete Dashboard", lambda: self.view_productivity_dashboard()),
+            ("📅 Weekly Summary", lambda: self.view_weekly_summary()),
+            ("📈 Productivity Trends", lambda: self.view_productivity_trends()),
+            ("🎯 Get Recommendations", lambda: self.get_productivity_recommendations()),
+        ]
+
+        for text, command in dashboard_actions:
+            btn = tk.Button(scrollable_frame,
+                            text=text,
+                            bg="#313244",
+                            fg="#ffffff",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            anchor="w",
+                            padx=15,
+                            pady=10,
+                            activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+
+    def create_tools_utilities_tab(self, notebook):
+        """Create tools & utilities tab with password vault, notes, calendar, etc."""
+        tab = tk.Frame(notebook, bg="#1e1e2e")
+        notebook.add(tab, text="🛠️ Tools & Utilities")
+
+        canvas = tk.Canvas(tab, bg="#1e1e2e", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(tab, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="#1e1e2e")
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        # Password Vault Section
+        password_section = tk.Label(scrollable_frame,
+                                    text="🔐 PASSWORD VAULT",
+                                    bg="#1e1e2e",
+                                    fg="#f9e2af",
+                                    font=("Segoe UI", 11, "bold"))
+        password_section.pack(pady=(10, 8), anchor="w", padx=8)
+
+        password_actions = [
+            ("➕ Add Password", lambda: self.add_password_dialog()),
+            ("🔍 View Password", lambda: self.view_password_dialog()),
+            ("📋 List All Passwords", lambda: self.list_passwords()),
+            ("🔑 Generate Secure Password", lambda: self.generate_password()),
+        ]
+
+        for text, command in password_actions:
+            btn = tk.Button(scrollable_frame,
+                            text=text,
+                            bg="#313244",
+                            fg="#ffffff",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            anchor="w",
+                            padx=15,
+                            pady=10,
+                            activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+
+        # Quick Notes Section
+        notes_section = tk.Label(scrollable_frame,
+                                text="📝 QUICK NOTES",
+                                bg="#1e1e2e",
+                                fg="#f9e2af",
+                                font=("Segoe UI", 11, "bold"))
+        notes_section.pack(pady=(15, 8), anchor="w", padx=8)
+
+        notes_actions = [
+            ("➕ New Note", lambda: self.add_note_dialog()),
+            ("📋 View All Notes", lambda: self.list_notes()),
+            ("🔍 Search Notes", lambda: self.search_notes_dialog()),
+            ("📌 Pinned Notes", lambda: self.view_pinned_notes()),
+        ]
+
+        for text, command in notes_actions:
+            btn = tk.Button(scrollable_frame,
+                            text=text,
+                            bg="#313244",
+                            fg="#ffffff",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            anchor="w",
+                            padx=15,
+                            pady=10,
+                            activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+
+        # Calendar Section
+        calendar_section = tk.Label(scrollable_frame,
+                                   text="📅 CALENDAR MANAGER",
+                                   bg="#1e1e2e",
+                                   fg="#f9e2af",
+                                   font=("Segoe UI", 11, "bold"))
+        calendar_section.pack(pady=(15, 8), anchor="w", padx=8)
+
+        calendar_actions = [
+            ("➕ Add Event", lambda: self.add_event_dialog()),
+            ("📅 Today's Events", lambda: self.view_today_events()),
+            ("📆 This Week", lambda: self.view_week_events()),
+            ("🔔 Upcoming Reminders", lambda: self.view_reminders()),
+        ]
+
+        for text, command in calendar_actions:
+            btn = tk.Button(scrollable_frame,
+                            text=text,
+                            bg="#313244",
+                            fg="#ffffff",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            anchor="w",
+                            padx=15,
+                            pady=10,
+                            activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+
+        # Weather & News Section
+        weather_section = tk.Label(scrollable_frame,
+                                   text="🌤️ WEATHER & NEWS",
+                                   bg="#1e1e2e",
+                                   fg="#f9e2af",
+                                   font=("Segoe UI", 11, "bold"))
+        weather_section.pack(pady=(15, 8), anchor="w", padx=8)
+
+        weather_actions = [
+            ("🌤️ Get Weather", lambda: self.get_weather_dialog()),
+            ("📅 3-Day Forecast", lambda: self.get_forecast()),
+            ("📰 Latest News Headlines", lambda: self.get_news()),
+            ("💼 Tech News", lambda: self.get_tech_news()),
+        ]
+
+        for text, command in weather_actions:
+            btn = tk.Button(scrollable_frame,
+                            text=text,
+                            bg="#313244",
+                            fg="#ffffff",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            anchor="w",
+                            padx=15,
+                            pady=10,
+                            activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+
+        # Translation Section
+        translation_section = tk.Label(scrollable_frame,
+                                       text="🌐 TRANSLATION SERVICE",
+                                       bg="#1e1e2e",
+                                       fg="#f9e2af",
+                                       font=("Segoe UI", 11, "bold"))
+        translation_section.pack(pady=(15, 8), anchor="w", padx=8)
+
+        translation_actions = [
+            ("🌐 Translate Text", lambda: self.translate_text_dialog()),
+            ("🔍 Detect Language", lambda: self.detect_language_dialog()),
+            ("📚 Supported Languages", lambda: self.show_supported_languages()),
+        ]
+
+        for text, command in translation_actions:
+            btn = tk.Button(scrollable_frame,
+                            text=text,
+                            bg="#313244",
+                            fg="#ffffff",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
                             anchor="w",
                             padx=15,
                             pady=10,
