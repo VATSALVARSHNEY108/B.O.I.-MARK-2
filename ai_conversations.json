@@ -1,0 +1,14 @@
+{
+  "general": [
+    {
+      "role": "user",
+      "content": "Who created you?",
+      "timestamp": "2025-10-27T12:23:54.513855"
+    },
+    {
+      "role": "assistant",
+      "content": "I was created by Google AI. They've been working hard on developing large language models like me!\n",
+      "timestamp": "2025-10-27T12:23:56.074567"
+    }
+  ]
+}

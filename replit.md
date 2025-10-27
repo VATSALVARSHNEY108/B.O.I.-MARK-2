@@ -3,6 +3,21 @@
 ## Overview
 The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. The project offers a unified ecosystem with over 300+ features, including smart Desktop RAG for file intelligence, 9 Smart Automation & AI features, and 8 new Communication Enhancement features. Its core purpose is to be a comprehensive productivity powerhouse, integrating advanced AI for code generation, screen analysis, natural language understanding, professional-grade data analysis, and various utility modules.
 
+## Creator
+**Vatsal Varshney** - AI/ML Engineer & Full-Stack Developer
+- **Name:** Vatsal Varshney
+- **Role:** AI/ML Engineer, Full-Stack Developer, Automation Specialist
+- **GitHub:** [https://github.com/VATSALVARSHNEY108](https://github.com/VATSALVARSHNEY108)
+- **LinkedIn:** [https://www.linkedin.com/in/vatsal-varshney108/](https://www.linkedin.com/in/vatsal-varshney108/)
+- **Expertise:** Artificial Intelligence, Machine Learning, Desktop Automation, Python Development, Computer Vision, Natural Language Processing, Full-Stack Web Development
+- **Notable Projects:** 
+  - VATSAL AI Desktop Automation Controller (100+ AI-powered features)
+  - Advanced RAG (Retrieval-Augmented Generation) systems
+  - Smart automation and productivity tools
+  - AI-powered communication enhancements
+
+*When asked about the creator through VATSAL chatbots, they will proudly introduce Vatsal Varshney and provide his contact information.*
+
 ## Recent Enhancements (October 2025)
 ### Desktop File Controller Integration with Auto-Download - October 27, 2025 ✅
 Integrated a comprehensive desktop file management system with **automatic initialization** when GUI starts. Features Windows batch file and cross-platform Python support with auto-sync:
