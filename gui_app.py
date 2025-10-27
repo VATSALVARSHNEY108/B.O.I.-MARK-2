@@ -18,6 +18,7 @@ from datetime import datetime
 from pathlib import Path
 from desktop_controller_integration import DesktopFileController
 from desktop_sync_manager import auto_initialize_on_gui_start, DesktopSyncManager
+from comprehensive_desktop_controller import ComprehensiveDesktopController
 
 from productivity_dashboard import ProductivityDashboard
 from pomodoro_ai_coach import PomodoroAICoach
@@ -51,6 +52,12 @@ class AutomationControllerGUI:
         self.clipboard_handler = ClipboardTextHandler()
         self.smart_automation = SmartAutomationManager()
         self.desktop_controller = DesktopFileController()
+        
+        try:
+            self.comprehensive_controller = ComprehensiveDesktopController()
+        except Exception as e:
+            self.comprehensive_controller = None
+            print(f"Comprehensive controller initialization failed: {e}")
 
         try:
             self.simple_chatbot = SimpleChatbot()
@@ -204,6 +211,7 @@ class AutomationControllerGUI:
         notebook.pack(fill="both", expand=True, padx=10, pady=10)
 
         self.create_vatsal_ai_tab(notebook)
+        self.create_comprehensive_controller_tab(notebook)
         self.create_web_automation_tab(notebook)
         self.create_productivity_hub_tab(notebook)
         self.create_tools_utilities_tab(notebook)
@@ -497,6 +505,263 @@ class AutomationControllerGUI:
         stats_btn.pack(side="left", padx=5)
         self.add_hover_effect(stats_btn, "#313244", "#45475a")
 
+"""
+Comprehensive Desktop Controller Tab for GUI
+This creates the UI tab for the 3-phase automation system
+"""
+
+def create_comprehensive_controller_tab(self, notebook):
+    """
+    3-Phase Desktop Automation Controller Tab
+    - Phase 1: Understand the Prompt
+    - Phase 2: Break into Steps
+    - Phase 3: Monitor & Execute
+    """
+    tab = tk.Frame(notebook, bg="#1e1e2e")
+    notebook.add(tab, text="🎯 Smart Control")
+    
+    # Header
+    header_frame = tk.Frame(tab, bg="#1a1a2e")
+    header_frame.pack(fill="x", pady=(10, 0), padx=10)
+    
+    header = tk.Label(header_frame,
+                      text="🎯 Comprehensive Desktop Controller",
+                      bg="#1a1a2e",
+                      fg="#f9e2af",
+                      font=("Segoe UI", 14, "bold"))
+    header.pack(pady=12)
+    
+    info = tk.Label(header_frame,
+                    text="🧠 Understands → 📋 Plans → 👁️ Monitors • AI-Powered 3-Phase Automation",
+                    bg="#1a1a2e",
+                    fg="#a6adc8",
+                    font=("Segoe UI", 9, "italic"))
+    info.pack(pady=(0, 12))
+    
+    # Phase indicator
+    phase_frame = tk.Frame(tab, bg="#1e1e2e")
+    phase_frame.pack(fill="x", padx=10, pady=5)
+    
+    self.phase_labels = {}
+    phases = [
+        ("🧠", "UNDERSTAND", "#89b4fa"),
+        ("📋", "PLAN", "#f9e2af"),
+        ("👁️", "MONITOR", "#a6e3a1")
+    ]
+    
+    for icon, name, color in phases:
+        phase_container = tk.Frame(phase_frame, bg="#313244", relief="flat")
+        phase_container.pack(side="left", expand=True, fill="x", padx=5, pady=5)
+        
+        label = tk.Label(phase_container,
+                        text=f"{icon} {name}",
+                        bg="#313244",
+                        fg=color,
+                        font=("Segoe UI", 9, "bold"),
+                        pady=8)
+        label.pack()
+        self.phase_labels[name] = label
+    
+    # Main container with two columns
+    main_container = tk.Frame(tab, bg="#1e1e2e")
+    main_container.pack(fill="both", expand=True, padx=10, pady=5)
+    
+    # Left column - Input and controls
+    left_column = tk.Frame(main_container, bg="#1e1e2e")
+    left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
+    
+    # Input section
+    input_section = tk.Frame(left_column, bg="#1e1e2e")
+    input_section.pack(fill="x", pady=(5, 10))
+    
+    input_label = tk.Label(input_section,
+                          text="🎯 Enter your automation command:",
+                          bg="#1e1e2e",
+                          fg="#a6adc8",
+                          font=("Segoe UI", 9, "bold"))
+    input_label.pack(anchor="w", padx=5, pady=(0, 5))
+    
+    # Input box with send button
+    input_box_frame = tk.Frame(input_section, bg="#1e1e2e")
+    input_box_frame.pack(fill="x", padx=5)
+    
+    self.comprehensive_input = tk.Entry(input_box_frame,
+                                       bg="#313244",
+                                       fg="#ffffff",
+                                       font=("Segoe UI", 11),
+                                       relief="solid",
+                                       bd=2,
+                                       insertbackground="#f9e2af")
+    self.comprehensive_input.pack(side="left", fill="x", expand=True, ipady=8)
+    self.comprehensive_input.bind("<Return>", lambda e: self.execute_comprehensive_command())
+    
+    execute_btn = tk.Button(input_box_frame,
+                           text="▶️ Execute",
+                           bg="#f9e2af",
+                           fg="#0f0f1e",
+                           font=("Segoe UI", 10, "bold"),
+                           relief="flat",
+                           cursor="hand2",
+                           command=self.execute_comprehensive_command,
+                           padx=20,
+                           pady=8)
+    execute_btn.pack(side="right", padx=(5, 0))
+    self.add_hover_effect(execute_btn, "#f9e2af", "#f5c2e7")
+    
+    # Quick actions section
+    quick_frame = tk.Frame(left_column, bg="#1e1e2e")
+    quick_frame.pack(fill="x", pady=5)
+    
+    quick_label = tk.Label(quick_frame,
+                          text="⚡ Quick Actions:",
+                          bg="#1e1e2e",
+                          fg="#a6adc8",
+                          font=("Segoe UI", 9, "bold"))
+    quick_label.pack(anchor="w", padx=5, pady=(0, 5))
+    
+    # Quick action buttons
+    quick_buttons_frame = tk.Frame(quick_frame, bg="#1e1e2e")
+    quick_buttons_frame.pack(fill="x", padx=5)
+    
+    quick_actions = [
+        ("📸 Screenshot", "Take a screenshot"),
+        ("🌐 Open Chrome", "Open Chrome and go to Google"),
+        ("🔍 Google Search", "Search Google for Python tutorials"),
+        ("💻 Open VS Code", "Launch VS Code and create new file")
+    ]
+    
+    for i, (btn_text, command) in enumerate(quick_actions):
+        if i % 2 == 0:
+            row_frame = tk.Frame(quick_buttons_frame, bg="#1e1e2e")
+            row_frame.pack(fill="x", pady=2)
+        
+        btn = tk.Button(row_frame,
+                       text=btn_text,
+                       bg="#313244",
+                       fg="#ffffff",
+                       font=("Segoe UI", 8, "bold"),
+                       relief="flat",
+                       cursor="hand2",
+                       command=lambda cmd=command: self.load_comprehensive_command(cmd),
+                       padx=10,
+                       pady=6)
+        btn.pack(side="left", expand=True, fill="x", padx=2)
+        self.add_hover_effect(btn, "#313244", "#45475a")
+    
+    # Example prompts
+    examples_frame = tk.Frame(left_column, bg="#1e1e2e")
+    examples_frame.pack(fill="x", pady=(10, 5))
+    
+    examples_label = tk.Label(examples_frame,
+                             text="💡 Example Prompts:",
+                             bg="#1e1e2e",
+                             fg="#a6adc8",
+                             font=("Segoe UI", 9, "bold"))
+    examples_label.pack(anchor="w", padx=5)
+    
+    examples_text = tk.Text(examples_frame,
+                           bg="#0f0f1e",
+                           fg="#89dceb",
+                           font=("Consolas", 8),
+                           height=4,
+                           relief="flat",
+                           padx=8,
+                           pady=8,
+                           wrap=tk.WORD)
+    examples_text.pack(fill="x", padx=5, pady=5)
+    examples_text.insert("1.0", 
+        "• Open Chrome, navigate to GitHub, and screenshot\n"
+        "• Launch Spotify and play jazz music\n"
+        "• Search Google for Python tutorials, open first 3 results\n"
+        "• Create a new folder on Desktop named 'Projects'")
+    examples_text.config(state='disabled')
+    
+    # Right column - Output
+    right_column = tk.Frame(main_container, bg="#1e1e2e")
+    right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
+    
+    output_label = tk.Label(right_column,
+                           text="📊 Execution Output:",
+                           bg="#1e1e2e",
+                           fg="#a6adc8",
+                           font=("Segoe UI", 9, "bold"))
+    output_label.pack(anchor="w", padx=5, pady=(0, 5))
+    
+    # Output display with scrollbar
+    self.comprehensive_output = scrolledtext.ScrolledText(
+        right_column,
+        bg="#0f0f1e",
+        fg="#cdd6f4",
+        font=("Consolas", 9),
+        wrap=tk.WORD,
+        state='disabled',
+        relief="flat",
+        padx=10,
+        pady=10
+    )
+    self.comprehensive_output.pack(fill="both", expand=True, padx=5, pady=5)
+    
+    # Configure text tags for colored output
+    self.comprehensive_output.tag_config("phase1", foreground="#89b4fa", font=("Consolas", 9, "bold"))
+    self.comprehensive_output.tag_config("phase2", foreground="#f9e2af", font=("Consolas", 9, "bold"))
+    self.comprehensive_output.tag_config("phase3", foreground="#a6e3a1", font=("Consolas", 9, "bold"))
+    self.comprehensive_output.tag_config("success", foreground="#a6e3a1", font=("Consolas", 9, "bold"))
+    self.comprehensive_output.tag_config("error", foreground="#f38ba8", font=("Consolas", 9, "bold"))
+    self.comprehensive_output.tag_config("info", foreground="#89dceb")
+    self.comprehensive_output.tag_config("highlight", foreground="#f9e2af", font=("Consolas", 9, "bold"))
+    
+    # Bottom buttons
+    bottom_frame = tk.Frame(tab, bg="#1e1e2e")
+    bottom_frame.pack(fill="x", padx=10, pady=(5, 10))
+    
+    buttons = [
+        ("📖 View Guide", self.show_comprehensive_guide, "#89b4fa"),
+        ("🔄 Clear Output", self.clear_comprehensive_output, "#313244"),
+        ("📸 View Screenshots", self.view_comprehensive_screenshots, "#89dceb"),
+        ("📊 View Stats", self.show_comprehensive_stats, "#a6e3a1")
+    ]
+    
+    for btn_text, command, color in buttons:
+        btn = tk.Button(bottom_frame,
+                       text=btn_text,
+                       bg=color,
+                       fg="#0f0f1e" if color != "#313244" else "#ffffff",
+                       font=("Segoe UI", 9, "bold"),
+                       relief="flat",
+                       cursor="hand2",
+                       command=command,
+                       padx=15,
+                       pady=8)
+        btn.pack(side="left", padx=5)
+        hover_color = "#74c7ec" if color == "#89b4fa" else "#45475a" if color == "#313244" else color
+        self.add_hover_effect(btn, color, hover_color)
+    
+    # Status indicator
+    status_container = tk.Frame(bottom_frame, bg="#313244", relief="flat")
+    status_container.pack(side="right", padx=5)
+    
+    self.comprehensive_status = tk.Label(status_container,
+                                        text="✅ Ready",
+                                        bg="#313244",
+                                        fg="#a6e3a1",
+                                        font=("Segoe UI", 9, "bold"),
+                                        padx=15,
+                                        pady=8)
+    self.comprehensive_status.pack()
+    
+    # Initial welcome message
+    self.append_comprehensive_output("=" * 60 + "\n", "info")
+    self.append_comprehensive_output("🎯 COMPREHENSIVE DESKTOP CONTROLLER\n", "highlight")
+    self.append_comprehensive_output("=" * 60 + "\n\n", "info")
+    self.append_comprehensive_output("Welcome! This system:\n", "info")
+    self.append_comprehensive_output("  🧠 Phase 1: ", "phase1")
+    self.append_comprehensive_output("Understands your prompt deeply\n", "info")
+    self.append_comprehensive_output("  📋 Phase 2: ", "phase2")
+    self.append_comprehensive_output("Breaks it into executable steps\n", "info")
+    self.append_comprehensive_output("  👁️  Phase 3: ", "phase3")
+    self.append_comprehensive_output("Monitors screen in real-time\n\n", "info")
+    self.append_comprehensive_output("💡 Try a command above or use Quick Actions!\n", "highlight")
+    self.append_comprehensive_output("=" * 60 + "\n", "info")
     def create_web_automation_tab(self, notebook):
         """Web Automation with Selenium"""
         tab = tk.Frame(notebook, bg="#1e1e2e")
@@ -3926,6 +4191,272 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
             self.update_output(f"\n⚠️  Desktop sync error: {str(e)}\n", "error")
             import traceback
             self.update_output(f"Details: {traceback.format_exc()}\n", "error")
+
+
+    # ==================== Comprehensive Controller Methods ====================
+    
+    def load_comprehensive_command(self, command):
+        """Load a predefined command into the input"""
+        self.comprehensive_input.delete(0, tk.END)
+        self.comprehensive_input.insert(0, command)
+        self.comprehensive_input.focus()
+    
+    def append_comprehensive_output(self, text, tag=None):
+        """Append text to the comprehensive output display"""
+        self.comprehensive_output.config(state='normal')
+        if tag:
+            self.comprehensive_output.insert(tk.END, text, tag)
+        else:
+            self.comprehensive_output.insert(tk.END, text)
+        self.comprehensive_output.see(tk.END)
+        self.comprehensive_output.config(state='disabled')
+        self.root.update_idletasks()
+    
+    def clear_comprehensive_output(self):
+        """Clear the comprehensive output display"""
+        self.comprehensive_output.config(state='normal')
+        self.comprehensive_output.delete(1.0, tk.END)
+        self.comprehensive_output.config(state='disabled')
+        
+        # Reset welcome message
+        self.append_comprehensive_output("=" * 60 + "\n", "info")
+        self.append_comprehensive_output("🎯 COMPREHENSIVE DESKTOP CONTROLLER\n", "highlight")
+        self.append_comprehensive_output("=" * 60 + "\n", "info")
+        self.append_comprehensive_output("\n✅ Output cleared. Ready for new command!\n\n", "success")
+    
+    def update_comprehensive_phase(self, phase_name, status="active"):
+        """Update the visual indicator for current phase"""
+        colors = {
+            "active": "#f9e2af",
+            "complete": "#a6e3a1",
+            "inactive": "#6c7086"
+        }
+        
+        if phase_name in self.phase_labels:
+            color = colors.get(status, colors["inactive"])
+            self.phase_labels[phase_name].config(fg=color)
+    
+    def execute_comprehensive_command(self):
+        """Execute a comprehensive desktop control command"""
+        command = self.comprehensive_input.get().strip()
+        
+        if not command:
+            messagebox.showwarning("Empty Command", "Please enter a command first!")
+            return
+        
+        if not self.comprehensive_controller:
+            self.append_comprehensive_output("\n⚠️  Comprehensive Controller not available\n", "error")
+            self.append_comprehensive_output("This feature requires local execution with display access.\n", "info")
+            self.append_comprehensive_output("Download and run locally for full functionality.\n", "info")
+            return
+        
+        # Clear previous output
+        self.comprehensive_output.config(state='normal')
+        self.comprehensive_output.delete(1.0, tk.END)
+        self.comprehensive_output.config(state='disabled')
+        
+        # Update status
+        self.comprehensive_status.config(text="⚙️ Processing...", fg="#f9e2af")
+        
+        # Run in thread
+        thread = threading.Thread(target=self._execute_comprehensive_task, args=(command,), daemon=True)
+        thread.start()
+    
+    def _execute_comprehensive_task(self, command):
+        """Execute comprehensive task in background thread"""
+        try:
+            self.append_comprehensive_output("=" * 60 + "\n", "info")
+            self.append_comprehensive_output("🎯 COMPREHENSIVE DESKTOP CONTROLLER\n", "highlight")
+            self.append_comprehensive_output("=" * 60 + "\n", "info")
+            self.append_comprehensive_output(f"Command: {command}\n\n", "info")
+            
+            # Phase 1: Understand
+            self.append_comprehensive_output("━" * 60 + "\n", "info")
+            self.append_comprehensive_output("🧠 PHASE 1: UNDERSTANDING PROMPT\n", "phase1")
+            self.append_comprehensive_output("━" * 60 + "\n", "info")
+            self.update_comprehensive_phase("UNDERSTAND", "active")
+            
+            understanding = self.comprehensive_controller.understand_prompt(command)
+            
+            self.append_comprehensive_output("\n✅ Prompt Analysis Complete:\n", "success")
+            self.append_comprehensive_output(f"   🎯 Goal: {understanding.get('primary_goal', 'N/A')}\n", "info")
+            self.append_comprehensive_output(f"   📊 Complexity: {understanding.get('complexity_level', 'N/A')}\n", "info")
+            self.append_comprehensive_output(f"   ⏱️  Estimated Time: {understanding.get('estimated_duration', 'N/A')}s\n", "info")
+            apps = understanding.get('required_applications', [])
+            if apps:
+                self.append_comprehensive_output(f"   🔧 Required Apps: {', '.join(apps)}\n", "info")
+            
+            self.update_comprehensive_phase("UNDERSTAND", "complete")
+            
+            # Phase 2: Break Down
+            self.append_comprehensive_output("\n" + "━" * 60 + "\n", "info")
+            self.append_comprehensive_output("📋 PHASE 2: BREAKING INTO STEPS\n", "phase2")
+            self.append_comprehensive_output("━" * 60 + "\n", "info")
+            self.update_comprehensive_phase("PLAN", "active")
+            
+            execution_plan = self.comprehensive_controller.break_into_steps(understanding)
+            steps = execution_plan.get("execution_plan", {}).get("steps", [])
+            
+            self.append_comprehensive_output("\n✅ Execution Plan Created:\n", "success")
+            self.append_comprehensive_output(f"   Total Steps: {len(steps)}\n", "info")
+            self.append_comprehensive_output(f"   Estimated Time: {execution_plan.get('execution_plan', {}).get('estimated_time', 'N/A')}s\n\n", "info")
+            
+            self.append_comprehensive_output("📝 Step Breakdown:\n", "highlight")
+            for step in steps:
+                self.append_comprehensive_output(f"   {step['step_number']}. {step.get('description', 'N/A')}\n", "info")
+                self.append_comprehensive_output(f"      → Expected: {step.get('expected_outcome', 'N/A')}\n", "info")
+            
+            self.update_comprehensive_phase("PLAN", "complete")
+            
+            # Phase 3: Monitor & Execute
+            self.append_comprehensive_output("\n" + "━" * 60 + "\n", "info")
+            self.append_comprehensive_output("👁️  PHASE 3: EXECUTING WITH MONITORING\n", "phase3")
+            self.append_comprehensive_output("━" * 60 + "\n", "info")
+            self.update_comprehensive_phase("MONITOR", "active")
+            
+            if self.comprehensive_controller.gui.demo_mode:
+                self.append_comprehensive_output("\n⚠️  DEMO MODE: Commands will be simulated\n", "error")
+                self.append_comprehensive_output("Download and run locally for actual execution\n\n", "info")
+            
+            # Execute each step
+            for i, step in enumerate(steps, 1):
+                self.append_comprehensive_output(f"\nStep {i}/{len(steps)}: {step.get('description', 'N/A')}\n", "highlight")
+                
+                if self.comprehensive_controller.gui.demo_mode:
+                    self.append_comprehensive_output(f"   [DEMO] Would execute: {step.get('action_type', 'N/A')}\n", "info")
+                    import time
+                    time.sleep(0.5)
+                    self.append_comprehensive_output("   ✅ Demo step completed\n", "success")
+                else:
+                    # Real execution with monitoring
+                    result = self.comprehensive_controller.monitor_screen_during_execution(step, i)
+                    if result.get("success"):
+                        self.append_comprehensive_output("   ✅ Step completed successfully\n", "success")
+                    else:
+                        self.append_comprehensive_output("   ⚠️  Step failed\n", "error")
+            
+            self.update_comprehensive_phase("MONITOR", "complete")
+            
+            # Summary
+            self.append_comprehensive_output("\n" + "━" * 60 + "\n", "info")
+            self.append_comprehensive_output("📊 EXECUTION SUMMARY\n", "highlight")
+            self.append_comprehensive_output("━" * 60 + "\n", "info")
+            self.append_comprehensive_output(f"\n✅ All phases completed!\n", "success")
+            self.append_comprehensive_output(f"   Total Steps: {len(steps)}\n", "info")
+            
+            if self.comprehensive_controller.gui.demo_mode:
+                self.append_comprehensive_output("\n💡 TIP: Download and run locally for full automation\n", "info")
+            
+            self.append_comprehensive_output("\n" + "=" * 60 + "\n", "info")
+            
+            # Update status
+            self.comprehensive_status.config(text="✅ Completed", fg="#a6e3a1")
+            
+        except Exception as e:
+            self.append_comprehensive_output(f"\n❌ Error: {str(e)}\n", "error")
+            self.comprehensive_status.config(text="❌ Error", fg="#f38ba8")
+    
+    def show_comprehensive_guide(self):
+        """Show comprehensive controller guide"""
+        guide_text = """
+🎯 COMPREHENSIVE DESKTOP CONTROLLER GUIDE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HOW IT WORKS:
+
+🧠 Phase 1: UNDERSTAND
+   • Analyzes your prompt deeply
+   • Identifies intent, complexity, requirements
+   • Predicts obstacles and plans mitigation
+
+📋 Phase 2: BREAK DOWN
+   • Creates detailed step-by-step execution plan
+   • Defines validation checkpoints
+   • Plans error recovery strategies
+
+👁️  Phase 3: MONITOR & EXECUTE
+   • Takes screenshots before each step
+   • Executes the action
+   • Takes screenshots after each step
+   • AI verifies expected vs actual outcome
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXAMPLE COMMANDS:
+
+Simple:
+  • "Take a screenshot"
+  • "Open Chrome"
+
+Moderate:
+  • "Open Chrome and go to Google"
+  • "Launch Spotify and play music"
+
+Complex:
+  • "Open Chrome, navigate to GitHub, find my repos, screenshot"
+  • "Search Google for Python, open top 3 results, screenshot each"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TIPS:
+✓ Be specific about what you want
+✓ Include the application name
+✓ Mention expected outcomes
+✓ Use natural language
+
+For full functionality, download and run locally!
+"""
+        messagebox.showinfo("Comprehensive Controller Guide", guide_text)
+    
+    def view_comprehensive_screenshots(self):
+        """View generated screenshots"""
+        import os
+        screenshot_files = [f for f in os.listdir('.') if f.startswith('step_') and f.endswith('.png')]
+        
+        if not screenshot_files:
+            messagebox.showinfo("Screenshots", "No screenshots found.\n\nScreenshots are generated during execution.\nDownload and run locally for full monitoring.")
+        else:
+            msg = f"Found {len(screenshot_files)} screenshots:\n\n"
+            for f in sorted(screenshot_files[:10]):
+                msg += f"• {f}\n"
+            if len(screenshot_files) > 10:
+                msg += f"\n... and {len(screenshot_files) - 10} more"
+            messagebox.showinfo("Screenshots", msg)
+    
+    def show_comprehensive_stats(self):
+        """Show comprehensive controller statistics"""
+        if not self.comprehensive_controller:
+            messagebox.showinfo("Stats", "Controller not available")
+            return
+        
+        stats_text = f"""
+COMPREHENSIVE CONTROLLER STATS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Status: {'✅ Ready' if self.comprehensive_controller else '❌ Not Available'}
+
+Features:
+  • Deep Prompt Understanding
+  • Intelligent Task Breakdown  
+  • Real-Time Screen Monitoring
+  • AI Vision Verification
+  • Adaptive Error Recovery
+
+Executions: {len(self.comprehensive_controller.execution_log) if self.comprehensive_controller else 0}
+Screen States: {len(self.comprehensive_controller.screen_states) if self.comprehensive_controller else 0}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 For full desktop control with actual mouse,
+keyboard, and screen access:
+  1. Download this project
+  2. Install: pip install -r requirements.txt
+  3. Set API key: GEMINI_API_KEY=your_key
+  4. Run: python gui_app.py
+"""
+        messagebox.showinfo("Comprehensive Controller Stats", stats_text)
 
 
 def main():
