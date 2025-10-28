@@ -17,26 +17,15 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "GUI App"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "Test Gemini"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
 args = "Simple Chatbot"
 
-[[workflows.workflow]]
-name = "GUI App"
-author = "agent"
-
-[workflows.workflow.metadata]
-outputType = "console"
-
 [[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python gui_app.py"
+task = "workflow.run"
+args = "GUI App"
 
 [[workflows.workflow]]
 name = "Test Gemini"
@@ -59,3 +48,14 @@ args = "python simple_chatbot.py"
 
 [workflows.workflow.metadata]
 outputType = "console"
+
+[[workflows.workflow]]
+name = "GUI App"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash start_gui_with_vnc.sh"
+
+[workflows.workflow.metadata]
+outputType = "vnc"
