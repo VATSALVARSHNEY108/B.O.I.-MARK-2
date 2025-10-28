@@ -3657,21 +3657,19 @@ Based on OthersideAI's self-operating-computer framework
     
     def handle_voice_command(self, command):
         """Handle voice command from continuous listening"""
-        def execute_voice():
-            self.update_output(f"\n🎤 Voice: {command}\n", "info")
-            
-            # Insert command and execute
-            self.root.after(0, lambda: self.command_input.delete(0, tk.END))
-            self.root.after(0, lambda: self.command_input.insert(0, command))
-            
-            # Wait a bit before executing to allow UI update
-            import time
-            time.sleep(0.1)
-            
-            self.execute_command()
+        # Execute on main thread for thread safety
+        self.root.after(0, lambda: self._execute_voice_command(command))
+    
+    def _execute_voice_command(self, command):
+        """Internal method to execute voice command on main thread"""
+        self.update_output(f"\n🎤 Voice: {command}\n", "info")
         
-        thread = threading.Thread(target=execute_voice, daemon=True)
-        thread.start()
+        # Insert command and execute
+        self.command_input.delete(0, tk.END)
+        self.command_input.insert(0, command)
+        
+        # Execute the command
+        self.execute_command()
 
     def show_help(self):
         help_window = tk.Toplevel(self.root)
