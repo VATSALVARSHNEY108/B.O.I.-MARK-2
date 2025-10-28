@@ -159,6 +159,7 @@ class AutomationControllerGUI:
             print(f"Integration Hub initialization failed: {e}")
 
         self.vatsal_mode = True
+        self.self_operating_mode = True
         self.processing = False
         self.hover_colors = {}
         self.vatsal_conversation_active = False
@@ -259,6 +260,22 @@ class AutomationControllerGUI:
                                            pady=5)
         self.vatsal_toggle_btn.pack(side="left", padx=15)
         self.add_hover_effect(self.vatsal_toggle_btn, "#89b4fa", "#74c7ec")
+
+        separator3 = tk.Label(stats_frame, text="•", bg="#1a1a2e", fg="#45475a", font=("Segoe UI", 10))
+        separator3.pack(side="left", padx=5)
+
+        self.self_operating_toggle_btn = tk.Button(stats_frame,
+                                                   text="🎮 Self-Operating: ON",
+                                                   bg="#cba6f7",
+                                                   fg="#0f0f1e",
+                                                   font=("Segoe UI", 9, "bold"),
+                                                   relief="flat",
+                                                   cursor="hand2",
+                                                   command=self.toggle_self_operating_mode,
+                                                   padx=15,
+                                                   pady=5)
+        self.self_operating_toggle_btn.pack(side="left", padx=15)
+        self.add_hover_effect(self.self_operating_toggle_btn, "#cba6f7", "#b4befe")
 
         main_container = tk.Frame(self.root, bg="#0f0f1e")
         main_container.pack(fill="both", expand=True, padx=30, pady=10)
@@ -2752,6 +2769,23 @@ class AutomationControllerGUI:
             self.vatsal_toggle_btn.config(text="🤖 VATSAL Mode: OFF", bg="#45475a")
             self.update_output("\n" + "=" * 60 + "\n", "info")
             self.update_output("Standard Mode Activated\n", "warning")
+            self.update_output("=" * 60 + "\n\n", "info")
+
+    def toggle_self_operating_mode(self):
+        """Toggle Self-Operating Computer feature on/off"""
+        self.self_operating_mode = not self.self_operating_mode
+        if self.self_operating_mode:
+            self.self_operating_toggle_btn.config(text="🎮 Self-Operating: ON", bg="#cba6f7")
+            self.update_output("\n" + "=" * 60 + "\n", "info")
+            self.update_output("🎮 Self-Operating Computer Mode: ENABLED\n", "success")
+            self.update_output("AI can now autonomously control your computer based on prompts.\n", "info")
+            self.update_output("Use the 🎮 Self-Operating tab to give objectives.\n", "info")
+            self.update_output("=" * 60 + "\n\n", "info")
+        else:
+            self.self_operating_toggle_btn.config(text="🎮 Self-Operating: OFF", bg="#45475a")
+            self.update_output("\n" + "=" * 60 + "\n", "info")
+            self.update_output("🎮 Self-Operating Computer Mode: DISABLED\n", "warning")
+            self.update_output("Self-operating features are now turned off.\n", "info")
             self.update_output("=" * 60 + "\n\n", "info")
 
     def show_vatsal_greeting(self):
