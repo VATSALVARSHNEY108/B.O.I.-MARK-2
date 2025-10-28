@@ -39,6 +39,7 @@ from vatsal_desktop_automator import VATSALAutomator
 from self_operating_computer import SelfOperatingComputer
 from self_operating_integrations import SelfOperatingIntegrationHub, SmartTaskRouter
 from command_executor_integration import EnhancedCommandExecutor, CommandInterceptor
+from voice_commander import create_voice_commander
 
 load_dotenv()
 
@@ -164,6 +165,18 @@ class AutomationControllerGUI:
         self.hover_colors = {}
         self.vatsal_conversation_active = False
         self.active_chatbot = "simple"
+
+        # Initialize Voice Commander
+        try:
+            self.voice_commander = create_voice_commander()
+            self.voice_listening = False
+            self.voice_enabled = True
+            print("✅ Voice Commander initialized")
+        except Exception as e:
+            self.voice_commander = None
+            self.voice_listening = False
+            self.voice_enabled = False
+            print(f"⚠️ Voice Commander initialization failed: {e}")
 
         self.setup_ui()
         self.check_api_key()
@@ -349,6 +362,38 @@ class AutomationControllerGUI:
                                       bd=0)
         self.command_input.pack(side="left", fill="both", expand=True, ipady=12, padx=(0, 10))
         self.command_input.bind("<Return>", lambda e: self.execute_command())
+
+        # Voice command buttons
+        voice_frame = tk.Frame(input_container, bg="#1a1a2e")
+        voice_frame.pack(side="right", padx=(0, 10))
+
+        self.voice_listen_btn = tk.Button(voice_frame,
+                                          text="🎤",
+                                          bg="#a6e3a1",
+                                          fg="#0f0f1e",
+                                          font=("Segoe UI", 14, "bold"),
+                                          relief="flat",
+                                          cursor="hand2",
+                                          command=self.start_voice_listen,
+                                          padx=12,
+                                          pady=10,
+                                          activebackground="#94e2d5")
+        self.voice_listen_btn.pack(side="left", padx=2)
+        self.add_hover_effect(self.voice_listen_btn, "#a6e3a1", "#94e2d5")
+
+        self.voice_continuous_btn = tk.Button(voice_frame,
+                                              text="🔊",
+                                              bg="#45475a",
+                                              fg="#ffffff",
+                                              font=("Segoe UI", 12, "bold"),
+                                              relief="flat",
+                                              cursor="hand2",
+                                              command=self.toggle_continuous_listening,
+                                              padx=12,
+                                              pady=10,
+                                              activebackground="#585b70")
+        self.voice_continuous_btn.pack(side="left", padx=2)
+        self.add_hover_effect(self.voice_continuous_btn, "#45475a", "#585b70")
 
         self.execute_btn = tk.Button(input_container,
                                      text="▶ Execute",
@@ -3405,6 +3450,10 @@ Based on OthersideAI's self-operating-computer framework
                         f"Error: {error_msg}"
                     )
                     self.update_output(f"🤖 VATSAL: {vatsal_response}\n", "error")
+                    
+                    # Speak error response if voice is enabled
+                    if self.voice_commander and self.voice_enabled:
+                        self.voice_commander.speak(vatsal_response)
                 else:
                     self.update_output(f"❌ {error_msg}\n", "error")
                     suggestion = get_ai_suggestion(f"User tried: {command}, but got error. Suggest alternatives.")
@@ -3420,6 +3469,10 @@ Based on OthersideAI's self-operating-computer framework
                 if self.vatsal_mode:
                     vatsal_response = self.get_vatsal_response(command, result['message'])
                     self.update_output(f"🤖 VATSAL:\n{vatsal_response}\n\n", "success")
+
+                    # Speak VATSAL's response if voice is enabled
+                    if self.voice_commander and self.voice_enabled:
+                        self.voice_commander.speak(vatsal_response)
 
                     # Show technical result in smaller text
                     self.update_output(f"📊 Technical Details:\n{result['message']}\n", "info")
@@ -3441,6 +3494,10 @@ Based on OthersideAI's self-operating-computer framework
                         f"Error: {result['message']}"
                     )
                     self.update_output(f"🤖 VATSAL: {vatsal_response}\n", "error")
+                    
+                    # Speak error response if voice is enabled
+                    if self.voice_commander and self.voice_enabled:
+                        self.voice_commander.speak(vatsal_response)
                 else:
                     self.update_output(f"❌ Error:\n{result['message']}\n", "error")
 
@@ -3490,6 +3547,88 @@ Based on OthersideAI's self-operating-computer framework
         self.output_area.delete(1.0, tk.END)
         self.output_area.config(state="disabled")
         self.update_output("✨ Console cleared!\n\n", "success")
+
+    def start_voice_listen(self):
+        """Start push-to-talk voice command"""
+        if not self.voice_commander:
+            messagebox.showerror("Voice Error", "Voice commander not available")
+            return
+        
+        if self.processing:
+            messagebox.showwarning("Busy", "Please wait for the current command to finish.")
+            return
+        
+        def voice_thread():
+            self.update_output("\n🎤 Listening for voice command...\n", "info")
+            self.update_status("🎤 Listening...", "#f9e2af")
+            self.root.after(0, lambda: self.voice_listen_btn.config(bg="#f38ba8"))
+            
+            result = self.voice_commander.listen_once(timeout=10)
+            
+            self.root.after(0, lambda: self.voice_listen_btn.config(bg="#a6e3a1"))
+            
+            if result['success'] and result['command']:
+                self.update_output(f"✅ Heard: {result['command']}\n\n", "success")
+                
+                # Execute the command
+                self.command_input.delete(0, tk.END)
+                self.command_input.insert(0, result['command'])
+                self.execute_command()
+                
+            else:
+                self.update_output(f"❌ {result['message']}\n", "error")
+                self.update_status("✅ Ready", "#a6e3a1")
+        
+        thread = threading.Thread(target=voice_thread, daemon=True)
+        thread.start()
+    
+    def toggle_continuous_listening(self):
+        """Toggle continuous voice listening mode"""
+        if not self.voice_commander:
+            messagebox.showerror("Voice Error", "Voice commander not available")
+            return
+        
+        if not self.voice_listening:
+            # Start continuous listening
+            result = self.voice_commander.start_continuous_listening(
+                callback=self.handle_voice_command
+            )
+            
+            if result['success']:
+                self.voice_listening = True
+                self.voice_continuous_btn.config(bg="#a6e3a1", text="🔇")
+                self.update_output("\n🔊 Continuous voice listening ENABLED\n", "success")
+                self.update_output("Say 'stop listening' to disable\n\n", "info")
+                self.update_status("🎤 Voice Active", "#a6e3a1")
+            else:
+                messagebox.showerror("Voice Error", result['message'])
+        else:
+            # Stop continuous listening
+            result = self.voice_commander.stop_continuous_listening()
+            
+            if result['success']:
+                self.voice_listening = False
+                self.voice_continuous_btn.config(bg="#45475a", text="🔊")
+                self.update_output("\n🔇 Continuous voice listening DISABLED\n", "warning")
+                self.update_status("✅ Ready", "#a6e3a1")
+    
+    def handle_voice_command(self, command):
+        """Handle voice command from continuous listening"""
+        def execute_voice():
+            self.update_output(f"\n🎤 Voice: {command}\n", "info")
+            
+            # Insert command and execute
+            self.root.after(0, lambda: self.command_input.delete(0, tk.END))
+            self.root.after(0, lambda: self.command_input.insert(0, command))
+            
+            # Wait a bit before executing to allow UI update
+            import time
+            time.sleep(0.1)
+            
+            self.execute_command()
+        
+        thread = threading.Thread(target=execute_voice, daemon=True)
+        thread.start()
 
     def show_help(self):
         help_window = tk.Toplevel(self.root)

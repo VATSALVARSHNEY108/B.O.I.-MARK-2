@@ -28,6 +28,16 @@ An intelligent AI desktop automation application powered by Google Gemini AI wit
 - **Dedicated chat interface** - beautiful conversation panel
 - **Smart suggestions** - morning briefings, productivity tips
 
+### 🎤 **Voice Commanding** (NEW!)
+- **Push-to-Talk Mode** - Click microphone button and speak
+- **Continuous Listening** - Hands-free voice control
+- **Speech Recognition** - Google-powered voice input
+- **Text-to-Speech Output** - VATSAL speaks responses aloud
+- **Natural Language** - Speak commands naturally
+- **All Features Supported** - Control 300+ features by voice
+- **Smart Audio Management** - Background processing, queued responses
+- See [Voice Commanding Guide](VOICE_COMMANDING_GUIDE.md) for details
+
 ### 🖥️ **System Automation**
 - Take screenshots with timestamps
 - Monitor system info (CPU, RAM, disk usage)
