@@ -1,0 +1,44 @@
+
+============================================================
+🚀 DESKTOP FILE & FOLDER AUTOMATOR - STARTING
+============================================================
+
+🔍 Scanning your desktop...
+
+📊 DESKTOP ANALYSIS SUMMARY
+============================================================
+📂 Desktop Location: C:\Users\VATSAL VARSHNEY\Desktop
+📅 Scanned: 2025-10-28 11:23:04
+
+📁 Total Folders: 3
+📄 Total Files: 0
+💾 Total Size: 0.00 B
+
+📂 Folders on Desktop:
+   • c++ (2 items)
+   • coding (2 items)
+   • documents (2 items)
+
+💾 Saving desktop data...
+✅ Data saved to: C:\Users\VATSAL VARSHNEY\PycharmProjects\DesktopAutomator2\desktop_data.json
+
+📥 BATCH FILE READY:
+   Location: C:\Users\VATSAL VARSHNEY\PycharmProjects\DesktopAutomator2\desktop_file_controller.bat
+   🚀 Double-click to launch desktop automation!
+
+============================================================
+✅ DESKTOP SCAN COMPLETE!
+💡 All desktop data has been analyzed and saved
+🗂️  Use the Desktop tab buttons to manage your files
+============================================================
+
+
+============================================================
+📝 You: what is on screen
+============================================================
+
+🤖 VATSAL: Right away. Processing 'what is on screen'.
+
+🤖 VATSAL: Right away. On it.
+
+Result: Error: Error parsing command: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 50\nPlease retry in 45.513992364s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.0-flash-exp', 'location': 'global'}, 'quotaValue': '50'}]}, {'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '45s'}]}}
