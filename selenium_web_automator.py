@@ -43,6 +43,39 @@ class SeleniumWebAutomator:
         
         self.execution_log = []
         
+    def _find_chrome_executable(self) -> Optional[str]:
+        """Find Chrome executable path on Windows/Linux/Mac"""
+        import platform
+        import os
+        
+        system = platform.system()
+        
+        if system == "Windows":
+            # Common Windows Chrome paths
+            possible_paths = [
+                r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+                os.path.expandvars(r"%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe"),
+                os.path.expandvars(r"%PROGRAMFILES%\Google\Chrome\Application\chrome.exe"),
+                os.path.expandvars(r"%PROGRAMFILES(X86)%\Google\Chrome\Application\chrome.exe"),
+            ]
+        elif system == "Darwin":  # macOS
+            possible_paths = [
+                "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+            ]
+        else:  # Linux
+            possible_paths = [
+                "/usr/bin/google-chrome",
+                "/usr/bin/chromium",
+                "/usr/bin/chromium-browser",
+            ]
+        
+        for path in possible_paths:
+            if os.path.exists(path):
+                return path
+        
+        return None
+    
     def initialize_browser(self) -> bool:
         """Initialize Chrome browser with Selenium"""
         try:
@@ -50,6 +83,16 @@ class SeleniumWebAutomator:
             from webdriver_manager.chrome import ChromeDriverManager
             
             chrome_options = Options()
+            
+            # Find Chrome executable
+            chrome_path = self._find_chrome_executable()
+            if chrome_path:
+                chrome_options.binary_location = chrome_path
+                print(f"✅ Found Chrome at: {chrome_path}")
+            else:
+                print("⚠️ Chrome executable not found")
+                print("📥 Please install Google Chrome from: https://www.google.com/chrome/")
+                raise FileNotFoundError("Chrome browser not installed. Please install Chrome to use YouTube automation features.")
             
             if self.headless:
                 chrome_options.add_argument('--headless=new')
@@ -70,7 +113,8 @@ class SeleniumWebAutomator:
             
         except Exception as e:
             print(f"❌ Browser initialization failed: {e}")
-            print(f"💡 Try running: pip install webdriver-manager")
+            print(f"💡 Make sure Chrome is installed on your system")
+            print(f"💡 Download Chrome from: https://www.google.com/chrome/")
             return False
     
     def close_browser(self):
