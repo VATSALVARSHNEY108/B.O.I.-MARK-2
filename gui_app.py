@@ -38,6 +38,26 @@ from selenium_web_automator import SeleniumWebAutomator
 
 load_dotenv()
 
+# VNC Display Optimization
+def setup_vnc_display():
+    """Configure optimal settings for VNC display"""
+    display = os.environ.get('DISPLAY', ':0')
+    vnc_mode = display == ':0'
+    
+    if vnc_mode:
+        print("🖥️  Running in VNC mode - Virtual Desktop enabled")
+        print(f"📺 Display: {display}")
+        
+        # Create screenshots directory if it doesn't exist
+        screenshots_dir = os.path.expanduser("~/screenshots")
+        os.makedirs(screenshots_dir, exist_ok=True)
+        print(f"📸 Screenshots will be saved to: {screenshots_dir}")
+    
+    return vnc_mode
+
+# Initialize VNC settings
+VNC_MODE = setup_vnc_display()
+
 
 class AutomationControllerGUI:
     def __init__(self, root):

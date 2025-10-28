@@ -1,21 +1,54 @@
 #!/bin/bash
 
+echo "🚀 Initializing VATSAL GUI with VNC Desktop Environment..."
+
+# Create necessary directories
+mkdir -p ~/.vnc
+mkdir -p ~/screenshots
+
 # Create .Xauthority file if it doesn't exist
 touch ~/.Xauthority
+chmod 600 ~/.Xauthority
 
-# Start Xvfb (virtual framebuffer) if not already running
-if ! pgrep -x "Xvfb" > /dev/null; then
-    echo "Starting Xvfb..."
-    Xvfb :0 -screen 0 1920x1080x24 &
-    sleep 2
-fi
+# Kill any existing Xvfb processes
+pkill -9 Xvfb 2>/dev/null || true
+sleep 1
 
 # Set DISPLAY environment variable
 export DISPLAY=:0
 
-# Generate X11 authentication
-xauth add $DISPLAY . $(xxd -l 16 -p /dev/urandom)
+# Start Xvfb (virtual framebuffer) with better settings for VNC
+echo "📺 Starting virtual display (1920x1080)..."
+Xvfb :0 -screen 0 1920x1080x24 -ac +extension GLX +render -noreset &
+XVFB_PID=$!
+sleep 2
+
+# Check if Xvfb started successfully
+if ! ps -p $XVFB_PID > /dev/null; then
+    echo "❌ Failed to start Xvfb"
+    exit 1
+fi
+
+# Generate X11 authentication using mcookie (more reliable than xxd)
+echo "🔐 Setting up X11 authentication..."
+MCOOKIE=$(mcookie)
+xauth add $DISPLAY . $MCOOKIE 2>/dev/null || echo "⚠️  X auth warning (non-fatal)"
+
+# Set up window manager (optional, for better VNC experience)
+export XDG_RUNTIME_DIR=/tmp/runtime-$USER
+mkdir -p $XDG_RUNTIME_DIR
+chmod 700 $XDG_RUNTIME_DIR
+
+# Disable screen saver and power management
+xset s off -dpms 2>/dev/null || true
+
+echo "✅ Virtual desktop ready!"
+echo "🤖 Starting VATSAL GUI Application..."
+echo ""
 
 # Start the GUI application
-echo "Starting GUI application..."
 python gui_app.py
+
+# Cleanup on exit
+echo "🛑 Shutting down..."
+kill $XVFB_PID 2>/dev/null || true
