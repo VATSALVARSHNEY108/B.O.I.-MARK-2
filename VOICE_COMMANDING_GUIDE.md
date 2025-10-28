@@ -15,13 +15,29 @@ VATSAL now supports **comprehensive voice commanding** - speak your commands and
    - Speak your command (up to 10 seconds)
    - System automatically executes after recognizing speech
    - Perfect for single commands
+   - No wake word required
 
 2. **Continuous Listening Mode** 🔊
    - Click the speaker button to enable
    - System listens continuously in the background
+   - Use wake words to activate commands
    - Automatically processes spoken commands
    - Say "stop listening" to disable
    - Ideal for hands-free operation
+
+3. **Wake Word Detection** 💬 (NEW!)
+   - **Enabled by default** in continuous mode
+   - Multiple wake words supported:
+     - "Hey VATSAL"
+     - "VATSAL"
+     - "OK VATSAL"
+     - "Computer"
+     - "Hey Computer"
+     - "Bhiaya" (Hindi/Urdu: Brother)
+     - "Bhaisahb" (Hindi/Urdu: Respected Brother)
+   - Click 💬 button to toggle on/off
+   - When enabled: Say wake word + command
+   - When disabled: All speech is processed
 
 ### 🔊 **Voice Output**
 
@@ -43,7 +59,17 @@ VATSAL now supports **comprehensive voice commanding** - speak your commands and
 
 2. **Continuous Listening**:
    ```
-   Click 🔊 button → Speak anytime → Say "stop listening" to disable
+   Click 🔊 button → Say "Hey VATSAL" → Then your command → Say "stop listening" to disable
+   ```
+
+3. **Wake Word Examples**:
+   ```
+   "Hey VATSAL, what time is it?"
+   "VATSAL, take a screenshot"
+   "OK VATSAL, check system information"
+   "Computer, play lofi beats"
+   "Bhiaya, open downloads folder"
+   "Bhaisahb, show system report"
    ```
 
 ### Example Commands
@@ -95,7 +121,8 @@ You can speak **any command** that VATSAL understands:
 Located next to the Execute button in the command input area:
 
 - **🎤 Green Button** (Left): Push-to-Talk - Click to speak once
-- **🔊 Gray Button** (Right): Continuous Listening - Toggle on/off
+- **🔊 Gray Button** (Middle): Continuous Listening - Toggle on/off
+- **💬 Yellow Button** (Right): Wake Word Toggle - Enable/disable wake word detection
 
 ### Visual Feedback
 
@@ -107,6 +134,10 @@ Located next to the Execute button in the command input area:
 2. **Continuous Listening Button**:
    - 🔘 Gray/Muted (🔊): Listening OFF
    - 🟢 Green (🔇): Listening ON
+
+3. **Wake Word Button**:
+   - 🟡 Yellow (💬): Wake word OFF (all speech processed)
+   - 🟢 Green (💬): Wake word ON (requires wake word)
 
 3. **Status Bar**:
    - "🎤 Listening...": System is capturing audio
@@ -273,10 +304,12 @@ VATSAL understands context:
 
 ## 🎓 Advanced Features
 
-### Wake Word (Future Enhancement)
-- Planned feature: "Hey VATSAL" wake word
-- Will enable true hands-free activation
-- Currently in development
+### Wake Word (AVAILABLE NOW!)
+- **Active Feature**: Wake word detection enabled
+- **Multiple Wake Words**: "Hey VATSAL", "VATSAL", "OK VATSAL", "Computer", "Hey Computer"
+- **True Hands-Free**: Say wake word before command in continuous mode
+- **Toggle Control**: Use 💬 button to enable/disable
+- **Privacy Friendly**: Only processes speech when wake word detected (when enabled)
 
 ### Voice Profiles (Future)
 - Custom voice selection

@@ -39,9 +39,10 @@ class VoiceCommander:
         self.tts_thread = None
         self.is_speaking = False
         
-        # Wake word detection
-        self.wake_word = "vatsal"
-        self.wake_word_enabled = False
+        # Wake word detection - support multiple wake phrases
+        self.wake_words = ["vatsal", "hey vatsal", "ok vatsal", "computer", "hey computer", "bhiaya", "bhaisahb"]
+        self.wake_word_enabled = True  # Enabled by default
+        self.wake_word = "vatsal"  # Primary wake word for display
         
         # Start TTS worker thread
         self._start_tts_worker()
@@ -171,10 +172,19 @@ class VoiceCommander:
                                 
                                 # Check for wake word if enabled
                                 if self.wake_word_enabled:
-                                    if self.wake_word.lower() not in command.lower():
+                                    command_lower = command.lower()
+                                    wake_word_found = False
+                                    
+                                    # Check if any wake word is present
+                                    for wake_word in self.wake_words:
+                                        if wake_word in command_lower:
+                                            wake_word_found = True
+                                            # Remove wake word from command
+                                            command = command_lower.replace(wake_word, "").strip()
+                                            break
+                                    
+                                    if not wake_word_found:
                                         continue
-                                    # Remove wake word from command
-                                    command = command.lower().replace(self.wake_word.lower(), "").strip()
                                 
                                 # Execute command
                                 if command:
@@ -229,10 +239,31 @@ class VoiceCommander:
     def set_wake_word(self, wake_word: str) -> dict:
         """Set custom wake word"""
         self.wake_word = wake_word.lower().strip()
+        # Also add to wake words list if not present
+        if self.wake_word not in self.wake_words:
+            self.wake_words.append(self.wake_word)
         return {
             "success": True,
             "message": f"Wake word set to '{self.wake_word}'"
         }
+    
+    def add_wake_word(self, wake_word: str) -> dict:
+        """Add an additional wake word"""
+        wake_word = wake_word.lower().strip()
+        if wake_word not in self.wake_words:
+            self.wake_words.append(wake_word)
+            return {
+                "success": True,
+                "message": f"Added wake word '{wake_word}'"
+            }
+        return {
+            "success": False,
+            "message": f"Wake word '{wake_word}' already exists"
+        }
+    
+    def get_wake_words(self) -> list:
+        """Get list of all wake words"""
+        return self.wake_words.copy()
     
     def get_status(self) -> dict:
         """Get current voice commander status"""
@@ -240,7 +271,8 @@ class VoiceCommander:
             "listening": self.continuous_listening,
             "speaking": self.is_speaking,
             "wake_word_enabled": self.wake_word_enabled,
-            "wake_word": self.wake_word
+            "wake_word": self.wake_word,
+            "wake_words": self.wake_words
         }
     
     def cleanup(self):

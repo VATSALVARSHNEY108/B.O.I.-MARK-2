@@ -31,11 +31,14 @@ An intelligent AI desktop automation application powered by Google Gemini AI wit
 ### 🎤 **Voice Commanding** (NEW!)
 - **Push-to-Talk Mode** - Click microphone button and speak
 - **Continuous Listening** - Hands-free voice control
+- **Wake Word Detection** - Say "Hey VATSAL", "VATSAL", "OK VATSAL", "Computer", "Bhiaya", or "Bhaisahb"
+- **Multiple Wake Words** - Choose your preferred activation phrase
 - **Speech Recognition** - Google-powered voice input
 - **Text-to-Speech Output** - VATSAL speaks responses aloud
 - **Natural Language** - Speak commands naturally
 - **All Features Supported** - Control 300+ features by voice
 - **Smart Audio Management** - Background processing, queued responses
+- **Privacy Friendly** - Only processes after wake word (when enabled)
 - See [Voice Commanding Guide](VOICE_COMMANDING_GUIDE.md) for details
 
 ### 🖥️ **System Automation**

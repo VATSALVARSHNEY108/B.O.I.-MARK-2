@@ -395,6 +395,21 @@ class AutomationControllerGUI:
         self.voice_continuous_btn.pack(side="left", padx=2)
         self.add_hover_effect(self.voice_continuous_btn, "#45475a", "#585b70")
 
+        # Wake word toggle button
+        self.wake_word_btn = tk.Button(voice_frame,
+                                       text="💬",
+                                       bg="#f9e2af",
+                                       fg="#0f0f1e",
+                                       font=("Segoe UI", 11, "bold"),
+                                       relief="flat",
+                                       cursor="hand2",
+                                       command=self.toggle_wake_word,
+                                       padx=10,
+                                       pady=10,
+                                       activebackground="#fab387")
+        self.wake_word_btn.pack(side="left", padx=2)
+        self.add_hover_effect(self.wake_word_btn, "#f9e2af", "#fab387")
+
         self.execute_btn = tk.Button(input_container,
                                      text="▶ Execute",
                                      bg="#89b4fa",
@@ -3597,7 +3612,15 @@ Based on OthersideAI's self-operating-computer framework
             if result['success']:
                 self.voice_listening = True
                 self.voice_continuous_btn.config(bg="#a6e3a1", text="🔇")
+                
+                # Show wake word status
+                wake_words = ", ".join(self.voice_commander.get_wake_words()[:3])
+                wake_status = ""
+                if self.voice_commander.wake_word_enabled:
+                    wake_status = f"\n💬 Wake words: {wake_words}\n"
+                
                 self.update_output("\n🔊 Continuous voice listening ENABLED\n", "success")
+                self.update_output(wake_status, "info")
                 self.update_output("Say 'stop listening' to disable\n\n", "info")
                 self.update_status("🎤 Voice Active", "#a6e3a1")
             else:
@@ -3611,6 +3634,26 @@ Based on OthersideAI's self-operating-computer framework
                 self.voice_continuous_btn.config(bg="#45475a", text="🔊")
                 self.update_output("\n🔇 Continuous voice listening DISABLED\n", "warning")
                 self.update_status("✅ Ready", "#a6e3a1")
+    
+    def toggle_wake_word(self):
+        """Toggle wake word detection on/off"""
+        if not self.voice_commander:
+            messagebox.showerror("Voice Error", "Voice commander not available")
+            return
+        
+        result = self.voice_commander.toggle_wake_word()
+        
+        if result['success']:
+            if result['enabled']:
+                self.wake_word_btn.config(bg="#a6e3a1")
+                wake_words = ", ".join(self.voice_commander.get_wake_words()[:3])
+                self.update_output(f"\n💬 Wake word ENABLED\n", "success")
+                self.update_output(f"Say: {wake_words}\n", "info")
+                self.update_output(f"Then your command (e.g., 'Hey VATSAL, what time is it')\n\n", "info")
+            else:
+                self.wake_word_btn.config(bg="#f9e2af")
+                self.update_output(f"\n💬 Wake word DISABLED\n", "warning")
+                self.update_output(f"Continuous listening will respond to all speech\n\n", "info")
     
     def handle_voice_command(self, command):
         """Handle voice command from continuous listening"""
