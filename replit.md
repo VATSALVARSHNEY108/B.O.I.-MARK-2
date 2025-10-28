@@ -32,7 +32,8 @@ The VATSAL AI Assistant (`vatsal_assistant.py`) is an intelligent AI companion w
 - **System Monitoring (`system_monitor.py`):** Monitors CPU, RAM, disk, network, and battery.
 - **Advanced File Operations (`advanced_file_operations.py`):** Includes searching, duplicate finding, and organization.
 - **Workflow Management (`workflow_templates.py`):** For saving, reusing, and tracking custom automation workflows.
-- **Voice Commands (`voice_assistant.py`):** Provides speech recognition and text-to-speech.
+- **Voice Commands (`voice_assistant.py`):** Basic speech recognition and text-to-speech framework.
+- **Voice Commander (`voice_commander.py`):** Enhanced comprehensive voice commanding system with push-to-talk and continuous listening modes. Features Google Speech Recognition for voice input, pyttsx3 for text-to-speech output, background threading for non-blocking operation, smart audio management with queuing, and wake word detection capabilities. Fully integrated into GUI with dedicated voice control buttons (🎤 push-to-talk, 🔊 continuous listening), automatic execution of spoken commands, and text-to-speech responses from VATSAL. Supports all 300+ features via voice control with visual feedback and status indicators.
 - **Productivity Tracking (`productivity_monitor.py`):** Monitors screen time and blocks distractions.
 - **AI Features Module (`ai_features.py`):** Provides 80+ AI capabilities across 17 categories (e.g., Chatbots, Text/Image Generation, Data Analysis).
 - **Data Analysis Suite (`data_analysis.py`):** Professional-grade toolkit with 100+ features covering Data Import/Export, Cleaning, Analysis, Visualization, and Machine Learning.
