@@ -2965,6 +2965,15 @@ class AutomationControllerGUI:
     
     def start_self_operating_text(self):
         """Start self-operating computer with text objective"""
+        if not self.self_operating_mode:
+            messagebox.showwarning(
+                "Feature Disabled", 
+                "🎮 Self-Operating Computer mode is currently DISABLED.\n\n"
+                "Please enable it using the '🎮 Self-Operating: OFF' toggle button in the header to use this feature."
+            )
+            self._update_soc_output("⚠️ Self-Operating mode is disabled. Enable it from the header toggle.\n", "warning")
+            return
+        
         if not self.self_operating_computer:
             self._update_soc_output("❌ Self-Operating Computer not available. Check Gemini API key.\n", "error")
             return
@@ -2988,6 +2997,15 @@ class AutomationControllerGUI:
     
     def start_self_operating_voice(self):
         """Start self-operating computer with voice objective"""
+        if not self.self_operating_mode:
+            messagebox.showwarning(
+                "Feature Disabled", 
+                "🎮 Self-Operating Computer mode is currently DISABLED.\n\n"
+                "Please enable it using the '🎮 Self-Operating: OFF' toggle button in the header to use this feature."
+            )
+            self._update_soc_output("⚠️ Self-Operating mode is disabled. Enable it from the header toggle.\n", "warning")
+            return
+        
         if not self.self_operating_computer:
             self._update_soc_output("❌ Self-Operating Computer not available. Check Gemini API key.\n", "error")
             return
