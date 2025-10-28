@@ -33,9 +33,17 @@ The Self-Operating Computer is an AI agent that:
    - "Open Calculator and calculate 25 × 47"
    - "Create a new folder on Desktop named 'AI Projects'"
 
-4. **Choose input mode:**
+4. **Choose your mode:**
+   
+   **Manual Mode (Default):**
    - **▶️ Start (Text)**: Uses the objective you typed
    - **🎤 Start (Voice)**: Listen for spoken objective
+   
+   **Auto Self-Control Mode (Toggle):**
+   - Click the **🔄 Auto Self-Control Mode** toggle button to enable
+   - When **✅ Enabled**: Press **Ctrl+Enter** in the objective field to quick-start
+   - AI automatically enters self-operating mode when you give a command
+   - When **❌ Disabled**: Manual control, use Start buttons
 
 5. **Watch the AI work!**
    - Real-time output shows what the AI is thinking and doing
@@ -56,6 +64,40 @@ Then choose:
 1. **Text input** - Type your objective
 2. **Voice input** - Speak your objective
 3. **Exit**
+
+---
+
+## 🔄 Auto Self-Control Mode (New!)
+
+The **Auto Self-Control Mode** toggle button lets you enable/disable automatic self-operating mode activation.
+
+### How It Works
+
+**When Enabled (✅):**
+- Press **Ctrl+Enter** in the objective field to instantly start self-operating
+- AI automatically begins autonomous control without clicking Start button
+- Perfect for rapid testing and quick automations
+- Toggle button shows green "✅ Enabled"
+
+**When Disabled (❌):**
+- Default manual mode
+- You must click **▶️ Start (Text)** or **🎤 Start (Voice)** buttons
+- More deliberate control over when AI takes over
+- Toggle button shows red "❌ Disabled"
+
+### Quick Start Workflow
+
+1. Type your objective in the text box
+2. Enable Auto Self-Control Mode (toggle button)
+3. Press **Ctrl+Enter** 
+4. AI immediately starts working! 🚀
+
+### Benefits
+
+✅ **Faster workflow** - No need to click Start button  
+✅ **Keyboard-driven** - Keep hands on keyboard  
+✅ **Toggle anytime** - Switch modes on the fly  
+✅ **Visual feedback** - Clear status indicators  
 
 ---
 

@@ -755,6 +755,14 @@ class AutomationControllerGUI:
                                     pady=8,
                                     wrap=tk.WORD)
         self.soc_objective.pack(fill="x", padx=5)
+        self.soc_objective.bind('<Control-Return>', lambda e: self.auto_start_if_enabled())
+        
+        hint_label = tk.Label(input_section,
+                             text="💡 Tip: Press Ctrl+Enter to quick-start when Auto Mode is enabled",
+                             bg="#1e1e2e",
+                             fg="#6c7086",
+                             font=("Segoe UI", 8, "italic"))
+        hint_label.pack(anchor="w", padx=5, pady=(2, 0))
         
         controls_frame = tk.Frame(left_column, bg="#1e1e2e")
         controls_frame.pack(fill="x", pady=5)
@@ -797,6 +805,37 @@ class AutomationControllerGUI:
                             pady=10)
         stop_btn.pack(side="left", expand=True, fill="x", padx=(2, 5))
         self.add_hover_effect(stop_btn, "#f38ba8", "#eba0ac")
+        
+        toggle_frame = tk.Frame(left_column, bg="#1e1e2e")
+        toggle_frame.pack(fill="x", pady=10)
+        
+        toggle_label_text = tk.Label(toggle_frame,
+                                     text="🔄 Auto Self-Control Mode:",
+                                     bg="#1e1e2e",
+                                     fg="#a6adc8",
+                                     font=("Segoe UI", 9, "bold"))
+        toggle_label_text.pack(side="left", padx=5)
+        
+        self.auto_control_enabled = False
+        self.auto_control_btn = tk.Button(toggle_frame,
+                                          text="❌ Disabled",
+                                          bg="#313244",
+                                          fg="#f38ba8",
+                                          font=("Segoe UI", 9, "bold"),
+                                          relief="flat",
+                                          cursor="hand2",
+                                          command=self.toggle_auto_control,
+                                          padx=20,
+                                          pady=8)
+        self.auto_control_btn.pack(side="left", padx=5)
+        self.add_hover_effect(self.auto_control_btn, "#313244", "#45475a")
+        
+        toggle_info = tk.Label(toggle_frame,
+                              text="When enabled, AI will automatically start self-operating mode after commands",
+                              bg="#1e1e2e",
+                              fg="#6c7086",
+                              font=("Segoe UI", 8, "italic"))
+        toggle_info.pack(side="left", padx=10)
         
         examples_frame = tk.Frame(left_column, bg="#1e1e2e")
         examples_frame.pack(fill="x", pady=(10, 5))
@@ -3075,6 +3114,54 @@ Based on OthersideAI's self-operating-computer framework
             self._update_soc_output("📸 Opened screenshots folder\n", "success")
         except Exception as e:
             messagebox.showerror("Error", f"Could not open folder: {str(e)}")
+    
+    def auto_start_if_enabled(self):
+        """Auto-start self-operating mode if enabled"""
+        if self.auto_control_enabled:
+            self._update_soc_output("\n🚀 Auto-starting self-operating mode...\n", "success")
+            self.start_self_operating_text()
+        else:
+            messagebox.showinfo(
+                "Auto Mode Disabled",
+                "Auto Self-Control Mode is currently disabled.\n\n"
+                "Enable it using the toggle button to use Ctrl+Enter quick-start."
+            )
+    
+    def toggle_auto_control(self):
+        """Toggle auto self-control mode on/off"""
+        self.auto_control_enabled = not self.auto_control_enabled
+        
+        if self.auto_control_enabled:
+            self.auto_control_btn.config(
+                text="✅ Enabled",
+                fg="#a6e3a1",
+                bg="#45475a"
+            )
+            self._update_soc_output("\n🔄 Auto Self-Control Mode: ENABLED\n", "success")
+            self._update_soc_output("AI will automatically start self-operating mode after commands.\n", "progress")
+            messagebox.showinfo(
+                "Auto Mode Enabled", 
+                "✅ Auto Self-Control Mode is now ENABLED!\n\n"
+                "When you give a command, AI will automatically:\n"
+                "1. Understand the command\n"
+                "2. Enter self-operating mode\n"
+                "3. View the screen and perform actions\n"
+                "4. Complete the objective autonomously\n\n"
+                "You can toggle this off anytime."
+            )
+        else:
+            self.auto_control_btn.config(
+                text="❌ Disabled",
+                fg="#f38ba8",
+                bg="#313244"
+            )
+            self._update_soc_output("\n🔄 Auto Self-Control Mode: DISABLED\n", "warning")
+            self._update_soc_output("Manual control restored. Use Start buttons to begin.\n", "progress")
+            messagebox.showinfo(
+                "Auto Mode Disabled",
+                "❌ Auto Self-Control Mode is now DISABLED.\n\n"
+                "Use the Start buttons to manually begin self-operating mode."
+            )
     
     def execute_web_automation(self):
         """Execute web automation from input"""
