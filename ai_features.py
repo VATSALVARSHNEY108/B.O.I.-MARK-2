@@ -81,7 +81,7 @@ User: {message}
 Provide a helpful, conversational response:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -116,7 +116,7 @@ Customer Query: {query}
 Provide a helpful, professional, and empathetic response addressing the customer's concern:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -141,7 +141,7 @@ Student Question: {question}
 Provide a clear, educational explanation with examples. Break down complex concepts into simple terms:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -164,7 +164,7 @@ Question: {question}
 Provide an expert-level response with specific details, facts, and insights:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -196,7 +196,7 @@ Story Prompt: {prompt}
 Write an engaging, well-structured story:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=instruction
             )
             
@@ -221,7 +221,7 @@ Tone: {tone}
 Create engaging, high-quality content for the specified type and tone:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -248,7 +248,7 @@ Target Word Count: {word_count} words
 Write a well-researched, informative article with proper structure (introduction, body, conclusion):"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -272,7 +272,7 @@ Goal: {goal}
 Write compelling marketing copy that engages and converts. Include headlines, body copy, and call-to-action:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -296,7 +296,7 @@ Target Audience: {audience}
 Write comprehensive technical documentation with clear explanations, examples, and proper structure:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -321,7 +321,7 @@ Text to translate:
 Provide only the translation:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -350,7 +350,7 @@ Provide:
 Return the analysis in JSON format:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -380,7 +380,7 @@ Text:
 Summary:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -403,7 +403,7 @@ Text: {text}
 Response format: Language Name (ISO Code) - Confidence Level"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -433,7 +433,7 @@ Check for:
 Provide a moderation report in JSON format:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -464,7 +464,7 @@ Generate a comprehensive, detailed description that an AI image generator could 
 Image generation prompt:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -488,7 +488,7 @@ Target Style: {style}
 Describe how the content should be transformed in the specified style:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -517,7 +517,7 @@ Identify:
 Provide detailed analysis:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -548,7 +548,7 @@ Analyze:
 Provide comprehensive trend analysis:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -581,7 +581,7 @@ Provide:
 Detailed prediction:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -610,7 +610,7 @@ Provide:
 Generate comprehensive insights:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -640,7 +640,7 @@ Provide:
 Detailed statistical analysis:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -669,7 +669,7 @@ Describe:
 Image recognition guidance:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -699,7 +699,7 @@ Provide:
 Object detection guide:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -729,7 +729,7 @@ Describe:
 Scene analysis guide:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -760,7 +760,7 @@ Generate a natural-sounding script with:
 Speech script:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -790,7 +790,7 @@ Describe:
 Audio analysis guide:"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             
@@ -814,7 +814,7 @@ Explain:
 4. Potential issues and solutions
 
 Conversion guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in format converter: {str(e)}"
@@ -832,7 +832,7 @@ Include:
 4. Tools and commands
 
 Codec transformation guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in codec transformer: {str(e)}"
@@ -850,7 +850,7 @@ Provide:
 4. Best tools
 
 Quality adjustment guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in quality adjuster: {str(e)}"
@@ -870,7 +870,7 @@ Include:
 4. Error handling
 
 Batch conversion guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in batch converter: {str(e)}"
@@ -888,7 +888,7 @@ Cover:
 4. Command line examples
 
 Resolution change guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in resolution changer: {str(e)}"
@@ -908,7 +908,7 @@ Include:
 4. Best practices
 
 Trimming guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in media trimmer: {str(e)}"
@@ -928,7 +928,7 @@ Explain:
 4. Automation options
 
 Splitting guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in media splitter: {str(e)}"
@@ -948,7 +948,7 @@ Cover:
 4. Tools and commands
 
 Merging guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in media merger: {str(e)}"
@@ -968,7 +968,7 @@ Include:
 4. Tools and techniques
 
 Volume adjustment guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in volume adjuster: {str(e)}"
@@ -988,7 +988,7 @@ Explain:
 4. Use cases and tools
 
 Speed control guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in speed controller: {str(e)}"
@@ -1006,7 +1006,7 @@ Include:
 4. Tools for optimization
 
 Size optimization guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in size optimizer: {str(e)}"
@@ -1026,7 +1026,7 @@ Cover:
 4. Best practices
 
 Bitrate adjustment guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in bitrate adjuster: {str(e)}"
@@ -1046,7 +1046,7 @@ Explain:
 4. Tools and settings
 
 Quality compression guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in quality compressor: {str(e)}"
@@ -1066,7 +1066,7 @@ Include:
 4. Script examples
 
 Batch compression guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in batch compression: {str(e)}"
@@ -1084,7 +1084,7 @@ Provide:
 4. Best practices
 
 Compression guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in format-specific compression: {str(e)}"
@@ -1102,7 +1102,7 @@ Cover:
 4. Common metadata fields
 
 Metadata extraction guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in metadata extractor: {str(e)}"
@@ -1122,7 +1122,7 @@ Include:
 4. Tools and commands
 
 Format detection guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in format detector: {str(e)}"
@@ -1142,7 +1142,7 @@ Explain:
 4. Objective vs subjective quality
 
 Quality analysis guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in quality analyzer: {str(e)}"
@@ -1162,7 +1162,7 @@ Include:
 4. Tools and scripts
 
 Duration calculation guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in duration calculator: {str(e)}"
@@ -1182,7 +1182,7 @@ Cover:
 4. Profile and level detection
 
 Codec identification guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in codec identifier: {str(e)}"
@@ -1202,7 +1202,7 @@ Provide:
 4. Best practices
 
 Stream configuration guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in stream configuration: {str(e)}"
@@ -1222,7 +1222,7 @@ Include:
 4. Latency optimization
 
 Broadcast settings guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in broadcast settings: {str(e)}"
@@ -1242,7 +1242,7 @@ Cover:
 4. Multi-bitrate streaming
 
 Encoding optimization guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in encoding optimizer: {str(e)}"
@@ -1263,7 +1263,7 @@ Explain:
 4. Platform requirements
 
 Quality settings guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in quality settings: {str(e)}"
@@ -1281,7 +1281,7 @@ Provide:
 4. Special considerations
 
 Platform optimization guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in platform optimizer: {str(e)}"
@@ -1301,7 +1301,7 @@ Include:
 4. Text formatting
 
 Subtitle editing guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in subtitle editor: {str(e)}"
@@ -1321,7 +1321,7 @@ Cover:
 4. Batch timing fixes
 
 Timing adjustment guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in timing adjuster: {str(e)}"
@@ -1339,7 +1339,7 @@ Explain:
 4. Tools and scripts
 
 Subtitle format conversion guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in subtitle format converter: {str(e)}"
@@ -1359,7 +1359,7 @@ Include:
 4. Quality improvement
 
 Subtitle generation guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in subtitle generator: {str(e)}"
@@ -1379,7 +1379,7 @@ Cover:
 4. Tools and techniques
 
 Subtitle synchronization guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in subtitle synchronizer: {str(e)}"
@@ -1399,7 +1399,7 @@ Include:
 4. Best practices
 
 Tag editing guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in tag editor: {str(e)}"
@@ -1419,7 +1419,7 @@ Cover:
 4. Tools and automation
 
 Cover art management guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in cover art manager: {str(e)}"
@@ -1439,7 +1439,7 @@ Explain:
 4. Data organization
 
 Information extraction guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in information extractor: {str(e)}"
@@ -1459,7 +1459,7 @@ Include:
 4. Automation scripts
 
 Batch editing guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in batch editor: {str(e)}"
@@ -1479,7 +1479,7 @@ Cover:
 4. Best practices
 
 ID3 editing guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in ID3 editor: {str(e)}"
@@ -1499,7 +1499,7 @@ Provide:
 4. Quality preservation
 
 Noise reduction guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in noise reduction: {str(e)}"
@@ -1519,7 +1519,7 @@ Include:
 4. Best practices
 
 Equalization guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in audio equalizer: {str(e)}"
@@ -1539,7 +1539,7 @@ Cover:
 4. Tools and processes
 
 Normalization guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in audio normalizer: {str(e)}"
@@ -1559,7 +1559,7 @@ Explain:
 4. Tools and techniques
 
 Amplification guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in audio amplifier: {str(e)}"
@@ -1579,7 +1579,7 @@ Include:
 4. Quality preservation
 
 Echo removal guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in echo remover: {str(e)}"
@@ -1599,7 +1599,7 @@ Cover:
 4. Post-processing
 
 Video stabilization guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in video stabilizer: {str(e)}"
@@ -1619,7 +1619,7 @@ Provide:
 4. LUT application
 
 Color correction guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in color corrector: {str(e)}"
@@ -1639,7 +1639,7 @@ Include:
 4. Maintaining detail
 
 Brightness adjustment guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in brightness adjuster: {str(e)}"
@@ -1659,7 +1659,7 @@ Explain:
 4. Avoiding artifacts
 
 Contrast enhancement guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in contrast enhancer: {str(e)}"
@@ -1679,7 +1679,7 @@ Cover:
 4. Tools and settings
 
 Frame rate conversion guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in frame rate converter: {str(e)}"
@@ -1699,7 +1699,7 @@ Include:
 4. Tools and automation
 
 Playlist creation guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in playlist creator: {str(e)}"
@@ -1719,7 +1719,7 @@ Cover:
 4. Automation scripts
 
 Media organization guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in media organizer: {str(e)}"
@@ -1739,7 +1739,7 @@ Provide:
 4. Progress monitoring
 
 Batch processing guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in batch processor: {str(e)}"
@@ -1759,7 +1759,7 @@ Include:
 4. Tools and scripts
 
 File renaming guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in file renamer: {str(e)}"
@@ -1779,7 +1779,7 @@ Cover:
 4. Tools and automation
 
 Duplicate finding guide:"""
-            response = client.models.generate_content(model='gemini-1.5-flash', contents=prompt)
+            response = client.models.generate_content(model='gemini-2.0-flash', contents=prompt)
             return response.text
         except Exception as e:
             return f"Error in duplicate finder: {str(e)}"

@@ -168,7 +168,7 @@ Generate the {language} code now:"""
     try:
         api_client = get_client()
         response = api_client.models.generate_content(
-            model="gemini-1.5-flash",
+            model="gemini-2.0-flash",
             contents=prompt,
             config=types.GenerateContentConfig(
                 temperature=0.7,
@@ -226,7 +226,7 @@ Provide a clear, beginner-friendly explanation of:
     try:
         api_client = get_client()
         response = api_client.models.generate_content(
-            model="gemini-1.5-flash",
+            model="gemini-2.0-flash",
             contents=prompt
         )
         return response.text or "Could not generate explanation"
@@ -251,7 +251,7 @@ Return ONLY the improved code, no explanations."""
     try:
         api_client = get_client()
         response = api_client.models.generate_content(
-            model="gemini-1.5-flash",
+            model="gemini-2.0-flash",
             contents=prompt
         )
         
@@ -287,7 +287,7 @@ Provide the corrected code with the bug fixed. Return ONLY the fixed code."""
     try:
         api_client = get_client()
         response = api_client.models.generate_content(
-            model="gemini-1.5-flash",
+            model="gemini-2.0-flash",
             contents=prompt
         )
         

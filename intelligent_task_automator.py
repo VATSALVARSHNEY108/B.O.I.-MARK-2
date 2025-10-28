@@ -88,7 +88,7 @@ Respond with ONLY valid JSON, no extra text.
         
         try:
             response = self.client.models.generate_content(
-                model="gemini-1.5-flash",
+                model="gemini-2.0-flash",
                 contents=prompt
             )
             
@@ -220,7 +220,7 @@ Return JSON format:
 """
             
             response = self.client.models.generate_content(
-                model="gemini-1.5-flash",
+                model="gemini-2.0-flash",
                 contents=[
                     types.Part.from_uri(file_uri=uploaded_file.uri, mime_type=uploaded_file.mime_type),
                     prompt

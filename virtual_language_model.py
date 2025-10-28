@@ -31,7 +31,7 @@ class VirtualLanguageModel:
         else:
             try:
                 self.client = genai.Client(api_key=self.api_key)
-                self.model = 'gemini-1.5-flash'
+                self.model = 'gemini-2.0-flash'
             except Exception as e:
                 print(f"⚠️  Warning: Failed to initialize Gemini client: {e}")
                 self.client = None

@@ -913,7 +913,7 @@ Validate if changes made things BETTER:
         try:
             client = get_client()
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=[
                     types.Content(
                         role="user",
@@ -1345,7 +1345,7 @@ Be specific, accurate, and helpful. If you're not sure, say so and explain why."
             
             client = get_client()
             response = client.models.generate_content(
-                model="gemini-1.5-flash",
+                model="gemini-2.0-flash",
                 contents=[
                     types.Content(
                         role="user",

@@ -168,7 +168,7 @@ Provide the complete text so I can reply to it."""
 Generate ONLY the reply text that should be typed, no additional commentary."""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     temperature=0.7,

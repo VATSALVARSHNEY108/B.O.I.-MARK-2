@@ -169,7 +169,7 @@ First screenshot: {screenshots[0]['time']}
 Last screenshot: {screenshots[-1]['time']}"""
             
             response = client.models.generate_content(
-                model='gemini-1.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     temperature=0.7,

@@ -37,7 +37,7 @@ def analyze_screenshot(image_path: str, query: str = "Describe what you see in t
         
         api_client = get_client()
         response = api_client.models.generate_content(
-            model="gemini-1.5-flash",
+            model="gemini-2.0-flash",
             contents=[
                 types.Content(
                     role="user",
@@ -91,7 +91,7 @@ def compare_screenshots(image1_path: str, image2_path: str) -> str:
         
         api_client = get_client()
         response = api_client.models.generate_content(
-            model="gemini-1.5-flash",
+            model="gemini-2.0-flash",
             contents=[
                 types.Content(
                     role="user",

@@ -103,7 +103,7 @@ Respond with ONLY valid JSON, no additional text.
         
         try:
             response = self.client.models.generate_content(
-                model="gemini-1.5-flash",
+                model="gemini-2.0-flash",
                 contents=analysis_prompt
             )
             
@@ -306,7 +306,7 @@ Respond with ONLY valid JSON.
         
         try:
             response = self.client.models.generate_content(
-                model="gemini-1.5-flash",
+                model="gemini-2.0-flash",
                 contents=breakdown_prompt
             )
             
@@ -460,7 +460,7 @@ Respond with ONLY valid JSON.
 """
             
             response = self.client.models.generate_content(
-                model="gemini-1.5-flash",
+                model="gemini-2.0-flash",
                 contents=[
                     types.Part.from_uri(
                         file_uri=uploaded_file.uri,
@@ -519,7 +519,7 @@ Respond with ONLY valid JSON.
         
         try:
             response = self.client.models.generate_content(
-                model="gemini-1.5-flash",
+                model="gemini-2.0-flash",
                 contents=verification_prompt
             )
             
