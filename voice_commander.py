@@ -181,14 +181,21 @@ class VoiceCommander:
                                             wake_word_found = True
                                             # Remove wake word from command
                                             command = command_lower.replace(wake_word, "").strip()
+                                            print(f"✅ Wake word detected! Executing: {command}")
                                             break
                                     
                                     if not wake_word_found:
+                                        print(f"⏭️  Skipped (no wake word): {command}")
                                         continue
                                 
-                                # Execute command
-                                if command:
-                                    self.command_callback(command)
+                                # Execute command via callback
+                                if command and command.strip():
+                                    print(f"▶️  Executing command via callback: {command}")
+                                    try:
+                                        self.command_callback(command)
+                                        print(f"✅ Command sent to callback successfully")
+                                    except Exception as e:
+                                        print(f"❌ Callback error: {str(e)}")
                                 
                             except sr.UnknownValueError:
                                 continue
