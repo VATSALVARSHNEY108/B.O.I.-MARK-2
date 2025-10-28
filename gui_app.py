@@ -36,6 +36,7 @@ from translation_service import TranslationService
 from smart_break_suggester import SmartBreakSuggester
 from selenium_web_automator import SeleniumWebAutomator
 from vatsal_desktop_automator import VATSALAutomator
+from self_operating_computer import SelfOperatingComputer
 
 load_dotenv()
 
@@ -122,6 +123,16 @@ class AutomationControllerGUI:
         except Exception as e:
             self.vatsal_automator = None
             print(f"VATSAL Automator initialization failed: {e}")
+        
+        try:
+            self.self_operating_computer = SelfOperatingComputer(verbose=True)
+            self.soc_running = False
+            self.soc_thread = None
+        except Exception as e:
+            self.self_operating_computer = None
+            self.soc_running = False
+            self.soc_thread = None
+            print(f"Self-Operating Computer initialization failed: {e}")
 
         self.vatsal_mode = True
         self.processing = False
@@ -251,6 +262,7 @@ class AutomationControllerGUI:
 
         self.create_vatsal_ai_tab(notebook)
         self.create_vatsal_automator_tab(notebook)
+        self.create_self_operating_tab(notebook)
         self.create_comprehensive_controller_tab(notebook)
         self.create_web_automation_tab(notebook)
         self.create_productivity_hub_tab(notebook)
@@ -667,6 +679,207 @@ class AutomationControllerGUI:
                            pady=8)
             btn.pack(side="left", padx=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
+
+    def create_self_operating_tab(self, notebook):
+        """Self-Operating Computer - Autonomous AI Control with Vision"""
+        tab = tk.Frame(notebook, bg="#1e1e2e")
+        notebook.add(tab, text="🎮 Self-Operating")
+        
+        header_frame = tk.Frame(tab, bg="#1a1a2e")
+        header_frame.pack(fill="x", pady=(10, 0), padx=10)
+        
+        header = tk.Label(header_frame,
+                          text="🎮 Self-Operating Computer",
+                          bg="#1a1a2e",
+                          fg="#cba6f7",
+                          font=("Segoe UI", 14, "bold"))
+        header.pack(pady=12)
+        
+        info = tk.Label(header_frame,
+                        text="👁️ AI Vision • 🖱️ Autonomous Control • 🎯 Goal-Driven Operation",
+                        bg="#1a1a2e",
+                        fg="#a6adc8",
+                        font=("Segoe UI", 9, "italic"))
+        info.pack(pady=(0, 12))
+        
+        desc_frame = tk.Frame(tab, bg="#1e1e2e")
+        desc_frame.pack(fill="x", padx=10, pady=5)
+        
+        desc_text = tk.Label(desc_frame,
+                            text="AI views your screen like a human and autonomously performs mouse/keyboard actions to accomplish objectives.\nInspired by OthersideAI's self-operating-computer, powered by Gemini Vision.",
+                            bg="#1e1e2e",
+                            fg="#6c7086",
+                            font=("Segoe UI", 9),
+                            justify="left")
+        desc_text.pack(anchor="w", padx=10, pady=5)
+        
+        main_container = tk.Frame(tab, bg="#1e1e2e")
+        main_container.pack(fill="both", expand=True, padx=10, pady=5)
+        
+        left_column = tk.Frame(main_container, bg="#1e1e2e")
+        left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
+        
+        status_frame = tk.Frame(left_column, bg="#313244", relief="flat")
+        status_frame.pack(fill="x", pady=(0, 10))
+        
+        status_label = tk.Label(status_frame,
+                               text="Status: Ready",
+                               bg="#313244",
+                               fg="#a6e3a1",
+                               font=("Segoe UI", 10, "bold"),
+                               anchor="w",
+                               padx=10,
+                               pady=8)
+        status_label.pack(fill="x")
+        self.soc_status_label = status_label
+        
+        input_section = tk.Frame(left_column, bg="#1e1e2e")
+        input_section.pack(fill="x", pady=(5, 10))
+        
+        input_label = tk.Label(input_section,
+                              text="🎯 Enter your objective:",
+                              bg="#1e1e2e",
+                              fg="#a6adc8",
+                              font=("Segoe UI", 9, "bold"))
+        input_label.pack(anchor="w", padx=5, pady=(0, 5))
+        
+        self.soc_objective = tk.Text(input_section,
+                                    bg="#313244",
+                                    fg="#ffffff",
+                                    font=("Segoe UI", 11),
+                                    height=3,
+                                    relief="solid",
+                                    bd=2,
+                                    insertbackground="#cba6f7",
+                                    padx=8,
+                                    pady=8,
+                                    wrap=tk.WORD)
+        self.soc_objective.pack(fill="x", padx=5)
+        
+        controls_frame = tk.Frame(left_column, bg="#1e1e2e")
+        controls_frame.pack(fill="x", pady=5)
+        
+        start_text_btn = tk.Button(controls_frame,
+                                   text="▶️ Start (Text)",
+                                   bg="#cba6f7",
+                                   fg="#0f0f1e",
+                                   font=("Segoe UI", 10, "bold"),
+                                   relief="flat",
+                                   cursor="hand2",
+                                   command=self.start_self_operating_text,
+                                   padx=20,
+                                   pady=10)
+        start_text_btn.pack(side="left", expand=True, fill="x", padx=(5, 2))
+        self.add_hover_effect(start_text_btn, "#cba6f7", "#b4befe")
+        
+        start_voice_btn = tk.Button(controls_frame,
+                                    text="🎤 Start (Voice)",
+                                    bg="#89b4fa",
+                                    fg="#0f0f1e",
+                                    font=("Segoe UI", 10, "bold"),
+                                    relief="flat",
+                                    cursor="hand2",
+                                    command=self.start_self_operating_voice,
+                                    padx=20,
+                                    pady=10)
+        start_voice_btn.pack(side="left", expand=True, fill="x", padx=2)
+        self.add_hover_effect(start_voice_btn, "#89b4fa", "#74c7ec")
+        
+        stop_btn = tk.Button(controls_frame,
+                            text="⏹️ Stop",
+                            bg="#f38ba8",
+                            fg="#0f0f1e",
+                            font=("Segoe UI", 10, "bold"),
+                            relief="flat",
+                            cursor="hand2",
+                            command=self.stop_self_operating,
+                            padx=20,
+                            pady=10)
+        stop_btn.pack(side="left", expand=True, fill="x", padx=(2, 5))
+        self.add_hover_effect(stop_btn, "#f38ba8", "#eba0ac")
+        
+        examples_frame = tk.Frame(left_column, bg="#1e1e2e")
+        examples_frame.pack(fill="x", pady=(10, 5))
+        
+        examples_label = tk.Label(examples_frame,
+                                 text="💡 Example Objectives:",
+                                 bg="#1e1e2e",
+                                 fg="#a6adc8",
+                                 font=("Segoe UI", 9, "bold"))
+        examples_label.pack(anchor="w", padx=5)
+        
+        examples_text = tk.Text(examples_frame,
+                               bg="#0f0f1e",
+                               fg="#89dceb",
+                               font=("Consolas", 8),
+                               height=5,
+                               relief="flat",
+                               padx=8,
+                               pady=8,
+                               wrap=tk.WORD)
+        examples_text.pack(fill="x", padx=5, pady=5)
+        examples_text.insert("1.0", 
+            "• Open Google Chrome and search for Python tutorials\n"
+            "• Open a new file in Notepad and write 'Hello World'\n"
+            "• Go to YouTube and play a video about AI\n"
+            "• Open Calculator and calculate 25 * 47\n"
+            "• Create a new folder on Desktop named 'AI Projects'")
+        examples_text.config(state='disabled')
+        
+        right_column = tk.Frame(main_container, bg="#1e1e2e")
+        right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
+        
+        output_label = tk.Label(right_column,
+                               text="📊 Real-Time Output:",
+                               bg="#1e1e2e",
+                               fg="#a6adc8",
+                               font=("Segoe UI", 9, "bold"))
+        output_label.pack(anchor="w", padx=5, pady=(0, 5))
+        
+        self.soc_output = scrolledtext.ScrolledText(
+            right_column,
+            bg="#0f0f1e",
+            fg="#cdd6f4",
+            font=("Consolas", 9),
+            wrap=tk.WORD,
+            state='disabled',
+            relief="flat",
+            padx=10,
+            pady=10
+        )
+        self.soc_output.pack(fill="both", expand=True, padx=5, pady=5)
+        
+        self.soc_output.tag_config("iteration", foreground="#cba6f7", font=("Consolas", 9, "bold"))
+        self.soc_output.tag_config("thought", foreground="#89dceb")
+        self.soc_output.tag_config("action", foreground="#a6e3a1", font=("Consolas", 9, "bold"))
+        self.soc_output.tag_config("progress", foreground="#f9e2af")
+        self.soc_output.tag_config("success", foreground="#a6e3a1", font=("Consolas", 9, "bold"))
+        self.soc_output.tag_config("error", foreground="#f38ba8", font=("Consolas", 9, "bold"))
+        self.soc_output.tag_config("warning", foreground="#f9e2af")
+        
+        bottom_frame = tk.Frame(tab, bg="#1e1e2e")
+        bottom_frame.pack(fill="x", padx=10, pady=(5, 10))
+        
+        buttons = [
+            ("📖 View Guide", self.show_soc_guide, "#89b4fa"),
+            ("🔄 Clear Output", self.clear_soc_output, "#313244"),
+            ("📸 View Screenshots", self.view_soc_screenshots, "#89dceb")
+        ]
+        
+        for text, command, color in buttons:
+            btn = tk.Button(bottom_frame,
+                           text=text,
+                           bg=color,
+                           fg="#0f0f1e" if color != "#313244" else "#ffffff",
+                           font=("Segoe UI", 9, "bold"),
+                           relief="flat",
+                           cursor="hand2",
+                           command=command,
+                           padx=15,
+                           pady=8)
+            btn.pack(side="left", expand=True, fill="x", padx=3)
+            hover_color = "#b4befe" if color == "#89b4fa" else "#74c7ec" if color == "#89dceb" else "#45475a"
+            self.add_hover_effect(btn, color, hover_color)
 
     def create_comprehensive_controller_tab(self, notebook):
         """
@@ -2652,6 +2865,216 @@ class AutomationControllerGUI:
         self.vatsal_automator_input.delete(0, tk.END)
         self.vatsal_automator_input.insert(0, command)
         self.execute_vatsal_automator_command()
+    
+    def start_self_operating_text(self):
+        """Start self-operating computer with text objective"""
+        if not self.self_operating_computer:
+            self._update_soc_output("❌ Self-Operating Computer not available. Check Gemini API key.\n", "error")
+            return
+        
+        if self.soc_running:
+            messagebox.showwarning("Already Running", "Self-operating mode is already active!")
+            return
+        
+        objective = self.soc_objective.get("1.0", tk.END).strip()
+        if not objective:
+            messagebox.showwarning("No Objective", "Please enter an objective first!")
+            return
+        
+        self.soc_running = True
+        self.soc_status_label.config(text=f"Status: Running...", fg="#f9e2af")
+        self._update_soc_output(f"\n🎯 Starting self-operating mode...\n", "success")
+        self._update_soc_output(f"📋 Objective: {objective}\n\n", "progress")
+        
+        self.soc_thread = threading.Thread(target=self._run_self_operating, args=(objective,), daemon=True)
+        self.soc_thread.start()
+    
+    def start_self_operating_voice(self):
+        """Start self-operating computer with voice objective"""
+        if not self.self_operating_computer:
+            self._update_soc_output("❌ Self-Operating Computer not available. Check Gemini API key.\n", "error")
+            return
+        
+        if self.soc_running:
+            messagebox.showwarning("Already Running", "Self-operating mode is already active!")
+            return
+        
+        self.soc_running = True
+        self.soc_status_label.config(text="Status: Listening...", fg="#89b4fa")
+        self._update_soc_output("\n🎤 Voice input mode activated...\n", "success")
+        self._update_soc_output("Please state your objective clearly.\n\n", "progress")
+        
+        self.soc_thread = threading.Thread(target=self._run_self_operating_voice, daemon=True)
+        self.soc_thread.start()
+    
+    def stop_self_operating(self):
+        """Stop the self-operating computer"""
+        if not self.soc_running:
+            messagebox.showinfo("Not Running", "Self-operating mode is not currently active.")
+            return
+        
+        self.soc_running = False
+        self.soc_status_label.config(text="Status: Stopped", fg="#f38ba8")
+        self._update_soc_output("\n🛑 Self-operating mode stopped by user.\n", "warning")
+    
+    def _run_self_operating(self, objective):
+        """Run self-operating computer in background"""
+        try:
+            import sys
+            from io import StringIO
+            
+            old_stdout = sys.stdout
+            sys.stdout = StringIO()
+            
+            class GUILogger:
+                def __init__(self, gui):
+                    self.gui = gui
+                
+                def log(self, message, level="INFO"):
+                    if "🔍" in message or "Analyzing" in message:
+                        tag = "iteration"
+                    elif "💭" in message or "Thought:" in message:
+                        tag = "thought"
+                    elif "⚡" in message or "Action:" in message:
+                        tag = "action"
+                    elif "📊" in message or "Progress:" in message:
+                        tag = "progress"
+                    elif "✅" in message or "COMPLETE" in message:
+                        tag = "success"
+                    elif "❌" in message or "ERROR" in level:
+                        tag = "error"
+                    elif "⚠️" in message or "WARN" in level:
+                        tag = "warning"
+                    else:
+                        tag = ""
+                    
+                    self.gui._update_soc_output(message + "\n", tag)
+            
+            logger = GUILogger(self)
+            self.self_operating_computer._log = lambda msg, level="INFO": logger.log(msg, level)
+            
+            result = self.self_operating_computer.operate(objective)
+            
+            sys.stdout = old_stdout
+            
+            if result.get("completed"):
+                self._update_soc_output(f"\n✅ Objective completed in {result['duration_seconds']}s!\n", "success")
+                self._update_soc_output(f"📊 Total iterations: {result['iterations']}\n", "progress")
+                self.soc_status_label.config(text="Status: Completed ✅", fg="#a6e3a1")
+            else:
+                self._update_soc_output(f"\n⏸️ Session ended (max iterations reached)\n", "warning")
+                self._update_soc_output(f"📊 Total iterations: {result['iterations']}\n", "progress")
+                self.soc_status_label.config(text="Status: Incomplete", fg="#f9e2af")
+            
+            self.soc_running = False
+            
+        except Exception as e:
+            self._update_soc_output(f"\n❌ Error: {str(e)}\n", "error")
+            self.soc_status_label.config(text="Status: Error", fg="#f38ba8")
+            self.soc_running = False
+    
+    def _run_self_operating_voice(self):
+        """Run self-operating computer with voice input"""
+        try:
+            result = self.self_operating_computer.operate_with_voice()
+            
+            if not result:
+                self._update_soc_output("❌ Voice input failed. Please try again.\n", "error")
+                self.soc_status_label.config(text="Status: Ready", fg="#a6e3a1")
+                self.soc_running = False
+                return
+            
+            if result.get("completed"):
+                self._update_soc_output(f"\n✅ Objective completed!\n", "success")
+                self.soc_status_label.config(text="Status: Completed ✅", fg="#a6e3a1")
+            else:
+                self._update_soc_output(f"\n⏸️ Session ended\n", "warning")
+                self.soc_status_label.config(text="Status: Incomplete", fg="#f9e2af")
+            
+            self.soc_running = False
+            
+        except Exception as e:
+            self._update_soc_output(f"\n❌ Error: {str(e)}\n", "error")
+            self.soc_status_label.config(text="Status: Error", fg="#f38ba8")
+            self.soc_running = False
+    
+    def _update_soc_output(self, message, tag=""):
+        """Update self-operating computer output display"""
+        self.soc_output.config(state='normal')
+        self.soc_output.insert(tk.END, message, tag)
+        self.soc_output.config(state='disabled')
+        self.soc_output.see(tk.END)
+    
+    def clear_soc_output(self):
+        """Clear self-operating computer output"""
+        self.soc_output.config(state='normal')
+        self.soc_output.delete(1.0, tk.END)
+        self.soc_output.config(state='disabled')
+        messagebox.showinfo("Cleared", "Output cleared!")
+    
+    def show_soc_guide(self):
+        """Show self-operating computer guide"""
+        guide = """
+🎮 SELF-OPERATING COMPUTER GUIDE
+
+Powered by Gemini Vision, this feature lets AI autonomously control
+your computer to accomplish objectives.
+
+HOW IT WORKS:
+1. AI views your screen (takes screenshots)
+2. Analyzes what it sees using Gemini Vision
+3. Decides the next mouse/keyboard action
+4. Executes the action
+5. Repeats until objective is complete
+
+INPUT MODES:
+▶️ Text Mode: Type your objective and click Start
+🎤 Voice Mode: Speak your objective when prompted
+
+EXAMPLE OBJECTIVES:
+• Open Google Chrome and search for Python tutorials
+• Go to YouTube and play a video about AI
+• Open Calculator and calculate 25 × 47
+• Create a new folder on Desktop named 'AI Projects'
+• Open Notepad and write 'Hello World'
+
+TIPS:
+✓ Be specific and clear with objectives
+✓ Simple tasks work best (1-3 steps)
+✓ AI can see and interact with visible UI elements
+✓ Click Stop if you need to interrupt
+✓ Check screenshots/ folder to see what AI saw
+
+SAFETY:
+⚠️ AI will not perform destructive actions without context
+⚠️ Move mouse to corner to trigger failsafe (PyAutoGUI)
+⚠️ Maximum 30 iterations per session
+
+Based on OthersideAI's self-operating-computer framework
+"""
+        messagebox.showinfo("Self-Operating Computer Guide", guide)
+    
+    def view_soc_screenshots(self):
+        """Open screenshots folder"""
+        import subprocess
+        import platform
+        
+        screenshots_dir = Path("screenshots")
+        if not screenshots_dir.exists():
+            messagebox.showinfo("No Screenshots", "No screenshots have been taken yet.")
+            return
+        
+        try:
+            if platform.system() == "Windows":
+                os.startfile(screenshots_dir)
+            elif platform.system() == "Darwin":
+                subprocess.run(["open", screenshots_dir])
+            else:
+                subprocess.run(["xdg-open", screenshots_dir])
+            
+            self._update_soc_output("📸 Opened screenshots folder\n", "success")
+        except Exception as e:
+            messagebox.showerror("Error", f"Could not open folder: {str(e)}")
     
     def execute_web_automation(self):
         """Execute web automation from input"""
