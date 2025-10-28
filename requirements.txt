@@ -51,3 +51,4 @@ sift-stack-py
 statsmodels
 selenium
 webdriver-manager
+opencv-python

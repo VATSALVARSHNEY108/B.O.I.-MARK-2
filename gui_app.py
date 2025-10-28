@@ -35,6 +35,7 @@ from weather_news_service import WeatherNewsService
 from translation_service import TranslationService
 from smart_break_suggester import SmartBreakSuggester
 from selenium_web_automator import SeleniumWebAutomator
+from vatsal_desktop_automator import VATSALAutomator
 
 load_dotenv()
 
@@ -115,6 +116,12 @@ class AutomationControllerGUI:
             self.vlm = None
             self.vlm_last_decision = None
             print(f"Virtual Language Model initialization failed: {e}")
+        
+        try:
+            self.vatsal_automator = VATSALAutomator()
+        except Exception as e:
+            self.vatsal_automator = None
+            print(f"VATSAL Automator initialization failed: {e}")
 
         self.vatsal_mode = True
         self.processing = False
@@ -243,6 +250,7 @@ class AutomationControllerGUI:
         notebook.pack(fill="both", expand=True, padx=10, pady=10)
 
         self.create_vatsal_ai_tab(notebook)
+        self.create_vatsal_automator_tab(notebook)
         self.create_comprehensive_controller_tab(notebook)
         self.create_web_automation_tab(notebook)
         self.create_productivity_hub_tab(notebook)
@@ -536,6 +544,129 @@ class AutomationControllerGUI:
                               pady=8)
         stats_btn.pack(side="left", padx=5)
         self.add_hover_effect(stats_btn, "#313244", "#45475a")
+    
+    def create_vatsal_automator_tab(self, notebook):
+        """VATSAL Intelligent Desktop Automator - Local execution with AI understanding"""
+        tab = tk.Frame(notebook, bg="#1e1e2e")
+        notebook.add(tab, text="⚡ VATSAL Auto")
+        
+        header_frame = tk.Frame(tab, bg="#1a1a2e")
+        header_frame.pack(fill="x", pady=(10, 0), padx=10)
+        
+        header = tk.Label(header_frame,
+                          text="⚡ VATSAL Desktop Automator",
+                          bg="#1a1a2e",
+                          fg="#f9e2af",
+                          font=("Segoe UI", 14, "bold"))
+        header.pack(pady=12)
+        
+        info = tk.Label(header_frame,
+                        text="🤖 AI Understanding • 💻 Local Execution • ⚠️ Safe Confirmations",
+                        bg="#1a1a2e",
+                        fg="#a6adc8",
+                        font=("Segoe UI", 9, "italic"))
+        info.pack(pady=(0, 12))
+        
+        description_frame = tk.Frame(tab, bg="#1e1e2e")
+        description_frame.pack(fill="x", padx=10, pady=5)
+        
+        desc_text = tk.Label(description_frame,
+                            text="Intelligent desktop automation that uses Gemini only for understanding commands.\nAll actions execute locally via Python modules. Destructive actions require confirmation.",
+                            bg="#1e1e2e",
+                            fg="#6c7086",
+                            font=("Segoe UI", 9),
+                            justify="left")
+        desc_text.pack(anchor="w", padx=10, pady=5)
+        
+        self.vatsal_automator_output = scrolledtext.ScrolledText(
+            tab,
+            bg="#0f0f1e",
+            fg="#cdd6f4",
+            font=("Consolas", 10),
+            wrap=tk.WORD,
+            height=10,
+            state='disabled',
+            relief="flat",
+            padx=10,
+            pady=10
+        )
+        self.vatsal_automator_output.pack(fill="both", expand=True, padx=10, pady=(10, 5))
+        
+        self.vatsal_automator_output.tag_config("success", foreground="#a6e3a1")
+        self.vatsal_automator_output.tag_config("error", foreground="#f38ba8")
+        self.vatsal_automator_output.tag_config("warning", foreground="#f9e2af")
+        self.vatsal_automator_output.tag_config("info", foreground="#89b4fa")
+        
+        input_frame = tk.Frame(tab, bg="#1e1e2e")
+        input_frame.pack(fill="x", padx=10, pady=5)
+        
+        input_label = tk.Label(input_frame,
+                               text="💬 Command (e.g., 'Open notepad and type Hello', 'Show system info'):",
+                               bg="#1e1e2e",
+                               fg="#a6adc8",
+                               font=("Segoe UI", 9, "bold"))
+        input_label.pack(anchor="w", padx=5, pady=(5, 2))
+        
+        input_box_frame = tk.Frame(input_frame, bg="#1e1e2e")
+        input_box_frame.pack(fill="x", padx=5, pady=(0, 5))
+        
+        self.vatsal_automator_input = tk.Entry(input_box_frame,
+                                                bg="#313244",
+                                                fg="#ffffff",
+                                                font=("Segoe UI", 12),
+                                                relief="solid",
+                                                bd=2,
+                                                insertbackground="#89b4fa")
+        self.vatsal_automator_input.pack(side="left", fill="x", expand=True, ipady=10)
+        self.vatsal_automator_input.bind("<Return>", lambda e: self.execute_vatsal_automator_command())
+        
+        execute_btn = tk.Button(input_box_frame,
+                                text="▶️ Execute",
+                                bg="#a6e3a1",
+                                fg="#0f0f1e",
+                                font=("Segoe UI", 11, "bold"),
+                                relief="flat",
+                                cursor="hand2",
+                                command=self.execute_vatsal_automator_command,
+                                padx=25,
+                                pady=10)
+        execute_btn.pack(side="right", padx=(5, 0))
+        self.add_hover_effect(execute_btn, "#a6e3a1", "#94e2d5")
+        
+        quick_actions_frame = tk.Frame(tab, bg="#1e1e2e")
+        quick_actions_frame.pack(fill="x", padx=10, pady=(0, 10))
+        
+        actions_label = tk.Label(quick_actions_frame,
+                                text="⚡ Quick Actions:",
+                                bg="#1e1e2e",
+                                fg="#a6adc8",
+                                font=("Segoe UI", 9, "bold"))
+        actions_label.pack(anchor="w", padx=5, pady=(5, 2))
+        
+        button_container = tk.Frame(quick_actions_frame, bg="#1e1e2e")
+        button_container.pack(fill="x", padx=5)
+        
+        quick_actions = [
+            ("💻 System Info", "Show system info"),
+            ("📸 Screenshot", "Take a screenshot"),
+            ("📂 Open Desktop", "Open Desktop folder"),
+            ("📝 Notepad", "Open notepad"),
+            ("🧹 Clear Output", None)
+        ]
+        
+        for text, command in quick_actions:
+            btn = tk.Button(button_container,
+                           text=text,
+                           bg="#313244",
+                           fg="#ffffff",
+                           font=("Segoe UI", 9, "bold"),
+                           relief="flat",
+                           cursor="hand2",
+                           command=lambda cmd=command: self.vatsal_quick_action(cmd),
+                           padx=12,
+                           pady=8)
+            btn.pack(side="left", padx=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
 
     def create_comprehensive_controller_tab(self, notebook):
         """
@@ -2459,6 +2590,68 @@ class AutomationControllerGUI:
             title = "Stats"
 
         messagebox.showinfo(title, stats_message)
+    
+    def execute_vatsal_automator_command(self):
+        """Execute command using VATSAL automator"""
+        if not self.vatsal_automator:
+            self._update_vatsal_automator_output("❌ VATSAL Automator not available. Check Gemini API key.\n", "error")
+            return
+        
+        command = self.vatsal_automator_input.get().strip()
+        if not command:
+            return
+        
+        self.vatsal_automator_input.delete(0, tk.END)
+        self._update_vatsal_automator_output(f"\n🎯 Command: {command}\n", "info")
+        
+        thread = threading.Thread(target=self._process_vatsal_automator_command, args=(command,))
+        thread.start()
+    
+    def _vatsal_confirmation_callback(self, intent, risk_level):
+        """Confirmation callback for destructive VATSAL actions"""
+        result = messagebox.askyesno(
+            "⚠️ Confirmation Required",
+            f"Risk Level: {risk_level.upper()}\n\nAction: {intent}\n\nDo you want to proceed?",
+            icon='warning'
+        )
+        return result
+    
+    def _process_vatsal_automator_command(self, command):
+        """Process VATSAL automator command in background"""
+        try:
+            self._update_vatsal_automator_output("🤔 Understanding command...\n", "info")
+            result = self.vatsal_automator.execute_command(command, confirmation_callback=self._vatsal_confirmation_callback)
+            
+            if "✓" in result:
+                self._update_vatsal_automator_output(f"\n{result}\n", "success")
+            elif "✗" in result or "❌" in result:
+                self._update_vatsal_automator_output(f"\n{result}\n", "error")
+            elif "⚠️" in result:
+                self._update_vatsal_automator_output(f"\n{result}\n", "warning")
+            else:
+                self._update_vatsal_automator_output(f"\n{result}\n", "info")
+            
+        except Exception as e:
+            self._update_vatsal_automator_output(f"\n❌ Error: {str(e)}\n", "error")
+    
+    def _update_vatsal_automator_output(self, message, tag=""):
+        """Update VATSAL automator output display"""
+        self.vatsal_automator_output.config(state='normal')
+        self.vatsal_automator_output.insert(tk.END, message, tag)
+        self.vatsal_automator_output.config(state='disabled')
+        self.vatsal_automator_output.see(tk.END)
+    
+    def vatsal_quick_action(self, command):
+        """Execute quick action or clear output"""
+        if command is None:
+            self.vatsal_automator_output.config(state='normal')
+            self.vatsal_automator_output.delete(1.0, tk.END)
+            self.vatsal_automator_output.config(state='disabled')
+            return
+        
+        self.vatsal_automator_input.delete(0, tk.END)
+        self.vatsal_automator_input.insert(0, command)
+        self.execute_vatsal_automator_command()
     
     def execute_web_automation(self):
         """Execute web automation from input"""
