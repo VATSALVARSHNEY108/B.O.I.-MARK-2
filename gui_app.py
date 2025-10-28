@@ -2994,6 +2994,9 @@ class AutomationControllerGUI:
         
         self.soc_thread = threading.Thread(target=self._run_self_operating, args=(objective,), daemon=True)
         self.soc_thread.start()
+        
+        # Auto-minimize window so user can see AI working on desktop
+        self.root.after(500, self.root.iconify)
     
     def start_self_operating_voice(self):
         """Start self-operating computer with voice objective"""
@@ -3021,6 +3024,9 @@ class AutomationControllerGUI:
         
         self.soc_thread = threading.Thread(target=self._run_self_operating_voice, daemon=True)
         self.soc_thread.start()
+        
+        # Auto-minimize window so user can see AI working on desktop
+        self.root.after(500, self.root.iconify)
     
     def stop_self_operating(self):
         """Stop the self-operating computer"""
