@@ -116,6 +116,103 @@ If no design work visible, say "No design detected"."""
                 "message": "Failed to analyze screenshot"
             }
     
+    def analyze_uploaded_screenshot(self, image_path: str, focus: str = "general") -> dict:
+        """
+        🆕 CLOUD-COMPATIBLE: Analyze an uploaded screenshot file
+        
+        This works in Replit! Upload your screenshot and get AI analysis.
+        
+        Args:
+            image_path: Path to the uploaded screenshot file
+            focus: What to analyze - 'general', 'errors', 'productivity', 'code', 'design'
+        
+        Returns:
+            Dict with analysis results
+        """
+        print(f"\n📸 Analyzing uploaded screenshot: {image_path}")
+        
+        # Check if file exists
+        if not os.path.exists(image_path):
+            return {
+                "success": False,
+                "message": f"❌ File not found: {image_path}\n\n💡 Upload your screenshot to the Replit workspace first!"
+            }
+        
+        # Determine analysis prompt based on focus
+        if focus == "general":
+            prompt = """Analyze this screenshot and describe:
+1. What application/website is currently visible
+2. What the user appears to be doing
+3. Any notable elements or content on screen
+4. Overall screen activity summary
+
+Be concise and factual."""
+        
+        elif focus == "errors":
+            prompt = """Analyze this screenshot specifically looking for:
+1. Error messages or warnings
+2. Red text or error indicators
+3. Dialog boxes with issues
+4. Any problems or alerts visible
+
+If no errors found, say "No errors detected"."""
+        
+        elif focus == "productivity":
+            prompt = """Analyze this screenshot for productivity insights:
+1. What task is the user working on?
+2. Is this work-related or personal browsing?
+3. Any distractions visible (social media, games, etc.)?
+4. Productivity score: 1-10 (10 = highly focused work)
+
+Provide brief, actionable insights."""
+        
+        elif focus == "code":
+            prompt = """Analyze this screenshot looking for code:
+1. What programming language is visible?
+2. What is the code trying to do?
+3. Any obvious bugs or issues in the visible code?
+4. Code quality assessment (1-10)
+
+If no code visible, say "No code detected"."""
+        
+        elif focus == "design":
+            prompt = """Analyze this screenshot for design/UI elements:
+1. What type of design/interface is visible?
+2. Color scheme and visual style
+3. Layout and composition quality
+4. Design suggestions or improvements (if any)
+
+If no design work visible, say "No design detected"."""
+        
+        else:
+            prompt = f"Analyze this screenshot with focus on: {focus}"
+        
+        print(f"   🤖 Analyzing with AI Vision (focus: {focus})...")
+        analysis = analyze_screenshot(image_path, prompt)
+        
+        if analysis and not analysis.startswith("Error"):
+            log_entry = {
+                "timestamp": datetime.now().isoformat(),
+                "focus": focus,
+                "analysis": analysis[:200],
+                "screenshot": image_path,
+                "type": "uploaded"
+            }
+            self.activity_log.append(log_entry)
+            
+            return {
+                "success": True,
+                "analysis": analysis,
+                "screenshot": image_path,
+                "timestamp": datetime.now().isoformat(),
+                "message": "✅ Screenshot analyzed successfully!"
+            }
+        else:
+            return {
+                "success": False,
+                "message": f"Failed to analyze screenshot: {analysis}"
+            }
+    
     def detect_screen_changes(self, interval: int = 5, duration: int = 30) -> dict:
         """
         Monitor screen for changes over time
