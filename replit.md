@@ -12,6 +12,10 @@ The AI Desktop Automation Controller is built with Python 3.11 and utilizes a mo
 ### UI/UX Decisions
 The primary interface is a GUI application (`gui_app.py`) featuring a modern, dark-themed, tabbed design (Version 2.0.0 - VATSAL Edition) with over 50 functions organized across 10 categories. Key UI elements include a 1400x900 window, Segoe UI fonts, a live clock, card-based design with gradient effects, quick-access buttons, and a real-time color-coded output console. It's built with `tkinter` and uses threading for non-blocking execution. A CLI interface (`main.py`) offers an interactive command-line alternative.
 
+**Feature Toggles:** The GUI header includes two prominent toggle buttons:
+- **🤖 VATSAL Mode Toggle:** Switches between VATSAL's sophisticated personality mode and standard direct responses
+- **🎮 Self-Operating Toggle:** Enables/disables the self-operating computer feature, allowing users to control when AI can autonomously control the desktop. When disabled, attempts to use self-operating features show a clear warning message guiding users to re-enable it from the header.
+
 The Advanced Smart Screen Monitor is integrated into the GUI's AI Features tab, providing one-click access to 8 specialized AI analysis modes and analytics reporting.
 
 The VATSAL AI Assistant (`vatsal_assistant.py`) is an intelligent AI companion with a sophisticated, British-inspired personality, contextual awareness, conversation memory, time-aware greetings, and proactive suggestions. A simple, powerful intelligent chatbot (`vatsal_ai.py`) and a streamlined, beginner-friendly Simple VATSAL Chatbot (`simple_chatbot.py`) powered by Google Gemini 2.5 Flash are also available. All three chatbot systems are unified in the GUI App under the "💬 VATSAL Chat" tab.
