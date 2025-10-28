@@ -37,6 +37,8 @@ from smart_break_suggester import SmartBreakSuggester
 from selenium_web_automator import SeleniumWebAutomator
 from vatsal_desktop_automator import VATSALAutomator
 from self_operating_computer import SelfOperatingComputer
+from self_operating_integrations import SelfOperatingIntegrationHub, SmartTaskRouter
+from command_executor_integration import EnhancedCommandExecutor, CommandInterceptor
 
 load_dotenv()
 
@@ -68,7 +70,19 @@ class AutomationControllerGUI:
         self.root.geometry("1400x900")
         self.root.configure(bg="#0f0f1e")
 
-        self.executor = CommandExecutor()
+        # Initialize base executor
+        self.base_executor = CommandExecutor()
+        
+        # Wrap with enhanced executor for self-operating integration
+        try:
+            self.executor = EnhancedCommandExecutor(self.base_executor)
+            self.command_interceptor = CommandInterceptor(self.executor)
+            print("✅ Enhanced Command Executor with self-operating integration initialized")
+        except Exception as e:
+            self.executor = self.base_executor  # Fallback to base
+            self.command_interceptor = None
+            print(f"⚠️ Using base executor (enhanced integration unavailable): {e}")
+        
         self.vatsal = create_vatsal_assistant()
         self.advanced_monitor = create_advanced_smart_screen_monitor()
         self.ai_monitor = create_ai_screen_monitoring_system()
@@ -133,6 +147,16 @@ class AutomationControllerGUI:
             self.soc_running = False
             self.soc_thread = None
             print(f"Self-Operating Computer initialization failed: {e}")
+        
+        # Initialize Self-Operating Integration Hub
+        try:
+            self.integration_hub = SelfOperatingIntegrationHub()
+            self.task_router = SmartTaskRouter(self.integration_hub)
+            print("✅ Self-Operating Integration Hub initialized")
+        except Exception as e:
+            self.integration_hub = None
+            self.task_router = None
+            print(f"Integration Hub initialization failed: {e}")
 
         self.vatsal_mode = True
         self.processing = False
