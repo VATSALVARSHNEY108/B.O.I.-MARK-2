@@ -25,7 +25,7 @@ class EnhancedGeminiChatbot:
             raise ValueError("GEMINI_API_KEY not found in environment variables")
         
         self.client = genai.Client(api_key=api_key)
-        self.model = "gemini-2.0-flash-exp"
+        self.model = "gemini-1.5-flash"
         self.conversation_history = []
         self.session_start = datetime.now()
         self.total_messages = 0

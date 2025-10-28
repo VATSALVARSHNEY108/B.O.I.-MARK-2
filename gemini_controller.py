@@ -594,7 +594,7 @@ For multi-step workflows, each step in steps array should have: {"action": "..."
     try:
         api_client = get_client()
         response = api_client.models.generate_content(
-            model="gemini-2.0-flash-exp",
+            model="gemini-1.5-flash",
             contents=[
                 types.Content(role="user", parts=[types.Part(text=f"Parse this command: {user_input}")])
             ],
@@ -637,7 +637,7 @@ def get_ai_suggestion(context: str) -> str:
     try:
         api_client = get_client()
         response = api_client.models.generate_content(
-            model="gemini-2.0-flash-exp",
+            model="gemini-1.5-flash",
             contents=f"As a desktop automation assistant, help with this: {context}"
         )
         return response.text or "No suggestion available"

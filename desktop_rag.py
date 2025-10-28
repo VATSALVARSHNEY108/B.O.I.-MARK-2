@@ -398,7 +398,7 @@ DESKTOP FILE CONTEXT:
 Provide a helpful, accurate answer based on the indexed files. If you need more information, suggest what additional indexing or searches might help. Be specific about file names, paths, and content when relevant."""
 
             response = client.models.generate_content(
-                model='gemini-2.0-flash-exp',
+                model='gemini-1.5-flash',
                 contents=prompt
             )
             
@@ -485,7 +485,7 @@ Provide:
 6. Potential cleanup opportunities"""
 
             response = client.models.generate_content(
-                model='gemini-2.0-flash-exp',
+                model='gemini-1.5-flash',
                 contents=prompt
             )
             
@@ -971,7 +971,7 @@ Provide:
 Be specific and practical."""
 
             response = client.models.generate_content(
-                model='gemini-2.0-flash-exp',
+                model='gemini-1.5-flash',
                 contents=prompt
             )
             

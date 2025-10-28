@@ -34,7 +34,7 @@ class VatsalAssistant:
             if api_key:
                 try:
                     self.client = genai.Client(api_key=api_key)
-                    self.model = "gemini-2.0-flash-exp"
+                    self.model = "gemini-1.5-flash"
                     self.ai_available = True
                 except Exception:
                     self.ai_available = False

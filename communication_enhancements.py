@@ -172,7 +172,7 @@ OPTION 3:
 Keep replies appropriate for {platform} and {context} tone."""
             
             response = client.models.generate_content(
-                model='gemini-2.0-flash-exp',
+                model='gemini-1.5-flash',
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     temperature=0.8,
@@ -595,7 +595,7 @@ Create a comprehensive summary with:
 Format your response clearly with these sections."""
             
             response = client.models.generate_content(
-                model='gemini-2.0-flash-exp',
+                model='gemini-1.5-flash',
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     temperature=0.5,
@@ -676,7 +676,7 @@ Format your response clearly with these sections."""
 Generate ONLY the reply text in {detected_lang}."""
             
             response = client.models.generate_content(
-                model='gemini-2.0-flash-exp',
+                model='gemini-1.5-flash',
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     temperature=0.7,
@@ -747,7 +747,7 @@ Format your response as JSON:
 }}"""
             
             response = client.models.generate_content(
-                model='gemini-2.0-flash-exp',
+                model='gemini-1.5-flash',
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     temperature=0.3,
