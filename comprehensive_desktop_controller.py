@@ -11,7 +11,13 @@ from datetime import datetime
 from google import genai
 from google.genai import types
 from gui_automation import GUIAutomation
-import pyautogui
+
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception:
+    PYAUTOGUI_AVAILABLE = False
+    pyautogui = None
 
 class ComprehensiveDesktopController:
     """

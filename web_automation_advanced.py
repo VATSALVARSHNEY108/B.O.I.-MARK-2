@@ -5,9 +5,15 @@ LeetCode, Codeforces, GitHub, StackOverflow, YouTube, etc.
 
 import time
 import webbrowser
-import pyautogui
 from typing import Dict, Any, Optional
 from gui_automation import GUIAutomation
+
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception:
+    PYAUTOGUI_AVAILABLE = False
+    pyautogui = None
 
 
 class WebsiteAutomator:

@@ -7,13 +7,19 @@ Additional automation capabilities - all executed locally
 import os
 import cv2
 import numpy as np
-import pyautogui
 import psutil
 import subprocess
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 from datetime import datetime
 import json
+
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception:
+    PYAUTOGUI_AVAILABLE = False
+    pyautogui = None
 
 
 class ScreenMonitor:

@@ -10,8 +10,14 @@ from google import genai
 from google.genai import types
 import os
 from gui_automation import GUIAutomation
-import pyautogui
 import webbrowser
+
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception:
+    PYAUTOGUI_AVAILABLE = False
+    pyautogui = None
 
 class IntelligentTaskAutomator:
     """

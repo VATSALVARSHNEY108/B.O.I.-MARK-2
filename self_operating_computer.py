@@ -7,12 +7,21 @@ Inspired by OthersideAI's self-operating-computer but powered by Google Gemini V
 import os
 import json
 import time
-import pyautogui
 import base64
 from pathlib import Path
 from datetime import datetime
 from typing import Optional, Dict, List, Tuple, Any, Callable
 from dotenv import load_dotenv
+
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+    # PyAutoGUI safety settings
+    pyautogui.FAILSAFE = True
+    pyautogui.PAUSE = 0.5
+except Exception:
+    PYAUTOGUI_AVAILABLE = False
+    pyautogui = None
 
 try:
     from google import genai
@@ -23,10 +32,6 @@ except ImportError:
     print("⚠️ google-genai not available")
 
 load_dotenv()
-
-# PyAutoGUI safety settings
-pyautogui.FAILSAFE = True
-pyautogui.PAUSE = 0.5
 
 class SelfOperatingComputer:
     """

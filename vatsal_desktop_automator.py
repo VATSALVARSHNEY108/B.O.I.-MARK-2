@@ -15,7 +15,6 @@ import json
 import time
 import psutil
 import subprocess
-import pyautogui
 import pyperclip
 from datetime import datetime
 from pathlib import Path
@@ -23,6 +22,13 @@ from typing import Dict, List, Optional, Tuple
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception:
+    PYAUTOGUI_AVAILABLE = False
+    pyautogui = None
 
 try:
     from vatsal_enhanced_modules import (
@@ -49,8 +55,9 @@ class VATSALAutomator:
         self.model = "gemini-2.0-flash"
         self.pending_confirmations = []
         
-        pyautogui.FAILSAFE = True
-        pyautogui.PAUSE = 0.5
+        if PYAUTOGUI_AVAILABLE and pyautogui:
+            pyautogui.FAILSAFE = True
+            pyautogui.PAUSE = 0.5
         
     def understand_command(self, user_input: str) -> Dict:
         """Use Gemini ONLY for understanding intent and task decomposition"""

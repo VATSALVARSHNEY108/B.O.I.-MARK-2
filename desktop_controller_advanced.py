@@ -3,13 +3,19 @@
 Full system control including windows, displays, keyboard macros, and system-wide automation
 """
 
-import pyautogui
 import psutil
 import os
 import json
 import subprocess
 import time
 from datetime import datetime
+
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception:
+    PYAUTOGUI_AVAILABLE = False
+    pyautogui = None
 
 class AdvancedDesktopController:
     """Comprehensive desktop control for complete system automation"""
@@ -19,8 +25,9 @@ class AdvancedDesktopController:
         self.macros = self.load_macros()
         
         # PyAutoGUI safety settings
-        pyautogui.FAILSAFE = True
-        pyautogui.PAUSE = 0.1
+        if PYAUTOGUI_AVAILABLE and pyautogui:
+            pyautogui.FAILSAFE = True
+            pyautogui.PAUSE = 0.1
     
     def load_macros(self):
         """Load saved macros"""
