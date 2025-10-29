@@ -28,7 +28,7 @@ The system includes a sophisticated AI assistant (`vatsal_assistant.py`) with co
 - **System Monitoring (`system_monitor.py`):** Monitors system resources.
 - **Advanced File Operations (`advanced_file_operations.py`):** Includes searching, duplicate finding, and organization.
 - **Workflow Management (`workflow_templates.py`):** For saving and reusing automation workflows.
-- **Voice Commander (`voice_commander.py`):** Comprehensive voice commanding system with push-to-talk, continuous listening, and active wake word detection ("Hey VATSAL", "VATSAL", "OK VATSAL", "Computer", "Hey Computer"). Integrated into GUI with dedicated controls and visual feedback.
+- **Voice Assistant (`voice_assistant.py`):** Interactive voice commanding system with wake word detection ("Oye", "Bhaiya", "Bhaisahb"). Features two-step interaction: wake word activation → acknowledgment ("Ji, kaho") → command processing. Supports both push-to-talk and continuous listening modes with customizable wake words. Uses Google Speech Recognition for voice input and pyttsx3 for text-to-speech responses.
 - **Productivity Tracking (`productivity_monitor.py`):** Monitors screen time and blocks distractions.
 - **AI Features Module (`ai_features.py`):** Provides 80+ AI capabilities across 17 categories.
 - **Data Analysis Suite (`data_analysis.py`):** Professional-grade toolkit for data import/export, cleaning, analysis, visualization, and machine learning.
