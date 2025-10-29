@@ -150,10 +150,14 @@ class VoiceCommander:
                     try:
                         self.tts_engine.say(text)
                         self.tts_engine.runAndWait()
+                        # Add delay after speaking to prevent microphone from hearing echo
+                        time.sleep(0.8)
                     except Exception as e:
                         print(f"❌ TTS Error: {str(e)}")
                     finally:
                         self.is_speaking = False
+                        # Additional safety delay after flag is cleared
+                        time.sleep(0.2)
                         
                 except Exception as e:
                     print(f"❌ TTS Worker Error: {str(e)}")
@@ -251,6 +255,9 @@ class VoiceCommander:
                             if self.is_speaking:
                                 time.sleep(0.1)
                                 continue
+                            
+                            # Small delay to ensure system's voice has finished playing
+                            time.sleep(0.1)
                             
                             audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=10)
                             
