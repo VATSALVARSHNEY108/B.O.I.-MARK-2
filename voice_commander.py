@@ -51,6 +51,15 @@ class VoiceCommander:
         # Human-like response variations
         self._init_response_variations()
         
+        # Advanced features
+        self.command_history = []  # Track all commands
+        self.max_history = 50  # Keep last 50 commands
+        self.conversation_mode = False  # Multi-turn conversation without wake word
+        self.conversation_timeout = 10  # Seconds before exiting conversation mode
+        self.last_command_time = None
+        self.voice_shortcuts = {}  # Custom voice macros
+        self.context = {}  # Store context between commands
+        
         # Start TTS worker thread
         self._start_tts_worker()
     
@@ -296,21 +305,19 @@ class VoiceCommander:
                                                 acknowledgment = self._get_random_response('wake_with_command')
                                                 self.speak(acknowledgment, interrupt=False)
                                                 
-                                                # Execute command via callback
-                                                try:
-                                                    self.command_callback(remaining)
-                                                    print(f"✅ Command sent to callback successfully")
-                                                except Exception as e:
-                                                    print(f"❌ Callback error: {str(e)}")
+                                                # Execute command via callback with advanced features
+                                                self._execute_advanced_command(remaining)
                                                 
                                                 # Reset - wait for wake word again
                                                 waiting_for_wake_word = True
                                             else:
-                                                # Just the wake word, no command yet
-                                                print(f"✅ Wake word detected! Listening for command...")
+                                                # Just the wake word, no command yet - enable conversation mode
+                                                print(f"✅ Wake word detected! Entering conversation mode...")
                                                 listening_response = self._get_random_response('wake_acknowledgment')
                                                 self.speak(listening_response, interrupt=False)
                                                 waiting_for_wake_word = False
+                                                # Enable conversation mode for easy follow-ups
+                                                self.enable_conversation_mode(timeout=15)
                                         else:
                                             # No wake word found
                                             print(f"⏭️  Skipped (no wake word): {command}")
@@ -319,15 +326,16 @@ class VoiceCommander:
                                         # Already activated by wake word, this is the command
                                         print(f"✅ Executing command: {command}")
                                         
-                                        # Execute command via callback
-                                        try:
-                                            self.command_callback(command.lower().strip())
-                                            print(f"✅ Command sent to callback successfully")
-                                        except Exception as e:
-                                            print(f"❌ Callback error: {str(e)}")
+                                        # Execute command with advanced features
+                                        self._execute_advanced_command(command.lower().strip())
                                         
-                                        # Reset - wait for wake word again
-                                        waiting_for_wake_word = True
+                                        # Check conversation timeout
+                                        if self.check_conversation_timeout():
+                                            print("💬 Conversation mode timed out")
+                                            waiting_for_wake_word = True
+                                        else:
+                                            # Stay in conversation mode if still active
+                                            waiting_for_wake_word = not self.conversation_mode
                                 else:
                                     # Wake word disabled, process all commands
                                     print(f"✅ Executing command: {command}")
@@ -427,8 +435,171 @@ class VoiceCommander:
             "speaking": self.is_speaking,
             "wake_word_enabled": self.wake_word_enabled,
             "wake_word": self.wake_word,
-            "wake_words": self.wake_words
+            "wake_words": self.wake_words,
+            "conversation_mode": self.conversation_mode,
+            "command_history_count": len(self.command_history),
+            "shortcuts_count": len(self.voice_shortcuts)
         }
+    
+    def add_to_history(self, command: str):
+        """Add command to history"""
+        import datetime
+        self.command_history.append({
+            'command': command,
+            'timestamp': datetime.datetime.now().isoformat()
+        })
+        # Keep only last max_history commands
+        if len(self.command_history) > self.max_history:
+            self.command_history.pop(0)
+        self.last_command_time = time.time()
+    
+    def get_command_history(self, limit: int = 10) -> list:
+        """Get recent command history"""
+        return self.command_history[-limit:]
+    
+    def clear_history(self):
+        """Clear command history"""
+        self.command_history = []
+        return {"success": True, "message": "Command history cleared"}
+    
+    def add_voice_shortcut(self, trigger: str, commands: list) -> dict:
+        """
+        Add a voice shortcut/macro
+        trigger: The phrase to trigger the shortcut
+        commands: List of commands to execute
+        """
+        trigger = trigger.lower().strip()
+        self.voice_shortcuts[trigger] = commands
+        return {
+            "success": True,
+            "message": f"Voice shortcut '{trigger}' created with {len(commands)} commands"
+        }
+    
+    def remove_voice_shortcut(self, trigger: str) -> dict:
+        """Remove a voice shortcut"""
+        trigger = trigger.lower().strip()
+        if trigger in self.voice_shortcuts:
+            del self.voice_shortcuts[trigger]
+            return {"success": True, "message": f"Shortcut '{trigger}' removed"}
+        return {"success": False, "message": f"Shortcut '{trigger}' not found"}
+    
+    def get_voice_shortcuts(self) -> dict:
+        """Get all voice shortcuts"""
+        return self.voice_shortcuts
+    
+    def enable_conversation_mode(self, timeout: int = 10):
+        """
+        Enable conversation mode - no wake word needed for follow-up commands
+        timeout: Seconds before automatically exiting conversation mode
+        """
+        self.conversation_mode = True
+        self.conversation_timeout = timeout
+        self.last_command_time = time.time()
+        return {
+            "success": True,
+            "message": f"Conversation mode enabled for {timeout} seconds"
+        }
+    
+    def disable_conversation_mode(self):
+        """Disable conversation mode"""
+        self.conversation_mode = False
+        return {"success": True, "message": "Conversation mode disabled"}
+    
+    def check_conversation_timeout(self):
+        """Check if conversation mode should timeout"""
+        if self.conversation_mode and self.last_command_time:
+            if time.time() - self.last_command_time > self.conversation_timeout:
+                self.conversation_mode = False
+                return True
+        return False
+    
+    def set_context(self, key: str, value):
+        """Store context information"""
+        self.context[key] = value
+    
+    def get_context(self, key: str, default=None):
+        """Retrieve context information"""
+        return self.context.get(key, default)
+    
+    def clear_context(self):
+        """Clear all context"""
+        self.context = {}
+        return {"success": True, "message": "Context cleared"}
+    
+    def process_command_chain(self, command: str) -> list:
+        """
+        Process chained commands (separated by 'and then' or 'and')
+        Returns list of individual commands
+        """
+        # Split by common chain separators
+        separators = [' and then ', ' then ', ' and also ', ' after that ']
+        commands = [command]
+        
+        for separator in separators:
+            new_commands = []
+            for cmd in commands:
+                if separator in cmd.lower():
+                    new_commands.extend(cmd.lower().split(separator))
+                else:
+                    new_commands.append(cmd)
+            commands = new_commands
+        
+        # Clean up commands
+        return [cmd.strip() for cmd in commands if cmd.strip()]
+    
+    def _execute_advanced_command(self, command: str):
+        """
+        Execute command with advanced features:
+        - Check for voice shortcuts
+        - Process command chains
+        - Add to history
+        - Execute via callback
+        """
+        command = command.strip()
+        
+        # Add to history
+        self.add_to_history(command)
+        
+        # Check if this is a voice shortcut
+        if command in self.voice_shortcuts:
+            print(f"🔗 Voice shortcut detected: '{command}'")
+            commands_to_execute = self.voice_shortcuts[command]
+            self.speak(f"Executing shortcut with {len(commands_to_execute)} commands")
+            
+            for cmd in commands_to_execute:
+                print(f"  ▶️ Shortcut command: {cmd}")
+                try:
+                    if self.command_callback:
+                        self.command_callback(cmd)
+                        time.sleep(0.5)  # Brief pause between chained commands
+                except Exception as e:
+                    print(f"❌ Callback error: {str(e)}")
+            return
+        
+        # Check for command chaining
+        chained_commands = self.process_command_chain(command)
+        
+        if len(chained_commands) > 1:
+            print(f"🔗 Command chain detected: {len(chained_commands)} commands")
+            self.speak(f"Executing {len(chained_commands)} commands")
+            
+            for i, cmd in enumerate(chained_commands, 1):
+                print(f"  {i}. {cmd}")
+                try:
+                    if self.command_callback:
+                        self.command_callback(cmd)
+                        if i < len(chained_commands):
+                            time.sleep(1)  # Pause between chained commands
+                except Exception as e:
+                    print(f"❌ Callback error on command {i}: {str(e)}")
+        else:
+            # Single command execution
+            try:
+                if self.command_callback:
+                    self.command_callback(command)
+                    print(f"✅ Command sent to callback successfully")
+            except Exception as e:
+                print(f"❌ Callback error: {str(e)}")
     
     def cleanup(self):
         """Clean up resources"""
