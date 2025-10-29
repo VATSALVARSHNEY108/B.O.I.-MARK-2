@@ -25,6 +25,12 @@ The system includes a sophisticated AI assistant (`vatsal_assistant.py`) with co
 - **Desktop RAG System (`desktop_rag.py`):** Indexes desktop files for semantic search and Q&A.
 - **Smart Automation & AI Module (`smart_automation.py`):** Provides 9 AI-powered features like Auto-Bug Fixer and Meeting Scheduler AI.
 - **Visual Chat Monitor (`visual_chat_monitor.py`):** AI-powered visual email/WhatsApp monitoring via real browser interface control.
+- **System Control (`system_control.py`):** System-level automation including:
+  - **Lock Screen:** Cross-platform screen locking for Windows, macOS, and Linux
+  - **Shutdown System:** Configurable delayed shutdown with cancellation support (default 10 seconds on Windows, 1 minute on Unix)
+  - **Restart System:** Configurable delayed restart with cancellation support
+  - **Power Action Management:** Automatic cancellation of previous power actions when scheduling new ones
+  - Brightness/volume control, microphone muting, sleep scheduling, and disk cleanup
 - **System Monitoring (`system_monitor.py`):** Monitors system resources.
 - **Advanced File Operations (`advanced_file_operations.py`):** Includes searching, duplicate finding, and organization.
 - **Workflow Management (`workflow_templates.py`):** For saving and reusing automation workflows.
