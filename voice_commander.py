@@ -145,6 +145,8 @@ class VoiceCommander:
         
         def listen_loop():
             """Continuous listening loop"""
+            waiting_for_wake_word = True
+            
             try:
                 with sr.Microphone() as source:
                     print("🎤 Continuous listening started")
@@ -172,32 +174,74 @@ class VoiceCommander:
                                 
                                 # Check for wake word if enabled
                                 if self.wake_word_enabled:
-                                    command_lower = command.lower()
-                                    wake_word_found = False
-                                    
-                                    # Check if any wake word is present
-                                    for wake_word in self.wake_words:
-                                        if wake_word in command_lower:
-                                            wake_word_found = True
-                                            # Remove wake word from command
-                                            command = command_lower.replace(wake_word, "").strip()
-                                            print(f"✅ Wake word detected! Executing: {command}")
-                                            break
-                                    
-                                    if not wake_word_found:
-                                        print(f"⏭️  Skipped (no wake word): {command}")
-                                        continue
-                                
-                                # Execute command via callback
-                                if command and command.strip():
-                                    print(f"▶️  Executing command via callback: {command}")
-                                    try:
-                                        self.command_callback(command)
-                                        print(f"✅ Command sent to callback successfully")
-                                    except Exception as e:
-                                        print(f"❌ Callback error: {str(e)}")
+                                    if waiting_for_wake_word:
+                                        # We're waiting for a wake word
+                                        command_lower = command.lower().strip()
+                                        wake_word_found = False
+                                        wake_word_used = None
+                                        remaining = ""
+                                        
+                                        # Check if any wake word is at the start
+                                        for wake_word in self.wake_words:
+                                            if command_lower.startswith(wake_word):
+                                                wake_word_found = True
+                                                wake_word_used = wake_word
+                                                # Extract everything after the wake word
+                                                remaining = command_lower[len(wake_word):].strip()
+                                                break
+                                        
+                                        if wake_word_found:
+                                            # Wake word detected!
+                                            if remaining:
+                                                # There's a command right after the wake word
+                                                print(f"✅ Wake word detected! Executing: {remaining}")
+                                                self.speak("Ji", interrupt=False)
+                                                
+                                                # Execute command via callback
+                                                try:
+                                                    self.command_callback(remaining)
+                                                    print(f"✅ Command sent to callback successfully")
+                                                except Exception as e:
+                                                    print(f"❌ Callback error: {str(e)}")
+                                                
+                                                # Reset - wait for wake word again
+                                                waiting_for_wake_word = True
+                                            else:
+                                                # Just the wake word, no command yet
+                                                print(f"✅ Wake word detected! Listening for command...")
+                                                self.speak("Ji, I am listening", interrupt=False)
+                                                waiting_for_wake_word = False
+                                        else:
+                                            # No wake word found
+                                            print(f"⏭️  Skipped (no wake word): {command}")
+                                            continue
+                                    else:
+                                        # Already activated by wake word, this is the command
+                                        print(f"✅ Executing command: {command}")
+                                        
+                                        # Execute command via callback
+                                        try:
+                                            self.command_callback(command.lower().strip())
+                                            print(f"✅ Command sent to callback successfully")
+                                        except Exception as e:
+                                            print(f"❌ Callback error: {str(e)}")
+                                        
+                                        # Reset - wait for wake word again
+                                        waiting_for_wake_word = True
+                                else:
+                                    # Wake word disabled, process all commands
+                                    print(f"✅ Executing command: {command}")
+                                    if command and command.strip():
+                                        try:
+                                            self.command_callback(command)
+                                            print(f"✅ Command sent to callback successfully")
+                                        except Exception as e:
+                                            print(f"❌ Callback error: {str(e)}")
                                 
                             except sr.UnknownValueError:
+                                # Couldn't understand - reset if we were waiting for a command
+                                if not waiting_for_wake_word:
+                                    waiting_for_wake_word = True
                                 continue
                             except sr.RequestError as e:
                                 print(f"❌ Recognition error: {str(e)}")
@@ -208,6 +252,9 @@ class VoiceCommander:
                             continue
                         except Exception as e:
                             print(f"❌ Listen error: {str(e)}")
+                            # Reset state on error
+                            if not waiting_for_wake_word:
+                                waiting_for_wake_word = True
                             continue
                             
             except Exception as e:
