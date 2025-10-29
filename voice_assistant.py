@@ -273,7 +273,7 @@ class VoiceAssistant:
 def create_voice_commands_list():
     """Return list of supported voice commands"""
     return """
-🎤 Voice Commands with Wake Words:
+🎤 Voice Commands with Wake Words (HIGH SENSITIVITY):
 
 Wake Words (say one of these first):
   • "Oye"
@@ -281,6 +281,12 @@ Wake Words (say one of these first):
   • "Bhaisahb"
 
 Usage: Say wake word → Wait for "Ji, kaho" → Give your command
+
+🎚️ Sensitivity Levels:
+  • LOW    - Fewer false triggers, louder voice needed
+  • MEDIUM - Balanced detection
+  • HIGH   - Very responsive (DEFAULT) ⭐
+  • ULTRA  - Maximum sensitivity, detects quiet speech
 
 System Control:
   • "Increase brightness"
@@ -311,6 +317,9 @@ Example:
   1. Say "Oye" or "Bhaiya" or "Bhaisahb"
   2. Wait for assistant to say "Ji, kaho"
   3. Give your command like "Open Chrome"
+  
+To change sensitivity:
+  assistant.set_sensitivity('ultra')  # ultra, high, medium, or low
 """
 
 if __name__ == "__main__":
