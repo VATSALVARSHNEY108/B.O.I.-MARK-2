@@ -304,74 +304,311 @@ class VoiceAssistant:
 """
     
     def process_voice_command(self, command):
-        """Process and execute voice commands"""
-        command = command.lower()
+        """Process and execute voice commands - MEGA ENHANCED with 50+ commands!"""
+        command = command.lower().strip()
         
-        # Check if command STARTS with "search" (not just contains it)
-        if command.strip().startswith("search"):
-            # Extract search query (remove "search" from beginning and optional "for" after it)
+        # ==================== PRODUCTIVITY (check first to avoid conflicts) ====================
+        if "timer" in command:
+            if "start" in command or "set" in command:
+                return "start_timer"
+            elif "stop" in command or "cancel" in command:
+                return "stop_timer"
+        
+        elif "stopwatch" in command:
+            if "start" in command:
+                return "start_stopwatch"
+            elif "stop" in command:
+                return "stop_stopwatch"
+        
+        elif "focus mode" in command or "do not disturb" in command:
+            if "enable" in command or "on" in command or "start" in command:
+                return "focus_mode_on"
+            else:
+                return "focus_mode_off"
+        
+        # ==================== TIME & DATE ====================
+        elif any(word in command for word in ["time", "clock"]) and "timer" not in command:
+            return "get_time"
+        
+        elif any(word in command for word in ["date", "today"]):
+            return "get_date"
+        
+        elif "day" in command and "is" in command:
+            return "get_day"
+        
+        # ==================== WEATHER ====================
+        elif "weather" in command:
+            if "forecast" in command or "tomorrow" in command:
+                return "weather_forecast"
+            else:
+                city = command.replace("weather", "").replace("in", "").strip()
+                return f"weather|{city}" if city else "weather"
+        
+        # ==================== CALCULATOR ====================
+        elif "calculate" in command or "compute" in command:
+            expr = command.replace("calculate", "").replace("compute", "").strip()
+            return f"calculate|{expr}"
+        
+        elif "plus" in command or "minus" in command or "times" in command or "divided by" in command:
+            return f"calculate|{command}"
+        
+        # ==================== NOTES & REMINDERS ====================
+        elif "note" in command or "write this" in command:
+            if "create" in command or "add" in command or "make" in command:
+                note_text = command.replace("create", "").replace("add", "").replace("make", "").replace("note", "").strip()
+                return f"create_note|{note_text}"
+            elif "show" in command or "list" in command or "read" in command:
+                return "list_notes"
+            elif "delete" in command or "remove" in command:
+                return "delete_note"
+        
+        elif "remind me" in command or "reminder" in command or "set alarm" in command:
+            reminder_text = command.replace("remind me", "").replace("reminder", "").replace("set alarm", "").strip()
+            return f"create_reminder|{reminder_text}"
+        
+        # ==================== CLIPBOARD ====================
+        elif "copy" in command and "clipboard" in command:
+            text = command.replace("copy", "").replace("clipboard", "").strip()
+            return f"copy_to_clipboard|{text}"
+        
+        elif "paste" in command or "clipboard" in command:
+            return "paste_from_clipboard"
+        
+        elif "clear clipboard" in command:
+            return "clear_clipboard"
+        
+        # ==================== SEARCH ====================
+        elif command.strip().startswith("search"):
             query = command.strip()
             if query.startswith("search "):
-                query = query[7:]  # Remove "search "
+                query = query[7:]
             elif query.startswith("search"):
-                query = query[6:]  # Remove "search"
+                query = query[6:]
             
-            # Remove optional "for " at the beginning of query
             query = query.strip()
             if query.startswith("for "):
-                query = query[4:]  # Remove "for "
+                query = query[4:]
             
             query = query.strip()
-            if query:
-                return f"web_search|{query}"
-            else:
-                return "web_search"
+            return f"web_search|{query}" if query else "web_search"
         
+        elif "google" in command and not "open" in command:
+            query = command.replace("google", "").strip()
+            return f"web_search|{query}"
+        
+        # ==================== APPS & PROGRAMS ====================
         elif "open" in command:
-            if "project folder" in command:
+            if "project folder" in command or "folder" in command:
                 return "open_folder|."
             elif "chrome" in command or "browser" in command:
                 return "open_app|chrome"
             elif "notepad" in command:
                 return "open_app|notepad"
+            elif "calculator" in command:
+                return "open_app|calc"
+            elif "paint" in command:
+                return "open_app|mspaint"
+            elif "word" in command:
+                return "open_app|winword"
+            elif "excel" in command:
+                return "open_app|excel"
+            elif "powerpoint" in command:
+                return "open_app|powerpnt"
+            elif "vscode" in command or "vs code" in command or "code" in command:
+                return "open_app|code"
+            elif "spotify" in command:
+                return "open_app|spotify"
+            elif "whatsapp" in command:
+                return "open_app|whatsapp"
+            elif "telegram" in command:
+                return "open_app|telegram"
+            elif "discord" in command:
+                return "open_app|discord"
+            elif "youtube" in command:
+                return "open_url|https://youtube.com"
+            elif "gmail" in command or "email" in command:
+                return "open_url|https://gmail.com"
+            elif "twitter" in command:
+                return "open_url|https://twitter.com"
+            elif "facebook" in command:
+                return "open_url|https://facebook.com"
+            elif "instagram" in command:
+                return "open_url|https://instagram.com"
         
+        elif "close" in command:
+            if "window" in command or "app" in command or "this" in command:
+                return "close_window"
+        
+        # ==================== MUSIC & MEDIA ====================
         elif "play" in command:
-            if "lofi" in command or "beats" in command:
+            if "spotify" in command:
+                song = command.replace("play", "").replace("spotify", "").replace("on", "").strip()
+                return f"play_spotify|{song}"
+            elif "youtube" in command:
+                song = command.replace("play", "").replace("youtube", "").replace("on", "").strip()
+                return f"play_youtube|{song}"
+            elif "lofi" in command or "beats" in command:
                 return "play_music|lofi beats"
             else:
                 song = command.replace("play", "").strip()
                 return f"play_music|{song}"
         
-        elif "send email" in command:
+        elif "pause" in command or "stop music" in command:
+            return "pause_music"
+        
+        elif "next song" in command or "skip" in command:
+            return "next_song"
+        
+        elif "previous song" in command:
+            return "previous_song"
+        
+        # ==================== COMMUNICATION ====================
+        elif "send email" in command or "email" in command:
             return "send_email|" + command
         
-        elif "screenshot" in command or "take a picture" in command:
+        elif "whatsapp" in command or "message" in command:
+            if "send" in command:
+                return "send_whatsapp|" + command
+        
+        # ==================== SYSTEM CONTROL ====================
+        elif "screenshot" in command or "take a picture" in command or "capture screen" in command:
             return "screenshot"
         
         elif "brightness" in command:
-            if "increase" in command or "up" in command:
+            if "increase" in command or "up" in command or "higher" in command:
                 return "brightness|80"
-            elif "decrease" in command or "down" in command:
+            elif "decrease" in command or "down" in command or "lower" in command:
                 return "brightness|30"
+            elif "max" in command or "full" in command:
+                return "brightness|100"
+            elif "min" in command:
+                return "brightness|10"
         
         elif "volume" in command:
             if "mute" in command:
                 return "mute"
             elif "unmute" in command:
                 return "unmute"
+            elif "up" in command or "increase" in command:
+                return "volume_up"
+            elif "down" in command or "decrease" in command:
+                return "volume_down"
+            elif "max" in command or "full" in command:
+                return "volume_max"
         
-        elif "system" in command and "report" in command:
-            return "system_report"
+        elif "shutdown" in command or "shut down" in command:
+            return "shutdown"
         
+        elif "restart" in command or "reboot" in command:
+            return "restart"
+        
+        elif "sleep" in command or "hibernate" in command:
+            if "cancel" in command:
+                return "cancel_sleep"
+            else:
+                return "sleep"
+        
+        elif "lock" in command and ("screen" in command or "computer" in command):
+            return "lock_screen"
+        
+        elif "log out" in command or "logout" in command or "sign out" in command:
+            return "logout"
+        
+        # ==================== WINDOW MANAGEMENT ====================
+        elif "minimize" in command:
+            if "all" in command:
+                return "minimize_all"
+            else:
+                return "minimize_window"
+        
+        elif "maximize" in command:
+            return "maximize_window"
+        
+        elif "switch window" in command or "switch app" in command:
+            return "switch_window"
+        
+        elif "show desktop" in command:
+            return "show_desktop"
+        
+        # ==================== FILE OPERATIONS ====================
         elif "organize" in command and "downloads" in command:
             return "organize_downloads"
+        
+        elif "clean" in command or "clear" in command:
+            if "temp" in command or "temporary" in command:
+                return "clear_temp"
+            elif "trash" in command or "recycle" in command:
+                return "empty_trash"
+            elif "cache" in command:
+                return "clear_cache"
+        
+        elif "empty" in command and ("trash" in command or "recycle" in command):
+            return "empty_trash"
+        
+        elif "disk space" in command or "storage" in command:
+            return "check_disk_space"
+        
+        
+        # ==================== INFORMATION ====================
+        elif "system" in command:
+            if "report" in command or "info" in command or "information" in command:
+                return "system_report"
+            elif "usage" in command or "performance" in command:
+                return "system_usage"
+        
+        elif "battery" in command:
+            return "battery_status"
+        
+        elif "wifi" in command or "network" in command:
+            if "password" in command or "pass" in command:
+                return "wifi_password"
+            else:
+                return "network_status"
+        
+        # ==================== FUN FEATURES (check before IP to avoid conflicts) ====================
+        elif ("flip" in command and "coin" in command) or "coin flip" in command:
+            return "flip_coin"
+        
+        elif "joke" in command or "funny" in command:
+            return "tell_joke"
+        
+        elif "quote" in command or "motivation" in command or "inspire" in command:
+            return "motivational_quote"
+        
+        elif "ip address" in command or (command.endswith("ip") or command.startswith("ip ") or " ip" in command):
+            return "get_ip"
+        
+        elif ("roll" in command and "dice" in command) or "dice" in command:
+            return "roll_dice"
+        
+        elif "random number" in command:
+            return "random_number"
+        
+        # ==================== TRANSLATION ====================
+        elif "translate" in command:
+            return "translate|" + command
+        
+        # ==================== NEWS ====================
+        elif "news" in command:
+            if "tech" in command or "technology" in command:
+                return "news|technology"
+            elif "sports" in command:
+                return "news|sports"
+            elif "business" in command:
+                return "news|business"
+            else:
+                return "news|general"
+        
+        # ==================== HELP ====================
+        elif "help" in command or "commands" in command or "what can you do" in command:
+            return "show_help"
         
         return None
 
 def create_voice_commands_list():
     """Return list of supported voice commands"""
     return """
-🎤 Voice Commands with Wake Words (ULTRA FAST SENSITIVITY):
+🎤 MEGA VOICE COMMAND LIST - 50+ Commands! (ULTRA FAST SENSITIVITY)
 
 Wake Words (say one of these first):
   Simple & Quick:
@@ -387,46 +624,150 @@ Wake Words (say one of these first):
 
 Usage: Say wake word → Wait for "Ji, kaho" → Give your command
 
-🎚️ Sensitivity Levels:
-  • LOW    - Fewer false triggers, louder voice needed
-  • MEDIUM - Balanced detection
-  • HIGH   - Very responsive (DEFAULT) ⭐
-  • ULTRA  - Maximum sensitivity, detects quiet speech
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-System Control:
-  • "Increase brightness"
-  • "Decrease brightness"
-  • "Mute microphone"
-  • "Unmute microphone"
-  • "Show system report"
+⏰ TIME & DATE:
+  • "What time is it?"
+  • "What's the date?"
+  • "What day is today?"
 
-File Management:
-  • "Open project folder"
-  • "Organize downloads"
-  • "Take a screenshot"
+🌤️ WEATHER:
+  • "Weather" / "Weather in [city]"
+  • "Weather forecast"
+  • "Weather tomorrow"
 
-Apps & Web:
-  • "Open Chrome"
+🔢 CALCULATOR:
+  • "Calculate 25 plus 37"
+  • "Compute 100 divided by 4"
+  • "50 times 3"
+
+📝 NOTES & REMINDERS:
+  • "Create note [text]"
+  • "Make note [text]"
+  • "List notes" / "Show notes"
+  • "Remind me to [task]"
+  • "Set alarm for [time]"
+
+📋 CLIPBOARD:
+  • "Copy to clipboard [text]"
+  • "Paste from clipboard"
+  • "Clear clipboard"
+
+🔍 SEARCH & WEB:
+  • "Search for [query]"
+  • "Google [query]"
+  • "Open YouTube"
+  • "Open Gmail"
+  • "Open Twitter/Facebook/Instagram"
+
+💻 OPEN APPS:
+  • "Open Chrome/Browser"
   • "Open Notepad"
-  • "Play lofi beats"
+  • "Open Calculator"
+  • "Open Paint"
+  • "Open Word/Excel/PowerPoint"
+  • "Open VS Code"
+  • "Open Spotify"
+  • "Open WhatsApp/Telegram/Discord"
+
+🪟 WINDOW MANAGEMENT:
+  • "Close window"
+  • "Minimize window"
+  • "Maximize window"
+  • "Minimize all"
+  • "Switch window"
+  • "Show desktop"
+
+🎵 MUSIC & MEDIA:
   • "Play [song name]"
+  • "Play lofi beats"
+  • "Play [song] on Spotify"
+  • "Play [song] on YouTube"
+  • "Pause music" / "Stop music"
+  • "Next song" / "Skip"
+  • "Previous song"
 
-Communication:
+💬 COMMUNICATION:
   • "Send email to [name]"
-  • "Text [name] that [message]"
+  • "Send WhatsApp message"
 
-Stop Listening:
+⚙️ SYSTEM CONTROL:
+  • "Screenshot" / "Capture screen"
+  • "Increase/Decrease brightness"
+  • "Max brightness" / "Min brightness"
+  • "Mute/Unmute volume"
+  • "Volume up/down"
+  • "Max volume"
+  • "Shutdown"
+  • "Restart/Reboot"
+  • "Sleep/Hibernate"
+  • "Cancel sleep"
+  • "Lock screen"
+  • "Log out/Sign out"
+
+📁 FILE OPERATIONS:
+  • "Organize downloads"
+  • "Clear temp files"
+  • "Empty trash/recycle bin"
+  • "Clear cache"
+  • "Check disk space"
+
+⏱️ PRODUCTIVITY:
+  • "Start timer"
+  • "Stop timer"
+  • "Start stopwatch"
+  • "Stop stopwatch"
+  • "Enable focus mode"
+  • "Disable focus mode"
+
+ℹ️ INFORMATION:
+  • "System report"
+  • "System usage/performance"
+  • "Battery status"
+  • "Network status"
+  • "WiFi password"
+  • "IP address"
+
+🎲 FUN FEATURES:
+  • "Tell a joke"
+  • "Motivational quote"
+  • "Flip a coin"
+  • "Roll dice"
+  • "Random number"
+
+📰 NEWS:
+  • "News" / "Latest news"
+  • "Tech news"
+  • "Sports news"
+  • "Business news"
+
+🌐 TRANSLATION:
+  • "Translate [text]"
+
+❓ HELP:
+  • "Help" / "Show commands"
+  • "What can you do?"
+
+🛑 STOP:
   • "Stop listening"
 
-Example:
-  1. Say "Bhai" (or even just "Bha" - any hint works!) ⚡
-  2. Wait for assistant to say "Ji, kaho"
-  3. Give your command like "Open Chrome"
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎚️ Sensitivity Levels:
+  • LOW    - Fewer false triggers
+  • MEDIUM - Balanced detection
+  • HIGH   - Very responsive
+  • ULTRA  - Maximum sensitivity (DEFAULT) ⭐
+
+Example Usage:
+  1. Say "Bhai" (or even "Bha") ⚡
+  2. Wait for "Ji, kaho"
+  3. Say "Open Chrome"
+  4. Done! ✅
+
+⚡ ULTRA FAST MODE: 50+ commands ready instantly!
   
-⚡ ULTRA FAST MODE: Even a hint of "bhai" sound will activate instantly!
-  
-To change sensitivity:
-  assistant.set_sensitivity('ultra')  # ultra, high, medium, or low
+Change sensitivity: assistant.set_sensitivity('ultra')
 """
 
 if __name__ == "__main__":
