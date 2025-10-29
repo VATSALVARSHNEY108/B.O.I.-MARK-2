@@ -16,6 +16,13 @@ class VoiceAssistant:
         self.wake_word_enabled = True
         self.wake_words = ["oye", "bhaiya", "bhaisahb"]
         
+        # Increase sensitivity settings
+        self.recognizer.energy_threshold = 300  # Lower = more sensitive (default ~4000)
+        self.recognizer.dynamic_energy_threshold = True  # Auto-adjust to ambient noise
+        self.recognizer.dynamic_energy_adjustment_damping = 0.15  # Faster adaptation
+        self.recognizer.dynamic_energy_ratio = 1.2  # Lower threshold for speech detection
+        self.recognizer.pause_threshold = 0.5  # Shorter pause before phrase ends (default 0.8)
+        
         self.engine.setProperty('rate', 150)
         self.engine.setProperty('volume', 0.9)
         
@@ -36,8 +43,10 @@ class VoiceAssistant:
         try:
             with sr.Microphone() as source:
                 print("🎤 Listening...")
-                self.recognizer.adjust_for_ambient_noise(source, duration=0.5)
-                audio = self.recognizer.listen(source, timeout=5)
+                # Quick ambient noise adjustment for faster response
+                self.recognizer.adjust_for_ambient_noise(source, duration=0.3)
+                # Increased timeout and phrase limit for better detection
+                audio = self.recognizer.listen(source, timeout=10, phrase_time_limit=8)
                 
                 print("🔄 Processing...")
                 command = self.recognizer.recognize_google(audio)
@@ -74,12 +83,16 @@ class VoiceAssistant:
                 else:
                     print("🎤 Voice assistant started (say 'stop listening' to quit)")
                 
-                self.recognizer.adjust_for_ambient_noise(source)
+                # Quick calibration for faster startup
+                print("📊 Calibrating microphone...")
+                self.recognizer.adjust_for_ambient_noise(source, duration=0.5)
+                print("✅ Ready! Listening...")
                 waiting_for_wake_word = self.wake_word_enabled
                 
                 while self.listening:
                     try:
-                        audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=5)
+                        # Increased sensitivity: longer timeout, longer phrase limit
+                        audio = self.recognizer.listen(source, timeout=2, phrase_time_limit=8)
                         command = self.recognizer.recognize_google(audio)
                         command_lower = command.lower()
                         
@@ -162,6 +175,55 @@ class VoiceAssistant:
     def get_wake_words(self):
         """Get list of current wake words"""
         return self.wake_words
+    
+    def set_sensitivity(self, level="high"):
+        """
+        Set microphone sensitivity level
+        
+        Args:
+            level: "low", "medium", "high", or "ultra"
+        """
+        if level == "low":
+            self.recognizer.energy_threshold = 2000
+            self.recognizer.pause_threshold = 1.0
+            self.recognizer.dynamic_energy_threshold = True
+            self.recognizer.dynamic_energy_ratio = 2.0  # Higher ratio = less sensitive
+            self.recognizer.dynamic_energy_adjustment_damping = 0.25
+            return "✅ Sensitivity set to LOW (fewer false triggers)"
+        elif level == "medium":
+            self.recognizer.energy_threshold = 1000
+            self.recognizer.pause_threshold = 0.8
+            self.recognizer.dynamic_energy_threshold = True
+            self.recognizer.dynamic_energy_ratio = 1.5
+            self.recognizer.dynamic_energy_adjustment_damping = 0.20
+            return "✅ Sensitivity set to MEDIUM (balanced)"
+        elif level == "high":
+            self.recognizer.energy_threshold = 300
+            self.recognizer.pause_threshold = 0.5
+            self.recognizer.dynamic_energy_threshold = True
+            self.recognizer.dynamic_energy_ratio = 1.2
+            self.recognizer.dynamic_energy_adjustment_damping = 0.15
+            return "✅ Sensitivity set to HIGH (very responsive)"
+        elif level == "ultra":
+            self.recognizer.energy_threshold = 100
+            self.recognizer.pause_threshold = 0.3
+            self.recognizer.dynamic_energy_threshold = True
+            self.recognizer.dynamic_energy_ratio = 1.1
+            self.recognizer.dynamic_energy_adjustment_damping = 0.10
+            return "✅ Sensitivity set to ULTRA HIGH (maximum sensitivity)"
+        else:
+            return "❌ Invalid level. Use: low, medium, high, or ultra"
+    
+    def get_sensitivity_info(self):
+        """Get current sensitivity settings"""
+        return f"""
+🎚️ Current Sensitivity Settings:
+  • Energy Threshold: {self.recognizer.energy_threshold}
+  • Pause Threshold: {self.recognizer.pause_threshold}
+  • Dynamic Adjustment: {self.recognizer.dynamic_energy_threshold}
+  • Dynamic Damping: {self.recognizer.dynamic_energy_adjustment_damping}
+  • Dynamic Ratio: {self.recognizer.dynamic_energy_ratio}
+"""
     
     def process_voice_command(self, command):
         """Process and execute voice commands"""
