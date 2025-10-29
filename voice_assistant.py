@@ -13,6 +13,8 @@ class VoiceAssistant:
         self.engine = pyttsx3.init()
         self.command_callback = command_callback
         self.listening = False
+        self.wake_word_enabled = True
+        self.wake_words = ["oye", "bhaiya", "bhaisahb"]
         
         self.engine.setProperty('rate', 150)
         self.engine.setProperty('volume', 0.9)
@@ -51,36 +53,77 @@ class VoiceAssistant:
         except Exception as e:
             return f"❌ Error: {str(e)}"
     
+    def check_for_wake_word(self, text):
+        """Check if the text contains any wake word"""
+        text_lower = text.lower()
+        for wake_word in self.wake_words:
+            if wake_word in text_lower:
+                return True
+        return False
+    
     def listen_continuous(self):
-        """Listen continuously for voice commands"""
+        """Listen continuously for voice commands with wake word detection"""
         self.listening = True
         
         def listen_thread():
             with sr.Microphone() as source:
-                print("🎤 Voice assistant started (say 'stop listening' to quit)")
+                if self.wake_word_enabled:
+                    wake_words_str = ", ".join(self.wake_words)
+                    print(f"🎤 Voice assistant started! Say wake word ({wake_words_str}) followed by your command")
+                    print("   Or say 'stop listening' to quit")
+                else:
+                    print("🎤 Voice assistant started (say 'stop listening' to quit)")
+                
                 self.recognizer.adjust_for_ambient_noise(source)
+                waiting_for_wake_word = self.wake_word_enabled
                 
                 while self.listening:
                     try:
                         audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=5)
                         command = self.recognizer.recognize_google(audio)
-                        print(f"✅ Command: {command}")
+                        command_lower = command.lower()
                         
-                        if "stop listening" in command.lower():
+                        if "stop listening" in command_lower:
                             self.listening = False
                             self.speak("Stopping voice assistant")
+                            print("👋 Voice assistant stopped")
                             break
                         
-                        if self.command_callback:
-                            response = self.command_callback(command)
-                            if response:
-                                self.speak(response)
+                        if self.wake_word_enabled:
+                            if waiting_for_wake_word:
+                                if self.check_for_wake_word(command):
+                                    print(f"👂 Wake word detected! Listening for command...")
+                                    self.speak("Ji, kaho")
+                                    waiting_for_wake_word = False
+                                else:
+                                    continue
+                            else:
+                                print(f"✅ Command: {command}")
+                                waiting_for_wake_word = True
+                                
+                                if self.command_callback:
+                                    response = self.command_callback(command)
+                                    if response:
+                                        self.speak(response)
+                                    else:
+                                        self.speak("Samajh nahi aaya. Phir se kaho")
+                        else:
+                            print(f"✅ Command: {command}")
+                            if self.command_callback:
+                                response = self.command_callback(command)
+                                if response:
+                                    self.speak(response)
+                                    
                     except sr.WaitTimeoutError:
                         continue
                     except sr.UnknownValueError:
+                        if not waiting_for_wake_word:
+                            waiting_for_wake_word = True
                         continue
                     except Exception as e:
                         print(f"❌ Error: {str(e)}")
+                        if not waiting_for_wake_word:
+                            waiting_for_wake_word = True
                         continue
         
         thread = threading.Thread(target=listen_thread, daemon=True)
@@ -91,6 +134,34 @@ class VoiceAssistant:
         """Stop continuous listening"""
         self.listening = False
         return "✅ Voice assistant stopped"
+    
+    def add_wake_word(self, wake_word):
+        """Add a custom wake word"""
+        if wake_word.lower() not in self.wake_words:
+            self.wake_words.append(wake_word.lower())
+            return f"✅ Wake word '{wake_word}' added"
+        return f"⚠️ Wake word '{wake_word}' already exists"
+    
+    def remove_wake_word(self, wake_word):
+        """Remove a wake word"""
+        if wake_word.lower() in self.wake_words:
+            self.wake_words.remove(wake_word.lower())
+            return f"✅ Wake word '{wake_word}' removed"
+        return f"⚠️ Wake word '{wake_word}' not found"
+    
+    def enable_wake_word(self):
+        """Enable wake word detection"""
+        self.wake_word_enabled = True
+        return "✅ Wake word detection enabled"
+    
+    def disable_wake_word(self):
+        """Disable wake word detection"""
+        self.wake_word_enabled = False
+        return "✅ Wake word detection disabled"
+    
+    def get_wake_words(self):
+        """Get list of current wake words"""
+        return self.wake_words
     
     def process_voice_command(self, command):
         """Process and execute voice commands"""
@@ -140,7 +211,14 @@ class VoiceAssistant:
 def create_voice_commands_list():
     """Return list of supported voice commands"""
     return """
-🎤 Voice Commands:
+🎤 Voice Commands with Wake Words:
+
+Wake Words (say one of these first):
+  • "Oye"
+  • "Bhaiya"
+  • "Bhaisahb"
+
+Usage: Say wake word → Wait for "Ji, kaho" → Give your command
 
 System Control:
   • "Increase brightness"
@@ -166,6 +244,11 @@ Communication:
 
 Stop Listening:
   • "Stop listening"
+
+Example:
+  1. Say "Oye" or "Bhaiya" or "Bhaisahb"
+  2. Wait for assistant to say "Ji, kaho"
+  3. Give your command like "Open Chrome"
 """
 
 if __name__ == "__main__":
