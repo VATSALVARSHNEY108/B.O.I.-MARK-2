@@ -24,9 +24,11 @@ echo [10] Create Multiple Folders
 echo [11] Backup Desktop
 echo [12] Delete Empty Folders
 echo [13] Show Folder Size
+echo [14] Lock Computer
+echo [15] Shutdown Computer
 echo [0] Exit
 echo.
-set /p choice="Enter your choice (0-13): "
+set /p choice="Enter your choice (0-15): "
 
 if "%choice%"=="1" goto CREATE_FOLDER
 if "%choice%"=="2" goto DELETE
@@ -41,6 +43,8 @@ if "%choice%"=="10" goto CREATE_MULTIPLE
 if "%choice%"=="11" goto BACKUP
 if "%choice%"=="12" goto DELETE_EMPTY
 if "%choice%"=="13" goto FOLDER_SIZE
+if "%choice%"=="14" goto LOCK_COMPUTER
+if "%choice%"=="15" goto SHUTDOWN_COMPUTER
 if "%choice%"=="0" goto EXIT
 goto MENU
 
@@ -319,6 +323,74 @@ if exist "%USERPROFILE%\Desktop\%foldername%" (
 echo.
 pause
 goto MENU
+
+:LOCK_COMPUTER
+cls
+echo ========================================
+echo         LOCK COMPUTER
+echo ========================================
+echo.
+set /p confirm="Are you sure you want to lock your computer? (Y/N): "
+if /i "!confirm!"=="Y" (
+    echo Locking computer...
+    rundll32.exe user32.dll,LockWorkStation
+) else (
+    echo Lock cancelled.
+    pause
+    goto MENU
+)
+
+:SHUTDOWN_COMPUTER
+cls
+echo ========================================
+echo       SHUTDOWN COMPUTER
+echo ========================================
+echo.
+echo WARNING: This will shut down your computer!
+echo.
+echo [1] Shutdown Immediately
+echo [2] Shutdown in 1 minute
+echo [3] Shutdown in 5 minutes
+echo [4] Shutdown in 10 minutes
+echo [5] Cancel Shutdown
+echo [0] Back to Menu
+echo.
+set /p shutdownchoice="Enter your choice (0-5): "
+
+if "%shutdownchoice%"=="1" (
+    echo Shutting down NOW...
+    shutdown /s /t 0
+)
+if "%shutdownchoice%"=="2" (
+    echo Computer will shutdown in 1 minute...
+    shutdown /s /t 60
+    echo To cancel, run: shutdown /a
+    pause
+    goto MENU
+)
+if "%shutdownchoice%"=="3" (
+    echo Computer will shutdown in 5 minutes...
+    shutdown /s /t 300
+    echo To cancel, run: shutdown /a
+    pause
+    goto MENU
+)
+if "%shutdownchoice%"=="4" (
+    echo Computer will shutdown in 10 minutes...
+    shutdown /s /t 600
+    echo To cancel, run: shutdown /a
+    pause
+    goto MENU
+)
+if "%shutdownchoice%"=="5" (
+    echo Cancelling any scheduled shutdown...
+    shutdown /a
+    echo.
+    pause
+    goto MENU
+)
+if "%shutdownchoice%"=="0" goto MENU
+goto SHUTDOWN_COMPUTER
 
 :EXIT
 cls
