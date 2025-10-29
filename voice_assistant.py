@@ -33,12 +33,29 @@ class VoiceAssistant:
         self.recognizer.pause_threshold = 0.3  # VERY short pause for instant response
         self.recognizer.operation_timeout = None  # No timeout for constant listening
         
+        # Voice settings
         self.engine.setProperty('rate', 150)
         self.engine.setProperty('volume', 0.9)
         
-        voices = self.engine.getProperty('voices')
-        if len(voices) > 1:
-            self.engine.setProperty('voice', voices[1].id)
+        # Get all available voices
+        self.available_voices = self.engine.getProperty('voices')
+        self.current_voice_type = "female"  # Default
+        
+        # Set default voice (female - usually index 1)
+        if len(self.available_voices) > 1:
+            self.engine.setProperty('voice', self.available_voices[1].id)
+        
+        # Voice presets for easy switching
+        self.voice_presets = {
+            "male": {"index": 0, "rate": 150, "pitch": 1.0},
+            "female": {"index": 1, "rate": 150, "pitch": 1.0},
+            "fast": {"index": 1, "rate": 250, "pitch": 1.2},
+            "slow": {"index": 0, "rate": 100, "pitch": 0.8},
+            "robot": {"index": 0, "rate": 180, "pitch": 0.5},
+            "chipmunk": {"index": 1, "rate": 300, "pitch": 2.0},
+            "deep": {"index": 0, "rate": 120, "pitch": 0.6},
+            "funny": {"index": 1, "rate": 200, "pitch": 1.5}
+        }
     
     def speak(self, text):
         """Convert text to speech"""
@@ -302,6 +319,88 @@ class VoiceAssistant:
   • Dynamic Damping: {self.recognizer.dynamic_energy_adjustment_damping}
   • Dynamic Ratio: {self.recognizer.dynamic_energy_ratio}
 """
+    
+    def list_voices(self):
+        """List all available voices"""
+        voice_info = "🎤 Available Voices:\n\n"
+        for i, voice in enumerate(self.available_voices):
+            voice_info += f"{i}. {voice.name}\n"
+            voice_info += f"   ID: {voice.id}\n"
+            voice_info += f"   Languages: {voice.languages}\n\n"
+        return voice_info
+    
+    def change_voice(self, voice_type="female"):
+        """Change voice to different styles"""
+        voice_type = voice_type.lower()
+        
+        if voice_type in self.voice_presets:
+            preset = self.voice_presets[voice_type]
+            
+            # Set voice by index (with bounds checking)
+            voice_index = min(preset["index"], len(self.available_voices) - 1)
+            self.engine.setProperty('voice', self.available_voices[voice_index].id)
+            
+            # Set speaking rate
+            self.engine.setProperty('rate', preset["rate"])
+            
+            # Note: Pitch control is not directly supported in pyttsx3
+            # But we can simulate it with rate changes
+            
+            self.current_voice_type = voice_type
+            
+            return f"✅ Voice changed to {voice_type.upper()} mode!"
+        
+        # Try to find voice by name/type in available voices
+        for i, voice in enumerate(self.available_voices):
+            if voice_type in voice.name.lower():
+                self.engine.setProperty('voice', voice.id)
+                self.current_voice_type = voice_type
+                return f"✅ Voice changed to: {voice.name}"
+        
+        return f"❌ Voice type '{voice_type}' not found. Available: {', '.join(self.voice_presets.keys())}"
+    
+    def get_current_voice(self):
+        """Get information about current voice"""
+        current = self.engine.getProperty('voice')
+        rate = self.engine.getProperty('rate')
+        volume = self.engine.getProperty('volume')
+        
+        for voice in self.available_voices:
+            if voice.id == current:
+                return f"""
+🎤 Current Voice Settings:
+  • Type: {self.current_voice_type.upper()}
+  • Name: {voice.name}
+  • Rate: {rate} words/min
+  • Volume: {int(volume * 100)}%
+"""
+        return "Current voice information not available"
+    
+    def set_voice_speed(self, speed="normal"):
+        """Change voice speaking speed"""
+        speed_map = {
+            "very slow": 80,
+            "slow": 120,
+            "normal": 150,
+            "fast": 200,
+            "very fast": 250,
+            "super fast": 300
+        }
+        
+        if speed in speed_map:
+            self.engine.setProperty('rate', speed_map[speed])
+            return f"✅ Voice speed set to {speed.upper()} ({speed_map[speed]} wpm)"
+        
+        return f"❌ Invalid speed. Options: {', '.join(speed_map.keys())}"
+    
+    def set_voice_volume(self, volume_percent=90):
+        """Set voice volume (0-100)"""
+        try:
+            volume = max(0, min(100, int(volume_percent))) / 100
+            self.engine.setProperty('volume', volume)
+            return f"✅ Voice volume set to {int(volume * 100)}%"
+        except:
+            return "❌ Invalid volume value"
     
     def process_voice_command(self, command):
         """Process and execute voice commands - MEGA ENHANCED with 50+ commands!"""
@@ -569,7 +668,7 @@ class VoiceAssistant:
         elif ("flip" in command and "coin" in command) or "coin flip" in command:
             return "flip_coin"
         
-        elif "joke" in command or "funny" in command:
+        elif "joke" in command or ("funny" in command and "voice" not in command and "change" not in command):
             return "tell_joke"
         
         elif "quote" in command or "motivation" in command or "inspire" in command:
@@ -598,6 +697,45 @@ class VoiceAssistant:
                 return "news|business"
             else:
                 return "news|general"
+        
+        # ==================== VOICE CONTROL ====================
+        elif "change voice" in command or "switch voice" in command:
+            if "male" in command:
+                return "change_voice|male"
+            elif "female" in command:
+                return "change_voice|female"
+            elif "robot" in command:
+                return "change_voice|robot"
+            elif "chipmunk" in command:
+                return "change_voice|chipmunk"
+            elif "deep" in command:
+                return "change_voice|deep"
+            elif "funny" in command or "fun" in command:
+                return "change_voice|funny"
+            elif "fast" in command:
+                return "change_voice|fast"
+            elif "slow" in command:
+                return "change_voice|slow"
+            else:
+                return "change_voice|female"
+        
+        elif "speak" in command and ("faster" in command or "slower" in command or "speed" in command):
+            if "faster" in command or "fast" in command:
+                return "voice_speed|fast"
+            elif "slower" in command or "slow" in command:
+                return "voice_speed|slow"
+            elif "very fast" in command or "super fast" in command:
+                return "voice_speed|very fast"
+            elif "very slow" in command:
+                return "voice_speed|very slow"
+            else:
+                return "voice_speed|normal"
+        
+        elif "list voices" in command or "show voices" in command or "available voices" in command:
+            return "list_voices"
+        
+        elif "current voice" in command or "voice info" in command:
+            return "current_voice"
         
         # ==================== HELP ====================
         elif "help" in command or "commands" in command or "what can you do" in command:
@@ -743,6 +881,20 @@ Usage: Say wake word → Wait for "Ji, kaho" → Give your command
 
 🌐 TRANSLATION:
   • "Translate [text]"
+
+🎤 VOICE CONTROL (NEW!):
+  • "Change voice to male"
+  • "Change voice to female"
+  • "Change voice to robot"
+  • "Change voice to chipmunk" 🐿️
+  • "Change voice to deep"
+  • "Change voice to funny"
+  • "Speak faster"
+  • "Speak slower"
+  • "Speak very fast" / "Super fast"
+  • "Speak very slow"
+  • "List voices"
+  • "Current voice"
 
 ❓ HELP:
   • "Help" / "Show commands"
