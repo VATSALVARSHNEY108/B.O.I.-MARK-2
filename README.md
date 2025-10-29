@@ -46,7 +46,10 @@ An intelligent AI desktop automation application powered by Google Gemini AI wit
 - Monitor system info (CPU, RAM, disk usage)
 - Check battery status
 - Control brightness and volume
-- Sleep, shutdown, and restart system
+- **Lock screen** - Secure your computer instantly
+- **Shutdown system** - Power off with configurable delay
+- **Restart system** - Reboot with configurable delay
+- Sleep and hibernate options
 - Manage running processes
 
 ### 📁 **File Management**

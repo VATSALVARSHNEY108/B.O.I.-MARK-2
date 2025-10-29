@@ -15,6 +15,7 @@ class SystemController:
     def __init__(self):
         self.os = platform.system()
         self.config_file = "system_config.json"
+        self.shutdown_process = None
         self.load_config()
     
     def load_config(self):
@@ -233,6 +234,125 @@ class SystemController:
         self.config["auto_cleanup"]["disk_limit"] = limit_percent
         self.save_config()
         return f"✅ Auto-cleanup enabled at {limit_percent}% disk usage"
+    
+    def lock_screen(self):
+        """Lock the computer screen"""
+        try:
+            if self.os == "Windows":
+                subprocess.run("rundll32.exe user32.dll,LockWorkStation", shell=True, check=False)
+                return "🔒 Screen locked"
+            elif self.os == "Darwin":
+                subprocess.run(["/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession", "-suspend"], check=False)
+                return "🔒 Screen locked"
+            elif self.os == "Linux":
+                try:
+                    subprocess.run(["xdg-screensaver", "lock"], check=True)
+                    return "🔒 Screen locked"
+                except:
+                    try:
+                        subprocess.run(["gnome-screensaver-command", "--lock"], check=True)
+                        return "🔒 Screen locked"
+                    except:
+                        try:
+                            subprocess.run(["loginctl", "lock-session"], check=True)
+                            return "🔒 Screen locked"
+                        except:
+                            return "❌ Failed to lock screen. Please lock manually."
+        except Exception as e:
+            return f"❌ Failed to lock screen: {str(e)}"
+    
+    def shutdown_system(self, delay_seconds=10):
+        """Shutdown the computer with optional delay"""
+        try:
+            if self.os in ["Darwin", "Linux"]:
+                if self.shutdown_process and self.shutdown_process.poll() is None:
+                    self.shutdown_process.terminate()
+                    self.shutdown_process = None
+            
+            if self.os == "Windows":
+                subprocess.run("shutdown /a", shell=True, check=False)
+                subprocess.Popen(f'shutdown /s /t {delay_seconds}', shell=True)
+                if delay_seconds > 0:
+                    return f"⚠️ Computer will shutdown in {delay_seconds} seconds. Run 'cancel shutdown' to abort."
+                else:
+                    return "⚠️ Shutting down computer now..."
+            elif self.os == "Darwin":
+                if delay_seconds > 0:
+                    self.shutdown_process = subprocess.Popen(
+                        f'sleep {delay_seconds} && sudo shutdown -h now',
+                        shell=True
+                    )
+                    return f"⚠️ Computer will shutdown in {delay_seconds} seconds. Run 'cancel shutdown' to abort."
+                else:
+                    subprocess.Popen(['sudo', 'shutdown', '-h', 'now'])
+                    return "⚠️ Shutting down computer now..."
+            elif self.os == "Linux":
+                if delay_seconds > 0:
+                    self.shutdown_process = subprocess.Popen(
+                        f'sleep {delay_seconds} && sudo systemctl poweroff',
+                        shell=True
+                    )
+                    return f"⚠️ Computer will shutdown in {delay_seconds} seconds. Run 'cancel shutdown' to abort."
+                else:
+                    subprocess.Popen(['sudo', 'systemctl', 'poweroff'])
+                    return "⚠️ Shutting down computer now..."
+        except Exception as e:
+            return f"❌ Failed to shutdown: {str(e)}"
+    
+    def restart_system(self, delay_seconds=10):
+        """Restart the computer with optional delay"""
+        try:
+            if self.os in ["Darwin", "Linux"]:
+                if self.shutdown_process and self.shutdown_process.poll() is None:
+                    self.shutdown_process.terminate()
+                    self.shutdown_process = None
+            
+            if self.os == "Windows":
+                subprocess.run("shutdown /a", shell=True, check=False)
+                subprocess.Popen(f'shutdown /r /t {delay_seconds}', shell=True)
+                if delay_seconds > 0:
+                    return f"🔄 Computer will restart in {delay_seconds} seconds. Run 'cancel shutdown' to abort."
+                else:
+                    return "🔄 Restarting computer now..."
+            elif self.os == "Darwin":
+                if delay_seconds > 0:
+                    self.shutdown_process = subprocess.Popen(
+                        f'sleep {delay_seconds} && sudo shutdown -r now',
+                        shell=True
+                    )
+                    return f"🔄 Computer will restart in {delay_seconds} seconds. Run 'cancel shutdown' to abort."
+                else:
+                    subprocess.Popen(['sudo', 'shutdown', '-r', 'now'])
+                    return "🔄 Restarting computer now..."
+            elif self.os == "Linux":
+                if delay_seconds > 0:
+                    self.shutdown_process = subprocess.Popen(
+                        f'sleep {delay_seconds} && sudo systemctl reboot',
+                        shell=True
+                    )
+                    return f"🔄 Computer will restart in {delay_seconds} seconds. Run 'cancel shutdown' to abort."
+                else:
+                    subprocess.Popen(['sudo', 'systemctl', 'reboot'])
+                    return "🔄 Restarting computer now..."
+        except Exception as e:
+            return f"❌ Failed to restart: {str(e)}"
+    
+    def cancel_shutdown_restart(self):
+        """Cancel scheduled shutdown or restart"""
+        try:
+            if self.os == "Windows":
+                subprocess.run("shutdown /a", shell=True, check=False)
+                return "✅ Shutdown/restart cancelled"
+            elif self.os in ["Darwin", "Linux"]:
+                if self.shutdown_process and self.shutdown_process.poll() is None:
+                    self.shutdown_process.terminate()
+                    self.shutdown_process = None
+                    return "✅ Shutdown/restart cancelled"
+                else:
+                    subprocess.run("sudo killall sleep", shell=True, check=False)
+                    return "✅ Attempted to cancel shutdown/restart"
+        except Exception as e:
+            return f"❌ Failed to cancel: {str(e)}"
 
 if __name__ == "__main__":
     controller = SystemController()

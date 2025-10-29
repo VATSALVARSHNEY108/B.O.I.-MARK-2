@@ -171,6 +171,10 @@ SYSTEM CONTROL:
 - set_brightness: Set screen brightness (parameters: level [0-100])
 - auto_brightness: Auto-adjust brightness based on time of day (parameters: none)
 - schedule_sleep: Schedule PC sleep (parameters: time [HH:MM format])
+- lock_screen: Lock the computer screen (parameters: none)
+- shutdown_system: Shutdown computer (parameters: delay_seconds [optional, default: 10])
+- restart_system: Restart computer (parameters: delay_seconds [optional, default: 10])
+- cancel_shutdown: Cancel scheduled shutdown or restart (parameters: none)
 - clear_temp_files: Clear temporary files and cache (parameters: none)
 - check_disk_space: Check disk space and auto-cleanup if needed (parameters: none)
 

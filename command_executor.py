@@ -1335,6 +1335,24 @@ class CommandExecutor:
                 result = self.system_control.schedule_sleep(time_str)
                 return {"success": True, "message": result}
 
+            elif action == "lock_screen":
+                result = self.system_control.lock_screen()
+                return {"success": True, "message": result}
+
+            elif action == "shutdown_system":
+                delay_seconds = parameters.get("delay_seconds", 10)
+                result = self.system_control.shutdown_system(delay_seconds)
+                return {"success": True, "message": result}
+
+            elif action == "restart_system":
+                delay_seconds = parameters.get("delay_seconds", 10)
+                result = self.system_control.restart_system(delay_seconds)
+                return {"success": True, "message": result}
+
+            elif action == "cancel_shutdown":
+                result = self.system_control.cancel_shutdown_restart()
+                return {"success": True, "message": result}
+
             elif action == "clear_temp_files":
                 result = self.system_control.clear_temp_files()
                 return {"success": True, "message": result}

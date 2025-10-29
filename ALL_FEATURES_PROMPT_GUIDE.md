@@ -238,6 +238,12 @@
 - "Unmute microphone"
 - "Sleep computer"
 - "Lock computer"
+- "Lock screen"
+- "Shutdown computer"
+- "Shutdown system"
+- "Restart computer"
+- "Restart system"
+- "Cancel shutdown"
 - "Schedule sleep in 30 minutes"
 
 **Cleanup:**
