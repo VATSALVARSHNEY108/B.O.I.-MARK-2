@@ -1,6 +1,6 @@
 """
 Enhanced Voice Commander for VATSAL
-Provides voice input and speech output for all VATSAL commands
+Provides voice input and speech output for all VATSAL commands with human-like personality
 """
 
 import speech_recognition as sr
@@ -8,7 +8,9 @@ import pyttsx3
 import threading
 import queue
 import time
+import random
 from typing import Callable, Optional
+from datetime import datetime
 
 class VoiceCommander:
     """Enhanced voice commanding with speech recognition and text-to-speech"""
@@ -46,8 +48,94 @@ class VoiceCommander:
         self.wake_word_enabled = True  # Enabled by default
         self.wake_word = "vatsal"  # Primary wake word for display
         
+        # Human-like response variations
+        self._init_response_variations()
+        
         # Start TTS worker thread
         self._start_tts_worker()
+    
+    def _init_response_variations(self):
+        """Initialize human-like response variations for natural conversation"""
+        self.responses = {
+            'wake_acknowledgment': [
+                "Ji, I am listening",
+                "Yes, how can I help?",
+                "I'm here, what do you need?",
+                "At your service",
+                "Ready, what's on your mind?",
+                "Ji, kaho",
+                "Yes sir, listening",
+                "I'm all ears"
+            ],
+            'wake_with_command': [
+                "Ji",
+                "On it",
+                "Right away",
+                "Got it",
+                "Sure thing",
+                "Okay"
+            ],
+            'activation': [
+                "Voice commanding activated. Ready to assist you",
+                "Hello! Voice assistant is online",
+                "I'm ready to help. Just say my name",
+                "Voice system active. How may I assist?",
+                "All systems online. At your service"
+            ],
+            'deactivation': [
+                "Voice commanding deactivated. See you soon",
+                "Going offline. Call me when you need me",
+                "Signing off. Have a great day",
+                "Voice assistant disabled. Until next time",
+                "Standby mode activated"
+            ],
+            'error': [
+                "Sorry, I didn't catch that",
+                "Could you repeat that please?",
+                "I didn't quite understand",
+                "Pardon me, say that again?",
+                "My apologies, I missed that"
+            ],
+            'greeting_morning': [
+                "Good morning sir. Ready to make today productive",
+                "Morning! Let's get things done today",
+                "Good morning. What shall we accomplish?"
+            ],
+            'greeting_afternoon': [
+                "Good afternoon. How can I assist you?",
+                "Afternoon! Ready when you are",
+                "Good afternoon sir. At your service"
+            ],
+            'greeting_evening': [
+                "Good evening. Hope you had a productive day",
+                "Evening! Still working hard I see",
+                "Good evening sir. What can I do for you?"
+            ],
+            'greeting_night': [
+                "Burning the midnight oil? I'm here to help",
+                "Late night session. Let's get it done",
+                "Good evening. Even at this hour, I'm ready"
+            ]
+        }
+    
+    def _get_random_response(self, category: str) -> str:
+        """Get a random response from the specified category"""
+        if category in self.responses:
+            return random.choice(self.responses[category])
+        return "Ready"
+    
+    def _get_time_based_greeting(self) -> str:
+        """Get greeting based on current time of day"""
+        hour = datetime.now().hour
+        
+        if 5 <= hour < 12:
+            return self._get_random_response('greeting_morning')
+        elif 12 <= hour < 17:
+            return self._get_random_response('greeting_afternoon')
+        elif 17 <= hour < 22:
+            return self._get_random_response('greeting_evening')
+        else:
+            return self._get_random_response('greeting_night')
     
     def _start_tts_worker(self):
         """Start background thread for text-to-speech"""
@@ -152,7 +240,8 @@ class VoiceCommander:
             try:
                 with sr.Microphone() as source:
                     print("🎤 Continuous listening started")
-                    self.speak("Voice commanding activated", interrupt=True)
+                    greeting = self._get_random_response('activation')
+                    self.speak(greeting, interrupt=True)
                     
                     self.recognizer.adjust_for_ambient_noise(source, duration=1)
                     
@@ -197,7 +286,8 @@ class VoiceCommander:
                                             if remaining:
                                                 # There's a command right after the wake word
                                                 print(f"✅ Wake word detected! Executing: {remaining}")
-                                                self.speak("Ji", interrupt=False)
+                                                acknowledgment = self._get_random_response('wake_with_command')
+                                                self.speak(acknowledgment, interrupt=False)
                                                 
                                                 # Execute command via callback
                                                 try:
@@ -211,7 +301,8 @@ class VoiceCommander:
                                             else:
                                                 # Just the wake word, no command yet
                                                 print(f"✅ Wake word detected! Listening for command...")
-                                                self.speak("Ji, I am listening", interrupt=False)
+                                                listening_response = self._get_random_response('wake_acknowledgment')
+                                                self.speak(listening_response, interrupt=False)
                                                 waiting_for_wake_word = False
                                         else:
                                             # No wake word found
@@ -274,7 +365,8 @@ class VoiceCommander:
             return {"success": False, "message": "Not currently listening"}
         
         self.continuous_listening = False
-        self.speak("Voice commanding deactivated", interrupt=True)
+        farewell = self._get_random_response('deactivation')
+        self.speak(farewell, interrupt=True)
         
         return {"success": True, "message": "Continuous listening stopped"}
     
