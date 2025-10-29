@@ -27,10 +27,12 @@ class VoiceCommander:
         if len(voices) > 1:
             self.tts_engine.setProperty('voice', voices[1].id)
         
-        # Recognition settings
-        self.recognizer.energy_threshold = 4000
+        # Recognition settings - HIGH SENSITIVITY for better wake word detection
+        self.recognizer.energy_threshold = 300  # Lower = more sensitive (default is 4000)
         self.recognizer.dynamic_energy_threshold = True
-        self.recognizer.pause_threshold = 0.8
+        self.recognizer.dynamic_energy_adjustment_damping = 0.15  # Faster adaptation to noise
+        self.recognizer.dynamic_energy_ratio = 1.2  # Lower threshold for speech detection
+        self.recognizer.pause_threshold = 0.5  # Shorter pause (faster response)
         
         # State management
         self.continuous_listening = False
