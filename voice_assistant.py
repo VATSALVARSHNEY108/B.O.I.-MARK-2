@@ -15,16 +15,23 @@ class VoiceAssistant:
         self.listening = False
         self.wake_word_enabled = True
         # Simple and easy wake words for quick activation
-        self.wake_words = ["hello", "open", "search", "oye", "bhaiya", "bhaisahb"]
+        self.wake_words = ["hello", "open", "search", "oye", "bhai", "bhaiya", "bhaisahb"]
         # Action verbs that should be kept in the command
         self.action_wake_words = ["open", "search"]
         
-        # Increase sensitivity settings
-        self.recognizer.energy_threshold = 300  # Lower = more sensitive (default ~4000)
+        # Phonetic variations and hints for ultra-fast "bhai" detection
+        self.bhai_variations = [
+            "bhai", "bhaiya", "bhaisahb", "by", "bye", "buy", 
+            "bha", "bhay", "bae", "bi", "b", "vai", "why"
+        ]
+        
+        # ULTRA sensitivity settings for instant "bhai" detection
+        self.recognizer.energy_threshold = 100  # ULTRA LOW = maximum sensitivity
         self.recognizer.dynamic_energy_threshold = True  # Auto-adjust to ambient noise
-        self.recognizer.dynamic_energy_adjustment_damping = 0.15  # Faster adaptation
-        self.recognizer.dynamic_energy_ratio = 1.2  # Lower threshold for speech detection
-        self.recognizer.pause_threshold = 0.5  # Shorter pause before phrase ends (default 0.8)
+        self.recognizer.dynamic_energy_adjustment_damping = 0.08  # VERY fast adaptation
+        self.recognizer.dynamic_energy_ratio = 1.05  # Detect even slightest sound
+        self.recognizer.pause_threshold = 0.3  # VERY short pause for instant response
+        self.recognizer.operation_timeout = None  # No timeout for constant listening
         
         self.engine.setProperty('rate', 150)
         self.engine.setProperty('volume', 0.9)
@@ -66,9 +73,15 @@ class VoiceAssistant:
             return f"❌ Error: {str(e)}"
     
     def check_for_wake_word(self, text):
-        """Check if the text starts with any wake word (as a standalone word)"""
+        """Check if the text starts with any wake word - ULTRA FAST for 'bhai' detection"""
         text_lower = text.lower().strip()
         words = text_lower.split()
+        
+        # INSTANT ACTIVATION: Check for ANY "bhai" variation (even hints!)
+        # This catches "bhai", "bha", "bye", "by", etc.
+        for variation in self.bhai_variations:
+            if variation in text_lower:
+                return True
         
         # Check if the first word matches any wake word
         if words and words[0] in self.wake_words:
@@ -80,6 +93,30 @@ class VoiceAssistant:
             if text_lower == wake_word or text_lower.startswith(wake_word + " "):
                 return True
         
+        # Fuzzy matching for partial sounds
+        if words:
+            first_word = words[0]
+            # Check if first word is similar to any wake word (partial match)
+            for wake_word in self.wake_words:
+                if len(first_word) >= 2 and (
+                    wake_word.startswith(first_word) or 
+                    first_word in wake_word or
+                    self._sounds_similar(first_word, wake_word)
+                ):
+                    return True
+        
+        return False
+    
+    def _sounds_similar(self, word1, word2):
+        """Check if two words sound similar (simple phonetic matching)"""
+        # Quick phonetic similarity check
+        if len(word1) < 2 or len(word2) < 2:
+            return False
+        
+        # Check if they share at least 2 characters in sequence
+        for i in range(len(word1) - 1):
+            if word1[i:i+2] in word2:
+                return True
         return False
     
     def listen_continuous(self):
@@ -95,16 +132,16 @@ class VoiceAssistant:
                 else:
                     print("🎤 Voice assistant started (say 'stop listening' to quit)")
                 
-                # Quick calibration for faster startup
-                print("📊 Calibrating microphone...")
-                self.recognizer.adjust_for_ambient_noise(source, duration=0.5)
-                print("✅ Ready! Listening...")
+                # ULTRA QUICK calibration for instant startup
+                print("📊 Calibrating microphone (ULTRA FAST mode)...")
+                self.recognizer.adjust_for_ambient_noise(source, duration=0.2)
+                print("✅ Ready! Listening... (Say 'bhai' or any hint of it to activate!)")
                 waiting_for_wake_word = self.wake_word_enabled
                 
                 while self.listening:
                     try:
-                        # Increased sensitivity: longer timeout, longer phrase limit
-                        audio = self.recognizer.listen(source, timeout=2, phrase_time_limit=8)
+                        # ULTRA FAST: Very short timeout and phrase limit for instant "bhai" detection
+                        audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=3)
                         command = self.recognizer.recognize_google(audio)
                         command_lower = command.lower()
                         
@@ -334,7 +371,7 @@ class VoiceAssistant:
 def create_voice_commands_list():
     """Return list of supported voice commands"""
     return """
-🎤 Voice Commands with Wake Words (HIGH SENSITIVITY):
+🎤 Voice Commands with Wake Words (ULTRA FAST SENSITIVITY):
 
 Wake Words (say one of these first):
   Simple & Quick:
@@ -342,10 +379,11 @@ Wake Words (say one of these first):
   • "Open"
   • "Search"
   
-  Hindi:
-  • "Oye"
+  Hindi (ULTRA FAST - even hints activate!):
+  • "Bhai" ⚡ (Detects: bhai, bha, bye, by, etc.)
   • "Bhaiya"
   • "Bhaisahb"
+  • "Oye"
 
 Usage: Say wake word → Wait for "Ji, kaho" → Give your command
 
@@ -381,9 +419,11 @@ Stop Listening:
   • "Stop listening"
 
 Example:
-  1. Say "Oye" or "Bhaiya" or "Bhaisahb"
+  1. Say "Bhai" (or even just "Bha" - any hint works!) ⚡
   2. Wait for assistant to say "Ji, kaho"
   3. Give your command like "Open Chrome"
+  
+⚡ ULTRA FAST MODE: Even a hint of "bhai" sound will activate instantly!
   
 To change sensitivity:
   assistant.set_sensitivity('ultra')  # ultra, high, medium, or low
