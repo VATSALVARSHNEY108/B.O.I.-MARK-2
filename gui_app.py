@@ -166,12 +166,12 @@ class AutomationControllerGUI:
         self.vatsal_conversation_active = False
         self.active_chatbot = "simple"
 
-        # Initialize Voice Commander
+        # Initialize Voice Commander with callback
         try:
-            self.voice_commander = create_voice_commander()
+            self.voice_commander = create_voice_commander(command_callback=self.handle_voice_command)
             self.voice_listening = False
             self.voice_enabled = True
-            print("✅ Voice Commander initialized")
+            print("✅ Voice Commander initialized with callback")
         except Exception as e:
             self.voice_commander = None
             self.voice_listening = False
@@ -3604,10 +3604,8 @@ Based on OthersideAI's self-operating-computer framework
             return
         
         if not self.voice_listening:
-            # Start continuous listening
-            result = self.voice_commander.start_continuous_listening(
-                callback=self.handle_voice_command
-            )
+            # Start continuous listening (callback already set during init)
+            result = self.voice_commander.start_continuous_listening()
             
             if result['success']:
                 self.voice_listening = True
