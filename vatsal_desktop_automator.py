@@ -13,6 +13,7 @@ import os
 import sys
 import json
 import time
+import platform
 import psutil
 import subprocess
 import pyperclip
@@ -235,6 +236,20 @@ CRITICAL RULES:
             elif action_type == "clipboard_paste" and ENHANCED_MODULES_AVAILABLE:
                 text = ClipboardManager.get_from_clipboard()
                 return True, f"Clipboard: {text[:100]}"
+            
+            elif action_type == "lock_screen":
+                return self._lock_screen()
+            
+            elif action_type == "shutdown_system":
+                delay = params.get("delay_seconds", 10)
+                return self._shutdown_system(delay)
+            
+            elif action_type == "restart_system":
+                delay = params.get("delay_seconds", 10)
+                return self._restart_system(delay)
+            
+            elif action_type == "cancel_shutdown":
+                return self._cancel_shutdown()
                 
             else:
                 return False, f"Unknown action: {action_type}"
@@ -467,6 +482,75 @@ Battery: {report['battery'].get('percent', 'N/A')}%"""
             return True, summary
         except Exception as e:
             return False, f"Report error: {str(e)}"
+    
+    def _lock_screen(self) -> Tuple[bool, str]:
+        """Lock the computer screen"""
+        try:
+            os_type = platform.system()
+            if os_type == "Windows":
+                subprocess.run("rundll32.exe user32.dll,LockWorkStation", shell=True, check=False)
+                return True, "🔒 Screen locked"
+            elif os_type == "Darwin":
+                subprocess.run(["/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession", "-suspend"], check=False)
+                return True, "🔒 Screen locked"
+            elif os_type == "Linux":
+                subprocess.run(["loginctl", "lock-session"], check=False)
+                return True, "🔒 Screen locked"
+            else:
+                return False, "Unsupported operating system"
+        except Exception as e:
+            return False, f"Failed to lock screen: {str(e)}"
+    
+    def _shutdown_system(self, delay_seconds: int = 10) -> Tuple[bool, str]:
+        """Shutdown the computer"""
+        try:
+            os_type = platform.system()
+            if os_type == "Windows":
+                subprocess.Popen(f'shutdown /s /t {delay_seconds}', shell=True)
+                return True, f"⚠️ Computer will shutdown in {delay_seconds} seconds"
+            elif os_type == "Darwin":
+                subprocess.Popen(f'sudo shutdown -h +{delay_seconds//60}', shell=True)
+                return True, f"⚠️ Computer will shutdown in {delay_seconds} seconds"
+            elif os_type == "Linux":
+                subprocess.Popen(f'sudo shutdown -h +{delay_seconds//60}', shell=True)
+                return True, f"⚠️ Computer will shutdown in {delay_seconds} seconds"
+            else:
+                return False, "Unsupported operating system"
+        except Exception as e:
+            return False, f"Failed to shutdown: {str(e)}"
+    
+    def _restart_system(self, delay_seconds: int = 10) -> Tuple[bool, str]:
+        """Restart the computer"""
+        try:
+            os_type = platform.system()
+            if os_type == "Windows":
+                subprocess.Popen(f'shutdown /r /t {delay_seconds}', shell=True)
+                return True, f"🔄 Computer will restart in {delay_seconds} seconds"
+            elif os_type == "Darwin":
+                subprocess.Popen(f'sudo shutdown -r +{delay_seconds//60}', shell=True)
+                return True, f"🔄 Computer will restart in {delay_seconds} seconds"
+            elif os_type == "Linux":
+                subprocess.Popen(f'sudo shutdown -r +{delay_seconds//60}', shell=True)
+                return True, f"🔄 Computer will restart in {delay_seconds} seconds"
+            else:
+                return False, "Unsupported operating system"
+        except Exception as e:
+            return False, f"Failed to restart: {str(e)}"
+    
+    def _cancel_shutdown(self) -> Tuple[bool, str]:
+        """Cancel scheduled shutdown or restart"""
+        try:
+            os_type = platform.system()
+            if os_type == "Windows":
+                subprocess.run("shutdown /a", shell=True, check=False)
+                return True, "✅ Shutdown/restart cancelled"
+            elif os_type in ["Darwin", "Linux"]:
+                subprocess.run("sudo killall shutdown", shell=True, check=False)
+                return True, "✅ Shutdown/restart cancelled"
+            else:
+                return False, "Unsupported operating system"
+        except Exception as e:
+            return False, f"Failed to cancel: {str(e)}"
     
     def execute_command(self, user_input: str, confirmation_callback=None) -> str:
         """Main execution flow: understand → confirm → execute
