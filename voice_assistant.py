@@ -6,6 +6,9 @@ Voice commands for hands-free automation control
 import speech_recognition as sr
 import pyttsx3
 import threading
+import re
+from datetime import datetime, timedelta
+from difflib import SequenceMatcher
 
 class VoiceAssistant:
     def __init__(self, command_callback=None):
@@ -56,6 +59,41 @@ class VoiceAssistant:
             "deep": {"index": 0, "rate": 120, "pitch": 0.6},
             "funny": {"index": 1, "rate": 200, "pitch": 1.5}
         }
+        
+        # ==================== INTELLIGENT FEATURES ====================
+        # Conversation context and memory
+        self.conversation_history = []
+        self.last_command = None
+        self.last_command_time = None
+        self.context = {}
+        
+        # Intent synonyms for natural language understanding
+        self.intent_synonyms = {
+            "open": ["open", "launch", "start", "run", "execute", "fire up", "bring up", "load"],
+            "close": ["close", "quit", "exit", "shut", "kill", "terminate", "end"],
+            "search": ["search", "find", "look for", "google", "lookup", "query", "seek"],
+            "play": ["play", "start playing", "put on", "listen to", "stream"],
+            "stop": ["stop", "pause", "halt", "freeze", "cancel"],
+            "increase": ["increase", "raise", "boost", "turn up", "make louder", "enhance"],
+            "decrease": ["decrease", "lower", "reduce", "turn down", "make quieter", "diminish"],
+            "create": ["create", "make", "generate", "build", "new", "add"],
+            "delete": ["delete", "remove", "erase", "clear", "destroy", "trash"],
+            "tell": ["tell me", "what is", "what's", "give me", "show me", "display"],
+        }
+        
+        # Entity extraction patterns
+        self.number_words = {
+            "zero": 0, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
+            "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+            "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15,
+            "sixteen": 16, "seventeen": 17, "eighteen": 18, "nineteen": 19, "twenty": 20,
+            "thirty": 30, "forty": 40, "fifty": 50, "sixty": 60, "seventy": 70,
+            "eighty": 80, "ninety": 90, "hundred": 100, "thousand": 1000
+        }
+        
+        # Common command patterns
+        self.learned_patterns = {}
+        self.command_count = {}
     
     def speak(self, text):
         """Convert text to speech"""
@@ -402,9 +440,248 @@ class VoiceAssistant:
         except:
             return "❌ Invalid volume value"
     
-    def process_voice_command(self, command):
-        """Process and execute voice commands - MEGA ENHANCED with 50+ commands!"""
+    # ==================== INTELLIGENT NLP METHODS ====================
+    
+    def extract_numbers(self, text):
+        """Extract numbers from text (both digits and words)"""
+        numbers = []
+        
+        # Extract digit numbers
+        digit_matches = re.findall(r'\d+', text)
+        numbers.extend([int(n) for n in digit_matches])
+        
+        # Extract word numbers
+        words = text.lower().split()
+        for word in words:
+            if word in self.number_words:
+                numbers.append(self.number_words[word])
+        
+        return numbers
+    
+    def extract_time(self, text):
+        """Extract time from natural language"""
+        # Match patterns like "at 3pm", "3:30", "fifteen minutes"
+        time_patterns = [
+            r'(\d{1,2}):(\d{2})\s*(am|pm)?',
+            r'(\d{1,2})\s*(am|pm)',
+            r'in\s+(\d+)\s+(minute|hour|second)',
+        ]
+        
+        for pattern in time_patterns:
+            match = re.search(pattern, text.lower())
+            if match:
+                return match.group(0)
+        
+        return None
+    
+    def normalize_intent(self, command):
+        """Normalize command to standard intent using synonyms"""
+        command_lower = command.lower()
+        
+        for intent, synonyms in self.intent_synonyms.items():
+            for synonym in synonyms:
+                if synonym in command_lower:
+                    # Replace synonym with standard intent
+                    command_lower = command_lower.replace(synonym, intent)
+                    break
+        
+        return command_lower
+    
+    def similarity_score(self, a, b):
+        """Calculate similarity between two strings"""
+        return SequenceMatcher(None, a.lower(), b.lower()).ratio()
+    
+    def find_best_match(self, command, possible_commands, threshold=0.6):
+        """Find best matching command from possibilities using fuzzy matching"""
+        best_match = None
+        best_score = 0
+        
+        for possible in possible_commands:
+            score = self.similarity_score(command, possible)
+            if score > best_score and score >= threshold:
+                best_score = score
+                best_match = possible
+        
+        return best_match, best_score
+    
+    def extract_app_name(self, command):
+        """Intelligently extract application name from command"""
+        # Common app keywords
+        apps = [
+            "chrome", "firefox", "edge", "browser",
+            "notepad", "word", "excel", "powerpoint",
+            "calculator", "calc", "calendar",
+            "spotify", "music", "player",
+            "explorer", "files", "folder",
+            "terminal", "cmd", "powershell",
+            "settings", "control panel",
+            "paint", "photos", "camera"
+        ]
+        
+        command_lower = command.lower()
+        
+        # Try exact match
+        for app in apps:
+            if app in command_lower:
+                return app
+        
+        # Try fuzzy match
+        words = command_lower.split()
+        for word in words:
+            for app in apps:
+                if self.similarity_score(word, app) > 0.8:
+                    return app
+        
+        # Extract quoted app names
+        quoted = re.findall(r'"([^"]*)"', command)
+        if quoted:
+            return quoted[0]
+        
+        return None
+    
+    def understand_context(self, command):
+        """Add context awareness to commands"""
+        # Skip if this is an explicit repeat command (handled separately)
+        if "repeat" in command.lower() and ("last" in command.lower() or "that" in command.lower()):
+            return None  # Let regular command processing handle it
+        
+        # Check if command refers to previous action
+        context_words = ["that", "it", "this", "again", "same", "more"]
+        
+        if any(word in command.lower() for word in context_words):
+            if self.last_command:
+                # Command is referring to previous action
+                return f"context_repeat|{self.last_command}"
+        
+        return None
+    
+    def learn_from_command(self, command, intent):
+        """Learn user's command patterns"""
+        # Track command frequency
+        if intent not in self.command_count:
+            self.command_count[intent] = 0
+        self.command_count[intent] += 1
+        
+        # Store command pattern
+        if intent not in self.learned_patterns:
+            self.learned_patterns[intent] = []
+        
+        if command not in self.learned_patterns[intent]:
+            self.learned_patterns[intent].append(command)
+        
+        # Update context
+        self.last_command = intent
+        self.last_command_time = datetime.now()
+        self.conversation_history.append({
+            "command": command,
+            "intent": intent,
+            "timestamp": datetime.now()
+        })
+        
+        # Keep only last 20 commands in history
+        if len(self.conversation_history) > 20:
+            self.conversation_history = self.conversation_history[-20:]
+    
+    def get_smart_suggestions(self):
+        """Get suggestions based on learned patterns"""
+        if not self.command_count:
+            return "No usage history yet"
+        
+        # Get top 5 most used commands
+        sorted_commands = sorted(self.command_count.items(), key=lambda x: x[1], reverse=True)
+        top_commands = sorted_commands[:5]
+        
+        suggestions = "🧠 Your most used commands:\n"
+        for cmd, count in top_commands:
+            suggestions += f"  • {cmd} ({count} times)\n"
+        
+        return suggestions
+    
+    def intelligent_parse(self, command):
+        """Enhanced intelligent command parsing with NLP"""
+        original_command = command
         command = command.lower().strip()
+        
+        # Check context first
+        context_result = self.understand_context(command)
+        if context_result:
+            return context_result
+        
+        # Normalize synonyms
+        normalized = self.normalize_intent(command)
+        
+        # Extract entities
+        numbers = self.extract_numbers(command)
+        time_info = self.extract_time(command)
+        app_name = self.extract_app_name(command)
+        
+        # Store extracted info in context
+        self.context = {
+            "numbers": numbers,
+            "time": time_info,
+            "app": app_name,
+            "original": original_command,
+            "normalized": normalized
+        }
+        
+        # Natural language patterns for common intents
+        
+        # Volume/brightness control with natural language
+        if any(word in command for word in ["louder", "quieter", "brighter", "dimmer", "volume", "sound"]):
+            if "louder" in command or ("turn up" in command and "sound" in command):
+                return "volume_up"
+            elif "quieter" in command or ("turn down" in command and "sound" in command):
+                return "volume_down"
+            elif "brighter" in command or ("turn up" in command and "bright" in command):
+                return "brightness_up"
+            elif "dimmer" in command or ("turn down" in command and "bright" in command):
+                return "brightness_down"
+            elif "volume" in command or "sound" in command:
+                if "up" in command or "increase" in command or "raise" in command or "louder" in command:
+                    return "volume_up"
+                elif "down" in command or "decrease" in command or "lower" in command or "quieter" in command:
+                    return "volume_down"
+        
+        # Smart app opening with various phrasings
+        if app_name and any(word in normalized for word in ["open", "launch", "start", "run"]):
+            return f"open_app|{app_name}"
+        
+        # Timer/reminder with natural language
+        if "remind me" in command or "reminder" in command:
+            if time_info:
+                return f"set_reminder|{time_info}|{command}"
+            if numbers:
+                return f"set_reminder|{numbers[0]} minutes|{command}"
+        
+        if "timer" in command or "alarm" in command:
+            if numbers:
+                return f"set_timer|{numbers[0]}"
+        
+        # Math with natural language
+        math_patterns = [
+            (r"what is (\d+) (\+|\-|\*|\/|plus|minus|times|divided by) (\d+)", "calculate"),
+            (r"calculate (\d+) (\+|\-|\*|\/|plus|minus|times|divided by) (\d+)", "calculate"),
+        ]
+        
+        for pattern, intent in math_patterns:
+            if re.search(pattern, command):
+                return f"{intent}|{command}"
+        
+        # Continue with regular command processing
+        return None
+    
+    def process_voice_command(self, command):
+        """Process and execute voice commands - ULTRA INTELLIGENT with NLP!"""
+        original_command = command
+        command = command.lower().strip()
+        
+        # ==================== INTELLIGENT PRE-PROCESSING ====================
+        # Try intelligent parsing first
+        intelligent_result = self.intelligent_parse(command)
+        if intelligent_result:
+            # Learn from this command
+            self.learn_from_command(original_command, intelligent_result.split('|')[0])
+            return intelligent_result
         
         # ==================== PRODUCTIVITY (check first to avoid conflicts) ====================
         if "timer" in command:
@@ -473,27 +750,28 @@ class VoiceAssistant:
         elif "paste" in command or "clipboard" in command:
             return "paste_from_clipboard"
         
+        # ==================== INTELLIGENT FEATURES (PRIORITY - check before clipboard) ====================
+        # Check clear history first (before clipboard clear)
+        elif "clear history" in command or ("forget" in command and "history" in command):
+            # Clear the history
+            self.conversation_history = []
+            self.command_count = {}
+            self.learned_patterns = {}
+            self.last_command = None
+            return "clear_history"
+        
         elif "clear clipboard" in command:
             return "clear_clipboard"
         
         # ==================== SEARCH ====================
-        elif command.strip().startswith("search"):
+        elif any(keyword in command for keyword in ["search", "google", "find information", "look for", "lookup"]) and not "open" in command:
             query = command.strip()
-            if query.startswith("search "):
-                query = query[7:]
-            elif query.startswith("search"):
-                query = query[6:]
-            
-            query = query.strip()
-            if query.startswith("for "):
-                query = query[4:]
+            # Remove search keywords intelligently
+            for keyword in ["search for", "search", "google", "find information about", "find", "look for", "lookup", "for "]:
+                query = query.replace(keyword, "")
             
             query = query.strip()
             return f"web_search|{query}" if query else "web_search"
-        
-        elif "google" in command and not "open" in command:
-            query = command.replace("google", "").strip()
-            return f"web_search|{query}"
         
         # ==================== APPS & PROGRAMS ====================
         elif "open" in command:
@@ -737,9 +1015,24 @@ class VoiceAssistant:
         elif "current voice" in command or "voice info" in command:
             return "current_voice"
         
+        # ==================== INTELLIGENT FEATURES ====================
+        # Check repeat commands before history (to avoid conflict)
+        elif ("repeat" in command or "do it again" in command) and not "context_repeat" in command:
+            if "last" in command or "that" in command or "again" in command:
+                return "repeat_last"
+        
+        elif "suggestions" in command or "what do i use" in command or "my habits" in command:
+            return "show_suggestions"
+        
+        elif "history" in command or "conversation history" in command or "what did i say" in command:
+            return "show_history"
+        
         # ==================== HELP ====================
         elif "help" in command or "commands" in command or "what can you do" in command:
             return "show_help"
+        
+        # Learn from every command for future improvements
+        self.learn_from_command(original_command, "unknown")
         
         return None
 
@@ -882,7 +1175,7 @@ Usage: Say wake word → Wait for "Ji, kaho" → Give your command
 🌐 TRANSLATION:
   • "Translate [text]"
 
-🎤 VOICE CONTROL (NEW!):
+🎤 VOICE CONTROL:
   • "Change voice to male"
   • "Change voice to female"
   • "Change voice to robot"
@@ -895,6 +1188,21 @@ Usage: Say wake word → Wait for "Ji, kaho" → Give your command
   • "Speak very slow"
   • "List voices"
   • "Current voice"
+
+🧠 INTELLIGENT FEATURES (NEW!):
+  • "Show suggestions" - See your most used commands
+  • "Show history" - View conversation history
+  • "Repeat that" / "Do it again" - Repeat last command
+  • "Clear history" - Clear conversation memory
+  
+  Natural Language Understanding:
+  • "Make it louder" → Volume up
+  • "Turn down the sound" → Volume down
+  • "Launch calculator" → Open calculator
+  • "Fire up Chrome" → Open Chrome
+  • "Set timer for 5 minutes" → Timer with auto-detection
+  • "Remind me in 10 minutes" → Smart reminder
+  • "What is 25 plus 30?" → Calculator
 
 ❓ HELP:
   • "Help" / "Show commands"
