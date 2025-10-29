@@ -26,9 +26,12 @@ echo [12] Delete Empty Folders
 echo [13] Show Folder Size
 echo [14] Lock Computer
 echo [15] Shutdown Computer
+echo [16] Restart Computer
+echo [17] Switch User
+echo [18] Sign Out
 echo [0] Exit
 echo.
-set /p choice="Enter your choice (0-15): "
+set /p choice="Enter your choice (0-18): "
 
 if "%choice%"=="1" goto CREATE_FOLDER
 if "%choice%"=="2" goto DELETE
@@ -45,6 +48,9 @@ if "%choice%"=="12" goto DELETE_EMPTY
 if "%choice%"=="13" goto FOLDER_SIZE
 if "%choice%"=="14" goto LOCK_COMPUTER
 if "%choice%"=="15" goto SHUTDOWN_COMPUTER
+if "%choice%"=="16" goto RESTART_COMPUTER
+if "%choice%"=="17" goto SWITCH_USER
+if "%choice%"=="18" goto SIGNOUT
 if "%choice%"=="0" goto EXIT
 goto MENU
 
@@ -391,6 +397,93 @@ if "%shutdownchoice%"=="5" (
 )
 if "%shutdownchoice%"=="0" goto MENU
 goto SHUTDOWN_COMPUTER
+
+:RESTART_COMPUTER
+cls
+echo ========================================
+echo       RESTART COMPUTER
+echo ========================================
+echo.
+echo WARNING: This will restart your computer!
+echo.
+echo [1] Restart Immediately
+echo [2] Restart in 1 minute
+echo [3] Restart in 5 minutes
+echo [4] Restart in 10 minutes
+echo [5] Cancel Restart
+echo [0] Back to Menu
+echo.
+set /p restartchoice="Enter your choice (0-5): "
+
+if "%restartchoice%"=="1" (
+    echo Restarting NOW...
+    shutdown /r /t 0
+)
+if "%restartchoice%"=="2" (
+    echo Computer will restart in 1 minute...
+    shutdown /r /t 60
+    echo To cancel, run: shutdown /a
+    pause
+    goto MENU
+)
+if "%restartchoice%"=="3" (
+    echo Computer will restart in 5 minutes...
+    shutdown /r /t 300
+    echo To cancel, run: shutdown /a
+    pause
+    goto MENU
+)
+if "%restartchoice%"=="4" (
+    echo Computer will restart in 10 minutes...
+    shutdown /r /t 600
+    echo To cancel, run: shutdown /a
+    pause
+    goto MENU
+)
+if "%restartchoice%"=="5" (
+    echo Cancelling any scheduled restart...
+    shutdown /a
+    echo.
+    pause
+    goto MENU
+)
+if "%restartchoice%"=="0" goto MENU
+goto RESTART_COMPUTER
+
+:SWITCH_USER
+cls
+echo ========================================
+echo         SWITCH USER
+echo ========================================
+echo.
+set /p confirm="Are you sure you want to switch user? (Y/N): "
+if /i "!confirm!"=="Y" (
+    echo Switching user...
+    rundll32.exe user32.dll,LockWorkStation
+    echo.
+    echo Note: After lock screen appears, you can click "Switch User"
+    pause
+) else (
+    echo Switch user cancelled.
+    pause
+    goto MENU
+)
+
+:SIGNOUT
+cls
+echo ========================================
+echo          SIGN OUT
+echo ========================================
+echo.
+set /p confirm="Are you sure you want to sign out? (Y/N): "
+if /i "!confirm!"=="Y" (
+    echo Signing out...
+    shutdown /l
+) else (
+    echo Sign out cancelled.
+    pause
+    goto MENU
+)
 
 :EXIT
 cls
