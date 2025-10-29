@@ -40,7 +40,7 @@ class VoiceCommander:
         self.is_speaking = False
         
         # Wake word detection - support multiple wake phrases
-        self.wake_words = ["vatsal", "hey vatsal", "ok vatsal", "computer", "hey computer", "bhiaya", "bhaisahb"]
+        self.wake_words = ["vatsal", "hey vatsal", "ok vatsal", "bhai", "computer", "hey computer", "bhiaya", "bhaisahb"]
         self.wake_word_enabled = True  # Enabled by default
         self.wake_word = "vatsal"  # Primary wake word for display
         
