@@ -14,7 +14,10 @@ class VoiceAssistant:
         self.command_callback = command_callback
         self.listening = False
         self.wake_word_enabled = True
-        self.wake_words = ["oye", "bhaiya", "bhaisahb"]
+        # Simple and easy wake words for quick activation
+        self.wake_words = ["hello", "open", "search", "oye", "bhaiya", "bhaisahb"]
+        # Action verbs that should be kept in the command
+        self.action_wake_words = ["open", "search"]
         
         # Increase sensitivity settings
         self.recognizer.energy_threshold = 300  # Lower = more sensitive (default ~4000)
@@ -63,11 +66,20 @@ class VoiceAssistant:
             return f"❌ Error: {str(e)}"
     
     def check_for_wake_word(self, text):
-        """Check if the text contains any wake word"""
-        text_lower = text.lower()
+        """Check if the text starts with any wake word (as a standalone word)"""
+        text_lower = text.lower().strip()
+        words = text_lower.split()
+        
+        # Check if the first word matches any wake word
+        if words and words[0] in self.wake_words:
+            return True
+        
+        # Also check for wake word at the very beginning (for short phrases)
         for wake_word in self.wake_words:
-            if wake_word in text_lower:
+            # Check if text starts with wake word followed by space or is exactly the wake word
+            if text_lower == wake_word or text_lower.startswith(wake_word + " "):
                 return True
+        
         return False
     
     def listen_continuous(self):
@@ -105,12 +117,41 @@ class VoiceAssistant:
                         if self.wake_word_enabled:
                             if waiting_for_wake_word:
                                 if self.check_for_wake_word(command):
-                                    print(f"👂 Wake word detected! Listening for command...")
-                                    self.speak("Ji, kaho")
-                                    waiting_for_wake_word = False
+                                    # Extract command from the same phrase if present
+                                    command_parts = command.lower().strip().split(None, 1)
+                                    wake_word_used = command_parts[0] if command_parts else ""
+                                    
+                                    # Check if there's a command after the wake word
+                                    if len(command_parts) > 1:
+                                        # Wake word + command in same phrase
+                                        # If wake word is an action verb, keep it in the command
+                                        if wake_word_used in self.action_wake_words:
+                                            # Keep the full phrase (e.g., "open chrome" stays as "open chrome")
+                                            actual_command = command.lower().strip()
+                                        else:
+                                            # Remove non-action wake word (e.g., "hello open chrome" → "open chrome")
+                                            actual_command = command_parts[1]
+                                        
+                                        print(f"👂 Wake word detected with command: {actual_command}")
+                                        self.speak("Ji")
+                                        
+                                        # Process the command immediately
+                                        if self.command_callback:
+                                            response = self.command_callback(actual_command)
+                                            if response:
+                                                self.speak(response)
+                                            else:
+                                                self.speak("Samajh nahi aaya")
+                                        waiting_for_wake_word = True  # Reset for next command
+                                    else:
+                                        # Wake word only, wait for command
+                                        print(f"👂 Wake word detected! Listening for command...")
+                                        self.speak("Ji, kaho")
+                                        waiting_for_wake_word = False
                                 else:
                                     continue
                             else:
+                                # Already activated, process command
                                 print(f"✅ Command: {command}")
                                 waiting_for_wake_word = True
                                 
@@ -229,7 +270,27 @@ class VoiceAssistant:
         """Process and execute voice commands"""
         command = command.lower()
         
-        if "open" in command:
+        # Check if command STARTS with "search" (not just contains it)
+        if command.strip().startswith("search"):
+            # Extract search query (remove "search" from beginning and optional "for" after it)
+            query = command.strip()
+            if query.startswith("search "):
+                query = query[7:]  # Remove "search "
+            elif query.startswith("search"):
+                query = query[6:]  # Remove "search"
+            
+            # Remove optional "for " at the beginning of query
+            query = query.strip()
+            if query.startswith("for "):
+                query = query[4:]  # Remove "for "
+            
+            query = query.strip()
+            if query:
+                return f"web_search|{query}"
+            else:
+                return "web_search"
+        
+        elif "open" in command:
             if "project folder" in command:
                 return "open_folder|."
             elif "chrome" in command or "browser" in command:
@@ -276,6 +337,12 @@ def create_voice_commands_list():
 🎤 Voice Commands with Wake Words (HIGH SENSITIVITY):
 
 Wake Words (say one of these first):
+  Simple & Quick:
+  • "Hello"
+  • "Open"
+  • "Search"
+  
+  Hindi:
   • "Oye"
   • "Bhaiya"
   • "Bhaisahb"
