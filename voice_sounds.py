@@ -14,6 +14,7 @@ class VoiceSoundEffects:
     def __init__(self, sounds_dir: str = "voice_sounds"):
         self.sounds_dir = sounds_dir
         self.enabled = True
+        self.volume = 0.8  # Default volume (0.0 to 1.0)
         self._initialized = False
         self._lock = threading.Lock()
         
@@ -133,6 +134,7 @@ class VoiceSoundEffects:
         try:
             with self._lock:
                 sound = pygame.mixer.Sound(sound_file)
+                sound.set_volume(self.volume)  # Apply current volume to this sound
                 channel = sound.play()
                 # Wait for sound to finish
                 while channel.get_busy():
@@ -143,8 +145,9 @@ class VoiceSoundEffects:
     def set_volume(self, volume: float):
         """Set master volume (0.0 to 1.0)"""
         try:
-            volume = max(0.0, min(1.0, volume))
-            pygame.mixer.music.set_volume(volume)
+            # Clamp volume to valid range
+            self.volume = max(0.0, min(1.0, volume))
+            # Note: Volume is applied per-sound in _play_sound_sync via Sound.set_volume()
         except Exception as e:
             print(f"⚠️ Could not set volume: {e}")
     

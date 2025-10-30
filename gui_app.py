@@ -414,6 +414,24 @@ class AutomationControllerGUI:
         self.wake_word_btn.pack(side="left", padx=2)
         self.add_hover_effect(self.wake_word_btn, "#f9e2af", "#fab387")
 
+        # Sound effects toggle button
+        self.sound_fx_btn = tk.Button(voice_frame,
+                                      text="🔊",
+                                      bg="#a6e3a1",
+                                      fg="#0f0f1e",
+                                      font=("Segoe UI", 11, "bold"),
+                                      relief="flat",
+                                      cursor="hand2",
+                                      command=self.toggle_sound_effects,
+                                      padx=10,
+                                      pady=10,
+                                      activebackground="#94e2d5")
+        self.sound_fx_btn.pack(side="left", padx=2)
+        self.add_hover_effect(self.sound_fx_btn, "#a6e3a1", "#94e2d5")
+        
+        # Right-click to open sound settings
+        self.sound_fx_btn.bind("<Button-3>", lambda e: self.show_sound_settings())
+
         self.execute_btn = tk.Button(input_container,
                                      text="▶ Execute",
                                      bg="#89b4fa",
@@ -3760,6 +3778,176 @@ Based on OthersideAI's self-operating-computer framework
         print(f"⚙️  Calling execute_command()...")
         self.execute_command()
         print(f"✅ execute_command() completed")
+    
+    def toggle_sound_effects(self):
+        """Toggle voice sound effects on/off"""
+        if not self.voice_commander:
+            messagebox.showerror("Voice Error", "Voice commander not available")
+            return
+        
+        result = self.voice_commander.toggle_sound_effects()
+        
+        if result['success']:
+            if result['enabled']:
+                self.sound_fx_btn.config(bg="#a6e3a1", text="🔊")
+                self.update_output(f"\n🔊 Voice sound effects ENABLED\n", "success")
+                self.update_output(f"You'll hear beeps during voice interactions\n", "info")
+                
+                # Play success sound to demonstrate
+                if self.voice_commander.sound_effects:
+                    self.voice_commander.sound_effects.play_sound('success', async_play=True)
+            else:
+                self.sound_fx_btn.config(bg="#45475a", text="🔇")
+                self.update_output(f"\n🔇 Voice sound effects DISABLED\n", "warning")
+                self.update_output(f"Voice commands will work silently\n", "info")
+    
+    def show_sound_settings(self):
+        """Show sound effects settings dialog"""
+        if not self.voice_commander or not self.voice_commander.sound_effects:
+            messagebox.showerror("Sound Error", "Sound effects not available")
+            return
+        
+        settings_window = tk.Toplevel(self.root)
+        settings_window.title("🔊 Sound Effects Settings")
+        settings_window.geometry("500x450")
+        settings_window.configure(bg="#1a1a2e")
+        
+        header = tk.Label(settings_window,
+                         text="🔊 Voice Sound Effects Settings",
+                         bg="#1a1a2e",
+                         fg="#ffffff",
+                         font=("Segoe UI", 16, "bold"),
+                         pady=20)
+        header.pack()
+        
+        # Sound effects status
+        status_frame = tk.Frame(settings_window, bg="#2a2a3e", relief="flat")
+        status_frame.pack(fill="x", padx=20, pady=10)
+        
+        sounds_list = self.voice_commander.list_sound_effects()
+        status_text = "🎵 Available Sound Effects:\n\n"
+        
+        if sounds_list['success']:
+            for name, info in sounds_list['sounds'].items():
+                status = "✅" if info['exists'] else "❌"
+                status_text += f"{status} {name.replace('_', ' ').title()}\n"
+        
+        status_label = tk.Label(status_frame,
+                               text=status_text,
+                               bg="#2a2a3e",
+                               fg="#ffffff",
+                               font=("Segoe UI", 11),
+                               justify="left",
+                               pady=15,
+                               padx=15)
+        status_label.pack()
+        
+        # Volume control
+        volume_frame = tk.Frame(settings_window, bg="#1a1a2e")
+        volume_frame.pack(fill="x", padx=20, pady=15)
+        
+        volume_label = tk.Label(volume_frame,
+                               text="🎚️ Volume:",
+                               bg="#1a1a2e",
+                               fg="#ffffff",
+                               font=("Segoe UI", 12, "bold"))
+        volume_label.pack(side="left", padx=10)
+        
+        current_volume = self.voice_commander.sound_effects.volume if self.voice_commander.sound_effects else 0.8
+        
+        def update_volume(val):
+            volume = float(val)
+            self.voice_commander.set_sound_volume(volume)
+            volume_value.config(text=f"{int(volume * 100)}%")
+        
+        volume_slider = tk.Scale(volume_frame,
+                                from_=0.0,
+                                to=1.0,
+                                resolution=0.1,
+                                orient="horizontal",
+                                bg="#313244",
+                                fg="#ffffff",
+                                highlightthickness=0,
+                                command=update_volume,
+                                length=250)
+        volume_slider.set(current_volume)
+        volume_slider.pack(side="left", padx=10)
+        
+        volume_value = tk.Label(volume_frame,
+                               text=f"{int(current_volume * 100)}%",
+                               bg="#1a1a2e",
+                               fg="#a6e3a1",
+                               font=("Segoe UI", 11, "bold"))
+        volume_value.pack(side="left", padx=10)
+        
+        # Test sounds section
+        test_frame = tk.Frame(settings_window, bg="#2a2a3e", relief="flat")
+        test_frame.pack(fill="x", padx=20, pady=15)
+        
+        test_header = tk.Label(test_frame,
+                              text="🎵 Test Sounds:",
+                              bg="#2a2a3e",
+                              fg="#f9e2af",
+                              font=("Segoe UI", 12, "bold"),
+                              pady=10)
+        test_header.pack()
+        
+        test_buttons_frame = tk.Frame(test_frame, bg="#2a2a3e")
+        test_buttons_frame.pack(pady=10)
+        
+        sound_names = ['wake_word', 'listening', 'processing', 'success', 'error']
+        
+        def play_test_sound(sound_name):
+            self.voice_commander.sound_effects.play_sound(sound_name, async_play=True)
+        
+        for sound_name in sound_names:
+            btn_text = sound_name.replace('_', ' ').title()
+            test_btn = tk.Button(test_buttons_frame,
+                                text=btn_text,
+                                bg="#313244",
+                                fg="#ffffff",
+                                font=("Segoe UI", 9),
+                                relief="flat",
+                                cursor="hand2",
+                                command=lambda s=sound_name: play_test_sound(s),
+                                padx=15,
+                                pady=8)
+            test_btn.pack(side="left", padx=5)
+            self.add_hover_effect(test_btn, "#313244", "#45475a")
+        
+        # Info section
+        info_frame = tk.Frame(settings_window, bg="#1a1a2e")
+        info_frame.pack(fill="x", padx=20, pady=15)
+        
+        info_text = """
+💡 Tips:
+• Click sound names above to test them
+• Adjust volume slider to your preference
+• Sound effects play during voice interactions
+• Toggle 🔊 button to enable/disable sounds
+        """
+        
+        info_label = tk.Label(info_frame,
+                             text=info_text,
+                             bg="#1a1a2e",
+                             fg="#a6adc8",
+                             font=("Segoe UI", 10),
+                             justify="left")
+        info_label.pack()
+        
+        # Close button
+        close_btn = tk.Button(settings_window,
+                             text="✅ Done",
+                             bg="#89b4fa",
+                             fg="#0f0f1e",
+                             font=("Segoe UI", 11, "bold"),
+                             relief="flat",
+                             cursor="hand2",
+                             command=settings_window.destroy,
+                             padx=30,
+                             pady=10)
+        close_btn.pack(pady=15)
+        self.add_hover_effect(close_btn, "#89b4fa", "#74c7ec")
 
     def show_help(self):
         help_window = tk.Toplevel(self.root)
