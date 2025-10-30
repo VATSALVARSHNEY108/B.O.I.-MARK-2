@@ -38,38 +38,15 @@ class VoiceAssistant:
         
         # Get all available voices
         self.available_voices = self.engine.getProperty('voices')
-        self.current_voice_type = "modi"  # Default (Modi-like voice)
+        self.current_voice_type = "male"  # Default (male voice)
         
-        # Set Modi-like voice - using Indian/Hindi deep male voice
-        # Try to find Hindi or Indian English voice
-        modi_voice_found = False
-        for voice in self.available_voices:
-            voice_id_lower = voice.id.lower()
-            # Look for Hindi voice first (most authentic Indian accent)
-            if 'hindi' in voice_id_lower or 'hi' in voice.languages:
-                self.engine.setProperty('voice', voice.id)
-                modi_voice_found = True
-                print(f"✓ Using Hindi voice: {voice.name}")
-                break
-        
-        # If no Hindi voice, try Indian English or just use first male voice
-        if not modi_voice_found:
-            for voice in self.available_voices:
-                voice_id_lower = voice.id.lower()
-                if 'english' in voice_id_lower or 'en' in voice.languages:
-                    self.engine.setProperty('voice', voice.id)
-                    modi_voice_found = True
-                    print(f"✓ Using English voice: {voice.name}")
-                    break
-        
-        # Fallback to first voice if nothing found
-        if not modi_voice_found and len(self.available_voices) > 0:
+        # Set male voice (index 0 is usually male)
+        if len(self.available_voices) > 0:
             self.engine.setProperty('voice', self.available_voices[0].id)
-            print(f"✓ Using default voice: {self.available_voices[0].name}")
         
-        # Voice settings for Modi-like voice - Deep, authoritative, measured pace
-        self.engine.setProperty('rate', 140)  # Slower, more deliberate like Modi's speeches
-        self.engine.setProperty('volume', 1.0)  # Full volume for authority
+        # Voice settings
+        self.engine.setProperty('rate', 150)  # Normal speaking rate
+        self.engine.setProperty('volume', 0.9)
         
         # Voice presets for easy switching
         self.voice_presets = {
