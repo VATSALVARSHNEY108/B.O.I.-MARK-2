@@ -1143,45 +1143,171 @@ class AutomationControllerGUI:
         execute_btn.pack(side="right", padx=(5, 0))
         self.add_hover_effect(execute_btn, "#f9e2af", "#f5c2e7")
         
-        # Quick actions section
-        quick_frame = tk.Frame(left_column, bg="#1e1e2e")
-        quick_frame.pack(fill="x", pady=5)
+        # Quick actions section with enhanced UI
+        quick_frame = tk.Frame(left_column, bg="#1e1e2e", relief="flat")
+        quick_frame.pack(fill="both", expand=True, pady=10, padx=5)
         
-        quick_label = tk.Label(quick_frame,
-                              text="⚡ Quick Actions:",
+        # Header with gradient effect simulation
+        header_frame = tk.Frame(quick_frame, bg="#1e1e2e", height=40)
+        header_frame.pack(fill="x", pady=(0, 10))
+        header_frame.pack_propagate(False)
+        
+        quick_label = tk.Label(header_frame,
+                              text="⚡ Quick Actions Centre",
                               bg="#1e1e2e",
-                              fg="#a6adc8",
-                              font=("Segoe UI", 9, "bold"))
-        quick_label.pack(anchor="w", padx=5, pady=(0, 5))
+                              fg="#f9e2af",
+                              font=("Segoe UI", 11, "bold"))
+        quick_label.pack(side="left", padx=10, pady=8)
         
-        # Quick action buttons
-        quick_buttons_frame = tk.Frame(quick_frame, bg="#1e1e2e")
-        quick_buttons_frame.pack(fill="x", padx=5)
+        # Subtitle
+        subtitle = tk.Label(header_frame,
+                           text="One-click automation shortcuts",
+                           bg="#1e1e2e",
+                           fg="#6c7086",
+                           font=("Segoe UI", 8))
+        subtitle.pack(side="left", padx=(0, 10))
         
-        quick_actions = [
-            ("📸 Screenshot", "Take a screenshot"),
-            ("🌐 Open Chrome", "Open Chrome and go to Google"),
-            ("🔍 Google Search", "Search Google for Python tutorials"),
-            ("💻 Open VS Code", "Launch VS Code and create new file")
+        # Scrollable container for quick actions
+        canvas_frame = tk.Frame(quick_frame, bg="#1e1e2e")
+        canvas_frame.pack(fill="both", expand=True)
+        
+        # Create canvas and scrollbar
+        canvas = tk.Canvas(canvas_frame, bg="#1e1e2e", highlightthickness=0)
+        scrollbar = ttk.Scrollbar(canvas_frame, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg="#1e1e2e")
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        # Quick action categories with enhanced design
+        quick_action_categories = [
+            {
+                "name": "🖥️ System",
+                "color": "#89b4fa",
+                "actions": [
+                    ("💻 Screenshot", "Take a screenshot", "#89b4fa"),
+                    ("🔒 Lock PC", "Lock the computer", "#f38ba8"),
+                    ("🔄 Restart", "Restart the computer", "#fab387"),
+                    ("📊 Task Manager", "Open Task Manager", "#cba6f7"),
+                ]
+            },
+            {
+                "name": "🌐 Web & Apps",
+                "color": "#89dceb",
+                "actions": [
+                    ("🌍 Chrome", "Open Chrome and go to Google", "#89dceb"),
+                    ("🔍 Google", "Search Google for Python tutorials", "#a6e3a1"),
+                    ("📧 Gmail", "Open Gmail in browser", "#f38ba8"),
+                    ("💬 WhatsApp", "Open WhatsApp Web", "#a6e3a1"),
+                ]
+            },
+            {
+                "name": "📁 Productivity",
+                "color": "#a6e3a1",
+                "actions": [
+                    ("📝 VS Code", "Launch VS Code", "#89b4fa"),
+                    ("📂 Explorer", "Open File Explorer", "#f9e2af"),
+                    ("📋 Clipboard", "Show clipboard history", "#fab387"),
+                    ("🗒️ Notepad", "Open Notepad", "#cba6f7"),
+                ]
+            },
+            {
+                "name": "🎵 Media",
+                "color": "#f5c2e7",
+                "actions": [
+                    ("🎵 Spotify", "Launch Spotify", "#a6e3a1"),
+                    ("🎬 YouTube", "Open YouTube", "#f38ba8"),
+                    ("🔊 Volume Up", "Increase system volume", "#89dceb"),
+                    ("🔇 Mute", "Mute system volume", "#6c7086"),
+                ]
+            }
         ]
         
-        for i, (btn_text, command) in enumerate(quick_actions):
-            if i % 2 == 0:
-                row_frame = tk.Frame(quick_buttons_frame, bg="#1e1e2e")
-                row_frame.pack(fill="x", pady=2)
+        # Create categorized quick action buttons
+        for category in quick_action_categories:
+            # Category card frame with border
+            category_card = tk.Frame(scrollable_frame, bg="#181825", relief="flat", bd=1)
+            category_card.pack(fill="x", padx=8, pady=6)
             
-            btn = tk.Button(row_frame,
-                           text=btn_text,
-                           bg="#313244",
-                           fg="#ffffff",
-                           font=("Segoe UI", 8, "bold"),
-                           relief="flat",
-                           cursor="hand2",
-                           command=lambda cmd=command: self.load_comprehensive_command(cmd),
-                           padx=10,
-                           pady=6)
-            btn.pack(side="left", expand=True, fill="x", padx=2)
-            self.add_hover_effect(btn, "#313244", "#45475a")
+            # Create inner frame for padding
+            inner_frame = tk.Frame(category_card, bg="#181825")
+            inner_frame.pack(fill="x", padx=1, pady=1)
+            
+            # Category header with colored accent
+            cat_header = tk.Frame(inner_frame, bg="#181825", height=30)
+            cat_header.pack(fill="x", pady=(0, 8))
+            cat_header.pack_propagate(False)
+            
+            # Color accent bar
+            accent_bar = tk.Frame(cat_header, bg=category["color"], width=4)
+            accent_bar.pack(side="left", fill="y")
+            
+            # Category name
+            cat_label = tk.Label(cat_header,
+                                text=category["name"],
+                                bg="#181825",
+                                fg=category["color"],
+                                font=("Segoe UI", 9, "bold"))
+            cat_label.pack(side="left", padx=8)
+            
+            # Action buttons grid
+            actions_grid = tk.Frame(inner_frame, bg="#181825")
+            actions_grid.pack(fill="x", padx=8, pady=(0, 8))
+            
+            # Create 2x2 grid for actions
+            for i, (btn_text, command, btn_color) in enumerate(category["actions"]):
+                row = i // 2
+                col = i % 2
+                
+                # Create button with modern style
+                btn_frame = tk.Frame(actions_grid, bg="#181825")
+                btn_frame.grid(row=row, column=col, padx=4, pady=4, sticky="ew")
+                
+                btn = tk.Button(btn_frame,
+                               text=btn_text,
+                               bg="#313244",
+                               fg="#cdd6f4",
+                               font=("Segoe UI", 9, "bold"),
+                               relief="flat",
+                               cursor="hand2",
+                               command=lambda cmd=command: self.load_comprehensive_command(cmd),
+                               padx=12,
+                               pady=10,
+                               activebackground="#45475a",
+                               activeforeground="#ffffff",
+                               bd=0,
+                               highlightthickness=0)
+                btn.pack(fill="x")
+                
+                # Enhanced hover effect with color tint
+                def create_hover_handlers(button, cmd_text, accent_color):
+                    def on_enter(e):
+                        button.config(bg="#45475a", fg=accent_color)
+                    def on_leave(e):
+                        button.config(bg="#313244", fg="#cdd6f4")
+                    return on_enter, on_leave
+                
+                enter_handler, leave_handler = create_hover_handlers(btn, btn_text, btn_color)
+                btn.bind("<Enter>", enter_handler)
+                btn.bind("<Leave>", leave_handler)
+            
+            # Configure grid columns to expand evenly
+            actions_grid.grid_columnconfigure(0, weight=1)
+            actions_grid.grid_columnconfigure(1, weight=1)
+        
+        # Pack canvas and scrollbar
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+        
+        # Bind mouse wheel for scrolling
+        def _on_mousewheel(event):
+            canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
         
         # Example prompts
         examples_frame = tk.Frame(left_column, bg="#1e1e2e")
