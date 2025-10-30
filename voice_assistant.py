@@ -38,29 +38,44 @@ class VoiceAssistant:
         
         # Get all available voices
         self.available_voices = self.engine.getProperty('voices')
-        self.current_voice_type = "kid"  # Default (kid voice)
+        self.current_voice_type = "modi"  # Default (Modi-like voice)
         
-        # Set kid voice - using high-pitched female variant (sounds like a child)
-        # Try to find the en+f3 or similar high-pitched voice
-        kid_voice_found = False
+        # Set Modi-like voice - using Indian/Hindi deep male voice
+        # Try to find Hindi or Indian English voice
+        modi_voice_found = False
         for voice in self.available_voices:
-            if 'f3' in voice.id.lower() or 'female' in voice.id.lower() or 'f2' in voice.id.lower():
+            voice_id_lower = voice.id.lower()
+            # Look for Hindi voice first (most authentic Indian accent)
+            if 'hindi' in voice_id_lower or 'hi' in voice.languages:
                 self.engine.setProperty('voice', voice.id)
-                kid_voice_found = True
+                modi_voice_found = True
+                print(f"✓ Using Hindi voice: {voice.name}")
                 break
         
-        # Fallback to second voice if kid voice not found
-        if not kid_voice_found and len(self.available_voices) > 1:
-            self.engine.setProperty('voice', self.available_voices[1].id)
+        # If no Hindi voice, try Indian English or just use first male voice
+        if not modi_voice_found:
+            for voice in self.available_voices:
+                voice_id_lower = voice.id.lower()
+                if 'english' in voice_id_lower or 'en' in voice.languages:
+                    self.engine.setProperty('voice', voice.id)
+                    modi_voice_found = True
+                    print(f"✓ Using English voice: {voice.name}")
+                    break
         
-        # Voice settings for kid-like voice - VERY FAST with higher pitch
-        self.engine.setProperty('rate', 220)  # Fast speaking rate like a kid
-        self.engine.setProperty('volume', 0.95)
+        # Fallback to first voice if nothing found
+        if not modi_voice_found and len(self.available_voices) > 0:
+            self.engine.setProperty('voice', self.available_voices[0].id)
+            print(f"✓ Using default voice: {self.available_voices[0].name}")
+        
+        # Voice settings for Modi-like voice - Deep, authoritative, measured pace
+        self.engine.setProperty('rate', 140)  # Slower, more deliberate like Modi's speeches
+        self.engine.setProperty('volume', 1.0)  # Full volume for authority
         
         # Voice presets for easy switching
         self.voice_presets = {
             "male": {"index": 0, "rate": 150, "pitch": 1.0},
             "female": {"index": 1, "rate": 150, "pitch": 1.0},
+            "modi": {"index": 0, "rate": 140, "pitch": 0.7},  # Deep, authoritative voice
             "kid": {"index": 1, "rate": 220, "pitch": 1.8},
             "fast": {"index": 1, "rate": 250, "pitch": 1.2},
             "slow": {"index": 0, "rate": 100, "pitch": 0.8},

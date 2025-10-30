@@ -52,3 +52,4 @@ statsmodels
 selenium
 webdriver-manager
 opencv-python
+elevenlabs
