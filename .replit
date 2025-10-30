@@ -17,45 +17,11 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Test Gemini"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Simple Chatbot"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "GUI App"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "WebSocket Server"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "Mobile Companion Server"
-
-[[workflows.workflow]]
-name = "Test Gemini"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python test_gemini.py"
-
-[workflows.workflow.metadata]
-outputType = "console"
-
-[[workflows.workflow]]
-name = "Simple Chatbot"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python simple_chatbot.py"
-
-[workflows.workflow.metadata]
-outputType = "console"
 
 [[workflows.workflow]]
 name = "GUI App"
@@ -67,18 +33,6 @@ outputType = "vnc"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python gui_app.py"
-
-[[workflows.workflow]]
-name = "WebSocket Server"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python websocket_server.py"
-waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "webview"
 
 [[workflows.workflow]]
 name = "Mobile Companion Server"
