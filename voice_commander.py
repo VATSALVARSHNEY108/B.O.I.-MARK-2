@@ -24,10 +24,10 @@ class VoiceCommander:
         self.tts_engine.setProperty('rate', 165)
         self.tts_engine.setProperty('volume', 0.95)
         
-        # Set voice (try to use a better voice if available)
+        # Set male voice (index 0 is typically male)
         voices = self.tts_engine.getProperty('voices')
-        if len(voices) > 1:
-            self.tts_engine.setProperty('voice', voices[1].id)
+        if len(voices) > 0:
+            self.tts_engine.setProperty('voice', voices[0].id)
         
         # Recognition settings - HIGH SENSITIVITY for better wake word detection
         self.recognizer.energy_threshold = 300  # Lower = more sensitive (default is 4000)
