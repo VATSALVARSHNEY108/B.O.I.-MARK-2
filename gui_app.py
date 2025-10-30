@@ -2818,6 +2818,194 @@ class AutomationControllerGUI:
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
 
+    def create_advanced_ai_tab(self, notebook):
+        """Advanced AI Enhancements - Multi-modal, Memory, Learning, Predictions"""
+        tab = tk.Frame(notebook, bg="#1e1e2e")
+        notebook.add(tab, text="🧠 Advanced AI")
+        
+        header_frame = tk.Frame(tab, bg="#1a1a2e")
+        header_frame.pack(fill="x", pady=(10, 0), padx=10)
+        
+        header = tk.Label(header_frame,
+                          text="🧠 Advanced AI Enhancements",
+                          bg="#1a1a2e",
+                          fg="#cba6f7",
+                          font=("Segoe UI", 14, "bold"))
+        header.pack(pady=12)
+        
+        info = tk.Label(header_frame,
+                        text="👁️ Multi-Modal • 🧠 Contextual Memory • 📚 Learning from Corrections • 🔮 Predictive Actions",
+                        bg="#1a1a2e",
+                        fg="#a6adc8",
+                        font=("Segoe UI", 9, "italic"))
+        info.pack(pady=(0, 12))
+        
+        main_container = tk.Frame(tab, bg="#1e1e2e")
+        main_container.pack(fill="both", expand=True, padx=10, pady=5)
+        
+        left_column = tk.Frame(main_container, bg="#1e1e2e")
+        left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
+        
+        multi_modal_section = tk.Label(left_column,
+                                       text="👁️ MULTI-MODAL AI",
+                                       bg="#1e1e2e",
+                                       fg="#cba6f7",
+                                       font=("Segoe UI", 11, "bold"))
+        multi_modal_section.pack(pady=(10, 8), anchor="w", padx=8)
+        
+        mm_buttons = [
+            ("🧠 Analyze Current Screen", lambda: self.advanced_ai_analyze_screen()),
+            ("🎤 Voice + Vision Analysis", lambda: self.advanced_ai_voice_vision()),
+            ("📊 Multi-Modal Statistics", lambda: self.advanced_ai_mm_stats())
+        ]
+        
+        for text, command in mm_buttons:
+            btn = tk.Button(left_column,
+                           text=text,
+                           bg="#313244",
+                           fg="#ffffff",
+                           font=("Segoe UI", 10),
+                           relief="flat",
+                           cursor="hand2",
+                           command=command,
+                           anchor="w",
+                           padx=15,
+                           pady=10,
+                           activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+        
+        memory_section = tk.Label(left_column,
+                                 text="🧠 CONTEXTUAL MEMORY",
+                                 bg="#1e1e2e",
+                                 fg="#89b4fa",
+                                 font=("Segoe UI", 11, "bold"))
+        memory_section.pack(pady=(15, 8), anchor="w", padx=8)
+        
+        memory_buttons = [
+            ("📝 Remember Something", lambda: self.advanced_ai_remember()),
+            ("🔍 Recall Memories", lambda: self.advanced_ai_recall()),
+            ("⚙️ Update Preferences", lambda: self.advanced_ai_preferences()),
+            ("📊 Memory Statistics", lambda: self.advanced_ai_memory_stats())
+        ]
+        
+        for text, command in memory_buttons:
+            btn = tk.Button(left_column,
+                           text=text,
+                           bg="#313244",
+                           fg="#ffffff",
+                           font=("Segoe UI", 10),
+                           relief="flat",
+                           cursor="hand2",
+                           command=command,
+                           anchor="w",
+                           padx=15,
+                           pady=10,
+                           activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+        
+        learning_section = tk.Label(left_column,
+                                   text="📚 CORRECTION LEARNING",
+                                   bg="#1e1e2e",
+                                   fg="#a6e3a1",
+                                   font=("Segoe UI", 11, "bold"))
+        learning_section.pack(pady=(15, 8), anchor="w", padx=8)
+        
+        learning_buttons = [
+            ("✏️ Record Correction", lambda: self.advanced_ai_record_correction()),
+            ("📈 Learning Report", lambda: self.advanced_ai_learning_report()),
+            ("🎯 Apply Learning", lambda: self.advanced_ai_apply_learning())
+        ]
+        
+        for text, command in learning_buttons:
+            btn = tk.Button(left_column,
+                           text=text,
+                           bg="#313244",
+                           fg="#ffffff",
+                           font=("Segoe UI", 10),
+                           relief="flat",
+                           cursor="hand2",
+                           command=command,
+                           anchor="w",
+                           padx=15,
+                           pady=10,
+                           activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+        
+        predictions_section = tk.Label(left_column,
+                                      text="🔮 PREDICTIVE ACTIONS",
+                                      bg="#1e1e2e",
+                                      fg="#f9e2af",
+                                      font=("Segoe UI", 11, "bold"))
+        predictions_section.pack(pady=(15, 8), anchor="w", padx=8)
+        
+        pred_buttons = [
+            ("🔮 Get Predictions", lambda: self.advanced_ai_predictions()),
+            ("💡 Proactive Suggestions", lambda: self.advanced_ai_suggestions()),
+            ("📊 Prediction Accuracy", lambda: self.advanced_ai_accuracy())
+        ]
+        
+        for text, command in pred_buttons:
+            btn = tk.Button(left_column,
+                           text=text,
+                           bg="#313244",
+                           fg="#ffffff",
+                           font=("Segoe UI", 10),
+                           relief="flat",
+                           cursor="hand2",
+                           command=command,
+                           anchor="w",
+                           padx=15,
+                           pady=10,
+                           activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            self.add_hover_effect(btn, "#313244", "#45475a")
+        
+        right_column = tk.Frame(main_container, bg="#1e1e2e")
+        right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
+        
+        output_label = tk.Label(right_column,
+                               text="📋 Output Console",
+                               bg="#1e1e2e",
+                               fg="#ffffff",
+                               font=("Segoe UI", 11, "bold"))
+        output_label.pack(pady=(10, 5), anchor="w", padx=8)
+        
+        self.advanced_ai_output = scrolledtext.ScrolledText(
+            right_column,
+            bg="#0f0f1e",
+            fg="#cdd6f4",
+            font=("Consolas", 10),
+            wrap=tk.WORD,
+            height=25,
+            state='disabled',
+            relief="flat",
+            padx=10,
+            pady=10
+        )
+        self.advanced_ai_output.pack(fill="both", expand=True, padx=8, pady=(0, 10))
+        
+        self.advanced_ai_output.tag_config("success", foreground="#a6e3a1")
+        self.advanced_ai_output.tag_config("error", foreground="#f38ba8")
+        self.advanced_ai_output.tag_config("warning", foreground="#f9e2af")
+        self.advanced_ai_output.tag_config("info", foreground="#89b4fa")
+        self.advanced_ai_output.tag_config("prediction", foreground="#cba6f7")
+        
+        clear_btn = tk.Button(right_column,
+                             text="🗑️ Clear Output",
+                             bg="#45475a",
+                             fg="#ffffff",
+                             font=("Segoe UI", 9),
+                             relief="flat",
+                             cursor="hand2",
+                             command=lambda: self.advanced_ai_clear_output(),
+                             padx=15,
+                             pady=8)
+        clear_btn.pack(pady=(0, 10), padx=8)
+        self.add_hover_effect(clear_btn, "#45475a", "#585b70")
+
     def create_web_tools_tab(self, notebook):
         tab = tk.Frame(notebook, bg="#1e1e2e")
         notebook.add(tab, text="🌐 Web")
