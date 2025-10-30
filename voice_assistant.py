@@ -42,11 +42,12 @@ class VoiceAssistant:
         
         # Get all available voices
         self.available_voices = self.engine.getProperty('voices')
-        self.current_voice_type = "female"  # Default
+        self.current_voice_type = "chipmunk"  # Default (kid-like voice)
         
-        # Set default voice (female - usually index 1)
+        # Set default voice (chipmunk - higher pitch like a kid)
         if len(self.available_voices) > 1:
             self.engine.setProperty('voice', self.available_voices[1].id)
+            self.engine.setProperty('rate', 300)  # Faster rate for kid-like voice
         
         # Voice presets for easy switching
         self.voice_presets = {
