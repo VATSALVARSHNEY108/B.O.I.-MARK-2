@@ -118,6 +118,17 @@ An intelligent AI desktop automation application powered by Google Gemini AI wit
 - Custom workflows
 - Productivity insights
 
+### 📡 **Real-Time WebSocket Dashboard** (NEW!)
+- **Live monitoring** - Watch your system in real-time from any browser
+- **Remote access** - Control VATSAL from your phone or tablet
+- **Real-time stats** - CPU, Memory, Disk usage updated every 2 seconds
+- **Activity feed** - See all commands and results instantly
+- **Beautiful UI** - Modern dark-themed responsive dashboard
+- **Multi-device** - Connect unlimited clients simultaneously
+- **Command execution** - Send commands from the web dashboard
+- **Instant notifications** - Get notified about events in real-time
+- See [WebSocket Dashboard Guide](WEBSOCKET_REALTIME_GUIDE.md) for details
+
 ### 👁️ **AI Screen Monitoring System** (NEW!)
 - Real-time continuous monitoring with 8 AI analysis modes
 - Productivity tracking with behavioral learning

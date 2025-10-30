@@ -1,7 +1,7 @@
 # AI Desktop Automation Controller
 
 ## Overview
-The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. The project offers a unified ecosystem with over 300+ features, including smart Desktop RAG for file intelligence, 9 Smart Automation & AI features, and 8 Communication Enhancement features. Its core purpose is to be a comprehensive productivity powerhouse, integrating advanced AI for code generation, screen analysis, natural language understanding, professional-grade data analysis, and various utility modules.
+The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. The project offers a unified ecosystem with over 300+ features, including smart Desktop RAG for file intelligence, 9 Smart Automation & AI features, 8 Communication Enhancement features, and **real-time WebSocket dashboard** for live monitoring. Its core purpose is to be a comprehensive productivity powerhouse, integrating advanced AI for code generation, screen analysis, natural language understanding, professional-grade data analysis, various utility modules, and real-time remote monitoring capabilities.
 
 ## User Preferences
 - **Chat Monitoring:** User prefers visual/screen-based chat monitoring where AI controls the real Gmail/WhatsApp interface on screen, rather than background API calls. This allows them to watch the AI work in real-time.
@@ -70,6 +70,15 @@ The system includes a sophisticated AI assistant (`vatsal_assistant.py`) with co
 - **Self-Operating Integration Hub (`self_operating_integrations.py`):** Bridges the self-operating computer with other VATSAL modules through task complexity analysis and intelligent module routing.
 - **Task Coordinator (`self_operating_coordinator.py`):** Orchestrates complex multi-step tasks across all VATSAL modules with AI-powered planning, automatic module selection, and comprehensive error recovery.
 - **Enhanced Command Executor (`command_executor_integration.py`):** Intelligent command router that automatically triggers self-operating mode when appropriate, with options for auto, prefer, and force modes.
+- **Real-Time WebSocket System:**
+  - **WebSocket Server (`websocket_server.py`):** Flask-SocketIO based server providing real-time bidirectional communication on port 5000
+  - **WebSocket Client (`websocket_client.py`):** Integrated client for broadcasting events from GUI to connected dashboards
+  - **Live Dashboard (`templates/dashboard.html`):** Modern web-based dashboard with real-time system monitoring, command execution tracking, and activity feed
+  - **System Stats Broadcasting:** CPU, memory, and disk usage updated every 2 seconds
+  - **Command Event Broadcasting:** Real-time updates for command start, completion, and failure
+  - **Multi-client Support:** Unlimited simultaneous connections with synchronized updates
+  - **Remote Access:** Access dashboard from any browser on the network
+  - **Beautiful UI:** Dark-themed, responsive design with smooth animations and notifications
 - **Utility Modules:** Spotify Integration, YouTube Integration, Weather & News, Translation, Calculator, Password Vault, Quick Notes, and Calendar Manager.
 
 ## External Dependencies

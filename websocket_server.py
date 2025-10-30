@@ -76,12 +76,55 @@ def handle_ping(data):
     })
 
 
+@socketio.on('command_started')
+def handle_command_started(data):
+    command = data.get('command', '')
+    timestamp = data.get('timestamp', datetime.now().isoformat())
+    print(f'🚀 Command started: {command}')
+    broadcast_command_execution(command, 'started', 'Executing command...')
+
+
+@socketio.on('command_completed')
+def handle_command_completed(data):
+    command = data.get('command', '')
+    result = data.get('result', '')
+    timestamp = data.get('timestamp', datetime.now().isoformat())
+    print(f'✅ Command completed: {command}')
+    broadcast_command_execution(command, 'completed', result)
+
+
+@socketio.on('command_failed')
+def handle_command_failed(data):
+    command = data.get('command', '')
+    error = data.get('error', '')
+    timestamp = data.get('timestamp', datetime.now().isoformat())
+    print(f'❌ Command failed: {command} - {error}')
+    broadcast_command_execution(command, 'failed', error)
+
+
+@socketio.on('notification')
+def handle_notification(data):
+    title = data.get('title', '')
+    message = data.get('message', '')
+    level = data.get('level', 'info')
+    print(f'🔔 Notification: {title} - {message}')
+    broadcast_notification(title, message, level)
+
+
+@socketio.on('system_event')
+def handle_system_event(data):
+    event_type = data.get('event_type', '')
+    event_data = data.get('data', {})
+    print(f'📡 System event: {event_type}')
+    broadcast_system_event(event_type, event_data)
+
+
 @socketio.on('execute_command')
 def handle_execute_command(data):
     command = data.get('command', '')
-    print(f'📝 Received command from client: {command}')
+    print(f'📝 Received command from web client: {command}')
     
-    broadcast_command_execution(command, 'pending', 'Command received from web client')
+    broadcast_command_execution(command, 'pending', 'Command received from web client - GUI execution not yet implemented')
 
 
 def broadcast_command_execution(command, status, result='', metadata=None):
