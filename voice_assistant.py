@@ -36,10 +36,6 @@ class VoiceAssistant:
         self.recognizer.pause_threshold = 0.3  # VERY short pause for instant response
         self.recognizer.operation_timeout = None  # No timeout for constant listening
         
-        # Voice settings
-        self.engine.setProperty('rate', 150)
-        self.engine.setProperty('volume', 0.9)
-        
         # Get all available voices
         self.available_voices = self.engine.getProperty('voices')
         self.current_voice_type = "chipmunk"  # Default (kid-like voice)
@@ -47,7 +43,10 @@ class VoiceAssistant:
         # Set default voice (chipmunk - higher pitch like a kid)
         if len(self.available_voices) > 1:
             self.engine.setProperty('voice', self.available_voices[1].id)
-            self.engine.setProperty('rate', 300)  # Faster rate for kid-like voice
+        
+        # Voice settings for kid-like voice
+        self.engine.setProperty('rate', 300)  # Faster rate for kid-like voice
+        self.engine.setProperty('volume', 0.9)
         
         # Voice presets for easy switching
         self.voice_presets = {
