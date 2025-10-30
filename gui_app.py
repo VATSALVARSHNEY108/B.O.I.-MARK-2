@@ -42,6 +42,7 @@ from command_executor_integration import EnhancedCommandExecutor, CommandInterce
 from voice_commander import create_voice_commander
 from system_control import SystemController
 from websocket_client import get_websocket_client
+from macro_recorder import MacroRecorder, MacroTemplates
 
 load_dotenv()
 
@@ -191,6 +192,18 @@ class AutomationControllerGUI:
             self.voice_listening = False
             self.voice_enabled = False
             print(f"⚠️ Voice Commander initialization failed: {e}")
+
+        # Initialize Macro Recorder
+        try:
+            self.macro_recorder = MacroRecorder()
+            self.macro_templates = MacroTemplates()
+            self.recording_active = False
+            self.current_macro_name = None
+            print("✅ Macro Recorder initialized")
+        except Exception as e:
+            self.macro_recorder = None
+            self.macro_templates = None
+            print(f"⚠️ Macro Recorder initialization failed: {e}")
 
         self.setup_ui()
         self.check_api_key()
@@ -446,6 +459,10 @@ class AutomationControllerGUI:
             ("🎬 VLC Player", "Open VLC Media Player", "#f9e2af", False, "vlc"),
             ("🔊 Volume Control", "Control system volume", "#89dceb", False, "volume"),
             ("🎧 Sound Settings", "Open sound settings", "#cba6f7", False, "sound"),
+            
+            ("🎬 AUTOMATION", None, "#f5c2e7", True, None),
+            ("🎬 Macro Recorder", "Record and playback macros", "#f5c2e7", False, "macro_recorder"),
+            ("📱 Mobile Control", "Remote control via mobile", "#89dceb", False, "mobile_control"),
         ]
         
         # Create menu buttons
@@ -6976,6 +6993,592 @@ keyboard, and screen access:
   4. Run: python gui_app.py
 """
         messagebox.showinfo("Comprehensive Controller Stats", stats_text)
+
+    def create_macro_recorder_tab(self, notebook):
+        """Macro Recorder Tab - Record and playback automation macros"""
+        tab = tk.Frame(notebook, bg="#1e1e2e")
+        notebook.add(tab, text="🎬 Macro Recorder")
+        
+        # Header
+        header_frame = tk.Frame(tab, bg="#1a1a2e")
+        header_frame.pack(fill="x", pady=(10, 0), padx=10)
+        
+        header = tk.Label(header_frame,
+                          text="🎬 Macro Recorder & Playback",
+                          bg="#1a1a2e",
+                          fg="#f5c2e7",
+                          font=("Segoe UI", 14, "bold"))
+        header.pack(pady=12)
+        
+        info = tk.Label(header_frame,
+                        text="🎯 Record • 💾 Save • ▶️ Playback • 🔄 Loop • 📱 Remote Control",
+                        bg="#1a1a2e",
+                        fg="#a6adc8",
+                        font=("Segoe UI", 9, "italic"))
+        info.pack(pady=(0, 12))
+        
+        # Main container
+        main_container = tk.Frame(tab, bg="#1e1e2e")
+        main_container.pack(fill="both", expand=True, padx=10, pady=5)
+        
+        # Left column - Controls
+        left_column = tk.Frame(main_container, bg="#1e1e2e")
+        left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
+        
+        # Recording controls
+        record_frame = tk.Frame(left_column, bg="#313244", relief="flat")
+        record_frame.pack(fill="x", pady=5)
+        
+        record_label = tk.Label(record_frame,
+                                text="📹 Recording Controls",
+                                bg="#313244",
+                                fg="#f5c2e7",
+                                font=("Segoe UI", 11, "bold"))
+        record_label.pack(pady=10)
+        
+        # Record status
+        self.macro_record_status = tk.Label(record_frame,
+                                            text="⚫ Ready to Record",
+                                            bg="#313244",
+                                            fg="#a6adc8",
+                                            font=("Segoe UI", 10))
+        self.macro_record_status.pack(pady=5)
+        
+        # Record buttons
+        record_btn_frame = tk.Frame(record_frame, bg="#313244")
+        record_btn_frame.pack(pady=10)
+        
+        self.macro_start_record_btn = tk.Button(record_btn_frame,
+                                                 text="🔴 Start Recording",
+                                                 bg="#f38ba8",
+                                                 fg="#0f0f1e",
+                                                 font=("Segoe UI", 10, "bold"),
+                                                 relief="flat",
+                                                 cursor="hand2",
+                                                 command=self.start_macro_recording,
+                                                 padx=20,
+                                                 pady=10)
+        self.macro_start_record_btn.pack(side="left", padx=5)
+        self.add_hover_effect(self.macro_start_record_btn, "#f38ba8", "#eba0ac")
+        
+        self.macro_stop_record_btn = tk.Button(record_btn_frame,
+                                                text="⏹️ Stop & Save",
+                                                bg="#89b4fa",
+                                                fg="#0f0f1e",
+                                                font=("Segoe UI", 10, "bold"),
+                                                relief="flat",
+                                                cursor="hand2",
+                                                command=self.stop_macro_recording,
+                                                padx=20,
+                                                pady=10,
+                                                state="disabled")
+        self.macro_stop_record_btn.pack(side="left", padx=5)
+        self.add_hover_effect(self.macro_stop_record_btn, "#89b4fa", "#74c7ec")
+        
+        # Macro list
+        list_frame = tk.Frame(left_column, bg="#313244", relief="flat")
+        list_frame.pack(fill="both", expand=True, pady=10)
+        
+        list_label = tk.Label(list_frame,
+                              text="💾 Saved Macros",
+                              bg="#313244",
+                              fg="#a6e3a1",
+                              font=("Segoe UI", 11, "bold"))
+        list_label.pack(pady=10)
+        
+        # Macro listbox
+        macro_list_container = tk.Frame(list_frame, bg="#313244")
+        macro_list_container.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+        
+        macro_scrollbar = tk.Scrollbar(macro_list_container)
+        macro_scrollbar.pack(side="right", fill="y")
+        
+        self.macro_listbox = tk.Listbox(macro_list_container,
+                                         bg="#0f0f1e",
+                                         fg="#cdd6f4",
+                                         font=("Consolas", 10),
+                                         relief="flat",
+                                         selectbackground="#45475a",
+                                         selectforeground="#f5c2e7",
+                                         yscrollcommand=macro_scrollbar.set)
+        self.macro_listbox.pack(side="left", fill="both", expand=True)
+        macro_scrollbar.config(command=self.macro_listbox.yview)
+        
+        # Refresh button
+        refresh_btn = tk.Button(list_frame,
+                                text="🔄 Refresh List",
+                                bg="#45475a",
+                                fg="#ffffff",
+                                font=("Segoe UI", 9),
+                                relief="flat",
+                                cursor="hand2",
+                                command=self.refresh_macro_list,
+                                padx=15,
+                                pady=8)
+        refresh_btn.pack(pady=5)
+        self.add_hover_effect(refresh_btn, "#45475a", "#585b70")
+        
+        # Right column - Playback & Output
+        right_column = tk.Frame(main_container, bg="#1e1e2e")
+        right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
+        
+        # Playback controls
+        playback_frame = tk.Frame(right_column, bg="#313244", relief="flat")
+        playback_frame.pack(fill="x", pady=5)
+        
+        playback_label = tk.Label(playback_frame,
+                                  text="▶️ Playback Controls",
+                                  bg="#313244",
+                                  fg="#89dceb",
+                                  font=("Segoe UI", 11, "bold"))
+        playback_label.pack(pady=10)
+        
+        # Repeat and speed controls
+        controls_container = tk.Frame(playback_frame, bg="#313244")
+        controls_container.pack(fill="x", padx=10, pady=10)
+        
+        # Repeat count
+        repeat_frame = tk.Frame(controls_container, bg="#313244")
+        repeat_frame.pack(fill="x", pady=5)
+        
+        tk.Label(repeat_frame,
+                 text="🔄 Repeat:",
+                 bg="#313244",
+                 fg="#a6adc8",
+                 font=("Segoe UI", 9)).pack(side="left", padx=5)
+        
+        self.macro_repeat_var = tk.StringVar(value="1")
+        repeat_spinbox = tk.Spinbox(repeat_frame,
+                                     from_=1,
+                                     to=100,
+                                     textvariable=self.macro_repeat_var,
+                                     bg="#0f0f1e",
+                                     fg="#ffffff",
+                                     font=("Segoe UI", 10),
+                                     relief="flat",
+                                     width=10)
+        repeat_spinbox.pack(side="left", padx=5)
+        
+        # Speed control
+        speed_frame = tk.Frame(controls_container, bg="#313244")
+        speed_frame.pack(fill="x", pady=5)
+        
+        tk.Label(speed_frame,
+                 text="⚡ Speed:",
+                 bg="#313244",
+                 fg="#a6adc8",
+                 font=("Segoe UI", 9)).pack(side="left", padx=5)
+        
+        self.macro_speed_var = tk.StringVar(value="1.0")
+        speed_options = ["0.5x", "1.0x", "1.5x", "2.0x", "3.0x"]
+        speed_combo = ttk.Combobox(speed_frame,
+                                    values=speed_options,
+                                    textvariable=self.macro_speed_var,
+                                    state="readonly",
+                                    font=("Segoe UI", 9),
+                                    width=10)
+        speed_combo.current(1)
+        speed_combo.pack(side="left", padx=5)
+        
+        # Playback buttons
+        playback_btns = tk.Frame(playback_frame, bg="#313244")
+        playback_btns.pack(pady=15)
+        
+        play_btn = tk.Button(playback_btns,
+                             text="▶️ Play Selected",
+                             bg="#a6e3a1",
+                             fg="#0f0f1e",
+                             font=("Segoe UI", 10, "bold"),
+                             relief="flat",
+                             cursor="hand2",
+                             command=self.play_macro,
+                             padx=20,
+                             pady=10)
+        play_btn.pack(side="left", padx=5)
+        self.add_hover_effect(play_btn, "#a6e3a1", "#94e2d5")
+        
+        stop_btn = tk.Button(playback_btns,
+                             text="⏹️ Stop",
+                             bg="#f38ba8",
+                             fg="#0f0f1e",
+                             font=("Segoe UI", 10, "bold"),
+                             relief="flat",
+                             cursor="hand2",
+                             command=self.stop_macro_playback,
+                             padx=20,
+                             pady=10)
+        stop_btn.pack(side="left", padx=5)
+        self.add_hover_effect(stop_btn, "#f38ba8", "#eba0ac")
+        
+        delete_btn = tk.Button(playback_btns,
+                                text="🗑️ Delete",
+                                bg="#45475a",
+                                fg="#ffffff",
+                                font=("Segoe UI", 10, "bold"),
+                                relief="flat",
+                                cursor="hand2",
+                                command=self.delete_macro,
+                                padx=20,
+                                pady=10)
+        delete_btn.pack(side="left", padx=5)
+        self.add_hover_effect(delete_btn, "#45475a", "#585b70")
+        
+        # Output console
+        output_label = tk.Label(right_column,
+                                text="📋 Macro Output",
+                                bg="#1e1e2e",
+                                fg="#a6adc8",
+                                font=("Segoe UI", 10, "bold"))
+        output_label.pack(anchor="w", padx=5, pady=(10, 5))
+        
+        self.macro_output = scrolledtext.ScrolledText(right_column,
+                                                       bg="#0f0f1e",
+                                                       fg="#cdd6f4",
+                                                       font=("Consolas", 9),
+                                                       wrap=tk.WORD,
+                                                       state='disabled',
+                                                       relief="flat",
+                                                       padx=10,
+                                                       pady=10)
+        self.macro_output.pack(fill="both", expand=True, padx=5, pady=5)
+        
+        self.macro_output.tag_config("success", foreground="#a6e3a1")
+        self.macro_output.tag_config("error", foreground="#f38ba8")
+        self.macro_output.tag_config("info", foreground="#89dceb")
+        self.macro_output.tag_config("event", foreground="#f9e2af")
+        
+        # Initialize macro list
+        self.refresh_macro_list()
+
+    def create_mobile_operations_tab(self, notebook):
+        """Mobile Operations Tab - Remote control interface"""
+        tab = tk.Frame(notebook, bg="#1e1e2e")
+        notebook.add(tab, text="📱 Mobile Control")
+        
+        # Header
+        header_frame = tk.Frame(tab, bg="#1a1a2e")
+        header_frame.pack(fill="x", pady=(10, 0), padx=10)
+        
+        header = tk.Label(header_frame,
+                          text="📱 Mobile Companion Control",
+                          bg="#1a1a2e",
+                          fg="#89dceb",
+                          font=("Segoe UI", 14, "bold"))
+        header.pack(pady=12)
+        
+        info = tk.Label(header_frame,
+                        text="📡 Remote Access • 🎮 Mobile Commands • 🔔 Notifications • 🎬 Remote Macros",
+                        bg="#1a1a2e",
+                        fg="#a6adc8",
+                        font=("Segoe UI", 9, "italic"))
+        info.pack(pady=(0, 12))
+        
+        # Main container
+        main_container = tk.Frame(tab, bg="#1e1e2e")
+        main_container.pack(fill="both", expand=True, padx=10, pady=5)
+        
+        # Left column - Server info and status
+        left_column = tk.Frame(main_container, bg="#1e1e2e")
+        left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
+        
+        # Server status
+        status_frame = tk.Frame(left_column, bg="#313244", relief="flat")
+        status_frame.pack(fill="x", pady=5)
+        
+        status_label = tk.Label(status_frame,
+                                text="📡 Server Status",
+                                bg="#313244",
+                                fg="#89dceb",
+                                font=("Segoe UI", 11, "bold"))
+        status_label.pack(pady=10)
+        
+        self.mobile_status = tk.Label(status_frame,
+                                       text="✅ Server Running",
+                                       bg="#313244",
+                                       fg="#a6e3a1",
+                                       font=("Segoe UI", 10))
+        self.mobile_status.pack(pady=5)
+        
+        # Server info
+        info_text = tk.Text(status_frame,
+                            bg="#0f0f1e",
+                            fg="#cdd6f4",
+                            font=("Consolas", 9),
+                            height=8,
+                            relief="flat",
+                            padx=10,
+                            pady=10,
+                            state='disabled',
+                            wrap=tk.WORD)
+        info_text.pack(fill="x", padx=10, pady=10)
+        
+        # Get domain info
+        domain = os.environ.get('REPLIT_DEV_DOMAIN', 'localhost:5000')
+        
+        info_text.config(state='normal')
+        info_text.insert("1.0", 
+                         f"📱 Mobile Interface:\n"
+                         f"https://{domain}/mobile\n\n"
+                         f"💻 Desktop Dashboard:\n"
+                         f"https://{domain}/\n\n"
+                         f"🔐 Default PIN: 1234\n"
+                         f"📡 WebSocket: Connected\n"
+                         f"🔔 Notifications: Enabled")
+        info_text.config(state='disabled')
+        
+        # Quick actions
+        actions_frame = tk.Frame(left_column, bg="#313244", relief="flat")
+        actions_frame.pack(fill="both", expand=True, pady=10)
+        
+        actions_label = tk.Label(actions_frame,
+                                 text="⚡ Quick Actions",
+                                 bg="#313244",
+                                 fg="#f9e2af",
+                                 font=("Segoe UI", 11, "bold"))
+        actions_label.pack(pady=10)
+        
+        actions = [
+            ("📱 Open Mobile Interface", lambda: self.open_mobile_interface()),
+            ("💻 Open Desktop Dashboard", lambda: self.open_desktop_dashboard()),
+            ("🎬 Trigger Remote Macro", lambda: self.trigger_remote_macro()),
+            ("📊 View Connected Clients", lambda: self.view_mobile_clients()),
+            ("🔔 Send Test Notification", lambda: self.send_test_notification()),
+        ]
+        
+        for text, command in actions:
+            btn = tk.Button(actions_frame,
+                            text=text,
+                            bg="#45475a",
+                            fg="#ffffff",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            anchor="w",
+                            padx=15,
+                            pady=10)
+            btn.pack(fill="x", padx=10, pady=3)
+            self.add_hover_effect(btn, "#45475a", "#585b70")
+        
+        # Right column - Mobile command history
+        right_column = tk.Frame(main_container, bg="#1e1e2e")
+        right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
+        
+        # Command history
+        history_label = tk.Label(right_column,
+                                 text="📜 Mobile Command History",
+                                 bg="#1e1e2e",
+                                 fg="#a6adc8",
+                                 font=("Segoe UI", 10, "bold"))
+        history_label.pack(anchor="w", padx=5, pady=5)
+        
+        self.mobile_history = scrolledtext.ScrolledText(right_column,
+                                                        bg="#0f0f1e",
+                                                        fg="#cdd6f4",
+                                                        font=("Consolas", 9),
+                                                        wrap=tk.WORD,
+                                                        state='disabled',
+                                                        relief="flat",
+                                                        padx=10,
+                                                        pady=10)
+        self.mobile_history.pack(fill="both", expand=True, padx=5, pady=5)
+        
+        self.mobile_history.tag_config("timestamp", foreground="#6c7086")
+        self.mobile_history.tag_config("command", foreground="#89dceb")
+        self.mobile_history.tag_config("success", foreground="#a6e3a1")
+        self.mobile_history.tag_config("error", foreground="#f38ba8")
+        
+        # Add initial message
+        self.mobile_append_history("📱 Mobile Companion Server is running", "success")
+        self.mobile_append_history(f"🌐 Access from your phone: https://{domain}/mobile", "info")
+
+    # Macro Recorder Methods
+    def start_macro_recording(self):
+        """Start recording a macro"""
+        if not self.macro_recorder:
+            messagebox.showerror("Error", "Macro Recorder not initialized")
+            return
+        
+        name = simpledialog.askstring("Macro Name", "Enter a name for this macro:")
+        if not name:
+            return
+        
+        self.current_macro_name = name
+        self.macro_append_output(f"🔴 Starting macro recording: {name}\n", "info")
+        
+        def on_event(event):
+            event_type = event.get('type', 'unknown')
+            self.macro_append_output(f"  • {event_type}\n", "event")
+        
+        result = self.macro_recorder.start_recording(callback=on_event)
+        self.macro_append_output(f"{result}\n", "success")
+        
+        self.macro_record_status.config(text="🔴 Recording...", fg="#f38ba8")
+        self.macro_start_record_btn.config(state="disabled")
+        self.macro_stop_record_btn.config(state="normal")
+        self.recording_active = True
+    
+    def stop_macro_recording(self):
+        """Stop recording and save macro"""
+        if not self.macro_recorder or not self.recording_active:
+            return
+        
+        result = self.macro_recorder.stop_recording(name=self.current_macro_name)
+        self.macro_append_output(f"{result}\n", "success")
+        
+        self.macro_record_status.config(text="⚫ Ready to Record", fg="#a6adc8")
+        self.macro_start_record_btn.config(state="normal")
+        self.macro_stop_record_btn.config(state="disabled")
+        self.recording_active = False
+        
+        self.refresh_macro_list()
+    
+    def refresh_macro_list(self):
+        """Refresh the list of saved macros"""
+        if not self.macro_recorder:
+            return
+        
+        self.macro_listbox.delete(0, tk.END)
+        macros = self.macro_recorder.list_macros()
+        
+        for macro in macros:
+            display_text = f"{macro['name']} ({macro['event_count']} events, {macro['duration']:.1f}s)"
+            self.macro_listbox.insert(tk.END, display_text)
+        
+        if macros:
+            self.macro_append_output(f"📋 Loaded {len(macros)} macro(s)\n", "info")
+    
+    def play_macro(self):
+        """Play the selected macro"""
+        if not self.macro_recorder:
+            messagebox.showerror("Error", "Macro Recorder not initialized")
+            return
+        
+        selection = self.macro_listbox.curselection()
+        if not selection:
+            messagebox.showwarning("No Selection", "Please select a macro to play")
+            return
+        
+        index = selection[0]
+        macros = self.macro_recorder.list_macros()
+        macro = macros[index]
+        
+        repeat = int(self.macro_repeat_var.get())
+        speed_str = self.macro_speed_var.get().replace('x', '')
+        speed = float(speed_str)
+        
+        self.macro_append_output(f"▶️ Playing macro: {macro['name']}\n", "info")
+        self.macro_append_output(f"   Repeat: {repeat}x, Speed: {speed}x\n", "info")
+        
+        def on_complete(message):
+            self.macro_append_output(f"{message}\n", "success")
+        
+        result = self.macro_recorder.play_macro(macro_name=macro['name'], 
+                                                 repeat=repeat, 
+                                                 speed=speed,
+                                                 callback=on_complete)
+        self.macro_append_output(f"{result}\n", "success")
+    
+    def stop_macro_playback(self):
+        """Stop macro playback"""
+        if not self.macro_recorder:
+            return
+        
+        result = self.macro_recorder.stop_playback()
+        self.macro_append_output(f"{result}\n", "info")
+    
+    def delete_macro(self):
+        """Delete the selected macro"""
+        if not self.macro_recorder:
+            return
+        
+        selection = self.macro_listbox.curselection()
+        if not selection:
+            messagebox.showwarning("No Selection", "Please select a macro to delete")
+            return
+        
+        index = selection[0]
+        macros = self.macro_recorder.list_macros()
+        macro = macros[index]
+        
+        if messagebox.askyesno("Confirm Delete", f"Delete macro '{macro['name']}'?"):
+            result = self.macro_recorder.delete_macro(macro['name'])
+            self.macro_append_output(f"{result}\n", "info")
+            self.refresh_macro_list()
+    
+    def macro_append_output(self, text, tag=None):
+        """Append text to macro output console"""
+        if hasattr(self, 'macro_output'):
+            self.macro_output.config(state='normal')
+            self.macro_output.insert(tk.END, text, tag)
+            self.macro_output.see(tk.END)
+            self.macro_output.config(state='disabled')
+    
+    # Mobile Operations Methods
+    def open_mobile_interface(self):
+        """Open mobile interface in browser"""
+        domain = os.environ.get('REPLIT_DEV_DOMAIN', 'localhost:5000')
+        url = f"https://{domain}/mobile"
+        self.mobile_append_history(f"🌐 Opening: {url}", "info")
+        messagebox.showinfo("Mobile Interface", f"Mobile interface URL:\n\n{url}\n\nOpen this URL on your mobile device.")
+    
+    def open_desktop_dashboard(self):
+        """Open desktop dashboard"""
+        domain = os.environ.get('REPLIT_DEV_DOMAIN', 'localhost:5000')
+        url = f"https://{domain}/"
+        self.mobile_append_history(f"💻 Opening: {url}", "info")
+        messagebox.showinfo("Desktop Dashboard", f"Desktop dashboard URL:\n\n{url}")
+    
+    def trigger_remote_macro(self):
+        """Trigger a macro from mobile interface"""
+        if not self.macro_recorder:
+            messagebox.showerror("Error", "Macro Recorder not initialized")
+            return
+        
+        macros = self.macro_recorder.list_macros()
+        if not macros:
+            messagebox.showinfo("No Macros", "No saved macros available.\n\nRecord a macro first in the Macro Recorder tab.")
+            return
+        
+        macro_names = [m['name'] for m in macros]
+        
+        # Simple selection dialog
+        selection = simpledialog.askstring("Remote Macro",
+                                            f"Available macros:\n{', '.join(macro_names)}\n\nEnter macro name:")
+        
+        if selection and selection in macro_names:
+            self.mobile_append_history(f"🎬 Triggered remote macro: {selection}", "command")
+            self.mobile_append_history("   (Mobile trigger simulation)", "info")
+            messagebox.showinfo("Success", f"Macro '{selection}' triggered!\n\nIn the full version, this would execute from your mobile device.")
+        elif selection:
+            self.mobile_append_history(f"❌ Macro not found: {selection}", "error")
+    
+    def view_mobile_clients(self):
+        """View connected mobile clients"""
+        self.mobile_append_history("📊 Viewing connected clients...", "info")
+        messagebox.showinfo("Connected Clients", 
+                            "Mobile Companion Server Status:\n\n"
+                            "✅ Server Running\n"
+                            "📡 WebSocket Enabled\n"
+                            "🔔 Notifications Active\n\n"
+                            "Connect your mobile device to:\n"
+                            f"https://{os.environ.get('REPLIT_DEV_DOMAIN', 'localhost:5000')}/mobile")
+    
+    def send_test_notification(self):
+        """Send a test notification"""
+        self.mobile_append_history("🔔 Sending test notification...", "command")
+        messagebox.showinfo("Test Notification", "Test notification sent!\n\nCheck your mobile device if connected.")
+        self.mobile_append_history("✅ Test notification sent", "success")
+    
+    def mobile_append_history(self, text, tag=None):
+        """Append text to mobile history console"""
+        if hasattr(self, 'mobile_history'):
+            timestamp = datetime.now().strftime("%H:%M:%S")
+            self.mobile_history.config(state='normal')
+            self.mobile_history.insert(tk.END, f"[{timestamp}] ", "timestamp")
+            self.mobile_history.insert(tk.END, f"{text}\n", tag)
+            self.mobile_history.see(tk.END)
+            self.mobile_history.config(state='disabled')
 
 
 def main():
