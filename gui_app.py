@@ -1143,83 +1143,78 @@ class AutomationControllerGUI:
         execute_btn.pack(side="right", padx=(5, 0))
         self.add_hover_effect(execute_btn, "#f9e2af", "#f5c2e7")
         
-        # Quick actions section - Vertical layout
-        quick_outer_frame = tk.Frame(left_column, bg="#1e1e2e")
-        quick_outer_frame.pack(fill="both", expand=True, pady=(5, 10))
+        # Quick actions section with navigation
+        self.quick_actions_container = tk.Frame(left_column, bg="#1e1e2e")
+        self.quick_actions_container.pack(fill="both", expand=True, pady=(5, 10))
+        
+        # Create main menu view
+        self.quick_menu_view = tk.Frame(self.quick_actions_container, bg="#1e1e2e")
         
         # Header
-        quick_header = tk.Label(quick_outer_frame,
-                               text="⚡ Quick Actions Centre",
-                               bg="#1e1e2e",
-                               fg="#f9e2af",
-                               font=("Segoe UI", 11, "bold"))
-        quick_header.pack(anchor="w", padx=8, pady=(5, 2))
+        menu_header = tk.Label(self.quick_menu_view,
+                              text="⚡ Quick Actions Centre",
+                              bg="#1e1e2e",
+                              fg="#f9e2af",
+                              font=("Segoe UI", 11, "bold"))
+        menu_header.pack(anchor="w", padx=8, pady=(5, 2))
         
         # Subtitle
-        quick_subtitle = tk.Label(quick_outer_frame,
-                                 text="One-click shortcuts",
-                                 bg="#1e1e2e",
-                                 fg="#6c7086",
-                                 font=("Segoe UI", 8))
-        quick_subtitle.pack(anchor="w", padx=8, pady=(0, 8))
+        menu_subtitle = tk.Label(self.quick_menu_view,
+                                text="Choose an action below",
+                                bg="#1e1e2e",
+                                fg="#6c7086",
+                                font=("Segoe UI", 8))
+        menu_subtitle.pack(anchor="w", padx=8, pady=(0, 8))
         
-        # Scrollable container
-        quick_canvas = tk.Canvas(quick_outer_frame, bg="#1e1e2e", highlightthickness=0, height=400)
-        quick_scrollbar = ttk.Scrollbar(quick_outer_frame, orient="vertical", command=quick_canvas.yview)
-        quick_scrollable = tk.Frame(quick_canvas, bg="#1e1e2e")
+        # Scrollable menu
+        menu_canvas = tk.Canvas(self.quick_menu_view, bg="#1e1e2e", highlightthickness=0, height=400)
+        menu_scrollbar = ttk.Scrollbar(self.quick_menu_view, orient="vertical", command=menu_canvas.yview)
+        menu_scrollable = tk.Frame(menu_canvas, bg="#1e1e2e")
         
-        quick_scrollable.bind(
+        menu_scrollable.bind(
             "<Configure>",
-            lambda e: quick_canvas.configure(scrollregion=quick_canvas.bbox("all"))
+            lambda e: menu_canvas.configure(scrollregion=menu_canvas.bbox("all"))
         )
         
-        quick_canvas.create_window((0, 0), window=quick_scrollable, anchor="nw", width=quick_outer_frame.winfo_reqwidth())
-        quick_canvas.configure(yscrollcommand=quick_scrollbar.set)
+        menu_canvas.create_window((0, 0), window=menu_scrollable, anchor="nw", width=400)
+        menu_canvas.configure(yscrollcommand=menu_scrollbar.set)
         
-        # All quick actions in vertical list with categories
-        all_quick_actions = [
-            # System category
-            ("🖥️ SYSTEM", None, "#89b4fa", True),
-            ("💻 Screenshot", "Take a screenshot", "#89b4fa", False),
-            ("🔒 Lock PC", "Lock the computer", "#f38ba8", False),
-            ("📊 Task Manager", "Open Task Manager", "#cba6f7", False),
+        # Define quick actions with features
+        self.quick_actions_data = [
+            ("🖥️ SYSTEM", None, "#89b4fa", True, None),
+            ("💻 Screenshot", "Take a screenshot", "#89b4fa", False, "screenshot"),
+            ("🔒 Lock PC", "Lock the computer", "#f38ba8", False, "lock"),
+            ("📊 Task Manager", "Open Task Manager", "#cba6f7", False, "taskmanager"),
             
-            # Web & Apps category
-            ("🌐 WEB & APPS", None, "#89dceb", True),
-            ("🌍 Chrome", "Open Chrome and go to Google", "#89dceb", False),
-            ("🔍 Google Search", "Search Google for Python tutorials", "#a6e3a1", False),
-            ("📧 Gmail", "Open Gmail in browser", "#f38ba8", False),
-            ("💬 WhatsApp", "Open WhatsApp Web", "#a6e3a1", False),
+            ("🌐 WEB & APPS", None, "#89dceb", True, None),
+            ("🌍 Chrome", "Open Chrome and go to Google", "#89dceb", False, "chrome"),
+            ("🔍 Google Search", "Search Google for Python tutorials", "#a6e3a1", False, "google"),
+            ("📧 Gmail", "Open Gmail in browser", "#f38ba8", False, "gmail"),
+            ("💬 WhatsApp", "Open WhatsApp Web", "#a6e3a1", False, "whatsapp"),
             
-            # Productivity category
-            ("📁 PRODUCTIVITY", None, "#a6e3a1", True),
-            ("📝 VS Code", "Launch VS Code", "#89b4fa", False),
-            ("📂 File Explorer", "Open File Explorer", "#f9e2af", False),
-            ("🗒️ Notepad", "Open Notepad", "#cba6f7", False),
+            ("📁 PRODUCTIVITY", None, "#a6e3a1", True, None),
+            ("📝 VS Code", "Launch VS Code", "#89b4fa", False, "vscode"),
+            ("📂 File Explorer", "Open File Explorer", "#f9e2af", False, "explorer"),
+            ("🗒️ Notepad", "Open Notepad", "#cba6f7", False, "notepad"),
             
-            # Media category
-            ("🎵 MEDIA", None, "#f5c2e7", True),
-            ("🎵 Spotify", "Launch Spotify", "#a6e3a1", False),
-            ("🎬 YouTube", "Open YouTube", "#f38ba8", False),
-            ("🔊 Volume Up", "Increase volume by 10%", "#89dceb", False),
-            ("🔇 Mute", "Mute system volume", "#6c7086", False),
+            ("🎵 MEDIA", None, "#f5c2e7", True, None),
+            ("🎵 Spotify", "Launch Spotify", "#a6e3a1", False, "spotify"),
+            ("🎬 YouTube", "Open YouTube", "#f38ba8", False, "youtube"),
+            ("🔊 Volume", "Control system volume", "#89dceb", False, "volume"),
         ]
         
-        # Create buttons vertically
-        for item in all_quick_actions:
-            text, command, color, is_header = item
+        # Create menu buttons
+        for item in self.quick_actions_data:
+            text, description, color, is_header, feature_id = item
             
             if is_header:
-                # Category header
-                header_container = tk.Frame(quick_scrollable, bg="#1e1e2e", height=35)
+                header_container = tk.Frame(menu_scrollable, bg="#1e1e2e", height=35)
                 header_container.pack(fill="x", padx=5, pady=(8, 3))
                 header_container.pack_propagate(False)
                 
-                # Color accent line
                 accent = tk.Frame(header_container, bg=color, width=3)
                 accent.pack(side="left", fill="y", padx=(0, 8))
                 
-                # Header label
                 header_label = tk.Label(header_container,
                                        text=text,
                                        bg="#1e1e2e",
@@ -1227,24 +1222,20 @@ class AutomationControllerGUI:
                                        font=("Segoe UI", 9, "bold"))
                 header_label.pack(side="left", pady=8)
             else:
-                # Action button
-                btn = tk.Button(quick_scrollable,
+                btn = tk.Button(menu_scrollable,
                                text=text,
                                bg="#313244",
                                fg="#cdd6f4",
                                font=("Segoe UI", 9, "bold"),
                                relief="flat",
                                cursor="hand2",
-                               command=lambda cmd=command: self.load_comprehensive_command(cmd),
+                               command=lambda t=text, d=description, c=color, f=feature_id: self.show_quick_action_feature(t, d, c, f),
                                padx=15,
                                pady=10,
                                anchor="w",
-                               activebackground="#45475a",
-                               activeforeground=color,
                                bd=0)
                 btn.pack(fill="x", padx=8, pady=2)
                 
-                # Hover effects
                 def make_hover(button, accent_color):
                     def on_enter(e):
                         button.config(bg="#45475a", fg=accent_color)
@@ -1255,15 +1246,45 @@ class AutomationControllerGUI:
                 
                 make_hover(btn, color)
         
-        # Pack canvas with fixed height
-        quick_canvas.pack(side="left", fill="both", expand=True, padx=(0, 0))
-        quick_scrollbar.pack(side="right", fill="y")
+        menu_canvas.pack(side="left", fill="both", expand=True)
+        menu_scrollbar.pack(side="right", fill="y")
         
-        # Mouse wheel scrolling
-        def on_quick_mousewheel(event):
-            quick_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
-        quick_canvas.bind("<Enter>", lambda e: quick_canvas.bind_all("<MouseWheel>", on_quick_mousewheel))
-        quick_canvas.bind("<Leave>", lambda e: quick_canvas.unbind_all("<MouseWheel>"))
+        # Create feature view (initially hidden)
+        self.quick_feature_view = tk.Frame(self.quick_actions_container, bg="#1e1e2e")
+        
+        # Feature view header
+        feature_header_frame = tk.Frame(self.quick_feature_view, bg="#1e1e2e", height=50)
+        feature_header_frame.pack(fill="x", pady=(0, 10))
+        feature_header_frame.pack_propagate(False)
+        
+        # Back button
+        self.back_button = tk.Button(feature_header_frame,
+                                     text="← Back",
+                                     bg="#313244",
+                                     fg="#89b4fa",
+                                     font=("Segoe UI", 10, "bold"),
+                                     relief="flat",
+                                     cursor="hand2",
+                                     command=self.show_quick_actions_menu,
+                                     padx=15,
+                                     pady=8)
+        self.back_button.pack(side="left", padx=8, pady=8)
+        self.add_hover_effect(self.back_button, "#313244", "#45475a")
+        
+        # Feature title
+        self.feature_title = tk.Label(feature_header_frame,
+                                     text="",
+                                     bg="#1e1e2e",
+                                     fg="#f9e2af",
+                                     font=("Segoe UI", 12, "bold"))
+        self.feature_title.pack(side="left", padx=10, pady=8)
+        
+        # Feature content area
+        self.feature_content = tk.Frame(self.quick_feature_view, bg="#181825", relief="flat")
+        self.feature_content.pack(fill="both", expand=True, padx=8, pady=(0, 8))
+        
+        # Show menu view by default
+        self.quick_menu_view.pack(fill="both", expand=True)
         
         # Example prompts
         examples_frame = tk.Frame(left_column, bg="#1e1e2e")
@@ -5850,6 +5871,250 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
         self.comprehensive_input.delete(0, tk.END)
         self.comprehensive_input.insert(0, command)
         self.comprehensive_input.focus()
+    
+    def show_quick_actions_menu(self):
+        """Show the main quick actions menu"""
+        self.quick_feature_view.pack_forget()
+        self.quick_menu_view.pack(fill="both", expand=True)
+    
+    def show_quick_action_feature(self, title, description, color, feature_id):
+        """Show the selected quick action feature"""
+        # Hide menu, show feature view
+        self.quick_menu_view.pack_forget()
+        self.quick_feature_view.pack(fill="both", expand=True)
+        
+        # Update title
+        self.feature_title.config(text=title, fg=color)
+        
+        # Clear previous content
+        for widget in self.feature_content.winfo_children():
+            widget.destroy()
+        
+        # Create feature-specific content
+        content_inner = tk.Frame(self.feature_content, bg="#181825")
+        content_inner.pack(fill="both", expand=True, padx=15, pady=15)
+        
+        # Description
+        desc_label = tk.Label(content_inner,
+                             text=description,
+                             bg="#181825",
+                             fg="#a6adc8",
+                             font=("Segoe UI", 10),
+                             wraplength=350)
+        desc_label.pack(pady=(0, 20))
+        
+        # Feature-specific content
+        if feature_id == "screenshot":
+            self.create_screenshot_feature(content_inner, color)
+        elif feature_id == "lock":
+            self.create_lock_feature(content_inner, color)
+        elif feature_id == "taskmanager":
+            self.create_taskmanager_feature(content_inner, color)
+        elif feature_id == "chrome":
+            self.create_chrome_feature(content_inner, color)
+        elif feature_id == "google":
+            self.create_google_feature(content_inner, color)
+        elif feature_id == "gmail":
+            self.create_gmail_feature(content_inner, color)
+        elif feature_id == "whatsapp":
+            self.create_whatsapp_feature(content_inner, color)
+        elif feature_id == "vscode":
+            self.create_vscode_feature(content_inner, color)
+        elif feature_id == "explorer":
+            self.create_explorer_feature(content_inner, color)
+        elif feature_id == "notepad":
+            self.create_notepad_feature(content_inner, color)
+        elif feature_id == "spotify":
+            self.create_spotify_feature(content_inner, color)
+        elif feature_id == "youtube":
+            self.create_youtube_feature(content_inner, color)
+        elif feature_id == "volume":
+            self.create_volume_feature(content_inner, color)
+    
+    def create_screenshot_feature(self, parent, color):
+        """Create screenshot feature UI"""
+        tk.Label(parent, text="📸 Screenshot Options", bg="#181825", fg=color, 
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        btn = tk.Button(parent, text="📷 Capture Full Screen", bg="#313244", fg="#cdd6f4",
+                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                       command=lambda: self.load_comprehensive_command("Take a screenshot"),
+                       padx=20, pady=12)
+        btn.pack(fill="x", pady=5)
+        self.add_hover_effect(btn, "#313244", "#45475a")
+        
+        btn2 = tk.Button(parent, text="🖼️ Capture Window", bg="#313244", fg="#cdd6f4",
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Take screenshot of active window"),
+                        padx=20, pady=12)
+        btn2.pack(fill="x", pady=5)
+        self.add_hover_effect(btn2, "#313244", "#45475a")
+    
+    def create_lock_feature(self, parent, color):
+        """Create lock PC feature UI"""
+        tk.Label(parent, text="🔒 System Lock", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        tk.Label(parent, text="⚠️ This will lock your computer", bg="#181825", fg="#fab387",
+                font=("Segoe UI", 9)).pack(pady=5)
+        
+        btn = tk.Button(parent, text="🔒 Lock Computer Now", bg="#f38ba8", fg="#0f0f1e",
+                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                       command=lambda: self.load_comprehensive_command("Lock the computer"),
+                       padx=20, pady=12)
+        btn.pack(fill="x", pady=10)
+        self.add_hover_effect(btn, "#f38ba8", "#f5c2e7")
+    
+    def create_taskmanager_feature(self, parent, color):
+        """Create task manager feature UI"""
+        tk.Label(parent, text="📊 Task Manager", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        btn = tk.Button(parent, text="📊 Open Task Manager", bg="#313244", fg="#cdd6f4",
+                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                       command=lambda: self.load_comprehensive_command("Open Task Manager"),
+                       padx=20, pady=12)
+        btn.pack(fill="x", pady=5)
+        self.add_hover_effect(btn, "#313244", "#45475a")
+    
+    def create_chrome_feature(self, parent, color):
+        """Create Chrome feature UI"""
+        tk.Label(parent, text="🌍 Chrome Browser", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        btn = tk.Button(parent, text="🌍 Open Chrome", bg="#313244", fg="#cdd6f4",
+                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                       command=lambda: self.load_comprehensive_command("Open Chrome and go to Google"),
+                       padx=20, pady=12)
+        btn.pack(fill="x", pady=5)
+        self.add_hover_effect(btn, "#313244", "#45475a")
+    
+    def create_google_feature(self, parent, color):
+        """Create Google search feature UI"""
+        tk.Label(parent, text="🔍 Google Search", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        search_entry = tk.Entry(parent, bg="#313244", fg="#ffffff", font=("Segoe UI", 10),
+                               relief="flat", insertbackground="#f9e2af")
+        search_entry.insert(0, "Python tutorials")
+        search_entry.pack(fill="x", pady=5, ipady=8)
+        
+        btn = tk.Button(parent, text="🔍 Search Google", bg="#a6e3a1", fg="#0f0f1e",
+                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                       command=lambda: self.load_comprehensive_command(f"Search Google for {search_entry.get()}"),
+                       padx=20, pady=12)
+        btn.pack(fill="x", pady=10)
+        self.add_hover_effect(btn, "#a6e3a1", "#94e2d5")
+    
+    def create_gmail_feature(self, parent, color):
+        """Create Gmail feature UI"""
+        tk.Label(parent, text="📧 Gmail", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        btn = tk.Button(parent, text="📧 Open Gmail", bg="#313244", fg="#cdd6f4",
+                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                       command=lambda: self.load_comprehensive_command("Open Gmail in browser"),
+                       padx=20, pady=12)
+        btn.pack(fill="x", pady=5)
+        self.add_hover_effect(btn, "#313244", "#45475a")
+    
+    def create_whatsapp_feature(self, parent, color):
+        """Create WhatsApp feature UI"""
+        tk.Label(parent, text="💬 WhatsApp", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        btn = tk.Button(parent, text="💬 Open WhatsApp Web", bg="#313244", fg="#cdd6f4",
+                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                       command=lambda: self.load_comprehensive_command("Open WhatsApp Web"),
+                       padx=20, pady=12)
+        btn.pack(fill="x", pady=5)
+        self.add_hover_effect(btn, "#313244", "#45475a")
+    
+    def create_vscode_feature(self, parent, color):
+        """Create VS Code feature UI"""
+        tk.Label(parent, text="📝 VS Code", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        btn = tk.Button(parent, text="📝 Launch VS Code", bg="#313244", fg="#cdd6f4",
+                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                       command=lambda: self.load_comprehensive_command("Launch VS Code"),
+                       padx=20, pady=12)
+        btn.pack(fill="x", pady=5)
+        self.add_hover_effect(btn, "#313244", "#45475a")
+    
+    def create_explorer_feature(self, parent, color):
+        """Create File Explorer feature UI"""
+        tk.Label(parent, text="📂 File Explorer", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        btn = tk.Button(parent, text="📂 Open File Explorer", bg="#313244", fg="#cdd6f4",
+                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                       command=lambda: self.load_comprehensive_command("Open File Explorer"),
+                       padx=20, pady=12)
+        btn.pack(fill="x", pady=5)
+        self.add_hover_effect(btn, "#313244", "#45475a")
+    
+    def create_notepad_feature(self, parent, color):
+        """Create Notepad feature UI"""
+        tk.Label(parent, text="🗒️ Notepad", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        btn = tk.Button(parent, text="🗒️ Open Notepad", bg="#313244", fg="#cdd6f4",
+                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                       command=lambda: self.load_comprehensive_command("Open Notepad"),
+                       padx=20, pady=12)
+        btn.pack(fill="x", pady=5)
+        self.add_hover_effect(btn, "#313244", "#45475a")
+    
+    def create_spotify_feature(self, parent, color):
+        """Create Spotify feature UI"""
+        tk.Label(parent, text="🎵 Spotify", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        btn = tk.Button(parent, text="🎵 Launch Spotify", bg="#313244", fg="#cdd6f4",
+                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                       command=lambda: self.load_comprehensive_command("Launch Spotify"),
+                       padx=20, pady=12)
+        btn.pack(fill="x", pady=5)
+        self.add_hover_effect(btn, "#313244", "#45475a")
+    
+    def create_youtube_feature(self, parent, color):
+        """Create YouTube feature UI"""
+        tk.Label(parent, text="🎬 YouTube", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        btn = tk.Button(parent, text="🎬 Open YouTube", bg="#313244", fg="#cdd6f4",
+                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                       command=lambda: self.load_comprehensive_command("Open YouTube"),
+                       padx=20, pady=12)
+        btn.pack(fill="x", pady=5)
+        self.add_hover_effect(btn, "#313244", "#45475a")
+    
+    def create_volume_feature(self, parent, color):
+        """Create Volume control feature UI"""
+        tk.Label(parent, text="🔊 Volume Control", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        btn1 = tk.Button(parent, text="🔊 Volume Up", bg="#313244", fg="#cdd6f4",
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Increase volume by 10%"),
+                        padx=20, pady=12)
+        btn1.pack(fill="x", pady=5)
+        self.add_hover_effect(btn1, "#313244", "#45475a")
+        
+        btn2 = tk.Button(parent, text="🔉 Volume Down", bg="#313244", fg="#cdd6f4",
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Decrease volume by 10%"),
+                        padx=20, pady=12)
+        btn2.pack(fill="x", pady=5)
+        self.add_hover_effect(btn2, "#313244", "#45475a")
+        
+        btn3 = tk.Button(parent, text="🔇 Mute", bg="#f38ba8", fg="#0f0f1e",
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Mute system volume"),
+                        padx=20, pady=12)
+        btn3.pack(fill="x", pady=5)
+        self.add_hover_effect(btn3, "#f38ba8", "#f5c2e7")
     
     def append_comprehensive_output(self, text, tag=None):
         """Append text to the comprehensive output display"""
