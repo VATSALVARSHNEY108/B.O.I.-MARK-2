@@ -54,3 +54,8 @@ webdriver-manager
 opencv-python
 elevenlabs
 pygame
+eventlet
+flask
+flask-cors
+flask-socketio
+python-socketio
