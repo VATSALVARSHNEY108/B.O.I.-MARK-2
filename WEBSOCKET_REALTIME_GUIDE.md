@@ -52,7 +52,8 @@ The WebSocket server runs automatically when you start your project. It serves:
 #### Send Commands
 - Type commands directly in the dashboard
 - Press Enter or click "Send Command"
-- See execution in real-time in the activity feed
+- **Note**: Remote command execution is marked as pending and will be available in a future update
+- For now, use the GUI app to execute commands and watch them appear in real-time on the dashboard
 
 #### Activity Feed
 - Shows all commands being executed
@@ -150,11 +151,12 @@ Multiple people can monitor the same system:
 - Everyone sees same updates
 - Coordinate automation tasks
 
-### 4. Mobile Control
-Control VATSAL from your phone:
-- Send commands on-the-go
+### 4. Mobile Monitoring
+Monitor VATSAL from your phone:
+- Watch commands execute in real-time
 - Check system status
-- Monitor from anywhere
+- See activity feed from anywhere
+- **Note**: Command execution from dashboard is a future enhancement
 
 ## 📊 Example Workflow
 
