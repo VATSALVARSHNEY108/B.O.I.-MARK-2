@@ -31,6 +31,10 @@ args = "GUI App"
 task = "workflow.run"
 args = "WebSocket Server"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Mobile Companion Server"
+
 [[workflows.workflow]]
 name = "Test Gemini"
 author = "agent"
@@ -71,6 +75,18 @@ author = "agent"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python websocket_server.py"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow]]
+name = "Mobile Companion Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python mobile_companion_server.py"
 waitForPort = 5000
 
 [workflows.workflow.metadata]

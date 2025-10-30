@@ -79,6 +79,18 @@ The system includes a sophisticated AI assistant (`vatsal_assistant.py`) with co
   - **Multi-client Support:** Unlimited simultaneous connections with synchronized updates
   - **Remote Access:** Access dashboard from any browser on the network
   - **Beautiful UI:** Dark-themed, responsive design with smooth animations and notifications
+- **Mobile Companion System (`mobile_companion_server.py`):** Complete mobile control solution for VATSAL desktop automation
+  - **Mobile API (`mobile_api.py`):** REST API with endpoints for command execution, system monitoring, and quick actions
+  - **Mobile Web Interface (`templates/mobile.html`):** Touch-optimized responsive interface for phone/tablet control
+  - **Authentication System (`mobile_auth.py`):** PIN-based authentication with token management and API key support
+  - **Push Notifications (`notification_service.py`):** Multi-channel notifications via SMS (Twilio), Email, and Webhooks
+  - **Remote Screenshot Viewing:** Live screenshot capture with compression and caching for mobile viewing
+  - **Quick Action Shortcuts:** 16+ pre-configured one-tap actions (lock, shutdown, volume, media control, etc.)
+  - **Voice Command Forwarding:** Execute voice commands from mobile to desktop
+  - **Real-Time Updates:** WebSocket integration for live system stats and command status
+  - **Security Features:** Session management, token expiration (24h), IP tracking, and activity logging
+  - **System Monitoring:** Real-time CPU, memory, disk, and battery status from mobile
+  - **Mobile-First Design:** Progressive Web App support, add-to-homescreen, touch gestures
 - **Utility Modules:** Spotify Integration, YouTube Integration, Weather & News, Translation, Calculator, Password Vault, Quick Notes, and Calendar Manager.
 
 ## External Dependencies
