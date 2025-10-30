@@ -74,7 +74,7 @@ Return JSON with this structure:
   "risk_level": "safe/moderate/destructive",
   "actions": [
     {
-      "type": "open_app|close_app|click|type|keyboard|mouse|screenshot|file_create|file_delete|file_move|folder_open|process_kill|system_info|system_report|search_files|minimize_all|clipboard_copy|clipboard_paste|wait",
+      "type": "open_app|close_app|click|type|keyboard|mouse|screenshot|file_create|file_delete|file_move|folder_open|process_kill|system_info|system_report|search_files|minimize_all|clipboard_copy|clipboard_paste|lock_screen|shutdown_system|restart_system|cancel_shutdown|wait",
       "params": {}
     }
   ]
@@ -101,6 +101,10 @@ LOCAL EXECUTION ACTIONS:
 - minimize_all: {} (minimize all windows)
 - clipboard_copy: {"text": "text to copy"}
 - clipboard_paste: {} (get clipboard content)
+- lock_screen: {} (lock computer screen)
+- shutdown_system: {"delay_seconds": 10} (shutdown computer with delay)
+- restart_system: {"delay_seconds": 10} (restart computer with delay)
+- cancel_shutdown: {} (cancel any scheduled shutdown/restart)
 - wait: {"seconds": 2}
 
 Examples:
@@ -136,6 +140,26 @@ Examples:
     {"type": "system_info", "params": {"type": "cpu"}},
     {"type": "system_info", "params": {"type": "memory"}},
     {"type": "system_info", "params": {"type": "disk"}}
+  ]
+}
+
+"Lock the screen"
+{
+  "intent": "Lock computer screen",
+  "requires_confirmation": false,
+  "risk_level": "safe",
+  "actions": [
+    {"type": "lock_screen", "params": {}}
+  ]
+}
+
+"Shutdown computer"
+{
+  "intent": "Shutdown computer with 10 second delay",
+  "requires_confirmation": true,
+  "risk_level": "moderate",
+  "actions": [
+    {"type": "shutdown_system", "params": {"delay_seconds": 10}}
   ]
 }
 
