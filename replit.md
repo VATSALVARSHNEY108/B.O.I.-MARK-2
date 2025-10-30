@@ -91,6 +91,18 @@ The system includes a sophisticated AI assistant (`vatsal_assistant.py`) with co
   - **Security Features:** Session management, token expiration (24h), IP tracking, and activity logging
   - **System Monitoring:** Real-time CPU, memory, disk, and battery status from mobile
   - **Mobile-First Design:** Progressive Web App support, add-to-homescreen, touch gestures
+- **Automation Recording & Macro System (`macro_recorder.py`):** Professional macro recording and playback system for desktop automation
+  - **Action Recording:** Captures mouse clicks, movements, scrolls, and keyboard events with precise timing
+  - **Accurate Playback:** Replays recorded sequences with millisecond precision and timing accuracy
+  - **Macro Management:** Save, load, list, and delete macros stored as JSON files
+  - **Loop Support:** Repeat macros 1-∞ times for batch automation
+  - **Speed Control:** Adjust playback speed from 0.1x to 10x (slow motion to ultra-fast)
+  - **Pre-built Templates:** Ready-made macros for multi-click sequences, form filling, screenshots, window switching
+  - **Event System:** Comprehensive event types (move, click, scroll, key_press, key_release)
+  - **Thread-Safe Execution:** Non-blocking recording and playback with callbacks
+  - **Cross-Platform:** Works on Windows, macOS, and Linux via pynput and PyAutoGUI
+  - **Smart Recording:** Optimizes mouse movements (100ms intervals) to reduce file size
+  - **Stop Controls:** Cancel recording or playback anytime with stop methods
 - **Utility Modules:** Spotify Integration, YouTube Integration, Weather & News, Translation, Calculator, Password Vault, Quick Notes, and Calendar Manager.
 
 ## External Dependencies
