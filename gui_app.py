@@ -41,6 +41,7 @@ from self_operating_integrations import SelfOperatingIntegrationHub, SmartTaskRo
 from command_executor_integration import EnhancedCommandExecutor, CommandInterceptor
 from voice_commander import create_voice_commander
 from system_control import SystemController
+from websocket_client import get_websocket_client
 
 load_dotenv()
 
@@ -169,6 +170,15 @@ class AutomationControllerGUI:
         self.hover_colors = {}
         self.vatsal_conversation_active = False
         self.active_chatbot = "simple"
+
+        # Initialize WebSocket client for real-time updates
+        try:
+            self.ws_client = get_websocket_client()
+            self.ws_client.connect()
+            print("✅ WebSocket client initialized for real-time updates")
+        except Exception as e:
+            self.ws_client = None
+            print(f"⚠️ WebSocket client initialization failed: {e}")
 
         # Initialize Voice Commander with callback
         try:
@@ -3769,6 +3779,13 @@ Based on OthersideAI's self-operating-computer framework
 
     def _execute_in_thread(self, command):
         try:
+            # Broadcast command started
+            if self.ws_client and self.ws_client.connected:
+                self.ws_client.emit('command_started', {
+                    'command': command,
+                    'timestamp': datetime.now().isoformat()
+                })
+            
             self.update_output(f"\n{'=' * 60}\n", "info")
             self.update_output(f"📝 You: {command}\n", "command")
             self.update_output(f"{'=' * 60}\n\n", "info")
@@ -3804,6 +3821,14 @@ Based on OthersideAI's self-operating-computer framework
             result = self.executor.execute(command_dict)
 
             if result["success"]:
+                # Broadcast command completed
+                if self.ws_client and self.ws_client.connected:
+                    self.ws_client.emit('command_completed', {
+                        'command': command,
+                        'result': str(result['message']),
+                        'timestamp': datetime.now().isoformat()
+                    })
+                
                 # Get VATSAL response if mode is enabled
                 if self.vatsal_mode:
                     vatsal_response = self.get_vatsal_response(command, result['message'])
@@ -3827,6 +3852,14 @@ Based on OthersideAI's self-operating-computer framework
                     self.update_output(f"\n{suggestion}\n", "command")
 
             else:
+                # Broadcast command failed
+                if self.ws_client and self.ws_client.connected:
+                    self.ws_client.emit('command_failed', {
+                        'command': command,
+                        'error': str(result['message']),
+                        'timestamp': datetime.now().isoformat()
+                    })
+                
                 if self.vatsal_mode:
                     vatsal_response = self.vatsal.process_with_personality(
                         command,
@@ -3843,6 +3876,14 @@ Based on OthersideAI's self-operating-computer framework
                 self.update_status("❌ Error", "#f38ba8")
 
         except Exception as e:
+            # Broadcast exception
+            if self.ws_client and self.ws_client.connected:
+                self.ws_client.emit('command_failed', {
+                    'command': command,
+                    'error': str(e),
+                    'timestamp': datetime.now().isoformat()
+                })
+            
             if self.vatsal_mode:
                 self.update_output(f"🤖 VATSAL: Apologies, Sir. Encountered an unexpected error: {str(e)}\n", "error")
             else:
