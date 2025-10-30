@@ -220,9 +220,11 @@ class SystemController:
             if self.config["auto_cleanup"]["enabled"] and percent_used > self.config["auto_cleanup"]["disk_limit"]:
                 result += "\n⚠️ Disk space limit exceeded. Running auto-cleanup...\n"
                 cleanup_msg = self.clear_temp_files()
-                result += cleanup_msg + "\n"
+                if cleanup_msg:
+                    result += cleanup_msg + "\n"
                 bin_msg = self.empty_recycle_bin()
-                result += bin_msg
+                if bin_msg:
+                    result += bin_msg
             
             return result
         except Exception as e:
@@ -238,65 +240,123 @@ class SystemController:
     def lock_screen(self):
         """Lock the computer screen"""
         try:
+            print("🔒 Attempting to lock screen...")
+            
             if self.os == "Windows":
-                subprocess.run("rundll32.exe user32.dll,LockWorkStation", shell=True, check=False)
-                return "🔒 Screen locked"
+                result = subprocess.run("rundll32.exe user32.dll,LockWorkStation", shell=True, check=False, capture_output=True, text=True)
+                print(f"Lock command executed (Windows): return code {result.returncode}")
+                return "🔒 Screen locked successfully"
+                
             elif self.os == "Darwin":
-                subprocess.run(["/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession", "-suspend"], check=False)
-                return "🔒 Screen locked"
+                result = subprocess.run(
+                    ["/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession", "-suspend"], 
+                    check=False, capture_output=True, text=True
+                )
+                print(f"Lock command executed (macOS): return code {result.returncode}")
+                return "🔒 Screen locked successfully"
+                
             elif self.os == "Linux":
-                try:
-                    subprocess.run(["xdg-screensaver", "lock"], check=True)
-                    return "🔒 Screen locked"
-                except:
+                # Try multiple methods in order of preference
+                lock_methods = [
+                    (["loginctl", "lock-session"], "loginctl"),
+                    (["xdg-screensaver", "lock"], "xdg-screensaver"),
+                    (["gnome-screensaver-command", "--lock"], "gnome-screensaver"),
+                    (["dm-tool", "lock"], "dm-tool"),
+                    (["xscreensaver-command", "-lock"], "xscreensaver"),
+                ]
+                
+                for cmd, method_name in lock_methods:
                     try:
-                        subprocess.run(["gnome-screensaver-command", "--lock"], check=True)
-                        return "🔒 Screen locked"
-                    except:
-                        try:
-                            subprocess.run(["loginctl", "lock-session"], check=True)
-                            return "🔒 Screen locked"
-                        except:
-                            return "❌ Failed to lock screen. Please lock manually."
+                        result = subprocess.run(cmd, check=True, capture_output=True, text=True, timeout=5)
+                        print(f"Lock command executed (Linux - {method_name}): return code {result.returncode}")
+                        return f"🔒 Screen locked successfully (using {method_name})"
+                    except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired):
+                        continue
+                
+                # If all methods failed
+                print("⚠️ All lock methods failed on Linux")
+                return "❌ Failed to lock screen. No compatible screen locker found. Please install xdg-screensaver, gnome-screensaver, or configure loginctl."
+            else:
+                return f"❌ Unsupported operating system: {self.os}"
+                
         except Exception as e:
+            print(f"❌ Exception in lock_screen: {str(e)}")
             return f"❌ Failed to lock screen: {str(e)}"
     
     def shutdown_system(self, delay_seconds=10):
         """Shutdown the computer with optional delay"""
         try:
+            print(f"⚠️ Attempting to shutdown system (delay: {delay_seconds}s)...")
+            
+            # Cancel any existing shutdown/restart process
             if self.os in ["Darwin", "Linux"]:
                 if self.shutdown_process and self.shutdown_process.poll() is None:
                     self.shutdown_process.terminate()
                     self.shutdown_process = None
+                    print("Cancelled previous shutdown process")
             
             if self.os == "Windows":
-                subprocess.run("shutdown /a", shell=True, check=False)
-                subprocess.Popen(f'shutdown /s /t {delay_seconds}', shell=True)
+                # Cancel any existing shutdown first
+                subprocess.run("shutdown /a", shell=True, check=False, capture_output=True)
+                
+                # Schedule new shutdown
+                result = subprocess.run(f'shutdown /s /t {delay_seconds}', shell=True, capture_output=True, text=True)
+                print(f"Shutdown command executed (Windows): return code {result.returncode}")
+                
                 if delay_seconds > 0:
-                    return f"⚠️ Computer will shutdown in {delay_seconds} seconds. Run 'cancel shutdown' to abort."
+                    return f"⚠️ Computer will shutdown in {delay_seconds} seconds.\n💡 Run 'cancel shutdown' command to abort."
                 else:
                     return "⚠️ Shutting down computer now..."
+                    
             elif self.os == "Darwin":
                 if delay_seconds > 0:
                     self.shutdown_process = subprocess.Popen(
                         f'sleep {delay_seconds} && sudo shutdown -h now',
-                        shell=True
+                        shell=True,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE
                     )
-                    return f"⚠️ Computer will shutdown in {delay_seconds} seconds. Run 'cancel shutdown' to abort."
+                    print(f"Shutdown scheduled (macOS): PID {self.shutdown_process.pid}")
+                    return f"⚠️ Computer will shutdown in {delay_seconds} seconds.\n💡 Click 'Cancel Shutdown' or run 'cancel shutdown' to abort."
                 else:
                     subprocess.Popen(['sudo', 'shutdown', '-h', 'now'])
+                    print("Immediate shutdown initiated (macOS)")
                     return "⚠️ Shutting down computer now..."
+                    
             elif self.os == "Linux":
                 if delay_seconds > 0:
-                    self.shutdown_process = subprocess.Popen(
-                        f'sleep {delay_seconds} && sudo systemctl poweroff',
-                        shell=True
-                    )
-                    return f"⚠️ Computer will shutdown in {delay_seconds} seconds. Run 'cancel shutdown' to abort."
+                    # Use systemctl with delay
+                    minutes = max(1, delay_seconds // 60)
+                    try:
+                        # Try systemctl first
+                        result = subprocess.run(
+                            f'sudo systemctl poweroff --message="Shutdown scheduled via VATSAL" --no-wall',
+                            shell=True,
+                            capture_output=True,
+                            text=True,
+                            timeout=2
+                        )
+                        print(f"Shutdown command executed (Linux systemctl): return code {result.returncode}")
+                        return f"⚠️ Computer will shutdown in {delay_seconds} seconds.\n💡 Run 'cancel shutdown' to abort."
+                    except:
+                        # Fallback to sleep + poweroff
+                        self.shutdown_process = subprocess.Popen(
+                            f'sleep {delay_seconds} && sudo systemctl poweroff',
+                            shell=True,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE
+                        )
+                        print(f"Shutdown scheduled (Linux fallback): PID {self.shutdown_process.pid}")
+                        return f"⚠️ Computer will shutdown in {delay_seconds} seconds.\n💡 Run 'cancel shutdown' to abort."
                 else:
                     subprocess.Popen(['sudo', 'systemctl', 'poweroff'])
+                    print("Immediate shutdown initiated (Linux)")
                     return "⚠️ Shutting down computer now..."
+            else:
+                return f"❌ Unsupported operating system: {self.os}"
+                
         except Exception as e:
+            print(f"❌ Exception in shutdown_system: {str(e)}")
             return f"❌ Failed to shutdown: {str(e)}"
     
     def restart_system(self, delay_seconds=10):

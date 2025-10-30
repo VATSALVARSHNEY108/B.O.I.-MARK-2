@@ -59,3 +59,7 @@ outputType = "vnc"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python gui_app.py"
+
+[[ports]]
+localPort = 38037
+externalPort = 80
