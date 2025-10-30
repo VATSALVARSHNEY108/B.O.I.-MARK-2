@@ -40,6 +40,7 @@ from self_operating_computer import SelfOperatingComputer
 from self_operating_integrations import SelfOperatingIntegrationHub, SmartTaskRouter
 from command_executor_integration import EnhancedCommandExecutor, CommandInterceptor
 from voice_commander import create_voice_commander
+from system_control import SystemController
 
 load_dotenv()
 
@@ -71,6 +72,9 @@ class AutomationControllerGUI:
         self.root.geometry("1400x900")
         self.root.configure(bg="#0f0f1e")
 
+        # Initialize system controller for direct access
+        self.system_controller = SystemController()
+        
         # Initialize base executor
         self.base_executor = CommandExecutor()
         
@@ -2029,6 +2033,34 @@ class AutomationControllerGUI:
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
+        # Direct action buttons (lock and shutdown)
+        direct_actions = [
+            ("🔒 Lock Computer", self.direct_lock_screen, "#f38ba8"),
+            ("⚠️ Shutdown Computer", self.direct_shutdown_system, "#f38ba8"),
+        ]
+        
+        for text, command_func, color in direct_actions:
+            btn = tk.Button(scrollable_frame,
+                            text=text,
+                            bg=color,
+                            fg="#ffffff",
+                            font=("Segoe UI", 10, "bold"),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command_func,
+                            anchor="w",
+                            padx=15,
+                            pady=12,
+                            activebackground="#45475a")
+            btn.pack(fill="x", padx=8, pady=3)
+            hover_color = "#fab387" if color == "#f38ba8" else "#45475a"
+            self.add_hover_effect(btn, color, hover_color)
+        
+        # Separator
+        separator = tk.Frame(scrollable_frame, bg="#45475a", height=2)
+        separator.pack(fill="x", padx=8, pady=8)
+
+        # AI-powered actions (through command parsing)
         actions = [
             ("📊 System Report", "Get full system report"),
             ("💾 Check Disk Usage", "Show disk usage"),
@@ -2039,7 +2071,6 @@ class AutomationControllerGUI:
             ("📁 Find Duplicates", "Find duplicate files"),
             ("🗜️ Compress Old Files", "Compress files older than 90 days"),
             ("💤 Sleep Computer", "Put computer to sleep"),
-            ("🔒 Lock Computer", "Lock the computer"),
             ("🔊 Volume Control", "Set volume to 50"),
         ]
 
@@ -3422,6 +3453,63 @@ Based on OthersideAI's self-operating-computer framework
         self.command_input.delete(0, tk.END)
         self.command_input.insert(0, command)
         self.execute_command()
+
+    def direct_lock_screen(self):
+        """Directly lock the screen without going through AI parsing"""
+        if self.processing:
+            messagebox.showwarning("Busy", "Please wait for the current command to finish.")
+            return
+        
+        self.processing = True
+        self.update_status("🔒 Locking...", "#f9e2af")
+        
+        def lock_thread():
+            try:
+                self.update_output(f"\n{'=' * 60}\n", "info")
+                self.update_output("🔒 Locking the computer...\n", "info")
+                result = self.system_controller.lock_screen()
+                self.update_output(f"{result}\n", "success")
+                self.update_status("✅ Ready", "#a6e3a1")
+            except Exception as e:
+                self.update_output(f"❌ Error locking screen: {str(e)}\n", "error")
+                self.update_status("❌ Error", "#f38ba8")
+            finally:
+                self.processing = False
+        
+        threading.Thread(target=lock_thread, daemon=True).start()
+    
+    def direct_shutdown_system(self):
+        """Directly shutdown the system without going through AI parsing"""
+        if self.processing:
+            messagebox.showwarning("Busy", "Please wait for the current command to finish.")
+            return
+        
+        # Confirm shutdown action
+        confirm = messagebox.askyesno(
+            "Confirm Shutdown",
+            "Are you sure you want to shutdown the computer?\n\nThe system will shutdown in 10 seconds."
+        )
+        
+        if not confirm:
+            return
+        
+        self.processing = True
+        self.update_status("⚠️ Shutting down...", "#f38ba8")
+        
+        def shutdown_thread():
+            try:
+                self.update_output(f"\n{'=' * 60}\n", "info")
+                self.update_output("⚠️ Initiating shutdown...\n", "warning")
+                result = self.system_controller.shutdown_system(delay_seconds=10)
+                self.update_output(f"{result}\n", "warning")
+                self.update_status("⚠️ Shutting down", "#f38ba8")
+            except Exception as e:
+                self.update_output(f"❌ Error during shutdown: {str(e)}\n", "error")
+                self.update_status("❌ Error", "#f38ba8")
+            finally:
+                self.processing = False
+        
+        threading.Thread(target=shutdown_thread, daemon=True).start()
 
     def execute_command(self):
         if self.processing:
