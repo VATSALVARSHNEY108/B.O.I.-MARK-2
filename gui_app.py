@@ -312,31 +312,146 @@ class AutomationControllerGUI:
                                     pady=12)
         categories_label.pack()
 
-        notebook_container = tk.Frame(left_panel, bg="#1a1a2e", relief="flat")
-        notebook_container.pack(fill="both", expand=True)
-
-        notebook = ttk.Notebook(notebook_container)
-        notebook.pack(fill="both", expand=True, padx=10, pady=10)
-
-        self.create_vatsal_ai_tab(notebook)
-        self.create_vatsal_automator_tab(notebook)
-        self.create_self_operating_tab(notebook)
-        self.create_comprehensive_controller_tab(notebook)
-        self.create_web_automation_tab(notebook)
-        self.create_productivity_hub_tab(notebook)
-        self.create_tools_utilities_tab(notebook)
-        self.create_code_tab(notebook)
-        self.create_desktop_tab(notebook)
-        self.create_file_automation_tab(notebook)
-        self.create_clipboard_text_tab(notebook)
-        self.create_messaging_tab(notebook)
-        self.create_system_tab(notebook)
-        self.create_productivity_tab(notebook)
-        self.create_utilities_tab(notebook)
-        self.create_ecosystem_tab(notebook)
-        self.create_ai_features_tab(notebook)
-        self.create_fun_tab(notebook)
-        self.create_web_tools_tab(notebook)
+        # Quick actions navigation container
+        self.quick_actions_container = tk.Frame(left_panel, bg="#1a1a2e", relief="flat")
+        self.quick_actions_container.pack(fill="both", expand=True, padx=10, pady=10)
+        
+        # Create main menu view
+        self.quick_menu_view = tk.Frame(self.quick_actions_container, bg="#1a1a2e")
+        
+        # Subtitle
+        menu_subtitle = tk.Label(self.quick_menu_view,
+                                text="Choose an action below",
+                                bg="#1a1a2e",
+                                fg="#6c7086",
+                                font=("Segoe UI", 9))
+        menu_subtitle.pack(anchor="w", padx=8, pady=(5, 8))
+        
+        # Scrollable menu
+        menu_canvas = tk.Canvas(self.quick_menu_view, bg="#1a1a2e", highlightthickness=0)
+        menu_scrollbar = ttk.Scrollbar(self.quick_menu_view, orient="vertical", command=menu_canvas.yview)
+        menu_scrollable = tk.Frame(menu_canvas, bg="#1a1a2e")
+        
+        menu_scrollable.bind(
+            "<Configure>",
+            lambda e: menu_canvas.configure(scrollregion=menu_canvas.bbox("all"))
+        )
+        
+        menu_canvas.create_window((0, 0), window=menu_scrollable, anchor="nw")
+        menu_canvas.configure(yscrollcommand=menu_scrollbar.set)
+        
+        # Define quick actions with features
+        self.quick_actions_data = [
+            ("🖥️ SYSTEM", None, "#89b4fa", True, None),
+            ("💻 Screenshot", "Take a screenshot", "#89b4fa", False, "screenshot"),
+            ("🔒 Lock PC", "Lock the computer", "#f38ba8", False, "lock"),
+            ("📊 Task Manager", "Open Task Manager", "#cba6f7", False, "taskmanager"),
+            ("🔋 Battery Info", "View battery status", "#a6e3a1", False, "battery"),
+            ("⚙️ System Settings", "Open system settings", "#89dceb", False, "settings"),
+            
+            ("🌐 WEB & APPS", None, "#89dceb", True, None),
+            ("🌍 Chrome", "Open Chrome and go to Google", "#89dceb", False, "chrome"),
+            ("🔍 Google Search", "Search Google for Python tutorials", "#a6e3a1", False, "google"),
+            ("📧 Gmail", "Open Gmail in browser", "#f38ba8", False, "gmail"),
+            ("💬 WhatsApp", "Open WhatsApp Web", "#a6e3a1", False, "whatsapp"),
+            ("📺 YouTube", "Open YouTube", "#f38ba8", False, "youtube"),
+            
+            ("📁 PRODUCTIVITY", None, "#a6e3a1", True, None),
+            ("📝 VS Code", "Launch VS Code", "#89b4fa", False, "vscode"),
+            ("📂 File Explorer", "Open File Explorer", "#f9e2af", False, "explorer"),
+            ("🗒️ Notepad", "Open Notepad", "#cba6f7", False, "notepad"),
+            ("📊 Excel", "Launch Microsoft Excel", "#a6e3a1", False, "excel"),
+            ("📄 Word", "Launch Microsoft Word", "#89dceb", False, "word"),
+            
+            ("🎵 MEDIA", None, "#f5c2e7", True, None),
+            ("🎵 Spotify", "Launch Spotify", "#a6e3a1", False, "spotify"),
+            ("🎬 VLC Player", "Open VLC Media Player", "#f9e2af", False, "vlc"),
+            ("🔊 Volume Control", "Control system volume", "#89dceb", False, "volume"),
+            ("🎧 Sound Settings", "Open sound settings", "#cba6f7", False, "sound"),
+        ]
+        
+        # Create menu buttons
+        for item in self.quick_actions_data:
+            text, description, color, is_header, feature_id = item
+            
+            if is_header:
+                header_container = tk.Frame(menu_scrollable, bg="#1a1a2e", height=35)
+                header_container.pack(fill="x", padx=5, pady=(12, 3))
+                header_container.pack_propagate(False)
+                
+                accent = tk.Frame(header_container, bg=color, width=4)
+                accent.pack(side="left", fill="y", padx=(0, 10))
+                
+                header_label = tk.Label(header_container,
+                                       text=text,
+                                       bg="#1a1a2e",
+                                       fg=color,
+                                       font=("Segoe UI", 10, "bold"))
+                header_label.pack(side="left", pady=8)
+            else:
+                btn = tk.Button(menu_scrollable,
+                               text=text,
+                               bg="#313244",
+                               fg="#cdd6f4",
+                               font=("Segoe UI", 10),
+                               relief="flat",
+                               cursor="hand2",
+                               command=lambda t=text, d=description, c=color, f=feature_id: self.show_quick_action_feature(t, d, c, f),
+                               padx=20,
+                               pady=12,
+                               anchor="w",
+                               bd=0)
+                btn.pack(fill="x", padx=8, pady=3)
+                
+                def make_hover(button, accent_color):
+                    def on_enter(e):
+                        button.config(bg="#45475a", fg=accent_color)
+                    def on_leave(e):
+                        button.config(bg="#313244", fg="#cdd6f4")
+                    button.bind("<Enter>", on_enter)
+                    button.bind("<Leave>", on_leave)
+                
+                make_hover(btn, color)
+        
+        menu_canvas.pack(side="left", fill="both", expand=True)
+        menu_scrollbar.pack(side="right", fill="y")
+        
+        # Create feature view (initially hidden)
+        self.quick_feature_view = tk.Frame(self.quick_actions_container, bg="#1a1a2e")
+        
+        # Feature view header
+        feature_header_frame = tk.Frame(self.quick_feature_view, bg="#1a1a2e", height=60)
+        feature_header_frame.pack(fill="x", pady=(0, 10))
+        feature_header_frame.pack_propagate(False)
+        
+        # Back button
+        self.back_button = tk.Button(feature_header_frame,
+                                     text="← Back",
+                                     bg="#313244",
+                                     fg="#89b4fa",
+                                     font=("Segoe UI", 11, "bold"),
+                                     relief="flat",
+                                     cursor="hand2",
+                                     command=self.show_quick_actions_menu,
+                                     padx=20,
+                                     pady=10)
+        self.back_button.pack(side="left", padx=10, pady=10)
+        self.add_hover_effect(self.back_button, "#313244", "#45475a")
+        
+        # Feature title
+        self.feature_title = tk.Label(feature_header_frame,
+                                     text="",
+                                     bg="#1a1a2e",
+                                     fg="#f9e2af",
+                                     font=("Segoe UI", 13, "bold"))
+        self.feature_title.pack(side="left", padx=15, pady=10)
+        
+        # Feature content area
+        self.feature_content = tk.Frame(self.quick_feature_view, bg="#181825", relief="flat")
+        self.feature_content.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+        
+        # Show menu view by default
+        self.quick_menu_view.pack(fill="both", expand=True)
 
         right_panel = tk.Frame(main_container, bg="#0f0f1e")
         right_panel.pack(side="right", fill="both", expand=True)
