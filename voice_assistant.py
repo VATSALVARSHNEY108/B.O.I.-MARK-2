@@ -38,20 +38,30 @@ class VoiceAssistant:
         
         # Get all available voices
         self.available_voices = self.engine.getProperty('voices')
-        self.current_voice_type = "chipmunk"  # Default (kid-like voice)
+        self.current_voice_type = "kid"  # Default (kid voice)
         
-        # Set default voice (chipmunk - higher pitch like a kid)
-        if len(self.available_voices) > 1:
+        # Set kid voice - using high-pitched female variant (sounds like a child)
+        # Try to find the en+f3 or similar high-pitched voice
+        kid_voice_found = False
+        for voice in self.available_voices:
+            if 'f3' in voice.id.lower() or 'female' in voice.id.lower() or 'f2' in voice.id.lower():
+                self.engine.setProperty('voice', voice.id)
+                kid_voice_found = True
+                break
+        
+        # Fallback to second voice if kid voice not found
+        if not kid_voice_found and len(self.available_voices) > 1:
             self.engine.setProperty('voice', self.available_voices[1].id)
         
-        # Voice settings for kid-like voice
-        self.engine.setProperty('rate', 300)  # Faster rate for kid-like voice
-        self.engine.setProperty('volume', 0.9)
+        # Voice settings for kid-like voice - VERY FAST with higher pitch
+        self.engine.setProperty('rate', 220)  # Fast speaking rate like a kid
+        self.engine.setProperty('volume', 0.95)
         
         # Voice presets for easy switching
         self.voice_presets = {
             "male": {"index": 0, "rate": 150, "pitch": 1.0},
             "female": {"index": 1, "rate": 150, "pitch": 1.0},
+            "kid": {"index": 1, "rate": 220, "pitch": 1.8},
             "fast": {"index": 1, "rate": 250, "pitch": 1.2},
             "slow": {"index": 0, "rate": 100, "pitch": 0.8},
             "robot": {"index": 0, "rate": 180, "pitch": 0.5},
