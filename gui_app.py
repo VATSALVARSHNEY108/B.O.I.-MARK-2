@@ -326,8 +326,73 @@ class AutomationControllerGUI:
         self.quick_actions_container = tk.Frame(left_panel, bg="#1a1a2e", relief="flat")
         self.quick_actions_container.pack(fill="both", expand=True, padx=10, pady=10)
         
+        # Create sidebar and main content container
+        self.sidebar_main_container = tk.Frame(self.quick_actions_container, bg="#1a1a2e")
+        self.sidebar_main_container.pack(fill="both", expand=True)
+        
+        # Create collapsible sidebar
+        self.sidebar_expanded = True
+        self.sidebar = tk.Frame(self.sidebar_main_container, bg="#0f0f1e", width=120)
+        self.sidebar.pack(side="left", fill="y", padx=(0, 5))
+        self.sidebar.pack_propagate(False)
+        
+        # Sidebar toggle button
+        self.sidebar_toggle_btn = tk.Button(self.sidebar,
+                                           text="◀",
+                                           bg="#313244",
+                                           fg="#89b4fa",
+                                           font=("Segoe UI", 12, "bold"),
+                                           relief="flat",
+                                           cursor="hand2",
+                                           command=self.toggle_sidebar,
+                                           padx=10,
+                                           pady=5)
+        self.sidebar_toggle_btn.pack(fill="x", padx=5, pady=5)
+        self.add_hover_effect(self.sidebar_toggle_btn, "#313244", "#45475a")
+        
+        # Sidebar title
+        self.sidebar_title = tk.Label(self.sidebar,
+                                     text="MENU",
+                                     bg="#0f0f1e",
+                                     fg="#6c7086",
+                                     font=("Segoe UI", 8, "bold"))
+        self.sidebar_title.pack(pady=(5, 10))
+        
+        # Category navigation data
+        self.sidebar_categories = [
+            ("🖥️", "SYSTEM", "#89b4fa"),
+            ("🌐", "WEB", "#89dceb"),
+            ("📁", "WORK", "#a6e3a1"),
+            ("🎵", "MEDIA", "#f5c2e7"),
+        ]
+        
+        self.sidebar_buttons = []
+        self.active_sidebar_category = None
+        
+        # Create category buttons in sidebar
+        for icon, name, color in self.sidebar_categories:
+            btn_frame = tk.Frame(self.sidebar, bg="#0f0f1e")
+            btn_frame.pack(fill="x", pady=3, padx=5)
+            
+            btn = tk.Button(btn_frame,
+                          text=f"{icon}\n{name}",
+                          bg="#313244",
+                          fg=color,
+                          font=("Segoe UI", 9),
+                          relief="flat",
+                          cursor="hand2",
+                          command=lambda cat=name: self.scroll_to_category(cat),
+                          padx=8,
+                          pady=10,
+                          width=10,
+                          wraplength=80)
+            btn.pack(fill="both", expand=True)
+            
+            self.sidebar_buttons.append((btn, name, color))
+            self.add_hover_effect(btn, "#313244", "#45475a")
+        
         # Create main menu view
-        self.quick_menu_view = tk.Frame(self.quick_actions_container, bg="#1a1a2e")
+        self.quick_menu_view = tk.Frame(self.sidebar_main_container, bg="#1a1a2e")
         
         # Subtitle
         menu_subtitle = tk.Label(self.quick_menu_view,
@@ -338,17 +403,20 @@ class AutomationControllerGUI:
         menu_subtitle.pack(anchor="w", padx=8, pady=(5, 8))
         
         # Scrollable menu
-        menu_canvas = tk.Canvas(self.quick_menu_view, bg="#1a1a2e", highlightthickness=0)
-        menu_scrollbar = ttk.Scrollbar(self.quick_menu_view, orient="vertical", command=menu_canvas.yview)
-        menu_scrollable = tk.Frame(menu_canvas, bg="#1a1a2e")
+        self.menu_canvas = tk.Canvas(self.quick_menu_view, bg="#1a1a2e", highlightthickness=0)
+        menu_scrollbar = ttk.Scrollbar(self.quick_menu_view, orient="vertical", command=self.menu_canvas.yview)
+        menu_scrollable = tk.Frame(self.menu_canvas, bg="#1a1a2e")
         
         menu_scrollable.bind(
             "<Configure>",
-            lambda e: menu_canvas.configure(scrollregion=menu_canvas.bbox("all"))
+            lambda e: self.menu_canvas.configure(scrollregion=self.menu_canvas.bbox("all"))
         )
         
-        menu_canvas.create_window((0, 0), window=menu_scrollable, anchor="nw")
-        menu_canvas.configure(yscrollcommand=menu_scrollbar.set)
+        self.menu_canvas.create_window((0, 0), window=menu_scrollable, anchor="nw")
+        self.menu_canvas.configure(yscrollcommand=menu_scrollbar.set)
+        
+        # Store header widgets for scrolling
+        self.category_headers = {}
         
         # Define quick actions with features
         self.quick_actions_data = [
@@ -389,6 +457,9 @@ class AutomationControllerGUI:
                 header_container.pack(fill="x", padx=5, pady=(12, 3))
                 header_container.pack_propagate(False)
                 
+                # Store header for scrolling
+                self.category_headers[text] = header_container
+                
                 accent = tk.Frame(header_container, bg=color, width=4)
                 accent.pack(side="left", fill="y", padx=(0, 10))
                 
@@ -423,7 +494,7 @@ class AutomationControllerGUI:
                 
                 make_hover(btn, color)
         
-        menu_canvas.pack(side="left", fill="both", expand=True)
+        self.menu_canvas.pack(side="left", fill="both", expand=True)
         menu_scrollbar.pack(side="right", fill="y")
         
         # Create feature view (initially hidden)
@@ -1371,7 +1442,7 @@ class AutomationControllerGUI:
                 
                 make_hover(btn, color)
         
-        menu_canvas.pack(side="left", fill="both", expand=True)
+        self.menu_canvas.pack(side="left", fill="both", expand=True)
         menu_scrollbar.pack(side="right", fill="y")
         
         # Create feature view (initially hidden)
@@ -6032,6 +6103,74 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
         """Show the main quick actions menu"""
         self.quick_feature_view.pack_forget()
         self.quick_menu_view.pack(fill="both", expand=True)
+    
+    def toggle_sidebar(self):
+        """Toggle sidebar expanded/collapsed state"""
+        if self.sidebar_expanded:
+            # Collapse sidebar
+            self.sidebar.config(width=50)
+            self.sidebar_toggle_btn.config(text="▶")
+            self.sidebar_title.pack_forget()
+            
+            # Update button text to show only icons
+            for btn, name, color in self.sidebar_buttons:
+                icon = [c for c in self.sidebar_categories if c[1] == name][0][0]
+                btn.config(text=icon, width=3)
+            
+            self.sidebar_expanded = False
+        else:
+            # Expand sidebar
+            self.sidebar.config(width=120)
+            self.sidebar_toggle_btn.config(text="◀")
+            self.sidebar_title.pack(pady=(5, 10))
+            
+            # Restore full text
+            for btn, name, color in self.sidebar_buttons:
+                icon = [c for c in self.sidebar_categories if c[1] == name][0][0]
+                btn.config(text=f"{icon}\n{name}", width=10)
+            
+            self.sidebar_expanded = True
+    
+    def scroll_to_category(self, category):
+        """Scroll to and highlight a specific category"""
+        # Update active category highlighting
+        for btn, name, color in self.sidebar_buttons:
+            if name == category:
+                btn.config(bg="#45475a", relief="solid", bd=2)
+                self.active_sidebar_category = category
+            else:
+                btn.config(bg="#313244", relief="flat", bd=0)
+        
+        # Map category names to quick actions headers
+        category_map = {
+            "SYSTEM": "🖥️ SYSTEM",
+            "WEB": "🌐 WEB & APPS",
+            "WORK": "📁 PRODUCTIVITY",
+            "MEDIA": "🎵 MEDIA"
+        }
+        
+        target_header = category_map.get(category, "")
+        
+        # Scroll to the category header
+        if target_header in self.category_headers:
+            header_widget = self.category_headers[target_header]
+            # Get the y position of the header
+            try:
+                self.menu_canvas.update_idletasks()
+                # Get the widget's bbox
+                bbox = self.menu_canvas.bbox("all")
+                if bbox:
+                    # Calculate position
+                    y_pos = header_widget.winfo_y()
+                    canvas_height = self.menu_canvas.winfo_height()
+                    scroll_region = bbox[3]  # Total height
+                    
+                    if scroll_region > canvas_height:
+                        # Scroll to position
+                        fraction = y_pos / scroll_region
+                        self.menu_canvas.yview_moveto(fraction)
+            except Exception as e:
+                print(f"Scroll error: {e}")
     
     def show_quick_action_feature(self, title, description, color, feature_id):
         """Show the selected quick action feature"""
