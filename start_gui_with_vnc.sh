@@ -42,6 +42,19 @@ chmod 700 $XDG_RUNTIME_DIR
 # Disable screen saver and power management
 xset s off -dpms 2>/dev/null || true
 
+# Start x11vnc VNC server on port 5900
+echo "🔐 Starting VNC server..."
+x11vnc -display :0 -forever -shared -rfbport 5900 -nopw &
+VNC_PID=$!
+sleep 2
+
+# Check if VNC server started successfully
+if ! ps -p $VNC_PID > /dev/null; then
+    echo "⚠️  VNC server failed to start (non-fatal)"
+else
+    echo "✅ VNC server running on port 5900"
+fi
+
 echo "✅ Virtual desktop ready!"
 echo "🤖 Starting VATSAL GUI Application..."
 echo ""
@@ -51,4 +64,5 @@ python gui_app.py
 
 # Cleanup on exit
 echo "🛑 Shutting down..."
+kill $VNC_PID 2>/dev/null || true
 kill $XVFB_PID 2>/dev/null || true
