@@ -5,7 +5,7 @@ integrations = ["python_gemini:1.0.0", "spotify:1.0.0"]
 
 [nix]
 channel = "stable-25_05"
-packages = ["SDL2", "SDL2_image", "SDL2_mixer", "SDL2_ttf", "cairo", "cargo", "chromedriver", "chromium", "espeak-ng", "ffmpeg-full", "fontconfig", "freetype", "geckodriver", "ghostscript", "glibcLocales", "gobject-introspection", "gtk3", "iana-etc", "libGL", "libGLU", "libiconv", "libjpeg", "libpng", "libxcrypt", "openssl", "pkg-config", "portmidi", "qhull", "rustc", "scrot", "tcl", "tk", "xorg.xinit", "xorg.xorgserver", "xvfb-run", "cmake", "xorg.libX11", "xorg.libXext", "tigervnc", "x11vnc"]
+packages = ["SDL2", "SDL2_image", "SDL2_mixer", "SDL2_ttf", "cairo", "cargo", "chromedriver", "chromium", "cmake", "espeak-ng", "ffmpeg-full", "fontconfig", "freetype", "geckodriver", "ghostscript", "glibcLocales", "gobject-introspection", "gtk3", "iana-etc", "libGL", "libGLU", "libiconv", "libjpeg", "libpng", "libxcrypt", "openssl", "pkg-config", "portmidi", "qhull", "rustc", "scrot", "tcl", "tigervnc", "tk", "x11vnc", "xorg.libX11", "xorg.libXext", "xorg.xinit", "xorg.xorgserver", "xvfb-run"]
 
 [workflows]
 runButton = "Project"
@@ -21,7 +21,7 @@ args = "GUI App"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Mobile Companion Server"
+args = "VNC Web Viewer"
 
 [[workflows.workflow]]
 name = "GUI App"
@@ -35,12 +35,12 @@ task = "shell.exec"
 args = "bash start_gui_with_vnc.sh"
 
 [[workflows.workflow]]
-name = "Mobile Companion Server"
+name = "VNC Web Viewer"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python mobile_companion_server.py"
+args = "python vnc_web_viewer.py"
 waitForPort = 5000
 
 [workflows.workflow.metadata]
@@ -49,3 +49,15 @@ outputType = "webview"
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 6080
+externalPort = 3001
+
+[[ports]]
+localPort = 32967
+externalPort = 3000
+
+[[ports]]
+localPort = 39253
+externalPort = 3002

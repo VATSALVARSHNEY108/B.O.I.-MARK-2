@@ -59,3 +59,8 @@ flask
 flask-cors
 flask-socketio
 python-socketio
+flask-socketio
+pyotp
+qrcode
+socketio
+websockify
