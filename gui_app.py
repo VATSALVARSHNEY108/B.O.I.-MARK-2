@@ -45,6 +45,7 @@ from websocket_client import get_websocket_client
 from macro_recorder import MacroRecorder, MacroTemplates
 from nl_workflow_builder import create_nl_workflow_builder
 from workflow_templates import WorkflowManager
+from security_dashboard import SecurityDashboard
 
 load_dotenv()
 
@@ -219,6 +220,14 @@ class AutomationControllerGUI:
             self.workflow_manager = None
             self.nl_workflow_builder = None
             print(f"⚠️ Workflow Builder initialization failed: {e}")
+
+        # Initialize Security Dashboard with Gemini AI
+        try:
+            self.security_dashboard = SecurityDashboard()
+            print("✅ Security Dashboard with Gemini AI initialized")
+        except Exception as e:
+            self.security_dashboard = None
+            print(f"⚠️ Security Dashboard initialization failed: {e}")
 
         self.setup_ui()
         self.check_api_key()
@@ -744,6 +753,10 @@ class AutomationControllerGUI:
         suggest_btn = tk.Button(bottom_frame, text="💡 Suggestion", command=self.show_suggestion, **button_config)
         suggest_btn.pack(side="left", padx=5)
         self.add_hover_effect(suggest_btn, "#313244", "#45475a")
+
+        security_btn = tk.Button(bottom_frame, text="🛡️ Security", command=self.show_security_dashboard, **button_config)
+        security_btn.pack(side="left", padx=5)
+        self.add_hover_effect(security_btn, "#313244", "#45475a")
 
         status_container = tk.Frame(bottom_frame, bg="#313244", relief="flat")
         status_container.pack(side="right", padx=10, pady=0)
@@ -4725,6 +4738,293 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                               padx=30,
                               pady=10)
         close_btn.pack(pady=(0, 20))
+
+    def show_security_dashboard(self):
+        """Display AI-Powered Security Dashboard"""
+        if not self.security_dashboard:
+            messagebox.showerror("Error", "Security Dashboard not initialized")
+            return
+        
+        sec_window = tk.Toplevel(self.root)
+        sec_window.title("🛡️ AI-Powered Security Dashboard")
+        sec_window.geometry("1000x700")
+        sec_window.configure(bg="#1a1a2e")
+        
+        header_frame = tk.Frame(sec_window, bg="#0f0f1e")
+        header_frame.pack(fill="x", pady=(0, 10))
+        
+        header = tk.Label(header_frame,
+                          text="🛡️ Security Dashboard with Gemini AI",
+                          bg="#0f0f1e",
+                          fg="#f38ba8",
+                          font=("Segoe UI", 18, "bold"),
+                          pady=15)
+        header.pack()
+        
+        subtitle = tk.Label(header_frame,
+                           text="🤖 AI-Powered Threat Analysis • 🔐 Enhanced Security Features",
+                           bg="#0f0f1e",
+                           fg="#a6adc8",
+                           font=("Segoe UI", 10, "italic"))
+        subtitle.pack()
+        
+        # Main content area
+        main_frame = tk.Frame(sec_window, bg="#1a1a2e")
+        main_frame.pack(fill="both", expand=True, padx=20, pady=10)
+        
+        # Left panel - Actions
+        left_panel = tk.Frame(main_frame, bg="#1e1e2e", width=300)
+        left_panel.pack(side="left", fill="y", padx=(0, 10))
+        left_panel.pack_propagate(False)
+        
+        actions_label = tk.Label(left_panel,
+                                text="🎯 Security Actions",
+                                bg="#1e1e2e",
+                                fg="#f9e2af",
+                                font=("Segoe UI", 12, "bold"),
+                                pady=10)
+        actions_label.pack()
+        
+        # Security action buttons
+        security_actions = [
+            ("📊 Security Status", self.show_security_status),
+            ("🤖 AI Threat Analysis", self.show_ai_threat_analysis),
+            ("💡 AI Recommendations", self.show_ai_security_recommendations),
+            ("🔍 Anomaly Detection", self.show_ai_anomaly_detection),
+            ("📄 Full AI Report", self.show_ai_security_report),
+            ("❓ Ask Security Question", self.ask_security_question)
+        ]
+        
+        for text, command in security_actions:
+            btn = tk.Button(left_panel,
+                           text=text,
+                           bg="#313244",
+                           fg="#ffffff",
+                           font=("Segoe UI", 10),
+                           relief="flat",
+                           cursor="hand2",
+                           command=command,
+                           anchor="w",
+                           padx=15,
+                           pady=12)
+            btn.pack(fill="x", padx=10, pady=5)
+        
+        # Right panel - Display area
+        right_panel = tk.Frame(main_frame, bg="#1e1e2e")
+        right_panel.pack(side="right", fill="both", expand=True)
+        
+        display_label = tk.Label(right_panel,
+                                text="📋 Security Information",
+                                bg="#1e1e2e",
+                                fg="#f9e2af",
+                                font=("Segoe UI", 12, "bold"),
+                                pady=10)
+        display_label.pack()
+        
+        # Display area
+        self.security_display = scrolledtext.ScrolledText(
+            right_panel,
+            bg="#0f0f1e",
+            fg="#cdd6f4",
+            font=("Consolas", 10),
+            wrap=tk.WORD,
+            relief="flat",
+            padx=15,
+            pady=15
+        )
+        self.security_display.pack(fill="both", expand=True, padx=10, pady=10)
+        
+        # Show initial status
+        status = self.security_dashboard.get_comprehensive_security_status()
+        status_text = f"""
+🛡️ SECURITY DASHBOARD STATUS
+{'='*60}
+
+Security Level: {status['dashboard_info']['security_level'].upper()}
+Current User: {status['dashboard_info']['current_user'] or 'Not Authenticated'}
+Authenticated: {status['dashboard_info']['authenticated']}
+
+🔐 BIOMETRIC AUTHENTICATION
+  • Enrolled Users: {status['biometric_authentication']['enrolled_users']}
+  • Success Rate: {status['biometric_authentication']['success_rate']:.1f}%
+
+🔑 TWO-FACTOR AUTHENTICATION
+  • Enabled Users: {status['two_factor_authentication']['enabled_users']}
+  • Success Rate: {status['two_factor_authentication']['success_rate']:.1f}%
+
+🔒 ENCRYPTED STORAGE
+  • Status: {'ENABLED' if status['encrypted_storage']['enabled'] else 'DISABLED'}
+  • Encrypted Files: {status['encrypted_storage']['encrypted_files']}
+
+🛡️ ACTIVITY MONITORING
+  • Status: {'ACTIVE' if status['activity_monitoring']['active'] else 'INACTIVE'}
+  • Total Activities: {status['activity_monitoring']['total_activities']}
+  • Threats Detected: {status['activity_monitoring']['threats_detected']}
+
+⚠️ THREATS (24H)
+  • Total: {status['threat_summary_24h']['total_threats']}
+  • Critical: {status['threat_summary_24h']['critical']}
+  • High: {status['threat_summary_24h']['high']}
+
+Click the buttons on the left to access AI-powered security features.
+        """
+        self.security_display.insert("1.0", status_text)
+        
+        close_btn = tk.Button(sec_window,
+                              text="Close",
+                              bg="#89b4fa",
+                              fg="#0f0f1e",
+                              font=("Segoe UI", 11, "bold"),
+                              relief="flat",
+                              cursor="hand2",
+                              command=sec_window.destroy,
+                              padx=30,
+                              pady=10)
+        close_btn.pack(pady=20)
+    
+    def show_security_status(self):
+        """Show current security status"""
+        if not hasattr(self, 'security_display'):
+            messagebox.showinfo("Info", "Please open Security Dashboard first")
+            return
+        
+        self.security_display.delete("1.0", "end")
+        self.security_display.insert("1.0", "Loading security status...\n")
+        self.security_display.update()
+        
+        status = self.security_dashboard.get_comprehensive_security_status()
+        report = self.security_dashboard.generate_security_report()
+        
+        self.security_display.delete("1.0", "end")
+        self.security_display.insert("1.0", report)
+    
+    def show_ai_threat_analysis(self):
+        """Show AI-powered threat analysis"""
+        if not hasattr(self, 'security_display'):
+            messagebox.showinfo("Info", "Please open Security Dashboard first")
+            return
+        
+        self.security_display.delete("1.0", "end")
+        self.security_display.insert("1.0", "🤖 Analyzing threats with Gemini AI...\nThis may take a moment...\n")
+        self.security_display.update()
+        
+        result = self.security_dashboard.ai_analyze_threats()
+        
+        self.security_display.delete("1.0", "end")
+        if result.get("success"):
+            self.security_display.insert("1.0", f"""
+🤖 AI-POWERED THREAT ANALYSIS
+{'='*60}
+
+Threat Count: {result.get('threat_count', 0)}
+Analysis Time: {result.get('timestamp', 'N/A')}
+
+{result['analysis']}
+            """)
+        else:
+            self.security_display.insert("1.0", f"⚠️ Error: {result.get('message', 'Unknown error')}")
+    
+    def show_ai_security_recommendations(self):
+        """Show AI-powered security recommendations"""
+        if not hasattr(self, 'security_display'):
+            messagebox.showinfo("Info", "Please open Security Dashboard first")
+            return
+        
+        self.security_display.delete("1.0", "end")
+        self.security_display.insert("1.0", "🤖 Generating security recommendations with Gemini AI...\n")
+        self.security_display.update()
+        
+        result = self.security_dashboard.ai_security_recommendations()
+        
+        self.security_display.delete("1.0", "end")
+        if result.get("success"):
+            self.security_display.insert("1.0", f"""
+💡 AI-POWERED SECURITY RECOMMENDATIONS
+{'='*60}
+
+Current Security Level: {result.get('security_level', 'N/A').upper()}
+Analysis Time: {result.get('timestamp', 'N/A')}
+
+{result['recommendations']}
+            """)
+        else:
+            self.security_display.insert("1.0", f"⚠️ Error: {result.get('message', 'Unknown error')}")
+    
+    def show_ai_anomaly_detection(self):
+        """Show AI-powered anomaly detection"""
+        if not hasattr(self, 'security_display'):
+            messagebox.showinfo("Info", "Please open Security Dashboard first")
+            return
+        
+        self.security_display.delete("1.0", "end")
+        self.security_display.insert("1.0", "🤖 Detecting anomalies with Gemini AI...\n")
+        self.security_display.update()
+        
+        result = self.security_dashboard.ai_detect_anomalies()
+        
+        self.security_display.delete("1.0", "end")
+        if result.get("success"):
+            self.security_display.insert("1.0", f"""
+🔍 AI-POWERED ANOMALY DETECTION
+{'='*60}
+
+Activities Analyzed: {result.get('activities_analyzed', 0)}
+Analysis Time: {result.get('timestamp', 'N/A')}
+
+{result['anomalies']}
+            """)
+        else:
+            self.security_display.insert("1.0", f"⚠️ Error: {result.get('message', 'Unknown error')}")
+    
+    def show_ai_security_report(self):
+        """Show comprehensive AI-enhanced security report"""
+        if not hasattr(self, 'security_display'):
+            messagebox.showinfo("Info", "Please open Security Dashboard first")
+            return
+        
+        self.security_display.delete("1.0", "end")
+        self.security_display.insert("1.0", "🤖 Generating comprehensive AI security report...\nThis may take a moment...\n")
+        self.security_display.update()
+        
+        report = self.security_dashboard.ai_generate_security_report()
+        
+        self.security_display.delete("1.0", "end")
+        self.security_display.insert("1.0", report)
+    
+    def ask_security_question(self):
+        """Ask a natural language security question"""
+        if not hasattr(self, 'security_display'):
+            messagebox.showinfo("Info", "Please open Security Dashboard first")
+            return
+        
+        question = simpledialog.askstring(
+            "Security Question",
+            "Ask me anything about your security status:",
+            parent=self.root
+        )
+        
+        if not question:
+            return
+        
+        self.security_display.delete("1.0", "end")
+        self.security_display.insert("1.0", f"❓ Question: {question}\n\n🤖 Thinking...\n")
+        self.security_display.update()
+        
+        result = self.security_dashboard.ai_natural_language_query(question)
+        
+        self.security_display.delete("1.0", "end")
+        if result.get("success"):
+            self.security_display.insert("1.0", f"""
+❓ SECURITY QUESTION & ANSWER
+{'='*60}
+
+Question: {result.get('question', question)}
+Answered: {result.get('timestamp', 'N/A')}
+
+{result['answer']}
+            """)
+        else:
+            self.security_display.insert("1.0", f"⚠️ Error: {result.get('message', 'Unknown error')}")
 
     def run_comprehensive_analysis(self):
         """Run comprehensive AI screen analysis"""

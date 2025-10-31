@@ -1,18 +1,23 @@
 """
 🛡️ Security Dashboard
-Central management for all enhanced security features
+Central management for all enhanced security features with Gemini AI integration
 """
 
 import os
 import json
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
+from google import genai
+from google.genai import types
+from dotenv import load_dotenv
 
 from enhanced_biometric_auth import BiometricAuthenticationSystem
 from two_factor_authentication import TwoFactorAuthentication
 from encrypted_storage_manager import EncryptedStorageManager
 from activity_monitoring import ActivityMonitoringSystem
 from sandbox_mode import SandboxMode
+
+load_dotenv()
 
 class SecurityDashboard:
     """
@@ -44,6 +49,14 @@ class SecurityDashboard:
         self.current_user = None
         self.authenticated = False
         self.auth_methods_used = []
+        
+        self.api_key = os.environ.get("GEMINI_API_KEY")
+        self.gemini_client = None
+        if self.api_key:
+            try:
+                self.gemini_client = genai.Client(api_key=self.api_key)
+            except Exception as e:
+                print(f"⚠️  Gemini AI initialization failed: {e}")
     
     def _load_config(self) -> Dict:
         """Load dashboard configuration"""
@@ -413,6 +426,265 @@ class SecurityDashboard:
 Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 """
         return report
+    
+    def ai_analyze_threats(self) -> Dict:
+        """
+        Use Gemini AI to analyze current threats and provide intelligent insights
+        """
+        if not self.gemini_client:
+            return {
+                "success": False,
+                "message": "Gemini AI not available. Please set GEMINI_API_KEY."
+            }
+        
+        try:
+            status = self.get_comprehensive_security_status()
+            recent_threats = self.activity_monitor.threat_log[-50:]
+            
+            threat_data = {
+                "total_threats_24h": status['threat_summary_24h']['total_threats'],
+                "critical_threats": status['threat_summary_24h']['critical'],
+                "high_threats": status['threat_summary_24h']['high'],
+                "recent_threat_events": recent_threats[-10:],
+                "monitoring_active": status['activity_monitoring']['active'],
+                "security_level": status['dashboard_info']['security_level']
+            }
+            
+            prompt = f"""As a cybersecurity expert, analyze this security threat data and provide:
+1. Critical insights about the threat landscape
+2. Risk assessment (Low/Medium/High/Critical)
+3. Top 3 actionable recommendations
+4. Potential attack vectors being exploited
+5. Priority security measures to implement
+
+Security Data:
+{json.dumps(threat_data, indent=2)}
+
+Provide a concise, actionable analysis."""
+            
+            response = self.gemini_client.models.generate_content(
+                model="gemini-2.0-flash-exp",
+                contents=prompt
+            )
+            
+            analysis = response.text
+            
+            self._log_audit_event(
+                "ai_threat_analysis",
+                {"analysis_length": len(analysis), "threats_analyzed": len(recent_threats)},
+                "info"
+            )
+            
+            return {
+                "success": True,
+                "analysis": analysis,
+                "threat_count": status['threat_summary_24h']['total_threats'],
+                "timestamp": datetime.now().isoformat()
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"AI analysis failed: {str(e)}"
+            }
+    
+    def ai_security_recommendations(self) -> Dict:
+        """
+        Get AI-powered personalized security recommendations
+        """
+        if not self.gemini_client:
+            return {
+                "success": False,
+                "message": "Gemini AI not available. Please set GEMINI_API_KEY."
+            }
+        
+        try:
+            status = self.get_comprehensive_security_status()
+            
+            prompt = f"""As a security consultant, analyze this security configuration and provide personalized recommendations:
+
+Current Security Status:
+- Security Level: {status['dashboard_info']['security_level']}
+- Biometric Auth: {status['biometric_authentication']['enrolled_users']} users enrolled
+- 2FA Enabled: {status['two_factor_authentication']['enabled_users']} users
+- Encryption: {'Enabled' if status['encrypted_storage']['enabled'] else 'Disabled'}
+- Monitoring: {'Active' if status['activity_monitoring']['active'] else 'Inactive'}
+- Recent Threats: {status['threat_summary_24h']['total_threats']} in 24h
+
+Provide:
+1. Security posture assessment
+2. 5 specific improvement recommendations (prioritized)
+3. Quick wins (easy to implement)
+4. Long-term security roadmap suggestions
+
+Be specific and actionable."""
+            
+            response = self.gemini_client.models.generate_content(
+                model="gemini-2.0-flash-exp",
+                contents=prompt
+            )
+            
+            recommendations = response.text
+            
+            return {
+                "success": True,
+                "recommendations": recommendations,
+                "security_level": status['dashboard_info']['security_level'],
+                "timestamp": datetime.now().isoformat()
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"AI recommendations failed: {str(e)}"
+            }
+    
+    def ai_natural_language_query(self, question: str) -> Dict:
+        """
+        Answer security-related questions using AI with current security context
+        """
+        if not self.gemini_client:
+            return {
+                "success": False,
+                "message": "Gemini AI not available. Please set GEMINI_API_KEY."
+            }
+        
+        try:
+            status = self.get_comprehensive_security_status()
+            recent_audit = self.audit_log[-20:]
+            
+            context = f"""Current Security Dashboard Status:
+{json.dumps(status, indent=2)}
+
+Recent Audit Events:
+{json.dumps(recent_audit, indent=2)}
+
+User Question: {question}
+
+As a security expert with access to the above security data, provide a clear, accurate answer to the user's question. If the question requires specific data from the security status, reference it directly."""
+            
+            response = self.gemini_client.models.generate_content(
+                model="gemini-2.0-flash-exp",
+                contents=context
+            )
+            
+            answer = response.text
+            
+            self._log_audit_event(
+                "ai_security_query",
+                {"question": question, "answer_length": len(answer)},
+                "info"
+            )
+            
+            return {
+                "success": True,
+                "question": question,
+                "answer": answer,
+                "timestamp": datetime.now().isoformat()
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"AI query failed: {str(e)}"
+            }
+    
+    def ai_detect_anomalies(self) -> Dict:
+        """
+        Use AI to detect unusual patterns in authentication and activity logs
+        """
+        if not self.gemini_client:
+            return {
+                "success": False,
+                "message": "Gemini AI not available. Please set GEMINI_API_KEY."
+            }
+        
+        try:
+            recent_activity = self.activity_monitor.activity_log[-100:]
+            recent_audit = self.audit_log[-50:]
+            
+            data = {
+                "recent_activities": recent_activity[-20:],
+                "recent_audit_events": recent_audit[-20:],
+                "time_window": "last 100 activities"
+            }
+            
+            prompt = f"""As a security analyst specializing in anomaly detection, analyze these logs:
+
+Activity and Audit Data:
+{json.dumps(data, indent=2)}
+
+Detect:
+1. Unusual authentication patterns
+2. Suspicious activity sequences
+3. Abnormal time-based patterns
+4. Potential security violations
+5. Anomalies that warrant investigation
+
+Provide specific findings with severity ratings."""
+            
+            response = self.gemini_client.models.generate_content(
+                model="gemini-2.0-flash-exp",
+                contents=prompt
+            )
+            
+            anomalies = response.text
+            
+            self._log_audit_event(
+                "ai_anomaly_detection",
+                {"activities_analyzed": len(recent_activity)},
+                "info"
+            )
+            
+            return {
+                "success": True,
+                "anomalies": anomalies,
+                "activities_analyzed": len(recent_activity),
+                "timestamp": datetime.now().isoformat()
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"AI anomaly detection failed: {str(e)}"
+            }
+    
+    def ai_generate_security_report(self) -> str:
+        """
+        Generate an AI-enhanced comprehensive security report
+        """
+        base_report = self.generate_security_report()
+        
+        if not self.gemini_client:
+            return base_report + "\n\n⚠️  AI Analysis unavailable (GEMINI_API_KEY not set)\n"
+        
+        try:
+            ai_analysis = self.ai_analyze_threats()
+            ai_recommendations = self.ai_security_recommendations()
+            
+            enhanced_report = base_report + "\n\n"
+            enhanced_report += "╔══════════════════════════════════════════════════════════════╗\n"
+            enhanced_report += "║  🤖 AI-POWERED THREAT ANALYSIS                              ║\n"
+            enhanced_report += "╚══════════════════════════════════════════════════════════════╝\n\n"
+            
+            if ai_analysis.get("success"):
+                enhanced_report += ai_analysis["analysis"] + "\n\n"
+            else:
+                enhanced_report += f"⚠️  {ai_analysis.get('message', 'Analysis unavailable')}\n\n"
+            
+            enhanced_report += "╔══════════════════════════════════════════════════════════════╗\n"
+            enhanced_report += "║  💡 AI-POWERED SECURITY RECOMMENDATIONS                     ║\n"
+            enhanced_report += "╚══════════════════════════════════════════════════════════════╝\n\n"
+            
+            if ai_recommendations.get("success"):
+                enhanced_report += ai_recommendations["recommendations"] + "\n\n"
+            else:
+                enhanced_report += f"⚠️  {ai_recommendations.get('message', 'Recommendations unavailable')}\n\n"
+            
+            return enhanced_report
+            
+        except Exception as e:
+            return base_report + f"\n\n⚠️  AI Enhancement Error: {str(e)}\n"
     
     def logout(self):
         """Logout current user"""
