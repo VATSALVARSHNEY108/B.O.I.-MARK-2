@@ -43,6 +43,8 @@ from voice_commander import create_voice_commander
 from system_control import SystemController
 from websocket_client import get_websocket_client
 from macro_recorder import MacroRecorder, MacroTemplates
+from nl_workflow_builder import create_nl_workflow_builder
+from workflow_templates import WorkflowManager
 
 load_dotenv()
 
@@ -204,6 +206,19 @@ class AutomationControllerGUI:
             self.macro_recorder = None
             self.macro_templates = None
             print(f"⚠️ Macro Recorder initialization failed: {e}")
+
+        # Initialize Natural Language Workflow Builder
+        try:
+            self.workflow_manager = WorkflowManager()
+            self.nl_workflow_builder = create_nl_workflow_builder(
+                workflow_manager=self.workflow_manager,
+                log_callback=self.workflow_log
+            )
+            print("✅ Natural Language Workflow Builder initialized")
+        except Exception as e:
+            self.workflow_manager = None
+            self.nl_workflow_builder = None
+            print(f"⚠️ Workflow Builder initialization failed: {e}")
 
         self.setup_ui()
         self.check_api_key()
@@ -461,6 +476,7 @@ class AutomationControllerGUI:
             ("🎧 Sound Settings", "Open sound settings", "#cba6f7", False, "sound"),
             
             ("🎬 AUTOMATION", None, "#f5c2e7", True, None),
+            ("💬 Workflow Builder", "Build workflows in plain English", "#a6e3a1", False, "workflow_builder"),
             ("🎬 Macro Recorder", "Record and playback macros", "#f5c2e7", False, "macro_recorder"),
             ("📱 Mobile Control", "Remote control via mobile", "#89dceb", False, "mobile_control"),
         ]
@@ -6430,6 +6446,46 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
             self.create_youtube_feature(content_inner, color)
         elif feature_id == "volume":
             self.create_volume_feature(content_inner, color)
+        elif feature_id == "workflow_builder":
+            self.create_workflow_builder_feature(content_inner, color)
+        elif feature_id == "macro_recorder":
+            self.create_macro_recorder_feature(content_inner, color)
+        elif feature_id == "mobile_control":
+            self.create_mobile_control_feature(content_inner, color)
+    
+    def create_workflow_builder_feature(self, parent, color):
+        """Create workflow builder feature UI"""
+        tk.Label(parent, text="💬 Workflow Builder", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        info_text = "Build complex automation workflows using plain English. The AI will convert your descriptions into executable steps."
+        tk.Label(parent, text=info_text, bg="#181825", fg="#a6adc8",
+                font=("Segoe UI", 9), wraplength=350, justify="left").pack(pady=(0, 20))
+        
+        btn = tk.Button(parent, text="💬 Open Workflow Builder",
+                       bg=color, fg="#0f0f1e",
+                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                       command=self.show_workflow_builder,
+                       padx=30, pady=12)
+        btn.pack(pady=10)
+    
+    def create_macro_recorder_feature(self, parent, color):
+        """Create macro recorder feature placeholder"""
+        tk.Label(parent, text="🎬 Macro Recorder", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        tk.Label(parent, text="Record and playback mouse & keyboard actions",
+                bg="#181825", fg="#a6adc8", font=("Segoe UI", 9)).pack(pady=(0, 20))
+        tk.Label(parent, text="Use the Macro Recorder tab for full access",
+                bg="#181825", fg="#6c7086", font=("Segoe UI", 9, "italic")).pack()
+    
+    def create_mobile_control_feature(self, parent, color):
+        """Create mobile control feature placeholder"""
+        tk.Label(parent, text="📱 Mobile Control", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        tk.Label(parent, text="Control your desktop from mobile devices",
+                bg="#181825", fg="#a6adc8", font=("Segoe UI", 9)).pack(pady=(0, 20))
+        tk.Label(parent, text="Use the Mobile Companion tab for full access",
+                bg="#181825", fg="#6c7086", font=("Segoe UI", 9, "italic")).pack()
     
     def create_screenshot_feature(self, parent, color):
         """Create screenshot feature UI"""
@@ -7767,6 +7823,317 @@ keyboard, and screen access:
             self.mobile_history.insert(tk.END, f"{text}\n", tag)
             self.mobile_history.see(tk.END)
             self.mobile_history.config(state='disabled')
+    
+    def workflow_log(self, message, level="INFO"):
+        """Log callback for workflow builder"""
+        level_colors = {
+            "INFO": "#89b4fa",
+            "SUCCESS": "#a6e3a1",
+            "ERROR": "#f38ba8",
+            "WARNING": "#f9e2af"
+        }
+        if hasattr(self, 'workflow_output_text'):
+            self.workflow_output_text.config(state='normal')
+            timestamp = datetime.now().strftime("%H:%M:%S")
+            self.workflow_output_text.insert(tk.END, f"[{timestamp}] ", ("timestamp",))
+            self.workflow_output_text.insert(tk.END, f"{message}\n", (level.lower(),))
+            self.workflow_output_text.see(tk.END)
+            self.workflow_output_text.config(state='disabled')
+    
+    def show_workflow_builder(self):
+        """Open Natural Language Workflow Builder window"""
+        if not self.nl_workflow_builder:
+            messagebox.showerror("Error", "Workflow Builder not initialized")
+            return
+        
+        builder_window = tk.Toplevel(self.root)
+        builder_window.title("💬 Natural Language Workflow Builder")
+        builder_window.geometry("1000x700")
+        builder_window.configure(bg="#0f0f1e")
+        
+        header_frame = tk.Frame(builder_window, bg="#1a1a2e")
+        header_frame.pack(fill="x", padx=20, pady=15)
+        
+        header = tk.Label(header_frame,
+                         text="💬 Natural Language Workflow Builder",
+                         bg="#1a1a2e",
+                         fg="#89b4fa",
+                         font=("Segoe UI", 16, "bold"))
+        header.pack(pady=10)
+        
+        info = tk.Label(header_frame,
+                       text="🎯 Describe workflows in plain English • 🤖 AI converts to automation • 💬 Test & refine • 💾 Save as templates",
+                       bg="#1a1a2e",
+                       fg="#a6adc8",
+                       font=("Segoe UI", 9, "italic"))
+        info.pack(pady=(0, 10))
+        
+        main_container = tk.Frame(builder_window, bg="#0f0f1e")
+        main_container.pack(fill="both", expand=True, padx=20, pady=10)
+        
+        left_column = tk.Frame(main_container, bg="#0f0f1e")
+        left_column.pack(side="left", fill="both", expand=True, padx=(0, 10))
+        
+        examples_frame = tk.Frame(left_column, bg="#313244")
+        examples_frame.pack(fill="x", pady=(0, 10))
+        
+        examples_label = tk.Label(examples_frame,
+                                 text="💡 Example Workflows",
+                                 bg="#313244",
+                                 fg="#f9e2af",
+                                 font=("Segoe UI", 10, "bold"))
+        examples_label.pack(pady=10)
+        
+        examples_list = tk.Listbox(examples_frame,
+                                   bg="#0f0f1e",
+                                   fg="#cdd6f4",
+                                   font=("Segoe UI", 9),
+                                   height=6,
+                                   selectmode=tk.SINGLE,
+                                   relief="flat")
+        examples_list.pack(fill="x", padx=10, pady=(0, 10))
+        
+        examples = self.nl_workflow_builder.get_examples()
+        for example in examples:
+            examples_list.insert(tk.END, example['name'])
+        
+        def use_example():
+            selection = examples_list.curselection()
+            if selection:
+                example = examples[selection[0]]
+                input_text.delete("1.0", tk.END)
+                input_text.insert("1.0", example['description'])
+        
+        use_example_btn = tk.Button(examples_frame,
+                                    text="📋 Use Selected Example",
+                                    bg="#89b4fa",
+                                    fg="#0f0f1e",
+                                    font=("Segoe UI", 9, "bold"),
+                                    relief="flat",
+                                    cursor="hand2",
+                                    command=use_example,
+                                    pady=8)
+        use_example_btn.pack(fill="x", padx=10, pady=(0, 10))
+        
+        input_label = tk.Label(left_column,
+                              text="💬 Describe Your Workflow:",
+                              bg="#0f0f1e",
+                              fg="#a6e3a1",
+                              font=("Segoe UI", 11, "bold"))
+        input_label.pack(anchor="w", pady=(10, 5))
+        
+        input_text = tk.Text(left_column,
+                            bg="#313244",
+                            fg="#ffffff",
+                            font=("Segoe UI", 11),
+                            height=8,
+                            wrap=tk.WORD,
+                            relief="flat",
+                            padx=10,
+                            pady=10)
+        input_text.pack(fill="both", expand=True, pady=(0, 10))
+        
+        button_frame = tk.Frame(left_column, bg="#0f0f1e")
+        button_frame.pack(fill="x", pady=10)
+        
+        def process_workflow():
+            description = input_text.get("1.0", tk.END).strip()
+            if not description:
+                messagebox.showwarning("Empty Input", "Please describe your workflow")
+                return
+            
+            self.workflow_log(f"Processing: {description}", "INFO")
+            result = self.nl_workflow_builder.describe_workflow(description)
+            
+            if result.get("success"):
+                if result.get("type") == "workflow":
+                    workflow = result["workflow"]
+                    output_text.delete("1.0", tk.END)
+                    output_text.insert("1.0", f"Workflow: {workflow.get('workflow_name', 'Unnamed')}\n\n")
+                    output_text.insert(tk.END, f"Description: {workflow.get('description', '')}\n\n")
+                    output_text.insert(tk.END, "Steps:\n")
+                    for i, step in enumerate(workflow.get("steps", []), 1):
+                        output_text.insert(tk.END, f"{i}. {step.get('action')} - {step.get('parameters')}\n")
+                    
+                    if workflow.get("suggestions"):
+                        output_text.insert(tk.END, f"\n💡 Suggestions: {workflow['suggestions']}\n")
+                    
+                    self.workflow_log(f"Generated workflow: {workflow.get('workflow_name')}", "SUCCESS")
+                else:
+                    self.workflow_log(result.get("message", "AI response received"), "INFO")
+                    messagebox.showinfo("AI Response", result.get("message", ""))
+            else:
+                error = result.get("error", "Unknown error")
+                self.workflow_log(f"Error: {error}", "ERROR")
+                messagebox.showerror("Error", error)
+        
+        def save_current_workflow():
+            current_draft = self.nl_workflow_builder.get_current_draft()
+            if not current_draft:
+                messagebox.showwarning("No Workflow", "Create a workflow first")
+                return
+            
+            result = self.nl_workflow_builder.save_workflow()
+            if result.get("success"):
+                self.workflow_log(f"Saved workflow: {result.get('name')}", "SUCCESS")
+                messagebox.showinfo("Success", result.get("message"))
+                refresh_saved_list()
+            else:
+                self.workflow_log(f"Save failed: {result.get('error')}", "ERROR")
+                messagebox.showerror("Error", result.get("error"))
+        
+        def clear_conversation():
+            self.nl_workflow_builder.clear_conversation()
+            self.nl_workflow_builder.clear_draft()
+            input_text.delete("1.0", tk.END)
+            output_text.delete("1.0", tk.END)
+            self.workflow_log("Conversation cleared", "INFO")
+        
+        process_btn = tk.Button(button_frame,
+                               text="🤖 Build Workflow",
+                               bg="#a6e3a1",
+                               fg="#0f0f1e",
+                               font=("Segoe UI", 10, "bold"),
+                               relief="flat",
+                               cursor="hand2",
+                               command=process_workflow,
+                               padx=20,
+                               pady=10)
+        process_btn.pack(side="left", padx=5)
+        
+        save_btn = tk.Button(button_frame,
+                            text="💾 Save Workflow",
+                            bg="#89b4fa",
+                            fg="#0f0f1e",
+                            font=("Segoe UI", 10, "bold"),
+                            relief="flat",
+                            cursor="hand2",
+                            command=save_current_workflow,
+                            padx=20,
+                            pady=10)
+        save_btn.pack(side="left", padx=5)
+        
+        clear_btn = tk.Button(button_frame,
+                             text="🗑️ Clear",
+                             bg="#f38ba8",
+                             fg="#0f0f1e",
+                             font=("Segoe UI", 10, "bold"),
+                             relief="flat",
+                             cursor="hand2",
+                             command=clear_conversation,
+                             padx=20,
+                             pady=10)
+        clear_btn.pack(side="left", padx=5)
+        
+        right_column = tk.Frame(main_container, bg="#0f0f1e")
+        right_column.pack(side="right", fill="both", expand=True)
+        
+        output_label = tk.Label(right_column,
+                               text="📋 Generated Workflow:",
+                               bg="#0f0f1e",
+                               fg="#cba6f7",
+                               font=("Segoe UI", 11, "bold"))
+        output_label.pack(anchor="w", pady=(0, 5))
+        
+        output_text = tk.Text(right_column,
+                             bg="#313244",
+                             fg="#ffffff",
+                             font=("Consolas", 10),
+                             wrap=tk.WORD,
+                             relief="flat",
+                             padx=10,
+                             pady=10)
+        output_text.pack(fill="both", expand=True, pady=(0, 10))
+        
+        saved_frame = tk.Frame(right_column, bg="#313244")
+        saved_frame.pack(fill="x", pady=(10, 0))
+        
+        saved_label = tk.Label(saved_frame,
+                              text="💾 Saved Workflows",
+                              bg="#313244",
+                              fg="#f9e2af",
+                              font=("Segoe UI", 10, "bold"))
+        saved_label.pack(pady=10)
+        
+        saved_list = tk.Listbox(saved_frame,
+                               bg="#0f0f1e",
+                               fg="#cdd6f4",
+                               font=("Segoe UI", 9),
+                               height=8,
+                               selectmode=tk.SINGLE,
+                               relief="flat")
+        saved_list.pack(fill="x", padx=10, pady=(0, 10))
+        
+        def refresh_saved_list():
+            saved_list.delete(0, tk.END)
+            workflows = self.nl_workflow_builder.list_templates()
+            for wf in workflows:
+                saved_list.insert(tk.END, f"{wf['name']} ({wf['steps_count']} steps)")
+        
+        def run_saved_workflow():
+            selection = saved_list.curselection()
+            if not selection:
+                return
+            
+            workflows = self.nl_workflow_builder.list_templates()
+            workflow = workflows[selection[0]]
+            command = f"run workflow: {workflow['name']}"
+            self.workflow_log(f"Executing workflow: {workflow['name']}", "INFO")
+            self.command_input.delete(0, tk.END)
+            self.command_input.insert(0, command)
+            self.execute_command()
+        
+        refresh_btn = tk.Button(saved_frame,
+                               text="🔄 Refresh List",
+                               bg="#45475a",
+                               fg="#ffffff",
+                               font=("Segoe UI", 9),
+                               relief="flat",
+                               cursor="hand2",
+                               command=refresh_saved_list,
+                               pady=6)
+        refresh_btn.pack(side="left", fill="x", expand=True, padx=(10, 5), pady=(0, 10))
+        
+        run_btn = tk.Button(saved_frame,
+                           text="▶️ Run Selected",
+                           bg="#a6e3a1",
+                           fg="#0f0f1e",
+                           font=("Segoe UI", 9, "bold"),
+                           relief="flat",
+                           cursor="hand2",
+                           command=run_saved_workflow,
+                           pady=6)
+        run_btn.pack(side="right", fill="x", expand=True, padx=(5, 10), pady=(0, 10))
+        
+        log_frame = tk.Frame(builder_window, bg="#1a1a2e")
+        log_frame.pack(fill="x", padx=20, pady=(0, 15))
+        
+        log_label = tk.Label(log_frame,
+                            text="📊 Activity Log",
+                            bg="#1a1a2e",
+                            fg="#f9e2af",
+                            font=("Segoe UI", 9, "bold"))
+        log_label.pack(anchor="w", padx=10, pady=(10, 5))
+        
+        self.workflow_output_text = tk.Text(log_frame,
+                                            bg="#0f0f1e",
+                                            fg="#cdd6f4",
+                                            font=("Consolas", 9),
+                                            height=6,
+                                            state='disabled',
+                                            relief="flat",
+                                            padx=10,
+                                            pady=10)
+        self.workflow_output_text.pack(fill="x", padx=10, pady=(0, 10))
+        
+        self.workflow_output_text.tag_config("timestamp", foreground="#6c7086")
+        self.workflow_output_text.tag_config("info", foreground="#89b4fa")
+        self.workflow_output_text.tag_config("success", foreground="#a6e3a1")
+        self.workflow_output_text.tag_config("error", foreground="#f38ba8")
+        self.workflow_output_text.tag_config("warning", foreground="#f9e2af")
+        
+        refresh_saved_list()
+        self.workflow_log("Workflow Builder ready!", "SUCCESS")
 
 
 def main():
