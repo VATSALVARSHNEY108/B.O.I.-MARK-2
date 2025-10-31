@@ -165,41 +165,55 @@ REQUIREMENTS:
 
 Generate the {language} code now:"""
 
-    try:
-        api_client = get_client()
-        response = api_client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                temperature=0.7,
-            )
-        )
-        
-        if response.text:
-            code = clean_code_output(response.text)
-            
-            return {
-                "success": True,
-                "code": code,
-                "language": language,
-                "extension": language_info["extension"],
-                "editor": language_info["editor"],
-                "description": description,
-                "source": "ai"
-            }
-        else:
-            return {
-                "success": False,
-                "error": "No code generated",
-                "code": f"# Error: Could not generate code for: {description}"
-            }
+    # Try multiple models in order of preference
+    models_to_try = [
+        "gemini-2.5-flash",      # Latest stable model (2025)
+        "gemini-2.0-flash-exp",  # Experimental fallback
+        "gemini-1.5-flash",      # Legacy fallback
+    ]
     
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e),
-            "code": f"# Error generating code: {str(e)}\n# Try one of these: {', '.join(list_available_templates())}"
-        }
+    last_error = None
+    
+    for model_name in models_to_try:
+        try:
+            api_client = get_client()
+            response = api_client.models.generate_content(
+                model=model_name,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.7,
+                )
+            )
+            
+            if response.text:
+                code = clean_code_output(response.text)
+                
+                return {
+                    "success": True,
+                    "code": code,
+                    "language": language,
+                    "extension": language_info["extension"],
+                    "editor": language_info["editor"],
+                    "description": description,
+                    "source": "ai",
+                    "model": model_name
+                }
+        
+        except Exception as e:
+            last_error = str(e)
+            # If 404 or model not found, try next model
+            if "404" in str(e) or "not found" in str(e).lower():
+                continue
+            else:
+                # For other errors, don't try other models
+                break
+    
+    # All models failed
+    return {
+        "success": False,
+        "error": last_error or "All models failed",
+        "code": f"# Error generating code: {last_error}\n# Try one of these templates: {', '.join(list_available_templates())}"
+    }
 
 def generate_multiple_versions(description: str, language: str | None = None, count: int = 1) -> list:
     """Generate multiple versions of code for comparison"""
@@ -223,15 +237,22 @@ Provide a clear, beginner-friendly explanation of:
 2. How it works (step by step)
 3. Key concepts used"""
 
-    try:
-        api_client = get_client()
-        response = api_client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=prompt
-        )
-        return response.text or "Could not generate explanation"
-    except Exception as e:
-        return f"Error: {str(e)}"
+    models_to_try = ["gemini-2.5-flash", "gemini-2.0-flash-exp", "gemini-1.5-flash"]
+    
+    for model_name in models_to_try:
+        try:
+            api_client = get_client()
+            response = api_client.models.generate_content(
+                model=model_name,
+                contents=prompt
+            )
+            return response.text or "Could not generate explanation"
+        except Exception as e:
+            if "404" in str(e) or "not found" in str(e).lower():
+                continue
+            return f"Error: {str(e)}"
+    
+    return "Error: All models failed to generate explanation"
 
 def improve_code(code: str, language: str = "python") -> dict:
     """Suggest improvements for existing code"""
@@ -248,30 +269,36 @@ Improvements to make:
 
 Return ONLY the improved code, no explanations."""
 
-    try:
-        api_client = get_client()
-        response = api_client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=prompt
-        )
-        
-        if response.text:
-            improved_code = clean_code_output(response.text)
-            return {
-                "success": True,
-                "code": improved_code,
-                "language": language
-            }
-        else:
+    models_to_try = ["gemini-2.5-flash", "gemini-2.0-flash-exp", "gemini-1.5-flash"]
+    
+    for model_name in models_to_try:
+        try:
+            api_client = get_client()
+            response = api_client.models.generate_content(
+                model=model_name,
+                contents=prompt
+            )
+            
+            if response.text:
+                improved_code = clean_code_output(response.text)
+                return {
+                    "success": True,
+                    "code": improved_code,
+                    "language": language,
+                    "model": model_name
+                }
+        except Exception as e:
+            if "404" in str(e) or "not found" in str(e).lower():
+                continue
             return {
                 "success": False,
-                "error": "Could not improve code"
+                "error": str(e)
             }
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e)
-        }
+    
+    return {
+        "success": False,
+        "error": "All models failed to improve code"
+    }
 
 def debug_code(code: str, error_message: str, language: str = "python") -> dict:
     """Debug code and fix errors"""
@@ -284,27 +311,33 @@ CODE:
 
 Provide the corrected code with the bug fixed. Return ONLY the fixed code."""
 
-    try:
-        api_client = get_client()
-        response = api_client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=prompt
-        )
-        
-        if response.text:
-            fixed_code = clean_code_output(response.text)
-            return {
-                "success": True,
-                "code": fixed_code,
-                "language": language
-            }
-        else:
+    models_to_try = ["gemini-2.5-flash", "gemini-2.0-flash-exp", "gemini-1.5-flash"]
+    
+    for model_name in models_to_try:
+        try:
+            api_client = get_client()
+            response = api_client.models.generate_content(
+                model=model_name,
+                contents=prompt
+            )
+            
+            if response.text:
+                fixed_code = clean_code_output(response.text)
+                return {
+                    "success": True,
+                    "code": fixed_code,
+                    "language": language,
+                    "model": model_name
+                }
+        except Exception as e:
+            if "404" in str(e) or "not found" in str(e).lower():
+                continue
             return {
                 "success": False,
-                "error": "Could not fix code"
+                "error": str(e)
             }
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e)
-        }
+    
+    return {
+        "success": False,
+        "error": "All models failed to debug code"
+    }
