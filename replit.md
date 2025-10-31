@@ -14,6 +14,7 @@ The primary interface is a GUI application (`gui_app.py`) built with `tkinter`, 
 
 ### Technical Implementations
 - **AI Command Processing:** Gemini AI is integrated for natural language processing and converting commands into actions (`gemini_controller.py`).
+- **AI Code Generation → Notepad:** Integrated Gemini AI-powered code generator that automatically generates clean, well-commented code in 10+ languages and writes it to Notepad automatically. Features smart template system for instant code generation of common algorithms, auto-language detection, and multi-language support (`code_generator.py`, `code_templates.py`).
 - **GUI Automation:** Uses `PyAutoGUI` for cross-platform desktop control (`gui_automation.py`).
 - **AI Vision Module:** Leverages Gemini Vision for OCR, UI element identification, and screen analysis (`screenshot_analyzer.py`).
 - **Desktop RAG System:** Indexes desktop files for semantic search and Q&A (`desktop_rag.py`).
