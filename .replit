@@ -5,7 +5,7 @@ integrations = ["python_gemini:1.0.0", "spotify:1.0.0"]
 
 [nix]
 channel = "stable-25_05"
-packages = ["SDL2", "SDL2_image", "SDL2_mixer", "SDL2_ttf", "cairo", "cargo", "chromedriver", "chromium", "espeak-ng", "ffmpeg-full", "fontconfig", "freetype", "geckodriver", "ghostscript", "glibcLocales", "gobject-introspection", "gtk3", "iana-etc", "libGL", "libGLU", "libiconv", "libjpeg", "libpng", "libxcrypt", "openssl", "pkg-config", "portmidi", "qhull", "rustc", "scrot", "tcl", "tk", "xorg.xinit", "xorg.xorgserver", "xvfb-run"]
+packages = ["SDL2", "SDL2_image", "SDL2_mixer", "SDL2_ttf", "cairo", "cargo", "chromedriver", "chromium", "espeak-ng", "ffmpeg-full", "fontconfig", "freetype", "geckodriver", "ghostscript", "glibcLocales", "gobject-introspection", "gtk3", "iana-etc", "libGL", "libGLU", "libiconv", "libjpeg", "libpng", "libxcrypt", "openssl", "pkg-config", "portmidi", "qhull", "rustc", "scrot", "tcl", "tk", "xorg.xinit", "xorg.xorgserver", "xvfb-run", "cmake", "xorg.libX11", "xorg.libXext"]
 
 [workflows]
 runButton = "Project"
