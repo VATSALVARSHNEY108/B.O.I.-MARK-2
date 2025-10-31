@@ -17,7 +17,7 @@ def main():
         print("=" * 60)
         
         # Import and run the GUI app
-        from core.gui_app import main as gui_main
+        from modules.core.gui_app import main as gui_main
         
         gui_main()
         
