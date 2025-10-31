@@ -19,6 +19,15 @@ The chatbot files have been organized into separate folders for better project s
 │   ├── vatsal_desktop_automator.py # Desktop Automation Tool
 │   └── README.md
 │
+├── 📁 vnc_tools/
+│   ├── vnc_web_viewer.py          # Web-based VNC viewer
+│   ├── start_gui_with_vnc.sh      # Launch GUI with VNC
+│   └── README.md
+│
+├── 📁 test_data/
+│   ├── test_sample_data.csv       # Sample test data
+│   └── README.md
+│
 └── 🚀 launch_gui.py               # Main GUI Application Launcher
 ```
 
@@ -84,7 +93,24 @@ python vatsal_desktop_automator.py
 - Visual controls and monitoring
 - Modern dark-themed interface
 
+### 🖥️ VNC Tools
+- Web-based VNC viewer for remote access
+- Script to launch GUI with VNC support
+- Advanced remote desktop capabilities
+
+### 📊 Test Data
+- Sample CSV files for testing
+- Data analysis testing
+- File processing validation
+
 ## Requirements
 - Python 3.x
 - GEMINI_API_KEY in environment variables
 - All dependencies installed (see requirements)
+
+## Benefits of This Organization
+✅ **Clean Root Directory** - Only the main launcher in root  
+✅ **Easy to Find** - Related files grouped together  
+✅ **Better Navigation** - Clear folder structure  
+✅ **Documentation** - Each folder has its own README  
+✅ **Simple Launch** - Just run `python launch_gui.py` to start
