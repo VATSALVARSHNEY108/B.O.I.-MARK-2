@@ -134,7 +134,7 @@ if prompt := st.chat_input("Type your instruction here..."):
             system_prompt = detect_intent_and_generate_prompt(prompt)
             
             response = client.models.generate_content(
-                model='gemini-2.0-flash-exp',
+                model='models/gemini-2.0-flash-exp',
                 contents=prompt,
                 config=genai.types.GenerateContentConfig(
                     system_instruction=system_prompt,
