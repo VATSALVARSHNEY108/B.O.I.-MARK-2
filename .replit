@@ -23,6 +23,10 @@ args = "GUI App"
 task = "workflow.run"
 args = "VNC Web Viewer"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "AI Assistant"
+
 [[workflows.workflow]]
 name = "GUI App"
 author = "agent"
@@ -46,6 +50,18 @@ task = "shell.exec"
 args = "python vnc_tools/vnc_web_viewer.py"
 waitForPort = 5000
 
+[[workflows.workflow]]
+name = "AI Assistant"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run intelligent_assistant.py --server.port 5000 --server.address 0.0.0.0 --server.headless true"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
 [[ports]]
 localPort = 5000
 externalPort = 80
@@ -53,6 +69,10 @@ externalPort = 80
 [[ports]]
 localPort = 32967
 externalPort = 3000
+
+[[ports]]
+localPort = 33433
+externalPort = 3001
 
 [[ports]]
 localPort = 39253
