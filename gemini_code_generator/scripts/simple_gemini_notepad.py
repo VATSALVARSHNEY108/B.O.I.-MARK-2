@@ -1,39 +1,46 @@
 """
 Simple Gemini to Notepad - Quick Code Generation
-Ultra-simple script to generate code and write it to Notepad
+Ultra-simple script to generate code and write it to Notepad with full screen
 """
 
-from code_generator import generate_code
-import subprocess
-import time
-import pyperclip
-import pyautogui
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'ai_features'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'modules', 'utilities'))
 
-def generate_and_write(description):
-    """Generate code with Gemini and write to Notepad"""
+from code_generator import generate_code
+from notepad_writer import write_code_to_notepad, write_letter_to_notepad
+
+def generate_and_write(description, fullscreen=True):
+    """Generate code/letter with Gemini and write to Notepad in full screen"""
     
-    print(f"🤖 Generating code: {description}...")
+    print(f"🤖 Generating content: {description}...")
     
     result = generate_code(description)
     
     if result.get("success"):
         code = result["code"]
+        source = result.get("source", "unknown")
         
-        print(f"✅ Generated {result['language']} code ({len(code)} chars)")
-        print("📝 Opening Notepad and writing code...")
+        print(f"✅ Generated {result.get('language', 'text')} content ({len(code)} chars)")
         
-        subprocess.Popen(['notepad.exe'])
-        time.sleep(2)
+        # Check if it's a letter or code
+        if source == "letter_template":
+            letter_type = result.get("letter_name", "Letter")
+            print(f"📝 Writing {letter_type} to Notepad in full screen...")
+            write_result = write_letter_to_notepad(code, letter_type, fullscreen=fullscreen)
+        else:
+            language = result.get("language", "text")
+            print(f"📝 Writing {language} code to Notepad in full screen...")
+            write_result = write_code_to_notepad(code, language, fullscreen=fullscreen)
         
-        pyperclip.copy(code)
-        time.sleep(0.3)
-        
-        pyautogui.hotkey('ctrl', 'v')
-        
-        print("✅ Done! Code written to Notepad!")
-        print("\n" + "="*60)
-        print(code)
-        print("="*60)
+        if write_result["success"]:
+            print(f"✅ {write_result['message']}")
+            print("\n" + "="*60)
+            print(code[:500] + ("..." if len(code) > 500 else ""))
+            print("="*60)
+        else:
+            print(f"❌ Error writing to Notepad: {write_result.get('error')}")
     else:
         print(f"❌ Error: {result.get('error')}")
 
