@@ -17,38 +17,7 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "GUI App"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "VNC Web Viewer"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "AI Assistant"
-
-[[workflows.workflow]]
-name = "GUI App"
-author = "agent"
-
-[workflows.workflow.metadata]
-outputType = "vnc"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "bash vnc_tools/start_gui_with_vnc.sh"
-
-[[workflows.workflow]]
-name = "VNC Web Viewer"
-author = "agent"
-
-[workflows.workflow.metadata]
-outputType = "webview"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python vnc_tools/vnc_web_viewer.py"
-waitForPort = 5000
 
 [[workflows.workflow]]
 name = "AI Assistant"
