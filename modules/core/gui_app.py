@@ -46,6 +46,8 @@ from macro_recorder import MacroRecorder, MacroTemplates
 from nl_workflow_builder import create_nl_workflow_builder
 from workflow_templates import WorkflowManager
 from security_dashboard import SecurityDashboard
+from user_profile_manager import get_user_profile_manager
+from user_settings_dialog import open_user_settings
 
 load_dotenv()
 
@@ -76,6 +78,10 @@ class AutomationControllerGUI:
         self.root.title("🤖 VATSAL - AI Desktop Automation Controller")
         self.root.geometry("1400x900")
         self.root.configure(bg="#0f0f1e")
+
+        # Initialize User Profile Manager
+        self.user_profile = get_user_profile_manager()
+        print(f"✅ User Profile Manager initialized - Welcome, {self.user_profile.get_user_name()}!")
 
         # Initialize system controller for direct access
         self.system_controller = SystemController()
@@ -340,6 +346,22 @@ class AutomationControllerGUI:
                                                    pady=5)
         self.self_operating_toggle_btn.pack(side="left", padx=15)
         self.add_hover_effect(self.self_operating_toggle_btn, "#cba6f7", "#b4befe")
+
+        separator4 = tk.Label(stats_frame, text="•", bg="#1a1a2e", fg="#45475a", font=("Segoe UI", 10))
+        separator4.pack(side="left", padx=5)
+
+        self.user_settings_btn = tk.Button(stats_frame,
+                                          text="⚙️ User Settings",
+                                          bg="#a6e3a1",
+                                          fg="#0f0f1e",
+                                          font=("Segoe UI", 9, "bold"),
+                                          relief="flat",
+                                          cursor="hand2",
+                                          command=self.open_user_settings,
+                                          padx=15,
+                                          pady=5)
+        self.user_settings_btn.pack(side="left", padx=15)
+        self.add_hover_effect(self.user_settings_btn, "#a6e3a1", "#94e2d5")
 
         main_container = tk.Frame(self.root, bg="#0f0f1e")
         main_container.pack(fill="both", expand=True, padx=30, pady=10)
@@ -3429,18 +3451,32 @@ class AutomationControllerGUI:
             self.update_output("🎮 Self-Operating Computer Mode: DISABLED\n", "warning")
             self.update_output("Self-operating features are now turned off.\n", "info")
             self.update_output("=" * 60 + "\n\n", "info")
+    
+    def open_user_settings(self):
+        """Open user profile settings dialog"""
+        try:
+            open_user_settings(self.root)
+        except Exception as e:
+            self.update_output(f"❌ Error opening user settings: {e}\n", "error")
 
     def show_vatsal_greeting(self):
         """Show VATSAL greeting message"""
+        # Use personalized greeting from user profile
+        personalized_greeting = self.user_profile.get_greeting()
         greeting = self.vatsal.get_greeting()
+        
         self.update_output("\n" + "=" * 60 + "\n", "info")
         self.update_output("🤖 VATSAL AI Assistant\n", "success")
         self.update_output("=" * 60 + "\n", "info")
+        self.update_output(f"{personalized_greeting}\n", "success")
         self.update_output(f"{greeting}\n\n", "info")
 
         # Show proactive suggestion
         suggestion = self.vatsal.get_proactive_suggestion()
         self.update_output(f"{suggestion}\n\n", "command")
+        
+        # Record interaction
+        self.user_profile.record_interaction()
 
     def get_vatsal_response(self, user_input, command_result=None):
         """Get VATSAL personality response"""
