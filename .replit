@@ -23,26 +23,18 @@ args = "AI Assistant"
 name = "AI Assistant"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "streamlit run intelligent_assistant.py --server.port 5000 --server.address 0.0.0.0 --server.headless true"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "streamlit run modules/ai_features/intelligent_assistant.py --server.port 5000 --server.address 0.0.0.0 --server.headless true"
+waitForPort = 5000
 
 [[ports]]
 localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 32967
-externalPort = 3000
-
-[[ports]]
 localPort = 39253
 externalPort = 3002
-
-[[ports]]
-localPort = 40479
-externalPort = 3001

@@ -3,7 +3,7 @@
 ## Overview
 The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. The project aims to be a comprehensive productivity powerhouse, offering a unified ecosystem with over 300+ features, including smart Desktop RAG, 9 Smart Automation & AI features, Natural Language Workflow Builder, 8 Communication Enhancement features, and a real-time WebSocket dashboard for live monitoring. It integrates advanced AI for code generation, screen analysis, natural language understanding, professional-grade data analysis, various utility modules, and real-time remote monitoring capabilities.
 
-**NEW:** Now includes an Intelligent AI Assistant (`intelligent_assistant.py`) - a Streamlit-based web interface that instantly understands user intent and generates appropriate responses (code, stories, explanations, letters, etc.) with no unnecessary commentary.
+**NEW:** Now includes an Intelligent AI Assistant (`modules/ai_features/intelligent_assistant.py`) - a Streamlit-based web interface that instantly understands user intent and generates appropriate responses (code, stories, explanations, letters, etc.) with no unnecessary commentary.
 
 ## User Preferences
 - **Chat Monitoring:** User prefers visual/screen-based chat monitoring where AI controls the real Gmail/WhatsApp interface on screen, rather than background API calls. This allows them to watch the AI work in real-time.
