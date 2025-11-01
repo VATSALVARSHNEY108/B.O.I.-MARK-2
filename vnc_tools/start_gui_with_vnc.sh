@@ -59,9 +59,9 @@ echo "✅ Virtual desktop ready!"
 echo "🤖 Starting VATSAL GUI Application..."
 echo ""
 
-# Start the GUI application from the correct path
+# Start the GUI application using the startup script
 cd /home/runner/workspace
-python modules/core/gui_app.py
+python start_gui.py
 
 # Cleanup on exit
 echo "🛑 Shutting down..."
