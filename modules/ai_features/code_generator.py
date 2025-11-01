@@ -7,6 +7,7 @@ import os
 from google import genai
 from google.genai import types
 from code_templates import get_template_code, list_available_templates
+from letter_templates import generate_letter, detect_letter_type
 
 client = None
 
@@ -73,6 +74,35 @@ LANGUAGE_TEMPLATES = {
     }
 }
 
+def is_letter_request(description: str) -> bool:
+    """Check if the description is requesting a letter"""
+    description_lower = description.lower()
+    
+    # Strong letter indicators
+    strong_indicators = [
+        "write a letter", "write letter", "draft a letter", "draft letter",
+        "compose a letter", "compose letter"
+    ]
+    
+    if any(indicator in description_lower for indicator in strong_indicators):
+        return True
+    
+    # Check for letter-specific keywords (but only if "write" or "draft" is also present)
+    if "write" in description_lower or "draft" in description_lower or "compose" in description_lower:
+        letter_types = [
+            "leave application", "leave letter", 
+            "resignation letter", "complaint letter", 
+            "invitation letter", "apology letter",
+            "thank you letter", "appreciation letter",
+            "recommendation letter", "permission letter",
+            "inquiry letter", "reference letter",
+            "job application letter"
+        ]
+        return any(letter_type in description_lower for letter_type in letter_types)
+    
+    return False
+
+
 def detect_language_from_description(description: str) -> str:
     """Detect programming language from description"""
     description_lower = description.lower()
@@ -116,14 +146,31 @@ def clean_code_output(code: str) -> str:
 def generate_code(description: str, language: str | None = None) -> dict:
     """
     Generate code using templates (fast) or Gemini AI (fallback)
+    Also handles letter generation requests
     
     Args:
-        description: What the code should do
+        description: What the code should do or letter to write
         language: Programming language (auto-detected if not provided)
     
     Returns:
-        dict with code, language, and metadata
+        dict with code/letter, language, and metadata
     """
+    # Check if this is a letter request
+    if is_letter_request(description):
+        letter_result = generate_letter(description)
+        if letter_result["success"]:
+            return {
+                "success": True,
+                "code": letter_result["letter"],
+                "language": "text",
+                "extension": ".txt",
+                "editor": "notepad" if os.name == "nt" else "gedit",
+                "description": description,
+                "source": "letter_template",
+                "letter_type": letter_result["letter_type"],
+                "letter_name": letter_result["letter_name"]
+            }
+    
     if not language:
         language = detect_language_from_description(description)
     
