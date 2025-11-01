@@ -22,7 +22,7 @@ python-engineio>=4.12.3
 websockets>=14.2
 websocket-client>=1.9.0
 websockify>=0.13.0
-
+  
 # Data Science & Analysis
 pandas>=2.3.3
 numpy>=2.2.6
