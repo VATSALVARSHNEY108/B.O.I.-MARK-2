@@ -8,9 +8,9 @@ from contact_manager import ContactManager
 from messaging_service import MessagingService
 from youtube_automation import create_youtube_automation
 from whatsapp_automation import create_whatsapp_automation
-from code_generator import generate_code, explain_code, improve_code, debug_code
+from modules.ai_features.code_generation import generate_code, explain_code, improve_code, debug_code
 from conversation_memory import ConversationMemory
-from screenshot_analyzer import analyze_screenshot, extract_text_from_screenshot, get_screenshot_summary
+from modules.ai_features.vision_ai import analyze_screenshot, extract_text_from_screenshot, get_screenshot_summary
 from screen_suggester import create_screen_suggester
 from email_sender import create_email_sender
 from system_monitor import get_cpu_usage, get_memory_usage, get_disk_usage, get_full_system_report, get_running_processes
@@ -41,7 +41,7 @@ from data_analysis import create_data_analysis_suite
 from behavioral_learning import create_behavioral_learning
 from workspace_manager import create_workspace_manager
 from multimodal_control import create_multimodal_control
-from advanced_ai_automation import create_advanced_ai_automation
+from modules.ai_features.automation_ai import create_advanced_ai_automation
 from data_intelligence import create_data_intelligence
 from collaboration_tools import create_collaboration_tools
 from creative_utilities import create_creative_utilities

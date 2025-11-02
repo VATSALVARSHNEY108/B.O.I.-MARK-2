@@ -10,7 +10,7 @@ from command_executor import CommandExecutor
 from vatsal_assistant import create_vatsal_assistant
 from advanced_smart_screen_monitor import create_advanced_smart_screen_monitor
 from ai_screen_monitoring_system import create_ai_screen_monitoring_system
-from simple_chatbot import SimpleChatbot
+from modules.ai_features.chatbots import SimpleChatbot
 from file_automation import create_file_automation
 from clipboard_text_handler import ClipboardTextHandler
 from smart_automation import SmartAutomationManager
@@ -19,7 +19,7 @@ from pathlib import Path
 from desktop_controller_integration import DesktopFileController
 from desktop_sync_manager import auto_initialize_on_gui_start, DesktopSyncManager
 from comprehensive_desktop_controller import ComprehensiveDesktopController
-from virtual_language_model import VirtualLanguageModel
+from modules.ai_features.vision_ai import VirtualLanguageModel
 from gui_automation import GUIAutomation
 
 from productivity_dashboard import ProductivityDashboard
