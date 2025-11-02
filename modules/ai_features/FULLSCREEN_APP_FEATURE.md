@@ -122,6 +122,63 @@ python modules/ai_features/screenshot_analysis.py screenshot custom_path.png
 - `google-genai` - for AI-powered app detection
 - `GEMINI_API_KEY` - environment variable with your Gemini API key
 
+## Control Apps Before Automation
+
+### NEW: Ensure Apps Are Fullscreen Before Controlling Them
+
+When automating apps like Notepad, browsers, or YouTube, you should **first ensure they're open in fullscreen** before sending commands:
+
+#### Control Notepad in Fullscreen
+```python
+from modules.ai_features.screenshot_analysis import control_notepad_fullscreen
+import pyautogui
+
+# First, open Notepad in fullscreen
+control_notepad_fullscreen()
+
+# Now control it - it's already fullscreen!
+pyautogui.write("This text appears in fullscreen Notepad")
+pyautogui.hotkey('ctrl', 's')  # Save
+```
+
+#### Control Browser in Fullscreen
+```python
+from modules.ai_features.screenshot_analysis import control_browser_fullscreen
+
+# Open Chrome in fullscreen
+control_browser_fullscreen("chrome")
+
+# Now control the browser with selenium/pyautogui
+# Browser is already fullscreen and ready!
+```
+
+#### Control YouTube in Fullscreen
+```python
+from modules.ai_features.screenshot_analysis import control_youtube_fullscreen
+
+# Open YouTube in fullscreen browser
+control_youtube_fullscreen("chrome", "https://youtube.com/watch?v=dQw4w9WgXcQ")
+
+# Now control playback, search, etc.
+# YouTube is already open in fullscreen!
+```
+
+#### Control Any App in Fullscreen
+```python
+from modules.ai_features.screenshot_analysis import ensure_app_fullscreen
+
+# Open Calculator in fullscreen
+ensure_app_fullscreen("calculator")
+
+# Open VS Code in fullscreen
+ensure_app_fullscreen("code")
+
+# Open Spotify in fullscreen
+ensure_app_fullscreen("spotify")
+
+# Now control any of these apps - they're all fullscreen!
+```
+
 ## Example Use Cases
 
 ### Use Case 1: Quick App Launcher
@@ -142,21 +199,63 @@ if not app_info['is_fullscreen']:
     analyzer.open_app_fullscreen(app_info['app_name'])
 ```
 
-### Use Case 3: Workflow Automation
+### Use Case 3: Workflow Automation with Fullscreen Control
 ```python
-# Analyze and auto-open as part of workflow
-result = detect_app_and_open_fullscreen()
-# Result includes app name, detection status, and launch result
+from modules.ai_features.screenshot_analysis import control_notepad_fullscreen
+import pyautogui
+import time
+
+# 1. Ensure Notepad is fullscreen
+control_notepad_fullscreen()
+time.sleep(1)
+
+# 2. Write automated content
+pyautogui.write("Meeting Notes - " + str(datetime.now()))
+pyautogui.press('enter')
+pyautogui.write("- Discussed project timeline")
+pyautogui.press('enter')
+pyautogui.write("- Reviewed budget")
+
+# 3. Save the file
+pyautogui.hotkey('ctrl', 's')
+```
+
+### Use Case 4: YouTube Automation
+```python
+from modules.ai_features.screenshot_analysis import control_youtube_fullscreen
+import time
+import pyautogui
+
+# Open YouTube in fullscreen
+control_youtube_fullscreen("chrome", "https://youtube.com")
+time.sleep(3)
+
+# Search for a video
+pyautogui.click(x=500, y=100)  # Click search box
+pyautogui.write("Python tutorial")
+pyautogui.press('enter')
 ```
 
 ## Demo
 
+### Demo 1: Fullscreen App Features
 Run the demo file to see all features in action:
 ```bash
 python demo_fullscreen_app_feature.py 1  # Open specific app
 python demo_fullscreen_app_feature.py 2  # Auto-detect and open
 python demo_fullscreen_app_feature.py 3  # Manual detection
 python demo_fullscreen_app_feature.py 4  # List supported apps
+```
+
+### Demo 2: Control Apps in Fullscreen
+Run the control demo to see how to control apps:
+```bash
+python demo_control_apps_fullscreen.py 1         # Control Notepad
+python demo_control_apps_fullscreen.py 2         # Control Browser
+python demo_control_apps_fullscreen.py 3         # Open YouTube
+python demo_control_apps_fullscreen.py 4         # Control Any App
+python demo_control_apps_fullscreen.py 5         # Complete Workflow
+python demo_control_apps_fullscreen.py examples  # Show code examples
 ```
 
 ## Error Handling

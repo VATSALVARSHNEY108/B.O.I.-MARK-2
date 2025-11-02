@@ -362,6 +362,84 @@ If no design work: "No design detected" """
         message += result
         
         return message
+    
+    def ensure_app_fullscreen(self, app_name: str) -> str:
+        """
+        Ensure an app is open and in fullscreen before controlling it
+        This should be called before any automation/control operations
+        
+        Args:
+            app_name: Name of the app to ensure is fullscreen
+        
+        Returns:
+            Status message
+        """
+        print(f"🔍 Ensuring {app_name} is open in fullscreen...")
+        
+        # Open the app in fullscreen
+        result = self.open_app_fullscreen(app_name, force_fullscreen=True)
+        
+        # Wait a bit for the app to fully open and go fullscreen
+        time.sleep(1)
+        
+        return result
+    
+    def control_notepad_fullscreen(self) -> str:
+        """
+        Open Notepad in fullscreen before controlling it
+        
+        Returns:
+            Status message
+        """
+        return self.ensure_app_fullscreen("notepad")
+    
+    def control_browser_fullscreen(self, browser: str = "chrome") -> str:
+        """
+        Open browser in fullscreen before controlling it
+        
+        Args:
+            browser: Browser name (chrome, firefox, edge, safari)
+        
+        Returns:
+            Status message
+        """
+        valid_browsers = ["chrome", "firefox", "edge", "safari"]
+        if browser.lower() not in valid_browsers:
+            return f"❌ Invalid browser. Choose from: {', '.join(valid_browsers)}"
+        
+        return self.ensure_app_fullscreen(browser)
+    
+    def control_youtube_fullscreen(self, browser: str = "chrome", youtube_url: str = "https://youtube.com") -> str:
+        """
+        Open YouTube in a browser in fullscreen mode
+        
+        Args:
+            browser: Browser to use (default: chrome)
+            youtube_url: YouTube URL to open (default: youtube.com)
+        
+        Returns:
+            Status message
+        """
+        system = platform.system()
+        
+        # First ensure browser is in fullscreen
+        result = self.ensure_app_fullscreen(browser)
+        
+        # Wait for browser to open
+        time.sleep(2)
+        
+        # Open YouTube URL
+        try:
+            if system == "Windows":
+                subprocess.Popen(f'start {browser} "{youtube_url}"', shell=True)
+            elif system == "Darwin":  # macOS
+                subprocess.Popen(f'open -a "{browser}" "{youtube_url}"', shell=True)
+            else:  # Linux
+                subprocess.Popen(f'{browser} "{youtube_url}" &', shell=True)
+            
+            return f"{result}\n✅ YouTube opened in {browser} fullscreen mode"
+        except Exception as e:
+            return f"{result}\n⚠️ Browser opened but couldn't open YouTube: {str(e)}"
 
 
 def create_screenshot_analyzer() -> ScreenshotAnalyzer:
@@ -447,6 +525,62 @@ def take_current_screenshot(save_path: str = "screenshots/current_screen.png") -
     """
     analyzer = create_screenshot_analyzer()
     return analyzer.take_screenshot(save_path)
+
+
+def control_notepad_fullscreen() -> str:
+    """
+    Open Notepad in fullscreen mode before controlling it
+    Use this before any Notepad automation
+    
+    Returns:
+        Status message
+    """
+    analyzer = create_screenshot_analyzer()
+    return analyzer.control_notepad_fullscreen()
+
+
+def control_browser_fullscreen(browser: str = "chrome") -> str:
+    """
+    Open browser in fullscreen mode before controlling it
+    Use this before any browser automation
+    
+    Args:
+        browser: Browser name (chrome, firefox, edge, safari)
+    
+    Returns:
+        Status message
+    """
+    analyzer = create_screenshot_analyzer()
+    return analyzer.control_browser_fullscreen(browser)
+
+
+def control_youtube_fullscreen(browser: str = "chrome", youtube_url: str = "https://youtube.com") -> str:
+    """
+    Open YouTube in fullscreen browser
+    
+    Args:
+        browser: Browser to use (default: chrome)
+        youtube_url: YouTube URL to open
+    
+    Returns:
+        Status message
+    """
+    analyzer = create_screenshot_analyzer()
+    return analyzer.control_youtube_fullscreen(browser, youtube_url)
+
+
+def ensure_app_fullscreen(app_name: str) -> str:
+    """
+    Ensure any app is open and fullscreen before controlling it
+    
+    Args:
+        app_name: Name of the app (notepad, chrome, calculator, etc.)
+    
+    Returns:
+        Status message
+    """
+    analyzer = create_screenshot_analyzer()
+    return analyzer.ensure_app_fullscreen(app_name)
 
 
 if __name__ == "__main__":
