@@ -6,6 +6,10 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 **NEW:** Now includes an Intelligent AI Assistant (integrated in `modules/ai_features/chatbots.py`) - a Streamlit-based web interface that instantly understands user intent and generates appropriate responses (code, stories, explanations, letters, etc.) with no unnecessary commentary.
 
 ## Recent Changes
+**November 2, 2025 - Enhanced GUI & Fullscreen Features**:
+- **✨ Enhanced Modern GUI** (`modules/core/enhanced_gui.py`): Completely redesigned beautiful GUI with modern design, stunning visuals, and intuitive UX. Features include dashboard with live statistics, sidebar navigation, 6 major views (Dashboard, Quick Actions, AI Chat, Automation, Analytics, Settings), beautiful color palette, hover effects, and professional appearance. Launch with `python launch_enhanced_gui.py`.
+- **📝 Fullscreen Notepad Enhancement** (`modules/utilities/notepad_writer.py`): Improved notepad writer to open in TRUE fullscreen mode before writing. Uses two-step process (maximize + F11) with better timing for smooth transitions and professional appearance.
+
 **November 2, 2025 - New Features**:
 - **🖼️ AI Screenshot Analysis Module** (`modules/ai_features/screenshot_analysis.py`): Dedicated module for AI-powered screenshot analysis with Google Gemini Vision. Features include error detection, code analysis, UI/UX improvement suggestions, design analysis, and OCR text extraction.
 - **🚀 Fullscreen App Automation** (`modules/automation/fullscreen_automation.py`): Cross-platform automation that opens applications in fullscreen mode and performs automated actions. Supports keyboard/mouse automation, window management, and screenshot capture.
@@ -27,7 +31,11 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 The AI Desktop Automation Controller is built with Python 3.11 and utilizes a modular architecture, enabling a wide range of desktop automation and AI-powered functionalities.
 
 ### UI/UX Decisions
-The primary interface is a GUI application (`gui_app.py`) built with `tkinter`, featuring a modern, dark-themed, tabbed design. It includes a live clock, card-based design with gradient effects, quick-access buttons, and a real-time color-coded output console. A CLI interface (`main.py`) provides an interactive command-line alternative. The GUI integrates toggle buttons for "VATSAL Mode" (personality vs. direct responses) and "Self-Operating Mode" (autonomous control).
+The system now offers TWO GUI options:
+1. **Original GUI** (`gui_app.py`): Comprehensive feature-rich interface with tabbed design, live clock, quick-access buttons, and real-time console output.
+2. **Enhanced Modern GUI** (`enhanced_gui.py`): Beautiful redesigned interface with modern dark theme, dashboard with live statistics, sidebar navigation, 6 major views, stunning color palette (#0a0e27 navy blue backgrounds, #667eea purple-blue accents), hover effects, and professional appearance. Launch with `python launch_enhanced_gui.py`.
+
+Both GUIs are built with `tkinter` and support VATSAL Mode, Self-Operating Mode, and comprehensive automation features. The Enhanced GUI provides a more polished, organized, and visually appealing experience. A CLI interface (`main.py`) also provides an interactive command-line alternative.
 
 ### Technical Implementations
 - **AI Command Processing:** Gemini AI is integrated for natural language processing and converting commands into actions (`modules/core/gemini_controller.py`).
