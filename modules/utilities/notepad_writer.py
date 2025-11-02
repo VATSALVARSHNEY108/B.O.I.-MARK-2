@@ -26,21 +26,25 @@ def write_to_notepad(content: str, fullscreen: bool = True, title: str = None) -
         # Step 1: Open Notepad
         print("📝 Opening Notepad...")
         process = subprocess.Popen(['notepad.exe'] if os.name == 'nt' else ['gedit'])
-        time.sleep(1.5)  # Wait for Notepad to open
+        time.sleep(2)  # Wait for Notepad to fully open
         
-        # Step 2: Maximize to full screen if requested
+        # Step 2: Put Notepad in TRUE FULLSCREEN if requested
         if fullscreen:
-            print("🖥️  Maximizing to full screen...")
+            print("🖥️  Opening in FULL SCREEN mode...")
             time.sleep(0.5)  # Brief pause to ensure window is ready
             
-            # Press Win+Up to maximize window (works on Windows)
+            # First maximize the window
             if os.name == 'nt':
                 pyautogui.hotkey('win', 'up')
+                time.sleep(0.3)
+                # Then enter true fullscreen with F11
+                pyautogui.press('f11')
             else:
                 # For Linux, use F11 for full screen
                 pyautogui.press('f11')
             
-            time.sleep(0.5)  # Wait for maximize animation
+            time.sleep(1)  # Wait for fullscreen animation to complete
+            print("✅ Notepad is now in FULL SCREEN mode")
         
         # Step 3: Add title if provided
         if title:
