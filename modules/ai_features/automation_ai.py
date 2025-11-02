@@ -6,8 +6,32 @@ Email summarizer, document generator, code review, and AI macro suggestions
 import json
 import os
 import re
+import tkinter as tk
+from tkinter import simpledialog, messagebox
 from datetime import datetime
 from typing import Dict, List, Any
+
+# AI feature imports
+try:
+    from modules.ai_features.vision_ai import create_multimodal_ai, MultiModalInput
+except ImportError:
+    create_multimodal_ai = None
+    MultiModalInput = None
+
+try:
+    from modules.intelligence.contextual_memory_enhanced import create_contextual_memory_enhanced
+except ImportError:
+    create_contextual_memory_enhanced = None
+
+try:
+    from modules.intelligence.correction_learning import create_correction_learning
+except ImportError:
+    create_correction_learning = None
+
+try:
+    from modules.intelligence.predictive_actions_engine import create_predictive_actions_engine
+except ImportError:
+    create_predictive_actions_engine = None
 
 class AdvancedAIAutomation:
     """Advanced AI-powered automation features"""
@@ -265,19 +289,6 @@ class AdvancedAIAutomation:
 def create_advanced_ai_automation():
     """Factory function to create an AdvancedAIAutomation instance"""
     return AdvancedAIAutomation()
-"""
-Advanced AI Integration Module
-Provides integration methods for the Advanced AI tab in GUI
-"""
-
-import os
-import tkinter as tk
-from tkinter import simpledialog, messagebox
-from datetime import datetime
-from modules.ai_features.vision_ai import create_multimodal_ai, MultiModalInput
-from modules.intelligence.contextual_memory_enhanced import create_contextual_memory_enhanced
-from modules.intelligence.correction_learning import create_correction_learning
-from modules.intelligence.predictive_actions_engine import create_predictive_actions_engine
 
 
 class AdvancedAIIntegration:
@@ -294,33 +305,53 @@ class AdvancedAIIntegration:
         """
         self.gui = gui_instance
         
-        try:
-            self.multimodal_ai = create_multimodal_ai()
-            print("✅ Multi-Modal AI initialized")
-        except Exception as e:
+        # Initialize Multi-Modal AI
+        if create_multimodal_ai:
+            try:
+                self.multimodal_ai = create_multimodal_ai()
+                print("✅ Multi-Modal AI initialized")
+            except Exception as e:
+                self.multimodal_ai = None
+                print(f"⚠️ Multi-Modal AI initialization failed: {e}")
+        else:
             self.multimodal_ai = None
-            print(f"⚠️ Multi-Modal AI initialization failed: {e}")
+            print("⚠️ Multi-Modal AI module not available")
         
-        try:
-            self.contextual_memory = create_contextual_memory_enhanced()
-            print("✅ Contextual Memory initialized")
-        except Exception as e:
+        # Initialize Contextual Memory
+        if create_contextual_memory_enhanced:
+            try:
+                self.contextual_memory = create_contextual_memory_enhanced()
+                print("✅ Contextual Memory initialized")
+            except Exception as e:
+                self.contextual_memory = None
+                print(f"⚠️ Contextual Memory initialization failed: {e}")
+        else:
             self.contextual_memory = None
-            print(f"⚠️ Contextual Memory initialization failed: {e}")
+            print("⚠️ Contextual Memory module not available")
         
-        try:
-            self.correction_learning = create_correction_learning()
-            print("✅ Correction Learning initialized")
-        except Exception as e:
+        # Initialize Correction Learning
+        if create_correction_learning:
+            try:
+                self.correction_learning = create_correction_learning()
+                print("✅ Correction Learning initialized")
+            except Exception as e:
+                self.correction_learning = None
+                print(f"⚠️ Correction Learning initialization failed: {e}")
+        else:
             self.correction_learning = None
-            print(f"⚠️ Correction Learning initialization failed: {e}")
+            print("⚠️ Correction Learning module not available")
         
-        try:
-            self.predictive_engine = create_predictive_actions_engine()
-            print("✅ Predictive Engine initialized")
-        except Exception as e:
+        # Initialize Predictive Engine
+        if create_predictive_actions_engine:
+            try:
+                self.predictive_engine = create_predictive_actions_engine()
+                print("✅ Predictive Engine initialized")
+            except Exception as e:
+                self.predictive_engine = None
+                print(f"⚠️ Predictive Engine initialization failed: {e}")
+        else:
             self.predictive_engine = None
-            print(f"⚠️ Predictive Engine initialization failed: {e}")
+            print("⚠️ Predictive Engine module not available")
     
     def append_output(self, text: str, tag: str = "info"):
         """Append text to advanced AI output console"""
