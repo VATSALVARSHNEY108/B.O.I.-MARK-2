@@ -6,9 +6,10 @@ Everything happens visually - you can watch the AI work!
 
 import time
 import webbrowser
-from gui_automation import GUIAutomation
-from screenshot_analyzer import analyze_screenshot, extract_text_from_screenshot
-from gemini_controller import get_client
+from modules.automation.gui_automation import GUIAutomation
+from modules.ai_features.vision_ai import extract_text_from_screenshot
+from modules.ai_features.screenshot_analysis import analyze_screenshot
+from modules.core.gemini_controller import get_client
 from google.genai import types
 import os
 
