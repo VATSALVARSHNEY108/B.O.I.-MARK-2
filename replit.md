@@ -3,7 +3,16 @@
 ## Overview
 The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. The project aims to be a comprehensive productivity powerhouse, offering a unified ecosystem with over 300+ features, including smart Desktop RAG, 9 Smart Automation & AI features, Natural Language Workflow Builder, 8 Communication Enhancement features, and a real-time WebSocket dashboard for live monitoring. It integrates advanced AI for code generation, screen analysis, natural language understanding, professional-grade data analysis, various utility modules, and real-time remote monitoring capabilities.
 
-**NEW:** Now includes an Intelligent AI Assistant (`modules/ai_features/intelligent_assistant.py`) - a Streamlit-based web interface that instantly understands user intent and generates appropriate responses (code, stories, explanations, letters, etc.) with no unnecessary commentary.
+**NEW:** Now includes an Intelligent AI Assistant (integrated in `modules/ai_features/chatbots.py`) - a Streamlit-based web interface that instantly understands user intent and generates appropriate responses (code, stories, explanations, letters, etc.) with no unnecessary commentary.
+
+## Recent Changes
+**November 2, 2025**: Consolidated `modules/ai_features/` directory from 12 files to 6 files for better code organization and maintainability:
+- **chatbots.py** (17K): Merged `simple_chatbot.py` + `intelligent_assistant.py` - All chatbot implementations
+- **code_generation.py** (43K): Merged `code_generator.py` + `code_templates.py` + `letter_templates.py` - Code and letter generation
+- **vision_ai.py** (50K): Merged `multimodal_ai_core.py` + `screenshot_analyzer.py` + `virtual_language_model.py` - Vision and multimodal AI
+- **automation_ai.py** (27K): Merged `advanced_ai_automation.py` + `advanced_ai_integration.py` - Advanced automation features
+- **ai_features.py** (59K): Main AI features class (unchanged)
+- **__init__.py**: Updated with proper exports for all consolidated modules
 
 ## User Preferences
 - **Chat Monitoring:** User prefers visual/screen-based chat monitoring where AI controls the real Gmail/WhatsApp interface on screen, rather than background API calls. This allows them to watch the AI work in real-time.
@@ -15,12 +24,12 @@ The AI Desktop Automation Controller is built with Python 3.11 and utilizes a mo
 The primary interface is a GUI application (`gui_app.py`) built with `tkinter`, featuring a modern, dark-themed, tabbed design. It includes a live clock, card-based design with gradient effects, quick-access buttons, and a real-time color-coded output console. A CLI interface (`main.py`) provides an interactive command-line alternative. The GUI integrates toggle buttons for "VATSAL Mode" (personality vs. direct responses) and "Self-Operating Mode" (autonomous control).
 
 ### Technical Implementations
-- **AI Command Processing:** Gemini AI is integrated for natural language processing and converting commands into actions (`gemini_controller.py`).
-- **AI Code Generation → Notepad:** Integrated Gemini AI-powered code generator that automatically generates clean, well-commented code in 10+ languages and writes it to Notepad automatically. Features smart template system for instant code generation of common algorithms, auto-language detection, and multi-language support (`code_generator.py`, `code_templates.py`).
-- **Intelligent Letter Writing System:** Advanced letter generation system with 13 professional letter templates (leave applications, complaints, appreciation, recommendation, resignation, invitations, apologies, job applications, thank you notes, permission requests, inquiries, reference requests, and general formal letters). Features natural language detection, automatic variable extraction from voice commands, customizable templates with smart defaults, and seamless integration with the code generator and Notepad (`letter_templates.py`).
+- **AI Command Processing:** Gemini AI is integrated for natural language processing and converting commands into actions (`modules/core/gemini_controller.py`).
+- **AI Code Generation → Notepad:** Integrated Gemini AI-powered code generator that automatically generates clean, well-commented code in 10+ languages and writes it to Notepad automatically. Features smart template system for instant code generation of common algorithms, auto-language detection, and multi-language support (`modules/ai_features/code_generation.py`).
+- **Intelligent Letter Writing System:** Advanced letter generation system with 13 professional letter templates (leave applications, complaints, appreciation, recommendation, resignation, invitations, apologies, job applications, thank you notes, permission requests, inquiries, reference requests, and general formal letters). Features natural language detection, automatic variable extraction from voice commands, customizable templates with smart defaults, and seamless integration with the code generator and Notepad (`modules/ai_features/code_generation.py`).
 - **Full Screen Notepad Writer:** Enhanced Notepad integration that automatically opens Notepad in full screen mode before writing any content. Provides better visibility and professional appearance for all generated letters and code. Includes automatic window maximization, formatted titles, and cross-platform support (`notepad_writer.py`).
-- **GUI Automation:** Uses `PyAutoGUI` for cross-platform desktop control (`gui_automation.py`).
-- **AI Vision Module:** Leverages Gemini Vision for OCR, UI element identification, and screen analysis (`screenshot_analyzer.py`).
+- **GUI Automation:** Uses `PyAutoGUI` for cross-platform desktop control (`modules/automation/gui_automation.py`).
+- **AI Vision Module:** Leverages Gemini Vision for OCR, UI element identification, and screen analysis (`modules/ai_features/vision_ai.py`).
 - **Desktop RAG System:** Indexes desktop files for semantic search and Q&A (`desktop_rag.py`).
 - **Smart Automation & AI:** Provides 9 AI-powered features (e.g., Auto-Bug Fixer, Meeting Scheduler AI) (`smart_automation.py`).
 - **Visual Chat Monitor:** AI-powered visual email/WhatsApp monitoring via real browser interface control (`visual_chat_monitor.py`).
@@ -31,7 +40,7 @@ The primary interface is a GUI application (`gui_app.py`) built with `tkinter`, 
 - **Mobile Companion System:** Offers complete mobile control via a REST API (`mobile_api.py`) and a touch-optimized web interface (`templates/mobile.html`), including PIN-based authentication, push notifications, remote screenshot viewing, and quick actions.
 - **Automation Recording & Macro System:** Professional macro recording and playback for mouse clicks, movements, scrolls, and keyboard events, with loop support, speed control, and macro management (`macro_recorder.py`).
 - **Natural Language Workflow Builder:** AI-powered workflow creation from plain English descriptions. Users can describe complex automation workflows in natural language, and the AI (Gemini 2.0 Flash) converts them into executable automation steps. Features include conversational refinement, workflow validation, reusable templates, and integration with the existing WorkflowManager (`nl_workflow_builder.py`, `workflow_templates.py`).
-- **Advanced AI Enhancements:** Integrates Multi-Modal AI (vision + voice + text), Enhanced Contextual Memory, a Correction Learning System, and a Predictive Actions Engine for next-generation intelligence and learning (`multimodal_ai_core.py`, `contextual_memory_enhanced.py`, `correction_learning.py`, `predictive_actions_engine.py`).
+- **Advanced AI Enhancements:** Integrates Multi-Modal AI (vision + voice + text), Enhanced Contextual Memory, a Correction Learning System, and a Predictive Actions Engine for next-generation intelligence and learning (`modules/ai_features/vision_ai.py`, `modules/intelligence/contextual_memory_enhanced.py`, `modules/intelligence/correction_learning.py`, `modules/intelligence/predictive_actions_engine.py`).
 - **AI-Powered Security Dashboard:** Comprehensive security management powered by Gemini AI, integrating biometric authentication, 2FA, encrypted storage, activity monitoring, and sandbox mode. Features include AI-driven threat analysis, intelligent security recommendations, anomaly detection, natural language security queries, and automated security reporting (`security_dashboard.py`). Accessible through a dedicated "🛡️ Security" button in the GUI with an intuitive dashboard interface.
 - **Utility Modules:** Includes integrations for Spotify, YouTube, Weather & News, Translation, Calculator, Password Vault, Quick Notes, and Calendar Manager.
 
