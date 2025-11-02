@@ -16,24 +16,27 @@ class ModernGUI:
         self.root = root
         self.root.title("✨ VATSAL - AI Desktop Automation")
         self.root.geometry("1600x1000")
-        self.root.configure(bg="#0a0e27")
+        self.root.configure(bg="#000000")
         
-        # Modern color palette
+        # Sleek Black & White color palette
         self.colors = {
-            'bg_primary': '#0a0e27',
-            'bg_secondary': '#151932',
-            'bg_tertiary': '#1e2139',
-            'accent_blue': '#667eea',
-            'accent_purple': '#764ba2',
-            'accent_green': '#00d4ff',
-            'accent_pink': '#f093fb',
-            'text_primary': '#ffffff',
-            'text_secondary': '#a5b4fc',
-            'text_muted': '#6b7280',
-            'success': '#10b981',
-            'warning': '#f59e0b',
-            'error': '#ef4444',
-            'card_bg': '#1a1f3a',
+            'bg_primary': '#000000',        # Pure black
+            'bg_secondary': '#0a0a0a',      # Slightly lighter black
+            'bg_tertiary': '#1a1a1a',       # Dark gray
+            'border_white': '#ffffff',      # Pure white borders
+            'border_gray': '#808080',       # Gray borders
+            'accent_blue': '#00d4ff',       # Cyan blue
+            'accent_purple': '#b19cd9',     # Light purple
+            'accent_green': '#00ff88',      # Neon green
+            'accent_pink': '#ff0080',       # Hot pink
+            'text_primary': '#ffffff',      # White text
+            'text_secondary': '#cccccc',    # Light gray text
+            'text_muted': '#808080',        # Muted gray
+            'success': '#00ff88',           # Neon green
+            'warning': '#ffaa00',           # Orange
+            'error': '#ff0055',             # Red
+            'card_bg': '#0f0f0f',          # Very dark gray
+            'prompt_bg': '#1a1a1a',        # Prompt bar background
         }
         
         # State variables
@@ -61,17 +64,31 @@ class ModernGUI:
         # Sidebar
         self.create_sidebar(main_container)
         
-        # Main content area
-        self.content_area = tk.Frame(main_container, bg=self.colors['bg_primary'])
-        self.content_area.pack(side="left", fill="both", expand=True)
+        # Main content area with white border
+        self.content_area = tk.Frame(
+            main_container, 
+            bg=self.colors['bg_primary'],
+            highlightbackground=self.colors['border_white'],
+            highlightthickness=2
+        )
+        self.content_area.pack(side="left", fill="both", expand=True, padx=2, pady=2)
         
         # Show dashboard by default
         self.show_dashboard()
         
+        # Command Prompt Bar at bottom
+        self.create_prompt_bar()
+        
     def create_top_navbar(self):
-        """Create modern top navigation bar with gradient effect"""
-        navbar = tk.Frame(self.root, bg=self.colors['bg_secondary'], height=70)
-        navbar.pack(fill="x", side="top")
+        """Create modern top navigation bar with white border"""
+        navbar = tk.Frame(
+            self.root, 
+            bg=self.colors['bg_secondary'], 
+            height=70,
+            highlightbackground=self.colors['border_white'],
+            highlightthickness=2
+        )
+        navbar.pack(fill="x", side="top", padx=2, pady=(2, 0))
         navbar.pack_propagate(False)
         
         # Left side - Logo and title
@@ -146,9 +163,15 @@ class ModernGUI:
         status_text.pack(side="left")
         
     def create_sidebar(self, parent):
-        """Create modern sidebar with navigation"""
-        sidebar = tk.Frame(parent, bg=self.colors['bg_secondary'], width=280)
-        sidebar.pack(side="left", fill="y")
+        """Create modern sidebar with white border"""
+        sidebar = tk.Frame(
+            parent, 
+            bg=self.colors['bg_secondary'], 
+            width=280,
+            highlightbackground=self.colors['border_white'],
+            highlightthickness=2
+        )
+        sidebar.pack(side="left", fill="y", padx=(2, 0), pady=2)
         sidebar.pack_propagate(False)
         
         # Sidebar title
@@ -182,24 +205,27 @@ class ModernGUI:
         self.highlight_nav_button("dashboard")
         
     def create_nav_button(self, parent, icon, name, view_id):
-        """Create a modern navigation button"""
+        """Create a modern navigation button with white border"""
         btn_frame = tk.Frame(parent, bg=self.colors['bg_secondary'])
         btn_frame.pack(fill="x", padx=15, pady=5)
         
         btn = tk.Button(
             btn_frame,
             text=f"{icon}  {name}",
-            font=("Segoe UI", 12),
+            font=("Segoe UI", 12, "bold"),
             bg=self.colors['bg_tertiary'],
             fg=self.colors['text_secondary'],
             activebackground=self.colors['accent_blue'],
             activeforeground=self.colors['text_primary'],
-            relief="flat",
+            relief="solid",
+            borderwidth=2,
             cursor="hand2",
             anchor="w",
             padx=20,
             pady=12,
-            command=lambda: self.switch_view(view_id)
+            command=lambda: self.switch_view(view_id),
+            highlightbackground=self.colors['border_white'],
+            highlightthickness=1
         )
         btn.pack(fill="both", expand=True)
         
@@ -315,8 +341,13 @@ class ModernGUI:
             self.create_action_button(row_frame, icon, name, color)
     
     def create_stat_card(self, parent, icon, title, value, color):
-        """Create a modern stats card with gradient"""
-        card_frame = tk.Frame(parent, bg=self.colors['card_bg'])
+        """Create a modern stats card with white border"""
+        card_frame = tk.Frame(
+            parent, 
+            bg=self.colors['card_bg'],
+            highlightbackground=self.colors['border_white'],
+            highlightthickness=2
+        )
         card_frame.pack(side="left", fill="both", expand=True, padx=10)
         
         # Card content with padding
@@ -354,7 +385,7 @@ class ModernGUI:
         title_label.pack(anchor="w")
     
     def create_action_button(self, parent, icon, name, color):
-        """Create a modern action button"""
+        """Create a modern action button with white border"""
         btn_container = tk.Frame(parent, bg=self.colors['bg_primary'])
         btn_container.pack(side="left", fill="both", expand=True, padx=8)
         
@@ -366,11 +397,14 @@ class ModernGUI:
             fg=self.colors['text_primary'],
             activebackground=color,
             activeforeground=self.colors['text_primary'],
-            relief="flat",
+            relief="solid",
+            borderwidth=2,
             cursor="hand2",
             padx=20,
             pady=20,
-            command=lambda: self.execute_quick_action(name.lower())
+            command=lambda: self.execute_quick_action(name.lower()),
+            highlightbackground=self.colors['border_white'],
+            highlightthickness=1
         )
         btn.pack(fill="both", expand=True)
         
@@ -462,8 +496,13 @@ class ModernGUI:
         scrollbar.pack(side="right", fill="y")
     
     def create_detailed_action_card(self, parent, icon, name, description):
-        """Create detailed action card"""
-        card = tk.Frame(parent, bg=self.colors['card_bg'])
+        """Create detailed action card with white border"""
+        card = tk.Frame(
+            parent, 
+            bg=self.colors['card_bg'],
+            highlightbackground=self.colors['border_white'],
+            highlightthickness=2
+        )
         card.pack(side="left", fill="both", expand=True, padx=8)
         
         content = tk.Frame(card, bg=self.colors['card_bg'])
@@ -507,11 +546,13 @@ class ModernGUI:
             font=("Segoe UI", 9, "bold"),
             bg=self.colors['accent_blue'],
             fg=self.colors['text_primary'],
-            relief="flat",
+            relief="solid",
+            borderwidth=1,
             cursor="hand2",
             command=lambda: self.execute_quick_action(name.lower()),
             padx=15,
-            pady=5
+            pady=5,
+            highlightbackground=self.colors['border_white']
         )
         exec_btn.pack(fill="x")
         
@@ -536,16 +577,21 @@ class ModernGUI:
         )
         header.pack(anchor="w", pady=(0, 20))
         
-        # Chat area
-        chat_frame = tk.Frame(container, bg=self.colors['card_bg'])
+        # Chat area with white border
+        chat_frame = tk.Frame(
+            container, 
+            bg=self.colors['card_bg'],
+            highlightbackground=self.colors['border_white'],
+            highlightthickness=2
+        )
         chat_frame.pack(fill="both", expand=True, pady=(0, 15))
         
         self.chat_display = scrolledtext.ScrolledText(
             chat_frame,
-            font=("Segoe UI", 11),
+            font=("Consolas", 11),
             bg=self.colors['card_bg'],
             fg=self.colors['text_primary'],
-            insertbackground=self.colors['text_primary'],
+            insertbackground=self.colors['accent_green'],
             relief="flat",
             padx=20,
             pady=15,
@@ -559,11 +605,14 @@ class ModernGUI:
         
         self.chat_input = tk.Entry(
             input_frame,
-            font=("Segoe UI", 12),
+            font=("Consolas", 12),
             bg=self.colors['card_bg'],
             fg=self.colors['text_primary'],
-            insertbackground=self.colors['text_primary'],
-            relief="flat"
+            insertbackground=self.colors['accent_green'],
+            relief="solid",
+            borderwidth=2,
+            highlightbackground=self.colors['border_white'],
+            highlightcolor=self.colors['accent_green']
         )
         self.chat_input.pack(side="left", fill="both", expand=True, ipady=12, padx=(0, 10))
         self.chat_input.bind("<Return>", lambda e: self.send_chat_message())
@@ -574,11 +623,13 @@ class ModernGUI:
             font=("Segoe UI", 11, "bold"),
             bg=self.colors['accent_blue'],
             fg=self.colors['text_primary'],
-            relief="flat",
+            relief="solid",
+            borderwidth=2,
             cursor="hand2",
             command=self.send_chat_message,
             padx=25,
-            pady=12
+            pady=12,
+            highlightbackground=self.colors['border_white']
         )
         send_btn.pack(side="right")
         
@@ -612,7 +663,12 @@ class ModernGUI:
         ]
         
         for icon, title, desc, color in features:
-            feature_card = tk.Frame(container, bg=self.colors['card_bg'])
+            feature_card = tk.Frame(
+                container, 
+                bg=self.colors['card_bg'],
+                highlightbackground=self.colors['border_white'],
+                highlightthickness=2
+            )
             feature_card.pack(fill="x", pady=10)
             
             content = tk.Frame(feature_card, bg=self.colors['card_bg'])
@@ -661,10 +717,12 @@ class ModernGUI:
                 font=("Segoe UI", 11, "bold"),
                 bg=color,
                 fg=self.colors['text_primary'],
-                relief="flat",
+                relief="solid",
+                borderwidth=2,
                 cursor="hand2",
                 padx=20,
-                pady=8
+                pady=8,
+                highlightbackground=self.colors['border_white']
             )
             btn.pack(side="right", padx=10)
     
@@ -712,8 +770,13 @@ class ModernGUI:
         )
         header.pack(anchor="w", pady=(0, 20))
         
-        # Settings options
-        settings_card = tk.Frame(container, bg=self.colors['card_bg'])
+        # Settings options with white border
+        settings_card = tk.Frame(
+            container, 
+            bg=self.colors['card_bg'],
+            highlightbackground=self.colors['border_white'],
+            highlightthickness=2
+        )
         settings_card.pack(fill="both", expand=True, padx=0, pady=0)
         
         settings_content = tk.Frame(settings_card, bg=self.colors['card_bg'])
@@ -804,6 +867,116 @@ class ModernGUI:
         # Update stats
         self.stats['commands_today'] += 1
         self.stats['tasks_completed'] += 1
+    
+    def create_prompt_bar(self):
+        """Create command prompt bar at the bottom"""
+        prompt_container = tk.Frame(
+            self.root,
+            bg=self.colors['prompt_bg'],
+            highlightbackground=self.colors['border_white'],
+            highlightthickness=2
+        )
+        prompt_container.pack(fill="x", side="bottom", padx=2, pady=2)
+        
+        # Prompt frame
+        prompt_frame = tk.Frame(prompt_container, bg=self.colors['prompt_bg'])
+        prompt_frame.pack(fill="x", padx=15, pady=12)
+        
+        # Prompt label
+        prompt_label = tk.Label(
+            prompt_frame,
+            text=">>>",
+            font=("Consolas", 14, "bold"),
+            bg=self.colors['prompt_bg'],
+            fg=self.colors['accent_green']
+        )
+        prompt_label.pack(side="left", padx=(0, 10))
+        
+        # Command input
+        self.prompt_entry = tk.Entry(
+            prompt_frame,
+            font=("Consolas", 13),
+            bg=self.colors['bg_tertiary'],
+            fg=self.colors['text_primary'],
+            insertbackground=self.colors['accent_green'],
+            relief="solid",
+            borderwidth=2,
+            highlightbackground=self.colors['border_white'],
+            highlightcolor=self.colors['accent_green'],
+            highlightthickness=1
+        )
+        self.prompt_entry.pack(side="left", fill="both", expand=True, ipady=8)
+        self.prompt_entry.bind("<Return>", lambda e: self.execute_prompt_command())
+        
+        # Execute button
+        exec_btn = tk.Button(
+            prompt_frame,
+            text="⚡ Execute",
+            font=("Segoe UI", 12, "bold"),
+            bg=self.colors['accent_green'],
+            fg=self.colors['bg_primary'],
+            activebackground=self.colors['accent_blue'],
+            activeforeground=self.colors['text_primary'],
+            relief="solid",
+            borderwidth=2,
+            cursor="hand2",
+            command=self.execute_prompt_command,
+            padx=20,
+            pady=8,
+            highlightbackground=self.colors['border_white']
+        )
+        exec_btn.pack(side="right", padx=(10, 0))
+        
+        # Status label
+        self.prompt_status = tk.Label(
+            prompt_container,
+            text="Ready to execute commands...",
+            font=("Consolas", 9),
+            bg=self.colors['prompt_bg'],
+            fg=self.colors['text_muted'],
+            anchor="w"
+        )
+        self.prompt_status.pack(fill="x", padx=15, pady=(0, 8))
+    
+    def execute_prompt_command(self):
+        """Execute command from prompt bar"""
+        command = self.prompt_entry.get().strip()
+        if not command:
+            return
+        
+        # Update status
+        self.prompt_status.configure(
+            text=f"Executing: {command}",
+            fg=self.colors['accent_blue']
+        )
+        
+        # Simulate command execution
+        threading.Thread(target=self.process_prompt_command, args=(command,), daemon=True).start()
+        
+        # Clear input
+        self.prompt_entry.delete(0, "end")
+    
+    def process_prompt_command(self, command):
+        """Process the prompt command"""
+        import time
+        time.sleep(0.5)
+        
+        # Update status with success
+        self.prompt_status.configure(
+            text=f"✓ Executed: {command}",
+            fg=self.colors['success']
+        )
+        
+        # Update stats
+        self.stats['commands_today'] += 1
+        self.stats['tasks_completed'] += 1
+        
+        # Reset status after 3 seconds
+        time.sleep(3)
+        self.prompt_status.configure(
+            text="Ready to execute commands...",
+            fg=self.colors['text_muted']
+        )
     
     def update_time(self):
         """Update the time display"""

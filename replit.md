@@ -6,8 +6,9 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 **NEW:** Now includes an Intelligent AI Assistant (integrated in `modules/ai_features/chatbots.py`) - a Streamlit-based web interface that instantly understands user intent and generates appropriate responses (code, stories, explanations, letters, etc.) with no unnecessary commentary.
 
 ## Recent Changes
-**November 2, 2025 - Enhanced GUI & Fullscreen Features**:
-- **✨ Enhanced Modern GUI** (`modules/core/enhanced_gui.py`): Completely redesigned beautiful GUI with modern design, stunning visuals, and intuitive UX. Features include dashboard with live statistics, sidebar navigation, 6 major views (Dashboard, Quick Actions, AI Chat, Automation, Analytics, Settings), beautiful color palette, hover effects, and professional appearance. Launch with `python launch_enhanced_gui.py`.
+**November 2, 2025 - Enhanced Black & White GUI**:
+- **⚫⚪ Enhanced Black & White GUI** (`modules/core/enhanced_gui.py`): Completely redesigned GUI with pure black backgrounds (#000000), crisp white borders (2px) on every element, and command prompt bar at bottom. Features include neon green/cyan/pink accents, terminal-style prompt (>>> with Consolas font), real-time command execution, dashboard with stats, sidebar navigation, 6 major views, and professional high-contrast appearance. Launch with `python launch_enhanced_gui.py`.
+- **⚡ Command Prompt Bar**: NEW terminal-style command bar at bottom with green >>> prompt, direct command execution, real-time status updates, and Enter key support.
 - **📝 Fullscreen Notepad Enhancement** (`modules/utilities/notepad_writer.py`): Improved notepad writer to open in TRUE fullscreen mode before writing. Uses two-step process (maximize + F11) with better timing for smooth transitions and professional appearance.
 
 **November 2, 2025 - New Features**:
