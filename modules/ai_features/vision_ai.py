@@ -9,7 +9,7 @@ import base64
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 from google import genai
-from gui_automation import GUIAutomation
+from modules.automation.gui_automation import GUIAutomation
 
 class MultiModalInput:
     """Represents a multi-modal input combining vision, voice, and text"""
@@ -726,7 +726,7 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional
 from google import genai
 from google.genai import types
-from gui_automation import GUIAutomation
+from modules.automation.gui_automation import GUIAutomation
 
 
 class VirtualLanguageModel:

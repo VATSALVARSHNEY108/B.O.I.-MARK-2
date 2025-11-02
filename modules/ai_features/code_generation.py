@@ -1052,8 +1052,6 @@ Handles intelligent code generation for multiple programming languages
 import os
 from google import genai
 from google.genai import types
-from code_templates import get_template_code, list_available_templates
-from letter_templates import generate_letter, detect_letter_type
 
 client = None
 

@@ -274,10 +274,10 @@ import os
 import tkinter as tk
 from tkinter import simpledialog, messagebox
 from datetime import datetime
-from multimodal_ai_core import create_multimodal_ai, MultiModalInput
-from contextual_memory_enhanced import create_contextual_memory_enhanced
-from correction_learning import create_correction_learning
-from predictive_actions_engine import create_predictive_actions_engine
+from modules.ai_features.vision_ai import create_multimodal_ai, MultiModalInput
+from modules.intelligence.contextual_memory_enhanced import create_contextual_memory_enhanced
+from modules.intelligence.correction_learning import create_correction_learning
+from modules.intelligence.predictive_actions_engine import create_predictive_actions_engine
 
 
 class AdvancedAIIntegration:

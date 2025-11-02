@@ -9,8 +9,8 @@ from datetime import datetime
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
-from gemini_controller import parse_command
-from command_executor import CommandExecutor
+from modules.core.gemini_controller import parse_command
+from modules.core.command_executor import CommandExecutor
 
 load_dotenv()
 
