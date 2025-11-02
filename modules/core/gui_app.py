@@ -75,9 +75,9 @@ VNC_MODE = setup_vnc_display()
 class AutomationControllerGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("🤖 VATSAL - AI Desktop Automation Controller")
+        self.root.title("✨ VATSAL - AI Desktop Automation Controller")
         self.root.geometry("1400x900")
-        self.root.configure(bg="#0f0f1e")
+        self.root.configure(bg="#000000")  # Pure black background
 
         # Initialize User Profile Manager
         self.user_profile = get_user_profile_manager()
@@ -248,181 +248,235 @@ class AutomationControllerGUI:
         style = ttk.Style()
         style.theme_use('clam')
 
+        # Fancy fonts and black/white theme
         style.configure("Header.TLabel",
-                        background="#0f0f1e",
+                        background="#000000",
                         foreground="#ffffff",
-                        font=("Segoe UI", 24, "bold"))
+                        font=("Copperplate Gothic Bold", 26, "bold"))
         style.configure("Info.TLabel",
-                        background="#0f0f1e",
-                        foreground="#a6adc8",
-                        font=("Segoe UI", 11))
+                        background="#000000",
+                        foreground="#cccccc",
+                        font=("Consolas", 11))
         style.configure("Category.TLabel",
-                        background="#1e1e2e",
-                        foreground="#f9e2af",
-                        font=("Segoe UI", 11, "bold"))
-        style.configure("TNotebook", background="#1e1e2e", borderwidth=0)
+                        background="#0a0a0a",
+                        foreground="#00ff88",
+                        font=("Impact", 12, "bold"))
+        style.configure("TNotebook", background="#0a0a0a", borderwidth=2, relief="solid")
         style.configure("TNotebook.Tab",
-                        background="#313244",
-                        foreground="#cdd6f4",
-                        padding=[15, 8],
-                        font=("Segoe UI", 9, "bold"))
+                        background="#1a1a1a",
+                        foreground="#ffffff",
+                        padding=[15, 10],
+                        font=("Arial Black", 10, "bold"),
+                        borderwidth=2)
         style.map("TNotebook.Tab",
-                  background=[("selected", "#45475a")],
-                  foreground=[("selected", "#ffffff")])
+                  background=[("selected", "#00d4ff")],
+                  foreground=[("selected", "#000000")])
 
-        header_frame = tk.Frame(self.root, bg="#0f0f1e", pady=20)
-        header_frame.pack(fill="x")
+        header_frame = tk.Frame(
+            self.root, 
+            bg="#000000", 
+            pady=20,
+            highlightbackground="#ffffff",
+            highlightthickness=2
+        )
+        header_frame.pack(fill="x", padx=3, pady=3)
 
-        header_container = tk.Frame(header_frame, bg="#1a1a2e", relief="flat")
-        header_container.pack(fill="x", padx=30)
+        header_container = tk.Frame(
+            header_frame, 
+            bg="#0a0a0a", 
+            relief="solid",
+            highlightbackground="#ffffff",
+            highlightthickness=2
+        )
+        header_container.pack(fill="x", padx=5)
 
         self.add_gradient_effect(header_container)
 
-        title_frame = tk.Frame(header_container, bg="#1a1a2e")
+        title_frame = tk.Frame(header_container, bg="#0a0a0a")
         title_frame.pack(pady=15)
 
         title = tk.Label(title_frame,
-                         text="🤖 V.A.T.S.A.L.",
-                         bg="#1a1a2e",
+                         text="✨ V.A.T.S.A.L. ✨",
+                         bg="#0a0a0a",
                          fg="#ffffff",
-                         font=("Segoe UI", 26, "bold"))
+                         font=("Copperplate Gothic Bold", 32, "bold"))
         title.pack()
 
         subtitle = tk.Label(title_frame,
-                            text="⚡ Vastly Advanced Technological System Above Limitations",
-                            bg="#1a1a2e",
-                            fg="#89b4fa",
-                            font=("Segoe UI", 11))
+                            text="⚡ Vastly Advanced Technological System Above Limitations ⚡",
+                            bg="#0a0a0a",
+                            fg="#00d4ff",
+                            font=("Georgia", 12, "italic"))
         subtitle.pack(pady=(5, 0))
 
-        stats_frame = tk.Frame(header_container, bg="#1a1a2e")
+        stats_frame = tk.Frame(header_container, bg="#0a0a0a")
         stats_frame.pack(pady=(10, 15))
 
         self.time_label = tk.Label(stats_frame,
                                    text="",
-                                   bg="#1a1a2e",
-                                   fg="#a6e3a1",
-                                   font=("Segoe UI", 10))
+                                   bg="#0a0a0a",
+                                   fg="#00ff88",
+                                   font=("Consolas", 11, "bold"))
         self.time_label.pack(side="left", padx=15)
 
-        separator1 = tk.Label(stats_frame, text="•", bg="#1a1a2e", fg="#45475a", font=("Segoe UI", 10))
+        separator1 = tk.Label(stats_frame, text="●", bg="#0a0a0a", fg="#ffffff", font=("Arial", 10))
         separator1.pack(side="left", padx=5)
 
         features_label = tk.Label(stats_frame,
                                   text="100+ AI Features Available",
-                                  bg="#1a1a2e",
-                                  fg="#f9e2af",
-                                  font=("Segoe UI", 10))
+                                  bg="#0a0a0a",
+                                  fg="#00d4ff",
+                                  font=("Arial Black", 10, "bold"))
         features_label.pack(side="left", padx=15)
 
-        separator2 = tk.Label(stats_frame, text="•", bg="#1a1a2e", fg="#45475a", font=("Segoe UI", 10))
+        separator2 = tk.Label(stats_frame, text="●", bg="#0a0a0a", fg="#ffffff", font=("Arial", 10))
         separator2.pack(side="left", padx=5)
 
         self.vatsal_toggle_btn = tk.Button(stats_frame,
                                            text="🤖 VATSAL Mode: ON",
-                                           bg="#89b4fa",
-                                           fg="#0f0f1e",
-                                           font=("Segoe UI", 9, "bold"),
-                                           relief="flat",
+                                           bg="#00d4ff",
+                                           fg="#000000",
+                                           font=("Arial Black", 10, "bold"),
+                                           relief="solid",
+                                           borderwidth=2,
                                            cursor="hand2",
                                            command=self.toggle_vatsal_mode,
                                            padx=15,
-                                           pady=5)
+                                           pady=5,
+                                           highlightbackground="#ffffff",
+                                           highlightthickness=1)
         self.vatsal_toggle_btn.pack(side="left", padx=15)
-        self.add_hover_effect(self.vatsal_toggle_btn, "#89b4fa", "#74c7ec")
+        self.add_hover_effect(self.vatsal_toggle_btn, "#00d4ff", "#00ff88")
 
-        separator3 = tk.Label(stats_frame, text="•", bg="#1a1a2e", fg="#45475a", font=("Segoe UI", 10))
+        separator3 = tk.Label(stats_frame, text="●", bg="#0a0a0a", fg="#ffffff", font=("Arial", 10))
         separator3.pack(side="left", padx=5)
 
         self.self_operating_toggle_btn = tk.Button(stats_frame,
                                                    text="🎮 Self-Operating: ON",
-                                                   bg="#cba6f7",
-                                                   fg="#0f0f1e",
-                                                   font=("Segoe UI", 9, "bold"),
-                                                   relief="flat",
+                                                   bg="#b19cd9",
+                                                   fg="#000000",
+                                                   font=("Arial Black", 10, "bold"),
+                                                   relief="solid",
+                                                   borderwidth=2,
                                                    cursor="hand2",
                                                    command=self.toggle_self_operating_mode,
                                                    padx=15,
-                                                   pady=5)
+                                                   pady=5,
+                                                   highlightbackground="#ffffff",
+                                                   highlightthickness=1)
         self.self_operating_toggle_btn.pack(side="left", padx=15)
-        self.add_hover_effect(self.self_operating_toggle_btn, "#cba6f7", "#b4befe")
+        self.add_hover_effect(self.self_operating_toggle_btn, "#b19cd9", "#ff0080")
 
-        separator4 = tk.Label(stats_frame, text="•", bg="#1a1a2e", fg="#45475a", font=("Segoe UI", 10))
+        separator4 = tk.Label(stats_frame, text="●", bg="#0a0a0a", fg="#ffffff", font=("Arial", 10))
         separator4.pack(side="left", padx=5)
 
         self.user_settings_btn = tk.Button(stats_frame,
                                           text="⚙️ User Settings",
-                                          bg="#a6e3a1",
-                                          fg="#0f0f1e",
-                                          font=("Segoe UI", 9, "bold"),
-                                          relief="flat",
+                                          bg="#00ff88",
+                                          fg="#000000",
+                                          font=("Arial Black", 10, "bold"),
+                                          relief="solid",
+                                          borderwidth=2,
                                           cursor="hand2",
                                           command=self.open_user_settings,
                                           padx=15,
-                                          pady=5)
+                                          pady=5,
+                                          highlightbackground="#ffffff",
+                                          highlightthickness=1)
         self.user_settings_btn.pack(side="left", padx=15)
-        self.add_hover_effect(self.user_settings_btn, "#a6e3a1", "#94e2d5")
+        self.add_hover_effect(self.user_settings_btn, "#00ff88", "#00d4ff")
 
-        main_container = tk.Frame(self.root, bg="#0f0f1e")
-        main_container.pack(fill="both", expand=True, padx=30, pady=10)
+        main_container = tk.Frame(
+            self.root, 
+            bg="#000000",
+            highlightbackground="#ffffff",
+            highlightthickness=2
+        )
+        main_container.pack(fill="both", expand=True, padx=5, pady=5)
 
-        left_panel = tk.Frame(main_container, bg="#0f0f1e", width=450)
-        left_panel.pack(side="left", fill="both", expand=False, padx=(0, 15))
+        left_panel = tk.Frame(
+            main_container, 
+            bg="#0a0a0a", 
+            width=450,
+            highlightbackground="#ffffff",
+            highlightthickness=2
+        )
+        left_panel.pack(side="left", fill="both", expand=False, padx=5)
         left_panel.pack_propagate(False)
 
-        left_header = tk.Frame(left_panel, bg="#1a1a2e", relief="flat")
-        left_header.pack(fill="x", pady=(0, 10))
+        left_header = tk.Frame(
+            left_panel, 
+            bg="#1a1a1a", 
+            relief="solid",
+            highlightbackground="#ffffff",
+            highlightthickness=2
+        )
+        left_header.pack(fill="x", pady=5, padx=5)
 
         categories_label = tk.Label(left_header,
-                                    text="🎯 Quick Actions Center",
-                                    bg="#1a1a2e",
-                                    fg="#ffffff",
-                                    font=("Segoe UI", 14, "bold"),
+                                    text="⚡ Quick Actions Center ⚡",
+                                    bg="#1a1a1a",
+                                    fg="#00d4ff",
+                                    font=("Impact", 16, "bold"),
                                     pady=12)
         categories_label.pack()
 
         # Quick actions navigation container
-        self.quick_actions_container = tk.Frame(left_panel, bg="#1a1a2e", relief="flat")
-        self.quick_actions_container.pack(fill="both", expand=True, padx=10, pady=10)
+        self.quick_actions_container = tk.Frame(
+            left_panel, 
+            bg="#0a0a0a", 
+            relief="solid",
+            highlightbackground="#ffffff",
+            highlightthickness=2
+        )
+        self.quick_actions_container.pack(fill="both", expand=True, padx=5, pady=5)
         
         # Create sidebar and main content container
-        self.sidebar_main_container = tk.Frame(self.quick_actions_container, bg="#1a1a2e")
+        self.sidebar_main_container = tk.Frame(self.quick_actions_container, bg="#0a0a0a")
         self.sidebar_main_container.pack(fill="both", expand=True)
         
         # Create collapsible sidebar
         self.sidebar_expanded = True
-        self.sidebar = tk.Frame(self.sidebar_main_container, bg="#0f0f1e", width=120)
-        self.sidebar.pack(side="left", fill="y", padx=(0, 5))
+        self.sidebar = tk.Frame(
+            self.sidebar_main_container, 
+            bg="#1a1a1a", 
+            width=120,
+            highlightbackground="#ffffff",
+            highlightthickness=1
+        )
+        self.sidebar.pack(side="left", fill="y", padx=2)
         self.sidebar.pack_propagate(False)
         
         # Sidebar toggle button
         self.sidebar_toggle_btn = tk.Button(self.sidebar,
                                            text="◀",
-                                           bg="#313244",
-                                           fg="#89b4fa",
-                                           font=("Segoe UI", 12, "bold"),
-                                           relief="flat",
+                                           bg="#00d4ff",
+                                           fg="#000000",
+                                           font=("Arial Black", 12, "bold"),
+                                           relief="solid",
+                                           borderwidth=2,
                                            cursor="hand2",
                                            command=self.toggle_sidebar,
                                            padx=10,
-                                           pady=5)
-        self.sidebar_toggle_btn.pack(fill="x", padx=5, pady=5)
-        self.add_hover_effect(self.sidebar_toggle_btn, "#313244", "#45475a")
+                                           pady=5,
+                                           highlightbackground="#ffffff")
+        self.sidebar_toggle_btn.pack(fill="x", padx=3, pady=3)
+        self.add_hover_effect(self.sidebar_toggle_btn, "#00d4ff", "#00ff88")
         
         # Sidebar title
         self.sidebar_title = tk.Label(self.sidebar,
                                      text="MENU",
-                                     bg="#0f0f1e",
-                                     fg="#6c7086",
-                                     font=("Segoe UI", 8, "bold"))
+                                     bg="#1a1a1a",
+                                     fg="#ffffff",
+                                     font=("Impact", 10, "bold"))
         self.sidebar_title.pack(pady=(5, 10))
         
         # Category navigation data
         self.sidebar_categories = [
-            ("🖥️", "SYSTEM", "#89b4fa"),
-            ("🌐", "WEB", "#89dceb"),
-            ("📁", "WORK", "#a6e3a1"),
-            ("🎵", "MEDIA", "#f5c2e7"),
+            ("🖥️", "SYSTEM", "#00d4ff"),
+            ("🌐", "WEB", "#00ff88"),
+            ("📁", "WORK", "#b19cd9"),
+            ("🎵", "MEDIA", "#ff0080"),
         ]
         
         self.sidebar_buttons = []
@@ -430,41 +484,49 @@ class AutomationControllerGUI:
         
         # Create category buttons in sidebar
         for icon, name, color in self.sidebar_categories:
-            btn_frame = tk.Frame(self.sidebar, bg="#0f0f1e")
-            btn_frame.pack(fill="x", pady=3, padx=5)
+            btn_frame = tk.Frame(self.sidebar, bg="#1a1a1a")
+            btn_frame.pack(fill="x", pady=3, padx=3)
             
             btn = tk.Button(btn_frame,
                           text=f"{icon}\n{name}",
-                          bg="#313244",
+                          bg="#0a0a0a",
                           fg=color,
-                          font=("Segoe UI", 9),
-                          relief="flat",
+                          font=("Arial Black", 9, "bold"),
+                          relief="solid",
+                          borderwidth=2,
                           cursor="hand2",
                           command=lambda cat=name: self.scroll_to_category(cat),
                           padx=8,
                           pady=10,
                           width=10,
-                          wraplength=80)
+                          wraplength=80,
+                          highlightbackground="#ffffff",
+                          highlightthickness=1)
             btn.pack(fill="both", expand=True)
             
             self.sidebar_buttons.append((btn, name, color))
-            self.add_hover_effect(btn, "#313244", "#45475a")
+            self.add_hover_effect(btn, "#0a0a0a", color)
         
         # Create main menu view
-        self.quick_menu_view = tk.Frame(self.sidebar_main_container, bg="#1a1a2e")
+        self.quick_menu_view = tk.Frame(self.sidebar_main_container, bg="#0a0a0a")
         
         # Subtitle
         menu_subtitle = tk.Label(self.quick_menu_view,
-                                text="Choose an action below",
-                                bg="#1a1a2e",
-                                fg="#6c7086",
-                                font=("Segoe UI", 9))
+                                text="⚡ Choose an action below ⚡",
+                                bg="#0a0a0a",
+                                fg="#00ff88",
+                                font=("Consolas", 10, "bold"))
         menu_subtitle.pack(anchor="w", padx=8, pady=(5, 8))
         
         # Scrollable menu
-        self.menu_canvas = tk.Canvas(self.quick_menu_view, bg="#1a1a2e", highlightthickness=0)
+        self.menu_canvas = tk.Canvas(
+            self.quick_menu_view, 
+            bg="#0a0a0a", 
+            highlightbackground="#ffffff",
+            highlightthickness=1
+        )
         menu_scrollbar = ttk.Scrollbar(self.quick_menu_view, orient="vertical", command=self.menu_canvas.yview)
-        menu_scrollable = tk.Frame(self.menu_canvas, bg="#1a1a2e")
+        menu_scrollable = tk.Frame(self.menu_canvas, bg="#0a0a0a")
         
         menu_scrollable.bind(
             "<Configure>",
@@ -598,81 +660,101 @@ class AutomationControllerGUI:
         # Show menu view by default
         self.quick_menu_view.pack(fill="both", expand=True)
 
-        right_panel = tk.Frame(main_container, bg="#0f0f1e")
-        right_panel.pack(side="right", fill="both", expand=True)
+        right_panel = tk.Frame(
+            main_container, 
+            bg="#0a0a0a",
+            highlightbackground="#ffffff",
+            highlightthickness=2
+        )
+        right_panel.pack(side="right", fill="both", expand=True, padx=5)
 
-        command_card = tk.Frame(right_panel, bg="#1a1a2e", relief="flat")
-        command_card.pack(fill="x", pady=(0, 15))
+        command_card = tk.Frame(
+            right_panel, 
+            bg="#1a1a1a", 
+            relief="solid",
+            highlightbackground="#ffffff",
+            highlightthickness=2
+        )
+        command_card.pack(fill="x", pady=5, padx=5)
 
-        input_frame = tk.Frame(command_card, bg="#1a1a2e")
-        input_frame.pack(fill="x", padx=20, pady=15)
+        input_frame = tk.Frame(command_card, bg="#1a1a1a")
+        input_frame.pack(fill="x", padx=15, pady=15)
 
         input_label = tk.Label(input_frame,
-                               text="💬 Command Input",
-                               bg="#1a1a2e",
-                               fg="#ffffff",
-                               font=("Segoe UI", 12, "bold"))
+                               text="💬 Command Input 💬",
+                               bg="#1a1a1a",
+                               fg="#00d4ff",
+                               font=("Impact", 14, "bold"))
         input_label.pack(anchor="w", pady=(0, 10))
 
-        input_container = tk.Frame(input_frame, bg="#1a1a2e")
+        input_container = tk.Frame(input_frame, bg="#1a1a1a")
         input_container.pack(fill="x")
 
         self.command_input = tk.Entry(input_container,
-                                      bg="#2a2a3e",
+                                      bg="#0a0a0a",
                                       fg="#ffffff",
-                                      font=("Segoe UI", 13),
-                                      insertbackground="#89b4fa",
-                                      relief="flat",
-                                      bd=0)
+                                      font=("Consolas", 13),
+                                      insertbackground="#00ff88",
+                                      relief="solid",
+                                      borderwidth=2,
+                                      highlightbackground="#ffffff",
+                                      highlightcolor="#00d4ff",
+                                      highlightthickness=1)
         self.command_input.pack(side="left", fill="both", expand=True, ipady=12, padx=(0, 10))
         self.command_input.bind("<Return>", lambda e: self.execute_command())
 
         # Voice command buttons
-        voice_frame = tk.Frame(input_container, bg="#1a1a2e")
+        voice_frame = tk.Frame(input_container, bg="#1a1a1a")
         voice_frame.pack(side="right", padx=(0, 10))
 
         self.voice_listen_btn = tk.Button(voice_frame,
                                           text="🎤",
-                                          bg="#a6e3a1",
-                                          fg="#0f0f1e",
-                                          font=("Segoe UI", 14, "bold"),
-                                          relief="flat",
+                                          bg="#00ff88",
+                                          fg="#000000",
+                                          font=("Arial Black", 14, "bold"),
+                                          relief="solid",
+                                          borderwidth=2,
                                           cursor="hand2",
                                           command=self.start_voice_listen,
                                           padx=12,
                                           pady=10,
-                                          activebackground="#94e2d5")
+                                          highlightbackground="#ffffff",
+                                          activebackground="#00d4ff")
         self.voice_listen_btn.pack(side="left", padx=2)
-        self.add_hover_effect(self.voice_listen_btn, "#a6e3a1", "#94e2d5")
+        self.add_hover_effect(self.voice_listen_btn, "#00ff88", "#00d4ff")
 
         self.voice_continuous_btn = tk.Button(voice_frame,
                                               text="🔊",
-                                              bg="#45475a",
-                                              fg="#ffffff",
-                                              font=("Segoe UI", 12, "bold"),
-                                              relief="flat",
+                                              bg="#b19cd9",
+                                              fg="#000000",
+                                              font=("Arial Black", 12, "bold"),
+                                              relief="solid",
+                                              borderwidth=2,
                                               cursor="hand2",
                                               command=self.toggle_continuous_listening,
                                               padx=12,
                                               pady=10,
-                                              activebackground="#585b70")
+                                              highlightbackground="#ffffff",
+                                              activebackground="#ff0080")
         self.voice_continuous_btn.pack(side="left", padx=2)
-        self.add_hover_effect(self.voice_continuous_btn, "#45475a", "#585b70")
+        self.add_hover_effect(self.voice_continuous_btn, "#b19cd9", "#ff0080")
 
         # Wake word toggle button
         self.wake_word_btn = tk.Button(voice_frame,
                                        text="💬",
-                                       bg="#f9e2af",
-                                       fg="#0f0f1e",
-                                       font=("Segoe UI", 11, "bold"),
-                                       relief="flat",
+                                       bg="#00d4ff",
+                                       fg="#000000",
+                                       font=("Arial Black", 11, "bold"),
+                                       relief="solid",
+                                       borderwidth=2,
                                        cursor="hand2",
                                        command=self.toggle_wake_word,
                                        padx=10,
                                        pady=10,
-                                       activebackground="#fab387")
+                                       highlightbackground="#ffffff",
+                                       activebackground="#00ff88")
         self.wake_word_btn.pack(side="left", padx=2)
-        self.add_hover_effect(self.wake_word_btn, "#f9e2af", "#fab387")
+        self.add_hover_effect(self.wake_word_btn, "#00d4ff", "#00ff88")
 
         # Sound effects toggle button
         self.sound_fx_btn = tk.Button(voice_frame,
@@ -693,101 +775,128 @@ class AutomationControllerGUI:
         self.sound_fx_btn.bind("<Button-3>", lambda e: self.show_sound_settings())
 
         self.execute_btn = tk.Button(input_container,
-                                     text="▶ Execute",
-                                     bg="#89b4fa",
-                                     fg="#0f0f1e",
-                                     font=("Segoe UI", 12, "bold"),
-                                     relief="flat",
+                                     text="⚡ Execute ⚡",
+                                     bg="#00ff88",
+                                     fg="#000000",
+                                     font=("Arial Black", 13, "bold"),
+                                     relief="solid",
+                                     borderwidth=2,
                                      cursor="hand2",
                                      command=self.execute_command,
                                      padx=25,
                                      pady=12,
-                                     activebackground="#74c7ec")
+                                     highlightbackground="#ffffff",
+                                     activebackground="#00d4ff")
         self.execute_btn.pack(side="right")
-        self.add_hover_effect(self.execute_btn, "#89b4fa", "#74c7ec")
+        self.add_hover_effect(self.execute_btn, "#00ff88", "#00d4ff")
 
-        output_card = tk.Frame(right_panel, bg="#1a1a2e", relief="flat")
-        output_card.pack(fill="both", expand=True)
+        output_card = tk.Frame(
+            right_panel, 
+            bg="#1a1a1a", 
+            relief="solid",
+            highlightbackground="#ffffff",
+            highlightthickness=2
+        )
+        output_card.pack(fill="both", expand=True, pady=5, padx=5)
 
-        output_header = tk.Frame(output_card, bg="#1a1a2e")
-        output_header.pack(fill="x", padx=20, pady=(15, 10))
+        output_header = tk.Frame(output_card, bg="#1a1a1a")
+        output_header.pack(fill="x", padx=15, pady=(15, 10))
 
         output_label = tk.Label(output_header,
-                                text="📋 Output Console",
-                                bg="#1a1a2e",
-                                fg="#ffffff",
-                                font=("Segoe UI", 12, "bold"))
+                                text="📋 Output Console 📋",
+                                bg="#1a1a1a",
+                                fg="#00d4ff",
+                                font=("Impact", 14, "bold"))
         output_label.pack(side="left")
 
         clear_console_btn = tk.Button(output_header,
                                       text="🗑️ Clear",
-                                      bg="#45475a",
+                                      bg="#ff0080",
                                       fg="#ffffff",
-                                      font=("Segoe UI", 9),
-                                      relief="flat",
+                                      font=("Arial Black", 10, "bold"),
+                                      relief="solid",
+                                      borderwidth=2,
                                       cursor="hand2",
                                       command=self.clear_output,
                                       padx=15,
                                       pady=5,
-                                      activebackground="#585b70")
+                                      highlightbackground="#ffffff",
+                                      activebackground="#b19cd9")
         clear_console_btn.pack(side="right")
-        self.add_hover_effect(clear_console_btn, "#45475a", "#585b70")
+        self.add_hover_effect(clear_console_btn, "#ff0080", "#b19cd9")
 
         self.output_area = scrolledtext.ScrolledText(output_card,
-                                                     bg="#2a2a3e",
+                                                     bg="#0a0a0a",
                                                      fg="#ffffff",
                                                      font=("Consolas", 11),
-                                                     relief="flat",
-                                                     bd=0,
+                                                     relief="solid",
+                                                     borderwidth=2,
                                                      padx=15,
                                                      pady=15,
                                                      wrap="word",
-                                                     insertbackground="#89b4fa")
-        self.output_area.pack(fill="both", expand=True, padx=20, pady=(0, 15))
+                                                     insertbackground="#00ff88",
+                                                     highlightbackground="#ffffff",
+                                                     highlightthickness=1)
+        self.output_area.pack(fill="both", expand=True, padx=15, pady=(0, 15))
         self.output_area.config(state="disabled")
 
-        bottom_frame = tk.Frame(self.root, bg="#1a1a2e", pady=15, padx=30)
-        bottom_frame.pack(fill="x", side="bottom")
+        bottom_frame = tk.Frame(
+            self.root, 
+            bg="#1a1a1a", 
+            pady=12, 
+            padx=20,
+            highlightbackground="#ffffff",
+            highlightthickness=2
+        )
+        bottom_frame.pack(fill="x", side="bottom", padx=5, pady=5)
 
         button_config = {
-            "bg": "#313244",
+            "bg": "#0a0a0a",
             "fg": "#ffffff",
-            "font": ("Segoe UI", 10),
-            "relief": "flat",
+            "font": ("Arial Black", 10, "bold"),
+            "relief": "solid",
+            "borderwidth": 2,
             "cursor": "hand2",
-            "padx": 20,
-            "pady": 10,
-            "activebackground": "#45475a"
+            "padx": 18,
+            "pady": 8,
+            "highlightbackground": "#ffffff",
+            "activebackground": "#00d4ff"
         }
 
         help_btn = tk.Button(bottom_frame, text="❓ Full Help", command=self.show_help, **button_config)
         help_btn.pack(side="left", padx=5)
-        self.add_hover_effect(help_btn, "#313244", "#45475a")
+        self.add_hover_effect(help_btn, "#0a0a0a", "#00d4ff")
 
         contacts_btn = tk.Button(bottom_frame, text="👥 Contacts", command=self.show_contacts, **button_config)
         contacts_btn.pack(side="left", padx=5)
-        self.add_hover_effect(contacts_btn, "#313244", "#45475a")
+        self.add_hover_effect(contacts_btn, "#0a0a0a", "#00ff88")
 
         about_btn = tk.Button(bottom_frame, text="ℹ️ About", command=self.show_about, **button_config)
         about_btn.pack(side="left", padx=5)
-        self.add_hover_effect(about_btn, "#313244", "#45475a")
+        self.add_hover_effect(about_btn, "#0a0a0a", "#b19cd9")
 
         suggest_btn = tk.Button(bottom_frame, text="💡 Suggestion", command=self.show_suggestion, **button_config)
         suggest_btn.pack(side="left", padx=5)
-        self.add_hover_effect(suggest_btn, "#313244", "#45475a")
+        self.add_hover_effect(suggest_btn, "#0a0a0a", "#ff0080")
 
         security_btn = tk.Button(bottom_frame, text="🛡️ Security", command=self.show_security_dashboard, **button_config)
         security_btn.pack(side="left", padx=5)
-        self.add_hover_effect(security_btn, "#313244", "#45475a")
+        self.add_hover_effect(security_btn, "#0a0a0a", "#00d4ff")
 
-        status_container = tk.Frame(bottom_frame, bg="#313244", relief="flat")
+        status_container = tk.Frame(
+            bottom_frame, 
+            bg="#0a0a0a", 
+            relief="solid",
+            highlightbackground="#ffffff",
+            highlightthickness=2
+        )
         status_container.pack(side="right", padx=10, pady=0)
 
         self.status_label = tk.Label(status_container,
                                      text="✅ Ready",
-                                     bg="#313244",
-                                     fg="#a6e3a1",
-                                     font=("Segoe UI", 10, "bold"),
+                                     bg="#0a0a0a",
+                                     fg="#00ff88",
+                                     font=("Consolas", 11, "bold"),
                                      padx=20,
                                      pady=10)
         self.status_label.pack()
