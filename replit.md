@@ -6,7 +6,13 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 **NEW:** Now includes an Intelligent AI Assistant (integrated in `modules/ai_features/chatbots.py`) - a Streamlit-based web interface that instantly understands user intent and generates appropriate responses (code, stories, explanations, letters, etc.) with no unnecessary commentary.
 
 ## Recent Changes
-**November 2, 2025**: Consolidated `modules/ai_features/` directory from 12 files to 6 files for better code organization and maintainability:
+**November 2, 2025 - New Features**:
+- **🖼️ AI Screenshot Analysis Module** (`modules/ai_features/screenshot_analysis.py`): Dedicated module for AI-powered screenshot analysis with Google Gemini Vision. Features include error detection, code analysis, UI/UX improvement suggestions, design analysis, and OCR text extraction.
+- **🚀 Fullscreen App Automation** (`modules/automation/fullscreen_automation.py`): Cross-platform automation that opens applications in fullscreen mode and performs automated actions. Supports keyboard/mouse automation, window management, and screenshot capture.
+- **🤖 Smart App Automation** (`modules/automation/smart_app_automation.py`): Intelligent automation that combines fullscreen app opening with AI screenshot analysis. Can automatically open apps, capture screenshots, analyze them with AI, perform automated actions, and provide continuous monitoring.
+- **📝 Screenshot Analyzer Module** (`screenshot_analyzer.py`): Backward-compatible module that re-exports screenshot analysis functions with lazy imports to avoid circular dependencies.
+
+**November 2, 2025 - Code Organization**: Consolidated `modules/ai_features/` directory from 12 files to 6 files for better code organization and maintainability:
 - **chatbots.py** (17K): Merged `simple_chatbot.py` + `intelligent_assistant.py` - All chatbot implementations
 - **code_generation.py** (43K): Merged `code_generator.py` + `code_templates.py` + `letter_templates.py` - Code and letter generation
 - **vision_ai.py** (50K): Merged `multimodal_ai_core.py` + `screenshot_analyzer.py` + `virtual_language_model.py` - Vision and multimodal AI
