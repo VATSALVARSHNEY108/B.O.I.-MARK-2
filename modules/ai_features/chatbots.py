@@ -4,7 +4,25 @@ Enhanced VATSAL Chatbot - Powered by Google Gemini AI
 A conversational AI that can both chat AND execute actual automation commands
 """
 
+import sys
 import os
+from pathlib import Path
+
+# Add project root and all module directories to path for imports
+project_root = Path(__file__).parent.parent.parent
+modules_dir = project_root / 'modules'
+
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+    sys.path.insert(0, str(modules_dir))
+    
+    # Add all module subdirectories (same as start_gui.py)
+    for subdir in ['core', 'automation', 'ai_features', 'utilities', 'communication',
+                   'monitoring', 'web', 'system', 'productivity', 'security', 
+                   'file_management', 'development', 'voice', 'integration', 
+                   'intelligence', 'network', 'data_analysis', 'smart_features', 'misc']:
+        sys.path.insert(0, str(modules_dir / subdir))
+
 from datetime import datetime
 from dotenv import load_dotenv
 from google import genai
@@ -265,7 +283,14 @@ from google import genai
 import os
 from datetime import datetime
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+# Initialize client safely
+api_key = os.getenv("GEMINI_API_KEY")
+if not api_key:
+    st.error("⚠️ GEMINI_API_KEY not found! Please add it to your Replit Secrets.")
+    st.info("Get your API key from: https://aistudio.google.com/app/apikey")
+    st.stop()
+
+client = genai.Client(api_key=api_key)
 
 st.set_page_config(
     page_title="AI Assistant",

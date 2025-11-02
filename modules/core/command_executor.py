@@ -3,7 +3,7 @@ import platform
 import webbrowser
 import time
 import urllib.parse
-from gui_automation import GUIAutomation
+from modules.automation.gui_automation import GUIAutomation
 from contact_manager import ContactManager
 from messaging_service import MessagingService
 from youtube_automation import create_youtube_automation

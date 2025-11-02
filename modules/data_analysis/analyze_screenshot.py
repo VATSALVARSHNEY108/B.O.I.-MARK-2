@@ -11,7 +11,7 @@ Example:
 
 import sys
 import os
-from smart_screen_monitor import SmartScreenMonitor
+from modules.monitoring.smart_screen_monitor import SmartScreenMonitor
 
 def analyze_screenshot(image_path: str):
     """Analyze a screenshot and print results"""

@@ -17,19 +17,19 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "AI Assistant"
+args = "AI Chat Assistant"
 
 [[workflows.workflow]]
-name = "AI Assistant"
+name = "AI Chat Assistant"
 author = "agent"
-
-[workflows.workflow.metadata]
-outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "streamlit run modules/ai_features/intelligent_assistant.py --server.port 5000 --server.address 0.0.0.0 --server.headless true"
+args = "streamlit run modules/ai_features/chatbots.py --server.port 5000 --server.address 0.0.0.0 --server.headless true"
 waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
 
 [[ports]]
 localPort = 5000
@@ -38,3 +38,7 @@ externalPort = 80
 [[ports]]
 localPort = 39253
 externalPort = 3002
+
+[[ports]]
+localPort = 46213
+externalPort = 3000

@@ -6,9 +6,9 @@ Continuously monitors your screen with AI Vision and provides intelligent insigh
 import time
 import os
 from datetime import datetime
-from gui_automation import GUIAutomation
+from modules.automation.gui_automation import GUIAutomation
 from screenshot_analyzer import analyze_screenshot
-from gemini_controller import get_client
+from modules.core.gemini_controller import get_client
 from google.genai import types
 
 
