@@ -11,32 +11,35 @@ VATSAL now features **intelligent wake word detection** for true hands-free voic
 ### Wake Word Activation
 You can now activate voice commands using any of these wake phrases:
 
-1. **"Hey VATSAL"** - Natural, conversational activation
-2. **"VATSAL"** - Quick, direct activation
-3. **"OK VATSAL"** - Assistant-style activation
-4. **"Computer"** - Classic sci-fi style
-5. **"Hey Computer"** - Star Trek style
-6. **"Bhiaya"** - Hindi/Urdu for "Brother" - Friendly, personal activation
-7. **"Bhaisahb"** - Hindi/Urdu for "Respected Brother" - Respectful activation
+1. **"Kai"** - Primary wake word - Quick, modern activation
+2. **"Hey Kai"** - Natural, conversational activation  
+3. **"OK Kai"** - Assistant-style activation
+4. **"VATSAL"** - Quick, direct activation
+5. **"Hey VATSAL"** - Natural, conversational activation
+6. **"OK VATSAL"** - Assistant-style activation
+7. **"Computer"** - Classic sci-fi style
+8. **"Hey Computer"** - Star Trek style
+9. **"Bhiaya"** - Hindi/Urdu for "Brother" - Friendly, personal activation
+10. **"Bhaisahb"** - Hindi/Urdu for "Respected Brother" - Respectful activation
 
 ### How It Works
 
 **Continuous Listening with Wake Words:**
 ```
-You: "Hey VATSAL, what time is it?"
-VATSAL: "Good afternoon, Sir. It's 2:30 PM."
+You: "Kai, what time is it?"
+Kai: "Good afternoon, Sir. It's 2:30 PM."
 
-You: "OK VATSAL, take a screenshot"
-VATSAL: "Screenshot captured successfully, Sir."
+You: "Hey Kai, take a screenshot"
+Kai: "Screenshot captured successfully, Sir."
 
-You: "Computer, check system information"
-VATSAL: "Your system is running optimally..."
+You: "OK Kai, check system information"
+Kai: "Your system is running optimally..."
 
-You: "Bhiaya, open downloads folder"
-VATSAL: "Opening downloads folder, Sir."
+You: "Computer, open downloads folder"
+Kai: "Opening downloads folder, Sir."
 
-You: "Bhaisahb, show me the weather"
-VATSAL: "Certainly, Sir. Currently 72°F and sunny..."
+You: "Hey VATSAL, show me the weather"
+Kai: "Certainly, Sir. Currently 72°F and sunny..."
 ```
 
 **Privacy Focused:**
@@ -54,9 +57,10 @@ Click the **🔊 speaker button** in the GUI
 
 ### 2. Use Wake Words
 Say one of the wake phrases followed by your command:
-- "Hey VATSAL, open downloads folder"
-- "VATSAL, play lofi beats"
-- "OK VATSAL, write Python code for sorting"
+- "Kai, open downloads folder"
+- "Hey Kai, play lofi beats"
+- "OK Kai, write Python code for sorting"
+- "VATSAL, check system status"
 
 ### 3. Toggle Wake Word (Optional)
 Click the **💬 yellow button** to:
@@ -88,19 +92,19 @@ Located next to the Execute button:
 
 ### Scenario 1: Working on Code
 ```
-You: "Hey VATSAL, what's the weather?"
-VATSAL: "Currently 72°F and sunny, Sir."
+You: "Hey Kai, what's the weather?"
+Kai: "Currently 72°F and sunny, Sir."
 
 [5 minutes later]
-You: "VATSAL, take a screenshot"
-VATSAL: "Screenshot saved, Sir."
+You: "Kai, take a screenshot"
+Kai: "Screenshot saved, Sir."
 
 [Background conversation with colleague - IGNORED]
 Colleague: "Did you see the game last night?"
 
-[Wake word triggers VATSAL]
-You: "OK VATSAL, check CPU usage"
-VATSAL: "CPU usage is at 45%, Sir."
+[Wake word triggers Kai]
+You: "OK Kai, check CPU usage"
+Kai: "CPU usage is at 45%, Sir."
 ```
 
 ### Scenario 2: Multitasking
@@ -129,6 +133,9 @@ VATSAL: "Downloads organized by type, Sir."
 ### Supported Wake Phrases
 ```python
 wake_words = [
+    "kai",         # Primary wake word
+    "hey kai",
+    "ok kai",
     "vatsal",
     "hey vatsal", 
     "ok vatsal",
@@ -317,12 +324,12 @@ Processed: "take a screenshot"
 
 ### First Commands to Try
 ```
-"Hey VATSAL, introduce yourself"
-"VATSAL, what can you do?"
-"OK VATSAL, take a screenshot"
+"Kai, introduce yourself"
+"Hey Kai, what can you do?"
+"OK Kai, take a screenshot"
 "Computer, check system information"
-"Bhiaya, what time is it?"
-"Bhaisahb, show me the weather"
+"VATSAL, what time is it?"
+"Bhiaya, show me the weather"
 ```
 
 ---
