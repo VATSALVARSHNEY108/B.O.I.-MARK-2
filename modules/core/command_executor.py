@@ -1330,6 +1330,66 @@ class CommandExecutor:
                 result = self.system_control.auto_brightness()
                 return {"success": True, "message": result}
 
+            elif action == "increase_brightness":
+                amount = parameters.get("amount", 10)
+                result = self.system_control.increase_brightness(amount)
+                return {"success": True, "message": result}
+
+            elif action == "decrease_brightness":
+                amount = parameters.get("amount", 10)
+                result = self.system_control.decrease_brightness(amount)
+                return {"success": True, "message": result}
+
+            elif action == "get_brightness":
+                level = self.system_control.get_brightness()
+                if level is not None:
+                    return {"success": True, "message": f"☀️ Current brightness: {level}%"}
+                else:
+                    return {"success": False, "message": "Unable to retrieve brightness level"}
+
+            # ==================== VOLUME CONTROL ====================
+
+            elif action == "set_volume":
+                level = parameters.get("level", 50)
+                result = self.system_control.set_volume(level)
+                return {"success": True, "message": result}
+
+            elif action == "increase_volume":
+                amount = parameters.get("amount", 10)
+                result = self.system_control.increase_volume(amount)
+                return {"success": True, "message": result}
+
+            elif action == "decrease_volume":
+                amount = parameters.get("amount", 10)
+                result = self.system_control.decrease_volume(amount)
+                return {"success": True, "message": result}
+
+            elif action == "volume_up":
+                amount = parameters.get("amount", 10)
+                result = self.system_control.increase_volume(amount)
+                return {"success": True, "message": result}
+
+            elif action == "volume_down":
+                amount = parameters.get("amount", 10)
+                result = self.system_control.decrease_volume(amount)
+                return {"success": True, "message": result}
+
+            elif action == "mute_volume":
+                result = self.system_control.mute_volume()
+                return {"success": True, "message": result}
+
+            elif action == "unmute_volume":
+                result = self.system_control.unmute_volume()
+                return {"success": True, "message": result}
+
+            elif action == "toggle_mute":
+                result = self.system_control.toggle_mute()
+                return {"success": True, "message": result}
+
+            elif action == "get_volume":
+                result = self.system_control.get_volume_info()
+                return {"success": True, "message": result}
+
             elif action == "schedule_sleep":
                 time_str = parameters.get("time", "23:00")
                 result = self.system_control.schedule_sleep(time_str)

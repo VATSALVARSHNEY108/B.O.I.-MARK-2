@@ -169,7 +169,19 @@ SYSTEM CONTROL:
 - mute_mic: Mute microphone (parameters: none)
 - unmute_mic: Unmute microphone (parameters: none)
 - set_brightness: Set screen brightness (parameters: level [0-100])
+- increase_brightness: Increase screen brightness (parameters: amount [default: 10])
+- decrease_brightness: Decrease screen brightness (parameters: amount [default: 10])
+- get_brightness: Get current brightness level (parameters: none)
 - auto_brightness: Auto-adjust brightness based on time of day (parameters: none)
+- set_volume: Set system volume (parameters: level [0-100])
+- increase_volume: Increase system volume (parameters: amount [default: 10])
+- decrease_volume: Decrease system volume (parameters: amount [default: 10])
+- volume_up: Increase volume (alias for increase_volume, parameters: amount [default: 10])
+- volume_down: Decrease volume (alias for decrease_volume, parameters: amount [default: 10])
+- mute_volume: Mute system volume (parameters: none)
+- unmute_volume: Unmute system volume (parameters: none)
+- toggle_mute: Toggle mute/unmute (parameters: none)
+- get_volume: Get current volume level (parameters: none)
 - schedule_sleep: Schedule PC sleep (parameters: time [HH:MM format])
 - lock_screen: Lock the computer screen (parameters: none)
 - shutdown_system: Shutdown computer (parameters: delay_seconds [optional, default: 10])
@@ -568,8 +580,19 @@ IMPORTANT:
 - If user says "resume", "play Spotify", "continue playing", use spotify_play
 - If user says "next" or "skip" or "next song", use spotify_next
 - If user says "previous" or "back" or "previous song", use spotify_previous
-- If user says "volume up" or "louder" or "increase volume", use spotify_volume_up
-- If user says "volume down" or "quieter" or "decrease volume", use spotify_volume_down
+- If user says "volume up" or "louder" or "increase volume" (without Spotify context), use increase_volume for system volume
+- If user says "volume down" or "quieter" or "decrease volume" (without Spotify context), use decrease_volume for system volume
+- If user says "set volume to X" or "volume X percent", use set_volume with level parameter
+- If user says "mute" or "mute volume" or "silence", use mute_volume
+- If user says "unmute" or "unmute volume", use unmute_volume
+- If user says "what's the volume" or "check volume" or "current volume", use get_volume
+- If user says "increase brightness" or "brighten screen" or "make screen brighter", use increase_brightness
+- If user says "decrease brightness" or "dim screen" or "make screen darker", use decrease_brightness
+- If user says "set brightness to X" or "brightness X percent", use set_brightness with level parameter
+- If user says "what's the brightness" or "check brightness" or "current brightness", use get_brightness
+- For Spotify-specific commands, use spotify_volume_up/down instead of system volume
+- If user says "volume up" or "louder" or "increase volume" in Spotify context, use spotify_volume_up
+- If user says "volume down" or "quieter" or "decrease volume" in Spotify context, use spotify_volume_down
 - If user says "mute Spotify" or "mute music", use spotify_mute
 - If user says "shuffle" or "shuffle on/off", use spotify_shuffle
 - If user says "repeat" or "loop", use spotify_repeat

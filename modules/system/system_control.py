@@ -84,6 +84,57 @@ class SystemController:
         except Exception as e:
             return f"❌ Failed to set brightness: {str(e)}"
     
+    def increase_brightness(self, amount=10):
+        """Increase brightness by specified amount"""
+        try:
+            current = self.get_brightness()
+            if current is not None:
+                new_level = min(100, current + amount)
+                return self.set_brightness(new_level)
+            else:
+                # If can't get current, just increase by amount
+                return self.set_brightness(50 + amount)
+        except Exception as e:
+            return f"❌ Failed to increase brightness: {str(e)}"
+    
+    def decrease_brightness(self, amount=10):
+        """Decrease brightness by specified amount"""
+        try:
+            current = self.get_brightness()
+            if current is not None:
+                new_level = max(0, current - amount)
+                return self.set_brightness(new_level)
+            else:
+                # If can't get current, just decrease
+                return self.set_brightness(max(0, 50 - amount))
+        except Exception as e:
+            return f"❌ Failed to decrease brightness: {str(e)}"
+    
+    def get_brightness(self):
+        """Get current brightness level (0-100)"""
+        try:
+            if self.os == "Windows":
+                result = subprocess.run(
+                    "powershell (Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightness).CurrentBrightness",
+                    shell=True, capture_output=True, text=True, check=False
+                )
+                if result.returncode == 0 and result.stdout.strip():
+                    return int(result.stdout.strip())
+            elif self.os == "Darwin":
+                result = subprocess.run("brightness -l", shell=True, capture_output=True, text=True, check=False)
+                if result.returncode == 0 and result.stdout.strip():
+                    return int(float(result.stdout.strip()) * 100)
+            elif self.os == "Linux":
+                result = subprocess.run(
+                    "xrandr --verbose | grep -i brightness | head -n 1 | awk '{print $2}'",
+                    shell=True, capture_output=True, text=True, check=False
+                )
+                if result.returncode == 0 and result.stdout.strip():
+                    return int(float(result.stdout.strip()) * 100)
+            return None
+        except:
+            return None
+    
     def auto_brightness(self):
         """Auto-adjust brightness based on time of day"""
         try:
@@ -97,6 +148,160 @@ class SystemController:
             return self.set_brightness(brightness)
         except Exception as e:
             return f"❌ Auto-brightness failed: {str(e)}"
+    
+    # ==================== VOLUME CONTROL ====================
+    
+    def set_volume(self, level):
+        """Set system volume (0-100)"""
+        try:
+            level = max(0, min(100, int(level)))
+            
+            if self.os == "Windows":
+                # Use nircmd for Windows
+                subprocess.run(f"nircmd.exe setsysvolume {int(level * 655.35)}", shell=True, check=False)
+                return f"🔊 Volume set to {level}%"
+            elif self.os == "Darwin":
+                subprocess.run(f"osascript -e 'set volume output volume {level}'", shell=True, check=False)
+                return f"🔊 Volume set to {level}%"
+            elif self.os == "Linux":
+                # Use pactl for PulseAudio (most common)
+                subprocess.run(f"pactl set-sink-volume @DEFAULT_SINK@ {level}%", shell=True, check=False)
+                return f"🔊 Volume set to {level}%"
+        except Exception as e:
+            return f"❌ Failed to set volume: {str(e)}"
+    
+    def increase_volume(self, amount=10):
+        """Increase volume by specified amount"""
+        try:
+            current = self.get_volume()
+            if current is not None:
+                new_level = min(100, current + amount)
+                return self.set_volume(new_level)
+            else:
+                # If can't get current, just increase
+                if self.os == "Windows":
+                    subprocess.run(f"nircmd.exe changesysvolume {int(amount * 655.35)}", shell=True, check=False)
+                    return f"🔊 Volume increased by {amount}%"
+                elif self.os == "Darwin":
+                    subprocess.run(f"osascript -e 'set volume output volume (output volume of (get volume settings) + {amount})'", shell=True, check=False)
+                    return f"🔊 Volume increased by {amount}%"
+                elif self.os == "Linux":
+                    subprocess.run(f"pactl set-sink-volume @DEFAULT_SINK@ +{amount}%", shell=True, check=False)
+                    return f"🔊 Volume increased by {amount}%"
+        except Exception as e:
+            return f"❌ Failed to increase volume: {str(e)}"
+    
+    def decrease_volume(self, amount=10):
+        """Decrease volume by specified amount"""
+        try:
+            current = self.get_volume()
+            if current is not None:
+                new_level = max(0, current - amount)
+                return self.set_volume(new_level)
+            else:
+                # If can't get current, just decrease
+                if self.os == "Windows":
+                    subprocess.run(f"nircmd.exe changesysvolume -{int(amount * 655.35)}", shell=True, check=False)
+                    return f"🔉 Volume decreased by {amount}%"
+                elif self.os == "Darwin":
+                    subprocess.run(f"osascript -e 'set volume output volume (output volume of (get volume settings) - {amount})'", shell=True, check=False)
+                    return f"🔉 Volume decreased by {amount}%"
+                elif self.os == "Linux":
+                    subprocess.run(f"pactl set-sink-volume @DEFAULT_SINK@ -{amount}%", shell=True, check=False)
+                    return f"🔉 Volume decreased by {amount}%"
+        except Exception as e:
+            return f"❌ Failed to decrease volume: {str(e)}"
+    
+    def get_volume(self):
+        """Get current volume level (0-100)"""
+        try:
+            if self.os == "Windows":
+                result = subprocess.run(
+                    "nircmd.exe getsysvolume",
+                    shell=True, capture_output=True, text=True, check=False
+                )
+                if result.returncode == 0 and result.stdout.strip():
+                    return int(int(result.stdout.strip()) / 655.35)
+            elif self.os == "Darwin":
+                result = subprocess.run(
+                    "osascript -e 'output volume of (get volume settings)'",
+                    shell=True, capture_output=True, text=True, check=False
+                )
+                if result.returncode == 0 and result.stdout.strip():
+                    return int(result.stdout.strip())
+            elif self.os == "Linux":
+                result = subprocess.run(
+                    "pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '[0-9]+(?=%)' | head -1",
+                    shell=True, capture_output=True, text=True, check=False
+                )
+                if result.returncode == 0 and result.stdout.strip():
+                    return int(result.stdout.strip())
+            return None
+        except:
+            return None
+    
+    def mute_volume(self):
+        """Mute system volume"""
+        try:
+            if self.os == "Windows":
+                subprocess.run("nircmd.exe mutesysvolume 1", shell=True, check=False)
+                return "🔇 Volume muted"
+            elif self.os == "Darwin":
+                subprocess.run("osascript -e 'set volume output muted true'", shell=True, check=False)
+                return "🔇 Volume muted"
+            elif self.os == "Linux":
+                subprocess.run("pactl set-sink-mute @DEFAULT_SINK@ 1", shell=True, check=False)
+                return "🔇 Volume muted"
+        except Exception as e:
+            return f"❌ Failed to mute volume: {str(e)}"
+    
+    def unmute_volume(self):
+        """Unmute system volume"""
+        try:
+            if self.os == "Windows":
+                subprocess.run("nircmd.exe mutesysvolume 0", shell=True, check=False)
+                return "🔊 Volume unmuted"
+            elif self.os == "Darwin":
+                subprocess.run("osascript -e 'set volume output muted false'", shell=True, check=False)
+                return "🔊 Volume unmuted"
+            elif self.os == "Linux":
+                subprocess.run("pactl set-sink-mute @DEFAULT_SINK@ 0", shell=True, check=False)
+                return "🔊 Volume unmuted"
+        except Exception as e:
+            return f"❌ Failed to unmute volume: {str(e)}"
+    
+    def toggle_mute(self):
+        """Toggle mute/unmute"""
+        try:
+            if self.os == "Windows":
+                subprocess.run("nircmd.exe mutesysvolume 2", shell=True, check=False)
+                return "🔊 Volume toggled"
+            elif self.os == "Darwin":
+                result = subprocess.run(
+                    "osascript -e 'output muted of (get volume settings)'",
+                    shell=True, capture_output=True, text=True, check=False
+                )
+                is_muted = result.stdout.strip() == "true"
+                if is_muted:
+                    return self.unmute_volume()
+                else:
+                    return self.mute_volume()
+            elif self.os == "Linux":
+                subprocess.run("pactl set-sink-mute @DEFAULT_SINK@ toggle", shell=True, check=False)
+                return "🔊 Volume toggled"
+        except Exception as e:
+            return f"❌ Failed to toggle mute: {str(e)}"
+    
+    def get_volume_info(self):
+        """Get detailed volume information"""
+        try:
+            level = self.get_volume()
+            if level is not None:
+                return f"🔊 Current Volume: {level}%"
+            else:
+                return "ℹ️ Unable to retrieve volume level"
+        except Exception as e:
+            return f"❌ Failed to get volume info: {str(e)}"
     
     def schedule_sleep(self, time_str="23:00"):
         """Schedule PC to sleep at specific time"""
