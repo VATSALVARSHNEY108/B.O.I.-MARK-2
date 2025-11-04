@@ -158,9 +158,30 @@ class SystemController:
             level = max(0, min(100, int(level)))
             
             if self.os == "Windows":
-                # Use nircmd for Windows
-                subprocess.run(f"nircmd.exe setsysvolume {int(level * 655.35)}", shell=True, check=False)
-                return f"🔊 Volume set to {level}%"
+                # Try pycaw library first (best method)
+                try:
+                    from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+                    from comtypes import CLSCTX_ALL
+                    from ctypes import cast, POINTER
+                    
+                    devices = AudioUtilities.GetSpeakers()
+                    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+                    volume = cast(interface, POINTER(IAudioEndpointVolume))
+                    volume.SetMasterVolumeLevelScalar(level / 100, None)
+                    return f"🔊 Volume set to {level}%"
+                except ImportError:
+                    # pycaw not installed, try nircmd
+                    result = subprocess.run(
+                        f"nircmd.exe setsysvolume {int(level * 655.35)}", 
+                        shell=True, 
+                        capture_output=True,
+                        text=True,
+                        check=False
+                    )
+                    if result.returncode == 0:
+                        return f"🔊 Volume set to {level}%"
+                    else:
+                        return f"⚠️ Volume control unavailable. Please install 'pycaw' (pip install pycaw) or download nircmd.exe"
             elif self.os == "Darwin":
                 subprocess.run(f"osascript -e 'set volume output volume {level}'", shell=True, check=False)
                 return f"🔊 Volume set to {level}%"
