@@ -34,13 +34,16 @@
 1. **"Kai"** - Primary wake word - Quick, modern activation
 2. **"Hey Kai"** - Natural, conversational activation  
 3. **"OK Kai"** - Assistant-style activation
-4. **"VATSAL"** - Legacy wake word still supported
-5. **"Hey VATSAL"** - Natural, conversational
-6. **"OK VATSAL"** - Assistant-style
-7. **"Computer"** - Classic sci-fi style
-8. **"Hey Computer"** - Star Trek style
-9. **"Bhiaya"** - Hindi/Urdu: Brother
-10. **"Bhaisahb"** - Hindi/Urdu: Respected Brother
+4. **"Watson"** - AI assistant style (IBM Watson inspired)
+5. **"Hey Watson"** - Natural, conversational
+6. **"OK Watson"** - Assistant-style
+7. **"VATSAL"** - Legacy wake word still supported
+8. **"Hey VATSAL"** - Natural, conversational
+9. **"OK VATSAL"** - Assistant-style
+10. **"Computer"** - Classic sci-fi style
+11. **"Hey Computer"** - Star Trek style
+12. **"Bhiaya"** - Hindi/Urdu: Brother
+13. **"Bhaisahb"** - Hindi/Urdu: Respected Brother
 
 ## 🚀 How to Use
 
@@ -55,7 +58,9 @@ python modules/core/gui_app.py
 "Kai, what time is it?"
 "Hey Kai, take a screenshot"
 "OK Kai, open downloads folder"
-"Kai, check system status"
+"Watson, check system status"
+"Hey Watson, open notepad"
+"OK Watson, show weather"
 ```
 
 ### Wake Word Toggle
@@ -80,6 +85,8 @@ python modules/core/gui_app.py
 🔊 Continuous voice listening ENABLED
 💬 Wake words: kai, hey kai, ok kai
 Then your command (e.g., 'Hey Kai, what time is it')
+
+You can also use: watson, hey watson, ok watson
 ```
 
 ## 🎨 Branding Strategy
@@ -98,10 +105,11 @@ The system maintains backward compatibility with all existing wake words while p
 ```python
 # From voice_commander.py
 self.wake_words = [
-    "vatsal", "hey vatsal", "ok vatsal", 
+    "kai", "hey kai", "ok kai",  # Primary wake words
+    "watson", "hey watson", "ok watson",  # AI assistant style
+    "vatsal", "hey vatsal", "ok vatsal",  # Legacy support
     "bhai", "computer", "hey computer", 
-    "bhiaya", "bhaisahb", 
-    "kai", "hey kai", "ok kai"  # NEW!
+    "bhiaya", "bhaisahb"
 ]
 self.wake_word = "kai"  # Primary wake word
 ```
