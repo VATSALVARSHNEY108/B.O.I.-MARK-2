@@ -42,8 +42,18 @@ class SystemController:
         """Mute system microphone"""
         try:
             if self.os == "Windows":
-                subprocess.run(["nircmd.exe", "mutesysvolume", "1", "microphone"], check=False)
-                return "✅ Microphone muted"
+                from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+                from comtypes import CLSCTX_ALL
+                from ctypes import cast, POINTER
+                
+                devices = AudioUtilities.GetMicrophone()
+                if devices:
+                    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+                    volume = cast(interface, POINTER(IAudioEndpointVolume))
+                    volume.SetMute(True, None)
+                    return "✅ Microphone muted"
+                else:
+                    return "⚠️ No microphone device found"
             elif self.os == "Darwin":
                 subprocess.run(["osascript", "-e", "set volume input volume 0"], check=False)
                 return "✅ Microphone muted"
@@ -57,8 +67,18 @@ class SystemController:
         """Unmute system microphone"""
         try:
             if self.os == "Windows":
-                subprocess.run(["nircmd.exe", "mutesysvolume", "0", "microphone"], check=False)
-                return "✅ Microphone unmuted"
+                from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+                from comtypes import CLSCTX_ALL
+                from ctypes import cast, POINTER
+                
+                devices = AudioUtilities.GetMicrophone()
+                if devices:
+                    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+                    volume = cast(interface, POINTER(IAudioEndpointVolume))
+                    volume.SetMute(False, None)
+                    return "✅ Microphone unmuted"
+                else:
+                    return "⚠️ No microphone device found"
             elif self.os == "Darwin":
                 subprocess.run(["osascript", "-e", "set volume input volume 50"], check=False)
                 return "✅ Microphone unmuted"
@@ -158,31 +178,15 @@ class SystemController:
             level = max(0, min(100, int(level)))
             
             if self.os == "Windows":
-                # Try pycaw library first (best method)
-                try:
-                    from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
-                    from comtypes import CLSCTX_ALL
-                    from ctypes import cast, POINTER
-                    
-                    devices = AudioUtilities.GetSpeakers()
-                    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-                    volume = cast(interface, POINTER(IAudioEndpointVolume))
-                    volume.SetMasterVolumeLevelScalar(level / 100.0, None)
-                    return f"🔊 Volume set to {level}%"
-                except (ImportError, AttributeError):
-                    # pycaw not available or error, try nircmd
-                    result = subprocess.run(
-                        f"nircmd.exe setsysvolume {int(level * 655.35)}", 
-                        shell=True, 
-                        capture_output=True,
-                        text=True,
-                        check=False
-                    )
-                    if result.returncode == 0:
-                        return f"🔊 Volume set to {level}%"
-                    else:
-                        # Neither method works, provide helpful message
-                        return f"⚠️ Volume control unavailable. Please download nircmd.exe from https://www.nirsoft.net/utils/nircmd.html and place it in C:\\Windows\\System32\\"
+                from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+                from comtypes import CLSCTX_ALL
+                from ctypes import cast, POINTER
+                
+                devices = AudioUtilities.GetSpeakers()
+                interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+                volume = cast(interface, POINTER(IAudioEndpointVolume))
+                volume.SetMasterVolumeLevelScalar(level / 100.0, None)
+                return f"🔊 Volume set to {level}%"
             elif self.os == "Darwin":
                 subprocess.run(f"osascript -e 'set volume output volume {level}'", shell=True, check=False)
                 return f"🔊 Volume set to {level}%"
@@ -201,16 +205,15 @@ class SystemController:
                 new_level = min(100, current + amount)
                 return self.set_volume(new_level)
             else:
-                # If can't get current, just increase
-                if self.os == "Windows":
-                    subprocess.run(f"nircmd.exe changesysvolume {int(amount * 655.35)}", shell=True, check=False)
-                    return f"🔊 Volume increased by {amount}%"
-                elif self.os == "Darwin":
+                # If can't get current, use fallback methods
+                if self.os == "Darwin":
                     subprocess.run(f"osascript -e 'set volume output volume (output volume of (get volume settings) + {amount})'", shell=True, check=False)
                     return f"🔊 Volume increased by {amount}%"
                 elif self.os == "Linux":
                     subprocess.run(f"pactl set-sink-volume @DEFAULT_SINK@ +{amount}%", shell=True, check=False)
                     return f"🔊 Volume increased by {amount}%"
+                else:
+                    return f"⚠️ Unable to get current volume. Try setting absolute volume instead."
         except Exception as e:
             return f"❌ Failed to increase volume: {str(e)}"
     
@@ -222,16 +225,15 @@ class SystemController:
                 new_level = max(0, current - amount)
                 return self.set_volume(new_level)
             else:
-                # If can't get current, just decrease
-                if self.os == "Windows":
-                    subprocess.run(f"nircmd.exe changesysvolume -{int(amount * 655.35)}", shell=True, check=False)
-                    return f"🔉 Volume decreased by {amount}%"
-                elif self.os == "Darwin":
+                # If can't get current, use fallback methods
+                if self.os == "Darwin":
                     subprocess.run(f"osascript -e 'set volume output volume (output volume of (get volume settings) - {amount})'", shell=True, check=False)
                     return f"🔉 Volume decreased by {amount}%"
                 elif self.os == "Linux":
                     subprocess.run(f"pactl set-sink-volume @DEFAULT_SINK@ -{amount}%", shell=True, check=False)
                     return f"🔉 Volume decreased by {amount}%"
+                else:
+                    return f"⚠️ Unable to get current volume. Try setting absolute volume instead."
         except Exception as e:
             return f"❌ Failed to decrease volume: {str(e)}"
     
@@ -239,25 +241,15 @@ class SystemController:
         """Get current volume level (0-100)"""
         try:
             if self.os == "Windows":
-                # Try pycaw first
-                try:
-                    from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
-                    from comtypes import CLSCTX_ALL
-                    from ctypes import cast, POINTER
-                    
-                    devices = AudioUtilities.GetSpeakers()
-                    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-                    volume = cast(interface, POINTER(IAudioEndpointVolume))
-                    current_volume = volume.GetMasterVolumeLevelScalar()
-                    return int(current_volume * 100)
-                except (ImportError, AttributeError):
-                    # Try nircmd fallback
-                    result = subprocess.run(
-                        "nircmd.exe getsysvolume",
-                        shell=True, capture_output=True, text=True, check=False
-                    )
-                    if result.returncode == 0 and result.stdout.strip():
-                        return int(int(result.stdout.strip()) / 655.35)
+                from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+                from comtypes import CLSCTX_ALL
+                from ctypes import cast, POINTER
+                
+                devices = AudioUtilities.GetSpeakers()
+                interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+                volume = cast(interface, POINTER(IAudioEndpointVolume))
+                current_volume = volume.GetMasterVolumeLevelScalar()
+                return int(current_volume * 100)
             elif self.os == "Darwin":
                 result = subprocess.run(
                     "osascript -e 'output volume of (get volume settings)'",
@@ -280,7 +272,14 @@ class SystemController:
         """Mute system volume"""
         try:
             if self.os == "Windows":
-                subprocess.run("nircmd.exe mutesysvolume 1", shell=True, check=False)
+                from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+                from comtypes import CLSCTX_ALL
+                from ctypes import cast, POINTER
+                
+                devices = AudioUtilities.GetSpeakers()
+                interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+                volume = cast(interface, POINTER(IAudioEndpointVolume))
+                volume.SetMute(True, None)
                 return "🔇 Volume muted"
             elif self.os == "Darwin":
                 subprocess.run("osascript -e 'set volume output muted true'", shell=True, check=False)
@@ -295,7 +294,14 @@ class SystemController:
         """Unmute system volume"""
         try:
             if self.os == "Windows":
-                subprocess.run("nircmd.exe mutesysvolume 0", shell=True, check=False)
+                from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+                from comtypes import CLSCTX_ALL
+                from ctypes import cast, POINTER
+                
+                devices = AudioUtilities.GetSpeakers()
+                interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+                volume = cast(interface, POINTER(IAudioEndpointVolume))
+                volume.SetMute(False, None)
                 return "🔊 Volume unmuted"
             elif self.os == "Darwin":
                 subprocess.run("osascript -e 'set volume output muted false'", shell=True, check=False)
@@ -310,22 +316,16 @@ class SystemController:
         """Toggle mute/unmute"""
         try:
             if self.os == "Windows":
-                # Try pycaw first
-                try:
-                    from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
-                    from comtypes import CLSCTX_ALL
-                    from ctypes import cast, POINTER
-                    
-                    devices = AudioUtilities.GetSpeakers()
-                    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-                    volume = cast(interface, POINTER(IAudioEndpointVolume))
-                    current_mute = volume.GetMute()
-                    volume.SetMute(not current_mute, None)
-                    return "🔇 Volume muted" if not current_mute else "🔊 Volume unmuted"
-                except (ImportError, AttributeError):
-                    # Fallback to nircmd
-                    subprocess.run("nircmd.exe mutesysvolume 2", shell=True, check=False)
-                    return "🔊 Volume toggled"
+                from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+                from comtypes import CLSCTX_ALL
+                from ctypes import cast, POINTER
+                
+                devices = AudioUtilities.GetSpeakers()
+                interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+                volume = cast(interface, POINTER(IAudioEndpointVolume))
+                current_mute = volume.GetMute()
+                volume.SetMute(not current_mute, None)
+                return "🔇 Volume muted" if not current_mute else "🔊 Volume unmuted"
             elif self.os == "Darwin":
                 result = subprocess.run(
                     "osascript -e 'output muted of (get volume settings)'",

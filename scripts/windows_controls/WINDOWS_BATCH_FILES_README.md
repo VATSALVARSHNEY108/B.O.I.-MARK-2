@@ -1,12 +1,47 @@
-# Windows Volume & Brightness Control Batch Files
+# Windows Volume & Brightness Control
 
-This folder contains batch files for easy volume and brightness control on Windows systems.
+## ⚠️ IMPORTANT: Recommended Approach
+
+**The Python-based volume control is now the recommended method** as it works out-of-the-box without requiring external tools!
+
+### Use Python Scripts Instead (Recommended ✅)
+
+```powershell
+# Volume control - Works immediately, no setup required!
+python scripts/volume_brightness_controller.py volume set 80
+python scripts/volume_brightness_controller.py volume up 5
+python scripts/volume_brightness_controller.py volume down 10
+python scripts/volume_brightness_controller.py volume mute
+python scripts/volume_brightness_controller.py volume get
+
+# Brightness control
+python scripts/volume_brightness_controller.py brightness set 75
+```
+
+**Benefits:**
+- ✅ No external tools required (nircmd.exe not needed)
+- ✅ Works immediately - no downloads or setup
+- ✅ More secure - pure Python solution
+- ✅ Cross-platform ready (Windows, macOS, Linux)
+- ✅ Better error handling and reliability
+
+---
+
+## Legacy Batch Files (Deprecated)
+
+This folder contains **legacy** batch files that rely on `nircmd.exe`. These are kept for backward compatibility but are **no longer recommended**.
 
 **Location:** `scripts/windows_controls/`
 
-## Prerequisites
+### Why Not Use Batch Files?
 
-### Download NirCmd
+1. **Requires nircmd.exe download** - Extra setup step
+2. **Security concerns** - External executable required
+3. **Windows-only** - Not cross-platform
+4. **Outdated** - Python solution is superior
+
+### If You Still Want to Use Batch Files
+
 The volume control batch files require `nircmd.exe` - a free command-line utility for Windows.
 
 1. Download from: https://www.nirsoft.net/utils/nircmd.html
@@ -75,79 +110,45 @@ quick_brightness_control.bat 100
 quick_brightness_control.bat 25
 ```
 
-## Creating Shortcuts
+---
 
-### Desktop Shortcuts
-1. Right-click on any batch file
-2. Select "Send to" → "Desktop (create shortcut)"
-3. Rename the shortcut if desired
+## Migration Guide
 
-### Keyboard Shortcuts
-1. Right-click the shortcut → Properties
-2. Click in the "Shortcut key" field
-3. Press your desired key combination (e.g., Ctrl + Alt + V)
-4. Click OK
+### From Batch Files to Python
 
-**Recommended shortcuts:**
-- Volume menu: `Ctrl + Alt + V`
-- Set volume 80%: `Ctrl + Alt + 8`
-- Brightness 50%: `Ctrl + Alt + B`
-
-## Volume Scale Reference
-
-NirCmd uses a scale of 0-65535 for volume. The batch files convert percentages:
-- 0% = 0
-- 25% = 16384
-- 50% = 32768
-- 75% = 49152
-- 100% = 65535
-
-## Troubleshooting
-
-### "nircmd.exe is not recognized"
-- Download nircmd.exe and place it in the same folder as the batch files
-- Or add it to your system PATH
-
-### Brightness control not working
-- Some laptops don't support WMI brightness control
-- Try using your laptop's function keys (Fn + brightness keys) instead
-- External monitors may not support software brightness control
-
-### Permission errors
-- Run the batch file as Administrator (right-click → "Run as administrator")
-
-## Integration with Python Scripts
-
-These batch files complement the Python-based system control in `modules/system/system_control.py`. Use:
-- Batch files: For quick Windows-only control
-- Python scripts: For cross-platform automation with Gemini AI integration
-
-## Advanced Usage
-
-### Run from Command Prompt
-```cmd
-cd path\to\project\scripts\windows_controls
+**Old (Batch):**
+```batch
 quick_volume_control.bat set 80
 ```
 
-### Use in scripts
-```batch
-@echo off
-call quick_volume_control.bat set 50
-call quick_brightness_control.bat 75
-echo Volume and brightness set!
+**New (Python):**
+```powershell
+python scripts/volume_brightness_controller.py volume set 80
 ```
 
-### Schedule with Task Scheduler
-1. Open Task Scheduler
-2. Create Basic Task
-3. Set trigger (time, logon, etc.)
-4. Action: Start a program
-5. Program: Full path to batch file
-6. Add arguments if using quick control versions
+### Creating Shortcuts for Python Commands
 
-## Safety Notes
+1. Create a new `.bat` file with this content:
+```batch
+@echo off
+python scripts/volume_brightness_controller.py volume set 80
+```
 
-- Volume is limited to 0-100% to protect hearing and speakers
-- Brightness changes are immediate - be careful in dark environments
-- Test with moderate values first before using extreme settings
+2. Create a shortcut to this file
+3. Assign a keyboard shortcut if desired
+
+---
+
+## Recommended: Switch to Python
+
+For the best experience, use the Python-based controller:
+
+```powershell
+# See all available commands
+python scripts/volume_brightness_controller.py
+
+# Test the new system
+python test_volume_pycaw.py
+```
+
+**No downloads required - Everything just works!** ✅
