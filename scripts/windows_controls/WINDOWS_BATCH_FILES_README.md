@@ -1,6 +1,8 @@
 # Windows Volume & Brightness Control Batch Files
 
-This project includes batch files for easy volume and brightness control on Windows systems.
+This folder contains batch files for easy volume and brightness control on Windows systems.
+
+**Location:** `scripts/windows_controls/`
 
 ## Prerequisites
 
@@ -10,7 +12,7 @@ The volume control batch files require `nircmd.exe` - a free command-line utilit
 1. Download from: https://www.nirsoft.net/utils/nircmd.html
 2. Extract `nircmd.exe` from the zip file
 3. Place it in one of these locations:
-   - Same folder as the batch files
+   - `scripts/windows_controls/` (same folder as these batch files)
    - `C:\Windows\System32\` (requires admin rights)
    - Any folder in your system PATH
 
@@ -124,7 +126,7 @@ These batch files complement the Python-based system control in `modules/system/
 
 ### Run from Command Prompt
 ```cmd
-cd path\to\project
+cd path\to\project\scripts\windows_controls
 quick_volume_control.bat set 80
 ```
 

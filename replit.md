@@ -7,7 +7,7 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 
 ## Recent Changes
 **November 4, 2025 - Windows Batch Files for Volume & Brightness**:
-- **🪟 Windows Batch File Controls**: Created comprehensive Windows batch files for easy volume and brightness control using `nircmd.exe`:
+- **🪟 Windows Batch File Controls** (`scripts/windows_controls/`): Created comprehensive Windows batch files for easy volume and brightness control using `nircmd.exe`:
   - `windows_volume_brightness_control.bat` - Interactive menu with preset levels, custom input, and toggle options
   - `quick_volume_control.bat` - Command-line volume control (set, up, down, mute, get)
   - `quick_brightness_control.bat` - Command-line brightness control
