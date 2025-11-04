@@ -757,3 +757,5 @@ if __name__ == "__main__":
     controller = SystemController()
     print("System Control Module - Testing")
     print(controller.check_disk_space())
+    print(controller.get_volume_info())
+    print(controller.get_brightness())
