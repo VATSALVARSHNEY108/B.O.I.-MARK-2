@@ -1,0 +1,538 @@
+C:\Users\VATSAL VARSHNEY\PycharmProjects\V.A.T.S.A.L.23242\.venv\Scripts\python.exe C:/Program Files/JetBrains/PyCharm 2025.2.4/plugins/python-ce/helpers/packaging_tool.py install data-analysis
+Collecting data-analysis
+  Using cached data_analysis-1.1.43-py2.py3-none-any.whl.metadata (1.5 kB)
+Collecting lxml (from data-analysis)
+  Using cached lxml-6.0.2-cp313-cp313-win_amd64.whl.metadata (3.7 kB)
+Requirement already satisfied: six in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from data-analysis) (1.17.0)
+Collecting coloredlogs (from data-analysis)
+  Using cached coloredlogs-15.0.1-py2.py3-none-any.whl.metadata (12 kB)
+Collecting path.py (from data-analysis)
+  Using cached path.py-12.5.0-py3-none-any.whl.metadata (1.3 kB)
+Collecting minio (from data-analysis)
+  Using cached minio-7.2.18-py3-none-any.whl.metadata (6.5 kB)
+Collecting rdflib (from data-analysis)
+  Using cached rdflib-7.4.0-py3-none-any.whl.metadata (12 kB)
+Collecting keyring (from data-analysis)
+  Using cached keyring-25.6.0-py3-none-any.whl.metadata (20 kB)
+Collecting keyrings.cryptfile (from data-analysis)
+  Using cached keyrings_cryptfile-1.3.9-py2.py3-none-any.whl
+Collecting rdflib-jsonld (from data-analysis)
+  Using cached rdflib_jsonld-0.6.2-py2.py3-none-any.whl.metadata (3.4 kB)
+Collecting healpy (from data-analysis)
+  Using cached healpy-1.18.1.tar.gz (4.8 MB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: scipy in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from data-analysis) (1.16.3)
+Collecting pydot (from data-analysis)
+  Using cached pydot-4.0.1-py3-none-any.whl.metadata (11 kB)
+Requirement already satisfied: numpy in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from data-analysis) (2.2.6)
+Requirement already satisfied: pandas in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from data-analysis) (2.3.3)
+Collecting astropy (from data-analysis)
+  Using cached astropy-7.1.1-cp313-cp313-win_amd64.whl.metadata (11 kB)
+Collecting persist-queue (from data-analysis)
+  Using cached persist_queue-1.1.0-py3-none-any.whl.metadata (17 kB)
+Requirement already satisfied: flask in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from data-analysis) (3.1.2)
+Collecting flask-restful (from data-analysis)
+  Using cached Flask_RESTful-0.3.10-py2.py3-none-any.whl.metadata (1.0 kB)
+Collecting pytest (from data-analysis)
+  Using cached pytest-8.4.2-py3-none-any.whl.metadata (7.7 kB)
+Collecting pytest-flask (from data-analysis)
+  Using cached pytest_flask-1.3.0-py3-none-any.whl.metadata (14 kB)
+Requirement already satisfied: psutil in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from data-analysis) (7.1.3)
+Collecting logstash-formatter (from data-analysis)
+  Using cached logstash_formatter-0.5.17-py3-none-any.whl
+Requirement already satisfied: requests in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from data-analysis) (2.32.5)
+Collecting PyYAML>=5.1 (from data-analysis)
+  Using cached pyyaml-6.0.3-cp313-cp313-win_amd64.whl.metadata (2.4 kB)
+Collecting oda-node>=0.1.36 (from data-analysis)
+  Using cached oda_node-0.1.55-py2.py3-none-any.whl.metadata (1.1 kB)
+Collecting python-shell-colors (from data-analysis)
+  Using cached python_shell_colors-0.4.0-py2.py3-none-any.whl.metadata (755 bytes)
+Collecting future (from data-analysis)
+  Using cached future-1.0.0-py3-none-any.whl.metadata (4.0 kB)
+Collecting marshmallow (from oda-node>=0.1.36->data-analysis)
+  Using cached marshmallow-4.1.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting apispec (from oda-node>=0.1.36->data-analysis)
+  Using cached apispec-6.8.4-py3-none-any.whl.metadata (10 kB)
+Collecting flasgger (from oda-node>=0.1.36->data-analysis)
+  Using cached flasgger-0.9.7.1-py2.py3-none-any.whl
+Collecting bravado (from oda-node>=0.1.36->data-analysis)
+  Using cached bravado-12.0.1-py2.py3-none-any.whl
+Collecting termcolor (from oda-node>=0.1.36->data-analysis)
+  Using cached termcolor-3.2.0-py3-none-any.whl.metadata (6.4 kB)
+Collecting pymysql (from oda-node>=0.1.36->data-analysis)
+  Using cached pymysql-1.1.2-py3-none-any.whl.metadata (4.3 kB)
+Collecting peewee (from oda-node>=0.1.36->data-analysis)
+  Using cached peewee-3.18.3-py3-none-any.whl
+Collecting retrying (from oda-node>=0.1.36->data-analysis)
+  Using cached retrying-1.4.2-py3-none-any.whl.metadata (5.5 kB)
+Collecting oda-knowledge-base>=0.7.0 (from oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached oda_knowledge_base-0.7.28-py2.py3-none-any.whl.metadata (1.5 kB)
+Collecting pyjwt (from oda-node>=0.1.36->data-analysis)
+  Using cached PyJWT-2.10.1-py3-none-any.whl.metadata (4.0 kB)
+Collecting pylogstash-context (from oda-node>=0.1.36->data-analysis)
+  Using cached pylogstash_context-0.1.19-py2.py3-none-any.whl.metadata (870 bytes)
+Collecting minio (from data-analysis)
+  Using cached minio-6.0.2-py2.py3-none-any.whl.metadata (11 kB)
+Requirement already satisfied: click in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from oda-knowledge-base>=0.7.0->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis) (8.3.0)
+Collecting click-aliases (from oda-knowledge-base>=0.7.0->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached click_aliases-1.0.5-py3-none-any.whl.metadata (1.7 kB)
+Collecting dynaconf (from oda-knowledge-base>=0.7.0->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached dynaconf-3.2.12-py2.py3-none-any.whl.metadata (9.4 kB)
+Collecting html2text (from oda-knowledge-base>=0.7.0->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached html2text-2025.4.15-py3-none-any.whl.metadata (4.1 kB)
+Collecting pluggy (from oda-knowledge-base>=0.7.0->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Requirement already satisfied: urllib3 in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from minio->data-analysis) (2.5.0)
+Requirement already satisfied: pytz in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from minio->data-analysis) (2025.2)
+Requirement already satisfied: certifi in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from minio->data-analysis) (2025.10.5)
+Requirement already satisfied: python-dateutil in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from minio->data-analysis) (2.9.0.post0)
+Collecting configparser (from minio->data-analysis)
+  Using cached configparser-7.2.0-py3-none-any.whl.metadata (5.5 kB)
+Collecting cwltool (from oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached cwltool-3.1.20251031082601-py3-none-any.whl.metadata (41 kB)
+Requirement already satisfied: packaging>=21.3 in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from apispec->oda-node>=0.1.36->data-analysis) (25.0)
+Collecting pyerfa>=2.0.1.1 (from astropy->data-analysis)
+  Using cached pyerfa-2.0.1.5-cp39-abi3-win_amd64.whl.metadata (5.9 kB)
+Collecting astropy-iers-data>=0.2025.9.29.0.35.48 (from astropy->data-analysis)
+  Using cached astropy_iers_data-0.2025.11.3.0.38.37-py3-none-any.whl.metadata (3.4 kB)
+Collecting bravado-core>=5.16.1 (from bravado->oda-node>=0.1.36->data-analysis)
+  Using cached bravado_core-6.1.1-py2.py3-none-any.whl
+Collecting msgpack (from bravado->oda-node>=0.1.36->data-analysis)
+  Using cached msgpack-1.1.2-cp313-cp313-win_amd64.whl.metadata (8.4 kB)
+Collecting simplejson (from bravado->oda-node>=0.1.36->data-analysis)
+  Using cached simplejson-3.20.2-cp313-cp313-win_amd64.whl.metadata (3.4 kB)
+Collecting monotonic (from bravado->oda-node>=0.1.36->data-analysis)
+  Using cached monotonic-1.6-py2.py3-none-any.whl.metadata (1.5 kB)
+Requirement already satisfied: typing_extensions in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from bravado->oda-node>=0.1.36->data-analysis) (4.15.0)
+Collecting jsonref (from bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached jsonref-1.1.0-py3-none-any.whl.metadata (2.7 kB)
+Collecting jsonschema>=2.5.1 (from jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached jsonschema-4.25.1-py3-none-any.whl.metadata (7.6 kB)
+Collecting swagger-spec-validator>=2.0.1 (from bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached swagger_spec_validator-3.0.4-py2.py3-none-any.whl.metadata (2.5 kB)
+Requirement already satisfied: attrs>=22.2.0 in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from jsonschema>=2.5.1->jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis) (25.4.0)
+Collecting jsonschema-specifications>=2023.03.6 (from jsonschema>=2.5.1->jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
+Collecting referencing>=0.28.4 (from jsonschema>=2.5.1->jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
+Collecting rpds-py>=0.7.1 (from jsonschema>=2.5.1->jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached rpds_py-0.28.0-cp313-cp313-win_amd64.whl.metadata (4.2 kB)
+Collecting fqdn (from jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached fqdn-1.5.1-py3-none-any.whl.metadata (1.4 kB)
+Requirement already satisfied: idna in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis) (3.11)
+Collecting isoduration (from jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached isoduration-20.11.0-py3-none-any.whl.metadata (5.7 kB)
+Collecting jsonpointer>1.13 (from jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached jsonpointer-3.0.0-py2.py3-none-any.whl.metadata (2.3 kB)
+Collecting rfc3339-validator (from jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached rfc3339_validator-0.1.4-py2.py3-none-any.whl.metadata (1.5 kB)
+Collecting rfc3986-validator>0.1.0 (from jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached rfc3986_validator-0.1.1-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting rfc3987-syntax>=1.1.0 (from jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached rfc3987_syntax-1.1.0-py3-none-any.whl.metadata (7.7 kB)
+Collecting uri-template (from jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached uri_template-1.3.0-py3-none-any.whl.metadata (8.8 kB)
+Collecting webcolors>=24.6.0 (from jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached webcolors-25.10.0-py3-none-any.whl.metadata (2.2 kB)
+Requirement already satisfied: charset_normalizer<4,>=2 in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from requests->data-analysis) (3.4.4)
+Collecting lark>=1.2.2 (from rfc3987-syntax>=1.1.0->jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached lark-1.3.1-py3-none-any.whl.metadata (1.8 kB)
+Collecting importlib-resources>=1.3 (from swagger-spec-validator>=2.0.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached importlib_resources-6.5.2-py3-none-any.whl.metadata (3.9 kB)
+Requirement already satisfied: colorama in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from click->oda-knowledge-base>=0.7.0->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis) (0.4.6)
+Collecting humanfriendly>=9.1 (from coloredlogs->data-analysis)
+  Using cached humanfriendly-10.0-py2.py3-none-any.whl.metadata (9.2 kB)
+Collecting pyreadline3 (from humanfriendly>=9.1->coloredlogs->data-analysis)
+  Using cached pyreadline3-3.5.4-py3-none-any.whl.metadata (4.7 kB)
+Collecting ruamel.yaml<0.19,>=0.16 (from cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached ruamel.yaml-0.18.16-py3-none-any.whl.metadata (25 kB)
+Collecting schema-salad<9,>=8.9 (from cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached schema_salad-8.9.20251102115403-py3-none-any.whl.metadata (17 kB)
+Collecting prov==1.5.1 (from cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached prov-1.5.1-py2.py3-none-any.whl.metadata (7.9 kB)
+Collecting mypy-extensions (from cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached mypy_extensions-1.1.0-py3-none-any.whl.metadata (1.1 kB)
+Collecting argcomplete>=1.12.0 (from cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached argcomplete-3.6.3-py3-none-any.whl.metadata (16 kB)
+Requirement already satisfied: pyparsing!=3.0.2 in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis) (3.2.5)
+Collecting cwl-utils>=0.32 (from cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached cwl_utils-0.40-py3-none-any.whl.metadata (8.3 kB)
+Collecting spython>=0.3.0 (from cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached spython-0.3.14-py3-none-any.whl.metadata (8.6 kB)
+Collecting rich-argparse (from cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached rich_argparse-1.7.2-py3-none-any.whl.metadata (14 kB)
+Collecting networkx (from prov==1.5.1->cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached networkx-3.5-py3-none-any.whl.metadata (6.3 kB)
+Collecting ruamel.yaml.clib>=0.2.7 (from ruamel.yaml<0.19,>=0.16->cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached ruamel.yaml.clib-0.2.14-cp313-cp313-win_amd64.whl.metadata (3.0 kB)
+Collecting mistune<3.2,>=3 (from schema-salad<9,>=8.9->cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached mistune-3.1.4-py3-none-any.whl.metadata (1.8 kB)
+Collecting CacheControl<0.15,>=0.13.1 (from CacheControl[filecache]<0.15,>=0.13.1->schema-salad<9,>=8.9->cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached cachecontrol-0.14.3-py3-none-any.whl.metadata (3.1 kB)
+Collecting filelock>=3.8.0 (from CacheControl[filecache]<0.15,>=0.13.1->schema-salad<9,>=8.9->cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached filelock-3.20.0-py3-none-any.whl.metadata (2.1 kB)
+Collecting cwl-upgrader>=1.2.3 (from cwl-utils>=0.32->cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached cwl_upgrader-1.2.12-py3-none-any.whl.metadata (2.7 kB)
+Requirement already satisfied: setuptools in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from cwl-upgrader>=1.2.3->cwl-utils>=0.32->cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis) (80.9.0)
+Requirement already satisfied: blinker>=1.9.0 in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from flask->data-analysis) (1.9.0)
+Requirement already satisfied: itsdangerous>=2.2.0 in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from flask->data-analysis) (2.2.0)
+Requirement already satisfied: jinja2>=3.1.2 in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from flask->data-analysis) (3.1.6)
+Requirement already satisfied: markupsafe>=2.1.1 in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from flask->data-analysis) (3.0.3)
+Requirement already satisfied: werkzeug>=3.1.0 in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from flask->data-analysis) (3.1.3)
+Collecting aniso8601>=0.82 (from flask-restful->data-analysis)
+  Using cached aniso8601-10.0.1-py2.py3-none-any.whl.metadata (23 kB)
+Collecting arrow>=0.15.0 (from isoduration->jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis)
+  Using cached arrow-1.4.0-py3-none-any.whl.metadata (7.7 kB)
+Requirement already satisfied: tzdata in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from arrow>=0.15.0->isoduration->jsonschema[format-nongpl]>=2.5.1->bravado-core>=5.16.1->bravado->oda-node>=0.1.36->data-analysis) (2025.2)
+Collecting pywin32-ctypes>=0.2.0 (from keyring->data-analysis)
+  Using cached pywin32_ctypes-0.2.3-py3-none-any.whl.metadata (3.9 kB)
+Collecting jaraco.classes (from keyring->data-analysis)
+  Using cached jaraco.classes-3.4.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting jaraco.functools (from keyring->data-analysis)
+  Using cached jaraco_functools-4.3.0-py3-none-any.whl.metadata (2.9 kB)
+Collecting jaraco.context (from keyring->data-analysis)
+  Using cached jaraco.context-6.0.1-py3-none-any.whl.metadata (4.1 kB)
+Collecting more-itertools (from jaraco.classes->keyring->data-analysis)
+  Using cached more_itertools-10.8.0-py3-none-any.whl.metadata (39 kB)
+Collecting argon2_cffi (from keyrings.cryptfile->data-analysis)
+  Using cached argon2_cffi-25.1.0-py3-none-any.whl.metadata (4.1 kB)
+Collecting pycryptodome (from keyrings.cryptfile->data-analysis)
+  Using cached pycryptodome-3.23.0-cp37-abi3-win_amd64.whl.metadata (3.5 kB)
+Collecting argon2-cffi-bindings (from argon2_cffi->keyrings.cryptfile->data-analysis)
+  Using cached argon2_cffi_bindings-25.1.0-cp39-abi3-win_amd64.whl.metadata (7.5 kB)
+Requirement already satisfied: cffi>=1.0.1 in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from argon2-cffi-bindings->argon2_cffi->keyrings.cryptfile->data-analysis) (2.0.0)
+Requirement already satisfied: pycparser in c:\users\vatsal varshney\pycharmprojects\v.a.t.s.a.l.23242\.venv\lib\site-packages (from cffi>=1.0.1->argon2-cffi-bindings->argon2_cffi->keyrings.cryptfile->data-analysis) (2.23)
+Collecting path (from path.py->data-analysis)
+  Using cached path-17.1.1-py3-none-any.whl.metadata (6.5 kB)
+Collecting iniconfig>=1 (from pytest->data-analysis)
+  Using cached iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting pygments>=2.7.2 (from pytest->data-analysis)
+  Using cached pygments-2.19.2-py3-none-any.whl.metadata (2.5 kB)
+Collecting rich>=11.0.0 (from rich-argparse->cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached rich-14.2.0-py3-none-any.whl.metadata (18 kB)
+Collecting markdown-it-py>=2.2.0 (from rich>=11.0.0->rich-argparse->cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached markdown_it_py-4.0.0-py3-none-any.whl.metadata (7.3 kB)
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich>=11.0.0->rich-argparse->cwltool->oda-knowledge-base[cwl]>=0.7.0->oda-node>=0.1.36->data-analysis)
+  Using cached mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Using cached data_analysis-1.1.43-py2.py3-none-any.whl (65 kB)
+Using cached oda_node-0.1.55-py2.py3-none-any.whl (37 kB)
+Using cached oda_knowledge_base-0.7.28-py2.py3-none-any.whl (5.6 MB)
+Using cached minio-6.0.2-py2.py3-none-any.whl (73 kB)
+Using cached pyyaml-6.0.3-cp313-cp313-win_amd64.whl (154 kB)
+Using cached apispec-6.8.4-py3-none-any.whl (30 kB)
+Using cached astropy-7.1.1-cp313-cp313-win_amd64.whl (6.3 MB)
+Using cached astropy_iers_data-0.2025.11.3.0.38.37-py3-none-any.whl (2.0 MB)
+Using cached pyerfa-2.0.1.5-cp39-abi3-win_amd64.whl (349 kB)
+Using cached jsonschema-4.25.1-py3-none-any.whl (90 kB)
+Using cached jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+Using cached jsonpointer-3.0.0-py2.py3-none-any.whl (7.6 kB)
+Using cached msgpack-1.1.2-cp313-cp313-win_amd64.whl (72 kB)
+Using cached referencing-0.37.0-py3-none-any.whl (26 kB)
+Using cached rfc3986_validator-0.1.1-py2.py3-none-any.whl (4.2 kB)
+Using cached rfc3987_syntax-1.1.0-py3-none-any.whl (8.0 kB)
+Using cached lark-1.3.1-py3-none-any.whl (113 kB)
+Using cached rpds_py-0.28.0-cp313-cp313-win_amd64.whl (227 kB)
+Using cached swagger_spec_validator-3.0.4-py2.py3-none-any.whl (28 kB)
+Using cached importlib_resources-6.5.2-py3-none-any.whl (37 kB)
+Using cached webcolors-25.10.0-py3-none-any.whl (14 kB)
+Using cached click_aliases-1.0.5-py3-none-any.whl (3.5 kB)
+Using cached coloredlogs-15.0.1-py2.py3-none-any.whl (46 kB)
+Using cached humanfriendly-10.0-py2.py3-none-any.whl (86 kB)
+Using cached configparser-7.2.0-py3-none-any.whl (17 kB)
+Using cached cwltool-3.1.20251031082601-py3-none-any.whl (1.7 MB)
+Using cached prov-1.5.1-py2.py3-none-any.whl (426 kB)
+Using cached rdflib-7.4.0-py3-none-any.whl (569 kB)
+Using cached ruamel.yaml-0.18.16-py3-none-any.whl (119 kB)
+Using cached schema_salad-8.9.20251102115403-py3-none-any.whl (650 kB)
+Using cached cachecontrol-0.14.3-py3-none-any.whl (21 kB)
+Using cached mistune-3.1.4-py3-none-any.whl (53 kB)
+Using cached argcomplete-3.6.3-py3-none-any.whl (43 kB)
+Using cached cwl_utils-0.40-py3-none-any.whl (437 kB)
+Using cached cwl_upgrader-1.2.12-py3-none-any.whl (27 kB)
+Using cached filelock-3.20.0-py3-none-any.whl (16 kB)
+Using cached pydot-4.0.1-py3-none-any.whl (37 kB)
+Using cached ruamel.yaml.clib-0.2.14-cp313-cp313-win_amd64.whl (115 kB)
+Using cached spython-0.3.14-py3-none-any.whl (109 kB)
+Using cached dynaconf-3.2.12-py2.py3-none-any.whl (237 kB)
+Using cached Flask_RESTful-0.3.10-py2.py3-none-any.whl (26 kB)
+Using cached aniso8601-10.0.1-py2.py3-none-any.whl (52 kB)
+Using cached fqdn-1.5.1-py3-none-any.whl (9.1 kB)
+Using cached future-1.0.0-py3-none-any.whl (491 kB)
+Using cached html2text-2025.4.15-py3-none-any.whl (34 kB)
+Using cached isoduration-20.11.0-py3-none-any.whl (11 kB)
+Using cached arrow-1.4.0-py3-none-any.whl (68 kB)
+Using cached jsonref-1.1.0-py3-none-any.whl (9.4 kB)
+Using cached keyring-25.6.0-py3-none-any.whl (39 kB)
+Using cached pywin32_ctypes-0.2.3-py3-none-any.whl (30 kB)
+Using cached jaraco.classes-3.4.0-py3-none-any.whl (6.8 kB)
+Using cached jaraco.context-6.0.1-py3-none-any.whl (6.8 kB)
+Using cached jaraco_functools-4.3.0-py3-none-any.whl (10 kB)
+Using cached argon2_cffi-25.1.0-py3-none-any.whl (14 kB)
+Using cached argon2_cffi_bindings-25.1.0-cp39-abi3-win_amd64.whl (31 kB)
+Using cached lxml-6.0.2-cp313-cp313-win_amd64.whl (4.0 MB)
+Using cached marshmallow-4.1.0-py3-none-any.whl (48 kB)
+Using cached monotonic-1.6-py2.py3-none-any.whl (8.2 kB)
+Using cached more_itertools-10.8.0-py3-none-any.whl (69 kB)
+Using cached mypy_extensions-1.1.0-py3-none-any.whl (5.0 kB)
+Using cached networkx-3.5-py3-none-any.whl (2.0 MB)
+Using cached path.py-12.5.0-py3-none-any.whl (2.3 kB)
+Using cached path-17.1.1-py3-none-any.whl (23 kB)
+Using cached persist_queue-1.1.0-py3-none-any.whl (53 kB)
+Using cached pluggy-1.6.0-py3-none-any.whl (20 kB)
+Using cached pycryptodome-3.23.0-cp37-abi3-win_amd64.whl (1.8 MB)
+Using cached PyJWT-2.10.1-py3-none-any.whl (22 kB)
+Using cached pylogstash_context-0.1.19-py2.py3-none-any.whl (5.8 kB)
+Using cached pymysql-1.1.2-py3-none-any.whl (45 kB)
+Using cached pyreadline3-3.5.4-py3-none-any.whl (83 kB)
+Using cached pytest-8.4.2-py3-none-any.whl (365 kB)
+Using cached iniconfig-2.3.0-py3-none-any.whl (7.5 kB)
+Using cached pygments-2.19.2-py3-none-any.whl (1.2 MB)
+Using cached pytest_flask-1.3.0-py3-none-any.whl (13 kB)
+Using cached python_shell_colors-0.4.0-py2.py3-none-any.whl (2.1 kB)
+Using cached rdflib_jsonld-0.6.2-py2.py3-none-any.whl (4.0 kB)
+Using cached retrying-1.4.2-py3-none-any.whl (10 kB)
+Using cached rfc3339_validator-0.1.4-py2.py3-none-any.whl (3.5 kB)
+Using cached rich_argparse-1.7.2-py3-none-any.whl (25 kB)
+Using cached rich-14.2.0-py3-none-any.whl (243 kB)
+Using cached markdown_it_py-4.0.0-py3-none-any.whl (87 kB)
+Using cached mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Using cached simplejson-3.20.2-cp313-cp313-win_amd64.whl (75 kB)
+Using cached termcolor-3.2.0-py3-none-any.whl (7.7 kB)
+Using cached uri_template-1.3.0-py3-none-any.whl (11 kB)
+Building wheels for collected packages: healpy
+  Building wheel for healpy (pyproject.toml): started
+  Building wheel for healpy (pyproject.toml): finished with status 'error'
+Failed to build healpy
+
+  error: subprocess-exited-with-error
+  
+  Building wheel for healpy (pyproject.toml) did not run successfully.
+  exit code: 1
+  
+  [210 lines of output]
+  C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\_distutils\extension.py:150: UserWarning: Unknown Extension options: 'cython_directives'
+    warnings.warn(msg)
+  C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\config\_apply_pyprojecttoml.py:82: SetuptoolsDeprecationWarning: `project.license` as a TOML table is deprecated
+  !!
+  
+          ********************************************************************************
+          Please use a simple string containing a SPDX expression for `project.license`. You can also use `project.license-files`. (Both options available on setuptools>=77.0.0).
+  
+          By 2026-Feb-18, you need to update your project and remove deprecated calls
+          or your builds will no longer be supported.
+  
+          See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+          ********************************************************************************
+  
+  !!
+    corresp(dist, value, root_dir)
+  C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\config\_apply_pyprojecttoml.py:61: SetuptoolsDeprecationWarning: License classifiers are deprecated.
+  !!
+  
+          ********************************************************************************
+          Please consider removing the following classifiers in favor of a SPDX license expression:
+  
+          License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)
+  
+          See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+          ********************************************************************************
+  
+  !!
+    dist._finalize_license_expression()
+  C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\dist.py:759: SetuptoolsDeprecationWarning: License classifiers are deprecated.
+  !!
+  
+          ********************************************************************************
+          Please consider removing the following classifiers in favor of a SPDX license expression:
+  
+          License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)
+  
+          See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+          ********************************************************************************
+  
+  !!
+    self._finalize_license_expression()
+  running bdist_wheel
+  running build
+  running build_py
+  creating build\lib.win-amd64-cpython-313\healpy
+  copying lib\healpy\conftest.py -> build\lib.win-amd64-cpython-313\healpy
+  copying lib\healpy\cookbook.py -> build\lib.win-amd64-cpython-313\healpy
+  copying lib\healpy\fitsfunc.py -> build\lib.win-amd64-cpython-313\healpy
+  copying lib\healpy\newvisufunc.py -> build\lib.win-amd64-cpython-313\healpy
+  copying lib\healpy\pixelfunc.py -> build\lib.win-amd64-cpython-313\healpy
+  copying lib\healpy\projaxes.py -> build\lib.win-amd64-cpython-313\healpy
+  copying lib\healpy\projector.py -> build\lib.win-amd64-cpython-313\healpy
+  copying lib\healpy\rotator.py -> build\lib.win-amd64-cpython-313\healpy
+  copying lib\healpy\sphtfunc.py -> build\lib.win-amd64-cpython-313\healpy
+  copying lib\healpy\version.py -> build\lib.win-amd64-cpython-313\healpy
+  copying lib\healpy\visufunc.py -> build\lib.win-amd64-cpython-313\healpy
+  copying lib\healpy\zoomtool.py -> build\lib.win-amd64-cpython-313\healpy
+  copying lib\healpy\__init__.py -> build\lib.win-amd64-cpython-313\healpy
+  creating build\lib.win-amd64-cpython-313\healpy\utils
+  copying lib\healpy\utils\deprecation.py -> build\lib.win-amd64-cpython-313\healpy\utils
+  copying lib\healpy\utils\__init__.py -> build\lib.win-amd64-cpython-313\healpy\utils
+  running egg_info
+  writing lib\healpy.egg-info\PKG-INFO
+  writing dependency_links to lib\healpy.egg-info\dependency_links.txt
+  writing requirements to lib\healpy.egg-info\requires.txt
+  writing top-level names to lib\healpy.egg-info\top_level.txt
+  pkg-config is not installed, falling back to pykg-config
+  checking if configure script for library 'cfitsio' exists
+  checking if configure script for library 'sharp' exists
+  checking if configure script for library 'healpix_cxx' exists
+  listing git files failed - pretending there aren't any
+  reading manifest file 'lib\healpy.egg-info\SOURCES.txt'
+  reading manifest template 'MANIFEST.in'
+  warning: no previously-included files found matching 'test\data\ipython*'
+  warning: no previously-included files found matching 'cextern\cfitsio\*pdf'
+  warning: no previously-included files found matching 'cextern\cfitsio\*ps'
+  warning: no previously-included files found matching 'cextern\cfitsio\*doc'
+  warning: no previously-included files found matching 'cextern\cfitsio\*tex'
+  no previously-included directories found matching 'cextern\cfitsio\docs'
+  warning: no previously-included files found matching '*.so'
+  warning: no previously-included files found matching '*.a'
+  warning: no previously-included files found matching '.gitignore'
+  warning: no previously-included files found matching '.gitmodules'
+  warning: no previously-included files found matching 'clean.sh'
+  warning: no files found matching 'src\_line_integral_convolution_lib.h'
+  warning: no files found matching 'src\_query_disc.cpp'
+  warning: no files found matching 'src\_sphtools.cpp'
+  warning: no files found matching 'src\_pixelfunc.cpp'
+  warning: no files found matching 'src\_masktools.cpp'
+  warning: no files found matching 'src\_hotspots.cpp'
+  warning: no files found matching 'src\_line_integral_convolution.cpp'
+  adding license file 'COPYING'
+  writing manifest file 'lib\healpy.egg-info\SOURCES.txt'
+  creating build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\pixel_window_n0002.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\pixel_window_n0004.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\pixel_window_n0008.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\pixel_window_n0016.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\pixel_window_n0032.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\pixel_window_n0064.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\pixel_window_n0128.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\pixel_window_n0256.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\pixel_window_n0512.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\pixel_window_n1024.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\pixel_window_n2048.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\pixel_window_n4096.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\pixel_window_n8192.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\weight_ring_n00002.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\weight_ring_n00004.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\weight_ring_n00008.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\weight_ring_n00016.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\weight_ring_n00032.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\weight_ring_n00064.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\weight_ring_n00128.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\weight_ring_n00256.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\weight_ring_n00512.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\weight_ring_n01024.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\weight_ring_n02048.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\weight_ring_n04096.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\weight_ring_n08192.fits -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\planck_cmap.dat -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\planck_log_cmap.dat -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\wmap_cmap.dat -> build\lib.win-amd64-cpython-313\healpy\data
+  copying lib\healpy\data\totcls.dat -> build\lib.win-amd64-cpython-313\healpy\data
+  running build_clib
+  checking if library 'cfitsio' is installed
+  Traceback (most recent call last):
+    File "C:\Users\VATSAL VARSHNEY\PycharmProjects\V.A.T.S.A.L.23242\.venv\Lib\site-packages\pip\_vendor\pyproject_hooks\_in_process\_in_process.py", line 389, in <module>
+      main()
+      ~~~~^^
+    File "C:\Users\VATSAL VARSHNEY\PycharmProjects\V.A.T.S.A.L.23242\.venv\Lib\site-packages\pip\_vendor\pyproject_hooks\_in_process\_in_process.py", line 373, in main
+      json_out["return_val"] = hook(**hook_input["kwargs"])
+                               ~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\VATSAL VARSHNEY\PycharmProjects\V.A.T.S.A.L.23242\.venv\Lib\site-packages\pip\_vendor\pyproject_hooks\_in_process\_in_process.py", line 280, in build_wheel
+      return _build_backend().build_wheel(
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+          wheel_directory, config_settings, metadata_directory
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      )
+      ^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\build_meta.py", line 435, in build_wheel
+      return _build(['bdist_wheel', '--dist-info-dir', str(metadata_directory)])
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\build_meta.py", line 423, in _build
+      return self._build_with_temp_dir(
+             ~~~~~~~~~~~~~~~~~~~~~~~~~^
+          cmd,
+          ^^^^
+      ...<3 lines>...
+          self._arbitrary_args(config_settings),
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      )
+      ^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\build_meta.py", line 404, in _build_with_temp_dir
+      self.run_setup()
+      ~~~~~~~~~~~~~~^^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\build_meta.py", line 317, in run_setup
+      exec(code, locals())
+      ~~~~^^^^^^^^^^^^^^^^
+    File "<string>", line 304, in <module>
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\__init__.py", line 115, in setup
+      return distutils.core.setup(**attrs)
+             ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\_distutils\core.py", line 186, in setup
+      return run_commands(dist)
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\_distutils\core.py", line 202, in run_commands
+      dist.run_commands()
+      ~~~~~~~~~~~~~~~~~^^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\_distutils\dist.py", line 1002, in run_commands
+      self.run_command(cmd)
+      ~~~~~~~~~~~~~~~~^^^^^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\dist.py", line 1102, in run_command
+      super().run_command(command)
+      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\_distutils\dist.py", line 1021, in run_command
+      cmd_obj.run()
+      ~~~~~~~~~~~^^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\command\bdist_wheel.py", line 370, in run
+      self.run_command("build")
+      ~~~~~~~~~~~~~~~~^^^^^^^^^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\_distutils\cmd.py", line 357, in run_command
+      self.distribution.run_command(command)
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\dist.py", line 1102, in run_command
+      super().run_command(command)
+      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\_distutils\dist.py", line 1021, in run_command
+      cmd_obj.run()
+      ~~~~~~~~~~~^^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\_distutils\command\build.py", line 135, in run
+      self.run_command(cmd_name)
+      ~~~~~~~~~~~~~~~~^^^^^^^^^^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\_distutils\cmd.py", line 357, in run_command
+      self.distribution.run_command(command)
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\dist.py", line 1102, in run_command
+      super().run_command(command)
+      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\_distutils\dist.py", line 1021, in run_command
+      cmd_obj.run()
+      ~~~~~~~~~~~^^
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Temp\pip-build-env-pllzdp3g\overlay\Lib\site-packages\setuptools\_distutils\command\build_clib.py", line 106, in run
+      self.build_libraries(self.libraries)
+      ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+    File "<string>", line 256, in build_libraries
+    File "<string>", line 126, in build_library
+    File "<string>", line 78, in pkgconfig
+    File "C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python313\Lib\shlex.py", line 308, in split
+      raise ValueError("s argument must not be None")
+  ValueError: s argument must not be None
+  [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+  ERROR: Failed building wheel for healpy
+error: failed-wheel-build-for-install
+
+Failed to build installable wheels for some pyproject.toml based projects
+
+healpy
+
+Process finished with exit code 1
