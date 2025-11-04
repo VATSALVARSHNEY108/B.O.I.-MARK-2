@@ -6,6 +6,14 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 **NEW:** Now includes an Intelligent AI Assistant (integrated in `modules/ai_features/chatbots.py`) - a Streamlit-based web interface that instantly understands user intent and generates appropriate responses (code, stories, explanations, letters, etc.) with no unnecessary commentary.
 
 ## Recent Changes
+**November 4, 2025 - Windows Batch Files for Volume & Brightness**:
+- **🪟 Windows Batch File Controls**: Created comprehensive Windows batch files for easy volume and brightness control using `nircmd.exe`:
+  - `windows_volume_brightness_control.bat` - Interactive menu with preset levels, custom input, and toggle options
+  - `quick_volume_control.bat` - Command-line volume control (set, up, down, mute, get)
+  - `quick_brightness_control.bat` - Command-line brightness control
+  - `WINDOWS_BATCH_FILES_README.md` - Complete documentation with usage examples and troubleshooting
+- **✅ Linux Volume Control Verified**: Confirmed working volume control on Linux using `pactl` commands for PulseAudio
+
 **November 2, 2025 - Enhanced Black & White GUI**:
 - **⚫⚪ Enhanced Black & White GUI** (`modules/core/enhanced_gui.py`): Completely redesigned GUI with pure black backgrounds (#000000), crisp white borders (2px) on every element, and command prompt bar at bottom. Features include neon green/cyan/pink accents, terminal-style prompt (>>> with Consolas font), real-time command execution, dashboard with stats, sidebar navigation, 6 major views, and professional high-contrast appearance. Launch with `python launch_enhanced_gui.py`.
 - **⚡ Command Prompt Bar**: NEW terminal-style command bar at bottom with green >>> prompt, direct command execution, real-time status updates, and Enter key support.
@@ -48,7 +56,7 @@ Both GUIs are built with `tkinter` and support VATSAL Mode, Self-Operating Mode,
 - **Desktop RAG System:** Indexes desktop files for semantic search and Q&A (`desktop_rag.py`).
 - **Smart Automation & AI:** Provides 9 AI-powered features (e.g., Auto-Bug Fixer, Meeting Scheduler AI) (`smart_automation.py`).
 - **Visual Chat Monitor:** AI-powered visual email/WhatsApp monitoring via real browser interface control (`visual_chat_monitor.py`).
-- **System Control:** Manages system-level automation including lock screen, shutdown, restart, brightness, volume, and disk cleanup (`system_control.py`).
+- **System Control:** Manages system-level automation including lock screen, shutdown, restart, brightness, volume, and disk cleanup (`system_control.py`). Cross-platform support for Windows, macOS, and Linux. Windows users can also use standalone batch files for quick volume/brightness control.
 - **Voice Assistant:** An ultra-intelligent, interactive voice commanding system with advanced AI capabilities, supporting multiple wake words, NLU, context awareness, and entity extraction (`voice_assistant.py`).
 - **Self-Operating Computer:** Autonomous AI desktop control using Gemini Vision (Gemini 2.0 Flash Exp) for screen analysis and autonomous actions, with improved decision making, OCR, and error recovery (`self_operating_computer.py`).
 - **Real-Time WebSocket System:** A Flask-SocketIO based server (`websocket_server.py`) provides a live dashboard (`templates/dashboard.html`) for real-time monitoring of system stats and command execution, supporting multi-client connections and remote access.
