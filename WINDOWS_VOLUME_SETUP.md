@@ -5,26 +5,11 @@ You're seeing: `'nircmd.exe' is not recognized as an internal or external comman
 
 This means Windows volume control needs additional setup.
 
-## ✅ SOLUTION - Choose One Method:
+## ✅ SOLUTION - Use nircmd.exe (Recommended):
 
-### Method 1: Install pycaw (Recommended - No external files needed)
+### Method 1: Download nircmd.exe (Easiest - 2 minutes)
 
-Run this in PowerShell:
-```powershell
-pip install pycaw comtypes
-```
-
-**Benefits:**
-- ✅ No external files needed
-- ✅ Native Windows API
-- ✅ Most reliable
-- ✅ Works permanently
-
-After installation, the volume commands will work automatically!
-
----
-
-### Method 2: Download nircmd.exe (Alternative)
+**Steps:**
 
 1. Download from: https://www.nirsoft.net/utils/nircmd.html
 2. Extract `nircmd.exe` from the zip file
@@ -49,17 +34,14 @@ quick_volume_control.bat set 80
 
 ---
 
-## 🎯 Quick Install Command
+## 🎯 Quick Summary
 
-**Just run this in your PowerShell:**
-```powershell
-pip install pycaw comtypes
-```
+**Just follow these 3 steps:**
+1. Download from https://www.nirsoft.net/utils/nircmd.html
+2. Copy `nircmd.exe` to `C:\Windows\System32\`
+3. Test: `python scripts/volume_brightness_controller.py volume set 50`
 
-Then test again:
-```powershell
-python scripts/volume_brightness_controller.py volume set 50
-```
+**Done!** ✅
 
 ---
 
