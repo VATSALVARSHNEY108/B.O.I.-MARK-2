@@ -11,16 +11,29 @@ def main():
     
     if len(sys.argv) < 2:
         print("\n🎮 QUICK SYSTEM COMMANDS")
-        print("=" * 50)
-        print("Usage: python quick_system_commands.py <command>")
-        print("\nAvailable commands:")
-        print("  lock         - Lock screen")
-        print("  shutdown     - Shutdown computer (10 sec delay)")
-        print("  shutdown-now - Shutdown immediately")
-        print("  restart      - Restart computer (10 sec delay)")
-        print("  restart-now  - Restart immediately")
-        print("  cancel       - Cancel shutdown/restart")
-        print("\nExample: python quick_system_commands.py lock")
+        print("=" * 60)
+        print("Usage: python quick_system_commands.py <command> [value]")
+        print("\nSystem Control:")
+        print("  lock           - Lock screen")
+        print("  shutdown       - Shutdown computer (10 sec delay)")
+        print("  shutdown-now   - Shutdown immediately")
+        print("  restart        - Restart computer (10 sec delay)")
+        print("  restart-now    - Restart immediately")
+        print("  cancel         - Cancel shutdown/restart")
+        print("\nVolume Control:")
+        print("  vol-set <0-100>    - Set volume to specific level")
+        print("  vol-up [amount]    - Increase volume (default 10)")
+        print("  vol-down [amount]  - Decrease volume (default 10)")
+        print("  vol-mute           - Toggle mute")
+        print("  vol-get            - Get current volume")
+        print("  vol-menu           - Open interactive menu (Windows)")
+        print("\nBrightness Control:")
+        print("  bright-set <0-100> - Set brightness to specific level")
+        print("\nExamples:")
+        print("  python quick_system_commands.py lock")
+        print("  python quick_system_commands.py vol-set 80")
+        print("  python quick_system_commands.py vol-up 5")
+        print("  python quick_system_commands.py bright-set 75")
         return
     
     command = sys.argv[1].lower()
@@ -42,6 +55,39 @@ def main():
     
     elif command == "cancel":
         print(controller.cancel_shutdown_restart())
+    
+    # Volume commands
+    elif command == "vol-set":
+        if len(sys.argv) < 3:
+            print("❌ Please specify volume level (0-100)")
+        else:
+            level = int(sys.argv[2])
+            print(controller.set_volume(level))
+    
+    elif command == "vol-up":
+        amount = int(sys.argv[2]) if len(sys.argv) > 2 else 10
+        print(controller.increase_volume(amount))
+    
+    elif command == "vol-down":
+        amount = int(sys.argv[2]) if len(sys.argv) > 2 else 10
+        print(controller.decrease_volume(amount))
+    
+    elif command == "vol-mute":
+        print(controller.toggle_mute())
+    
+    elif command == "vol-get":
+        print(controller.get_volume_info())
+    
+    elif command == "vol-menu":
+        print(controller.open_volume_brightness_menu())
+    
+    # Brightness commands
+    elif command == "bright-set":
+        if len(sys.argv) < 3:
+            print("❌ Please specify brightness level (0-100)")
+        else:
+            level = int(sys.argv[2])
+            print(controller.set_brightness(level))
     
     else:
         print(f"❌ Unknown command: {command}")

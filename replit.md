@@ -6,12 +6,18 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 **NEW:** Now includes an Intelligent AI Assistant (integrated in `modules/ai_features/chatbots.py`) - a Streamlit-based web interface that instantly understands user intent and generates appropriate responses (code, stories, explanations, letters, etc.) with no unnecessary commentary.
 
 ## Recent Changes
-**November 4, 2025 - Windows Batch Files for Volume & Brightness**:
+**November 4, 2025 - Volume & Brightness Control Upgrades**:
 - **🪟 Windows Batch File Controls** (`scripts/windows_controls/`): Created comprehensive Windows batch files for easy volume and brightness control using `nircmd.exe`:
   - `windows_volume_brightness_control.bat` - Interactive menu with preset levels, custom input, and toggle options
   - `quick_volume_control.bat` - Command-line volume control (set, up, down, mute, get)
   - `quick_brightness_control.bat` - Command-line brightness control
   - `WINDOWS_BATCH_FILES_README.md` - Complete documentation with usage examples and troubleshooting
+- **🔧 System Control Module Upgrades** (`modules/system/system_control.py`): Added batch file integration methods:
+  - `use_batch_volume_control()` - Alternative Windows volume control via batch files
+  - `use_batch_brightness_control()` - Alternative Windows brightness control via batch files
+  - `open_volume_brightness_menu()` - Opens interactive Windows control menu
+- **🎛️ New Python Controller** (`scripts/volume_brightness_controller.py`): Cross-platform standalone script for volume and brightness control with user-friendly CLI interface
+- **⚡ Enhanced Quick Commands** (`modules/system/quick_system_commands.py`): Added volume and brightness commands (vol-set, vol-up, vol-down, vol-mute, vol-get, bright-set)
 - **✅ Linux Volume Control Verified**: Confirmed working volume control on Linux using `pactl` commands for PulseAudio
 
 **November 2, 2025 - Enhanced Black & White GUI**:

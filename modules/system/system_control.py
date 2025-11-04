@@ -16,6 +16,7 @@ class SystemController:
         self.os = platform.system()
         self.config_file = "system_config.json"
         self.shutdown_process = None
+        self.batch_files_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "scripts", "windows_controls")
         self.load_config()
     
     def load_config(self):
@@ -402,7 +403,7 @@ class SystemController:
                     import winshell
                     winshell.recycle_bin().empty(confirm=False, show_progress=False, sound=False)
                     return "✅ Recycle bin emptied"
-                except ImportError:
+                except (ImportError, Exception):
                     subprocess.run("rd /s /q %temp%", shell=True, check=False)
                     return "✅ Temp cleaned (winshell not available)"
             elif self.os == "Darwin":
@@ -618,6 +619,90 @@ class SystemController:
                     return "✅ Attempted to cancel shutdown/restart"
         except Exception as e:
             return f"❌ Failed to cancel: {str(e)}"
+    
+    # ==================== BATCH FILE INTEGRATION ====================
+    
+    def use_batch_volume_control(self, command, value=None):
+        """
+        Use Windows batch file for volume control (alternative method)
+        Args:
+            command: 'set', 'up', 'down', 'mute', or 'get'
+            value: Volume level or amount (optional for some commands)
+        """
+        if self.os != "Windows":
+            return "ℹ️ Batch file control is only available on Windows"
+        
+        try:
+            batch_file = os.path.join(self.batch_files_dir, "quick_volume_control.bat")
+            
+            if not os.path.exists(batch_file):
+                return f"❌ Batch file not found: {batch_file}\nPlease ensure scripts/windows_controls/ folder exists."
+            
+            if command == "get":
+                result = subprocess.run(
+                    [batch_file, command],
+                    capture_output=True,
+                    text=True,
+                    check=False
+                )
+                return result.stdout.strip() if result.stdout else "ℹ️ Unable to get volume"
+            
+            elif command in ["set", "up", "down"]:
+                if value is None:
+                    value = 10 if command in ["up", "down"] else 50
+                subprocess.run([batch_file, command, str(value)], check=False)
+                return f"🔊 Volume {command} to {value}%" if command == "set" else f"🔊 Volume {command} by {value}%"
+            
+            elif command == "mute":
+                subprocess.run([batch_file, command], check=False)
+                return "🔇 Volume toggled"
+            
+            else:
+                return f"❌ Unknown command: {command}"
+                
+        except Exception as e:
+            return f"❌ Batch file error: {str(e)}"
+    
+    def use_batch_brightness_control(self, level):
+        """
+        Use Windows batch file for brightness control (alternative method)
+        Args:
+            level: Brightness level (0-100)
+        """
+        if self.os != "Windows":
+            return "ℹ️ Batch file control is only available on Windows"
+        
+        try:
+            batch_file = os.path.join(self.batch_files_dir, "quick_brightness_control.bat")
+            
+            if not os.path.exists(batch_file):
+                return f"❌ Batch file not found: {batch_file}\nPlease ensure scripts/windows_controls/ folder exists."
+            
+            level = max(0, min(100, int(level)))
+            subprocess.run([batch_file, str(level)], check=False)
+            return f"🔆 Brightness set to {level}% (via batch file)"
+            
+        except Exception as e:
+            return f"❌ Batch file error: {str(e)}"
+    
+    def open_volume_brightness_menu(self):
+        """
+        Open the interactive Windows volume & brightness control menu
+        """
+        if self.os != "Windows":
+            return "ℹ️ Interactive menu is only available on Windows"
+        
+        try:
+            batch_file = os.path.join(self.batch_files_dir, "windows_volume_brightness_control.bat")
+            
+            if not os.path.exists(batch_file):
+                return f"❌ Batch file not found: {batch_file}\nPlease ensure scripts/windows_controls/ folder exists."
+            
+            subprocess.Popen([batch_file], shell=True)
+            return "🎛️ Opening Windows Volume & Brightness Control Menu..."
+            
+        except Exception as e:
+            return f"❌ Failed to open menu: {str(e)}"
 
 if __name__ == "__main__":
     controller = SystemController()

@@ -1,0 +1,44 @@
+╔════════════════════════════════════════════════════════════════════╗
+║          WINDOWS VOLUME & BRIGHTNESS CONTROL - QUICK START         ║
+╚════════════════════════════════════════════════════════════════════╝
+
+📥 SETUP (Required for first-time use):
+   1. Download nircmd.exe from: https://www.nirsoft.net/utils/nircmd.html
+   2. Extract nircmd.exe from the zip file
+   3. Place nircmd.exe in THIS folder (scripts/windows_controls/)
+
+🎛️  INTERACTIVE MENU:
+   - Double-click: windows_volume_brightness_control.bat
+   - User-friendly menu with all options
+
+⚡ QUICK COMMANDS:
+
+   Volume:
+   -------
+   quick_volume_control.bat set 80       → Set volume to 80%
+   quick_volume_control.bat up 5         → Increase by 5%
+   quick_volume_control.bat down 10      → Decrease by 10%
+   quick_volume_control.bat mute         → Toggle mute
+   quick_volume_control.bat get          → Show current volume
+
+   Brightness:
+   -----------
+   quick_brightness_control.bat 50       → Set brightness to 50%
+   quick_brightness_control.bat 100      → Set brightness to 100%
+
+🐍 PYTHON ALTERNATIVE (Cross-platform):
+   From project root:
+   python scripts/volume_brightness_controller.py volume set 80
+   python scripts/volume_brightness_controller.py brightness set 50
+
+💡 TIPS:
+   • Create desktop shortcuts for quick access
+   • Set keyboard shortcuts (Right-click shortcut → Properties → Shortcut key)
+   • Use in Task Scheduler for automated control
+
+❓ TROUBLESHOOTING:
+   • "nircmd.exe not found" → Download and place in this folder
+   • Permission errors → Run as Administrator
+   • Brightness not working → Use laptop function keys instead
+
+📚 Full documentation: See WINDOWS_BATCH_FILES_README.md

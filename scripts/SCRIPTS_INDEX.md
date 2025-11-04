@@ -16,12 +16,21 @@ This directory contains various utility scripts for the AI Desktop Automation Co
 ## 🔧 Standalone Scripts
 
 ### Python Scripts
+
+#### System Control
+- `volume_brightness_controller.py` ⭐ **NEW** - Cross-platform volume & brightness control
+  - Usage: `python volume_brightness_controller.py volume set 80`
+  - Features: volume control, brightness control, interactive menu (Windows)
+
+#### Voice & Audio
 - `check_voices.py` - Check available text-to-speech voices
 - `create_wav_files.py` - Create WAV audio files
-- `debug_lock_command.py` - Debug screen lock functionality
 - `hear_modi_voice.py` - Test Modi voice settings
-- `organize_project.py` - Project organization utility
 - `set_kid_voice.py` - Configure kid voice settings
+
+#### Utilities
+- `debug_lock_command.py` - Debug screen lock functionality
+- `organize_project.py` - Project organization utility
 
 ### Windows Batch Files
 - `desktop_file_controller.bat` - Control desktop files
@@ -44,6 +53,27 @@ This directory contains various utility scripts for the AI Desktop Automation Co
 cd scripts
 python script_name.py
 ```
+
+### Volume & Brightness Control
+**Cross-platform Python control:**
+```bash
+# Set volume to 80%
+python scripts/volume_brightness_controller.py volume set 80
+
+# Increase volume by 5%
+python scripts/volume_brightness_controller.py volume up 5
+
+# Set brightness to 50%
+python scripts/volume_brightness_controller.py brightness set 50
+
+# Open interactive menu (Windows only)
+python scripts/volume_brightness_controller.py volume menu
+```
+
+**Windows batch file control:**
+- Navigate to `scripts/windows_controls/`
+- Double-click `windows_volume_brightness_control.bat` for interactive menu
+- Or use command-line: `quick_volume_control.bat set 80`
 
 ## 📖 Documentation
 For detailed information about specific scripts, refer to the README files in their respective directories.
