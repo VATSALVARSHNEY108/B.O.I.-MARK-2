@@ -10,6 +10,8 @@ import shutil
 import time
 from datetime import datetime, timedelta
 import json
+import psutil
+import threading
 
 class SystemController:
     def __init__(self):
@@ -348,7 +350,15 @@ class SystemController:
             return f"❌ Failed to get volume info: {str(e)}"
     
     def schedule_sleep(self, time_str="23:00"):
-        """Schedule PC to sleep at specific time"""
+        """
+        Schedule PC to enter sleep mode at specific time (NOT shutdown)
+        
+        LIMITATIONS:
+        - Cannot be cancelled once scheduled
+        - Avoid scheduling multiple sleep times
+        - For critical scheduling, use OS task scheduler instead
+        - Basic timer-based sleep for convenience
+        """
         try:
             hours, minutes = map(int, time_str.split(':'))
             now = datetime.now()
@@ -359,29 +369,42 @@ class SystemController:
             
             seconds_until_sleep = (sleep_time - now).total_seconds()
             
-            if self.os == "Windows":
-                subprocess.Popen(f'shutdown /s /t {int(seconds_until_sleep)}', shell=True)
-                return f"✅ Sleep scheduled for {time_str}"
-            elif self.os == "Darwin":
-                subprocess.Popen(f'sudo shutdown -s +{int(seconds_until_sleep/60)}', shell=True)
-                return f"✅ Sleep scheduled for {time_str}"
-            elif self.os == "Linux":
-                subprocess.Popen(f'sudo shutdown -h +{int(seconds_until_sleep/60)}', shell=True)
-                return f"✅ Sleep scheduled for {time_str}"
+            def execute_sleep():
+                """Execute sleep mode after delay"""
+                try:
+                    time.sleep(seconds_until_sleep)
+                    result = self.sleep_mode()
+                    self._show_notification(
+                        "💤 VATSAL Sleep Mode",
+                        f"Entering sleep mode as scheduled at {time_str}"
+                    )
+                    print(f"[SCHEDULED SLEEP] {result}")
+                except Exception as e:
+                    error_msg = f"Scheduled sleep failed: {str(e)}"
+                    self._show_notification("❌ Sleep Error", error_msg)
+                    print(f"[ERROR] {error_msg}")
+            
+            threading.Thread(target=execute_sleep, daemon=True).start()
+            return f"😴 Sleep mode scheduled for {time_str} ({sleep_time.strftime('%Y-%m-%d %H:%M')})\n⚠️  System will SLEEP (not shutdown) at scheduled time\nℹ️  Cannot be cancelled once set"
         except Exception as e:
             return f"❌ Failed to schedule sleep: {str(e)}"
     
     def cancel_sleep(self):
-        """Cancel scheduled sleep"""
+        """
+        Cancel scheduled sleep
+        
+        Note: This only works for shutdown-based scheduling.
+        Timer-based sleep schedules cannot be cancelled once started.
+        """
         try:
             if self.os == "Windows":
                 subprocess.run("shutdown /a", shell=True, check=False)
-                return "✅ Sleep cancelled"
+                return "✅ Shutdown/restart cancelled (if any were scheduled)\nℹ️  Note: Timer-based sleep schedules cannot be cancelled"
             elif self.os in ["Darwin", "Linux"]:
                 subprocess.run("sudo shutdown -c", shell=True, check=False)
-                return "✅ Sleep cancelled"
+                return "✅ Shutdown/restart cancelled (if any were scheduled)\nℹ️  Note: Timer-based sleep schedules cannot be cancelled"
         except Exception as e:
-            return f"❌ Failed to cancel sleep: {str(e)}"
+            return f"❌ Failed to cancel: {str(e)}"
     
     def schedule_wake(self, time_str="07:00"):
         """Schedule PC to wake at specific time (Windows only)"""
@@ -746,6 +769,488 @@ class SystemController:
             
         except Exception as e:
             return f"❌ Failed to open menu: {str(e)}"
+    
+    # ==================== SYSTEM INFORMATION ====================
+    
+    def get_cpu_usage(self):
+        """Get current CPU usage percentage"""
+        try:
+            cpu_percent = psutil.cpu_percent(interval=1)
+            cpu_count = psutil.cpu_count()
+            return f"💻 CPU Usage: {cpu_percent}%\n📊 CPU Cores: {cpu_count}"
+        except Exception as e:
+            return f"❌ Failed to get CPU usage: {str(e)}"
+    
+    def get_ram_usage(self):
+        """Get current RAM usage"""
+        try:
+            ram = psutil.virtual_memory()
+            total_gb = ram.total / (1024**3)
+            used_gb = ram.used / (1024**3)
+            available_gb = ram.available / (1024**3)
+            percent = ram.percent
+            
+            return f"🧠 RAM Usage: {percent}%\n📊 Used: {used_gb:.2f} GB / {total_gb:.2f} GB\n✅ Available: {available_gb:.2f} GB"
+        except Exception as e:
+            return f"❌ Failed to get RAM usage: {str(e)}"
+    
+    def get_battery_status(self):
+        """Get battery status and percentage"""
+        try:
+            battery = psutil.sensors_battery()
+            if battery is None:
+                return "🔌 No battery detected (Desktop PC or battery info unavailable)"
+            
+            percent = battery.percent
+            plugged = battery.power_plugged
+            time_left = battery.secsleft
+            
+            status = "🔌 Charging" if plugged else "🔋 On Battery"
+            
+            if time_left == -1:
+                time_str = "Calculating..."
+            elif time_left == -2:
+                time_str = "Unlimited (Plugged in)"
+            else:
+                hours = time_left // 3600
+                minutes = (time_left % 3600) // 60
+                time_str = f"{hours}h {minutes}m remaining"
+            
+            return f"{status}\n🔋 Battery: {percent}%\n⏱️ {time_str}"
+        except Exception as e:
+            return f"❌ Failed to get battery status: {str(e)}"
+    
+    def get_system_uptime(self):
+        """Get system uptime"""
+        try:
+            boot_time = datetime.fromtimestamp(psutil.boot_time())
+            uptime = datetime.now() - boot_time
+            
+            days = uptime.days
+            hours = uptime.seconds // 3600
+            minutes = (uptime.seconds % 3600) // 60
+            
+            return f"⏱️ System Uptime: {days} days, {hours} hours, {minutes} minutes\n🔄 Boot Time: {boot_time.strftime('%Y-%m-%d %H:%M:%S')}"
+        except Exception as e:
+            return f"❌ Failed to get uptime: {str(e)}"
+    
+    def get_network_status(self):
+        """Get network connection status and IP address"""
+        try:
+            import socket
+            
+            hostname = socket.gethostname()
+            local_ip = socket.gethostbyname(hostname)
+            
+            net_info = psutil.net_if_stats()
+            active_connections = []
+            
+            for interface, stats in net_info.items():
+                if stats.isup:
+                    active_connections.append(interface)
+            
+            return f"🌐 Hostname: {hostname}\n📡 Local IP: {local_ip}\n✅ Active Interfaces: {', '.join(active_connections[:3])}"
+        except Exception as e:
+            return f"❌ Failed to get network status: {str(e)}"
+    
+    def get_disk_usage(self):
+        """Get disk usage for all drives"""
+        try:
+            partitions = psutil.disk_partitions()
+            result = "💾 Disk Usage:\n"
+            
+            for partition in partitions:
+                try:
+                    usage = psutil.disk_usage(partition.mountpoint)
+                    total_gb = usage.total / (1024**3)
+                    used_gb = usage.used / (1024**3)
+                    free_gb = usage.free / (1024**3)
+                    percent = usage.percent
+                    
+                    result += f"\n📁 {partition.device} ({partition.mountpoint})\n"
+                    result += f"   Used: {used_gb:.1f} GB / {total_gb:.1f} GB ({percent}%)\n"
+                    result += f"   Free: {free_gb:.1f} GB\n"
+                except:
+                    continue
+            
+            return result
+        except Exception as e:
+            return f"❌ Failed to get disk usage: {str(e)}"
+    
+    def get_system_info(self):
+        """Get comprehensive system information"""
+        try:
+            system = platform.system()
+            release = platform.release()
+            version = platform.version()
+            machine = platform.machine()
+            processor = platform.processor()
+            
+            info = f"🖥️ System Information\n"
+            info += f"━━━━━━━━━━━━━━━━━━━━━━\n"
+            info += f"OS: {system} {release}\n"
+            info += f"Version: {version}\n"
+            info += f"Architecture: {machine}\n"
+            info += f"Processor: {processor}\n"
+            info += f"\n{self.get_cpu_usage()}\n"
+            info += f"\n{self.get_ram_usage()}\n"
+            
+            return info
+        except Exception as e:
+            return f"❌ Failed to get system info: {str(e)}"
+    
+    # ==================== CLIPBOARD MANAGEMENT ====================
+    
+    def copy_to_clipboard(self, text):
+        """Copy text to clipboard"""
+        try:
+            import pyperclip
+            pyperclip.copy(text)
+            return f"✅ Copied to clipboard: {text[:50]}..." if len(text) > 50 else f"✅ Copied to clipboard: {text}"
+        except Exception as e:
+            return f"❌ Failed to copy to clipboard: {str(e)}"
+    
+    def get_clipboard(self):
+        """Get current clipboard content"""
+        try:
+            import pyperclip
+            content = pyperclip.paste()
+            if not content:
+                return "📋 Clipboard is empty"
+            return f"📋 Clipboard content:\n{content}"
+        except Exception as e:
+            return f"❌ Failed to get clipboard: {str(e)}"
+    
+    def clear_clipboard(self):
+        """Clear clipboard content"""
+        try:
+            import pyperclip
+            pyperclip.copy('')
+            return "✅ Clipboard cleared"
+        except Exception as e:
+            return f"❌ Failed to clear clipboard: {str(e)}"
+    
+    # ==================== POWER MANAGEMENT ====================
+    
+    def sleep_mode(self):
+        """Put system to sleep"""
+        try:
+            if self.os == "Windows":
+                subprocess.run("rundll32.exe powrprof.dll,SetSuspendState 0,1,0", shell=True, check=False)
+                return "😴 Putting system to sleep..."
+            elif self.os == "Darwin":
+                subprocess.run(["pmset", "sleepnow"], check=False)
+                return "😴 Putting system to sleep..."
+            elif self.os == "Linux":
+                subprocess.run(["systemctl", "suspend"], check=False)
+                return "😴 Putting system to sleep..."
+        except Exception as e:
+            return f"❌ Failed to sleep: {str(e)}"
+    
+    def hibernate(self):
+        """Hibernate the system"""
+        try:
+            if self.os == "Windows":
+                subprocess.run("shutdown /h", shell=True, check=False)
+                return "💤 Hibernating system..."
+            elif self.os == "Darwin":
+                subprocess.run(["pmset", "hibernatemode", "25"], check=False)
+                subprocess.run(["pmset", "sleepnow"], check=False)
+                return "💤 Hibernating system..."
+            elif self.os == "Linux":
+                subprocess.run(["systemctl", "hibernate"], check=False)
+                return "💤 Hibernating system..."
+        except Exception as e:
+            return f"❌ Failed to hibernate: {str(e)}"
+    
+    # ==================== WINDOW MANAGEMENT ====================
+    
+    def minimize_all_windows(self):
+        """Minimize all windows (show desktop)"""
+        try:
+            if self.os == "Windows":
+                import pyautogui
+                pyautogui.hotkey('win', 'd')
+                return "🪟 All windows minimized (Desktop shown)"
+            elif self.os == "Darwin":
+                subprocess.run(["osascript", "-e", 'tell application "System Events" to key code 103 using {command down}'], check=False)
+                return "🪟 All windows minimized"
+            elif self.os == "Linux":
+                subprocess.run(["wmctrl", "-k", "on"], check=False)
+                return "🪟 All windows minimized"
+        except Exception as e:
+            return f"❌ Failed to minimize windows: {str(e)}"
+    
+    def show_desktop(self):
+        """Show desktop"""
+        return self.minimize_all_windows()
+    
+    def list_open_windows(self):
+        """List all open windows"""
+        try:
+            if self.os == "Windows":
+                import win32gui
+                windows = []
+                
+                def callback(hwnd, windows):
+                    if win32gui.IsWindowVisible(hwnd):
+                        title = win32gui.GetWindowText(hwnd)
+                        if title:
+                            windows.append(title)
+                
+                win32gui.EnumWindows(callback, windows)
+                
+                if windows:
+                    return "🪟 Open Windows:\n" + "\n".join([f"  • {w}" for w in windows[:15]])
+                else:
+                    return "ℹ️ No visible windows found"
+            else:
+                return "ℹ️ Window listing only available on Windows"
+        except Exception as e:
+            return f"❌ Failed to list windows: {str(e)}"
+    
+    # ==================== PROCESS MANAGEMENT ====================
+    
+    def list_running_processes(self, limit=10):
+        """List top running processes by CPU usage"""
+        try:
+            processes = []
+            for proc in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_percent']):
+                try:
+                    processes.append(proc.info)
+                except:
+                    pass
+            
+            processes.sort(key=lambda x: x['cpu_percent'], reverse=True)
+            
+            result = f"⚙️ Top {limit} Processes (by CPU usage):\n"
+            for i, proc in enumerate(processes[:limit], 1):
+                result += f"{i}. {proc['name']} (PID: {proc['pid']})\n"
+                result += f"   CPU: {proc['cpu_percent']}% | RAM: {proc['memory_percent']:.1f}%\n"
+            
+            return result
+        except Exception as e:
+            return f"❌ Failed to list processes: {str(e)}"
+    
+    def kill_process(self, process_name):
+        """
+        Kill a process by name
+        
+        WARNING: This forcefully terminates processes. Be careful with system processes!
+        Killing critical system processes can cause system instability.
+        
+        Safe to kill: chrome, firefox, notepad, calculator, etc.
+        DO NOT kill: explorer, System, csrss, winlogon, services, etc.
+        """
+        try:
+            critical_processes = [
+                'system', 'csrss', 'winlogon', 'services', 'lsass', 'smss',
+                'explorer', 'svchost', 'dwm', 'systemd', 'init', 'kernel'
+            ]
+            
+            if process_name.lower() in critical_processes:
+                return f"🚫 Cannot kill '{process_name}' - This is a critical system process!\nKilling it may crash your system."
+            
+            killed = []
+            for proc in psutil.process_iter(['pid', 'name']):
+                if process_name.lower() in proc.info['name'].lower():
+                    try:
+                        proc.terminate()  # Try graceful termination first
+                        proc.wait(timeout=3)
+                        killed.append(f"{proc.info['name']} (PID: {proc.info['pid']})")
+                    except psutil.TimeoutExpired:
+                        proc.kill()  # Force kill if graceful fails
+                        killed.append(f"{proc.info['name']} (PID: {proc.info['pid']}) - Force killed")
+                    except psutil.AccessDenied:
+                        return f"🚫 Access denied: '{proc.info['name']}' requires administrator privileges"
+            
+            if killed:
+                return f"✅ Terminated processes:\n" + "\n".join([f"  • {p}" for p in killed])
+            else:
+                return f"⚠️ No process found matching '{process_name}'"
+        except Exception as e:
+            return f"❌ Failed to terminate process: {str(e)}"
+    
+    # ==================== QUICK APP LAUNCHERS ====================
+    
+    def open_calculator(self):
+        """Open calculator application"""
+        try:
+            if self.os == "Windows":
+                subprocess.Popen("calc.exe")
+                return "🧮 Opening Calculator..."
+            elif self.os == "Darwin":
+                subprocess.Popen(["open", "-a", "Calculator"])
+                return "🧮 Opening Calculator..."
+            elif self.os == "Linux":
+                subprocess.Popen(["gnome-calculator"])
+                return "🧮 Opening Calculator..."
+        except Exception as e:
+            return f"❌ Failed to open calculator: {str(e)}"
+    
+    def open_notepad(self):
+        """Open notepad/text editor"""
+        try:
+            if self.os == "Windows":
+                subprocess.Popen("notepad.exe")
+                return "📝 Opening Notepad..."
+            elif self.os == "Darwin":
+                subprocess.Popen(["open", "-a", "TextEdit"])
+                return "📝 Opening TextEdit..."
+            elif self.os == "Linux":
+                subprocess.Popen(["gedit"])
+                return "📝 Opening Text Editor..."
+        except Exception as e:
+            return f"❌ Failed to open notepad: {str(e)}"
+    
+    def open_task_manager(self):
+        """Open task manager"""
+        try:
+            if self.os == "Windows":
+                subprocess.Popen("taskmgr.exe")
+                return "📊 Opening Task Manager..."
+            elif self.os == "Darwin":
+                subprocess.Popen(["open", "-a", "Activity Monitor"])
+                return "📊 Opening Activity Monitor..."
+            elif self.os == "Linux":
+                subprocess.Popen(["gnome-system-monitor"])
+                return "📊 Opening System Monitor..."
+        except Exception as e:
+            return f"❌ Failed to open task manager: {str(e)}"
+    
+    def open_file_explorer(self, path=None):
+        """Open file explorer at specified path"""
+        try:
+            if self.os == "Windows":
+                if path:
+                    subprocess.Popen(f'explorer "{path}"')
+                else:
+                    subprocess.Popen("explorer")
+                return f"📂 Opening File Explorer{' at ' + path if path else ''}..."
+            elif self.os == "Darwin":
+                if path:
+                    subprocess.Popen(["open", path])
+                else:
+                    subprocess.Popen(["open", "."])
+                return f"📂 Opening Finder{' at ' + path if path else ''}..."
+            elif self.os == "Linux":
+                if path:
+                    subprocess.Popen(["xdg-open", path])
+                else:
+                    subprocess.Popen(["xdg-open", "."])
+                return f"📂 Opening File Manager{' at ' + path if path else ''}..."
+        except Exception as e:
+            return f"❌ Failed to open file explorer: {str(e)}"
+    
+    def open_command_prompt(self):
+        """Open command prompt/terminal"""
+        try:
+            if self.os == "Windows":
+                subprocess.Popen("cmd.exe")
+                return "💻 Opening Command Prompt..."
+            elif self.os == "Darwin":
+                subprocess.Popen(["open", "-a", "Terminal"])
+                return "💻 Opening Terminal..."
+            elif self.os == "Linux":
+                subprocess.Popen(["gnome-terminal"])
+                return "💻 Opening Terminal..."
+        except Exception as e:
+            return f"❌ Failed to open command prompt: {str(e)}"
+    
+    # ==================== TIMER AND ALARM ====================
+    
+    def set_timer(self, seconds, message="Timer finished!"):
+        """Set a countdown timer"""
+        try:
+            def timer_thread():
+                time.sleep(seconds)
+                self._show_notification("⏰ Timer Alert", message)
+            
+            threading.Thread(target=timer_thread, daemon=True).start()
+            
+            minutes = seconds // 60
+            secs = seconds % 60
+            return f"⏱️ Timer set for {minutes}m {secs}s"
+        except Exception as e:
+            return f"❌ Failed to set timer: {str(e)}"
+    
+    def set_alarm(self, time_str, message="Alarm!"):
+        """Set an alarm for specific time (format: HH:MM)"""
+        try:
+            target_time = datetime.strptime(time_str, "%H:%M").time()
+            now = datetime.now()
+            target_datetime = datetime.combine(now.date(), target_time)
+            
+            if target_datetime < now:
+                target_datetime += timedelta(days=1)
+            
+            wait_seconds = (target_datetime - now).total_seconds()
+            
+            def alarm_thread():
+                time.sleep(wait_seconds)
+                self._show_notification("⏰ Alarm Alert", message)
+            
+            threading.Thread(target=alarm_thread, daemon=True).start()
+            
+            return f"⏰ Alarm set for {time_str} ({target_datetime.strftime('%Y-%m-%d %H:%M')})"
+        except Exception as e:
+            return f"❌ Failed to set alarm: {str(e)}"
+    
+    def _show_notification(self, title, message):
+        """Show system notification with multiple fallback methods"""
+        notification_sent = False
+        
+        try:
+            if self.os == "Windows":
+                try:
+                    from plyer import notification as plyer_notify
+                    plyer_notify.notify(
+                        title=title,
+                        message=message,
+                        app_name="VATSAL",
+                        timeout=10
+                    )
+                    notification_sent = True
+                except:
+                    try:
+                        import win32api
+                        import win32con
+                        win32api.MessageBox(0, message, title, win32con.MB_ICONINFORMATION)
+                        notification_sent = True
+                    except:
+                        pass
+                        
+            elif self.os == "Darwin":
+                try:
+                    subprocess.run([
+                        "osascript", "-e",
+                        f'display notification "{message}" with title "{title}"'
+                    ], check=True)
+                    notification_sent = True
+                except:
+                    pass
+                    
+            elif self.os == "Linux":
+                try:
+                    subprocess.run(["notify-send", title, message], check=True)
+                    notification_sent = True
+                except:
+                    pass
+        except Exception as e:
+            pass
+        
+        if not notification_sent:
+            print(f"\n{'='*60}")
+            print(f"🔔 {title}")
+            print(f"{'='*60}")
+            print(f"   {message}")
+            print(f"{'='*60}\n")
+            
+            try:
+                import logging
+                logging.warning(f"VATSAL ALERT - {title}: {message}")
+            except:
+                pass
 
 if __name__ == "__main__":
     controller = SystemController()
