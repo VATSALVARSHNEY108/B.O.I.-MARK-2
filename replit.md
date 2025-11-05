@@ -1,7 +1,7 @@
 # AI Desktop Automation Controller
 
 ## Overview
-The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. The project aims to be a comprehensive productivity powerhouse, offering a unified ecosystem with over 300+ features, including smart Desktop RAG, 9 Smart Automation & AI features, Natural Language Workflow Builder, 8 Communication Enhancement features, and a real-time WebSocket dashboard for live monitoring. It integrates advanced AI for code generation, screen analysis, natural language understanding, professional-grade data analysis, various utility modules, and real-time remote monitoring capabilities, including an Intelligent AI Assistant.
+The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. The project aims to be a comprehensive productivity powerhouse, offering a unified ecosystem with over 310+ features, including smart Desktop RAG, 9 Smart Automation & AI features, Natural Language Workflow Builder, 8 Communication Enhancement features, 7 new essential utility tools (November 2025), and a real-time WebSocket dashboard for live monitoring. It integrates advanced AI for code generation, screen analysis, natural language understanding, professional-grade data analysis, various utility modules, and real-time remote monitoring capabilities, including an Intelligent AI Assistant.
 
 ## User Preferences
 - **Chat Monitoring:** User prefers visual/screen-based chat monitoring where AI controls the real Gmail/WhatsApp interface on screen, rather than background API calls. This allows them to watch the AI work in real-time.
@@ -34,7 +34,14 @@ Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mo
 -   **Natural Language Workflow Builder:** AI-powered workflow creation from plain English descriptions using Gemini 2.0 Flash.
 -   **Advanced AI Enhancements:** Integrates Multi-Modal AI, Enhanced Contextual Memory, a Correction Learning System, and a Predictive Actions Engine.
 -   **AI-Powered Security Dashboard:** Comprehensive security management powered by Gemini AI, integrating biometric authentication, 2FA, encrypted storage, and AI-driven threat analysis.
--   **Utility Modules:** Includes integrations for Spotify, YouTube, Weather & News, Translation, Calculator, Password Vault, Quick Notes, and Calendar Manager.
+-   **Utility Modules:** Includes integrations for Spotify, YouTube, Weather & News, Translation, Calculator, Password Vault, Quick Notes, Calendar Manager, Timer & Stopwatch, Quick Reminders, Habit Tracker, Color Tools, QR Code Tools, Screenshot Annotator, and Image Resizer.
+    -   **Timer & Stopwatch:** Countdown timers with cancellation, stopwatch with lap times, and Pomodoro mode.
+    -   **Quick Reminders:** Scheduled reminders with cross-platform pop-up notifications, sound alerts, and snooze functionality.
+    -   **Habit Tracker:** Daily habit checklist with streak tracking, statistics, and completion history.
+    -   **Color Picker & Converter:** Screen color picker, format conversion (HEX/RGB/HSL/HSV), palette generation, and color manipulation.
+    -   **QR Code Tools:** Generate QR codes for URLs, text, contacts, WiFi credentials; read QR codes from files and screen.
+    -   **Screenshot Annotator:** Add text, arrows, rectangles, circles, highlights, and blur areas to screenshots.
+    -   **Image Resizer:** Batch image resizing, compression, format conversion, thumbnail creation, rotation, and cropping.
 
 ## External Dependencies
 -   **google-genai:** For Gemini AI integration.
@@ -54,3 +61,4 @@ Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mo
 -   **Google Translate API:** For language translation.
 -   **opencv-python:** For screen monitoring and image analysis.
 -   **Data Science Libraries:** pandas, numpy, scikit-learn, matplotlib, seaborn, statsmodels, nltk, openpyxl.
+-   **Image Processing:** Pillow (PIL), qrcode, pyzbar for QR code operations.
