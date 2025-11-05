@@ -277,3 +277,6 @@ pycaw
 comtypes
 pycaw
 plyer
+pillow
+pyzbar
+qrcode
