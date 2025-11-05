@@ -200,12 +200,14 @@ class VoiceCommander:
         Listen for a single voice command
         Returns: dict with 'success', 'command', and 'message'
         """
+        source = None
         try:
-            with sr.Microphone() as source:
+            source = sr.Microphone()
+            with source as mic:
                 print("🎤 Listening...")
-                self.recognizer.adjust_for_ambient_noise(source, duration=0.5)
+                self.recognizer.adjust_for_ambient_noise(mic, duration=0.5)
                 
-                audio = self.recognizer.listen(source, timeout=timeout, phrase_time_limit=10)
+                audio = self.recognizer.listen(mic, timeout=timeout, phrase_time_limit=10)
                 
                 print("🔄 Processing speech...")
                 command = self.recognizer.recognize_google(audio)
@@ -235,12 +237,30 @@ class VoiceCommander:
                 "command": None,
                 "message": f"Recognition service error: {str(e)}"
             }
+        except OSError as e:
+            return {
+                "success": False,
+                "command": None,
+                "message": f"Microphone not available: {str(e)}"
+            }
+        except AttributeError as e:
+            return {
+                "success": False,
+                "command": None,
+                "message": f"Audio device error: {str(e)}"
+            }
         except Exception as e:
             return {
                 "success": False,
                 "command": None,
                 "message": f"Error: {str(e)}"
             }
+        finally:
+            if source is not None and hasattr(source, 'stream') and source.stream is not None:
+                try:
+                    source.stream.close()
+                except:
+                    pass
     
     def start_continuous_listening(self, callback: Optional[Callable] = None):
         """Start continuous voice command listening"""
@@ -258,9 +278,11 @@ class VoiceCommander:
         def listen_loop():
             """Continuous listening loop"""
             waiting_for_wake_word = True
+            mic_source = None
             
             try:
-                with sr.Microphone() as source:
+                mic_source = sr.Microphone()
+                with mic_source as source:
                     print("🎤 Continuous listening started")
                     greeting = self._get_random_response('activation')
                     self.speak(greeting, interrupt=True)
@@ -404,9 +426,22 @@ class VoiceCommander:
                                 waiting_for_wake_word = True
                             continue
                             
+            except OSError as e:
+                print(f"❌ Microphone not available: {str(e)}")
+                self.continuous_listening = False
+                self.speak("Microphone not available in this environment", interrupt=True)
+            except AttributeError as e:
+                print(f"❌ Audio device error: {str(e)}")
+                self.continuous_listening = False
             except Exception as e:
                 print(f"❌ Microphone error: {str(e)}")
                 self.continuous_listening = False
+            finally:
+                if mic_source is not None and hasattr(mic_source, 'stream') and mic_source.stream is not None:
+                    try:
+                        mic_source.stream.close()
+                    except:
+                        pass
         
         self.listen_thread = threading.Thread(target=listen_loop, daemon=True)
         self.listen_thread.start()
