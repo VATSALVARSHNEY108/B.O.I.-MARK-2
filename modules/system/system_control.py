@@ -44,12 +44,11 @@ class SystemController:
             if self.os == "Windows":
                 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
                 from comtypes import CLSCTX_ALL
-                from ctypes import cast, POINTER
                 
                 devices = AudioUtilities.GetMicrophone()
                 if devices:
                     interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-                    volume = cast(interface, POINTER(IAudioEndpointVolume))
+                    volume = interface.QueryInterface(IAudioEndpointVolume)
                     volume.SetMute(True, None)
                     return "✅ Microphone muted"
                 else:
@@ -69,12 +68,11 @@ class SystemController:
             if self.os == "Windows":
                 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
                 from comtypes import CLSCTX_ALL
-                from ctypes import cast, POINTER
                 
                 devices = AudioUtilities.GetMicrophone()
                 if devices:
                     interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-                    volume = cast(interface, POINTER(IAudioEndpointVolume))
+                    volume = interface.QueryInterface(IAudioEndpointVolume)
                     volume.SetMute(False, None)
                     return "✅ Microphone unmuted"
                 else:
@@ -184,7 +182,7 @@ class SystemController:
                 
                 devices = AudioUtilities.GetSpeakers()
                 interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-                volume = cast(interface, POINTER(IAudioEndpointVolume))
+                volume = interface.QueryInterface(IAudioEndpointVolume)
                 volume.SetMasterVolumeLevelScalar(level / 100.0, None)
                 return f"🔊 Volume set to {level}%"
             elif self.os == "Darwin":
@@ -243,11 +241,10 @@ class SystemController:
             if self.os == "Windows":
                 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
                 from comtypes import CLSCTX_ALL
-                from ctypes import cast, POINTER
                 
                 devices = AudioUtilities.GetSpeakers()
                 interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-                volume = cast(interface, POINTER(IAudioEndpointVolume))
+                volume = interface.QueryInterface(IAudioEndpointVolume)
                 current_volume = volume.GetMasterVolumeLevelScalar()
                 return int(current_volume * 100)
             elif self.os == "Darwin":
@@ -274,11 +271,10 @@ class SystemController:
             if self.os == "Windows":
                 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
                 from comtypes import CLSCTX_ALL
-                from ctypes import cast, POINTER
                 
                 devices = AudioUtilities.GetSpeakers()
                 interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-                volume = cast(interface, POINTER(IAudioEndpointVolume))
+                volume = interface.QueryInterface(IAudioEndpointVolume)
                 volume.SetMute(True, None)
                 return "🔇 Volume muted"
             elif self.os == "Darwin":
@@ -296,11 +292,10 @@ class SystemController:
             if self.os == "Windows":
                 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
                 from comtypes import CLSCTX_ALL
-                from ctypes import cast, POINTER
                 
                 devices = AudioUtilities.GetSpeakers()
                 interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-                volume = cast(interface, POINTER(IAudioEndpointVolume))
+                volume = interface.QueryInterface(IAudioEndpointVolume)
                 volume.SetMute(False, None)
                 return "🔊 Volume unmuted"
             elif self.os == "Darwin":
@@ -318,11 +313,10 @@ class SystemController:
             if self.os == "Windows":
                 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
                 from comtypes import CLSCTX_ALL
-                from ctypes import cast, POINTER
                 
                 devices = AudioUtilities.GetSpeakers()
                 interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-                volume = cast(interface, POINTER(IAudioEndpointVolume))
+                volume = interface.QueryInterface(IAudioEndpointVolume)
                 current_mute = volume.GetMute()
                 volume.SetMute(not current_mute, None)
                 return "🔇 Volume muted" if not current_mute else "🔊 Volume unmuted"
