@@ -10,7 +10,15 @@ import time
 from typing import Optional, Dict, Any, Tuple
 from google import genai
 import base64
-import pyautogui
+
+# Try to import pyautogui, but don't crash if it's not available
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception as e:
+    print(f"⚠️ PyAutoGUI not available: {e}")
+    PYAUTOGUI_AVAILABLE = False
+    pyautogui = None
 
 
 class ScreenshotAnalyzer:
@@ -146,6 +154,10 @@ If no design work: "No design detected" """
         Returns:
             Path to the saved screenshot
         """
+        if not PYAUTOGUI_AVAILABLE:
+            print("❌ Screenshot functionality not available in this environment")
+            return ""
+        
         try:
             # Create screenshots directory if it doesn't exist
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
@@ -308,6 +320,10 @@ If no design work: "No design detected" """
         Args:
             system: Operating system name
         """
+        if not PYAUTOGUI_AVAILABLE:
+            print("⚠️ Fullscreen automation not available in this environment")
+            return
+        
         try:
             if system == "Windows":
                 # F11 for fullscreen in most apps
