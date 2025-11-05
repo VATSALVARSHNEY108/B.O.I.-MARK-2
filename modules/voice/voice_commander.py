@@ -255,12 +255,6 @@ class VoiceCommander:
                 "command": None,
                 "message": f"Error: {str(e)}"
             }
-        finally:
-            if source is not None and hasattr(source, 'stream') and source.stream is not None:
-                try:
-                    source.stream.close()
-                except:
-                    pass
     
     def start_continuous_listening(self, callback: Optional[Callable] = None):
         """Start continuous voice command listening"""
@@ -436,12 +430,6 @@ class VoiceCommander:
             except Exception as e:
                 print(f"❌ Microphone error: {str(e)}")
                 self.continuous_listening = False
-            finally:
-                if mic_source is not None and hasattr(mic_source, 'stream') and mic_source.stream is not None:
-                    try:
-                        mic_source.stream.close()
-                    except:
-                        pass
         
         self.listen_thread = threading.Thread(target=listen_loop, daemon=True)
         self.listen_thread.start()
