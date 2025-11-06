@@ -1,11 +1,26 @@
 #!/usr/bin/env python3
 
 import streamlit as st
+import streamlit.components.v1 as components
 import random
 
 st.set_page_config(page_title="Minimal Chat", page_icon="💬")
 
 st.title("💬 Minimal Chatbot")
+
+def speak_text(text):
+    components.html(
+        f"""
+        <script>
+            const utterance = new SpeechSynthesisUtterance("{text}");
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            window.speechSynthesis.speak(utterance);
+        </script>
+        """,
+        height=0,
+    )
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -81,3 +96,5 @@ if prompt := st.chat_input("Say something..."):
     st.session_state.messages.append({"role": "assistant", "content": response})
     with st.chat_message("assistant"):
         st.write(response)
+    
+    speak_text(response)
