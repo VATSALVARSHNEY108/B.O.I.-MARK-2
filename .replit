@@ -17,15 +17,15 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "AI Chat Assistant"
+args = "Minimal Chatbot"
 
 [[workflows.workflow]]
-name = "AI Chat Assistant"
+name = "Minimal Chatbot"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "streamlit run modules/ai_features/chatbots.py --server.port 5000 --server.address 0.0.0.0 --server.headless true"
+args = "streamlit run minimal_chatbot.py --server.port 5000 --server.address 0.0.0.0 --server.headless true"
 waitForPort = 5000
 
 [workflows.workflow.metadata]
@@ -38,6 +38,10 @@ externalPort = 80
 [[ports]]
 localPort = 34389
 externalPort = 3000
+
+[[ports]]
+localPort = 36919
+externalPort = 3001
 
 [[ports]]
 localPort = 39253
