@@ -29,6 +29,7 @@ from google import genai
 from google.genai import types
 from modules.core.gemini_controller import parse_command
 from modules.core.command_executor import CommandExecutor
+from modules.ai_features.emotional_intelligence import EmotionalIntelligence
 
 load_dotenv()
 
@@ -48,6 +49,10 @@ class SimpleChatbot:
         # Initialize command executor for actual automation
         print("🔧 Initializing automation capabilities...")
         self.executor = CommandExecutor()
+        
+        # Initialize emotional intelligence
+        print("🧠 Initializing emotional intelligence...")
+        self.emotional_intelligence = EmotionalIntelligence()
         
         self.system_prompt = """You are VATSAL, a sophisticated AI assistant with a friendly personality.
 
@@ -102,6 +107,15 @@ Guidelines:
     def chat(self, user_message):
         """Send a message and get AI response, executing commands when needed"""
         try:
+            # Detect emotion in user's message
+            emotion_data = self.emotional_intelligence.detect_emotion(user_message)
+            
+            # Show emotional understanding (subtle)
+            if emotion_data.get('intensity', 0) > 0.7:
+                emotion = emotion_data.get('primary_emotion')
+                if emotion in ['sad', 'angry', 'anxious', 'tired']:
+                    print(f"💙 I notice you might be feeling {emotion}. I'm here to help.")
+            
             self.conversation_history.append({
                 "role": "user",
                 "content": user_message
@@ -164,12 +178,23 @@ Guidelines:
             
             conversation_text += "VATSAL:"
             
+            # Enhance system prompt with emotional intelligence
+            enhanced_prompt = self.emotional_intelligence.enhance_system_prompt(
+                self.system_prompt, 
+                emotion_data
+            )
+            
+            # Get support suggestions if user seems to need help
+            suggestions = self.emotional_intelligence.suggest_support_actions(emotion_data)
+            if suggestions and emotion_data.get('intensity', 0) > 0.6:
+                print(f"💡 Suggestion: {suggestions[0]}")
+            
             response = self.client.models.generate_content(
                 model=self.model,
                 contents=conversation_text,
                 config=types.GenerateContentConfig(
-                    system_instruction=self.system_prompt,
-                    temperature=0.8,
+                    system_instruction=enhanced_prompt,
+                    temperature=0.9,  # Slightly higher for more natural responses
                     max_output_tokens=1500,
                 )
             )
@@ -192,23 +217,9 @@ Guidelines:
         return "Conversation reset! Let's start fresh."
     
     def greeting(self):
-        """Get a greeting message"""
-        hour = datetime.now().hour
-        
-        if 5 <= hour < 12:
-            time_greeting = "Good morning"
-            emoji = "🌅"
-        elif 12 <= hour < 17:
-            time_greeting = "Good afternoon"
-            emoji = "☀️"
-        elif 17 <= hour < 22:
-            time_greeting = "Good evening"
-            emoji = "🌆"
-        else:
-            time_greeting = "Burning the midnight oil, are we"
-            emoji = "🌙"
-        
-        return f"{time_greeting}, Sir! {emoji} I'm VATSAL, your AI assistant. I'm here to help with anything you need - from conversation to desktop automation. What would you like me to do?"
+        """Get a greeting message with emotional intelligence"""
+        # Use emotionally intelligent greeting
+        return self.emotional_intelligence.get_personalized_greeting()
 
 
 def main():
