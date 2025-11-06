@@ -3,10 +3,14 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import random
+from datetime import datetime
+import math
+import platform
+import psutil
 
-st.set_page_config(page_title="Minimal Chat", page_icon="💬")
+st.set_page_config(page_title="JARVIS AI", page_icon="🤖")
 
-st.title("💬 Minimal Chatbot")
+st.title("🤖 JARVIS - Personal AI Assistant")
 
 def speak_text(text):
     components.html(
