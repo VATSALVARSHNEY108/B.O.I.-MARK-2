@@ -8,9 +8,9 @@ import math
 import platform
 import psutil
 
-st.set_page_config(page_title="JARVIS AI", page_icon="🤖")
+st.set_page_config(page_title="Minimal Chat", page_icon="💬")
 
-st.title("🤖 JARVIS - Personal AI Assistant")
+st.title("💬 Minimal Chatbot")
 
 def speak_text(text):
     components.html(
@@ -33,11 +33,58 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
 
+def calculate(expression):
+    try:
+        allowed = set("0123456789+-*/()%. ")
+        if all(c in allowed for c in expression):
+            result = eval(expression)
+            return str(result)
+    except:
+        pass
+    return None
+
+def get_system_info():
+    try:
+        cpu = psutil.cpu_percent()
+        memory = psutil.virtual_memory().percent
+        return f"CPU: {cpu}%, Memory: {memory}%"
+    except:
+        return "System running smoothly."
+
 def get_minimal_response(user_input):
     user_lower = user_input.lower().strip()
     
-    if any(word in user_lower for word in ["hello", "hi", "hey", "hola", "greetings"]):
-        return random.choice(["Oh, you again.", "Yeah, hi.", "Sup.", "Hey there.", "What now?"])
+    if any(word in user_lower for word in ["time", "what time"]):
+        current_time = datetime.now().strftime("%I:%M %p")
+        return f"It's {current_time}."
+    
+    elif any(word in user_lower for word in ["date", "what day", "today"]) and "update" not in user_lower:
+        current_date = datetime.now().strftime("%B %d, %Y")
+        day = datetime.now().strftime("%A")
+        return f"{day}, {current_date}."
+    
+    elif "calculate" in user_lower or "+" in user_input or "-" in user_input or "*" in user_input or "/" in user_input:
+        parts = user_input.split()
+        for part in parts:
+            result = calculate(part)
+            if result:
+                return f"Result: {result}"
+        nums = [word for word in parts if word.replace(".", "").replace("-", "").isdigit()]
+        if len(nums) >= 2:
+            expr = " ".join(parts[-5:])
+            result = calculate(expr)
+            if result:
+                return f"Result: {result}"
+        return "Can't calculate that."
+    
+    elif "system" in user_lower and any(word in user_lower for word in ["status", "info", "check"]):
+        return get_system_info()
+    
+    elif "weather" in user_lower:
+        return random.choice(["Check outside.", "No idea, mate.", "Sunny, probably.", "Ask Google.", "It's fine."])
+    
+    elif any(word in user_lower for word in ["hello", "hi", "hey", "hola", "greetings"]):
+        return random.choice(["Oh, you again.", "Yeah, hi.", "Sup.", "Hey there.", "What now?", "Greetings."])
     
     elif any(word in user_lower for word in ["how are you", "how r u", "wassup"]):
         return random.choice(["Peachy.", "Living the dream.", "Stellar, obviously.", "Better than you.", "Still here."])
@@ -54,8 +101,8 @@ def get_minimal_response(user_input):
     elif any(word in user_lower for word in ["love you", "i love", "ily"]):
         return random.choice(["Sure you do.", "Aww, how sweet.", "That's nice.", "Cool story.", "OK then."])
     
-    elif any(word in user_lower for word in ["help", "what can you do"]):
-        return random.choice(["Not much.", "Chat. That's it.", "Talk. Barely.", "Minimal stuff.", "You're looking at it."])
+    elif any(word in user_lower for word in ["help", "what can you do", "features"]):
+        return "Time, date, math, system info, chat."
     
     elif any(word in user_lower for word in ["stupid", "dumb", "idiot", "useless"]):
         return random.choice(["Right back at ya.", "Original.", "Harsh.", "Ouch.", "Love you too."])
