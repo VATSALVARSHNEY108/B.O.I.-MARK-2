@@ -91,20 +91,30 @@ class UserProfileManager:
     
     def get_user_name(self) -> str:
         """Get user's name"""
+        if "user_info" not in self.profile:
+            self.profile["user_info"] = self._get_default_profile()["user_info"]
+            self._save_profile()
         return self.profile["user_info"].get("name", "User")
     
     def set_user_name(self, name: str):
         """Set user's name"""
+        if "user_info" not in self.profile:
+            self.profile["user_info"] = self._get_default_profile()["user_info"]
         self.profile["user_info"]["name"] = name
         self._save_profile()
         print(f"✅ User name set to: {name}")
     
     def get_user_info(self) -> Dict[str, str]:
         """Get all user info"""
+        if "user_info" not in self.profile:
+            self.profile["user_info"] = self._get_default_profile()["user_info"]
+            self._save_profile()
         return self.profile["user_info"]
     
     def update_user_info(self, **kwargs):
         """Update user info fields"""
+        if "user_info" not in self.profile:
+            self.profile["user_info"] = self._get_default_profile()["user_info"]
         for key, value in kwargs.items():
             if key in self.profile["user_info"]:
                 self.profile["user_info"][key] = value
@@ -115,20 +125,30 @@ class UserProfileManager:
     
     def get_preference(self, key: str, default: Any = None) -> Any:
         """Get a specific preference"""
+        if "preferences" not in self.profile:
+            self.profile["preferences"] = self._get_default_profile()["preferences"]
+            self._save_profile()
         return self.profile["preferences"].get(key, default)
     
     def set_preference(self, key: str, value: Any):
         """Set a specific preference"""
+        if "preferences" not in self.profile:
+            self.profile["preferences"] = self._get_default_profile()["preferences"]
         self.profile["preferences"][key] = value
         self._save_profile()
         print(f"✅ Preference '{key}' set to: {value}")
     
     def get_all_preferences(self) -> Dict[str, Any]:
         """Get all preferences"""
+        if "preferences" not in self.profile:
+            self.profile["preferences"] = self._get_default_profile()["preferences"]
+            self._save_profile()
         return self.profile["preferences"]
     
     def update_preferences(self, **kwargs):
         """Update multiple preferences at once"""
+        if "preferences" not in self.profile:
+            self.profile["preferences"] = self._get_default_profile()["preferences"]
         for key, value in kwargs.items():
             self.profile["preferences"][key] = value
         self._save_profile()
@@ -138,20 +158,30 @@ class UserProfileManager:
     
     def get_custom_setting(self, key: str, default: Any = None) -> Any:
         """Get a custom user-defined setting"""
+        if "custom_settings" not in self.profile:
+            self.profile["custom_settings"] = self._get_default_profile()["custom_settings"]
+            self._save_profile()
         return self.profile["custom_settings"].get(key, default)
     
     def set_custom_setting(self, key: str, value: Any):
         """Set a custom user-defined setting"""
+        if "custom_settings" not in self.profile:
+            self.profile["custom_settings"] = self._get_default_profile()["custom_settings"]
         self.profile["custom_settings"][key] = value
         self._save_profile()
         print(f"✅ Custom setting '{key}' set to: {value}")
     
     def get_all_custom_settings(self) -> Dict[str, Any]:
         """Get all custom settings"""
+        if "custom_settings" not in self.profile:
+            self.profile["custom_settings"] = self._get_default_profile()["custom_settings"]
+            self._save_profile()
         return self.profile["custom_settings"]
     
     def remove_custom_setting(self, key: str):
         """Remove a custom setting"""
+        if "custom_settings" not in self.profile:
+            self.profile["custom_settings"] = self._get_default_profile()["custom_settings"]
         if key in self.profile["custom_settings"]:
             del self.profile["custom_settings"][key]
             self._save_profile()
@@ -161,6 +191,8 @@ class UserProfileManager:
     
     def add_thing_to_change(self, item: str, category: str = "general", priority: str = "medium"):
         """Add something user wants to change/remember"""
+        if "things_to_change" not in self.profile:
+            self.profile["things_to_change"] = self._get_default_profile()["things_to_change"]
         change_item = {
             "item": item,
             "category": category,
@@ -175,6 +207,9 @@ class UserProfileManager:
     
     def get_things_to_change(self, status: Optional[str] = None) -> List[Dict]:
         """Get list of things to change, optionally filtered by status"""
+        if "things_to_change" not in self.profile:
+            self.profile["things_to_change"] = self._get_default_profile()["things_to_change"]
+            self._save_profile()
         if status:
             return [item for item in self.profile["things_to_change"] 
                    if item.get("status") == status]
@@ -182,6 +217,8 @@ class UserProfileManager:
     
     def mark_thing_done(self, index: int):
         """Mark a thing to change as done"""
+        if "things_to_change" not in self.profile:
+            self.profile["things_to_change"] = self._get_default_profile()["things_to_change"]
         if 0 <= index < len(self.profile["things_to_change"]):
             self.profile["things_to_change"][index]["status"] = "done"
             self.profile["things_to_change"][index]["completed_at"] = datetime.now().isoformat()
@@ -190,6 +227,8 @@ class UserProfileManager:
     
     def remove_thing_to_change(self, index: int):
         """Remove a thing to change"""
+        if "things_to_change" not in self.profile:
+            self.profile["things_to_change"] = self._get_default_profile()["things_to_change"]
         if 0 <= index < len(self.profile["things_to_change"]):
             removed = self.profile["things_to_change"].pop(index)
             self._save_profile()
@@ -199,22 +238,32 @@ class UserProfileManager:
     
     def learn_habit(self, habit_key: str, habit_value: Any):
         """Learn and remember a user habit"""
+        if "habits" not in self.profile:
+            self.profile["habits"] = self._get_default_profile()["habits"]
         self.profile["habits"][habit_key] = habit_value
         self._save_profile()
         print(f"✅ Learned habit: {habit_key}")
     
     def get_habit(self, habit_key: str, default: Any = None) -> Any:
         """Get a learned habit"""
+        if "habits" not in self.profile:
+            self.profile["habits"] = self._get_default_profile()["habits"]
+            self._save_profile()
         return self.profile["habits"].get(habit_key, default)
     
     def get_all_habits(self) -> Dict[str, Any]:
         """Get all learned habits"""
+        if "habits" not in self.profile:
+            self.profile["habits"] = self._get_default_profile()["habits"]
+            self._save_profile()
         return self.profile["habits"]
     
     # ============= Interaction Stats Methods =============
     
     def record_interaction(self, command: Optional[str] = None):
         """Record an interaction"""
+        if "interaction_stats" not in self.profile:
+            self.profile["interaction_stats"] = self._get_default_profile()["interaction_stats"]
         stats = self.profile["interaction_stats"]
         stats["total_interactions"] += 1
         stats["last_interaction"] = datetime.now().isoformat()
@@ -240,10 +289,16 @@ class UserProfileManager:
     
     def get_stats(self) -> Dict[str, Any]:
         """Get interaction statistics"""
+        if "interaction_stats" not in self.profile:
+            self.profile["interaction_stats"] = self._get_default_profile()["interaction_stats"]
+            self._save_profile()
         return self.profile["interaction_stats"]
     
     def get_favorite_commands(self, top_n: int = 10) -> List[tuple]:
         """Get top N favorite commands"""
+        if "interaction_stats" not in self.profile:
+            self.profile["interaction_stats"] = self._get_default_profile()["interaction_stats"]
+            self._save_profile()
         fav_commands = self.profile["interaction_stats"]["favorite_commands"]
         sorted_commands = sorted(fav_commands.items(), key=lambda x: x[1], reverse=True)
         return sorted_commands[:top_n]
@@ -298,6 +353,11 @@ class UserProfileManager:
         stats = self.get_stats()
         things_pending = len(self.get_things_to_change(status="pending"))
         things_done = len(self.get_things_to_change(status="done"))
+        
+        if "custom_settings" not in self.profile:
+            self.profile["custom_settings"] = self._get_default_profile()["custom_settings"]
+        if "habits" not in self.profile:
+            self.profile["habits"] = self._get_default_profile()["habits"]
         
         summary = f"""
 ╔════════════════════════════════════════════╗
