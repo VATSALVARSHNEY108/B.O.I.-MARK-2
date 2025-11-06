@@ -1,0 +1,35 @@
+5-11-07 00:02:59.064 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 00:02:59.064 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 00:02:59.064 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 00:02:59.064 Session state does not function when running a script without `streamlit run`
+2025-11-07 00:02:59.064 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 00:02:59.064 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 00:02:59.065 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 00:02:59.065 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 00:02:59.065 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 00:02:59.066 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 00:02:59.066 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 00:02:59.066 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 00:02:59.066 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 00:02:59.066 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+pygame 2.6.1 (SDL 2.28.4, Python 3.13.9)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+⚠️ pynput not available - macro recording limited
+🖥️  Running in VNC mode - Virtual Desktop enabled
+📺 Display: :0
+📸 Screenshots will be saved to: C:\Users\VATSAL VARSHNEY/screenshots
+❌ Error: 'user_info'
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL#\vatsal.py", line 45, in main
+    gui_main()
+    ~~~~~~~~^^
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL#\modules\core\gui_app.py", line 8586, in main
+    app = AutomationControllerGUI(root)
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL#\modules\core\gui_app.py", line 84, in __init__
+    print(f"✅ User Profile Manager initialized - Welcome, {self.user_profile.get_user_name()}!")
+                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL#\modules\intelligence\user_profile_manager.py", line 94, in get_user_name
+    return self.profile["user_info"].get("name", "User")
+           ~~~~~~~~~~~~^^^^^^^^^^^^^
+KeyError: 'user_info'
+(.venv) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL#> 
