@@ -30,6 +30,7 @@ from google.genai import types
 from modules.core.gemini_controller import parse_command
 from modules.core.command_executor import CommandExecutor
 from modules.ai_features.emotional_intelligence import EmotionalIntelligence
+from modules.ai_features.common_sense import CommonSenseReasoning
 
 load_dotenv()
 
@@ -53,6 +54,10 @@ class SimpleChatbot:
         # Initialize emotional intelligence
         print("🧠 Initializing emotional intelligence...")
         self.emotional_intelligence = EmotionalIntelligence()
+        
+        # Initialize common sense reasoning
+        print("🎯 Initializing common sense reasoning...")
+        self.common_sense = CommonSenseReasoning()
         
         self.system_prompt = """You are VATSAL, a sophisticated AI assistant with a friendly personality.
 
@@ -124,6 +129,25 @@ Guidelines:
             # Check if this might be a command
             if self.is_automation_command(user_message):
                 try:
+                    # Apply common sense validation BEFORE executing
+                    context = {
+                        'recent_actions': [msg['content'] for msg in self.conversation_history[-5:] if msg['role'] == 'user']
+                    }
+                    
+                    validation = self.common_sense.validate_action(user_message, context)
+                    
+                    # Check for safety issues
+                    if validation.get('safety_level') == 'dangerous':
+                        warning_msg = f"⚠️ Safety Warning: {', '.join(validation.get('warnings', []))}"
+                        if validation.get('suggestions'):
+                            warning_msg += f"\n💡 Suggestion: {validation['suggestions'][0]}"
+                        return warning_msg
+                    
+                    # Show warnings for caution-level actions
+                    if validation.get('warnings'):
+                        for warning in validation['warnings'][:2]:  # Show max 2 warnings
+                            print(f"⚠️ {warning}")
+                    
                     # Try to parse as a command
                     command_dict = parse_command(user_message)
                     
@@ -137,6 +161,9 @@ Guidelines:
                         
                         # Execute the command
                         result = self.executor.execute(command_dict)
+                        
+                        # Update common sense context
+                        self.common_sense.update_context(user_message, result)
                         
                         # Build a response based on the result
                         if result["success"]:
@@ -171,6 +198,25 @@ Guidelines:
                     print(f"   (Command execution attempted but continuing as conversation)")
             
             # Normal conversation (not a command, or command failed)
+            
+            # Check for missing information
+            missing_info = self.common_sense.detect_missing_information(user_message)
+            if missing_info.get('critical') and not missing_info.get('can_proceed_without'):
+                questions = missing_info.get('questions_to_ask', [])
+                if questions:
+                    return f"I need a bit more information: {questions[0]}"
+            
+            # Infer user intent for better understanding
+            intent_analysis = self.common_sense.infer_user_intent(
+                user_message,
+                {'recent_actions': [msg['content'] for msg in self.conversation_history[-5:] if msg['role'] == 'user']}
+            )
+            
+            # Check logical consistency
+            consistency = self.common_sense.check_logical_consistency(user_message, self.conversation_history)
+            if not consistency.get('consistent') and consistency.get('clarifications_needed'):
+                print(f"🤔 {consistency['clarifications_needed'][0]}")
+            
             conversation_text = ""
             for msg in self.conversation_history[-10:]:
                 role = "User" if msg["role"] == "user" else "VATSAL"
@@ -178,11 +224,16 @@ Guidelines:
             
             conversation_text += "VATSAL:"
             
-            # Enhance system prompt with emotional intelligence
+            # Enhance system prompt with emotional intelligence AND common sense
             enhanced_prompt = self.emotional_intelligence.enhance_system_prompt(
                 self.system_prompt, 
                 emotion_data
             )
+            
+            # Add common sense context
+            if intent_analysis.get('inferred_intent') != user_message:
+                enhanced_prompt += f"\n\nINFERRED USER INTENT: {intent_analysis.get('inferred_intent')}"
+                enhanced_prompt += f"\nSUGGESTED ACTIONS: {', '.join(intent_analysis.get('suggested_actions', [])[:2])}"
             
             # Get support suggestions if user seems to need help
             suggestions = self.emotional_intelligence.suggest_support_actions(emotion_data)
