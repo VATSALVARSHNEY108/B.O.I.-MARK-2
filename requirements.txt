@@ -279,3 +279,5 @@ plyer
 pillow
 pyzbar
 qrcode
+mediapipe
+security
