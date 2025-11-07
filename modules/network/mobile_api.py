@@ -13,9 +13,18 @@ from datetime import datetime
 import json
 import threading
 import time
-from PIL import Image
 import psutil
 from pathlib import Path
+
+# Try to import PIL for image processing
+try:
+    from PIL import Image
+    PIL_AVAILABLE = True
+except Exception as e:
+    print(f"⚠️  PIL not available in this environment: {e}")
+    print("📸 Screenshot resizing will be disabled")
+    PIL_AVAILABLE = False
+    Image = None
 
 # Try to import pyautogui, but handle headless environments
 try:
@@ -239,7 +248,7 @@ class MobileAPI:
             with self.screenshot_lock:
                 screenshot = pyautogui.screenshot()
                 
-                if screenshot.width > max_width:
+                if PIL_AVAILABLE and screenshot.width > max_width:
                     ratio = max_width / screenshot.width
                     new_height = int(screenshot.height * ratio)
                     screenshot = screenshot.resize((max_width, new_height), Image.LANCZOS)

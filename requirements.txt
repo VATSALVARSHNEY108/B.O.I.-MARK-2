@@ -25,7 +25,7 @@ websocket-client>=1.9.0
 websockify>=0.13.0
 flasgger>=0.9.7.1
 aniso8601>=10.0.1
-  
+
 # Data Science & Analysis
 data-analysis>=1.1.43
 pandas>=2.3.3
@@ -43,7 +43,6 @@ oda-node>=0.1.55
 oda-knowledge-base>=0.7.28
 
 # Computer Vision
-opencv-python>=4.12.0.88
 opencv-contrib-python>=4.12.0.88
 pillow>=11.3.0
 

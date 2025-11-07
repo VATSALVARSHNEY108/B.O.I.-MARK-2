@@ -4,6 +4,10 @@ VATSAL Mobile Companion - Integrated Server
 Combines WebSocket Server, Mobile API, and Notification Service
 """
 
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
 from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO
 from flask_cors import CORS
@@ -12,19 +16,20 @@ import time
 import json
 from datetime import datetime
 import psutil
-import os
 from dotenv import load_dotenv
 
-from mobile_api import MobileAPI
-from mobile_auth import mobile_auth, require_auth, get_client_ip
-from notification_service import notification_service
+from network.mobile_api import MobileAPI
+from network.mobile_auth import mobile_auth, require_auth, get_client_ip
+from misc.notification_service import NotificationService
+
+notification_service = NotificationService()
 
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'vatsal-secret-key-2024')
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 # Global state
 connected_clients = 0

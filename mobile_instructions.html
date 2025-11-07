@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VATSAL Mobile Companion - Setup Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card h3 {
+            font-size: 1.3em;
+            margin: 20px 0 10px 0;
+            color: #ffd700;
+        }
+        
+        .step {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .step strong {
+            color: #ffd700;
+            font-size: 1.1em;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4ade80;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .url-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-align: center;
+            margin: 15px 0;
+            word-break: break-all;
+        }
+        
+        .button {
+            display: inline-block;
+            background: #ffd700;
+            color: #333;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: transform 0.2s;
+        }
+        
+        .button:hover {
+            transform: scale(1.05);
+        }
+        
+        .status {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .quick-action {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .quick-action .emoji {
+            font-size: 2em;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 VATSAL Mobile Companion</h1>
+            <p>Control Your Desktop from Anywhere</p>
+        </div>
+        
+        <div class="card">
+            <h2>🚀 Quick Start Guide</h2>
+            
+            <div class="step">
+                <strong>Step 1:</strong> Make sure the Mobile Companion Server workflow is running
+            </div>
+            
+            <div class="step">
+                <strong>Step 2:</strong> Get your Replit URL (shown in the webview above)
+            </div>
+            
+            <div class="step">
+                <strong>Step 3:</strong> On your phone, open this URL:
+                <div class="url-box">
+                    https://your-repl-name.your-username.repl.co/mobile
+                </div>
+            </div>
+            
+            <div class="step">
+                <strong>Step 4:</strong> Bookmark the page or add to home screen for quick access!
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>⚡ What You Can Do</h2>
+            
+            <h3>Quick Actions (One-Tap Control)</h3>
+            <div class="quick-actions">
+                <div class="quick-action">
+                    <span class="emoji">🔒</span>
+                    Lock Screen
+                </div>
+                <div class="quick-action">
+                    <span class="emoji">⚡</span>
+                    Shutdown
+                </div>
+                <div class="quick-action">
+                    <span class="emoji">🔊</span>
+                    Volume Control
+                </div>
+                <div class="quick-action">
+                    <span class="emoji">🎵</span>
+                    Music Control
+                </div>
+                <div class="quick-action">
+                    <span class="emoji">📸</span>
+                    Screenshot
+                </div>
+                <div class="quick-action">
+                    <span class="emoji">🎯</span>
+                    Focus Mode
+                </div>
+            </div>
+            
+            <h3>Additional Features</h3>
+            <ul class="feature-list">
+                <li>📊 Real-time system monitoring (CPU, Memory, Disk)</li>
+                <li>💬 Execute any VATSAL voice command</li>
+                <li>📸 View live screenshots of your desktop</li>
+                <li>🔔 Receive push notifications (optional with Twilio)</li>
+                <li>🔐 Secure PIN authentication (default: 1234)</li>
+                <li>📡 Live WebSocket updates every 2 seconds</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h2>🔐 Security Setup</h2>
+            
+            <div class="step">
+                <strong>Default PIN:</strong> 1234
+            </div>
+            
+            <div class="step">
+                <strong>To Change PIN:</strong> Add <code>MOBILE_PIN</code> to your Replit Secrets
+            </div>
+            
+            <h3>Optional: SMS Notifications</h3>
+            <p>Get SMS alerts for important events:</p>
+            <ol style="margin-left: 20px; margin-top: 10px;">
+                <li>Sign up at <a href="https://www.twilio.com" style="color: #ffd700;">Twilio.com</a></li>
+                <li>Add these to Replit Secrets:
+                    <ul>
+                        <li>TWILIO_ACCOUNT_SID</li>
+                        <li>TWILIO_AUTH_TOKEN</li>
+                        <li>TWILIO_PHONE_NUMBER</li>
+                        <li>NOTIFICATION_PHONE</li>
+                    </ul>
+                </li>
+                <li>Restart the server</li>
+            </ol>
+        </div>
+        
+        <div class="card">
+            <h2>💡 Pro Tips</h2>
+            <ul class="feature-list">
+                <li>Add the mobile URL to your phone's home screen for app-like experience</li>
+                <li>Use quick actions for faster control than typing commands</li>
+                <li>Keep the page open to monitor your system remotely</li>
+                <li>Screenshot feature works best on local installations</li>
+            </ul>
+        </div>
+        
+        <div class="status">
+            <h2>📋 Current Status</h2>
+            <p><strong>Note:</strong> The Mobile Companion Server has some dependency issues in the Replit environment. The PIL (image library) needs to be properly configured for full functionality.</p>
+            <p style="margin-top: 10px;"><strong>Recommended:</strong> Run VATSAL locally on your Windows/Mac/Linux computer for full mobile companion features including screenshot capture and image processing.</p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px; opacity: 0.8;">
+            <p>VATSAL AI Desktop Automation - Mobile Companion v1.0</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">310+ Features | Real-time Control | Powered by Gemini AI</p>
+        </div>
+    </div>
+</body>
+</html>
