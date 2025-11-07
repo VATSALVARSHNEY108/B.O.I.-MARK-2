@@ -1,0 +1,115 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+(.venv) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL12345> python vatsal.py
+🚀 Starting VATSAL AI Desktop Automation...
+============================================================
+2025-11-07 21:02:53.534 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:53.535 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.156 
+  Warning: to view this Streamlit app on a browser, run it with the following
+  command:
+
+    streamlit run vatsal.py [ARGUMENTS]
+2025-11-07 21:02:54.156 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.157 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.157 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.157 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.158 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.158 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.158 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.158 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.158 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.159 Session state does not function when running a script without `streamlit run`
+2025-11-07 21:02:54.159 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.159 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.159 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.159 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.159 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.159 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.160 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.160 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.160 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-07 21:02:54.160 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+pygame 2.6.1 (SDL 2.28.4, Python 3.13.9)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+⚠️ pynput not available - macro recording limited
+🖥️  Running in VNC mode - Virtual Desktop enabled
+📺 Display: :0
+📸 Screenshots will be saved to: C:\Users\VATSAL VARSHNEY/screenshots
+Error saving profile: 'metadata'
+✅ User Profile Manager initialized - Welcome, User!
+📺 Screen size detected: 1920x1080
+📱 WhatsApp automation ready
+🤖 AI Screen Suggester ready!
+📧 Email Sender (DEMO MODE - credentials not configured)
+📱 Chat Monitor initialized
+   ⚠️  Gmail credentials not configured
+   ⚠️  Twilio credentials not configured
+📺 Screen size detected: 1920x1080
+📱 Visual Chat Monitor initialized
+   ✅ Will control real Gmail/WhatsApp on your screen
+📺 Screen size detected: 1920x1080
+👁️ Smart Screen Monitor initialized
+🧠 Advanced Desktop RAG initialized
+   📊 Indexed files: 0
+   🏷️  Tagged files: 0
+   🔗 File relationships: 0
+💬 Communication Enhancements initialized
+   ✅ 8 advanced features ready
+✅ Self-Operating Computer initialized
+📺 Screen size detected: 1920x1080
+✅ Comprehensive Desktop Controller initialized
+✅ Command Parser initialized
+🎯 Task Coordinator initialized
+✅ Enhanced Command Executor initialized with self-operating support
+✅ Enhanced Command Executor with self-operating integration initialized
+📺 Screen size detected: 1920x1080
+🚀 Advanced Smart Screen Monitor initialized
+   ✨ Enhanced with multi-modal AI intelligence
+📺 Screen size detected: 1920x1080
+🚀 AI Screen Monitoring System initialized
+   ✨ 8 AI analysis modes available
+   📊 Analytics tracking enabled
+   🧠 Pattern learning active
+📁 File Automation System initialized
+📺 Screen size detected: 1920x1080
+🔧 Initializing automation capabilities...
+📺 Screen size detected: 1920x1080
+📱 WhatsApp automation ready
+🤖 AI Screen Suggester ready!
+📧 Email Sender (DEMO MODE - credentials not configured)
+📱 Chat Monitor initialized
+   ⚠️  Gmail credentials not configured
+   ⚠️  Twilio credentials not configured
+📺 Screen size detected: 1920x1080
+📱 Visual Chat Monitor initialized
+   ✅ Will control real Gmail/WhatsApp on your screen
+📺 Screen size detected: 1920x1080
+👁️ Smart Screen Monitor initialized
+🧠 Advanced Desktop RAG initialized
+   📊 Indexed files: 0
+   🏷️  Tagged files: 0
+   🔗 File relationships: 0
+💬 Communication Enhancements initialized
+   ✅ 8 advanced features ready
+🧠 Initializing emotional intelligence...
+🎯 Initializing common sense reasoning...
+📺 Screen size detected: 1920x1080
+✅ Self-Operating Computer initialized
+📺 Screen size detected: 1920x1080
+✅ Comprehensive Desktop Controller initialized
+✅ Command Parser initialized
+✅ Self-Operating Integration Hub initialized
+✅ WebSocket client initialized for real-time updates
+✅ Voice sound effects initialized
+✅ Created default sound effects in voice_sounds/
+🔊 Voice sound effects ready!
+✅ Voice Commander initialized with callback
+✅ Macro Recorder initialized
+✅ Natural Language Workflow Builder initialized
+⚠️ Security Dashboard initialization failed: module 'cv2' has no attribute 'face'
+Error saving profile: 'metadata'
+⚠️ WebSocket Client connection failed: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /socket.io/?transport=polling&EIO=4&t=1762529593.3250687 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001C792FDAF90>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
