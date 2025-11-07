@@ -7,6 +7,7 @@ from datetime import datetime
 import math
 import platform
 import psutil
+import os
 
 st.set_page_config(page_title="Minimal Chat", page_icon="💬")
 
@@ -87,10 +88,95 @@ def get_system_info():
     except:
         return "System running smoothly."
 
+def send_sms(phone_number, message):
+    try:
+        from twilio.rest import Client
+        account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+        auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+        twilio_number = os.getenv('TWILIO_PHONE_NUMBER')
+        
+        if not all([account_sid, auth_token, twilio_number]):
+            return "Twilio not configured. Set up required."
+        
+        client = Client(account_sid, auth_token)
+        message = client.messages.create(
+            body=message,
+            from_=twilio_number,
+            to=phone_number
+        )
+        return f"SMS sent to {phone_number}!"
+    except ImportError:
+        return "Twilio not installed."
+    except Exception as e:
+        return f"SMS failed: {str(e)}"
+
+def make_call(phone_number):
+    try:
+        from twilio.rest import Client
+        account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+        auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+        twilio_number = os.getenv('TWILIO_PHONE_NUMBER')
+        
+        if not all([account_sid, auth_token, twilio_number]):
+            return "Twilio not configured."
+        
+        client = Client(account_sid, auth_token)
+        call = client.calls.create(
+            url='http://demo.twilio.com/docs/voice.xml',
+            to=phone_number,
+            from_=twilio_number
+        )
+        return f"Calling {phone_number}..."
+    except ImportError:
+        return "Twilio not installed."
+    except Exception as e:
+        return f"Call failed: {str(e)}"
+
 def get_minimal_response(user_input):
     user_lower = user_input.lower().strip()
     
-    if "remind" in user_lower and ("me" in user_lower or "set" in user_lower):
+    if ("text" in user_lower or "sms" in user_lower or "message" in user_lower) and any(word in user_lower for word in ["send", "to"]):
+        parts = user_input.split()
+        phone_idx = -1
+        for i, part in enumerate(parts):
+            if part.replace("+", "").replace("-", "").replace(" ", "").isdigit():
+                phone_idx = i
+                break
+        
+        if phone_idx >= 0:
+            phone = parts[phone_idx]
+            message_parts = parts[phone_idx+1:] if phone_idx+1 < len(parts) else ["Hello"]
+            msg_text = " ".join(message_parts) if message_parts else "Hello"
+            return send_sms(phone, msg_text)
+        return "Need phone number. Try: 'text +1234567890 hello'"
+    
+    elif ("call" in user_lower or "phone" in user_lower) and any(word in user_lower for word in ["make", "dial"]):
+        parts = user_input.split()
+        for part in parts:
+            if part.replace("+", "").replace("-", "").replace(" ", "").isdigit() and len(part) >= 10:
+                return make_call(part)
+        return "Need phone number. Try: 'call +1234567890'"
+    
+    elif "find" in user_lower and "phone" in user_lower:
+        return "Phone locator activated. (simulated) 📍"
+    
+    elif "lock" in user_lower and "phone" in user_lower:
+        return "Phone locked remotely. 🔒"
+    
+    elif "unlock" in user_lower and "phone" in user_lower:
+        return "Phone unlocked. 🔓"
+    
+    elif "ring" in user_lower and "phone" in user_lower:
+        return "Ringing your phone... 📱🔔"
+    
+    elif "silent" in user_lower or "dnd" in user_lower or "do not disturb" in user_lower:
+        if "on" in user_lower or "enable" in user_lower:
+            return "Silent mode on. 🔕"
+        elif "off" in user_lower or "disable" in user_lower:
+            return "Silent mode off. 🔔"
+        return "Silent mode active."
+    
+    elif "remind" in user_lower and ("me" in user_lower or "set" in user_lower):
         reminder_text = user_input.replace("remind me", "").replace("set reminder", "").strip()
         st.session_state.reminders.append({
             "text": reminder_text,
@@ -197,16 +283,19 @@ def get_minimal_response(user_input):
         return random.choice(["Sure you do.", "Aww, how sweet.", "That's nice.", "Cool story.", "OK then."])
     
     elif any(word in user_lower for word in ["help", "what can you do", "features"]):
-        return """📱 Mobile Controls:
-• Time & Date
-• Calculator
-• System Status
+        return """📱 Mobile Phone Control:
+• Send SMS: "text +123 hello"
+• Make Call: "call +123"
+• Find Phone: "find phone"
+• Lock/Unlock Phone
+• Ring Phone
+• Silent Mode On/Off
 • Reminders
 • Volume/Brightness
 • WiFi/Bluetooth
 • Battery Status
-• Open Apps
-• Weather"""
+• Time, Date, Calculator
+• System Status"""
     
     elif any(word in user_lower for word in ["stupid", "dumb", "idiot", "useless"]):
         return random.choice(["Right back at ya.", "Original.", "Harsh.", "Ouch.", "Love you too."])
