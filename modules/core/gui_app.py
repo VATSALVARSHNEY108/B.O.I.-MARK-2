@@ -394,271 +394,272 @@ class AutomationControllerGUI:
         )
         main_container.pack(fill="both", expand=True, padx=5, pady=5)
 
-        left_panel = tk.Frame(
-            main_container, 
-            bg="#0a0a0a", 
-            width=450,
-            highlightbackground="#ffffff",
-            highlightthickness=2
-        )
-        left_panel.pack(side="left", fill="both", expand=False, padx=5)
-        left_panel.pack_propagate(False)
+        # Quick Actions Center removed as per user request
+        # left_panel = tk.Frame(
+        #     main_container, 
+        #     bg="#0a0a0a", 
+        #     width=450,
+        #     highlightbackground="#ffffff",
+        #     highlightthickness=2
+        # )
+        # left_panel.pack(side="left", fill="both", expand=False, padx=5)
+        # left_panel.pack_propagate(False)
 
-        left_header = tk.Frame(
-            left_panel, 
-            bg="#1a1a1a", 
-            relief="solid",
-            highlightbackground="#ffffff",
-            highlightthickness=2
-        )
-        left_header.pack(fill="x", pady=5, padx=5)
+        # left_header = tk.Frame(
+        #     left_panel, 
+        #     bg="#1a1a1a", 
+        #     relief="solid",
+        #     highlightbackground="#ffffff",
+        #     highlightthickness=2
+        # )
+        # left_header.pack(fill="x", pady=5, padx=5)
 
-        categories_label = tk.Label(left_header,
-                                    text="⚡ Quick Actions Center ⚡",
-                                    bg="#1a1a1a",
-                                    fg="#00d4ff",
-                                    font=("Impact", 16, "bold"),
-                                    pady=12)
-        categories_label.pack()
+        # categories_label = tk.Label(left_header,
+        #                             text="⚡ Quick Actions Center ⚡",
+        #                             bg="#1a1a1a",
+        #                             fg="#00d4ff",
+        #                             font=("Impact", 16, "bold"),
+        #                             pady=12)
+        # categories_label.pack()
 
-        # Quick actions navigation container
-        self.quick_actions_container = tk.Frame(
-            left_panel, 
-            bg="#0a0a0a", 
-            relief="solid",
-            highlightbackground="#ffffff",
-            highlightthickness=2
-        )
-        self.quick_actions_container.pack(fill="both", expand=True, padx=5, pady=5)
+        # Quick actions navigation container - REMOVED
+        # self.quick_actions_container = tk.Frame(
+        #     left_panel, 
+        #     bg="#0a0a0a", 
+        #     relief="solid",
+        #     highlightbackground="#ffffff",
+        #     highlightthickness=2
+        # )
+        # self.quick_actions_container.pack(fill="both", expand=True, padx=5, pady=5)
         
-        # Create sidebar and main content container
-        self.sidebar_main_container = tk.Frame(self.quick_actions_container, bg="#0a0a0a")
-        self.sidebar_main_container.pack(fill="both", expand=True)
+        # Create sidebar and main content container - REMOVED
+        # self.sidebar_main_container = tk.Frame(self.quick_actions_container, bg="#0a0a0a")
+        # self.sidebar_main_container.pack(fill="both", expand=True)
         
-        # Create collapsible sidebar
-        self.sidebar_expanded = True
-        self.sidebar = tk.Frame(
-            self.sidebar_main_container, 
-            bg="#1a1a1a", 
-            width=120,
-            highlightbackground="#ffffff",
-            highlightthickness=1
-        )
-        self.sidebar.pack(side="left", fill="y", padx=2)
-        self.sidebar.pack_propagate(False)
+        # Create collapsible sidebar - REMOVED
+        # self.sidebar_expanded = True
+        # self.sidebar = tk.Frame(
+        #     self.sidebar_main_container, 
+        #     bg="#1a1a1a", 
+        #     width=120,
+        #     highlightbackground="#ffffff",
+        #     highlightthickness=1
+        # )
+        # self.sidebar.pack(side="left", fill="y", padx=2)
+        # self.sidebar.pack_propagate(False)
         
-        # Sidebar toggle button
-        self.sidebar_toggle_btn = tk.Button(self.sidebar,
-                                           text="◀",
-                                           bg="#00d4ff",
-                                           fg="#000000",
-                                           font=("Arial Black", 12, "bold"),
-                                           relief="solid",
-                                           borderwidth=2,
-                                           cursor="hand2",
-                                           command=self.toggle_sidebar,
-                                           padx=10,
-                                           pady=5,
-                                           highlightbackground="#ffffff")
-        self.sidebar_toggle_btn.pack(fill="x", padx=3, pady=3)
-        self.add_hover_effect(self.sidebar_toggle_btn, "#00d4ff", "#00ff88")
+        # # Sidebar toggle button
+        # self.sidebar_toggle_btn = tk.Button(self.sidebar,
+        #                                    text="◀",
+        #                                    bg="#00d4ff",
+        #                                    fg="#000000",
+        #                                    font=("Arial Black", 12, "bold"),
+        #                                    relief="solid",
+        #                                    borderwidth=2,
+        #                                    cursor="hand2",
+        #                                    command=self.toggle_sidebar,
+        #                                    padx=10,
+        #                                    pady=5,
+        #                                    highlightbackground="#ffffff")
+        # self.sidebar_toggle_btn.pack(fill="x", padx=3, pady=3)
+        # self.add_hover_effect(self.sidebar_toggle_btn, "#00d4ff", "#00ff88")
         
-        # Sidebar title
-        self.sidebar_title = tk.Label(self.sidebar,
-                                     text="MENU",
-                                     bg="#1a1a1a",
-                                     fg="#ffffff",
-                                     font=("Impact", 10, "bold"))
-        self.sidebar_title.pack(pady=(5, 10))
+        # # Sidebar title
+        # self.sidebar_title = tk.Label(self.sidebar,
+        #                              text="MENU",
+        #                              bg="#1a1a1a",
+        #                              fg="#ffffff",
+        #                              font=("Impact", 10, "bold"))
+        # self.sidebar_title.pack(pady=(5, 10))
         
-        # Category navigation data
-        self.sidebar_categories = [
-            ("🖥️", "SYSTEM", "#00d4ff"),
-            ("🌐", "WEB", "#00ff88"),
-            ("📁", "WORK", "#b19cd9"),
-            ("🎵", "MEDIA", "#ff0080"),
-        ]
+        # # Category navigation data
+        # self.sidebar_categories = [
+        #     ("🖥️", "SYSTEM", "#00d4ff"),
+        #     ("🌐", "WEB", "#00ff88"),
+        #     ("📁", "WORK", "#b19cd9"),
+        #     ("🎵", "MEDIA", "#ff0080"),
+        # ]
         
-        self.sidebar_buttons = []
-        self.active_sidebar_category = None
+        # self.sidebar_buttons = []
+        # self.active_sidebar_category = None
         
-        # Create category buttons in sidebar
-        for icon, name, color in self.sidebar_categories:
-            btn_frame = tk.Frame(self.sidebar, bg="#1a1a1a")
-            btn_frame.pack(fill="x", pady=3, padx=3)
+        # # Create category buttons in sidebar
+        # for icon, name, color in self.sidebar_categories:
+        #     btn_frame = tk.Frame(self.sidebar, bg="#1a1a1a")
+        #     btn_frame.pack(fill="x", pady=3, padx=3)
             
-            btn = tk.Button(btn_frame,
-                          text=f"{icon}\n{name}",
-                          bg="#0a0a0a",
-                          fg=color,
-                          font=("Arial Black", 9, "bold"),
-                          relief="solid",
-                          borderwidth=2,
-                          cursor="hand2",
-                          command=lambda cat=name: self.scroll_to_category(cat),
-                          padx=8,
-                          pady=10,
-                          width=10,
-                          wraplength=80,
-                          highlightbackground="#ffffff",
-                          highlightthickness=1)
-            btn.pack(fill="both", expand=True)
+        #     btn = tk.Button(btn_frame,
+        #                   text=f"{icon}\n{name}",
+        #                   bg="#0a0a0a",
+        #                   fg=color,
+        #                   font=("Arial Black", 9, "bold"),
+        #                   relief="solid",
+        #                   borderwidth=2,
+        #                   cursor="hand2",
+        #                   command=lambda cat=name: self.scroll_to_category(cat),
+        #                   padx=8,
+        #                   pady=10,
+        #                   width=10,
+        #                   wraplength=80,
+        #                   highlightbackground="#ffffff",
+        #                   highlightthickness=1)
+        #     btn.pack(fill="both", expand=True)
             
-            self.sidebar_buttons.append((btn, name, color))
-            self.add_hover_effect(btn, "#0a0a0a", color)
+        #     self.sidebar_buttons.append((btn, name, color))
+        #     self.add_hover_effect(btn, "#0a0a0a", color)
         
-        # Create main menu view
-        self.quick_menu_view = tk.Frame(self.sidebar_main_container, bg="#0a0a0a")
+        # # Create main menu view
+        # self.quick_menu_view = tk.Frame(self.sidebar_main_container, bg="#0a0a0a")
         
-        # Subtitle
-        menu_subtitle = tk.Label(self.quick_menu_view,
-                                text="⚡ Choose an action below ⚡",
-                                bg="#0a0a0a",
-                                fg="#00ff88",
-                                font=("Consolas", 10, "bold"))
-        menu_subtitle.pack(anchor="w", padx=8, pady=(5, 8))
+        # # Subtitle - REMOVED
+        # menu_subtitle = tk.Label(self.quick_menu_view,
+        #                         text="⚡ Choose an action below ⚡",
+        #                         bg="#0a0a0a",
+        #                         fg="#00ff88",
+        #                         font=("Consolas", 10, "bold"))
+        # menu_subtitle.pack(anchor="w", padx=8, pady=(5, 8))
         
-        # Scrollable menu
-        self.menu_canvas = tk.Canvas(
-            self.quick_menu_view, 
-            bg="#0a0a0a", 
-            highlightbackground="#ffffff",
-            highlightthickness=1
-        )
-        menu_scrollbar = ttk.Scrollbar(self.quick_menu_view, orient="vertical", command=self.menu_canvas.yview)
-        menu_scrollable = tk.Frame(self.menu_canvas, bg="#0a0a0a")
+        # # Scrollable menu - REMOVED
+        # self.menu_canvas = tk.Canvas(
+        #     self.quick_menu_view, 
+        #     bg="#0a0a0a", 
+        #     highlightbackground="#ffffff",
+        #     highlightthickness=1
+        # )
+        # menu_scrollbar = ttk.Scrollbar(self.quick_menu_view, orient="vertical", command=self.menu_canvas.yview)
+        # menu_scrollable = tk.Frame(self.menu_canvas, bg="#0a0a0a")
         
-        menu_scrollable.bind(
-            "<Configure>",
-            lambda e: self.menu_canvas.configure(scrollregion=self.menu_canvas.bbox("all"))
-        )
+        # menu_scrollable.bind(
+        #     "<Configure>",
+        #     lambda e: self.menu_canvas.configure(scrollregion=self.menu_canvas.bbox("all"))
+        # )
         
-        self.menu_canvas.create_window((0, 0), window=menu_scrollable, anchor="nw")
-        self.menu_canvas.configure(yscrollcommand=menu_scrollbar.set)
+        # self.menu_canvas.create_window((0, 0), window=menu_scrollable, anchor="nw")
+        # self.menu_canvas.configure(yscrollcommand=menu_scrollbar.set)
         
-        # Store header widgets for scrolling
-        self.category_headers = {}
+        # # Store header widgets for scrolling
+        # self.category_headers = {}
         
-        # Define quick actions with features
-        self.quick_actions_data = [
-            ("🖥️ SYSTEM", None, "#89b4fa", True, None),
-            ("💻 Screenshot", "Take a screenshot", "#89b4fa", False, "screenshot"),
-            ("🔒 Lock PC", "Lock the computer", "#f38ba8", False, "lock"),
-            ("📊 Task Manager", "Open Task Manager", "#cba6f7", False, "taskmanager"),
-            ("🔋 Battery Info", "View battery status", "#a6e3a1", False, "battery"),
-            ("⚙️ System Settings", "Open system settings", "#89dceb", False, "settings"),
+        # # Define quick actions with features - REMOVED
+        # self.quick_actions_data = [
+        #     ("🖥️ SYSTEM", None, "#89b4fa", True, None),
+        #     ("💻 Screenshot", "Take a screenshot", "#89b4fa", False, "screenshot"),
+        #     ("🔒 Lock PC", "Lock the computer", "#f38ba8", False, "lock"),
+        #     ("📊 Task Manager", "Open Task Manager", "#cba6f7", False, "taskmanager"),
+        #     ("🔋 Battery Info", "View battery status", "#a6e3a1", False, "battery"),
+        #     ("⚙️ System Settings", "Open system settings", "#89dceb", False, "settings"),
             
-            ("🌐 WEB & APPS", None, "#89dceb", True, None),
-            ("🌍 Chrome", "Open Chrome and go to Google", "#89dceb", False, "chrome"),
-            ("🔍 Google Search", "Search Google for Python tutorials", "#a6e3a1", False, "google"),
-            ("📧 Gmail", "Open Gmail in browser", "#f38ba8", False, "gmail"),
-            ("💬 WhatsApp", "Open WhatsApp Web", "#a6e3a1", False, "whatsapp"),
-            ("📺 YouTube", "Open YouTube", "#f38ba8", False, "youtube"),
+        #     ("🌐 WEB & APPS", None, "#89dceb", True, None),
+        #     ("🌍 Chrome", "Open Chrome and go to Google", "#89dceb", False, "chrome"),
+        #     ("🔍 Google Search", "Search Google for Python tutorials", "#a6e3a1", False, "google"),
+        #     ("📧 Gmail", "Open Gmail in browser", "#f38ba8", False, "gmail"),
+        #     ("💬 WhatsApp", "Open WhatsApp Web", "#a6e3a1", False, "whatsapp"),
+        #     ("📺 YouTube", "Open YouTube", "#f38ba8", False, "youtube"),
             
-            ("📁 PRODUCTIVITY", None, "#a6e3a1", True, None),
-            ("📝 VS Code", "Launch VS Code", "#89b4fa", False, "vscode"),
-            ("📂 File Explorer", "Open File Explorer", "#f9e2af", False, "explorer"),
-            ("🗒️ Notepad", "Open Notepad", "#cba6f7", False, "notepad"),
-            ("📊 Excel", "Launch Microsoft Excel", "#a6e3a1", False, "excel"),
-            ("📄 Word", "Launch Microsoft Word", "#89dceb", False, "word"),
+        #     ("📁 PRODUCTIVITY", None, "#a6e3a1", True, None),
+        #     ("📝 VS Code", "Launch VS Code", "#89b4fa", False, "vscode"),
+        #     ("📂 File Explorer", "Open File Explorer", "#f9e2af", False, "explorer"),
+        #     ("🗒️ Notepad", "Open Notepad", "#cba6f7", False, "notepad"),
+        #     ("📊 Excel", "Launch Microsoft Excel", "#a6e3a1", False, "excel"),
+        #     ("📄 Word", "Launch Microsoft Word", "#89dceb", False, "word"),
             
-            ("🎵 MEDIA", None, "#f5c2e7", True, None),
-            ("🎵 Spotify", "Launch Spotify", "#a6e3a1", False, "spotify"),
-            ("🎬 VLC Player", "Open VLC Media Player", "#f9e2af", False, "vlc"),
-            ("🔊 Volume Control", "Control system volume", "#89dceb", False, "volume"),
-            ("🎧 Sound Settings", "Open sound settings", "#cba6f7", False, "sound"),
+        #     ("🎵 MEDIA", None, "#f5c2e7", True, None),
+        #     ("🎵 Spotify", "Launch Spotify", "#a6e3a1", False, "spotify"),
+        #     ("🎬 VLC Player", "Open VLC Media Player", "#f9e2af", False, "vlc"),
+        #     ("🔊 Volume Control", "Control system volume", "#89dceb", False, "volume"),
+        #     ("🎧 Sound Settings", "Open sound settings", "#cba6f7", False, "sound"),
             
-            ("🎬 AUTOMATION", None, "#f5c2e7", True, None),
-            ("💬 Workflow Builder", "Build workflows in plain English", "#a6e3a1", False, "workflow_builder"),
-            ("🎬 Macro Recorder", "Record and playback macros", "#f5c2e7", False, "macro_recorder"),
-            ("📱 Mobile Control", "Remote control via mobile", "#89dceb", False, "mobile_control"),
-        ]
+        #     ("🎬 AUTOMATION", None, "#f5c2e7", True, None),
+        #     ("💬 Workflow Builder", "Build workflows in plain English", "#a6e3a1", False, "workflow_builder"),
+        #     ("🎬 Macro Recorder", "Record and playback macros", "#f5c2e7", False, "macro_recorder"),
+        #     ("📱 Mobile Control", "Remote control via mobile", "#89dceb", False, "mobile_control"),
+        # ]
         
-        # Create menu buttons
-        for item in self.quick_actions_data:
-            text, description, color, is_header, feature_id = item
+        # # Create menu buttons - REMOVED
+        # for item in self.quick_actions_data:
+        #     text, description, color, is_header, feature_id = item
             
-            if is_header:
-                header_container = tk.Frame(menu_scrollable, bg="#1a1a2e", height=35)
-                header_container.pack(fill="x", padx=5, pady=(12, 3))
-                header_container.pack_propagate(False)
+        #     if is_header:
+        #         header_container = tk.Frame(menu_scrollable, bg="#1a1a2e", height=35)
+        #         header_container.pack(fill="x", padx=5, pady=(12, 3))
+        #         header_container.pack_propagate(False)
                 
-                # Store header for scrolling
-                self.category_headers[text] = header_container
+        #         # Store header for scrolling
+        #         self.category_headers[text] = header_container
                 
-                accent = tk.Frame(header_container, bg=color, width=4)
-                accent.pack(side="left", fill="y", padx=(0, 10))
+        #         accent = tk.Frame(header_container, bg=color, width=4)
+        #         accent.pack(side="left", fill="y", padx=(0, 10))
                 
-                header_label = tk.Label(header_container,
-                                       text=text,
-                                       bg="#1a1a2e",
-                                       fg=color,
-                                       font=("Segoe UI", 10, "bold"))
-                header_label.pack(side="left", pady=8)
-            else:
-                btn = tk.Button(menu_scrollable,
-                               text=text,
-                               bg="#313244",
-                               fg="#cdd6f4",
-                               font=("Segoe UI", 10),
-                               relief="flat",
-                               cursor="hand2",
-                               command=lambda t=text, d=description, c=color, f=feature_id: self.show_quick_action_feature(t, d, c, f),
-                               padx=20,
-                               pady=12,
-                               anchor="w",
-                               bd=0)
-                btn.pack(fill="x", padx=8, pady=3)
+        #         header_label = tk.Label(header_container,
+        #                                text=text,
+        #                                bg="#1a1a2e",
+        #                                fg=color,
+        #                                font=("Segoe UI", 10, "bold"))
+        #         header_label.pack(side="left", pady=8)
+        #     else:
+        #         btn = tk.Button(menu_scrollable,
+        #                        text=text,
+        #                        bg="#313244",
+        #                        fg="#cdd6f4",
+        #                        font=("Segoe UI", 10),
+        #                        relief="flat",
+        #                        cursor="hand2",
+        #                        command=lambda t=text, d=description, c=color, f=feature_id: self.show_quick_action_feature(t, d, c, f),
+        #                        padx=20,
+        #                        pady=12,
+        #                        anchor="w",
+        #                        bd=0)
+        #         btn.pack(fill="x", padx=8, pady=3)
                 
-                def make_hover(button, accent_color):
-                    def on_enter(e):
-                        button.config(bg="#45475a", fg=accent_color)
-                    def on_leave(e):
-                        button.config(bg="#313244", fg="#cdd6f4")
-                    button.bind("<Enter>", on_enter)
-                    button.bind("<Leave>", on_leave)
+        #         def make_hover(button, accent_color):
+        #             def on_enter(e):
+        #                 button.config(bg="#45475a", fg=accent_color)
+        #             def on_leave(e):
+        #                 button.config(bg="#313244", fg="#cdd6f4")
+        #             button.bind("<Enter>", on_enter)
+        #             button.bind("<Leave>", on_leave)
                 
-                make_hover(btn, color)
+        #         make_hover(btn, color)
         
-        self.menu_canvas.pack(side="left", fill="both", expand=True)
-        menu_scrollbar.pack(side="right", fill="y")
+        # self.menu_canvas.pack(side="left", fill="both", expand=True)
+        # menu_scrollbar.pack(side="right", fill="y")
         
-        # Create feature view (initially hidden)
-        self.quick_feature_view = tk.Frame(self.quick_actions_container, bg="#1a1a2e")
+        # # Create feature view (initially hidden) - REMOVED
+        # self.quick_feature_view = tk.Frame(self.quick_actions_container, bg="#1a1a2e")
         
-        # Feature view header
-        feature_header_frame = tk.Frame(self.quick_feature_view, bg="#1a1a2e", height=60)
-        feature_header_frame.pack(fill="x", pady=(0, 10))
-        feature_header_frame.pack_propagate(False)
+        # # Feature view header
+        # feature_header_frame = tk.Frame(self.quick_feature_view, bg="#1a1a2e", height=60)
+        # feature_header_frame.pack(fill="x", pady=(0, 10))
+        # feature_header_frame.pack_propagate(False)
         
-        # Back button
-        self.back_button = tk.Button(feature_header_frame,
-                                     text="← Back",
-                                     bg="#313244",
-                                     fg="#89b4fa",
-                                     font=("Segoe UI", 11, "bold"),
-                                     relief="flat",
-                                     cursor="hand2",
-                                     command=self.show_quick_actions_menu,
-                                     padx=20,
-                                     pady=10)
-        self.back_button.pack(side="left", padx=10, pady=10)
-        self.add_hover_effect(self.back_button, "#313244", "#45475a")
+        # # Back button
+        # self.back_button = tk.Button(feature_header_frame,
+        #                              text="← Back",
+        #                              bg="#313244",
+        #                              fg="#89b4fa",
+        #                              font=("Segoe UI", 11, "bold"),
+        #                              relief="flat",
+        #                              cursor="hand2",
+        #                              command=self.show_quick_actions_menu,
+        #                              padx=20,
+        #                              pady=10)
+        # self.back_button.pack(side="left", padx=10, pady=10)
+        # self.add_hover_effect(self.back_button, "#313244", "#45475a")
         
-        # Feature title
-        self.feature_title = tk.Label(feature_header_frame,
-                                     text="",
-                                     bg="#1a1a2e",
-                                     fg="#f9e2af",
-                                     font=("Segoe UI", 13, "bold"))
-        self.feature_title.pack(side="left", padx=15, pady=10)
+        # # Feature title
+        # self.feature_title = tk.Label(feature_header_frame,
+        #                              text="",
+        #                              bg="#1a1a2e",
+        #                              fg="#f9e2af",
+        #                              font=("Segoe UI", 13, "bold"))
+        # self.feature_title.pack(side="left", padx=15, pady=10)
         
-        # Feature content area
-        self.feature_content = tk.Frame(self.quick_feature_view, bg="#181825", relief="flat")
-        self.feature_content.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+        # # Feature content area
+        # self.feature_content = tk.Frame(self.quick_feature_view, bg="#181825", relief="flat")
+        # self.feature_content.pack(fill="both", expand=True, padx=10, pady=(0, 10))
         
-        # Show menu view by default
-        self.quick_menu_view.pack(fill="both", expand=True)
+        # # Show menu view by default
+        # self.quick_menu_view.pack(fill="both", expand=True)
 
         right_panel = tk.Frame(
             main_container, 
@@ -1516,148 +1517,148 @@ class AutomationControllerGUI:
         execute_btn.pack(side="right", padx=(5, 0))
         self.add_hover_effect(execute_btn, "#f9e2af", "#f5c2e7")
         
-        # Quick actions section with navigation
-        self.quick_actions_container = tk.Frame(left_column, bg="#1e1e2e")
-        self.quick_actions_container.pack(fill="both", expand=True, pady=(5, 10))
+        # Quick actions section with navigation - REMOVED
+        # self.quick_actions_container = tk.Frame(left_column, bg="#1e1e2e")
+        # self.quick_actions_container.pack(fill="both", expand=True, pady=(5, 10))
         
-        # Create main menu view
-        self.quick_menu_view = tk.Frame(self.quick_actions_container, bg="#1e1e2e")
+        # # Create main menu view
+        # self.quick_menu_view = tk.Frame(self.quick_actions_container, bg="#1e1e2e")
         
-        # Header
-        menu_header = tk.Label(self.quick_menu_view,
-                              text="⚡ Quick Actions Centre",
-                              bg="#1e1e2e",
-                              fg="#f9e2af",
-                              font=("Segoe UI", 11, "bold"))
-        menu_header.pack(anchor="w", padx=8, pady=(5, 2))
+        # # Header
+        # menu_header = tk.Label(self.quick_menu_view,
+        #                       text="⚡ Quick Actions Centre",
+        #                       bg="#1e1e2e",
+        #                       fg="#f9e2af",
+        #                       font=("Segoe UI", 11, "bold"))
+        # menu_header.pack(anchor="w", padx=8, pady=(5, 2))
         
-        # Subtitle
-        menu_subtitle = tk.Label(self.quick_menu_view,
-                                text="Choose an action below",
-                                bg="#1e1e2e",
-                                fg="#6c7086",
-                                font=("Segoe UI", 8))
-        menu_subtitle.pack(anchor="w", padx=8, pady=(0, 8))
+        # # Subtitle
+        # menu_subtitle = tk.Label(self.quick_menu_view,
+        #                         text="Choose an action below",
+        #                         bg="#1e1e2e",
+        #                         fg="#6c7086",
+        #                         font=("Segoe UI", 8))
+        # menu_subtitle.pack(anchor="w", padx=8, pady=(0, 8))
         
-        # Scrollable menu
-        menu_canvas = tk.Canvas(self.quick_menu_view, bg="#1e1e2e", highlightthickness=0, height=400)
-        menu_scrollbar = ttk.Scrollbar(self.quick_menu_view, orient="vertical", command=menu_canvas.yview)
-        menu_scrollable = tk.Frame(menu_canvas, bg="#1e1e2e")
+        # # Scrollable menu - REMOVED
+        # menu_canvas = tk.Canvas(self.quick_menu_view, bg="#1e1e2e", highlightthickness=0, height=400)
+        # menu_scrollbar = ttk.Scrollbar(self.quick_menu_view, orient="vertical", command=menu_canvas.yview)
+        # menu_scrollable = tk.Frame(menu_canvas, bg="#1e1e2e")
         
-        menu_scrollable.bind(
-            "<Configure>",
-            lambda e: menu_canvas.configure(scrollregion=menu_canvas.bbox("all"))
-        )
+        # menu_scrollable.bind(
+        #     "<Configure>",
+        #     lambda e: menu_canvas.configure(scrollregion=menu_canvas.bbox("all"))
+        # )
         
-        menu_canvas.create_window((0, 0), window=menu_scrollable, anchor="nw", width=400)
-        menu_canvas.configure(yscrollcommand=menu_scrollbar.set)
+        # menu_canvas.create_window((0, 0), window=menu_scrollable, anchor="nw", width=400)
+        # menu_canvas.configure(yscrollcommand=menu_scrollbar.set)
         
-        # Define quick actions with features
-        self.quick_actions_data = [
-            ("🖥️ SYSTEM", None, "#89b4fa", True, None),
-            ("💻 Screenshot", "Take a screenshot", "#89b4fa", False, "screenshot"),
-            ("🔒 Lock PC", "Lock the computer", "#f38ba8", False, "lock"),
-            ("📊 Task Manager", "Open Task Manager", "#cba6f7", False, "taskmanager"),
+        # # Define quick actions with features - REMOVED
+        # self.quick_actions_data = [
+        #     ("🖥️ SYSTEM", None, "#89b4fa", True, None),
+        #     ("💻 Screenshot", "Take a screenshot", "#89b4fa", False, "screenshot"),
+        #     ("🔒 Lock PC", "Lock the computer", "#f38ba8", False, "lock"),
+        #     ("📊 Task Manager", "Open Task Manager", "#cba6f7", False, "taskmanager"),
             
-            ("🌐 WEB & APPS", None, "#89dceb", True, None),
-            ("🌍 Chrome", "Open Chrome and go to Google", "#89dceb", False, "chrome"),
-            ("🔍 Google Search", "Search Google for Python tutorials", "#a6e3a1", False, "google"),
-            ("📧 Gmail", "Open Gmail in browser", "#f38ba8", False, "gmail"),
-            ("💬 WhatsApp", "Open WhatsApp Web", "#a6e3a1", False, "whatsapp"),
+        #     ("🌐 WEB & APPS", None, "#89dceb", True, None),
+        #     ("🌍 Chrome", "Open Chrome and go to Google", "#89dceb", False, "chrome"),
+        #     ("🔍 Google Search", "Search Google for Python tutorials", "#a6e3a1", False, "google"),
+        #     ("📧 Gmail", "Open Gmail in browser", "#f38ba8", False, "gmail"),
+        #     ("💬 WhatsApp", "Open WhatsApp Web", "#a6e3a1", False, "whatsapp"),
             
-            ("📁 PRODUCTIVITY", None, "#a6e3a1", True, None),
-            ("📝 VS Code", "Launch VS Code", "#89b4fa", False, "vscode"),
-            ("📂 File Explorer", "Open File Explorer", "#f9e2af", False, "explorer"),
-            ("🗒️ Notepad", "Open Notepad", "#cba6f7", False, "notepad"),
+        #     ("📁 PRODUCTIVITY", None, "#a6e3a1", True, None),
+        #     ("📝 VS Code", "Launch VS Code", "#89b4fa", False, "vscode"),
+        #     ("📂 File Explorer", "Open File Explorer", "#f9e2af", False, "explorer"),
+        #     ("🗒️ Notepad", "Open Notepad", "#cba6f7", False, "notepad"),
             
-            ("🎵 MEDIA", None, "#f5c2e7", True, None),
-            ("🎵 Spotify", "Launch Spotify", "#a6e3a1", False, "spotify"),
-            ("🎬 YouTube", "Open YouTube", "#f38ba8", False, "youtube"),
-            ("🔊 Volume", "Control system volume", "#89dceb", False, "volume"),
-        ]
+        #     ("🎵 MEDIA", None, "#f5c2e7", True, None),
+        #     ("🎵 Spotify", "Launch Spotify", "#a6e3a1", False, "spotify"),
+        #     ("🎬 YouTube", "Open YouTube", "#f38ba8", False, "youtube"),
+        #     ("🔊 Volume", "Control system volume", "#89dceb", False, "volume"),
+        # ]
         
-        # Create menu buttons
-        for item in self.quick_actions_data:
-            text, description, color, is_header, feature_id = item
+        # # Create menu buttons - REMOVED
+        # for item in self.quick_actions_data:
+        #     text, description, color, is_header, feature_id = item
             
-            if is_header:
-                header_container = tk.Frame(menu_scrollable, bg="#1e1e2e", height=35)
-                header_container.pack(fill="x", padx=5, pady=(8, 3))
-                header_container.pack_propagate(False)
+        #     if is_header:
+        #         header_container = tk.Frame(menu_scrollable, bg="#1e1e2e", height=35)
+        #         header_container.pack(fill="x", padx=5, pady=(8, 3))
+        #         header_container.pack_propagate(False)
                 
-                accent = tk.Frame(header_container, bg=color, width=3)
-                accent.pack(side="left", fill="y", padx=(0, 8))
+        #         accent = tk.Frame(header_container, bg=color, width=3)
+        #         accent.pack(side="left", fill="y", padx=(0, 8))
                 
-                header_label = tk.Label(header_container,
-                                       text=text,
-                                       bg="#1e1e2e",
-                                       fg=color,
-                                       font=("Segoe UI", 9, "bold"))
-                header_label.pack(side="left", pady=8)
-            else:
-                btn = tk.Button(menu_scrollable,
-                               text=text,
-                               bg="#313244",
-                               fg="#cdd6f4",
-                               font=("Segoe UI", 9, "bold"),
-                               relief="flat",
-                               cursor="hand2",
-                               command=lambda t=text, d=description, c=color, f=feature_id: self.show_quick_action_feature(t, d, c, f),
-                               padx=15,
-                               pady=10,
-                               anchor="w",
-                               bd=0)
-                btn.pack(fill="x", padx=8, pady=2)
+        #         header_label = tk.Label(header_container,
+        #                                text=text,
+        #                                bg="#1e1e2e",
+        #                                fg=color,
+        #                                font=("Segoe UI", 9, "bold"))
+        #         header_label.pack(side="left", pady=8)
+        #     else:
+        #         btn = tk.Button(menu_scrollable,
+        #                        text=text,
+        #                        bg="#313244",
+        #                        fg="#cdd6f4",
+        #                        font=("Segoe UI", 9, "bold"),
+        #                        relief="flat",
+        #                        cursor="hand2",
+        #                        command=lambda t=text, d=description, c=color, f=feature_id: self.show_quick_action_feature(t, d, c, f),
+        #                        padx=15,
+        #                        pady=10,
+        #                        anchor="w",
+        #                        bd=0)
+        #         btn.pack(fill="x", padx=8, pady=2)
                 
-                def make_hover(button, accent_color):
-                    def on_enter(e):
-                        button.config(bg="#45475a", fg=accent_color)
-                    def on_leave(e):
-                        button.config(bg="#313244", fg="#cdd6f4")
-                    button.bind("<Enter>", on_enter)
-                    button.bind("<Leave>", on_leave)
+        #         def make_hover(button, accent_color):
+        #             def on_enter(e):
+        #                 button.config(bg="#45475a", fg=accent_color)
+        #             def on_leave(e):
+        #                 button.config(bg="#313244", fg="#cdd6f4")
+        #             button.bind("<Enter>", on_enter)
+        #             button.bind("<Leave>", on_leave)
                 
-                make_hover(btn, color)
+        #         make_hover(btn, color)
         
-        self.menu_canvas.pack(side="left", fill="both", expand=True)
-        menu_scrollbar.pack(side="right", fill="y")
+        # self.menu_canvas.pack(side="left", fill="both", expand=True)
+        # menu_scrollbar.pack(side="right", fill="y")
         
-        # Create feature view (initially hidden)
-        self.quick_feature_view = tk.Frame(self.quick_actions_container, bg="#1e1e2e")
+        # # Create feature view (initially hidden) - REMOVED
+        # self.quick_feature_view = tk.Frame(self.quick_actions_container, bg="#1e1e2e")
         
-        # Feature view header
-        feature_header_frame = tk.Frame(self.quick_feature_view, bg="#1e1e2e", height=50)
-        feature_header_frame.pack(fill="x", pady=(0, 10))
-        feature_header_frame.pack_propagate(False)
+        # # Feature view header
+        # feature_header_frame = tk.Frame(self.quick_feature_view, bg="#1e1e2e", height=50)
+        # feature_header_frame.pack(fill="x", pady=(0, 10))
+        # feature_header_frame.pack_propagate(False)
         
-        # Back button
-        self.back_button = tk.Button(feature_header_frame,
-                                     text="← Back",
-                                     bg="#313244",
-                                     fg="#89b4fa",
-                                     font=("Segoe UI", 10, "bold"),
-                                     relief="flat",
-                                     cursor="hand2",
-                                     command=self.show_quick_actions_menu,
-                                     padx=15,
-                                     pady=8)
-        self.back_button.pack(side="left", padx=8, pady=8)
-        self.add_hover_effect(self.back_button, "#313244", "#45475a")
+        # # Back button
+        # self.back_button = tk.Button(feature_header_frame,
+        #                              text="← Back",
+        #                              bg="#313244",
+        #                              fg="#89b4fa",
+        #                              font=("Segoe UI", 10, "bold"),
+        #                              relief="flat",
+        #                              cursor="hand2",
+        #                              command=self.show_quick_actions_menu,
+        #                              padx=15,
+        #                              pady=8)
+        # self.back_button.pack(side="left", padx=8, pady=8)
+        # self.add_hover_effect(self.back_button, "#313244", "#45475a")
         
-        # Feature title
-        self.feature_title = tk.Label(feature_header_frame,
-                                     text="",
-                                     bg="#1e1e2e",
-                                     fg="#f9e2af",
-                                     font=("Segoe UI", 12, "bold"))
-        self.feature_title.pack(side="left", padx=10, pady=8)
+        # # Feature title
+        # self.feature_title = tk.Label(feature_header_frame,
+        #                              text="",
+        #                              bg="#1e1e2e",
+        #                              fg="#f9e2af",
+        #                              font=("Segoe UI", 12, "bold"))
+        # self.feature_title.pack(side="left", padx=10, pady=8)
         
-        # Feature content area
-        self.feature_content = tk.Frame(self.quick_feature_view, bg="#181825", relief="flat")
-        self.feature_content.pack(fill="both", expand=True, padx=8, pady=(0, 8))
+        # # Feature content area
+        # self.feature_content = tk.Frame(self.quick_feature_view, bg="#181825", relief="flat")
+        # self.feature_content.pack(fill="both", expand=True, padx=8, pady=(0, 8))
         
-        # Show menu view by default
-        self.quick_menu_view.pack(fill="both", expand=True)
+        # # Show menu view by default
+        # self.quick_menu_view.pack(fill="both", expand=True)
         
         # Example prompts
         examples_frame = tk.Frame(left_column, bg="#1e1e2e")
