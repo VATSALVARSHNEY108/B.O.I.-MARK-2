@@ -12,6 +12,36 @@ st.set_page_config(page_title="Minimal Chat", page_icon="💬")
 
 st.title("💬 Minimal Chatbot")
 
+st.markdown("""
+<style>
+    .stButton button {
+        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+        margin: 5px 0;
+    }
+    @media (max-width: 768px) {
+        .stChatInput input {
+            font-size: 16px;
+        }
+    }
+</style>
+""", unsafe_allow_html=True)
+
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    if st.button("⏰ Time"):
+        st.session_state.quick_cmd = "time"
+with col2:
+    if st.button("📅 Date"):
+        st.session_state.quick_cmd = "date"
+with col3:
+    if st.button("💻 System"):
+        st.session_state.quick_cmd = "system status"
+with col4:
+    if st.button("❓ Help"):
+        st.session_state.quick_cmd = "help"
+
 def speak_text(text):
     components.html(
         f"""
@@ -28,6 +58,12 @@ def speak_text(text):
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
+
+if "quick_cmd" not in st.session_state:
+    st.session_state.quick_cmd = None
+
+if "reminders" not in st.session_state:
+    st.session_state.reminders = []
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
@@ -54,7 +90,66 @@ def get_system_info():
 def get_minimal_response(user_input):
     user_lower = user_input.lower().strip()
     
-    if any(word in user_lower for word in ["time", "what time"]):
+    if "remind" in user_lower and ("me" in user_lower or "set" in user_lower):
+        reminder_text = user_input.replace("remind me", "").replace("set reminder", "").strip()
+        st.session_state.reminders.append({
+            "text": reminder_text,
+            "time": datetime.now().strftime("%I:%M %p")
+        })
+        return f"Reminder set: {reminder_text}"
+    
+    elif "show" in user_lower and "reminder" in user_lower:
+        if st.session_state.reminders:
+            reminders = "\n".join([f"- {r['text']} ({r['time']})" for r in st.session_state.reminders])
+            return f"Reminders:\n{reminders}"
+        return "No reminders set."
+    
+    elif "clear" in user_lower and "reminder" in user_lower:
+        count = len(st.session_state.reminders)
+        st.session_state.reminders = []
+        return f"Cleared {count} reminders."
+    
+    elif any(word in user_lower for word in ["open", "launch", "start"]) and any(app in user_lower for app in ["chrome", "browser", "calculator", "music", "spotify", "youtube", "gmail", "maps"]):
+        apps = ["chrome", "browser", "calculator", "music", "spotify", "youtube", "gmail", "maps"]
+        app_found = next((app for app in apps if app in user_lower), None)
+        if app_found:
+            return f"Opening {app_found}... (simulated)"
+        return "Can't find that app."
+    
+    elif "volume" in user_lower:
+        if "up" in user_lower or "increase" in user_lower or "+" in user_lower:
+            return "Volume up. 🔊"
+        elif "down" in user_lower or "decrease" in user_lower or "-" in user_lower:
+            return "Volume down. 🔉"
+        elif "mute" in user_lower:
+            return "Muted. 🔇"
+        return "Volume at 50%."
+    
+    elif "brightness" in user_lower:
+        if "up" in user_lower or "increase" in user_lower:
+            return "Brightness up. ☀️"
+        elif "down" in user_lower or "decrease" in user_lower:
+            return "Brightness down. 🌙"
+        return "Brightness at 50%."
+    
+    elif any(word in user_lower for word in ["wifi", "wi-fi"]):
+        if "on" in user_lower or "enable" in user_lower:
+            return "WiFi enabled. 📶"
+        elif "off" in user_lower or "disable" in user_lower:
+            return "WiFi disabled."
+        return "WiFi connected."
+    
+    elif "bluetooth" in user_lower:
+        if "on" in user_lower or "enable" in user_lower:
+            return "Bluetooth on. 🔵"
+        elif "off" in user_lower or "disable" in user_lower:
+            return "Bluetooth off."
+        return "Bluetooth ready."
+    
+    elif "battery" in user_lower or "charge" in user_lower:
+        return random.choice(["Battery at 85%.", "75% charged.", "Nearly full.", "Battery good.", "92% remaining."])
+    
+    elif any(word in user_lower for word in ["time", "what time"]):
         current_time = datetime.now().strftime("%I:%M %p")
         return f"It's {current_time}."
     
@@ -102,7 +197,16 @@ def get_minimal_response(user_input):
         return random.choice(["Sure you do.", "Aww, how sweet.", "That's nice.", "Cool story.", "OK then."])
     
     elif any(word in user_lower for word in ["help", "what can you do", "features"]):
-        return "Time, date, math, system info, chat."
+        return """📱 Mobile Controls:
+• Time & Date
+• Calculator
+• System Status
+• Reminders
+• Volume/Brightness
+• WiFi/Bluetooth
+• Battery Status
+• Open Apps
+• Weather"""
     
     elif any(word in user_lower for word in ["stupid", "dumb", "idiot", "useless"]):
         return random.choice(["Right back at ya.", "Original.", "Harsh.", "Ouch.", "Love you too."])
@@ -136,6 +240,23 @@ def get_minimal_response(user_input):
     
     else:
         return random.choice(["OK.", "Sure.", "Whatever.", "Noted.", "Interesting.", "Cool.", "If you say so.", "Mmhmm."])
+
+if st.session_state.quick_cmd:
+    prompt = st.session_state.quick_cmd
+    st.session_state.quick_cmd = None
+    
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.write(prompt)
+    
+    response = get_minimal_response(prompt)
+    
+    st.session_state.messages.append({"role": "assistant", "content": response})
+    with st.chat_message("assistant"):
+        st.write(response)
+    
+    speak_text(response)
+    st.rerun()
 
 if prompt := st.chat_input("Say something..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
