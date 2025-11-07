@@ -572,7 +572,6 @@ class AutomationControllerGUI:
             ("💬 Workflow Builder", "Build workflows in plain English", "#a6e3a1", False, "workflow_builder"),
             ("🎬 Macro Recorder", "Record and playback macros", "#f5c2e7", False, "macro_recorder"),
             ("📱 Mobile Control", "Remote control via mobile", "#89dceb", False, "mobile_control"),
-            ("✋ Hand Gesture Control", "Control mouse with hand gestures", "#a6e3a1", False, "hand_gesture"),
         ]
         
         # Create menu buttons
@@ -6898,8 +6897,6 @@ Answered: {result.get('timestamp', 'N/A')}
             self.create_macro_recorder_feature(content_inner, color)
         elif feature_id == "mobile_control":
             self.create_mobile_control_feature(content_inner, color)
-        elif feature_id == "hand_gesture":
-            self.create_hand_gesture_feature(content_inner, color)
     
     def create_workflow_builder_feature(self, parent, color):
         """Create workflow builder feature UI"""

@@ -660,7 +660,6 @@ class ModernGUI:
             ("📝", "Script Builder", "Build custom automation scripts", self.colors['accent_blue'], None),
             ("⏰", "Task Scheduler", "Schedule automated tasks", self.colors['accent_green'], None),
             ("🔄", "Workflow Creator", "Create complex workflows", self.colors['accent_pink'], None),
-            ("✋", "Hand Gesture Control", "Control mouse with hand gestures via webcam", self.colors['accent_green'], self.launch_hand_gesture_controller),
         ]
         
         for icon, title, desc, color, action in features:
