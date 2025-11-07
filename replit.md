@@ -35,7 +35,8 @@ Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mo
 -   **Advanced AI Enhancements:** Integrates Multi-Modal AI, Enhanced Contextual Memory, a Correction Learning System, and a Predictive Actions Engine.
 -   **AI-Powered Security Dashboard:** Comprehensive security management powered by Gemini AI, integrating biometric authentication, 2FA, encrypted storage, and AI-driven threat analysis.
 -   **Batch Form Filler System:** Comprehensive form automation system with 15+ pre-built templates supporting web forms (Selenium), desktop forms (PyAutoGUI), clipboard mode, and batch processing from CSV/Excel files. Features intelligent field detection, smart field matching, and supports job applications, registrations, surveys, medical forms, banking, e-commerce, and more.
--   **Utility Modules:** Includes integrations for Spotify, YouTube, Weather & News, Translation, Calculator, Password Vault, Quick Notes, Calendar Manager, Timer & Stopwatch, Quick Reminders, Habit Tracker, Color Tools, QR Code Tools, Screenshot Annotator, Image Resizer, and Batch Form Filler.
+-   **Hand Gesture Mouse Controller:** Touchless computer control using webcam and MediaPipe hand tracking. Control mouse cursor, click, scroll, drag, and adjust volume using natural hand gestures. Features real-time tracking at 30-60 FPS, 7 gesture types (cursor move, left/right click, scroll, drag, volume control), smooth cursor tracking with jitter reduction, and gesture statistics tracking.
+-   **Utility Modules:** Includes integrations for Spotify, YouTube, Weather & News, Translation, Calculator, Password Vault, Quick Notes, Calendar Manager, Timer & Stopwatch, Quick Reminders, Habit Tracker, Color Tools, QR Code Tools, Screenshot Annotator, Image Resizer, Batch Form Filler, and Hand Gesture Controller.
     -   **Timer & Stopwatch:** Countdown timers with cancellation, stopwatch with lap times, and Pomodoro mode.
     -   **Quick Reminders:** Scheduled reminders with cross-platform pop-up notifications, sound alerts, and snooze functionality.
     -   **Habit Tracker:** Daily habit checklist with streak tracking, statistics, and completion history.
@@ -44,6 +45,7 @@ Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mo
     -   **Screenshot Annotator:** Add text, arrows, rectangles, circles, highlights, and blur areas to screenshots.
     -   **Image Resizer:** Batch image resizing, compression, format conversion, thumbnail creation, rotation, and cropping.
     -   **Batch Form Filler:** Intelligent form automation with 15+ templates (job applications, contact forms, surveys, medical, banking, etc.), web form automation (Selenium), desktop form filling (PyAutoGUI), clipboard mode, and batch processing from CSV/Excel with smart field matching.
+    -   **Hand Gesture Controller:** Touchless mouse control via webcam using MediaPipe hand tracking. Features 7 gesture types: cursor movement, left/right click, scroll, drag & drop, and volume control. Real-time hand detection at 30-60 FPS with smooth cursor tracking.
 
 ## External Dependencies
 -   **google-genai:** For Gemini AI integration.
@@ -61,10 +63,12 @@ Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mo
 -   **Replit Spotify Connector:** For Spotify API integration.
 -   **wttr.in API:** For weather data.
 -   **Google Translate API:** For language translation.
--   **opencv-python:** For screen monitoring and image analysis.
+-   **opencv-python:** For screen monitoring, image analysis, and webcam capture for hand gesture control.
+-   **MediaPipe:** For real-time hand tracking and gesture recognition.
 -   **Data Science Libraries:** pandas, numpy, scikit-learn, matplotlib, seaborn, statsmodels, nltk, openpyxl.
 -   **Image Processing:** Pillow (PIL), qrcode, pyzbar for QR code operations.
 -   **Selenium:** For web automation and intelligent form filling.
 
 ## Recent Changes
+-   **November 2025 (Latest):** Added Hand Gesture Mouse Controller with MediaPipe integration for touchless computer control. Features 7 gesture types (cursor, clicks, scroll, drag, volume), real-time hand tracking at 30-60 FPS, smooth cursor movement, and gesture statistics. Includes comprehensive demo and documentation.
 -   **November 2025:** Added comprehensive Batch Form Filler system with 15+ pre-built templates supporting web forms, desktop applications, clipboard mode, and batch processing from CSV/Excel files. Includes smart field detection and intelligent field name matching for automated form filling across multiple platforms.
