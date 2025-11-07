@@ -656,13 +656,14 @@ class ModernGUI:
         
         # Automation features
         features = [
-            ("🎬", "Macro Recorder", "Record and playback your actions", self.colors['accent_purple']),
-            ("📝", "Script Builder", "Build custom automation scripts", self.colors['accent_blue']),
-            ("⏰", "Task Scheduler", "Schedule automated tasks", self.colors['accent_green']),
-            ("🔄", "Workflow Creator", "Create complex workflows", self.colors['accent_pink']),
+            ("🎬", "Macro Recorder", "Record and playback your actions", self.colors['accent_purple'], None),
+            ("📝", "Script Builder", "Build custom automation scripts", self.colors['accent_blue'], None),
+            ("⏰", "Task Scheduler", "Schedule automated tasks", self.colors['accent_green'], None),
+            ("🔄", "Workflow Creator", "Create complex workflows", self.colors['accent_pink'], None),
+            ("✋", "Hand Gesture Control", "Control mouse with hand gestures via webcam", self.colors['accent_green'], self.launch_hand_gesture_controller),
         ]
         
-        for icon, title, desc, color in features:
+        for icon, title, desc, color, action in features:
             feature_card = tk.Frame(
                 container, 
                 bg=self.colors['card_bg'],
@@ -722,7 +723,8 @@ class ModernGUI:
                 cursor="hand2",
                 padx=20,
                 pady=8,
-                highlightbackground=self.colors['border_white']
+                highlightbackground=self.colors['border_white'],
+                command=action if action else lambda t=title: messagebox.showinfo("Coming Soon", f"{t} feature coming soon!")
             )
             btn.pack(side="right", padx=10)
     
@@ -985,6 +987,72 @@ class ModernGUI:
         date_str = now.strftime("%B %d, %Y")
         self.time_label.configure(text=f"🕐 {time_str} • {date_str}")
         self.root.after(1000, self.update_time)
+    
+    def launch_hand_gesture_controller(self):
+        """Launch the hand gesture controller in a separate thread"""
+        def run_controller():
+            try:
+                from modules.automation.hand_gesture_controller import HandGestureController
+                
+                messagebox.showinfo(
+                    "Hand Gesture Controller",
+                    "🎥 Initializing Hand Gesture Controller...\n\n"
+                    "✋ Make sure you have:\n"
+                    "• Working webcam\n"
+                    "• Good lighting\n"
+                    "• Plain background\n\n"
+                    "Press 'Q' to quit when running."
+                )
+                
+                controller = HandGestureController()
+                
+                # Check dependencies
+                deps = controller.check_dependencies()
+                all_available = all(deps.values())
+                
+                if not all_available:
+                    missing = [name for name, available in deps.items() if not available]
+                    error_msg = f"Missing dependencies: {', '.join(missing)}\n\n"
+                    error_msg += controller.get_missing_dependencies_message()
+                    messagebox.showerror("Missing Dependencies", error_msg)
+                    return
+                
+                # Initialize controller
+                result = controller.initialize()
+                
+                if not result["success"]:
+                    error_msg = result.get("error", "Unknown error")
+                    help_text = result.get("help", "")
+                    full_msg = f"{error_msg}\n\n{help_text}" if help_text else error_msg
+                    messagebox.showerror("Initialization Failed", full_msg)
+                    return
+                
+                # Start controller (this will open a VNC window)
+                result = controller.start(show_video=True)
+                
+                if result["success"]:
+                    stats = result["stats"]
+                    messagebox.showinfo(
+                        "Session Complete",
+                        f"✅ Hand Gesture Controller stopped\n\n"
+                        f"📊 Statistics:\n"
+                        f"  Total gestures: {stats['total_gestures']}\n"
+                        f"  Clicks: {stats['clicks']}\n"
+                        f"  Scrolls: {stats['scrolls']}\n"
+                        f"  Drags: {stats['drags']}"
+                    )
+                else:
+                    error_msg = result.get("error", "Unknown error")
+                    messagebox.showerror("Runtime Error", error_msg)
+                    
+            except Exception as e:
+                error_msg = f"Failed to launch hand gesture controller:\n\n{str(e)}"
+                messagebox.showerror("Error", error_msg)
+        
+        # Run in separate thread to avoid blocking GUI
+        import threading
+        thread = threading.Thread(target=run_controller, daemon=True)
+        thread.start()
 
 
 def main():

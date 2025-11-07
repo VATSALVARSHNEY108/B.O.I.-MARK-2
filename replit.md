@@ -70,5 +70,5 @@ Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mo
 -   **Selenium:** For web automation and intelligent form filling.
 
 ## Recent Changes
--   **November 2025 (Latest):** Added Hand Gesture Mouse Controller with MediaPipe integration for touchless computer control. Features 7 gesture types (cursor, clicks, scroll, drag, volume), real-time hand tracking at 30-60 FPS, smooth cursor movement, and gesture statistics. Includes comprehensive demo and documentation.
+-   **November 2025 (Latest):** Added Hand Gesture Mouse Controller with MediaPipe integration for touchless computer control. Features 7 gesture types (cursor, clicks, scroll, drag, volume), real-time hand tracking at 30-60 FPS, smooth cursor movement, and gesture statistics. **Now fully integrated into both GUI applications** with easy-to-use launch buttons in the Automation section. Includes comprehensive demo, documentation, and standalone launcher.
 -   **November 2025:** Added comprehensive Batch Form Filler system with 15+ pre-built templates supporting web forms, desktop applications, clipboard mode, and batch processing from CSV/Excel files. Includes smart field detection and intelligent field name matching for automated form filling across multiple platforms.

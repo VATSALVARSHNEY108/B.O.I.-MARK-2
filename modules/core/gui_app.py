@@ -572,6 +572,7 @@ class AutomationControllerGUI:
             ("💬 Workflow Builder", "Build workflows in plain English", "#a6e3a1", False, "workflow_builder"),
             ("🎬 Macro Recorder", "Record and playback macros", "#f5c2e7", False, "macro_recorder"),
             ("📱 Mobile Control", "Remote control via mobile", "#89dceb", False, "mobile_control"),
+            ("✋ Hand Gesture Control", "Control mouse with hand gestures", "#a6e3a1", False, "hand_gesture"),
         ]
         
         # Create menu buttons
@@ -6897,6 +6898,8 @@ Answered: {result.get('timestamp', 'N/A')}
             self.create_macro_recorder_feature(content_inner, color)
         elif feature_id == "mobile_control":
             self.create_mobile_control_feature(content_inner, color)
+        elif feature_id == "hand_gesture":
+            self.create_hand_gesture_feature(content_inner, color)
     
     def create_workflow_builder_feature(self, parent, color):
         """Create workflow builder feature UI"""
@@ -6931,6 +6934,114 @@ Answered: {result.get('timestamp', 'N/A')}
                 bg="#181825", fg="#a6adc8", font=("Segoe UI", 9)).pack(pady=(0, 20))
         tk.Label(parent, text="Use the Mobile Companion tab for full access",
                 bg="#181825", fg="#6c7086", font=("Segoe UI", 9, "italic")).pack()
+    
+    def create_hand_gesture_feature(self, parent, color):
+        """Create hand gesture control feature UI"""
+        tk.Label(parent, text="✋ Hand Gesture Control", bg="#181825", fg=color,
+                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+        
+        info_text = "Control your mouse using hand gestures via webcam. Features 7 gestures: cursor movement, left/right click, scroll, drag, and volume control."
+        tk.Label(parent, text=info_text, bg="#181825", fg="#a6adc8",
+                font=("Segoe UI", 9), wraplength=350, justify="left").pack(pady=(0, 20))
+        
+        # Launch button
+        btn = tk.Button(parent, text="🎥 Launch Hand Gesture Controller",
+                       bg=color, fg="#0f0f1e",
+                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                       command=self.launch_hand_gesture_controller,
+                       padx=30, pady=12)
+        btn.pack(pady=10)
+        
+        # Info labels
+        tk.Label(parent, text="📋 Requirements:", bg="#181825", fg="#89dceb",
+                font=("Segoe UI", 9, "bold")).pack(pady=(15, 5), anchor="w")
+        tk.Label(parent, text="• Working webcam", bg="#181825", fg="#a6adc8",
+                font=("Segoe UI", 8)).pack(anchor="w", padx=20)
+        tk.Label(parent, text="• Good lighting conditions", bg="#181825", fg="#a6adc8",
+                font=("Segoe UI", 8)).pack(anchor="w", padx=20)
+        tk.Label(parent, text="• Plain background recommended", bg="#181825", fg="#a6adc8",
+                font=("Segoe UI", 8)).pack(anchor="w", padx=20)
+        
+        tk.Label(parent, text="⌨️ Controls:", bg="#181825", fg="#89dceb",
+                font=("Segoe UI", 9, "bold")).pack(pady=(10, 5), anchor="w")
+        tk.Label(parent, text="• Press 'Q' to quit", bg="#181825", fg="#a6adc8",
+                font=("Segoe UI", 8)).pack(anchor="w", padx=20)
+        tk.Label(parent, text="• Press 'S' to toggle stats", bg="#181825", fg="#a6adc8",
+                font=("Segoe UI", 8)).pack(anchor="w", padx=20)
+    
+    def launch_hand_gesture_controller(self):
+        """Launch the hand gesture controller in a separate thread"""
+        def run_controller():
+            try:
+                from modules.automation.hand_gesture_controller import HandGestureController
+                
+                self.log_to_console("🎥 Initializing Hand Gesture Controller...")
+                
+                controller = HandGestureController()
+                
+                # Check dependencies
+                deps = controller.check_dependencies()
+                all_available = all(deps.values())
+                
+                if not all_available:
+                    missing = [name for name, available in deps.items() if not available]
+                    error_msg = f"Missing dependencies: {', '.join(missing)}\n"
+                    error_msg += controller.get_missing_dependencies_message()
+                    self.log_to_console(f"❌ {error_msg}")
+                    messagebox.showerror("Missing Dependencies", error_msg)
+                    return
+                
+                self.log_to_console("✅ All dependencies available")
+                
+                # Initialize controller
+                result = controller.initialize()
+                
+                if not result["success"]:
+                    error_msg = result.get("error", "Unknown error")
+                    help_text = result.get("help", "")
+                    full_msg = f"{error_msg}\n\n{help_text}" if help_text else error_msg
+                    self.log_to_console(f"❌ Initialization failed: {error_msg}")
+                    messagebox.showerror("Initialization Failed", full_msg)
+                    return
+                
+                self.log_to_console(f"✅ {result['message']}")
+                self.log_to_console(f"📺 Screen: {result['screen_size']}")
+                self.log_to_console(f"🎥 {result['camera']}")
+                self.log_to_console("\n" + "=" * 60)
+                self.log_to_console("✋ HAND GESTURE CONTROLS:")
+                self.log_to_console("  👆 Index finger        → Move cursor")
+                self.log_to_console("  🤏 Pinch               → Left click")
+                self.log_to_console("  ✋ Open palm           → Scroll")
+                self.log_to_console("  🤘 Thumb + Index       → Volume control")
+                self.log_to_console("  🤙 Pinky only          → Right click")
+                self.log_to_console("  ✊ Closed fist         → Drag & drop")
+                self.log_to_console("\n⌨️  Press 'Q' to quit")
+                self.log_to_console("=" * 60 + "\n")
+                
+                # Start controller (this will open a VNC window)
+                result = controller.start(show_video=True)
+                
+                if result["success"]:
+                    stats = result["stats"]
+                    self.log_to_console("✅ Hand Gesture Controller stopped")
+                    self.log_to_console(f"📊 Statistics:")
+                    self.log_to_console(f"  Total gestures: {stats['total_gestures']}")
+                    self.log_to_console(f"  Clicks: {stats['clicks']}")
+                    self.log_to_console(f"  Scrolls: {stats['scrolls']}")
+                    self.log_to_console(f"  Drags: {stats['drags']}")
+                else:
+                    error_msg = result.get("error", "Unknown error")
+                    self.log_to_console(f"❌ Error: {error_msg}")
+                    messagebox.showerror("Runtime Error", error_msg)
+                    
+            except Exception as e:
+                error_msg = f"Failed to launch hand gesture controller: {str(e)}"
+                self.log_to_console(f"❌ {error_msg}")
+                messagebox.showerror("Error", error_msg)
+        
+        # Run in separate thread to avoid blocking GUI
+        thread = threading.Thread(target=run_controller, daemon=True)
+        thread.start()
     
     def create_screenshot_feature(self, parent, color):
         """Create screenshot feature UI"""
