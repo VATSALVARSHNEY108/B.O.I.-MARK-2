@@ -23,8 +23,17 @@ class FaceTrainer:
             cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
         )
         
-        # Use LBPH (Local Binary Patterns Histograms) recognizer
-        self.recognizer = cv2.face.LBPHFaceRecognizer_create()
+        # Use LBPH (Local Binary Patterns Histograms) recognizer with optimized parameters
+        # radius=2, neighbors=16 for better accuracy
+        # grid_x=8, grid_y=8 for better spatial resolution
+        # threshold=80 for stricter matching
+        self.recognizer = cv2.face.LBPHFaceRecognizer_create(
+            radius=2,
+            neighbors=16,
+            grid_x=8,
+            grid_y=8,
+            threshold=100.0
+        )
         
         self.labels = {}
         self.label_counter = 0
@@ -81,7 +90,18 @@ class FaceTrainer:
                         face_roi = gray[y:y+h, x:x+w]
                         # Resize to standard size
                         face_roi = cv2.resize(face_roi, (200, 200))
+                        
+                        # Apply histogram equalization for better contrast
+                        face_roi = cv2.equalizeHist(face_roi)
+                        
+                        # Add original face
                         faces.append(face_roi)
+                        labels_list.append(person_label)
+                        image_count += 1
+                        
+                        # Data augmentation: Add horizontally flipped version
+                        flipped = cv2.flip(face_roi, 1)
+                        faces.append(flipped)
                         labels_list.append(person_label)
                         image_count += 1
                 
@@ -185,8 +205,14 @@ class FaceRecognizer:
             cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
         )
         
-        # Initialize recognizer
-        self.recognizer = cv2.face.LBPHFaceRecognizer_create()
+        # Initialize recognizer with same optimized parameters
+        self.recognizer = cv2.face.LBPHFaceRecognizer_create(
+            radius=2,
+            neighbors=16,
+            grid_x=8,
+            grid_y=8,
+            threshold=100.0
+        )
         self.labels = {}
         self.reverse_labels = {}
         
@@ -229,15 +255,25 @@ class FaceRecognizer:
         face_roi = gray_frame[y:y+h, x:x+w]
         face_roi = cv2.resize(face_roi, (200, 200))
         
+        # Apply histogram equalization (same as training)
+        face_roi = cv2.equalizeHist(face_roi)
+        
         # Predict
-        label, confidence = self.recognizer.predict(face_roi)
+        label, distance = self.recognizer.predict(face_roi)
         
         # Get person name
         person_name = self.reverse_labels.get(label, "Unknown")
         
-        # Convert confidence (lower is better in LBPH)
-        # Threshold: <50 is good match, >80 is poor
-        confidence_score = max(0, 100 - confidence)
+        # Convert distance to confidence percentage
+        # In LBPH, lower distance = better match
+        # Distance typically ranges from 0-150
+        # <50 = excellent, 50-70 = good, >70 = poor
+        if distance < 50:
+            confidence_score = 95 - (distance * 0.5)
+        elif distance < 70:
+            confidence_score = 80 - ((distance - 50) * 1.5)
+        else:
+            confidence_score = max(0, 50 - ((distance - 70) * 0.5))
         
         return person_name, confidence_score
 
