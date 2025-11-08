@@ -25,12 +25,13 @@ class FaceTrainer:
         
         # Use LBPH (Local Binary Patterns Histograms) recognizer with balanced parameters
         # Optimized for faster loading while maintaining good accuracy
+        # Higher threshold = more lenient matching
         self.recognizer = cv2.face.LBPHFaceRecognizer_create(
             radius=1,
             neighbors=8,
             grid_x=8,
             grid_y=8,
-            threshold=100.0
+            threshold=150.0
         )
         
         self.labels = {}
@@ -204,12 +205,13 @@ class FaceRecognizer:
         )
         
         # Initialize recognizer with same balanced parameters as training
+        # Higher threshold = more lenient matching
         self.recognizer = cv2.face.LBPHFaceRecognizer_create(
             radius=1,
             neighbors=8,
             grid_x=8,
             grid_y=8,
-            threshold=100.0
+            threshold=150.0
         )
         self.labels = {}
         self.reverse_labels = {}
@@ -269,14 +271,13 @@ class FaceRecognizer:
         
         # Convert distance to confidence percentage
         # In LBPH, lower distance = better match
-        # Distance typically ranges from 0-150
-        # <50 = excellent, 50-70 = good, >70 = poor
-        if distance < 50:
-            confidence_score = 95 - (distance * 0.5)
-        elif distance < 70:
-            confidence_score = 80 - ((distance - 50) * 1.5)
+        # Adjusted for more lenient matching
+        if distance < 60:
+            confidence_score = 100 - (distance * 0.4)
+        elif distance < 90:
+            confidence_score = 76 - ((distance - 60) * 0.8)
         else:
-            confidence_score = max(0, 50 - ((distance - 70) * 0.5))
+            confidence_score = max(0, 52 - ((distance - 90) * 0.4))
         
         return person_name, confidence_score
 

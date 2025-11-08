@@ -95,10 +95,10 @@ def main():
                     name, confidence = recognizer.recognize_face(gray, (x, y, w, h))
                     
                     # Color based on confidence
-                    if confidence > 70:
+                    if confidence > 60:
                         color = (0, 255, 0)  # Green
                         status = "EXCELLENT"
-                    elif confidence > 50:
+                    elif confidence > 40:
                         color = (0, 255, 255)  # Yellow
                         status = "GOOD"
                     else:
