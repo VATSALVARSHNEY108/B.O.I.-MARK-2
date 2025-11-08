@@ -94,6 +94,9 @@ def main():
                     # Recognize the face
                     name, confidence = recognizer.recognize_face(gray, (x, y, w, h))
                     
+                    # Show name and confidence in console for debugging
+                    print(f"Face detected: {name} at {confidence:.1f}%")
+                    
                     # Check if it's an unknown person
                     if name == "Unknown" or confidence < 1:
                         color = (0, 0, 255)  # Red

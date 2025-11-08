@@ -266,9 +266,12 @@ class FaceRecognizer:
         # Predict
         label, distance = self.recognizer.predict(face_roi)
         
+        # DEBUG: Print raw distance to help tune threshold
+        print(f"[DEBUG] Raw distance: {distance:.2f}, Label: {label}")
+        
         # IMPORTANT: Reject if distance is too high (not a good match)
-        # For this simplified model, distance > 70 means it's likely NOT the trained person
-        if distance > 70:
+        # Stricter threshold: distance > 50 means it's likely NOT the trained person
+        if distance > 50:
             return "Unknown", 0.0
         
         # Get person name
