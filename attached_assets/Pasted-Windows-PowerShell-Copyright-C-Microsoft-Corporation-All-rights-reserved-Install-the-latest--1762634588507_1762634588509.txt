@@ -1,0 +1,80 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+(.venv1) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL> python train_vatsal_face.py
+======================================================================
+VATSAL AI - Personal Face Recognition Training
+======================================================================
+
+This will train the system to recognize YOUR face!
+
+📂 Training Data Location:
+  biometric_data/faces/vatsal/training/
+
+📸 Your Photos:
+  ✅ 7 photos copied from attached_assets/
+
+======================================================================
+
+
+🚀 Starting face recognition training...
+============================================================
+📂 Loading training images...
+  👤 Processing vatsal (label: 0)
+    ✅ Loaded 268 face samples
+
+📊 Training Statistics:
+  Total face samples: 268
+  People to recognize: 1
+  Label mapping: {'vatsal': 0}
+
+🧠 Training model...
+✅ Model saved to: biometric_data/faces\models\face_model.yml
+✅ Labels saved to: biometric_data/faces\models\labels.pkl
+
+============================================================
+🎉 Training complete!
+
+You can now use the trained model to recognize:
+  👤 VATSAL (label: 0)
+
+======================================================================
+🎉 SUCCESS! Your face model is trained!
+======================================================================
+
+📊 Training Results:
+  Face samples processed: 268
+  People in model: 1
+  Model file: biometric_data/faces\models\face_model.yml
+
+🎯 The system will now:
+  1. Detect your face in real-time
+  2. Recognize you as 'VATSAL'
+  3. Greet you by name when you appear
+
+======================================================================
+
+✅ Next Steps:
+  1. Run: python test_face_recognition.py
+  2. Or use in main app: streamlit run vatsal.py
+
+The system is now personalized for you! 🚀
+(.venv1) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL> pyhton show_camera.py
+pyhton : The term 'pyhton' is not recognized as the name of a cmdlet, function, 
+script file, or operable program. Check the spelling of the name, or if a path was 
+included, verify that the path is correct and try again.
+At line:1 char:1
++ pyhton show_camera.py
++ ~~~~~~
+    + CategoryInfo          : ObjectNotFound: (pyhton:String) [], CommandNotFoundE 
+   xception
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+(.venv1) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL> python show_camera.py                                                                                   
+======================================================================
+📹 Camera Display with Face Recognition
+======================================================================
+
+🧠 Loading face recognition model...
