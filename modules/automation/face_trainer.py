@@ -270,8 +270,8 @@ class FaceRecognizer:
         print(f"[DEBUG] Raw distance: {distance:.2f}, Label: {label}")
         
         # IMPORTANT: Reject if distance is too high (not a good match)
-        # Stricter threshold: distance > 50 means it's likely NOT the trained person
-        if distance > 50:
+        # Balanced threshold: distance > 60 means it's likely NOT the trained person
+        if distance > 60:
             return "Unknown", 0.0
         
         # Get person name
