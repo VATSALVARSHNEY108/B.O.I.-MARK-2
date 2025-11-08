@@ -1,0 +1,99 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+(.venv1) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL> python train_vatsal_face.py
+======================================================================
+VATSAL AI - Personal Face Recognition Training
+======================================================================
+
+This will train the system to recognize YOUR face!
+
+📂 Training Data Location:
+  biometric_data/faces/vatsal/training/
+
+📸 Your Photos:
+  ✅ 7 photos copied from attached_assets/
+
+======================================================================
+
+
+🚀 Starting face recognition training...
+============================================================
+📂 Loading training images...
+  👤 Processing vatsal (label: 0)
+    ✅ Loaded 11 face samples
+
+📊 Training Statistics:
+  Total face samples: 11
+  People to recognize: 1
+  Label mapping: {'vatsal': 0}
+
+🧠 Training model...
+✅ Model saved to: biometric_data/faces\models\face_model.yml
+✅ Labels saved to: biometric_data/faces\models\labels.pkl
+
+============================================================
+🎉 Training complete!
+
+You can now use the trained model to recognize:
+  👤 VATSAL (label: 0)
+
+======================================================================
+🎉 SUCCESS! Your face model is trained!
+======================================================================
+
+📊 Training Results:
+  Face samples processed: 11
+  People in model: 1
+  Model file: biometric_data/faces\models\face_model.yml
+
+🎯 The system will now:
+  1. Detect your face in real-time
+  2. Recognize you as 'VATSAL'
+  3. Greet you by name when you appear
+
+======================================================================
+
+✅ Next Steps:
+  1. Run: python test_face_recognition.py
+  2. Or use in main app: streamlit run vatsal.py
+
+The system is now personalized for you! 🚀
+(.venv1) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL>  python test_face_recognition.py                                                                        
+======================================================================
+VATSAL AI - Personal Face Recognition Test
+======================================================================
+
+This will test if the system recognizes YOUR face!
+
+📹 Starting webcam...
+💡 Show your face to the camera
+🎯 The system will try to recognize you
+
+Press 'q' to quit
+======================================================================
+
+✅ Model loaded: 1 people
+✅ Model loaded successfully!
+👥 Can recognize: ['vatsal']
+
+🎥 Camera ready! Looking for faces...
+
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL\test_face_recognition.py", line 132, in main
+    cv2.imshow('VATSAL - Face Recognition Test', frame)
+cv2.error: OpenCV(4.12.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1301: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvShowImage'
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL\test_face_recognition.py", line 155, in <module>
+    main()
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL\test_face_recognition.py", line 142, in main
+    cv2.destroyAllWindows()
+cv2.error: OpenCV(4.12.0) D:\a\opencv-python\opencv-python\opencv\modules\highgui\src\window.cpp:1295: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Cocoa support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvDestroyAllWindows'
+
+(.venv1) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL> 
