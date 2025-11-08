@@ -17,31 +17,15 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Minimal Chatbot"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Mobile Companion"
+args = "VATSAL AI Desktop Automation"
 
 [[workflows.workflow]]
-name = "Minimal Chatbot"
+name = "VATSAL AI Desktop Automation"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "streamlit run minimal_chatbot.py --server.port 5000 --server.address 0.0.0.0 --server.headless true"
-waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "webview"
-
-[[workflows.workflow]]
-name = "Mobile Companion"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python modules/network/mobile_companion_server.py"
+args = "streamlit run vatsal.py --server.port=5000 --server.address=0.0.0.0 --server.headless=true"
 waitForPort = 5000
 
 [workflows.workflow.metadata]
@@ -62,3 +46,7 @@ externalPort = 3001
 [[ports]]
 localPort = 39253
 externalPort = 3002
+
+[[ports]]
+localPort = 40909
+externalPort = 3000
