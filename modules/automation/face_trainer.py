@@ -266,18 +266,25 @@ class FaceRecognizer:
         # Predict
         label, distance = self.recognizer.predict(face_roi)
         
+        # IMPORTANT: Reject if distance is too high (not a good match)
+        # For this simplified model, distance > 70 means it's likely NOT the trained person
+        if distance > 70:
+            return "Unknown", 0.0
+        
         # Get person name
         person_name = self.reverse_labels.get(label, "Unknown")
         
         # Convert distance to confidence percentage
         # In LBPH, lower distance = better match
-        # Adjusted for more lenient matching
-        if distance < 60:
-            confidence_score = 100 - (distance * 0.4)
-        elif distance < 90:
-            confidence_score = 76 - ((distance - 60) * 0.8)
+        # Only accept distances < 70 for trained person
+        if distance < 40:
+            confidence_score = 100 - (distance * 0.3)
+        elif distance < 55:
+            confidence_score = 88 - ((distance - 40) * 1.0)
+        elif distance < 70:
+            confidence_score = 73 - ((distance - 55) * 1.5)
         else:
-            confidence_score = max(0, 52 - ((distance - 90) * 0.4))
+            confidence_score = 0.0
         
         return person_name, confidence_score
 

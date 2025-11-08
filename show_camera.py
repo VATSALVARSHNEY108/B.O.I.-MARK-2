@@ -94,20 +94,31 @@ def main():
                     # Recognize the face
                     name, confidence = recognizer.recognize_face(gray, (x, y, w, h))
                     
-                    # Color based on confidence
-                    if confidence > 60:
+                    # Check if it's an unknown person
+                    if name == "Unknown" or confidence < 1:
+                        color = (0, 0, 255)  # Red
+                        name_text = "UNKNOWN"
+                        confidence_text = "NOT RECOGNIZED"
+                        status_text = "Access Denied"
+                    # Color based on confidence for recognized person
+                    elif confidence > 70:
                         color = (0, 255, 0)  # Green
                         status = "EXCELLENT"
-                    elif confidence > 40:
+                        name_text = f"{name.upper()}"
+                        confidence_text = f"{confidence:.1f}%"
+                        status_text = f"Match: {status}"
+                    elif confidence > 50:
                         color = (0, 255, 255)  # Yellow
                         status = "GOOD"
+                        name_text = f"{name.upper()}"
+                        confidence_text = f"{confidence:.1f}%"
+                        status_text = f"Match: {status}"
                     else:
                         color = (0, 165, 255)  # Orange
-                        status = "POOR"
-                    
-                    name_text = f"{name.upper()}"
-                    confidence_text = f"{confidence:.1f}%"
-                    status_text = f"Match: {status}"
+                        status = "WEAK"
+                        name_text = f"{name.upper()}"
+                        confidence_text = f"{confidence:.1f}%"
+                        status_text = f"Match: {status}"
                 else:
                     # Just show face detection
                     color = (255, 0, 0)  # Blue
