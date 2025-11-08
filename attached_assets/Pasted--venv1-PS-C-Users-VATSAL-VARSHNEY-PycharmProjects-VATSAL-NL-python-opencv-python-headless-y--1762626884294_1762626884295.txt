@@ -1,0 +1,34 @@
+(.venv1) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL> python opencv-python-headless -y                                                                        
+C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python311\python.exe: can't open file 'C:\\Users\\VATSAL VARSHNEY\\PycharmProjects\\VATSAL NL\\opencv-python-headless': [Errno 2] No such file or directory
+(.venv1) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL> pip install opencv-python
+Collecting opencv-python
+  Using cached opencv_python-4.12.0.88-cp37-abi3-win_amd64.whl.metadata (19 kB)
+Requirement already satisfied: numpy<2.3.0,>=2 in c:\users\vatsal varshney\pycharmprojects\train-llm-from-scratch\.venv1\lib\site-packages (from opencv-python) (2.1.3)
+Using cached opencv_python-4.12.0.88-cp37-abi3-win_amd64.whl (39.0 MB)
+Installing collected packages: opencv-python
+Successfully installed opencv-python-4.12.0.88
+(.venv1) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL> python test_face_recognition.py                                                                         
+======================================================================
+VATSAL AI - Personal Face Recognition Test
+======================================================================
+
+This will test if the system recognizes YOUR face!
+
+📹 Starting webcam...
+💡 Show your face to the camera
+🎯 The system will try to recognize you
+
+Press 'q' to quit
+======================================================================
+
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL\test_face_recognition.py", line 155, in <module>
+    main()
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL\test_face_recognition.py", line 34, in main
+    recognizer = FaceRecognizer()
+                 ^^^^^^^^^^^^^^^^
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL\modules\automation\face_trainer.py", line 189, in __init__
+    self.recognizer = cv2.face.LBPHFaceRecognizer_create()
+                      ^^^^^^^^
+AttributeError: module 'cv2' has no attribute 'face'
+(.venv1) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL> 
