@@ -97,31 +97,42 @@ def main():
                     # Color based on confidence
                     if confidence > 70:
                         color = (0, 255, 0)  # Green
-                        status = "Excellent"
+                        status = "EXCELLENT"
                     elif confidence > 50:
                         color = (0, 255, 255)  # Yellow
-                        status = "Good"
+                        status = "GOOD"
                     else:
                         color = (0, 165, 255)  # Orange
-                        status = "Poor"
+                        status = "POOR"
                     
-                    label = f"{name.upper()} - {confidence:.1f}%"
+                    name_text = f"{name.upper()}"
+                    confidence_text = f"{confidence:.1f}%"
                     status_text = f"Match: {status}"
                 else:
                     # Just show face detection
                     color = (255, 0, 0)  # Blue
-                    label = "Face Detected"
-                    status_text = "No Recognition Model"
+                    name_text = "Face Detected"
+                    confidence_text = "N/A"
+                    status_text = "No Model"
                 
-                # Draw rectangle around face
-                cv2.rectangle(frame, (x, y), (x+w, y+h), color, 3)
+                # Draw rectangle around face (thick border)
+                cv2.rectangle(frame, (x, y), (x+w, y+h), color, 4)
                 
-                # Draw label above face
-                cv2.putText(frame, label, (x, y - 35),
-                           cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
+                # Draw semi-transparent background for text
+                overlay = frame.copy()
+                cv2.rectangle(overlay, (x, y - 80), (x + w, y), (0, 0, 0), -1)
+                cv2.addWeighted(overlay, 0.6, frame, 0.4, 0, frame)
                 
-                # Draw status below name
-                cv2.putText(frame, status_text, (x, y - 10),
+                # Draw name (large)
+                cv2.putText(frame, name_text, (x + 5, y - 50),
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2)
+                
+                # Draw confidence percentage (LARGE and bold)
+                cv2.putText(frame, confidence_text, (x + 5, y - 25),
+                           cv2.FONT_HERSHEY_SIMPLEX, 1.2, color, 3)
+                
+                # Draw status
+                cv2.putText(frame, status_text, (x + 5, y - 5),
                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
             
             # Add instructions at bottom
