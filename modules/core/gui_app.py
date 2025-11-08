@@ -43,6 +43,7 @@ from voice_commander import create_voice_commander
 from system_control import SystemController
 from websocket_client import get_websocket_client
 from macro_recorder import MacroRecorder, MacroTemplates
+from modules.automation.face_gesture_assistant import FaceGestureAssistant
 from nl_workflow_builder import create_nl_workflow_builder
 from workflow_templates import WorkflowManager
 from security_dashboard import SecurityDashboard
@@ -201,6 +202,17 @@ class AutomationControllerGUI:
             self.voice_listening = False
             self.voice_enabled = False
             print(f"⚠️ Voice Commander initialization failed: {e}")
+        
+        # Initialize Face & Gesture Assistant
+        try:
+            self.face_gesture_assistant = FaceGestureAssistant(voice_commander=self.voice_commander)
+            self.face_gesture_assistant.set_gesture_callback(self._handle_gesture_command)
+            self.face_gesture_running = False
+            print("✅ Face & Gesture Assistant initialized")
+        except Exception as e:
+            self.face_gesture_assistant = None
+            self.face_gesture_running = False
+            print(f"⚠️ Face & Gesture Assistant initialization failed: {e}")
 
         # Initialize Macro Recorder
         try:
@@ -774,6 +786,21 @@ class AutomationControllerGUI:
         
         # Right-click to open sound settings
         self.sound_fx_btn.bind("<Button-3>", lambda e: self.show_sound_settings())
+        
+        # Face & Gesture detection toggle button
+        self.face_gesture_btn = tk.Button(voice_frame,
+                                         text="👤",
+                                         bg="#f9e2af",
+                                         fg="#0f0f1e",
+                                         font=("Segoe UI", 11, "bold"),
+                                         relief="flat",
+                                         cursor="hand2",
+                                         command=self.toggle_face_gesture,
+                                         padx=10,
+                                         pady=10,
+                                         activebackground="#f5c2e7")
+        self.face_gesture_btn.pack(side="left", padx=2)
+        self.add_hover_effect(self.face_gesture_btn, "#f9e2af", "#f5c2e7")
 
         self.execute_btn = tk.Button(input_container,
                                      text="⚡ Execute ⚡",
@@ -4510,6 +4537,57 @@ Based on OthersideAI's self-operating-computer framework
                 self.sound_fx_btn.config(bg="#45475a", text="🔇")
                 self.update_output(f"\n🔇 Voice sound effects DISABLED\n", "warning")
                 self.update_output(f"Voice commands will work silently\n", "info")
+    
+    def toggle_face_gesture(self):
+        """Toggle face detection and gesture recognition on/off"""
+        if not self.face_gesture_assistant:
+            messagebox.showerror("Face & Gesture Error", "Face & Gesture Assistant not available")
+            return
+        
+        if not self.face_gesture_running:
+            result = self.face_gesture_assistant.start(camera_index=0)
+            
+            if result['success']:
+                self.face_gesture_running = True
+                self.face_gesture_btn.config(bg="#a6e3a1", text="👁️")
+                self.update_output("\n" + "=" * 60 + "\n", "info")
+                self.update_output("👁️  Face & Gesture Detection ENABLED\n", "success")
+                self.update_output("=" * 60 + "\n", "info")
+                self.update_output("📋 Instructions:\n", "info")
+                self.update_output("• Position your face in front of the camera\n", "info")
+                self.update_output("• I will greet you when I detect your face\n", "info")
+                self.update_output("• Show an OPEN PALM to activate voice listening\n", "info")
+                self.update_output("• A window will open showing the camera feed\n", "info")
+                self.update_output("• Press 'q' in the camera window to close it\n\n", "info")
+                self.update_status("👁️  Face Detection Active", "#a6e3a1")
+            else:
+                messagebox.showerror("Camera Error", result['message'])
+        else:
+            result = self.face_gesture_assistant.stop()
+            
+            if result['success']:
+                self.face_gesture_running = False
+                self.face_gesture_btn.config(bg="#f9e2af", text="👤")
+                self.update_output("\n👁️  Face & Gesture Detection DISABLED\n", "warning")
+                
+                stats = self.face_gesture_assistant.get_stats()
+                self.update_output(f"\n📊 Session Statistics:\n", "info")
+                self.update_output(f"• Faces detected: {stats['faces_detected']}\n", "info")
+                self.update_output(f"• Greetings given: {stats['greetings_given']}\n", "info")
+                self.update_output(f"• Gestures detected: {stats['gestures_detected']}\n\n", "info")
+                self.update_status("✅ Ready", "#a6e3a1")
+    
+    def _handle_gesture_command(self, command):
+        """
+        Handle voice command from gesture detection.
+        
+        THREAD SAFETY: This is called from the detection worker thread,
+        so we use root.after(0, ...) to marshal execution to the main thread
+        before touching any Tkinter widgets.
+        """
+        print(f"✋ Gesture command received: '{command}'")
+        # Marshal to main thread for thread-safe widget manipulation
+        self.root.after(0, lambda: self._execute_voice_command(command))
     
     def show_sound_settings(self):
         """Show sound effects settings dialog"""

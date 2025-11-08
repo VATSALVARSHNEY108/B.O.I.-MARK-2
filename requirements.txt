@@ -29,7 +29,6 @@ aniso8601>=10.0.1
 # Data Science & Analysis
 data-analysis>=1.1.43
 pandas>=2.3.3
-numpy>=2.2.6
 scipy>=1.16.2
 scikit-learn>=1.7.2
 matplotlib>=3.10.7
@@ -281,3 +280,4 @@ pyzbar
 qrcode
 mediapipe
 security
+numpy
