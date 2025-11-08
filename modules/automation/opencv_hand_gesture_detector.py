@@ -51,7 +51,9 @@ class OpenCVHandGestureDetector:
             'gestures_detected': 0,
             'greetings_given': 0,
             'open_palm_detected': 0,
-            'fist_detected': 0
+            'fist_detected': 0,
+            'thumbs_up_detected': 0,
+            'peace_sign_detected': 0
         }
         
         # Gesture detection parameters
@@ -119,6 +121,8 @@ class OpenCVHandGestureDetector:
         print("🎥 OpenCV Hand & Face Detection started")
         print("👋 Show your OPEN PALM to activate listening")
         print("✊ Make a FIST to stop listening")
+        print("👍 Show THUMBS UP for approval")
+        print("✌️  Show PEACE SIGN for victory")
         
         while self.running:
             try:
@@ -197,11 +201,35 @@ class OpenCVHandGestureDetector:
                         self.stats['fist_detected'] += 1
                         cv2.putText(
                             frame,
-                            "✊ FIST - Stop",
+                            "FIST - Stop",
                             (10, 60),
                             cv2.FONT_HERSHEY_SIMPLEX,
                             0.7,
                             (0, 165, 255),
+                            2
+                        )
+                    
+                    elif gesture == "THUMBS_UP":
+                        self.stats['thumbs_up_detected'] += 1
+                        cv2.putText(
+                            frame,
+                            "THUMBS UP - Good!",
+                            (10, 60),
+                            cv2.FONT_HERSHEY_SIMPLEX,
+                            0.7,
+                            (0, 255, 0),
+                            2
+                        )
+                    
+                    elif gesture == "PEACE_SIGN":
+                        self.stats['peace_sign_detected'] += 1
+                        cv2.putText(
+                            frame,
+                            "PEACE SIGN - Victory!",
+                            (10, 60),
+                            cv2.FONT_HERSHEY_SIMPLEX,
+                            0.7,
+                            (255, 255, 0),
                             2
                         )
                 else:
@@ -297,7 +325,11 @@ class OpenCVHandGestureDetector:
                     # Determine gesture based on finger count
                     if finger_count >= 4:
                         return "OPEN_PALM", max_contour
-                    elif finger_count <= 1:
+                    elif finger_count == 2 or finger_count == 3:
+                        return "PEACE_SIGN", max_contour
+                    elif finger_count == 1:
+                        return "THUMBS_UP", max_contour
+                    elif finger_count == 0:
                         return "FIST", max_contour
                     else:
                         return "PARTIAL", max_contour
