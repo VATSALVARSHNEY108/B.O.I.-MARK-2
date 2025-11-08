@@ -1,0 +1,51 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL> python vatsal.py
+🚀 Starting VATSAL AI Desktop Automation...
+============================================================
+2025-11-08 22:23:29.420 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:29.421 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.116 
+  Warning: to view this Streamlit app on a browser, run it with the following
+  command:
+
+    streamlit run vatsal.py [ARGUMENTS]
+2025-11-08 22:23:30.116 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.116 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.117 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.117 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.117 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.118 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.118 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.118 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.118 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.118 Session state does not function when running a script without `streamlit run`
+2025-11-08 22:23:30.119 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.119 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.119 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.119 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.119 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.120 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.121 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.121 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.121 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-08 22:23:30.121 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+pygame 2.6.1 (SDL 2.28.4, Python 3.13.9)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+⚠️ pynput not available - macro recording limited
+❌ Error: No module named 'mediapipe'
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL\vatsal.py", line 44, in main
+    from modules.core.gui_app import main as gui_main
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL\modules\core\gui_app.py", line 46, in <module>
+    from modules.automation.face_gesture_assistant import FaceGestureAssistant
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL\modules\automation\face_gesture_assistant.py", line 7, in <module>
+    import mediapipe as mp
+ModuleNotFoundError: No module named 'mediapipe'
+PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL> pip install mediapipe
+ERROR: Could not find a version that satisfies the requirement mediapipe (from versions: none)
+ERROR: No matching distribution found for mediapipe                                                                                                                                 
+PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL>   
