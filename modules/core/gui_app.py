@@ -50,6 +50,9 @@ except ImportError as e:
     FACE_GESTURE_AVAILABLE = False
     FaceGestureAssistant = None
     print(f"⚠️  Face Gesture Assistant not available: {e}")
+
+# Import OpenCV-based detector (always available)
+from modules.automation.opencv_hand_gesture_detector import OpenCVHandGestureDetector
 from nl_workflow_builder import create_nl_workflow_builder
 from workflow_templates import WorkflowManager
 from security_dashboard import SecurityDashboard
@@ -209,20 +212,25 @@ class AutomationControllerGUI:
             self.voice_enabled = False
             print(f"⚠️ Voice Commander initialization failed: {e}")
         
-        # Initialize Face & Gesture Assistant
+        # Initialize Face & Gesture Assistant (MediaPipe version if available, otherwise OpenCV)
         try:
             if FACE_GESTURE_AVAILABLE and FaceGestureAssistant is not None:
                 self.face_gesture_assistant = FaceGestureAssistant(voice_commander=self.voice_commander)
                 self.face_gesture_assistant.set_gesture_callback(self._handle_gesture_command)
                 self.face_gesture_running = False
-                print("✅ Face & Gesture Assistant initialized")
+                self.gesture_detector_type = "MediaPipe"
+                print("✅ Face & Gesture Assistant initialized (MediaPipe version)")
             else:
-                self.face_gesture_assistant = None
+                # Fallback to OpenCV-only detector
+                self.face_gesture_assistant = OpenCVHandGestureDetector(voice_commander=self.voice_commander)
+                self.face_gesture_assistant.set_gesture_callback(self._handle_gesture_command)
                 self.face_gesture_running = False
-                print("⚠️ Face & Gesture Assistant not available (MediaPipe required)")
+                self.gesture_detector_type = "OpenCV"
+                print("✅ Face & Gesture Detector initialized (OpenCV version)")
         except Exception as e:
             self.face_gesture_assistant = None
             self.face_gesture_running = False
+            self.gesture_detector_type = None
             print(f"⚠️ Face & Gesture Assistant initialization failed: {e}")
 
         # Initialize Macro Recorder

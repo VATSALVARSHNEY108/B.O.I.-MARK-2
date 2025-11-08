@@ -71,6 +71,13 @@ Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mo
 -   **Selenium:** For web automation and intelligent form filling.
 
 ## Recent Changes
--   **November 2025 (Latest):** Added Face & Gesture Assistant feature using OpenCV and MediaPipe. System now detects user's face via webcam, greets them by name ("Vatsal" or "Yes sir"), and recognizes hand gestures (open palm) to activate voice listening mode. Includes full GUI integration with toggle button (👤), thread-safe callbacks, real-time camera feed display, session statistics, and comprehensive documentation (docs/FACE_GESTURE_FEATURE.md).
+-   **November 2025 (Latest):** Added **Enhanced Hand Gesture & Face Detection** with dual implementation:
+    - **OpenCV-only detector** (works everywhere, including Python 3.13 on Windows and Replit)
+    - **MediaPipe detector** (when available, for advanced tracking)
+    - Features: Real-time face detection, hand gesture recognition (open palm 👋, fist ✊), automatic voice activation, greeting system
+    - Gestures: Open palm activates listening, fist stops, with visual feedback
+    - Full GUI integration, standalone demo (`demo_opencv_hand_gesture.py`), comprehensive documentation
+    - Works without MediaPipe dependency using skin color detection and contour analysis
+-   **November 2025:** Added Face & Gesture Assistant feature using OpenCV and MediaPipe. System now detects user's face via webcam, greets them by name ("Vatsal" or "Yes sir"), and recognizes hand gestures (open palm) to activate voice listening mode. Includes full GUI integration with toggle button (👤), thread-safe callbacks, real-time camera feed display, session statistics, and comprehensive documentation (docs/FACE_GESTURE_FEATURE.md).
 -   **November 2025:** Added Hand Gesture Mouse Controller with MediaPipe integration for touchless computer control. Features 7 gesture types (cursor, clicks, scroll, drag, volume), real-time hand tracking at 30-60 FPS, smooth cursor movement, and gesture statistics. **Now fully integrated into both GUI applications** with easy-to-use launch buttons in the Automation section. Includes comprehensive demo, documentation, and standalone launcher.
 -   **November 2025:** Added comprehensive Batch Form Filler system with 15+ pre-built templates supporting web forms, desktop applications, clipboard mode, and batch processing from CSV/Excel files. Includes smart field detection and intelligent field name matching for automated form filling across multiple platforms.
