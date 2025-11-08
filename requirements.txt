@@ -1,4 +1,4 @@
-# Python 3.13+ Requirements
+# Python 3.11+ Requirements for VATSAL AI Desktop Automation
 # Core Dependencies
 cryptography>=43.0.3
 google-genai>=1.0.0
@@ -12,6 +12,7 @@ requests>=2.32.3
 sift-stack-py>=0.9.1
 speechrecognition>=3.14.0
 watchdog>=6.0.0
+numpy>=1.26.4
 
 # Web Framework & WebSocket
 Flask>=3.1.2
@@ -41,9 +42,11 @@ healpy>=1.18.1
 oda-node>=0.1.55
 oda-knowledge-base>=0.7.28
 
-# Computer Vision
-opencv-contrib-python>=4.12.0.88
+# Computer Vision & MediaPipe
+opencv-contrib-python>=4.11.0.86
 pillow>=11.3.0
+mediapipe>=0.10.9
+pyzbar>=0.1.9
 
 # Web Automation & Scraping
 selenium>=4.38.0
@@ -114,6 +117,11 @@ pylogstash-context>=0.1.19
 colorama>=0.4.6
 pyreadline3>=3.5.4
 pywin32-ctypes>=0.2.3
+plyer>=2.1.0
+
+# Windows-specific Audio Control
+comtypes>=1.4.1
+pycaw>=20240210
 
 # Type Checking
 pydantic>=2.12.3
@@ -126,7 +134,7 @@ GitPython>=3.1.45
 google-auth>=2.41.1
 protobuf>=5.29.5
 
-# Other Dependencies
+# Supporting Dependencies
 about-time>=4.2.1
 annotated-types>=0.7.0
 anyio>=4.11.0
@@ -270,14 +278,3 @@ jaraco.classes>=3.4.0
 jaraco.functools>=4.3.0
 jaraco.context>=6.0.1
 more-itertools>=10.8.0
-comtypes
-pycaw
-comtypes
-pycaw
-plyer
-pillow
-pyzbar
-qrcode
-mediapipe
-security
-numpy
