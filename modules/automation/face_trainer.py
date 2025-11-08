@@ -23,13 +23,11 @@ class FaceTrainer:
             cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
         )
         
-        # Use LBPH (Local Binary Patterns Histograms) recognizer with optimized parameters
-        # radius=2, neighbors=16 for better accuracy
-        # grid_x=8, grid_y=8 for better spatial resolution
-        # threshold=80 for stricter matching
+        # Use LBPH (Local Binary Patterns Histograms) recognizer with balanced parameters
+        # Optimized for faster loading while maintaining good accuracy
         self.recognizer = cv2.face.LBPHFaceRecognizer_create(
-            radius=2,
-            neighbors=16,
+            radius=1,
+            neighbors=8,
             grid_x=8,
             grid_y=8,
             threshold=100.0
@@ -205,10 +203,10 @@ class FaceRecognizer:
             cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
         )
         
-        # Initialize recognizer with same optimized parameters
+        # Initialize recognizer with same balanced parameters as training
         self.recognizer = cv2.face.LBPHFaceRecognizer_create(
-            radius=2,
-            neighbors=16,
+            radius=1,
+            neighbors=8,
             grid_x=8,
             grid_y=8,
             threshold=100.0
@@ -221,8 +219,13 @@ class FaceRecognizer:
     def load_model(self) -> bool:
         """Load trained model"""
         try:
+            print("   Loading model file... (this may take a moment)")
+            import sys
+            sys.stdout.flush()
+            
             # Load the model
             self.recognizer.read(self.model_path)
+            print("   Model file loaded successfully!")
             
             # Load labels
             labels_path = self.model_path.replace('.yml', '_labels.pkl')
