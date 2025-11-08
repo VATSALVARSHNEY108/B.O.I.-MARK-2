@@ -4,11 +4,19 @@ Detects user's face, greets them, and recognizes hand signs to activate voice li
 """
 
 import cv2
-import mediapipe as mp
 import threading
 import time
 from typing import Dict, Optional, Callable
 import numpy as np
+
+# Try to import mediapipe, make it optional for Python 3.13 Windows compatibility
+try:
+    import mediapipe as mp
+    MEDIAPIPE_AVAILABLE = True
+except ImportError:
+    MEDIAPIPE_AVAILABLE = False
+    print("⚠️  MediaPipe not available - hand gesture recognition will be disabled")
+    print("   Face detection will still work using OpenCV")
 
 
 class FaceGestureAssistant:
@@ -16,18 +24,25 @@ class FaceGestureAssistant:
     
     def __init__(self, voice_commander=None):
         self.voice_commander = voice_commander
+        self.mediapipe_available = MEDIAPIPE_AVAILABLE
         
         self.face_cascade = cv2.CascadeClassifier(
             cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
         )
         
-        self.mp_hands = mp.solutions.hands
-        self.hands = self.mp_hands.Hands(
-            max_num_hands=1,
-            min_detection_confidence=0.7,
-            min_tracking_confidence=0.5
-        )
-        self.mp_drawing = mp.solutions.drawing_utils
+        # Only initialize MediaPipe if available
+        if MEDIAPIPE_AVAILABLE:
+            self.mp_hands = mp.solutions.hands
+            self.hands = self.mp_hands.Hands(
+                max_num_hands=1,
+                min_detection_confidence=0.7,
+                min_tracking_confidence=0.5
+            )
+            self.mp_drawing = mp.solutions.drawing_utils
+        else:
+            self.mp_hands = None
+            self.hands = None
+            self.mp_drawing = None
         
         self.cap = None
         self.running = False
@@ -99,7 +114,7 @@ class FaceGestureAssistant:
         if self.cap:
             self.cap.release()
         
-        if self.hands:
+        if self.hands and MEDIAPIPE_AVAILABLE:
             self.hands.close()
         
         cv2.destroyAllWindows()
@@ -157,33 +172,35 @@ class FaceGestureAssistant:
                 else:
                     self.face_detected = False
                 
-                rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                results = self.hands.process(rgb_frame)
-                
-                if results.multi_hand_landmarks:
-                    for hand_landmarks in results.multi_hand_landmarks:
-                        self.mp_drawing.draw_landmarks(
-                            frame,
-                            hand_landmarks,
-                            self.mp_hands.HAND_CONNECTIONS
-                        )
-                        
-                        gesture = self._recognize_gesture(hand_landmarks)
-                        
-                        if gesture == "OPEN_PALM" and self.face_detected:
-                            if current_time - self.last_gesture_time > self.gesture_cooldown:
-                                self._handle_listening_gesture()
-                                self.last_gesture_time = current_time
-                            
-                            cv2.putText(
+                # Hand gesture detection (only if MediaPipe is available)
+                if MEDIAPIPE_AVAILABLE and self.hands:
+                    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    results = self.hands.process(rgb_frame)
+                    
+                    if results.multi_hand_landmarks:
+                        for hand_landmarks in results.multi_hand_landmarks:
+                            self.mp_drawing.draw_landmarks(
                                 frame,
-                                "Listening Gesture Detected!",
-                                (10, 60),
-                                cv2.FONT_HERSHEY_SIMPLEX,
-                                0.7,
-                                (0, 255, 255),
-                                2
+                                hand_landmarks,
+                                self.mp_hands.HAND_CONNECTIONS
                             )
+                            
+                            gesture = self._recognize_gesture(hand_landmarks)
+                            
+                            if gesture == "OPEN_PALM" and self.face_detected:
+                                if current_time - self.last_gesture_time > self.gesture_cooldown:
+                                    self._handle_listening_gesture()
+                                    self.last_gesture_time = current_time
+                                
+                                cv2.putText(
+                                    frame,
+                                    "Listening Gesture Detected!",
+                                    (10, 60),
+                                    cv2.FONT_HERSHEY_SIMPLEX,
+                                    0.7,
+                                    (0, 255, 255),
+                                    2
+                                )
                 
                 status_text = "Face: Detected" if self.face_detected else "Face: Not Detected"
                 cv2.putText(

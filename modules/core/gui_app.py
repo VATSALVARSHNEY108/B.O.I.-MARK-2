@@ -43,7 +43,13 @@ from voice_commander import create_voice_commander
 from system_control import SystemController
 from websocket_client import get_websocket_client
 from macro_recorder import MacroRecorder, MacroTemplates
-from modules.automation.face_gesture_assistant import FaceGestureAssistant
+try:
+    from modules.automation.face_gesture_assistant import FaceGestureAssistant
+    FACE_GESTURE_AVAILABLE = True
+except ImportError as e:
+    FACE_GESTURE_AVAILABLE = False
+    FaceGestureAssistant = None
+    print(f"⚠️  Face Gesture Assistant not available: {e}")
 from nl_workflow_builder import create_nl_workflow_builder
 from workflow_templates import WorkflowManager
 from security_dashboard import SecurityDashboard
@@ -205,10 +211,15 @@ class AutomationControllerGUI:
         
         # Initialize Face & Gesture Assistant
         try:
-            self.face_gesture_assistant = FaceGestureAssistant(voice_commander=self.voice_commander)
-            self.face_gesture_assistant.set_gesture_callback(self._handle_gesture_command)
-            self.face_gesture_running = False
-            print("✅ Face & Gesture Assistant initialized")
+            if FACE_GESTURE_AVAILABLE and FaceGestureAssistant is not None:
+                self.face_gesture_assistant = FaceGestureAssistant(voice_commander=self.voice_commander)
+                self.face_gesture_assistant.set_gesture_callback(self._handle_gesture_command)
+                self.face_gesture_running = False
+                print("✅ Face & Gesture Assistant initialized")
+            else:
+                self.face_gesture_assistant = None
+                self.face_gesture_running = False
+                print("⚠️ Face & Gesture Assistant not available (MediaPipe required)")
         except Exception as e:
             self.face_gesture_assistant = None
             self.face_gesture_running = False
