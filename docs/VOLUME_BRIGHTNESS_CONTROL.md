@@ -2,7 +2,7 @@
 
 ## Overview
 
-Kai AI Assistant now includes comprehensive system-level volume and brightness controls that work seamlessly with voice commands and the GUI. Control your computer's volume and screen brightness using natural language!
+Vatsal AI Assistant now includes comprehensive system-level volume and brightness controls that work seamlessly with voice commands and the GUI. Control your computer's volume and screen brightness using natural language!
 
 ## ✅ Features Added
 
@@ -28,63 +28,63 @@ Kai AI Assistant now includes comprehensive system-level volume and brightness c
 
 ```
 # Basic Volume Control
-"Kai, increase volume"
+"Vatsal, increase volume"
 "Hey Watson, decrease volume"
-"Kai, volume up"
+"Vatsal, volume up"
 "Watson, volume down"
-"Kai, louder"
-"Hey Kai, quieter"
+"Vatsal, louder"
+"Hey Vatsal, quieter"
 
 # Set Specific Volume
-"Kai, set volume to 50"
+"Vatsal, set volume to 50"
 "Watson, volume 75 percent"
-"Hey Kai, set volume to 30%"
+"Hey Vatsal, set volume to 30%"
 
 # Mute/Unmute
-"Kai, mute"
+"Vatsal, mute"
 "Watson, mute volume"
-"Kai, unmute"
+"Vatsal, unmute"
 "Hey Watson, unmute volume"
-"Kai, toggle mute"
+"Vatsal, toggle mute"
 
 # Check Volume
-"Kai, what's the volume?"
+"Vatsal, what's the volume?"
 "Watson, check volume"
-"Hey Kai, current volume"
+"Hey Vatsal, current volume"
 
 # Custom Amount
-"Kai, increase volume by 20"
+"Vatsal, increase volume by 20"
 "Watson, decrease volume by 5"
-"Kai, raise volume 15"
+"Vatsal, raise volume 15"
 ```
 
 ### Brightness Commands
 
 ```
 # Basic Brightness Control
-"Kai, increase brightness"
+"Vatsal, increase brightness"
 "Watson, decrease brightness"
-"Hey Kai, brighten screen"
+"Hey Vatsal, brighten screen"
 "Watson, dim screen"
-"Kai, make screen brighter"
+"Vatsal, make screen brighter"
 "Hey Watson, make screen darker"
 
 # Set Specific Brightness
-"Kai, set brightness to 80"
+"Vatsal, set brightness to 80"
 "Watson, brightness 50 percent"
-"Hey Kai, set brightness to 25%"
+"Hey Vatsal, set brightness to 25%"
 
 # Check Brightness
-"Kai, what's the brightness?"
+"Vatsal, what's the brightness?"
 "Watson, check brightness"
-"Hey Kai, current brightness"
+"Hey Vatsal, current brightness"
 
 # Auto Brightness
-"Kai, auto brightness"
+"Vatsal, auto brightness"
 "Watson, enable auto brightness"
 
 # Custom Amount
-"Kai, increase brightness by 20"
+"Vatsal, increase brightness by 20"
 "Watson, decrease brightness by 15"
 ```
 
@@ -164,9 +164,9 @@ python modules/core/gui_app.py
 
 # Enable continuous listening (click 🔊 button)
 # Say wake word + command:
-"Kai, increase volume"
+"Vatsal, increase volume"
 "Watson, set brightness to 60"
-"Hey Kai, mute"
+"Hey Vatsal, mute"
 ```
 
 ### Via Text Commands
@@ -245,16 +245,16 @@ Configure in `system_config.json`:
 
 3. **Test Volume Control**:
    ```
-   "Kai, set volume to 50"
-   "Kai, increase volume"
-   "Kai, mute"
+   "Vatsal, set volume to 50"
+   "Vatsal, increase volume"
+   "Vatsal, mute"
    ```
 
 4. **Test Brightness Control**:
    ```
-   "Kai, set brightness to 70"
-   "Kai, increase brightness"
-   "Kai, dim screen"
+   "Vatsal, set brightness to 70"
+   "Vatsal, increase brightness"
+   "Vatsal, dim screen"
    ```
 
 ## ⚙️ Configuration
@@ -330,10 +330,10 @@ sudo apt-get install pulseaudio-utils
 - ✅ **Natural Language** - Use conversational commands
 - ✅ **Fine-Grained Control** - Set exact levels or adjust incrementally
 - ✅ **Smart Context** - AI understands system vs app-specific controls
-- ✅ **Wake Word Support** - Use "Kai" or "Watson" to activate
+- ✅ **Wake Word Support** - Use "Vatsal" or "Watson" to activate
 
 ---
 
 **Created:** November 4, 2025  
-**Version:** 2.1.0 - Kai Edition  
+**Version:** 2.1.0 - Vatsal Edition  
 **Status:** ✅ Fully Implemented & Tested

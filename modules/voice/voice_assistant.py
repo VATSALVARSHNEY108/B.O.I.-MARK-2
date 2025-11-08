@@ -18,7 +18,7 @@ class VoiceAssistant:
         self.listening = False
         self.wake_word_enabled = True
         # Simple and easy wake words for quick activation
-        self.wake_words = ["kai", "hey kai", "ok kai", "watson", "hey watson", "ok watson", "hello", "open", "search", "oye", "bhai", "bhaiya", "bhaisahb"]
+        self.wake_words = ["vatsal", "hey vatsal", "ok vatsal", "watson", "hey watson", "ok watson", "hello", "open", "search", "oye", "bhai", "bhaiya", "bhaisahb"]
         # Action verbs that should be kept in the command
         self.action_wake_words = ["open", "search"]
         

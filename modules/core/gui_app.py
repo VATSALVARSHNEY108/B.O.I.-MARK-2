@@ -75,7 +75,7 @@ VNC_MODE = setup_vnc_display()
 class AutomationControllerGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("✨ Kai - AI Desktop Automation Controller")
+        self.root.title("✨ Vatsal - AI Desktop Automation Controller")
         self.root.geometry("1400x900")
         self.root.configure(bg="#000000")  # Pure black background
 
@@ -3576,7 +3576,7 @@ class AutomationControllerGUI:
         greeting = self.vatsal.get_greeting()
         
         self.update_output("\n" + "=" * 60 + "\n", "info")
-        self.update_output("🤖 Kai AI Assistant (Powered by VATSAL)\n", "success")
+        self.update_output("🤖 Vatsal AI Assistant (Powered by VATSAL)\n", "success")
         self.update_output("=" * 60 + "\n", "info")
         self.update_output(f"{personalized_greeting}\n", "success")
         self.update_output(f"{greeting}\n\n", "info")
@@ -3599,9 +3599,9 @@ class AutomationControllerGUI:
         if self.simple_chatbot:
             greeting = self.simple_chatbot.greeting()
         else:
-            greeting = "Hello! I'm Kai, your AI assistant. How can I help you today?"
+            greeting = "Hello! I'm Vatsal, your AI assistant. How can I help you today?"
 
-        self._add_vatsal_ai_message("Kai", greeting)
+        self._add_vatsal_ai_message("Vatsal", greeting)
         self.vatsal_conversation_active = True
 
     def send_to_vatsal_ai(self):
@@ -4463,7 +4463,7 @@ Based on OthersideAI's self-operating-computer framework
                 wake_words = ", ".join(self.voice_commander.get_wake_words()[:3])
                 self.update_output(f"\n💬 Wake word ENABLED\n", "success")
                 self.update_output(f"Say: {wake_words}\n", "info")
-                self.update_output(f"Then your command (e.g., 'Hey Kai, what time is it')\n\n", "info")
+                self.update_output(f"Then your command (e.g., 'Hey Vatsal, what time is it')\n\n", "info")
             else:
                 self.wake_word_btn.config(bg="#f9e2af")
                 self.update_output(f"\n💬 Wake word DISABLED\n", "warning")
@@ -4813,12 +4813,12 @@ For more information, visit the documentation or contact support.
 
     def show_about(self):
         about_window = tk.Toplevel(self.root)
-        about_window.title("ℹ️ About Kai")
+        about_window.title("ℹ️ About Vatsal")
         about_window.geometry("700x600")
         about_window.configure(bg="#1a1a2e")
 
         header = tk.Label(about_window,
-                          text="🤖 Kai - AI Desktop Assistant",
+                          text="🤖 Vatsal - AI Desktop Assistant",
                           bg="#1a1a2e",
                           fg="#ffffff",
                           font=("Segoe UI", 18, "bold"),
@@ -4826,7 +4826,7 @@ For more information, visit the documentation or contact support.
         header.pack()
 
         version = tk.Label(about_window,
-                           text="Version 2.1.0 - Kai Edition (Powered by VATSAL)",
+                           text="Version 2.1.0 - Vatsal Edition (Powered by VATSAL)",
                            bg="#1a1a2e",
                            fg="#89b4fa",
                            font=("Segoe UI", 11))
@@ -4837,15 +4837,15 @@ For more information, visit the documentation or contact support.
 
         description = tk.Label(description_frame,
                                text="""
-⚡ Kai - Your Intelligent Desktop AI Assistant
+⚡ Vatsal - Your Intelligent Desktop AI Assistant
 
 Powered by Google Gemini AI & VATSAL Framework
 
-Kai is your intelligent AI assistant with sophisticated 
+Vatsal is your intelligent AI assistant with sophisticated 
 personality and advanced voice control capabilities.
 
 ✓ 80+ AI-powered features
-✓ Advanced wake word detection ("Kai", "Hey Kai", etc.)
+✓ Advanced wake word detection ("Vatsal", "Hey Vatsal", etc.)
 ✓ Context-aware responses with memory
 ✓ Proactive suggestions & assistance
 ✓ Natural language command processing

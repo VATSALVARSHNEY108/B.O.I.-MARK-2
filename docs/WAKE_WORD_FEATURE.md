@@ -11,9 +11,9 @@ VATSAL now features **intelligent wake word detection** for true hands-free voic
 ### Wake Word Activation
 You can now activate voice commands using any of these wake phrases:
 
-1. **"Kai"** - Primary wake word - Quick, modern activation
-2. **"Hey Kai"** - Natural, conversational activation  
-3. **"OK Kai"** - Assistant-style activation
+1. **"Vatsal"** - Primary wake word - Quick, modern activation
+2. **"Hey Vatsal"** - Natural, conversational activation  
+3. **"OK Vatsal"** - Assistant-style activation
 4. **"VATSAL"** - Quick, direct activation
 5. **"Hey VATSAL"** - Natural, conversational activation
 6. **"OK VATSAL"** - Assistant-style activation
@@ -26,20 +26,20 @@ You can now activate voice commands using any of these wake phrases:
 
 **Continuous Listening with Wake Words:**
 ```
-You: "Kai, what time is it?"
-Kai: "Good afternoon, Sir. It's 2:30 PM."
+You: "Vatsal, what time is it?"
+Vatsal: "Good afternoon, Sir. It's 2:30 PM."
 
-You: "Hey Kai, take a screenshot"
-Kai: "Screenshot captured successfully, Sir."
+You: "Hey Vatsal, take a screenshot"
+Vatsal: "Screenshot captured successfully, Sir."
 
-You: "OK Kai, check system information"
-Kai: "Your system is running optimally..."
+You: "OK Vatsal, check system information"
+Vatsal: "Your system is running optimally..."
 
 You: "Computer, open downloads folder"
-Kai: "Opening downloads folder, Sir."
+Vatsal: "Opening downloads folder, Sir."
 
 You: "Hey VATSAL, show me the weather"
-Kai: "Certainly, Sir. Currently 72°F and sunny..."
+Vatsal: "Certainly, Sir. Currently 72°F and sunny..."
 ```
 
 **Privacy Focused:**
@@ -57,9 +57,9 @@ Click the **🔊 speaker button** in the GUI
 
 ### 2. Use Wake Words
 Say one of the wake phrases followed by your command:
-- "Kai, open downloads folder"
-- "Hey Kai, play lofi beats"
-- "OK Kai, write Python code for sorting"
+- "Vatsal, open downloads folder"
+- "Hey Vatsal, play lofi beats"
+- "OK Vatsal, write Python code for sorting"
 - "VATSAL, check system status"
 
 ### 3. Toggle Wake Word (Optional)
@@ -92,19 +92,19 @@ Located next to the Execute button:
 
 ### Scenario 1: Working on Code
 ```
-You: "Hey Kai, what's the weather?"
-Kai: "Currently 72°F and sunny, Sir."
+You: "Hey Vatsal, what's the weather?"
+Vatsal: "Currently 72°F and sunny, Sir."
 
 [5 minutes later]
-You: "Kai, take a screenshot"
-Kai: "Screenshot saved, Sir."
+You: "Vatsal, take a screenshot"
+Vatsal: "Screenshot saved, Sir."
 
 [Background conversation with colleague - IGNORED]
 Colleague: "Did you see the game last night?"
 
-[Wake word triggers Kai]
-You: "OK Kai, check CPU usage"
-Kai: "CPU usage is at 45%, Sir."
+[Wake word triggers Vatsal]
+You: "OK Vatsal, check CPU usage"
+Vatsal: "CPU usage is at 45%, Sir."
 ```
 
 ### Scenario 2: Multitasking
@@ -133,12 +133,12 @@ VATSAL: "Downloads organized by type, Sir."
 ### Supported Wake Phrases
 ```python
 wake_words = [
-    "kai",         # Primary wake word
-    "hey kai",
-    "ok kai",
-    "vatsal",
-    "hey vatsal", 
+    "vatsal",      # Primary wake word
+    "hey vatsal",
     "ok vatsal",
+    "VATSAL",
+    "hey VATSAL", 
+    "ok VATSAL",
     "computer",
     "hey computer",
     "bhiaya",      # Hindi/Urdu: Brother
@@ -324,9 +324,9 @@ Processed: "take a screenshot"
 
 ### First Commands to Try
 ```
-"Kai, introduce yourself"
-"Hey Kai, what can you do?"
-"OK Kai, take a screenshot"
+"Vatsal, introduce yourself"
+"Hey Vatsal, what can you do?"
+"OK Vatsal, take a screenshot"
 "Computer, check system information"
 "VATSAL, what time is it?"
 "Bhiaya, show me the weather"
