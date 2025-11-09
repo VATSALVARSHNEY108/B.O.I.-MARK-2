@@ -78,6 +78,25 @@ class OpenCVHandGestureDetector:
     def _load_mediapipe_model(self):
         """Load Google MediaPipe pretrained gesture model"""
         try:
+            import importlib.util
+            
+            # Check if mediapipe is actually installed and functional
+            mediapipe_spec = importlib.util.find_spec("mediapipe")
+            if mediapipe_spec is None:
+                print("ℹ️  MediaPipe not installed (optional - using fallback methods)")
+                self.mediapipe_recognizer = None
+                return
+            
+            # Try to import MediaPipe
+            try:
+                import mediapipe as mp
+            except Exception as mp_error:
+                print(f"ℹ️  MediaPipe unavailable in this environment: {str(mp_error)[:60]}")
+                print("   Using hardcoded + custom trained gestures instead")
+                self.mediapipe_recognizer = None
+                return
+            
+            # MediaPipe is available, try to load recognizer
             from modules.automation.mediapipe_gesture_recognizer import MediaPipeGestureRecognizer
             
             self.mediapipe_recognizer = MediaPipeGestureRecognizer()
@@ -86,10 +105,11 @@ class OpenCVHandGestureDetector:
                 print("✅ MediaPipe pretrained model loaded")
                 print(f"   Gestures: {self.mediapipe_recognizer.list_available_gestures()}")
             else:
-                print("⚠️  MediaPipe model not available, will use other methods")
+                print("⚠️  MediaPipe model file not found, will use other methods")
                 self.mediapipe_recognizer = None
         except Exception as e:
-            print(f"⚠️  Could not load MediaPipe: {e}")
+            print(f"ℹ️  MediaPipe unavailable: {str(e)[:60]}")
+            print("   Using hardcoded + custom trained gestures")
             self.mediapipe_recognizer = None
     
     def start(self, camera_index: int = 0) -> Dict:
@@ -674,6 +694,16 @@ class OpenCVHandGestureDetector:
             for gesture in mediapipe_gestures:
                 print(f"   • {gesture}")
             total_gestures += len(mediapipe_gestures)
+        else:
+            # MediaPipe not available, show what it would support
+            mediapipe_gestures = ["FIST", "OPEN_PALM", "ONE_FINGER_UP", "THUMBS_DOWN", 
+                                  "THUMBS_UP", "PEACE_SIGN", "ROCK_SIGN", "SPOCK", "OK_CIRCLE", "PINCH"]
+            print(f"\n📱 MediaPipe Pretrained Gestures ({len(mediapipe_gestures)} gestures):")
+            print("   ⚠️  MediaPipe not available in cloud environment")
+            print("   ℹ️  Install MediaPipe on local machine for instant gesture recognition")
+            print("   📋 Supported gestures:")
+            for gesture in mediapipe_gestures:
+                print(f"      • {gesture}")
         
         # Custom trained gestures
         if self.gesture_trainer and self.gesture_trainer.classifier:
@@ -686,7 +716,8 @@ class OpenCVHandGestureDetector:
         else:
             print(f"\n🎓 Custom Trained Gestures:")
             print("   ❌ NOT CONFIGURED")
-            print("   ℹ️  Run 'python train_hand_gestures.py' to train custom gestures")
+            print("   ℹ️  Run 'python train_hand_gestures.py' on local machine to train")
+            print("   📝 Recommended: Train 10+ custom gestures for best accuracy")
         
         # Hardcoded finger-counting gestures
         hardcoded_gestures = ["OPEN_PALM", "FIST", "PEACE_SIGN", "THUMBS_UP"]
@@ -696,7 +727,10 @@ class OpenCVHandGestureDetector:
             print(f"   • {gesture}")
         total_gestures += len(hardcoded_gestures)
         
-        print(f"\n📊 Total Available Gestures: {total_gestures}")
+        print(f"\n📊 Total Configured Gestures: {total_gestures if self.gesture_trainer else len(hardcoded_gestures)}")
+        if not self.mediapipe_recognizer:
+            print("\n💡 Note: This is a cloud environment without camera access.")
+            print("   Deploy to local machine with webcam for full gesture recognition.")
         print("=" * 70 + "\n")
     
     def _detect_hand_roi(self, frame) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:

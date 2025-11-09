@@ -9,11 +9,14 @@ import numpy as np
 from typing import Optional, Tuple
 
 try:
-    import mediapipe as mp
-    from mediapipe.tasks import python
-    from mediapipe.tasks.python import vision
+    import mediapipe as mp  # type: ignore
+    from mediapipe.tasks import python as mediapipe_python  # type: ignore
+    from mediapipe.tasks.python import vision as mediapipe_vision  # type: ignore
     MEDIAPIPE_AVAILABLE = True
 except ImportError:
+    mp = None  # type: ignore
+    mediapipe_python = None  # type: ignore
+    mediapipe_vision = None  # type: ignore
     MEDIAPIPE_AVAILABLE = False
     print("⚠️  MediaPipe not available. Install with: pip install mediapipe")
 
@@ -71,17 +74,20 @@ class MediaPipeGestureRecognizer:
             return
         
         try:
-            base_options = python.BaseOptions(model_asset_path=self.model_path)
-            options = vision.GestureRecognizerOptions(
+            from mediapipe.tasks import python as mediapipe_python
+            from mediapipe.tasks.python import vision as mediapipe_vision
+            
+            base_options = mediapipe_python.BaseOptions(model_asset_path=self.model_path)
+            options = mediapipe_vision.GestureRecognizerOptions(
                 base_options=base_options,
-                running_mode=vision.RunningMode.IMAGE,
+                running_mode=mediapipe_vision.RunningMode.IMAGE,
                 num_hands=1,
                 min_hand_detection_confidence=self.min_confidence,
                 min_hand_presence_confidence=self.min_confidence,
                 min_tracking_confidence=self.min_confidence
             )
             
-            self.recognizer = vision.GestureRecognizer.create_from_options(options)
+            self.recognizer = mediapipe_vision.GestureRecognizer.create_from_options(options)
             self.available = True
             print(f"✅ MediaPipe gesture recognizer loaded")
             print(f"   Available gestures: {list(self.gesture_mapping.values())}")
@@ -108,6 +114,8 @@ class MediaPipeGestureRecognizer:
             rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             
             # Create MediaPipe Image
+            if mp is None:
+                return None, 0.0
             mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_frame)
             
             # Recognize gestures with MediaPipe
@@ -259,7 +267,7 @@ class MediaPipeGestureRecognizer:
         middle_ring_dist = np.linalg.norm(np.array(middle_tip[:2]) - np.array(ring_tip[:2]))
         
         # Spock if middle-ring gap is significantly larger
-        return middle_ring_dist > 2 * max(index_middle_dist, ring_pinky_dist)
+        return bool(middle_ring_dist > 2 * max(float(index_middle_dist), float(ring_pinky_dist)))
     
     def _is_ok_circle(self, landmarks: list) -> bool:
         """Detect OK gesture (thumb + index forming circle 👌)"""
@@ -270,7 +278,7 @@ class MediaPipeGestureRecognizer:
         distance = np.linalg.norm(np.array(thumb_tip[:2]) - np.array(index_tip[:2]))
         
         # OK gesture if distance is very small (forming circle)
-        return distance < 0.05
+        return bool(distance < 0.05)
     
     def _is_pinch(self, landmarks: list) -> bool:
         """Detect pinch gesture 🫰"""
@@ -280,7 +288,7 @@ class MediaPipeGestureRecognizer:
         distance = np.linalg.norm(np.array(thumb_tip[:2]) - np.array(index_tip[:2]))
         
         # Pinch if fingers are close but not forming complete circle
-        return 0.03 < distance < 0.08
+        return bool(0.03 < distance < 0.08)
     
     def list_available_gestures(self) -> list:
         """

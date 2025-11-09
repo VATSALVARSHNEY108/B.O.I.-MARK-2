@@ -287,4 +287,3 @@ security
 scikit-learn
 numpy
 opencv-python
-mediapipe
