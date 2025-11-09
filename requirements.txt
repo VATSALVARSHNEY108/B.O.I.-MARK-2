@@ -287,3 +287,4 @@ more-itertools>=10.8.0
 opencv-contrib-python
 opencv-python
 security
+mediapipe
