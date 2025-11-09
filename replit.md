@@ -71,7 +71,15 @@ Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mo
 -   **Selenium:** For web automation and intelligent form filling.
 
 ## Recent Changes
--   **November 2025 (Latest):** Added **Enhanced Hand Gesture & Face Detection** with dual implementation:
+-   **November 2025 (Latest Update):** Added **Custom Gesture Training System** - Train unlimited custom hand gestures using machine learning!
+    - **GestureTrainer module** (`modules/automation/gesture_trainer.py`): Captures samples from camera, extracts HOG + Hu moment features, trains SVM classifier
+    - **Hybrid Detection** in `opencv_hand_gesture_detector.py`: Tries ML model first (custom gestures), falls back to hardcoded finger-counting
+    - **Training Utility** (`train_hand_gestures.py`): User-friendly CLI for capturing samples and training models
+    - **Smart Recognition**: Detects custom gestures with confidence scoring (60% threshold)
+    - **Backward Compatible**: All old hardcoded gestures (OPEN_PALM, FIST, etc.) still work!
+    - **Documentation**: Complete guides in GESTURE_TRAINING_GUIDE.md and FIX_ENVIRONMENT.md
+    - **Storage**: Models saved to biometric_data/hands/ directory
+-   **November 2025:** Added **Enhanced Hand Gesture & Face Detection** with dual implementation:
     - **OpenCV-only detector** (works everywhere, including Python 3.13 on Windows and Replit)
     - **MediaPipe detector** (when available, for advanced tracking)
     - Features: Real-time face detection, hand gesture recognition (open palm 👋, fist ✊), automatic voice activation, greeting system
