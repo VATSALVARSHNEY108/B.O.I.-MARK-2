@@ -820,21 +820,6 @@ class AutomationControllerGUI:
         # Right-click to open sound settings
         self.sound_fx_btn.bind("<Button-3>", lambda e: self.show_sound_settings())
 
-        # Gesture detection toggle button (Two V signs for VATSAL)
-        self.gesture_btn = tk.Button(voice_frame,
-                                      text="✌️",
-                                      bg="#f9e2af",
-                                      fg="#0f0f1e",
-                                      font=("Segoe UI", 11, "bold"),
-                                      relief="flat",
-                                      cursor="hand2",
-                                      command=self.toggle_gesture,
-                                      padx=10,
-                                      pady=10,
-                                      activebackground="#f5c2e7")
-        self.gesture_btn.pack(side="left", padx=2)
-        self.add_hover_effect(self.gesture_btn, "#f9e2af", "#f5c2e7")
-
         self.execute_btn = tk.Button(input_container,
                                      text="⚡ Execute ⚡",
                                      bg="#00ff88",
@@ -4594,14 +4579,17 @@ Based on OthersideAI's self-operating-computer framework
 
             threading.Thread(target=run_gesture_voice, daemon=True).start()
             self.gesture_voice_active = True
-            self.gesture_voice_btn.config(bg="#00ff88", text="✌️")
+            self.gesture_voice_btn.config(bg="#00ff88", text="✌️✌️")
             self.update_output("\n" + "=" * 60 + "\n", "info")
-            self.update_output("✌️  Gesture Voice Activator ENABLED\n", "success")
+            self.update_output("✌️  Gesture Voice & Hand Detection ENABLED\n", "success")
             self.update_output("=" * 60 + "\n", "info")
             self.update_output("📋 Instructions:\n", "info")
             self.update_output("• Show V sign (peace sign ✌️) to activate voice\n", "info")
             self.update_output("• Hold for 1 second to trigger listening\n", "info")
-            self.update_output("• Speak your command when you see red microphone\n", "info")
+            self.update_output("• Show TWO V SIGNS (both hands) for VATSAL greeting\n", "info")
+            self.update_output("• Show OPEN PALM to activate voice listening\n", "info")
+            self.update_output("• Make a FIST to stop\n", "info")
+            self.update_output("• Show THUMBS UP for approval\n", "info")
             self.update_output("• A camera window will open showing hand tracking\n", "info")
             self.update_output("• Press 'q' in the camera window to close it\n\n", "info")
             self.update_status("✌️  Gesture Voice Active", "#00ff88")
@@ -4624,46 +4612,10 @@ Based on OthersideAI's self-operating-computer framework
         # Route to existing voice command handler on main thread
         self.root.after(0, lambda: self.handle_voice_command(speech_text))
 
-    def toggle_gesture(self):
-        """Toggle gesture recognition on/off (Two V signs for VATSAL greeting)"""
-        if not self.gesture_assistant:
-            messagebox.showerror("Gesture Error", "Hand Gesture Detector not available")
-            return
-
-        if not self.gesture_running:
-            result = self.gesture_assistant.start(camera_index=0)
-
-            if result['success']:
-                self.gesture_running = True
-                self.gesture_btn.config(bg="#a6e3a1", text="✌️✌️")
-                self.update_output("\n" + "=" * 60 + "\n", "info")
-                self.update_output("✌️  Hand Gesture Detection ENABLED\n", "success")
-                self.update_output("=" * 60 + "\n", "info")
-                self.update_output("📋 Instructions:\n", "info")
-                self.update_output("• Show TWO PEACE SIGNS (both hands) for VATSAL greeting\n", "info")
-                self.update_output("• Show an OPEN PALM to activate voice listening\n", "info")
-                self.update_output("• Make a FIST to stop\n", "info")
-                self.update_output("• Show THUMBS UP for approval\n", "info")
-                self.update_output("• A window will open showing the camera feed\n", "info")
-                self.update_output("• Press 'q' in the camera window to close it\n\n", "info")
-                self.update_status("✌️  Gesture Detection Active", "#a6e3a1")
-            else:
-                messagebox.showerror("Camera Error", result['message'])
-        else:
-            result = self.gesture_assistant.stop()
-
-            if result['success']:
-                self.gesture_running = False
-                self.gesture_btn.config(bg="#f9e2af", text="✌️")
-                self.update_output("\n✌️  Hand Gesture Detection DISABLED\n", "warning")
-
-                stats = self.gesture_assistant.get_stats()
-                self.update_output(f"\n📊 Session Statistics:\n", "info")
-                self.update_output(f"• VATSAL detected: {stats['vatsal_detected']}\n", "info")
-                self.update_output(f"• Gestures detected: {stats['gestures_detected']}\n", "info")
-                self.update_output(f"• Open palm: {stats['open_palm_detected']}\n", "info")
-                self.update_output(f"• Peace signs: {stats['peace_sign_detected']}\n\n", "info")
-                self.update_status("✅ Ready", "#a6e3a1")
+    # REMOVED: Separate gesture button functionality merged into toggle_gesture_voice
+    # def toggle_gesture(self):
+    #     """Toggle gesture recognition on/off (Two V signs for VATSAL greeting)"""
+    #     # This functionality is now part of the V sign gesture voice feature
 
     def _handle_gesture_command(self, command):
         """
