@@ -33,7 +33,7 @@ class MediaPipeGestureRecognizer:
     """
     
     def __init__(self, model_path: str = "models/mediapipe/gesture_recognizer.task",
-                 min_confidence: float = 0.7):
+                 min_confidence: float = 0.6):
         """
         Initialize MediaPipe gesture recognizer
         

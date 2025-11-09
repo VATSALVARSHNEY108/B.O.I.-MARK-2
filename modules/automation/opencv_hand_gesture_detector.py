@@ -320,24 +320,35 @@ class OpenCVHandGestureDetector:
             # Find contours
             contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             
-            if not contours:
-                return []
-            
             # Analyze all valid contours
             gestures = []
-            for contour in contours:
-                area = cv2.contourArea(contour)
-                
-                # Check if area is reasonable for a hand
-                if area < self.min_hand_area or area > self.max_hand_area:
-                    continue
-                
-                # Try hybrid detection (ML + hardcoded)
-                gesture, confidence = self._analyze_contour_with_hybrid(frame, contour)
-                if gesture != "NONE":
+            
+            if contours:
+                for contour in contours:
+                    area = cv2.contourArea(contour)
+                    
+                    # Check if area is reasonable for a hand
+                    if area < self.min_hand_area or area > self.max_hand_area:
+                        continue
+                    
+                    # Try hybrid detection (ML + hardcoded)
+                    gesture, confidence = self._analyze_contour_with_hybrid(frame, contour)
+                    if gesture != "NONE":
+                        gestures.append({
+                            'gesture': gesture, 
+                            'contour': contour,
+                            'confidence': confidence
+                        })
+            
+            # FALLBACK: If no contours found, try MediaPipe on full frame
+            # This ensures gestures work even without reliable skin detection
+            if not gestures and self.mediapipe_recognizer is not None:
+                gesture, confidence = self.mediapipe_recognizer.recognize(frame)
+                if gesture is not None and confidence >= self.min_confidence:
+                    self.stats['mediapipe_gestures_detected'] += 1
                     gestures.append({
-                        'gesture': gesture, 
-                        'contour': contour,
+                        'gesture': gesture,
+                        'contour': None,  # No contour available
                         'confidence': confidence
                     })
             

@@ -132,6 +132,13 @@
       "cooldown": 1,
       "priority": 5,
       "voice_feedback": null
+    },
+    "ILOVEYOU": {
+      "action": "help",
+      "description": "Show help menu - MediaPipe gesture",
+      "cooldown": 2,
+      "priority": 5,
+      "voice_feedback": "Help menu"
     }
   },
   "actions": {
