@@ -821,19 +821,19 @@ class AutomationControllerGUI:
         self.sound_fx_btn.bind("<Button-3>", lambda e: self.show_sound_settings())
 
         # Gesture detection toggle button (Two V signs for VATSAL)
-        # self.gesture_btn = tk.Button(voice_frame,
-        #                              text="✌️",
-        #                              bg="#f9e2af",
-        #                              fg="#0f0f1e",
-        #                              font=("Segoe UI", 11, "bold"),
-        #                              relief="flat",
-        #                              cursor="hand2",
-        #                              command=self.toggle_gesture,
-        #                              padx=10,
-        #                              pady=10,
-        #                              activebackground="#f5c2e7")
-        # self.gesture_btn.pack(side="left", padx=2)
-        # self.add_hover_effect(self.gesture_btn, "#f9e2af", "#f5c2e7")
+        self.gesture_btn = tk.Button(voice_frame,
+                                      text="✌️",
+                                      bg="#f9e2af",
+                                      fg="#0f0f1e",
+                                      font=("Segoe UI", 11, "bold"),
+                                      relief="flat",
+                                      cursor="hand2",
+                                      command=self.toggle_gesture,
+                                      padx=10,
+                                      pady=10,
+                                      activebackground="#f5c2e7")
+        self.gesture_btn.pack(side="left", padx=2)
+        self.add_hover_effect(self.gesture_btn, "#f9e2af", "#f5c2e7")
 
         self.execute_btn = tk.Button(input_container,
                                      text="⚡ Execute ⚡",
