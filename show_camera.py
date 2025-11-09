@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Show Camera with Face Detection
-Opens a window to display what the camera sees with face detection
+Show Camera with Face Recognition
+Opens a window to display what the camera sees with face recognition
 """
 
 import cv2
@@ -16,11 +16,10 @@ from modules.automation.face_trainer import FaceRecognizer
 
 def main():
     print("=" * 70)
-    print("📹 Camera Display with Face Recognition")
+    print("📹 VATSAL AI - Face Recognition Camera")
     print("=" * 70)
     print()
     
-    # Load model
     model_path = "biometric_data/faces/models/face_model.yml"
     recognizer = None
     
@@ -28,12 +27,13 @@ def main():
         print("🧠 Loading face recognition model...")
         recognizer = FaceRecognizer(model_path)
         if recognizer.load_model():
-            print(f"✅ Model loaded! Can recognize: {list(recognizer.labels.keys())}")
+            print(f"✅ Ready to recognize: {list(recognizer.labels.keys())}")
+            print(f"📊 Distance threshold: {recognizer.distance_threshold}")
         else:
-            print("⚠️  Model failed to load - will only show face detection")
+            print("⚠️  Model failed to load - face detection only")
             recognizer = None
     else:
-        print("⚠️  No trained model found - will only show face detection")
+        print("⚠️  No trained model found")
         print("   Run: python train_vatsal_face.py")
     
     print()
@@ -45,21 +45,20 @@ def main():
         print("❌ Could not open camera!")
         return
     
-    # Set camera properties
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
     
     print("✅ Camera ready!")
     print()
-    print("🎯 Instructions:")
-    print("   • Look at the camera")
-    print("   • Press 'q' to quit")
-    print("   • Press 's' to save a snapshot")
+    print("🎯 Controls:")
+    print("   Press 'q' to quit")
+    print("   Press 's' to save snapshot")
+    print("   Press '+' to increase threshold")
+    print("   Press '-' to decrease threshold")
     print()
     print("=" * 70)
     print()
     
-    # Face detector
     face_cascade = cv2.CascadeClassifier(
         cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
     )
@@ -74,13 +73,9 @@ def main():
                 print("❌ Failed to read from camera")
                 break
             
-            # Flip for mirror effect
             frame = cv2.flip(frame, 1)
-            
-            # Convert to grayscale for detection
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             
-            # Detect faces
             faces = face_cascade.detectMultiScale(
                 gray,
                 scaleFactor=1.1,
@@ -88,87 +83,77 @@ def main():
                 minSize=(100, 100)
             )
             
-            # Process each face
             for (x, y, w, h) in faces:
                 if recognizer and recognizer.model_loaded:
-                    # Recognize the face
-                    name, confidence = recognizer.recognize_face(gray, (x, y, w, h))
+                    name, confidence, distance = recognizer.recognize_face(gray, (x, y, w, h))
                     
-                    # Show name and confidence in console for debugging
-                    print(f"Face detected: {name} at {confidence:.1f}%")
-                    
-                    # Check if it's an unknown person
-                    if name == "Unknown" or confidence < 1:
-                        color = (0, 0, 255)  # Red
+                    if name == "Unknown":
+                        color = (0, 0, 255)
                         name_text = "UNKNOWN"
-                        confidence_text = "NOT RECOGNIZED"
-                        status_text = "Access Denied"
-                    # Color based on confidence for recognized person
-                    elif confidence > 70:
-                        color = (0, 255, 0)  # Green
-                        status = "EXCELLENT"
-                        name_text = f"{name.upper()}"
+                        confidence_text = f"Distance: {distance:.1f}"
+                        status_text = "ACCESS DENIED"
+                    elif confidence > 75:
+                        color = (0, 255, 0)
+                        name_text = name.upper()
                         confidence_text = f"{confidence:.1f}%"
-                        status_text = f"Match: {status}"
-                    elif confidence > 50:
-                        color = (0, 255, 255)  # Yellow
-                        status = "GOOD"
-                        name_text = f"{name.upper()}"
+                        status_text = f"Distance: {distance:.1f}"
+                    elif confidence > 60:
+                        color = (0, 255, 255)
+                        name_text = name.upper()
                         confidence_text = f"{confidence:.1f}%"
-                        status_text = f"Match: {status}"
+                        status_text = f"Distance: {distance:.1f}"
                     else:
-                        color = (0, 165, 255)  # Orange
-                        status = "WEAK"
-                        name_text = f"{name.upper()}"
+                        color = (0, 165, 255)
+                        name_text = name.upper()
                         confidence_text = f"{confidence:.1f}%"
-                        status_text = f"Match: {status}"
+                        status_text = f"Distance: {distance:.1f}"
                 else:
-                    # Just show face detection
-                    color = (255, 0, 0)  # Blue
+                    color = (255, 0, 0)
                     name_text = "Face Detected"
-                    confidence_text = "N/A"
-                    status_text = "No Model"
+                    confidence_text = "No Model"
+                    status_text = "Training Required"
                 
-                # Draw rectangle around face (thick border)
-                cv2.rectangle(frame, (x, y), (x+w, y+h), color, 4)
+                cv2.rectangle(frame, (x, y), (x+w, y+h), color, 3)
                 
-                # Draw semi-transparent background for text
                 overlay = frame.copy()
                 cv2.rectangle(overlay, (x, y - 80), (x + w, y), (0, 0, 0), -1)
                 cv2.addWeighted(overlay, 0.6, frame, 0.4, 0, frame)
                 
-                # Draw name (large)
                 cv2.putText(frame, name_text, (x + 5, y - 50),
                            cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2)
                 
-                # Draw confidence percentage (LARGE and bold)
                 cv2.putText(frame, confidence_text, (x + 5, y - 25),
-                           cv2.FONT_HERSHEY_SIMPLEX, 1.2, color, 3)
+                           cv2.FONT_HERSHEY_SIMPLEX, 1.0, color, 2)
                 
-                # Draw status
                 cv2.putText(frame, status_text, (x + 5, y - 5),
-                           cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
             
-            # Add instructions at bottom
-            info_text = f"Faces: {len(faces)} | Press 'q' to quit, 's' to save snapshot"
+            info_text = f"Faces: {len(faces)}"
+            if recognizer and recognizer.model_loaded:
+                info_text += f" | Threshold: {recognizer.distance_threshold:.0f}"
+            info_text += " | q=quit s=save +/- adjust"
+            
             cv2.putText(frame, info_text, (10, frame.shape[0] - 20),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
             
-            # Show frame
             cv2.imshow('VATSAL AI - Face Recognition', frame)
             
-            # Handle key presses
             key = cv2.waitKey(1) & 0xFF
             
             if key == ord('q'):
                 print("\n⏹️  Stopping camera...")
                 break
             elif key == ord('s'):
-                # Save snapshot
                 snapshot_count += 1
                 filename = f"snapshot_{snapshot_count}.jpg"
                 cv2.imwrite(filename, frame)
                 print(f"📸 Saved: {filename}")
+            elif key == ord('+') or key == ord('='):
+                if recognizer:
+                    recognizer.set_threshold(recognizer.distance_threshold + 2)
+            elif key == ord('-') or key == ord('_'):
+                if recognizer:
+                    recognizer.set_threshold(max(10, recognizer.distance_threshold - 2))
     
     except Exception as e:
         print(f"\n❌ Error: {e}")
