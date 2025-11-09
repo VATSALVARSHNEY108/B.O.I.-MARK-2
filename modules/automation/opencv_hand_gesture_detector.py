@@ -71,6 +71,9 @@ class OpenCVHandGestureDetector:
         # Load custom trained model if enabled
         if self.use_trained_model:
             self._load_trained_model()
+        
+        # Print comprehensive gesture availability summary
+        self._print_gesture_summary()
     
     def _load_mediapipe_model(self):
         """Load Google MediaPipe pretrained gesture model"""
@@ -606,17 +609,95 @@ class OpenCVHandGestureDetector:
         """Load trained gesture model if available"""
         try:
             from modules.automation.gesture_trainer import GestureTrainer
+            import os
             
             self.gesture_trainer = GestureTrainer()
+            
+            model_path = self.gesture_trainer.model_path
+            scaler_path = self.gesture_trainer.scaler_path
+            labels_path = self.gesture_trainer.labels_path
+            
             if self.gesture_trainer.load_model():
                 print(f"✅ Loaded trained gesture model with {len(self.gesture_trainer.labels)} custom gestures")
                 print(f"   Custom gestures: {list(self.gesture_trainer.labels.keys())}")
+                print(f"   Model path: {model_path}")
             else:
-                print("ℹ️  No trained gesture model found. Using hardcoded gestures only.")
+                print("\n" + "=" * 70)
+                print("⚠️  CUSTOM TRAINED GESTURES NOT FOUND")
+                print("=" * 70)
+                print(f"   Expected model files at:")
+                print(f"   - {model_path}")
+                print(f"   - {scaler_path}")
+                print(f"   - {labels_path}")
+                print()
+                
+                missing_files = []
+                if not os.path.exists(model_path):
+                    missing_files.append("gesture_model.pkl")
+                if not os.path.exists(scaler_path):
+                    missing_files.append("gesture_scaler.pkl")
+                if not os.path.exists(labels_path):
+                    missing_files.append("gesture_labels.pkl")
+                
+                if missing_files:
+                    print(f"   Missing files: {', '.join(missing_files)}")
+                print()
+                print("   📝 To train custom gestures:")
+                print("      1. Run: python train_hand_gestures.py")
+                print("      2. Capture samples for each gesture (50+ recommended)")
+                print("      3. Train the model")
+                print("      4. Restart the gesture detector")
+                print()
+                print("   ℹ️  Currently using:")
+                if self.mediapipe_recognizer:
+                    print("      ✅ MediaPipe pretrained gestures (7 gestures)")
+                print("      ✅ Hardcoded finger-counting gestures")
+                print("=" * 70 + "\n")
                 self.gesture_trainer = None
         except Exception as e:
             print(f"⚠️  Could not load trained model: {e}")
             self.gesture_trainer = None
+    
+    def _print_gesture_summary(self):
+        """Print comprehensive summary of available gesture types"""
+        print("\n" + "=" * 70)
+        print("🎯 GESTURE DETECTION SYSTEM - AVAILABLE GESTURES")
+        print("=" * 70)
+        
+        total_gestures = 0
+        
+        # MediaPipe pretrained gestures
+        if self.mediapipe_recognizer:
+            mediapipe_gestures = self.mediapipe_recognizer.list_available_gestures()
+            print(f"\n📱 MediaPipe Pretrained Gestures ({len(mediapipe_gestures)} gestures):")
+            print("   ✅ NO TRAINING REQUIRED - Works instantly!")
+            for gesture in mediapipe_gestures:
+                print(f"   • {gesture}")
+            total_gestures += len(mediapipe_gestures)
+        
+        # Custom trained gestures
+        if self.gesture_trainer and self.gesture_trainer.classifier:
+            custom_gestures = list(self.gesture_trainer.labels.keys())
+            print(f"\n🎓 Custom Trained Gestures ({len(custom_gestures)} gestures):")
+            print("   ✅ User-trained ML model loaded")
+            for gesture in custom_gestures:
+                print(f"   • {gesture}")
+            total_gestures += len(custom_gestures)
+        else:
+            print(f"\n🎓 Custom Trained Gestures:")
+            print("   ❌ NOT CONFIGURED")
+            print("   ℹ️  Run 'python train_hand_gestures.py' to train custom gestures")
+        
+        # Hardcoded finger-counting gestures
+        hardcoded_gestures = ["OPEN_PALM", "FIST", "PEACE_SIGN", "THUMBS_UP"]
+        print(f"\n👆 Hardcoded Finger-Counting Gestures ({len(hardcoded_gestures)} gestures):")
+        print("   ✅ Always available (fallback method)")
+        for gesture in hardcoded_gestures:
+            print(f"   • {gesture}")
+        total_gestures += len(hardcoded_gestures)
+        
+        print(f"\n📊 Total Available Gestures: {total_gestures}")
+        print("=" * 70 + "\n")
     
     def _detect_hand_roi(self, frame) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
         """
