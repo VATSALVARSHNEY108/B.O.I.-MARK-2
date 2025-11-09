@@ -1,6 +1,7 @@
 """
 VATSAL AI - Gesture-Activated Voice Listener
 Detects TWO V signs (both hands) to trigger VATSAL greeting
+UPGRADED: Android camera support with auto-detection
 """
 
 import cv2
@@ -15,12 +16,13 @@ from modules.automation.audio_feedback import get_audio_feedback
 class GestureVoiceActivator:
     """Gesture-based voice activation system with dual V sign detection"""
     
-    def __init__(self, on_speech_callback: Optional[Callable[[str], None]] = None):
+    def __init__(self, on_speech_callback: Optional[Callable[[str], None]] = None, camera_index: int = None):
         """
         Initialize gesture voice activator
         
         Args:
             on_speech_callback: Function to call when speech is recognized
+            camera_index: Camera index to use (None = auto-detect)
         """
         self.mp_hands = mp.solutions.hands
         self.hands = None
@@ -32,6 +34,7 @@ class GestureVoiceActivator:
         self.running = False
         self.on_speech_callback = on_speech_callback
         self.on_stop_callback = None
+        self.camera_index = camera_index
         
         self.greeting_cooldown = 0
         
@@ -126,10 +129,59 @@ class GestureVoiceActivator:
         """Set callback to be called when activator stops"""
         self.on_stop_callback = callback
     
+    def detect_working_camera(self):
+        """Auto-detect first working camera (supports Android/DroidCam)"""
+        print("🔍 Auto-detecting cameras...")
+        
+        for index in range(4):
+            cap = cv2.VideoCapture(index)
+            if cap.isOpened():
+                time.sleep(0.5)
+                ret, frame = cap.read()
+                cap.release()
+                
+                if ret and frame is not None and frame.mean() > 10:
+                    print(f"✅ Found working camera at index {index}")
+                    return index
+                else:
+                    print(f"⚠️  Camera {index} opens but no valid feed")
+            else:
+                print(f"❌ Camera {index} not available")
+        
+        print("⚠️  No working camera found, defaulting to index 0")
+        return 0
+    
+    def initialize_camera(self, camera_index):
+        """Initialize camera with Android/DroidCam support (fixes black screen)"""
+        print(f"📹 Opening camera {camera_index}...")
+        
+        cap = cv2.VideoCapture(camera_index)
+        
+        if not cap.isOpened():
+            print(f"❌ Could not open camera {camera_index}!")
+            return None
+        
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        
+        print("⏳ Warming up camera (critical for Android/DroidCam)...")
+        time.sleep(2)
+        
+        print("🔄 Discarding initial frames...")
+        for i in range(5):
+            ret, frame = cap.read()
+            if ret:
+                brightness = frame.mean()
+                print(f"   Frame {i+1}: Brightness {brightness:.1f}")
+            time.sleep(0.1)
+        
+        print("✅ Camera ready!")
+        return cap
+    
     def run(self):
         """Main loop for gesture detection"""
         print("=" * 70)
-        print("🎯 VATSAL AI - Gesture-Activated Voice Listener")
+        print("🎯 VATSAL AI - Gesture-Activated Voice Listener (UPGRADED)")
         print("=" * 70)
         print()
         
@@ -140,21 +192,22 @@ class GestureVoiceActivator:
             min_tracking_confidence=0.5
         )
         
-        print("📹 Opening camera...")
+        if self.camera_index is None:
+            self.camera_index = self.detect_working_camera()
         
-        cap = cv2.VideoCapture(0)
+        print(f"🎥 Using camera index: {self.camera_index}")
+        print()
         
-        if not cap.isOpened():
-            print("❌ Could not open camera!")
+        cap = self.initialize_camera(self.camera_index)
+        
+        if cap is None:
+            print("❌ Camera initialization failed!")
             return
         
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-        
-        print("✅ Camera ready!")
         print()
         print("🎯 Instructions:")
         print("   • Show TWO V signs (both hands ✌️✌️) to get VATSAL greeting")
+        print("   • Show ONE V sign (1 second) to activate voice listening")
         print("   • Speak your command when microphone icon appears")
         print("   • Press 'q' to quit")
         print()
@@ -234,11 +287,15 @@ class GestureVoiceActivator:
                     cv2.putText(frame, f"Last: {self.last_text[:40]}", (10, h - 20),
                                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
                 
-                status_text = "Show 2 V signs for VATSAL greeting | 1 V sign for listening | Press 'q' to quit"
+                status_text = f"Camera {self.camera_index} | 2 V signs=greeting | 1 V sign=listen | q=quit"
                 cv2.putText(frame, status_text, (10, h - 50),
                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                 
-                cv2.imshow('VATSAL AI - Gesture Listener', frame)
+                camera_info = f"Android Camera Support Enabled"
+                cv2.putText(frame, camera_info, (10, 30),
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+                
+                cv2.imshow('VATSAL AI - Gesture Listener (UPGRADED)', frame)
                 
                 key = cv2.waitKey(1) & 0xFF
                 
@@ -267,6 +324,19 @@ class GestureVoiceActivator:
         print("=" * 70)
 
 
-def create_gesture_voice_activator(on_speech_callback: Optional[Callable[[str], None]] = None):
-    """Factory function to create gesture voice activator"""
-    return GestureVoiceActivator(on_speech_callback)
+def create_gesture_voice_activator(on_speech_callback: Optional[Callable[[str], None]] = None, camera_index: int = None):
+    """
+    Factory function to create gesture voice activator
+    
+    Args:
+        on_speech_callback: Function to call when speech is recognized
+        camera_index: Camera index to use (None = auto-detect, 0 = first camera, 1 = Android/DroidCam, etc.)
+    
+    Usage:
+        # Auto-detect camera (recommended for Android/DroidCam)
+        activator = create_gesture_voice_activator()
+        
+        # Use specific camera (if you know the index)
+        activator = create_gesture_voice_activator(camera_index=1)
+    """
+    return GestureVoiceActivator(on_speech_callback, camera_index)
