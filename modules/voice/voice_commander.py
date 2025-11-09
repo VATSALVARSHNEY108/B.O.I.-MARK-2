@@ -183,6 +183,43 @@ class VoiceCommander:
         self.tts_thread = threading.Thread(target=tts_worker, daemon=True)
         self.tts_thread.start()
     
+    def interrupt_and_listen(self, callback: Optional[Callable[[str], None]] = None):
+        """
+        Interrupt current speech and start listening for a new command
+        This is triggered when the listening gesture is shown while AI is speaking
+        """
+        print("\n🛑 Speech interrupted - Ready for new command!")
+        
+        try:
+            # Stop the TTS engine immediately
+            if self.is_speaking:
+                self.tts_engine.stop()
+            
+            # Clear all pending speech from queue
+            while not self.tts_queue.empty():
+                try:
+                    self.tts_queue.get_nowait()
+                except queue.Empty:
+                    break
+            
+            # Reset speaking state
+            self.is_speaking = False
+            
+            # Small delay to ensure engine fully stops
+            time.sleep(0.2)
+            
+            # Start listening for new command
+            if callback:
+                result = self.listen_once()
+                if result['success']:
+                    callback(result['command'])
+            else:
+                return self.listen_once()
+                
+        except Exception as e:
+            print(f"❌ Interrupt error: {e}")
+            return {"success": False, "message": f"Interrupt failed: {e}"}
+    
     def speak(self, text: str, interrupt: bool = False):
         """Queue text for speech output"""
         if interrupt:
