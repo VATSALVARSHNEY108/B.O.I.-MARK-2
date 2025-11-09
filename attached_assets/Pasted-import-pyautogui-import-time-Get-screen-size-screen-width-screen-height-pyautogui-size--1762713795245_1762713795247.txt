@@ -1,0 +1,68 @@
+import pyautogui
+import time
+
+# Get screen size
+screen_width, screen_height = pyautogui.size()
+
+# Time tracking for clicks
+last_click_time = 0.5  # Prevents continuous clicks
+prev_wrist_y = None  # Store previous wrist position for scrolling
+
+
+def move_cursor(hand_landmarks, frame_width, frame_height, prev_x, prev_y, smoothing):
+    """
+    Moves the cursor smoothly based on the index finger tip position.
+    """
+    index_finger_x = hand_landmarks.landmark[8].x
+    index_finger_y = hand_landmarks.landmark[8].y
+
+    # Convert to screen coordinates
+    screen_x = int(index_finger_x * screen_width)
+    screen_y = int(index_finger_y * screen_height)
+
+    # Apply smoothing
+    new_x = prev_x + (screen_x - prev_x) * smoothing
+    new_y = prev_y + (screen_y - prev_y) * smoothing
+
+    pyautogui.moveTo(new_x, new_y)
+    return new_x, new_y  # Return new smoothed position
+
+
+def click_mouse(hand_landmarks):
+    """
+    Detects a pinch gesture (thumb + index finger) to trigger a left click.
+    """
+    global last_click_time
+
+    thumb_x = hand_landmarks.landmark[4].x
+    index_x = hand_landmarks.landmark[8].x
+
+    if abs(thumb_x - index_x) < 0.02:  # If fingers are close
+        if time.time() - last_click_time > 0.5:  # Click cooldown
+            print("🖱 Left Click!")
+            pyautogui.click()
+            last_click_time = time.time()
+
+
+def scroll_page(hand_landmarks):
+    """
+    Scrolls the page up or down based on wrist movement.
+
+    """
+    global prev_wrist_y  # Use the global variable
+
+    wrist_y = hand_landmarks.landmark[0].y  # Wrist Y position
+
+    if prev_wrist_y is None:
+        prev_wrist_y = wrist_y  # Initialize wrist position
+
+    movement = wrist_y - prev_wrist_y  # Calculate movement difference
+
+    if movement > 0.03:  # Downward movement (Scroll Down)
+        print("📜 Scrolling Down")
+        pyautogui.scroll(-30)
+    elif movement < -0.03:  # Upward movement (Scroll Up)
+        print("📜 Scrolling Up")
+        pyautogui.scroll(30)
+
+    prev_wrist_y = wrist_y  # Update previous wrist position
