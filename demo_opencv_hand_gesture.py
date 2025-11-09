@@ -38,13 +38,9 @@ def main():
     detector = OpenCVHandGestureDetector()
     
     # Set callbacks
-    def on_face_detected():
-        print("📸 Face callback triggered")
-    
     def on_gesture_detected(command):
         print(f"🎯 Gesture callback triggered with command: {command}")
     
-    detector.set_face_callback(on_face_detected)
     detector.set_gesture_callback(on_gesture_detected)
     
     # Start detection
