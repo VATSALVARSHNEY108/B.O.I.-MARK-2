@@ -193,7 +193,7 @@ class GestureVoiceActivator:
         )
         
         if self.camera_index is None:
-            self.camera_index = self.detect_working_camera()
+            self.camera_index = 1  # Change this: 0=default, 1=Android/DroidCam, 2=camera2, 3=camera3
         
         print(f"🎥 Using camera index: {self.camera_index}")
         print()
