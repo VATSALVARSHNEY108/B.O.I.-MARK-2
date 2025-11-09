@@ -50,7 +50,6 @@ oda-knowledge-base>=0.7.28
 # Computer Vision & MediaPipe
 opencv-contrib-python>=4.11.0.86
 pillow>=11.3.0
-mediapipe>=0.10.9
 pyzbar>=0.1.9
 
 # Web Automation & Scraping
@@ -285,7 +284,7 @@ jaraco.context>=6.0.1
 more-itertools>=10.8.0
 opencv-contrib-python
 security
-mediapipe
 scikit-learn
 numpy
 opencv-python
+mediapipe
