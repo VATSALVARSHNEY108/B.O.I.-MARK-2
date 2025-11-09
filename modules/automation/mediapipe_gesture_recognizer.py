@@ -50,11 +50,11 @@ class MediaPipeGestureRecognizer:
         self.gesture_mapping = {
             "Closed_Fist": "FIST",
             "Open_Palm": "OPEN_PALM",
-            "Pointing_Up": "POINTING_UP",
+            "Pointing_Up": "ONE_FINGER_UP",
             "Thumb_Down": "THUMBS_DOWN",
             "Thumb_Up": "THUMBS_UP",
             "Victory": "PEACE_SIGN",
-            "ILoveYou": "ILOVEYOU"
+            "ILoveYou": "ROCK_SIGN"
         }
         
         self._load_model()
@@ -92,7 +92,7 @@ class MediaPipeGestureRecognizer:
     
     def recognize(self, frame: np.ndarray) -> Tuple[Optional[str], float]:
         """
-        Recognize gesture in a frame
+        Recognize gesture in a frame (MediaPipe + custom gestures)
         
         Args:
             frame: BGR image from OpenCV (numpy array)
@@ -110,12 +110,11 @@ class MediaPipeGestureRecognizer:
             # Create MediaPipe Image
             mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_frame)
             
-            # Recognize gestures
+            # Recognize gestures with MediaPipe
             result = self.recognizer.recognize(mp_image)
             
-            # Extract results
+            # 1. Try MediaPipe gestures first
             if result.gestures and len(result.gestures) > 0:
-                # Get top gesture
                 gesture = result.gestures[0][0]
                 
                 if gesture.score >= self.min_confidence:
@@ -124,6 +123,15 @@ class MediaPipeGestureRecognizer:
                     vatsal_name = self.gesture_mapping.get(mediapipe_name, mediapipe_name)
                     
                     return vatsal_name, gesture.score
+            
+            # 2. If no MediaPipe gesture, try custom gesture detection
+            if result.hand_landmarks and len(result.hand_landmarks) > 0:
+                landmarks = result.hand_landmarks[0]
+                landmarks_list = [(lm.x, lm.y, lm.z) for lm in landmarks]
+                
+                custom_gesture, custom_conf = self.detect_custom_gestures(landmarks_list)
+                if custom_gesture:
+                    return custom_gesture, custom_conf
             
             return None, 0.0
             
@@ -206,14 +214,84 @@ class MediaPipeGestureRecognizer:
         
         return frame
     
+    def detect_custom_gestures(self, landmarks: list) -> Tuple[Optional[str], float]:
+        """
+        Detect custom gestures using hand landmark analysis
+        Supports: SPOCK, OK_CIRCLE, PINCH, ROCK_SIGN
+        
+        Args:
+            landmarks: List of 21 (x, y, z) hand landmarks
+        
+        Returns:
+            Tuple of (gesture_name, confidence) or (None, 0.0)
+        """
+        if not landmarks or len(landmarks) < 21:
+            return None, 0.0
+        
+        # 1. SPOCK (Vulcan salute - split fingers)
+        if self._is_spock_gesture(landmarks):
+            return "SPOCK", 0.9
+        
+        # 2. OK_CIRCLE (Thumb + Index forming circle)
+        elif self._is_ok_circle(landmarks):
+            return "OK_CIRCLE", 0.85
+        
+        # 3. PINCH
+        elif self._is_pinch(landmarks):
+            return "PINCH", 0.8
+        
+        return None, 0.0
+    
+    def _is_spock_gesture(self, landmarks: list) -> bool:
+        """Detect Spock/Vulcan salute (split fingers 🖖)"""
+        index_tip = landmarks[8]
+        middle_tip = landmarks[12]
+        ring_tip = landmarks[16]
+        pinky_tip = landmarks[20]
+        
+        # Distance between index and middle (should be small)
+        index_middle_dist = np.linalg.norm(np.array(index_tip[:2]) - np.array(middle_tip[:2]))
+        
+        # Distance between ring and pinky (should be small)
+        ring_pinky_dist = np.linalg.norm(np.array(ring_tip[:2]) - np.array(pinky_tip[:2]))
+        
+        # Distance between middle and ring (should be large)
+        middle_ring_dist = np.linalg.norm(np.array(middle_tip[:2]) - np.array(ring_tip[:2]))
+        
+        # Spock if middle-ring gap is significantly larger
+        return middle_ring_dist > 2 * max(index_middle_dist, ring_pinky_dist)
+    
+    def _is_ok_circle(self, landmarks: list) -> bool:
+        """Detect OK gesture (thumb + index forming circle 👌)"""
+        thumb_tip = landmarks[4]
+        index_tip = landmarks[8]
+        
+        # Distance between thumb tip and index tip
+        distance = np.linalg.norm(np.array(thumb_tip[:2]) - np.array(index_tip[:2]))
+        
+        # OK gesture if distance is very small (forming circle)
+        return distance < 0.05
+    
+    def _is_pinch(self, landmarks: list) -> bool:
+        """Detect pinch gesture 🫰"""
+        thumb_tip = landmarks[4]
+        index_tip = landmarks[8]
+        
+        distance = np.linalg.norm(np.array(thumb_tip[:2]) - np.array(index_tip[:2]))
+        
+        # Pinch if fingers are close but not forming complete circle
+        return 0.03 < distance < 0.08
+    
     def list_available_gestures(self) -> list:
         """
         Get list of gestures this recognizer can detect
         
         Returns:
-            List of gesture names
+            List of gesture names (includes MediaPipe + custom gestures)
         """
-        return list(self.gesture_mapping.values())
+        base_gestures = list(self.gesture_mapping.values())
+        custom_gestures = ["SPOCK", "OK_CIRCLE", "PINCH"]
+        return base_gestures + custom_gestures
     
     def is_available(self) -> bool:
         """Check if recognizer is ready to use"""
