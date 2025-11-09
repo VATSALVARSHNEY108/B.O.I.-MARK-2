@@ -71,7 +71,15 @@ Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mo
 -   **Selenium:** For web automation and intelligent form filling.
 
 ## Recent Changes
--   **November 2025 (Latest Update):** Added **Custom Gesture Training System** - Train unlimited custom hand gestures using machine learning!
+-   **November 2025 (Latest Update):** Added **Google MediaPipe Pretrained Gestures** - 7 gestures work instantly with NO training required!
+    - **MediaPipe Integration** (`modules/automation/mediapipe_gesture_recognizer.py`): Production-ready wrapper for Google's pretrained gesture model
+    - **3-Tier Detection**: MediaPipe pretrained (best) → Custom ML (user-trained) → Hardcoded finger-counting (fallback)
+    - **7 Gestures Available**: Open_Palm, Closed_Fist, Thumbs_Up, Thumbs_Down, Pointing_Up, Victory, ILoveYou
+    - **Full-Frame Fallback**: Works even when skin detection fails (low light, dark skin tones)
+    - **No Camera Training**: Google's AI model provides instant gesture recognition
+    - **Documentation**: Complete guide in docs/MEDIAPIPE_GESTURES.md
+    - **Model Storage**: Downloaded to models/mediapipe/gesture_recognizer.task (8.1MB)
+-   **November 2025:** Added **Custom Gesture Training System** - Train unlimited custom hand gestures using machine learning!
     - **GestureTrainer module** (`modules/automation/gesture_trainer.py`): Captures samples from camera, extracts HOG + Hu moment features, trains SVM classifier
     - **Hybrid Detection** in `opencv_hand_gesture_detector.py`: Tries ML model first (custom gestures), falls back to hardcoded finger-counting
     - **Training Utility** (`train_hand_gestures.py`): User-friendly CLI for capturing samples and training models
