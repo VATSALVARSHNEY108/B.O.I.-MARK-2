@@ -1,0 +1,240 @@
+{
+  "gestures": {
+    "OPEN_PALM": {
+      "action": "voice_listen",
+      "description": "Activate voice listening",
+      "cooldown": 2,
+      "priority": 10,
+      "voice_feedback": "Listening"
+    },
+    "FIST": {
+      "action": "voice_stop",
+      "description": "Stop voice listening",
+      "cooldown": 1,
+      "priority": 10,
+      "voice_feedback": null
+    },
+    "THUMBS_UP": {
+      "action": "confirm",
+      "description": "Confirmation gesture",
+      "cooldown": 1,
+      "priority": 5,
+      "voice_feedback": "Confirmed"
+    },
+    "THUMBS_DOWN": {
+      "action": "reject",
+      "description": "Rejection gesture",
+      "cooldown": 1,
+      "priority": 5,
+      "voice_feedback": "Rejected"
+    },
+    "PEACE_SIGN": {
+      "action": "screenshot",
+      "description": "Take a screenshot",
+      "cooldown": 2,
+      "priority": 5,
+      "voice_feedback": "Screenshot taken"
+    },
+    "TWO_PEACE_SIGNS": {
+      "action": "greet_vatsal",
+      "description": "VATSAL greeting with supreme leader messages",
+      "cooldown": 3,
+      "priority": 15,
+      "voice_feedback": null
+    },
+    "POINTING_LEFT": {
+      "action": "previous",
+      "description": "Previous item or go back",
+      "cooldown": 1,
+      "priority": 5,
+      "voice_feedback": "Previous"
+    },
+    "POINTING_RIGHT": {
+      "action": "next",
+      "description": "Next item or go forward",
+      "cooldown": 1,
+      "priority": 5,
+      "voice_feedback": "Next"
+    },
+    "POINTING_UP": {
+      "action": "volume_up",
+      "description": "Increase volume",
+      "cooldown": 0.5,
+      "priority": 5,
+      "voice_feedback": null
+    },
+    "POINTING_DOWN": {
+      "action": "volume_down",
+      "description": "Decrease volume",
+      "cooldown": 0.5,
+      "priority": 5,
+      "voice_feedback": null
+    },
+    "THREE_FINGERS": {
+      "action": "minimize_window",
+      "description": "Minimize current window",
+      "cooldown": 1,
+      "priority": 7,
+      "voice_feedback": "Minimized"
+    },
+    "FOUR_FINGERS": {
+      "action": "maximize_window",
+      "description": "Maximize current window",
+      "cooldown": 1,
+      "priority": 7,
+      "voice_feedback": "Maximized"
+    },
+    "OK_SIGN": {
+      "action": "close_window",
+      "description": "Close current window",
+      "cooldown": 2,
+      "priority": 8,
+      "voice_feedback": "Closing window"
+    },
+    "PALM_LEFT": {
+      "action": "lock_screen",
+      "description": "Lock the screen - palm facing left",
+      "cooldown": 3,
+      "priority": 10,
+      "voice_feedback": "Locking screen",
+      "enabled": true
+    },
+    "SWIPE_LEFT": {
+      "action": "switch_workspace_left",
+      "description": "Switch to left workspace/desktop (Motion - Not yet implemented)",
+      "cooldown": 1,
+      "priority": 6,
+      "voice_feedback": null,
+      "enabled": false,
+      "planned": true
+    },
+    "SWIPE_RIGHT": {
+      "action": "switch_workspace_right",
+      "description": "Switch to right workspace/desktop (Motion - Not yet implemented)",
+      "cooldown": 1,
+      "priority": 6,
+      "voice_feedback": null,
+      "enabled": false,
+      "planned": true
+    },
+    "CIRCLE_MOTION": {
+      "action": "toggle_recording",
+      "description": "Start/stop screen recording (Motion - Not yet implemented)",
+      "cooldown": 2,
+      "priority": 8,
+      "voice_feedback": "Recording toggled",
+      "enabled": false,
+      "planned": true
+    },
+    "PINCH": {
+      "action": "play_pause",
+      "description": "Play/pause media",
+      "cooldown": 1,
+      "priority": 5,
+      "voice_feedback": null
+    }
+  },
+  "actions": {
+    "voice_listen": {
+      "module": "voice_commander",
+      "method": "start_listening",
+      "description": "Start voice command listening"
+    },
+    "voice_stop": {
+      "module": "voice_commander",
+      "method": "stop_listening",
+      "description": "Stop voice listening"
+    },
+    "screenshot": {
+      "module": "system_control",
+      "method": "take_screenshot",
+      "description": "Capture screenshot"
+    },
+    "greet_vatsal": {
+      "module": "gesture_detector",
+      "method": "greet_vatsal",
+      "description": "Special VATSAL greeting"
+    },
+    "volume_up": {
+      "module": "system_control",
+      "method": "increase_volume",
+      "params": {"amount": 5},
+      "description": "Increase system volume"
+    },
+    "volume_down": {
+      "module": "system_control",
+      "method": "decrease_volume",
+      "params": {"amount": 5},
+      "description": "Decrease system volume"
+    },
+    "minimize_window": {
+      "module": "window_control",
+      "method": "minimize_active_window",
+      "description": "Minimize active window"
+    },
+    "maximize_window": {
+      "module": "window_control",
+      "method": "maximize_active_window",
+      "description": "Maximize active window"
+    },
+    "close_window": {
+      "module": "window_control",
+      "method": "close_active_window",
+      "description": "Close active window"
+    },
+    "lock_screen": {
+      "module": "system_control",
+      "method": "lock_screen",
+      "description": "Lock the screen"
+    },
+    "toggle_recording": {
+      "module": "system_control",
+      "method": "toggle_screen_recording",
+      "description": "Toggle screen recording"
+    },
+    "play_pause": {
+      "module": "media_control",
+      "method": "play_pause",
+      "description": "Play/pause media"
+    },
+    "next": {
+      "module": "media_control",
+      "method": "next_track",
+      "description": "Next track"
+    },
+    "previous": {
+      "module": "media_control",
+      "method": "previous_track",
+      "description": "Previous track"
+    },
+    "confirm": {
+      "module": "gesture_detector",
+      "method": "confirmation_signal",
+      "description": "User confirmation"
+    },
+    "reject": {
+      "module": "gesture_detector",
+      "method": "rejection_signal",
+      "description": "User rejection"
+    },
+    "switch_workspace_left": {
+      "module": "window_control",
+      "method": "switch_desktop",
+      "params": {"direction": "left"},
+      "description": "Switch to left workspace"
+    },
+    "switch_workspace_right": {
+      "module": "window_control",
+      "method": "switch_desktop",
+      "params": {"direction": "right"},
+      "description": "Switch to right workspace"
+    }
+  },
+  "settings": {
+    "enable_voice_feedback": true,
+    "global_cooldown": 0.3,
+    "confidence_threshold": 0.7,
+    "enable_visual_feedback": true,
+    "log_gestures": true
+  }
+}
