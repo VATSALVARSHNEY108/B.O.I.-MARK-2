@@ -418,13 +418,36 @@ class OpenCVHandGestureDetector:
         
         if self.voice_commander:
             import random
+            
+            # Expanded greetings list with "supreme leader" style greetings
             greetings = [
+                "Supreme leader, welcome!",
+                "All hail the supreme leader!",
+                "Welcome, supreme leader!",
+                "The supreme leader has arrived!",
+                "Greetings, supreme leader!",
                 "Hello Vatsal! Both hands up!",
                 "Welcome Vatsal!",
                 "Greetings Vatsal! I see you!",
-                "At your service Vatsal!"
+                "At your service, supreme leader!",
+                "Your loyal servant reporting, supreme leader!",
+                "The boss is in the house!",
+                "Master has arrived!",
+                "Welcome back, supreme commander!"
             ]
-            greeting = random.choice(greetings)
+            
+            # Select a random greeting, avoiding the last one if possible
+            if not hasattr(self, 'last_greeting'):
+                self.last_greeting = None
+            
+            # Try to pick a different greeting than last time
+            available_greetings = [g for g in greetings if g != self.last_greeting]
+            if not available_greetings:
+                available_greetings = greetings
+            
+            greeting = random.choice(available_greetings)
+            self.last_greeting = greeting
+            
             self.voice_commander.speak(greeting)
         
         self.stats['vatsal_detected'] += 1

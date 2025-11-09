@@ -220,6 +220,37 @@ class VoiceCommander:
             print(f"❌ Interrupt error: {e}")
             return {"success": False, "message": f"Interrupt failed: {e}"}
     
+    def stop_speaking(self):
+        """
+        Stop any ongoing speech immediately without listening for a new command.
+        This is triggered by the "next" voice command.
+        """
+        print("\n🛑 Stopping speech...")
+        
+        try:
+            # Stop the TTS engine immediately
+            if self.is_speaking:
+                self.tts_engine.stop()
+            
+            # Clear all pending speech from queue
+            while not self.tts_queue.empty():
+                try:
+                    self.tts_queue.get_nowait()
+                except queue.Empty:
+                    break
+            
+            # Reset speaking state
+            self.is_speaking = False
+            
+            # Small delay to ensure engine fully stops
+            time.sleep(0.2)
+            
+            return {"success": True, "message": "Speech stopped"}
+                
+        except Exception as e:
+            print(f"❌ Stop speaking error: {e}")
+            return {"success": False, "message": f"Stop failed: {e}"}
+    
     def speak(self, text: str, interrupt: bool = False):
         """Queue text for speech output"""
         if interrupt:
@@ -649,12 +680,19 @@ class VoiceCommander:
     def _execute_advanced_command(self, command: str):
         """
         Execute command with advanced features:
+        - Check for immediate control commands (next, stop)
         - Check for voice shortcuts
         - Process command chains
         - Add to history
         - Execute via callback
         """
         command = command.strip()
+        
+        # Check for "next" command to stop speaking
+        if command.lower() in ["next", "stop talking", "skip", "quiet", "silence", "shut up"]:
+            print("🛑 'Next' command detected - stopping speech")
+            self.stop_speaking()
+            return
         
         # Add to history
         self.add_to_history(command)
