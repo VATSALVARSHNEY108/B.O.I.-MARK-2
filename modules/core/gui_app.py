@@ -53,6 +53,7 @@ except ImportError as e:
 
 # Import OpenCV-based detector (always available)
 from modules.automation.opencv_hand_gesture_detector import OpenCVHandGestureDetector
+from modules.automation.gesture_voice_activator import create_gesture_voice_activator, GestureVoiceActivator
 from nl_workflow_builder import create_nl_workflow_builder
 from workflow_templates import WorkflowManager
 from security_dashboard import SecurityDashboard
@@ -211,6 +212,18 @@ class AutomationControllerGUI:
             self.voice_listening = False
             self.voice_enabled = False
             print(f"⚠️ Voice Commander initialization failed: {e}")
+        
+        # Initialize Gesture Voice Activator (V sign to activate voice)
+        try:
+            self.gesture_voice_activator = create_gesture_voice_activator(
+                on_speech_callback=self.handle_gesture_speech
+            )
+            self.gesture_voice_active = False
+            print("✅ Gesture Voice Activator initialized (V sign → voice)")
+        except Exception as e:
+            self.gesture_voice_activator = None
+            self.gesture_voice_active = False
+            print(f"⚠️ Gesture Voice Activator initialization failed: {e}")
         
         # Initialize Face & Gesture Assistant (MediaPipe version if available, otherwise OpenCV)
         try:
@@ -788,6 +801,23 @@ class AutomationControllerGUI:
         self.wake_word_btn.pack(side="left", padx=2)
         self.add_hover_effect(self.wake_word_btn, "#00d4ff", "#00ff88")
 
+        # Gesture Voice Activator button (V sign → voice)
+        self.gesture_voice_btn = tk.Button(voice_frame,
+                                           text="✌️",
+                                           bg="#ffd700",
+                                           fg="#000000",
+                                           font=("Arial Black", 12, "bold"),
+                                           relief="solid",
+                                           borderwidth=2,
+                                           cursor="hand2",
+                                           command=self.toggle_gesture_voice,
+                                           padx=10,
+                                           pady=10,
+                                           highlightbackground="#ffffff",
+                                           activebackground="#ffaa00")
+        self.gesture_voice_btn.pack(side="left", padx=2)
+        self.add_hover_effect(self.gesture_voice_btn, "#ffd700", "#ffaa00")
+        
         # Sound effects toggle button
         self.sound_fx_btn = tk.Button(voice_frame,
                                       text="🔊",
@@ -4556,6 +4586,59 @@ Based on OthersideAI's self-operating-computer framework
                 self.sound_fx_btn.config(bg="#45475a", text="🔇")
                 self.update_output(f"\n🔇 Voice sound effects DISABLED\n", "warning")
                 self.update_output(f"Voice commands will work silently\n", "info")
+    
+    def toggle_gesture_voice(self):
+        """Toggle gesture-activated voice listening (V sign → voice)"""
+        if not self.gesture_voice_active:
+            # Create fresh activator with callbacks
+            try:
+                self.gesture_voice_activator = create_gesture_voice_activator(
+                    on_speech_callback=self.handle_gesture_speech
+                )
+                self.gesture_voice_activator.set_stop_callback(self._on_gesture_voice_stopped)
+            except Exception as e:
+                messagebox.showerror("Gesture Voice Error", f"Failed to initialize: {e}")
+                return
+            
+            # Start gesture voice activator in background thread
+            def run_gesture_voice():
+                try:
+                    self.gesture_voice_activator.run()
+                except Exception as e:
+                    print(f"❌ Gesture voice error: {e}")
+                    self.root.after(0, self._on_gesture_voice_stopped)
+            
+            threading.Thread(target=run_gesture_voice, daemon=True).start()
+            self.gesture_voice_active = True
+            self.gesture_voice_btn.config(bg="#00ff88", text="✌️")
+            self.update_output("\n" + "=" * 60 + "\n", "info")
+            self.update_output("✌️  Gesture Voice Activator ENABLED\n", "success")
+            self.update_output("=" * 60 + "\n", "info")
+            self.update_output("📋 Instructions:\n", "info")
+            self.update_output("• Show V sign (peace sign ✌️) to activate voice\n", "info")
+            self.update_output("• Hold for 1 second to trigger listening\n", "info")
+            self.update_output("• Speak your command when you see red microphone\n", "info")
+            self.update_output("• A camera window will open showing hand tracking\n", "info")
+            self.update_output("• Press 'q' in the camera window to close it\n\n", "info")
+            self.update_status("✌️  Gesture Voice Active", "#00ff88")
+        else:
+            # Stop gesture voice activator
+            if self.gesture_voice_activator:
+                self.gesture_voice_activator.stop()
+            self._on_gesture_voice_stopped()
+    
+    def _on_gesture_voice_stopped(self):
+        """Callback when gesture voice activator stops (thread-safe)"""
+        self.gesture_voice_active = False
+        self.gesture_voice_btn.config(bg="#ffd700", text="✌️")
+        self.update_output("\n✌️  Gesture Voice Activator DISABLED\n", "warning")
+        self.update_status("✅ Ready", "#a6e3a1")
+    
+    def handle_gesture_speech(self, speech_text):
+        """Handle speech recognized from gesture activation (thread-safe)"""
+        print(f"✌️ Gesture speech received: '{speech_text}'")
+        # Route to existing voice command handler on main thread
+        self.root.after(0, lambda: self.handle_voice_command(speech_text))
     
     def toggle_face_gesture(self):
         """Toggle face detection and gesture recognition on/off"""
