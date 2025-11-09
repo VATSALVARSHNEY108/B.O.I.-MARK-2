@@ -1,5 +1,5 @@
 """
-Enhanced Hand Gesture and Face Detection using OpenCV
+Enhanced Hand Gesture Detection using OpenCV
 Works in all environments without MediaPipe dependency
 """
 
@@ -12,17 +12,12 @@ from typing import Dict, Optional, Callable, Tuple
 
 class OpenCVHandGestureDetector:
     """
-    Hand gesture and face detection using pure OpenCV.
+    Hand gesture detection using pure OpenCV.
     Works everywhere without MediaPipe dependency.
     """
     
     def __init__(self, voice_commander=None):
         self.voice_commander = voice_commander
-        
-        # Face detection using Haar Cascade
-        self.face_cascade = cv2.CascadeClassifier(
-            cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
-        )
         
         # Hand detection using skin color detection
         self.lower_skin = np.array([0, 20, 70], dtype=np.uint8)
@@ -34,22 +29,18 @@ class OpenCVHandGestureDetector:
         self.thread = None
         
         # Detection state
-        self.face_detected = False
         self.hand_detected = False
-        self.last_greeting_time = 0
         self.last_gesture_time = 0
-        self.greeting_cooldown = 10
         self.gesture_cooldown = 2
+        self.vatsal_greeting_cooldown = 0
         
         # Callbacks
-        self.on_face_detected_callback = None
         self.on_gesture_detected_callback = None
         
         # Statistics
         self.stats = {
-            'faces_detected': 0,
             'gestures_detected': 0,
-            'greetings_given': 0,
+            'vatsal_detected': 0,
             'open_palm_detected': 0,
             'fist_detected': 0,
             'thumbs_up_detected': 0,
@@ -61,7 +52,7 @@ class OpenCVHandGestureDetector:
         self.max_hand_area = 50000
     
     def start(self, camera_index: int = 0) -> Dict:
-        """Start face and gesture detection"""
+        """Start gesture detection"""
         if self.running:
             return {
                 'success': False,
@@ -85,7 +76,7 @@ class OpenCVHandGestureDetector:
             
             return {
                 'success': True,
-                'message': 'OpenCV Hand & Face Detector started successfully'
+                'message': 'OpenCV Hand Gesture Detector started successfully'
             }
         except Exception as e:
             return {
@@ -118,11 +109,11 @@ class OpenCVHandGestureDetector:
     
     def _detection_loop(self):
         """Main detection loop"""
-        print("🎥 OpenCV Hand & Face Detection started")
+        print("🎥 OpenCV Hand Gesture Detection started")
         print("👋 Show your OPEN PALM to activate listening")
         print("✊ Make a FIST to stop listening")
         print("👍 Show THUMBS UP for approval")
-        print("✌️  Show PEACE SIGN for victory")
+        print("✌️✌️  Show TWO PEACE SIGNS (both hands) for VATSAL greeting")
         
         while self.running:
             try:
@@ -134,124 +125,117 @@ class OpenCVHandGestureDetector:
                 frame = cv2.flip(frame, 1)
                 current_time = time.time()
                 
-                # Face Detection
-                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                faces = self.face_cascade.detectMultiScale(
-                    gray,
-                    scaleFactor=1.1,
-                    minNeighbors=5,
-                    minSize=(80, 80)
-                )
+                # Detect all hand gestures in the frame
+                gestures = self._detect_all_hand_gestures(frame)
                 
-                # Process face detection
-                if len(faces) > 0:
-                    if not self.face_detected:
-                        self.face_detected = True
-                        self.stats['faces_detected'] += 1
-                        print("👤 Face detected!")
+                # Count peace signs in current frame
+                peace_sign_count = sum(1 for g in gestures if g['gesture'] == "PEACE_SIGN")
+                
+                # Check for VATSAL greeting (two peace signs simultaneously)
+                if peace_sign_count >= 2 and self.vatsal_greeting_cooldown == 0:
+                    self._greet_vatsal()
+                    for gesture_info in gestures:
+                        if gesture_info['contour'] is not None:
+                            cv2.drawContours(frame, [gesture_info['contour']], 0, (0, 255, 0), 3)
                     
-                    # Greet user
-                    if current_time - self.last_greeting_time > self.greeting_cooldown:
-                        self._greet_user()
-                        self.last_greeting_time = current_time
-                    
-                    # Draw face rectangle
-                    for (x, y, w, h) in faces:
-                        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-                        cv2.putText(
-                            frame,
-                            "Vatsal",
-                            (x, y-10),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            0.9,
-                            (0, 255, 0),
-                            2
-                        )
-                else:
-                    self.face_detected = False
-                
-                # Hand Gesture Detection
-                gesture, hand_contour = self._detect_hand_gesture(frame)
-                
-                if gesture != "NONE":
+                    cv2.putText(
+                        frame,
+                        "VATSAL DETECTED!",
+                        (10, 60),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        1.5,
+                        (0, 255, 0),
+                        3
+                    )
                     self.hand_detected = True
+                
+                elif len(gestures) > 0:
+                    # Process first detected gesture
+                    gesture_info = gestures[0]
+                    gesture = gesture_info['gesture']
+                    hand_contour = gesture_info['contour']
                     
-                    # Draw hand contour
-                    if hand_contour is not None:
-                        cv2.drawContours(frame, [hand_contour], 0, (255, 0, 255), 2)
-                    
-                    # Handle gestures
-                    if gesture == "OPEN_PALM" and self.face_detected:
-                        if current_time - self.last_gesture_time > self.gesture_cooldown:
-                            self._handle_listening_gesture()
-                            self.last_gesture_time = current_time
-                            self.stats['open_palm_detected'] += 1
+                    if gesture != "NONE":
+                        self.hand_detected = True
                         
-                        cv2.putText(
-                            frame,
-                            "✋ OPEN PALM - Listening!",
-                            (10, 60),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            0.7,
-                            (0, 255, 255),
-                            2
-                        )
-                    
-                    elif gesture == "FIST":
-                        self.stats['fist_detected'] += 1
-                        cv2.putText(
-                            frame,
-                            "FIST - Stop",
-                            (10, 60),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            0.7,
-                            (0, 165, 255),
-                            2
-                        )
-                    
-                    elif gesture == "THUMBS_UP":
-                        self.stats['thumbs_up_detected'] += 1
-                        cv2.putText(
-                            frame,
-                            "THUMBS UP - Good!",
-                            (10, 60),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            0.7,
-                            (0, 255, 0),
-                            2
-                        )
-                    
-                    elif gesture == "PEACE_SIGN":
-                        self.stats['peace_sign_detected'] += 1
-                        cv2.putText(
-                            frame,
-                            "PEACE SIGN - Victory!",
-                            (10, 60),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            0.7,
-                            (255, 255, 0),
-                            2
-                        )
+                        # Draw hand contour
+                        if hand_contour is not None:
+                            cv2.drawContours(frame, [hand_contour], 0, (255, 0, 255), 2)
+                        
+                        # Handle gestures
+                        if gesture == "OPEN_PALM":
+                            if current_time - self.last_gesture_time > self.gesture_cooldown:
+                                self._handle_listening_gesture()
+                                self.last_gesture_time = current_time
+                                self.stats['open_palm_detected'] += 1
+                            
+                            cv2.putText(
+                                frame,
+                                "OPEN PALM - Listening!",
+                                (10, 60),
+                                cv2.FONT_HERSHEY_SIMPLEX,
+                                0.7,
+                                (0, 255, 255),
+                                2
+                            )
+                        
+                        elif gesture == "FIST":
+                            self.stats['fist_detected'] += 1
+                            cv2.putText(
+                                frame,
+                                "FIST - Stop",
+                                (10, 60),
+                                cv2.FONT_HERSHEY_SIMPLEX,
+                                0.7,
+                                (0, 165, 255),
+                                2
+                            )
+                        
+                        elif gesture == "THUMBS_UP":
+                            self.stats['thumbs_up_detected'] += 1
+                            cv2.putText(
+                                frame,
+                                "THUMBS UP - Good!",
+                                (10, 60),
+                                cv2.FONT_HERSHEY_SIMPLEX,
+                                0.7,
+                                (0, 255, 0),
+                                2
+                            )
+                        
+                        elif gesture == "PEACE_SIGN":
+                            self.stats['peace_sign_detected'] += 1
+                            cv2.putText(
+                                frame,
+                                f"PEACE SIGN ({peace_sign_count}/2 for VATSAL)",
+                                (10, 60),
+                                cv2.FONT_HERSHEY_SIMPLEX,
+                                0.7,
+                                (255, 255, 0),
+                                2
+                            )
+                    else:
+                        self.hand_detected = False
                 else:
                     self.hand_detected = False
                 
+                # Decrement cooldown
+                if self.vatsal_greeting_cooldown > 0:
+                    self.vatsal_greeting_cooldown -= 1
+                
                 # Display status
-                status_text = "Face: Detected" if self.face_detected else "Face: Not Detected"
                 hand_status = "Hand: Detected" if self.hand_detected else "Hand: Not Detected"
                 
-                cv2.putText(frame, status_text, (10, 30),
-                           cv2.FONT_HERSHEY_SIMPLEX, 0.7,
-                           (0, 255, 0) if self.face_detected else (0, 0, 255), 2)
-                
-                cv2.putText(frame, hand_status, (10, 90),
+                cv2.putText(frame, hand_status, (10, 30),
                            cv2.FONT_HERSHEY_SIMPLEX, 0.7,
                            (0, 255, 0) if self.hand_detected else (0, 0, 255), 2)
                 
                 # Display help
-                cv2.putText(frame, "Press 'q' to quit", (10, frame.shape[0] - 20),
+                cv2.putText(frame, "Press 'q' to quit | Show 2 peace signs for VATSAL", 
+                           (10, frame.shape[0] - 20),
                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                 
-                cv2.imshow('VATSAL - OpenCV Hand & Face Detection', frame)
+                cv2.imshow('VATSAL - OpenCV Hand Gesture Detection', frame)
                 
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     self.running = False
@@ -262,6 +246,91 @@ class OpenCVHandGestureDetector:
                 time.sleep(0.1)
         
         print("🛑 Detection stopped")
+    
+    def _detect_all_hand_gestures(self, frame) -> list:
+        """
+        Detect all hand gestures in the frame (for multiple hands).
+        Returns: List of {'gesture': str, 'contour': np.ndarray}
+        """
+        try:
+            # Convert to HSV for better skin detection
+            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+            
+            # Create skin mask
+            mask = cv2.inRange(hsv, self.lower_skin, self.upper_skin)
+            
+            # Morphological operations to remove noise
+            kernel = np.ones((5, 5), np.uint8)
+            mask = cv2.erode(mask, kernel, iterations=1)
+            mask = cv2.dilate(mask, kernel, iterations=2)
+            mask = cv2.GaussianBlur(mask, (5, 5), 0)
+            
+            # Find contours
+            contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            
+            if not contours:
+                return []
+            
+            # Analyze all valid contours
+            gestures = []
+            for contour in contours:
+                area = cv2.contourArea(contour)
+                
+                # Check if area is reasonable for a hand
+                if area < self.min_hand_area or area > self.max_hand_area:
+                    continue
+                
+                # Analyze contour to determine gesture
+                gesture = self._analyze_contour_gesture(contour)
+                if gesture != "NONE":
+                    gestures.append({'gesture': gesture, 'contour': contour})
+            
+            return gestures
+            
+        except Exception as e:
+            print(f"❌ Multi-hand detection error: {str(e)}")
+            return []
+    
+    def _analyze_contour_gesture(self, contour) -> str:
+        """Analyze a single contour to determine gesture type"""
+        try:
+            hull = cv2.convexHull(contour, returnPoints=False)
+            
+            if len(hull) > 3:
+                defects = cv2.convexityDefects(contour, hull)
+                
+                if defects is not None:
+                    finger_count = 0
+                    
+                    for i in range(defects.shape[0]):
+                        s, e, f, d = defects[i, 0]
+                        start = tuple(contour[s][0])
+                        end = tuple(contour[e][0])
+                        far = tuple(contour[f][0])
+                        
+                        a = np.linalg.norm(np.array(start) - np.array(far))
+                        b = np.linalg.norm(np.array(end) - np.array(far))
+                        c = np.linalg.norm(np.array(start) - np.array(end))
+                        
+                        angle = np.arccos((a**2 + b**2 - c**2) / (2 * a * b))
+                        
+                        if angle <= np.pi / 2 and d > 10000:
+                            finger_count += 1
+                    
+                    # Determine gesture based on finger count
+                    if finger_count >= 4:
+                        return "OPEN_PALM"
+                    elif finger_count == 2 or finger_count == 3:
+                        return "PEACE_SIGN"
+                    elif finger_count == 1:
+                        return "THUMBS_UP"
+                    elif finger_count == 0:
+                        return "FIST"
+            
+            return "NONE"
+            
+        except Exception as e:
+            return "NONE"
     
     def _detect_hand_gesture(self, frame) -> Tuple[str, Optional[np.ndarray]]:
         """
@@ -340,24 +409,26 @@ class OpenCVHandGestureDetector:
             print(f"❌ Gesture detection error: {str(e)}")
             return "NONE", None
     
-    def _greet_user(self):
-        """Greet the user when face is detected"""
+    def _greet_vatsal(self):
+        """Greet VATSAL when two peace signs are detected"""
+        print("\n" + "=" * 70)
+        print("👋 VATSAL DETECTED! Two peace signs shown!")
+        print("🎉 Hello VATSAL! Welcome!")
+        print("=" * 70 + "\n")
+        
         if self.voice_commander:
             import random
             greetings = [
-                "Yes sir",
-                "Hello Vatsal",
-                "I'm here Vatsal",
-                "At your service sir",
-                "Ready to assist Vatsal"
+                "Hello Vatsal! Both hands up!",
+                "Welcome Vatsal!",
+                "Greetings Vatsal! I see you!",
+                "At your service Vatsal!"
             ]
             greeting = random.choice(greetings)
             self.voice_commander.speak(greeting)
-            self.stats['greetings_given'] += 1
-            print(f"👋 Greeting: {greeting}")
         
-        if self.on_face_detected_callback:
-            self.on_face_detected_callback()
+        self.stats['vatsal_detected'] += 1
+        self.vatsal_greeting_cooldown = 100
     
     def _handle_listening_gesture(self):
         """Handle the listening activation gesture"""
@@ -381,10 +452,6 @@ class OpenCVHandGestureDetector:
                     self.voice_commander.speak("I didn't catch that")
             else:
                 self.voice_commander.speak("Sorry, I couldn't hear you")
-    
-    def set_face_callback(self, callback: Callable):
-        """Set callback for face detection"""
-        self.on_face_detected_callback = callback
     
     def set_gesture_callback(self, callback: Callable):
         """Set callback for gesture detection"""

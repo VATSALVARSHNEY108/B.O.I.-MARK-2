@@ -1,6 +1,6 @@
 """
 VATSAL AI - Gesture-Activated Voice Listener
-Detects V sign (peace/victory gesture) to activate voice listening
+Detects TWO V signs (both hands) to trigger VATSAL greeting
 """
 
 import cv2
@@ -12,7 +12,7 @@ from typing import Callable, Optional
 
 
 class GestureVoiceActivator:
-    """Gesture-based voice activation system"""
+    """Gesture-based voice activation system with dual V sign detection"""
     
     def __init__(self, on_speech_callback: Optional[Callable[[str], None]] = None):
         """
@@ -31,6 +31,8 @@ class GestureVoiceActivator:
         self.running = False
         self.on_speech_callback = on_speech_callback
         self.on_stop_callback = None
+        
+        self.greeting_cooldown = 0
         
     def is_v_sign(self, hand_landmarks):
         """
@@ -100,6 +102,14 @@ class GestureVoiceActivator:
             thread = threading.Thread(target=self.listen_audio, daemon=True)
             thread.start()
     
+    def trigger_vatsal_greeting(self):
+        """Greet VATSAL when both hands show V sign"""
+        print("\n" + "=" * 70)
+        print("👋 VATSAL DETECTED! Both hands showing V sign!")
+        print("🎉 Hello VATSAL! Welcome!")
+        print("=" * 70 + "\n")
+        self.greeting_cooldown = 100
+    
     def stop(self):
         """Stop the gesture activator"""
         self.running = False
@@ -120,7 +130,7 @@ class GestureVoiceActivator:
         
         self.hands = self.mp_hands.Hands(
             static_image_mode=False,
-            max_num_hands=1,
+            max_num_hands=2,
             min_detection_confidence=0.7,
             min_tracking_confidence=0.5
         )
@@ -139,7 +149,7 @@ class GestureVoiceActivator:
         print("✅ Camera ready!")
         print()
         print("🎯 Instructions:")
-        print("   • Show V sign (✌️) to activate voice listening")
+        print("   • Show TWO V signs (both hands ✌️✌️) to get VATSAL greeting")
         print("   • Speak your command when microphone icon appears")
         print("   • Press 'q' to quit")
         print()
@@ -147,9 +157,9 @@ class GestureVoiceActivator:
         print()
         
         self.running = True
-        v_sign_detected = False
-        v_sign_timer = 0
-        cooldown = 0
+        single_v_detected = False
+        single_v_timer = 0
+        single_v_cooldown = 0
         
         try:
             while self.running:
@@ -166,7 +176,7 @@ class GestureVoiceActivator:
                 
                 h, w, _ = frame.shape
                 
-                gesture_detected = False
+                v_sign_count = 0
                 
                 if results.multi_hand_landmarks:
                     for hand_landmarks in results.multi_hand_landmarks:
@@ -177,25 +187,38 @@ class GestureVoiceActivator:
                         )
                         
                         if self.is_v_sign(hand_landmarks):
-                            gesture_detected = True
-                            
-                            cv2.putText(frame, "V SIGN DETECTED!", (50, 100),
-                                       cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 3)
-                            
-                            if not v_sign_detected and cooldown == 0:
-                                v_sign_detected = True
-                                v_sign_timer = time.time()
+                            v_sign_count += 1
                 
-                if gesture_detected and v_sign_detected:
-                    if time.time() - v_sign_timer > 1.0 and not self.listening:
+                if v_sign_count == 2:
+                    cv2.putText(frame, "VATSAL DETECTED!", (50, 100),
+                               cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 3)
+                    cv2.putText(frame, "Both Hands V Sign!", (50, 150),
+                               cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 255), 2)
+                    
+                    if self.greeting_cooldown == 0:
+                        self.trigger_vatsal_greeting()
+                        
+                elif v_sign_count == 1:
+                    cv2.putText(frame, "One V Sign Detected", (50, 100),
+                               cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 200, 255), 2)
+                    
+                    if not single_v_detected and single_v_cooldown == 0:
+                        single_v_detected = True
+                        single_v_timer = time.time()
+                
+                if v_sign_count == 1 and single_v_detected:
+                    if time.time() - single_v_timer > 1.0 and not self.listening:
                         self.start_listening_thread()
-                        v_sign_detected = False
-                        cooldown = 60
-                elif not gesture_detected:
-                    v_sign_detected = False
+                        single_v_detected = False
+                        single_v_cooldown = 60
+                elif v_sign_count != 1:
+                    single_v_detected = False
                 
-                if cooldown > 0:
-                    cooldown -= 1
+                if single_v_cooldown > 0:
+                    single_v_cooldown -= 1
+                
+                if self.greeting_cooldown > 0:
+                    self.greeting_cooldown -= 1
                 
                 if self.listening:
                     cv2.circle(frame, (w - 50, 50), 30, (0, 0, 255), -1)
@@ -206,7 +229,7 @@ class GestureVoiceActivator:
                     cv2.putText(frame, f"Last: {self.last_text[:40]}", (10, h - 20),
                                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
                 
-                status_text = "Show V sign to activate listening | Press 'q' to quit"
+                status_text = "Show 2 V signs for VATSAL greeting | 1 V sign for listening | Press 'q' to quit"
                 cv2.putText(frame, status_text, (10, h - 50),
                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                 
