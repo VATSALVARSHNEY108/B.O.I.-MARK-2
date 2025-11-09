@@ -8,6 +8,7 @@ import threading
 import time
 from typing import Dict, Optional, Callable
 import numpy as np
+from modules.automation.audio_feedback import get_audio_feedback
 
 # Try to import mediapipe, make it optional for Python 3.13 Windows compatibility
 try:
@@ -285,6 +286,10 @@ class FaceGestureAssistant:
         """
         print("✋ Listening gesture detected!")
         self.stats['gestures_detected'] += 1
+        
+        # Play audio signal when listening starts
+        audio = get_audio_feedback()
+        audio.play_listening_start()
         
         if self.voice_commander:
             self.voice_commander.speak("I'm listening")

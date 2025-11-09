@@ -27,7 +27,7 @@ Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mo
 -   **Visual Chat Monitor:** AI-powered visual email/WhatsApp monitoring via real browser interface control.
 -   **System Control:** Manages system-level automation (lock screen, shutdown, restart, brightness, volume, disk cleanup) with cross-platform support and Windows batch file integration. Includes new features for system information, clipboard, power management, window management, process management, quick app launchers, and timers/alarms.
 -   **Voice Assistant:** An ultra-intelligent, interactive voice commanding system with advanced AI capabilities, supporting multiple wake words ("Vatsal", "Hey Vatsal", etc.), NLU, context awareness, and entity extraction.
--   **Face & Gesture Assistant:** Computer vision-powered face detection and hand gesture recognition using OpenCV and MediaPipe. Detects user's face to greet them by name ("Vatsal" or "Yes sir"), and recognizes hand gestures (open palm) to activate voice listening mode. Provides hands-free, natural interaction with full GUI integration.
+-   **Face & Gesture Assistant:** Computer vision-powered face detection and hand gesture recognition using OpenCV and MediaPipe. Detects user's face to greet them by name ("Vatsal" or "Yes sir"), and recognizes hand gestures (open palm) to activate voice listening mode. **Now includes audio feedback** - plays a pleasant beep sound when listening starts, providing instant confirmation that the system is ready for voice commands. Provides hands-free, natural interaction with full GUI integration.
 -   **Self-Operating Computer:** Autonomous AI desktop control using Gemini Vision (Gemini 2.0 Flash Exp) for screen analysis and autonomous actions.
 -   **Real-Time WebSocket System:** A Flask-SocketIO based server provides a live dashboard for real-time monitoring of system stats and command execution.
 -   **Mobile Companion System:** Offers complete mobile control via a REST API and a touch-optimized web interface, including PIN-based authentication and push notifications.
@@ -71,6 +71,17 @@ Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mo
 -   **Selenium:** For web automation and intelligent form filling.
 
 ## Recent Changes
+-   **November 2025 (Latest Update):** Added **Audio Feedback System** for gesture recognition!
+    - **Rising Beep Sound** plays when hand gesture activates listening (800Hz → 1200Hz, 0.2s)
+    - **Instant Confirmation** - user immediately knows system is ready for voice commands
+    - **Dual Audio Backend**: Pygame (primary) for quality tones, system beep (fallback) for compatibility
+    - **3 Sound Types**: Listening start, listening stop, success confirmation
+    - **Integrated into** all gesture systems: Face & Gesture Assistant, Gesture Voice Activator, OpenCV Hand Detector
+    - **Volume Control** and enable/disable options via `AudioFeedback` class
+    - **Cross-Platform**: Works on Windows (winsound), macOS (say), and Linux (beep/bell)
+    - **Documentation**: Complete guide in `modules/automation/AUDIO_FEEDBACK_GUIDE.md`
+    - **Test Script**: `test_audio_feedback.py` for quick audio testing
+    - **User Experience**: No more confusion - clear audio signal confirms listening is active!
 -   **November 2025 (Latest Update):** Added **Google MediaPipe Pretrained Gestures** - 7 gestures work instantly with NO training required!
     - **MediaPipe Integration** (`modules/automation/mediapipe_gesture_recognizer.py`): Production-ready wrapper for Google's pretrained gesture model
     - **3-Tier Detection**: MediaPipe pretrained (best) → Custom ML (user-trained) → Hardcoded finger-counting (fallback)

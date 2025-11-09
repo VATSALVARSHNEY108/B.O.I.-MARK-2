@@ -9,6 +9,7 @@ import speech_recognition as sr
 import threading
 import time
 from typing import Callable, Optional
+from modules.automation.audio_feedback import get_audio_feedback
 
 
 class GestureVoiceActivator:
@@ -67,6 +68,10 @@ class GestureVoiceActivator:
         """Listen to audio and convert to text"""
         self.listening = True
         print("\n🎤 Listening... Speak now!")
+        
+        # Play audio signal when listening starts
+        audio = get_audio_feedback()
+        audio.play_listening_start()
         
         try:
             with sr.Microphone() as source:
