@@ -235,6 +235,11 @@
       "method": "switch_desktop",
       "params": {"direction": "right"},
       "description": "Switch to right workspace"
+    },
+    "help": {
+      "module": "gesture_detector",
+      "method": "show_help",
+      "description": "Show gesture help menu"
     }
   },
   "settings": {
