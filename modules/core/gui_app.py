@@ -59,16 +59,16 @@ def setup_vnc_display():
     """Configure optimal settings for VNC display"""
     display = os.environ.get('DISPLAY', ':0')
     vnc_mode = display == ':0'
-    
+
     if vnc_mode:
         print("🖥️  Running in VNC mode - Virtual Desktop enabled")
         print(f"📺 Display: {display}")
-        
+
         # Create screenshots directory if it doesn't exist
         screenshots_dir = os.path.expanduser("~/screenshots")
         os.makedirs(screenshots_dir, exist_ok=True)
         print(f"📸 Screenshots will be saved to: {screenshots_dir}")
-    
+
     return vnc_mode
 
 # Initialize VNC settings
@@ -88,10 +88,10 @@ class AutomationControllerGUI:
 
         # Initialize system controller for direct access
         self.system_controller = SystemController()
-        
+
         # Initialize base executor
         self.base_executor = CommandExecutor()
-        
+
         # Wrap with enhanced executor for self-operating integration
         try:
             self.executor = EnhancedCommandExecutor(self.base_executor)
@@ -101,7 +101,7 @@ class AutomationControllerGUI:
             self.executor = self.base_executor  # Fallback to base
             self.command_interceptor = None
             print(f"⚠️ Using base executor (enhanced integration unavailable): {e}")
-        
+
         self.vatsal = create_vatsal_assistant()
         self.advanced_monitor = create_advanced_smart_screen_monitor()
         self.ai_monitor = create_ai_screen_monitoring_system()
@@ -109,7 +109,7 @@ class AutomationControllerGUI:
         self.clipboard_handler = ClipboardTextHandler()
         self.smart_automation = SmartAutomationManager()
         self.desktop_controller = DesktopFileController()
-        
+
         try:
             self.comprehensive_controller = ComprehensiveDesktopController()
         except Exception as e:
@@ -134,13 +134,13 @@ class AutomationControllerGUI:
         self.weather_news = WeatherNewsService()
         self.translator = TranslationService()
         self.break_suggester = SmartBreakSuggester()
-        
+
         try:
             self.web_automator = SeleniumWebAutomator()
         except Exception as e:
             self.web_automator = None
             print(f"Web automator initialization failed: {e}")
-        
+
         # Initialize Virtual Language Model
         try:
             gui_automation = GUIAutomation()
@@ -150,13 +150,13 @@ class AutomationControllerGUI:
             self.vlm = None
             self.vlm_last_decision = None
             print(f"Virtual Language Model initialization failed: {e}")
-        
+
         try:
             self.vatsal_automator = VATSALAutomator()
         except Exception as e:
             self.vatsal_automator = None
             print(f"VATSAL Automator initialization failed: {e}")
-        
+
         try:
             self.self_operating_computer = SelfOperatingComputer(verbose=True)
             self.soc_running = False
@@ -166,7 +166,7 @@ class AutomationControllerGUI:
             self.soc_running = False
             self.soc_thread = None
             print(f"Self-Operating Computer initialization failed: {e}")
-        
+
         # Initialize Self-Operating Integration Hub
         try:
             self.integration_hub = SelfOperatingIntegrationHub()
@@ -204,7 +204,7 @@ class AutomationControllerGUI:
             self.voice_listening = False
             self.voice_enabled = False
             print(f"⚠️ Voice Commander initialization failed: {e}")
-        
+
         # Initialize Gesture Voice Activator (V sign to activate voice)
         try:
             self.gesture_voice_activator = create_gesture_voice_activator(
@@ -216,7 +216,7 @@ class AutomationControllerGUI:
             self.gesture_voice_activator = None
             self.gesture_voice_active = False
             print(f"⚠️ Gesture Voice Activator initialization failed: {e}")
-        
+
         # Initialize Hand Gesture Detector (OpenCV - no face detection)
         try:
             self.gesture_assistant = OpenCVHandGestureDetector(voice_commander=self.voice_commander)
@@ -301,8 +301,8 @@ class AutomationControllerGUI:
                   foreground=[("selected", "#000000")])
 
         header_frame = tk.Frame(
-            self.root, 
-            bg="#000000", 
+            self.root,
+            bg="#000000",
             pady=20,
             highlightbackground="#ffffff",
             highlightthickness=2
@@ -310,8 +310,8 @@ class AutomationControllerGUI:
         header_frame.pack(fill="x", padx=3, pady=3)
 
         header_container = tk.Frame(
-            header_frame, 
-            bg="#0a0a0a", 
+            header_frame,
+            bg="#0a0a0a",
             relief="solid",
             highlightbackground="#ffffff",
             highlightthickness=2
@@ -415,7 +415,7 @@ class AutomationControllerGUI:
         self.add_hover_effect(self.user_settings_btn, "#00ff88", "#00d4ff")
 
         main_container = tk.Frame(
-            self.root, 
+            self.root,
             bg="#000000",
             highlightbackground="#ffffff",
             highlightthickness=2
@@ -424,8 +424,8 @@ class AutomationControllerGUI:
 
         # Quick Actions Center removed as per user request
         # left_panel = tk.Frame(
-        #     main_container, 
-        #     bg="#0a0a0a", 
+        #     main_container,
+        #     bg="#0a0a0a",
         #     width=450,
         #     highlightbackground="#ffffff",
         #     highlightthickness=2
@@ -434,8 +434,8 @@ class AutomationControllerGUI:
         # left_panel.pack_propagate(False)
 
         # left_header = tk.Frame(
-        #     left_panel, 
-        #     bg="#1a1a1a", 
+        #     left_panel,
+        #     bg="#1a1a1a",
         #     relief="solid",
         #     highlightbackground="#ffffff",
         #     highlightthickness=2
@@ -452,30 +452,30 @@ class AutomationControllerGUI:
 
         # Quick actions navigation container - REMOVED
         # self.quick_actions_container = tk.Frame(
-        #     left_panel, 
-        #     bg="#0a0a0a", 
+        #     left_panel,
+        #     bg="#0a0a0a",
         #     relief="solid",
         #     highlightbackground="#ffffff",
         #     highlightthickness=2
         # )
         # self.quick_actions_container.pack(fill="both", expand=True, padx=5, pady=5)
-        
+
         # Create sidebar and main content container - REMOVED
         # self.sidebar_main_container = tk.Frame(self.quick_actions_container, bg="#0a0a0a")
         # self.sidebar_main_container.pack(fill="both", expand=True)
-        
+
         # Create collapsible sidebar - REMOVED
         # self.sidebar_expanded = True
         # self.sidebar = tk.Frame(
-        #     self.sidebar_main_container, 
-        #     bg="#1a1a1a", 
+        #     self.sidebar_main_container,
+        #     bg="#1a1a1a",
         #     width=120,
         #     highlightbackground="#ffffff",
         #     highlightthickness=1
         # )
         # self.sidebar.pack(side="left", fill="y", padx=2)
         # self.sidebar.pack_propagate(False)
-        
+
         # # Sidebar toggle button
         # self.sidebar_toggle_btn = tk.Button(self.sidebar,
         #                                    text="◀",
@@ -491,7 +491,7 @@ class AutomationControllerGUI:
         #                                    highlightbackground="#ffffff")
         # self.sidebar_toggle_btn.pack(fill="x", padx=3, pady=3)
         # self.add_hover_effect(self.sidebar_toggle_btn, "#00d4ff", "#00ff88")
-        
+
         # # Sidebar title
         # self.sidebar_title = tk.Label(self.sidebar,
         #                              text="MENU",
@@ -499,7 +499,7 @@ class AutomationControllerGUI:
         #                              fg="#ffffff",
         #                              font=("Impact", 10, "bold"))
         # self.sidebar_title.pack(pady=(5, 10))
-        
+
         # # Category navigation data
         # self.sidebar_categories = [
         #     ("🖥️", "SYSTEM", "#00d4ff"),
@@ -507,15 +507,15 @@ class AutomationControllerGUI:
         #     ("📁", "WORK", "#b19cd9"),
         #     ("🎵", "MEDIA", "#ff0080"),
         # ]
-        
+
         # self.sidebar_buttons = []
         # self.active_sidebar_category = None
-        
+
         # # Create category buttons in sidebar
         # for icon, name, color in self.sidebar_categories:
         #     btn_frame = tk.Frame(self.sidebar, bg="#1a1a1a")
         #     btn_frame.pack(fill="x", pady=3, padx=3)
-            
+
         #     btn = tk.Button(btn_frame,
         #                   text=f"{icon}\n{name}",
         #                   bg="#0a0a0a",
@@ -532,13 +532,13 @@ class AutomationControllerGUI:
         #                   highlightbackground="#ffffff",
         #                   highlightthickness=1)
         #     btn.pack(fill="both", expand=True)
-            
+
         #     self.sidebar_buttons.append((btn, name, color))
         #     self.add_hover_effect(btn, "#0a0a0a", color)
-        
+
         # # Create main menu view
         # self.quick_menu_view = tk.Frame(self.sidebar_main_container, bg="#0a0a0a")
-        
+
         # # Subtitle - REMOVED
         # menu_subtitle = tk.Label(self.quick_menu_view,
         #                         text="⚡ Choose an action below ⚡",
@@ -546,28 +546,28 @@ class AutomationControllerGUI:
         #                         fg="#00ff88",
         #                         font=("Consolas", 10, "bold"))
         # menu_subtitle.pack(anchor="w", padx=8, pady=(5, 8))
-        
+
         # # Scrollable menu - REMOVED
         # self.menu_canvas = tk.Canvas(
-        #     self.quick_menu_view, 
-        #     bg="#0a0a0a", 
+        #     self.quick_menu_view,
+        #     bg="#0a0a0a",
         #     highlightbackground="#ffffff",
         #     highlightthickness=1
         # )
         # menu_scrollbar = ttk.Scrollbar(self.quick_menu_view, orient="vertical", command=self.menu_canvas.yview)
         # menu_scrollable = tk.Frame(self.menu_canvas, bg="#0a0a0a")
-        
+
         # menu_scrollable.bind(
         #     "<Configure>",
         #     lambda e: self.menu_canvas.configure(scrollregion=self.menu_canvas.bbox("all"))
         # )
-        
+
         # self.menu_canvas.create_window((0, 0), window=menu_scrollable, anchor="nw")
         # self.menu_canvas.configure(yscrollcommand=menu_scrollbar.set)
-        
+
         # # Store header widgets for scrolling
         # self.category_headers = {}
-        
+
         # # Define quick actions with features - REMOVED
         # self.quick_actions_data = [
         #     ("🖥️ SYSTEM", None, "#89b4fa", True, None),
@@ -576,48 +576,48 @@ class AutomationControllerGUI:
         #     ("📊 Task Manager", "Open Task Manager", "#cba6f7", False, "taskmanager"),
         #     ("🔋 Battery Info", "View battery status", "#a6e3a1", False, "battery"),
         #     ("⚙️ System Settings", "Open system settings", "#89dceb", False, "settings"),
-            
+
         #     ("🌐 WEB & APPS", None, "#89dceb", True, None),
         #     ("🌍 Chrome", "Open Chrome and go to Google", "#89dceb", False, "chrome"),
         #     ("🔍 Google Search", "Search Google for Python tutorials", "#a6e3a1", False, "google"),
         #     ("📧 Gmail", "Open Gmail in browser", "#f38ba8", False, "gmail"),
         #     ("💬 WhatsApp", "Open WhatsApp Web", "#a6e3a1", False, "whatsapp"),
         #     ("📺 YouTube", "Open YouTube", "#f38ba8", False, "youtube"),
-            
+
         #     ("📁 PRODUCTIVITY", None, "#a6e3a1", True, None),
         #     ("📝 VS Code", "Launch VS Code", "#89b4fa", False, "vscode"),
         #     ("📂 File Explorer", "Open File Explorer", "#f9e2af", False, "explorer"),
         #     ("🗒️ Notepad", "Open Notepad", "#cba6f7", False, "notepad"),
         #     ("📊 Excel", "Launch Microsoft Excel", "#a6e3a1", False, "excel"),
         #     ("📄 Word", "Launch Microsoft Word", "#89dceb", False, "word"),
-            
+
         #     ("🎵 MEDIA", None, "#f5c2e7", True, None),
         #     ("🎵 Spotify", "Launch Spotify", "#a6e3a1", False, "spotify"),
         #     ("🎬 VLC Player", "Open VLC Media Player", "#f9e2af", False, "vlc"),
         #     ("🔊 Volume Control", "Control system volume", "#89dceb", False, "volume"),
         #     ("🎧 Sound Settings", "Open sound settings", "#cba6f7", False, "sound"),
-            
+
         #     ("🎬 AUTOMATION", None, "#f5c2e7", True, None),
         #     ("💬 Workflow Builder", "Build workflows in plain English", "#a6e3a1", False, "workflow_builder"),
         #     ("🎬 Macro Recorder", "Record and playback macros", "#f5c2e7", False, "macro_recorder"),
         #     ("📱 Mobile Control", "Remote control via mobile", "#89dceb", False, "mobile_control"),
         # ]
-        
+
         # # Create menu buttons - REMOVED
         # for item in self.quick_actions_data:
         #     text, description, color, is_header, feature_id = item
-            
+
         #     if is_header:
         #         header_container = tk.Frame(menu_scrollable, bg="#1a1a2e", height=35)
         #         header_container.pack(fill="x", padx=5, pady=(12, 3))
         #         header_container.pack_propagate(False)
-                
+
         #         # Store header for scrolling
         #         self.category_headers[text] = header_container
-                
+
         #         accent = tk.Frame(header_container, bg=color, width=4)
         #         accent.pack(side="left", fill="y", padx=(0, 10))
-                
+
         #         header_label = tk.Label(header_container,
         #                                text=text,
         #                                bg="#1a1a2e",
@@ -638,7 +638,7 @@ class AutomationControllerGUI:
         #                        anchor="w",
         #                        bd=0)
         #         btn.pack(fill="x", padx=8, pady=3)
-                
+
         #         def make_hover(button, accent_color):
         #             def on_enter(e):
         #                 button.config(bg="#45475a", fg=accent_color)
@@ -646,20 +646,20 @@ class AutomationControllerGUI:
         #                 button.config(bg="#313244", fg="#cdd6f4")
         #             button.bind("<Enter>", on_enter)
         #             button.bind("<Leave>", on_leave)
-                
+
         #         make_hover(btn, color)
-        
+
         # self.menu_canvas.pack(side="left", fill="both", expand=True)
         # menu_scrollbar.pack(side="right", fill="y")
-        
+
         # # Create feature view (initially hidden) - REMOVED
         # self.quick_feature_view = tk.Frame(self.quick_actions_container, bg="#1a1a2e")
-        
+
         # # Feature view header
         # feature_header_frame = tk.Frame(self.quick_feature_view, bg="#1a1a2e", height=60)
         # feature_header_frame.pack(fill="x", pady=(0, 10))
         # feature_header_frame.pack_propagate(False)
-        
+
         # # Back button
         # self.back_button = tk.Button(feature_header_frame,
         #                              text="← Back",
@@ -673,7 +673,7 @@ class AutomationControllerGUI:
         #                              pady=10)
         # self.back_button.pack(side="left", padx=10, pady=10)
         # self.add_hover_effect(self.back_button, "#313244", "#45475a")
-        
+
         # # Feature title
         # self.feature_title = tk.Label(feature_header_frame,
         #                              text="",
@@ -681,16 +681,16 @@ class AutomationControllerGUI:
         #                              fg="#f9e2af",
         #                              font=("Segoe UI", 13, "bold"))
         # self.feature_title.pack(side="left", padx=15, pady=10)
-        
+
         # # Feature content area
         # self.feature_content = tk.Frame(self.quick_feature_view, bg="#181825", relief="flat")
         # self.feature_content.pack(fill="both", expand=True, padx=10, pady=(0, 10))
-        
+
         # # Show menu view by default
         # self.quick_menu_view.pack(fill="both", expand=True)
 
         right_panel = tk.Frame(
-            main_container, 
+            main_container,
             bg="#0a0a0a",
             highlightbackground="#ffffff",
             highlightthickness=2
@@ -698,8 +698,8 @@ class AutomationControllerGUI:
         right_panel.pack(side="right", fill="both", expand=True, padx=5)
 
         command_card = tk.Frame(
-            right_panel, 
-            bg="#1a1a1a", 
+            right_panel,
+            bg="#1a1a1a",
             relief="solid",
             highlightbackground="#ffffff",
             highlightthickness=2
@@ -801,7 +801,7 @@ class AutomationControllerGUI:
                                            activebackground="#ffaa00")
         self.gesture_voice_btn.pack(side="left", padx=2)
         self.add_hover_effect(self.gesture_voice_btn, "#ffd700", "#ffaa00")
-        
+
         # Sound effects toggle button
         self.sound_fx_btn = tk.Button(voice_frame,
                                       text="🔊",
@@ -816,24 +816,24 @@ class AutomationControllerGUI:
                                       activebackground="#94e2d5")
         self.sound_fx_btn.pack(side="left", padx=2)
         self.add_hover_effect(self.sound_fx_btn, "#a6e3a1", "#94e2d5")
-        
+
         # Right-click to open sound settings
         self.sound_fx_btn.bind("<Button-3>", lambda e: self.show_sound_settings())
-        
+
         # Gesture detection toggle button (Two V signs for VATSAL)
-        self.gesture_btn = tk.Button(voice_frame,
-                                     text="✌️",
-                                     bg="#f9e2af",
-                                     fg="#0f0f1e",
-                                     font=("Segoe UI", 11, "bold"),
-                                     relief="flat",
-                                     cursor="hand2",
-                                     command=self.toggle_gesture,
-                                     padx=10,
-                                     pady=10,
-                                     activebackground="#f5c2e7")
-        self.gesture_btn.pack(side="left", padx=2)
-        self.add_hover_effect(self.gesture_btn, "#f9e2af", "#f5c2e7")
+        # self.gesture_btn = tk.Button(voice_frame,
+        #                              text="✌️",
+        #                              bg="#f9e2af",
+        #                              fg="#0f0f1e",
+        #                              font=("Segoe UI", 11, "bold"),
+        #                              relief="flat",
+        #                              cursor="hand2",
+        #                              command=self.toggle_gesture,
+        #                              padx=10,
+        #                              pady=10,
+        #                              activebackground="#f5c2e7")
+        # self.gesture_btn.pack(side="left", padx=2)
+        # self.add_hover_effect(self.gesture_btn, "#f9e2af", "#f5c2e7")
 
         self.execute_btn = tk.Button(input_container,
                                      text="⚡ Execute ⚡",
@@ -852,8 +852,8 @@ class AutomationControllerGUI:
         self.add_hover_effect(self.execute_btn, "#00ff88", "#00d4ff")
 
         output_card = tk.Frame(
-            right_panel, 
-            bg="#1a1a1a", 
+            right_panel,
+            bg="#1a1a1a",
             relief="solid",
             highlightbackground="#ffffff",
             highlightthickness=2
@@ -902,9 +902,9 @@ class AutomationControllerGUI:
         self.output_area.config(state="disabled")
 
         bottom_frame = tk.Frame(
-            self.root, 
-            bg="#1a1a1a", 
-            pady=12, 
+            self.root,
+            bg="#1a1a1a",
+            pady=12,
             padx=20,
             highlightbackground="#ffffff",
             highlightthickness=2
@@ -945,8 +945,8 @@ class AutomationControllerGUI:
         self.add_hover_effect(security_btn, "#0a0a0a", "#00d4ff")
 
         status_container = tk.Frame(
-            bottom_frame, 
-            bg="#0a0a0a", 
+            bottom_frame,
+            bg="#0a0a0a",
             relief="solid",
             highlightbackground="#ffffff",
             highlightthickness=2
@@ -1113,32 +1113,32 @@ class AutomationControllerGUI:
                               pady=8)
         stats_btn.pack(side="left", padx=5)
         self.add_hover_effect(stats_btn, "#313244", "#45475a")
-    
+
     def create_vatsal_automator_tab(self, notebook):
         """VATSAL Intelligent Desktop Automator - Local execution with AI understanding"""
         tab = tk.Frame(notebook, bg="#1e1e2e")
         notebook.add(tab, text="⚡ VATSAL Auto")
-        
+
         header_frame = tk.Frame(tab, bg="#1a1a2e")
         header_frame.pack(fill="x", pady=(10, 0), padx=10)
-        
+
         header = tk.Label(header_frame,
                           text="⚡ VATSAL Desktop Automator",
                           bg="#1a1a2e",
                           fg="#f9e2af",
                           font=("Segoe UI", 14, "bold"))
         header.pack(pady=12)
-        
+
         info = tk.Label(header_frame,
                         text="🤖 AI Understanding • 💻 Local Execution • ⚠️ Safe Confirmations",
                         bg="#1a1a2e",
                         fg="#a6adc8",
                         font=("Segoe UI", 9, "italic"))
         info.pack(pady=(0, 12))
-        
+
         description_frame = tk.Frame(tab, bg="#1e1e2e")
         description_frame.pack(fill="x", padx=10, pady=5)
-        
+
         desc_text = tk.Label(description_frame,
                             text="Intelligent desktop automation that uses Gemini only for understanding commands.\nAll actions execute locally via Python modules. Destructive actions require confirmation.",
                             bg="#1e1e2e",
@@ -1146,7 +1146,7 @@ class AutomationControllerGUI:
                             font=("Segoe UI", 9),
                             justify="left")
         desc_text.pack(anchor="w", padx=10, pady=5)
-        
+
         self.vatsal_automator_output = scrolledtext.ScrolledText(
             tab,
             bg="#0f0f1e",
@@ -1160,25 +1160,25 @@ class AutomationControllerGUI:
             pady=10
         )
         self.vatsal_automator_output.pack(fill="both", expand=True, padx=10, pady=(10, 5))
-        
+
         self.vatsal_automator_output.tag_config("success", foreground="#a6e3a1")
         self.vatsal_automator_output.tag_config("error", foreground="#f38ba8")
         self.vatsal_automator_output.tag_config("warning", foreground="#f9e2af")
         self.vatsal_automator_output.tag_config("info", foreground="#89b4fa")
-        
+
         input_frame = tk.Frame(tab, bg="#1e1e2e")
         input_frame.pack(fill="x", padx=10, pady=5)
-        
+
         input_label = tk.Label(input_frame,
                                text="💬 Command (e.g., 'Open notepad and type Hello', 'Show system info'):",
                                bg="#1e1e2e",
                                fg="#a6adc8",
                                font=("Segoe UI", 9, "bold"))
         input_label.pack(anchor="w", padx=5, pady=(5, 2))
-        
+
         input_box_frame = tk.Frame(input_frame, bg="#1e1e2e")
         input_box_frame.pack(fill="x", padx=5, pady=(0, 5))
-        
+
         self.vatsal_automator_input = tk.Entry(input_box_frame,
                                                 bg="#313244",
                                                 fg="#ffffff",
@@ -1188,7 +1188,7 @@ class AutomationControllerGUI:
                                                 insertbackground="#89b4fa")
         self.vatsal_automator_input.pack(side="left", fill="x", expand=True, ipady=10)
         self.vatsal_automator_input.bind("<Return>", lambda e: self.execute_vatsal_automator_command())
-        
+
         execute_btn = tk.Button(input_box_frame,
                                 text="▶️ Execute",
                                 bg="#a6e3a1",
@@ -1201,20 +1201,20 @@ class AutomationControllerGUI:
                                 pady=10)
         execute_btn.pack(side="right", padx=(5, 0))
         self.add_hover_effect(execute_btn, "#a6e3a1", "#94e2d5")
-        
+
         quick_actions_frame = tk.Frame(tab, bg="#1e1e2e")
         quick_actions_frame.pack(fill="x", padx=10, pady=(0, 10))
-        
+
         actions_label = tk.Label(quick_actions_frame,
                                 text="⚡ Quick Actions:",
                                 bg="#1e1e2e",
                                 fg="#a6adc8",
                                 font=("Segoe UI", 9, "bold"))
         actions_label.pack(anchor="w", padx=5, pady=(5, 2))
-        
+
         button_container = tk.Frame(quick_actions_frame, bg="#1e1e2e")
         button_container.pack(fill="x", padx=5)
-        
+
         quick_actions = [
             ("💻 System Info", "Show system info"),
             ("📸 Screenshot", "Take a screenshot"),
@@ -1222,7 +1222,7 @@ class AutomationControllerGUI:
             ("📝 Notepad", "Open notepad"),
             ("🧹 Clear Output", None)
         ]
-        
+
         for text, command in quick_actions:
             btn = tk.Button(button_container,
                            text=text,
@@ -1241,27 +1241,27 @@ class AutomationControllerGUI:
         """Self-Operating Computer - Autonomous AI Control with Vision"""
         tab = tk.Frame(notebook, bg="#1e1e2e")
         notebook.add(tab, text="🎮 Self-Operating")
-        
+
         header_frame = tk.Frame(tab, bg="#1a1a2e")
         header_frame.pack(fill="x", pady=(10, 0), padx=10)
-        
+
         header = tk.Label(header_frame,
                           text="🎮 Self-Operating Computer",
                           bg="#1a1a2e",
                           fg="#cba6f7",
                           font=("Segoe UI", 14, "bold"))
         header.pack(pady=12)
-        
+
         info = tk.Label(header_frame,
                         text="👁️ AI Vision • 🖱️ Autonomous Control • 🎯 Goal-Driven Operation",
                         bg="#1a1a2e",
                         fg="#a6adc8",
                         font=("Segoe UI", 9, "italic"))
         info.pack(pady=(0, 12))
-        
+
         desc_frame = tk.Frame(tab, bg="#1e1e2e")
         desc_frame.pack(fill="x", padx=10, pady=5)
-        
+
         desc_text = tk.Label(desc_frame,
                             text="AI views your screen like a human and autonomously performs mouse/keyboard actions to accomplish objectives.\nInspired by OthersideAI's self-operating-computer, powered by Gemini Vision.",
                             bg="#1e1e2e",
@@ -1269,16 +1269,16 @@ class AutomationControllerGUI:
                             font=("Segoe UI", 9),
                             justify="left")
         desc_text.pack(anchor="w", padx=10, pady=5)
-        
+
         main_container = tk.Frame(tab, bg="#1e1e2e")
         main_container.pack(fill="both", expand=True, padx=10, pady=5)
-        
+
         left_column = tk.Frame(main_container, bg="#1e1e2e")
         left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
-        
+
         status_frame = tk.Frame(left_column, bg="#313244", relief="flat")
         status_frame.pack(fill="x", pady=(0, 10))
-        
+
         status_label = tk.Label(status_frame,
                                text="Status: Ready",
                                bg="#313244",
@@ -1289,17 +1289,17 @@ class AutomationControllerGUI:
                                pady=8)
         status_label.pack(fill="x")
         self.soc_status_label = status_label
-        
+
         input_section = tk.Frame(left_column, bg="#1e1e2e")
         input_section.pack(fill="x", pady=(5, 10))
-        
+
         input_label = tk.Label(input_section,
                               text="🎯 Enter your objective:",
                               bg="#1e1e2e",
                               fg="#a6adc8",
                               font=("Segoe UI", 9, "bold"))
         input_label.pack(anchor="w", padx=5, pady=(0, 5))
-        
+
         self.soc_objective = tk.Text(input_section,
                                     bg="#313244",
                                     fg="#ffffff",
@@ -1313,17 +1313,17 @@ class AutomationControllerGUI:
                                     wrap=tk.WORD)
         self.soc_objective.pack(fill="x", padx=5)
         self.soc_objective.bind('<Control-Return>', lambda e: self.auto_start_if_enabled())
-        
+
         hint_label = tk.Label(input_section,
                              text="💡 Tip: Press Ctrl+Enter to quick-start when Auto Mode is enabled",
                              bg="#1e1e2e",
                              fg="#6c7086",
                              font=("Segoe UI", 8, "italic"))
         hint_label.pack(anchor="w", padx=5, pady=(2, 0))
-        
+
         controls_frame = tk.Frame(left_column, bg="#1e1e2e")
         controls_frame.pack(fill="x", pady=5)
-        
+
         start_text_btn = tk.Button(controls_frame,
                                    text="▶️ Start (Text)",
                                    bg="#cba6f7",
@@ -1336,7 +1336,7 @@ class AutomationControllerGUI:
                                    pady=10)
         start_text_btn.pack(side="left", expand=True, fill="x", padx=(5, 2))
         self.add_hover_effect(start_text_btn, "#cba6f7", "#b4befe")
-        
+
         start_voice_btn = tk.Button(controls_frame,
                                     text="🎤 Start (Voice)",
                                     bg="#89b4fa",
@@ -1349,7 +1349,7 @@ class AutomationControllerGUI:
                                     pady=10)
         start_voice_btn.pack(side="left", expand=True, fill="x", padx=2)
         self.add_hover_effect(start_voice_btn, "#89b4fa", "#74c7ec")
-        
+
         stop_btn = tk.Button(controls_frame,
                             text="⏹️ Stop",
                             bg="#f38ba8",
@@ -1362,17 +1362,17 @@ class AutomationControllerGUI:
                             pady=10)
         stop_btn.pack(side="left", expand=True, fill="x", padx=(2, 5))
         self.add_hover_effect(stop_btn, "#f38ba8", "#eba0ac")
-        
+
         toggle_frame = tk.Frame(left_column, bg="#1e1e2e")
         toggle_frame.pack(fill="x", pady=10)
-        
+
         toggle_label_text = tk.Label(toggle_frame,
                                      text="🔄 Auto Self-Control Mode:",
                                      bg="#1e1e2e",
                                      fg="#a6adc8",
                                      font=("Segoe UI", 9, "bold"))
         toggle_label_text.pack(side="left", padx=5)
-        
+
         self.auto_control_enabled = False
         self.auto_control_btn = tk.Button(toggle_frame,
                                           text="❌ Disabled",
@@ -1386,24 +1386,24 @@ class AutomationControllerGUI:
                                           pady=8)
         self.auto_control_btn.pack(side="left", padx=5)
         self.add_hover_effect(self.auto_control_btn, "#313244", "#45475a")
-        
+
         toggle_info = tk.Label(toggle_frame,
                               text="When enabled, AI will automatically start self-operating mode after commands",
                               bg="#1e1e2e",
                               fg="#6c7086",
                               font=("Segoe UI", 8, "italic"))
         toggle_info.pack(side="left", padx=10)
-        
+
         examples_frame = tk.Frame(left_column, bg="#1e1e2e")
         examples_frame.pack(fill="x", pady=(10, 5))
-        
+
         examples_label = tk.Label(examples_frame,
                                  text="💡 Example Objectives:",
                                  bg="#1e1e2e",
                                  fg="#a6adc8",
                                  font=("Segoe UI", 9, "bold"))
         examples_label.pack(anchor="w", padx=5)
-        
+
         examples_text = tk.Text(examples_frame,
                                bg="#0f0f1e",
                                fg="#89dceb",
@@ -1414,24 +1414,24 @@ class AutomationControllerGUI:
                                pady=8,
                                wrap=tk.WORD)
         examples_text.pack(fill="x", padx=5, pady=5)
-        examples_text.insert("1.0", 
+        examples_text.insert("1.0",
             "• Open Google Chrome and search for Python tutorials\n"
             "• Open a new file in Notepad and write 'Hello World'\n"
             "• Go to YouTube and play a video about AI\n"
             "• Open Calculator and calculate 25 * 47\n"
             "• Create a new folder on Desktop named 'AI Projects'")
         examples_text.config(state='disabled')
-        
+
         right_column = tk.Frame(main_container, bg="#1e1e2e")
         right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
-        
+
         output_label = tk.Label(right_column,
                                text="📊 Real-Time Output:",
                                bg="#1e1e2e",
                                fg="#a6adc8",
                                font=("Segoe UI", 9, "bold"))
         output_label.pack(anchor="w", padx=5, pady=(0, 5))
-        
+
         self.soc_output = scrolledtext.ScrolledText(
             right_column,
             bg="#0f0f1e",
@@ -1444,7 +1444,7 @@ class AutomationControllerGUI:
             pady=10
         )
         self.soc_output.pack(fill="both", expand=True, padx=5, pady=5)
-        
+
         self.soc_output.tag_config("iteration", foreground="#cba6f7", font=("Consolas", 9, "bold"))
         self.soc_output.tag_config("thought", foreground="#89dceb")
         self.soc_output.tag_config("action", foreground="#a6e3a1", font=("Consolas", 9, "bold"))
@@ -1452,16 +1452,16 @@ class AutomationControllerGUI:
         self.soc_output.tag_config("success", foreground="#a6e3a1", font=("Consolas", 9, "bold"))
         self.soc_output.tag_config("error", foreground="#f38ba8", font=("Consolas", 9, "bold"))
         self.soc_output.tag_config("warning", foreground="#f9e2af")
-        
+
         bottom_frame = tk.Frame(tab, bg="#1e1e2e")
         bottom_frame.pack(fill="x", padx=10, pady=(5, 10))
-        
+
         buttons = [
             ("📖 View Guide", self.show_soc_guide, "#89b4fa"),
             ("🔄 Clear Output", self.clear_soc_output, "#313244"),
             ("📸 View Screenshots", self.view_soc_screenshots, "#89dceb")
         ]
-        
+
         for text, command, color in buttons:
             btn = tk.Button(bottom_frame,
                            text=text,
@@ -1488,40 +1488,40 @@ class AutomationControllerGUI:
         """
         tab = tk.Frame(notebook, bg="#1e1e2e")
         notebook.add(tab, text="🎯 Smart Control")
-        
+
         # Header
         header_frame = tk.Frame(tab, bg="#1a1a2e")
         header_frame.pack(fill="x", pady=(10, 0), padx=10)
-        
+
         header = tk.Label(header_frame,
                           text="🎯 Comprehensive Desktop Controller",
                           bg="#1a1a2e",
                           fg="#f9e2af",
                           font=("Segoe UI", 14, "bold"))
         header.pack(pady=12)
-        
+
         info = tk.Label(header_frame,
                         text="🧠 Understands → 📋 Plans → 👁️ Monitors • AI-Powered 3-Phase Automation",
                         bg="#1a1a2e",
                         fg="#a6adc8",
                         font=("Segoe UI", 9, "italic"))
         info.pack(pady=(0, 12))
-        
+
         # Phase indicator
         phase_frame = tk.Frame(tab, bg="#1e1e2e")
         phase_frame.pack(fill="x", padx=10, pady=5)
-        
+
         self.phase_labels = {}
         phases = [
             ("🧠", "UNDERSTAND", "#89b4fa"),
             ("📋", "PLAN", "#f9e2af"),
             ("👁️", "MONITOR", "#a6e3a1")
         ]
-        
+
         for icon, name, color in phases:
             phase_container = tk.Frame(phase_frame, bg="#313244", relief="flat")
             phase_container.pack(side="left", expand=True, fill="x", padx=5, pady=5)
-            
+
             label = tk.Label(phase_container,
                             text=f"{icon} {name}",
                             bg="#313244",
@@ -1530,30 +1530,30 @@ class AutomationControllerGUI:
                             pady=8)
             label.pack()
             self.phase_labels[name] = label
-        
+
         # Main container with two columns
         main_container = tk.Frame(tab, bg="#1e1e2e")
         main_container.pack(fill="both", expand=True, padx=10, pady=5)
-        
+
         # Left column - Input and controls
         left_column = tk.Frame(main_container, bg="#1e1e2e")
         left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
-        
+
         # Input section
         input_section = tk.Frame(left_column, bg="#1e1e2e")
         input_section.pack(fill="x", pady=(5, 10))
-        
+
         input_label = tk.Label(input_section,
                               text="🎯 Enter your automation command:",
                               bg="#1e1e2e",
                               fg="#a6adc8",
                               font=("Segoe UI", 9, "bold"))
         input_label.pack(anchor="w", padx=5, pady=(0, 5))
-        
+
         # Input box with send button
         input_box_frame = tk.Frame(input_section, bg="#1e1e2e")
         input_box_frame.pack(fill="x", padx=5)
-        
+
         self.comprehensive_input = tk.Entry(input_box_frame,
                                            bg="#313244",
                                            fg="#ffffff",
@@ -1563,7 +1563,7 @@ class AutomationControllerGUI:
                                            insertbackground="#f9e2af")
         self.comprehensive_input.pack(side="left", fill="x", expand=True, ipady=8)
         self.comprehensive_input.bind("<Return>", lambda e: self.execute_comprehensive_command())
-        
+
         execute_btn = tk.Button(input_box_frame,
                                text="▶️ Execute",
                                bg="#f9e2af",
@@ -1576,14 +1576,14 @@ class AutomationControllerGUI:
                                pady=8)
         execute_btn.pack(side="right", padx=(5, 0))
         self.add_hover_effect(execute_btn, "#f9e2af", "#f5c2e7")
-        
+
         # Quick actions section with navigation - REMOVED
         # self.quick_actions_container = tk.Frame(left_column, bg="#1e1e2e")
         # self.quick_actions_container.pack(fill="both", expand=True, pady=(5, 10))
-        
+
         # # Create main menu view
         # self.quick_menu_view = tk.Frame(self.quick_actions_container, bg="#1e1e2e")
-        
+
         # # Header
         # menu_header = tk.Label(self.quick_menu_view,
         #                       text="⚡ Quick Actions Centre",
@@ -1591,7 +1591,7 @@ class AutomationControllerGUI:
         #                       fg="#f9e2af",
         #                       font=("Segoe UI", 11, "bold"))
         # menu_header.pack(anchor="w", padx=8, pady=(5, 2))
-        
+
         # # Subtitle
         # menu_subtitle = tk.Label(self.quick_menu_view,
         #                         text="Choose an action below",
@@ -1599,56 +1599,56 @@ class AutomationControllerGUI:
         #                         fg="#6c7086",
         #                         font=("Segoe UI", 8))
         # menu_subtitle.pack(anchor="w", padx=8, pady=(0, 8))
-        
+
         # # Scrollable menu - REMOVED
         # menu_canvas = tk.Canvas(self.quick_menu_view, bg="#1e1e2e", highlightthickness=0, height=400)
         # menu_scrollbar = ttk.Scrollbar(self.quick_menu_view, orient="vertical", command=menu_canvas.yview)
         # menu_scrollable = tk.Frame(menu_canvas, bg="#1e1e2e")
-        
+
         # menu_scrollable.bind(
         #     "<Configure>",
         #     lambda e: menu_canvas.configure(scrollregion=menu_canvas.bbox("all"))
         # )
-        
+
         # menu_canvas.create_window((0, 0), window=menu_scrollable, anchor="nw", width=400)
         # menu_canvas.configure(yscrollcommand=menu_scrollbar.set)
-        
+
         # # Define quick actions with features - REMOVED
         # self.quick_actions_data = [
         #     ("🖥️ SYSTEM", None, "#89b4fa", True, None),
         #     ("💻 Screenshot", "Take a screenshot", "#89b4fa", False, "screenshot"),
         #     ("🔒 Lock PC", "Lock the computer", "#f38ba8", False, "lock"),
         #     ("📊 Task Manager", "Open Task Manager", "#cba6f7", False, "taskmanager"),
-            
+
         #     ("🌐 WEB & APPS", None, "#89dceb", True, None),
         #     ("🌍 Chrome", "Open Chrome and go to Google", "#89dceb", False, "chrome"),
         #     ("🔍 Google Search", "Search Google for Python tutorials", "#a6e3a1", False, "google"),
         #     ("📧 Gmail", "Open Gmail in browser", "#f38ba8", False, "gmail"),
         #     ("💬 WhatsApp", "Open WhatsApp Web", "#a6e3a1", False, "whatsapp"),
-            
+
         #     ("📁 PRODUCTIVITY", None, "#a6e3a1", True, None),
         #     ("📝 VS Code", "Launch VS Code", "#89b4fa", False, "vscode"),
         #     ("📂 File Explorer", "Open File Explorer", "#f9e2af", False, "explorer"),
         #     ("🗒️ Notepad", "Open Notepad", "#cba6f7", False, "notepad"),
-            
+
         #     ("🎵 MEDIA", None, "#f5c2e7", True, None),
         #     ("🎵 Spotify", "Launch Spotify", "#a6e3a1", False, "spotify"),
         #     ("🎬 YouTube", "Open YouTube", "#f38ba8", False, "youtube"),
         #     ("🔊 Volume", "Control system volume", "#89dceb", False, "volume"),
         # ]
-        
+
         # # Create menu buttons - REMOVED
         # for item in self.quick_actions_data:
         #     text, description, color, is_header, feature_id = item
-            
+
         #     if is_header:
         #         header_container = tk.Frame(menu_scrollable, bg="#1e1e2e", height=35)
         #         header_container.pack(fill="x", padx=5, pady=(8, 3))
         #         header_container.pack_propagate(False)
-                
+
         #         accent = tk.Frame(header_container, bg=color, width=3)
         #         accent.pack(side="left", fill="y", padx=(0, 8))
-                
+
         #         header_label = tk.Label(header_container,
         #                                text=text,
         #                                bg="#1e1e2e",
@@ -1669,7 +1669,7 @@ class AutomationControllerGUI:
         #                        anchor="w",
         #                        bd=0)
         #         btn.pack(fill="x", padx=8, pady=2)
-                
+
         #         def make_hover(button, accent_color):
         #             def on_enter(e):
         #                 button.config(bg="#45475a", fg=accent_color)
@@ -1677,20 +1677,20 @@ class AutomationControllerGUI:
         #                 button.config(bg="#313244", fg="#cdd6f4")
         #             button.bind("<Enter>", on_enter)
         #             button.bind("<Leave>", on_leave)
-                
+
         #         make_hover(btn, color)
-        
+
         # self.menu_canvas.pack(side="left", fill="both", expand=True)
         # menu_scrollbar.pack(side="right", fill="y")
-        
+
         # # Create feature view (initially hidden) - REMOVED
         # self.quick_feature_view = tk.Frame(self.quick_actions_container, bg="#1e1e2e")
-        
+
         # # Feature view header
         # feature_header_frame = tk.Frame(self.quick_feature_view, bg="#1e1e2e", height=50)
         # feature_header_frame.pack(fill="x", pady=(0, 10))
         # feature_header_frame.pack_propagate(False)
-        
+
         # # Back button
         # self.back_button = tk.Button(feature_header_frame,
         #                              text="← Back",
@@ -1704,7 +1704,7 @@ class AutomationControllerGUI:
         #                              pady=8)
         # self.back_button.pack(side="left", padx=8, pady=8)
         # self.add_hover_effect(self.back_button, "#313244", "#45475a")
-        
+
         # # Feature title
         # self.feature_title = tk.Label(feature_header_frame,
         #                              text="",
@@ -1712,25 +1712,25 @@ class AutomationControllerGUI:
         #                              fg="#f9e2af",
         #                              font=("Segoe UI", 12, "bold"))
         # self.feature_title.pack(side="left", padx=10, pady=8)
-        
+
         # # Feature content area
         # self.feature_content = tk.Frame(self.quick_feature_view, bg="#181825", relief="flat")
         # self.feature_content.pack(fill="both", expand=True, padx=8, pady=(0, 8))
-        
+
         # # Show menu view by default
         # self.quick_menu_view.pack(fill="both", expand=True)
-        
+
         # Example prompts
         examples_frame = tk.Frame(left_column, bg="#1e1e2e")
         examples_frame.pack(fill="x", pady=(10, 5))
-        
+
         examples_label = tk.Label(examples_frame,
                                  text="💡 Example Prompts:",
                                  bg="#1e1e2e",
                                  fg="#a6adc8",
                                  font=("Segoe UI", 9, "bold"))
         examples_label.pack(anchor="w", padx=5)
-        
+
         examples_text = tk.Text(examples_frame,
                                bg="#0f0f1e",
                                fg="#89dceb",
@@ -1741,24 +1741,24 @@ class AutomationControllerGUI:
                                pady=8,
                                wrap=tk.WORD)
         examples_text.pack(fill="x", padx=5, pady=5)
-        examples_text.insert("1.0", 
+        examples_text.insert("1.0",
             "• Open Chrome, navigate to GitHub, and screenshot\n"
             "• Launch Spotify and play jazz music\n"
             "• Search Google for Python tutorials, open first 3 results\n"
             "• Create a new folder on Desktop named 'Projects'")
         examples_text.config(state='disabled')
-        
+
         # Right column - Output
         right_column = tk.Frame(main_container, bg="#1e1e2e")
         right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
-        
+
         output_label = tk.Label(right_column,
                                text="📊 Execution Output:",
                                bg="#1e1e2e",
                                fg="#a6adc8",
                                font=("Segoe UI", 9, "bold"))
         output_label.pack(anchor="w", padx=5, pady=(0, 5))
-        
+
         # Output display with scrollbar
         self.comprehensive_output = scrolledtext.ScrolledText(
             right_column,
@@ -1772,7 +1772,7 @@ class AutomationControllerGUI:
             pady=10
         )
         self.comprehensive_output.pack(fill="both", expand=True, padx=5, pady=5)
-        
+
         # Configure text tags for colored output
         self.comprehensive_output.tag_config("phase1", foreground="#89b4fa", font=("Consolas", 9, "bold"))
         self.comprehensive_output.tag_config("phase2", foreground="#f9e2af", font=("Consolas", 9, "bold"))
@@ -1781,18 +1781,18 @@ class AutomationControllerGUI:
         self.comprehensive_output.tag_config("error", foreground="#f38ba8", font=("Consolas", 9, "bold"))
         self.comprehensive_output.tag_config("info", foreground="#89dceb")
         self.comprehensive_output.tag_config("highlight", foreground="#f9e2af", font=("Consolas", 9, "bold"))
-        
+
         # Bottom buttons
         bottom_frame = tk.Frame(tab, bg="#1e1e2e")
         bottom_frame.pack(fill="x", padx=10, pady=(5, 10))
-        
+
         buttons = [
             ("📖 View Guide", self.show_comprehensive_guide, "#89b4fa"),
             ("🔄 Clear Output", self.clear_comprehensive_output, "#313244"),
             ("📸 View Screenshots", self.view_comprehensive_screenshots, "#89dceb"),
             ("📊 View Stats", self.show_comprehensive_stats, "#a6e3a1")
         ]
-        
+
         for btn_text, command, color in buttons:
             btn = tk.Button(bottom_frame,
                            text=btn_text,
@@ -1807,11 +1807,11 @@ class AutomationControllerGUI:
             btn.pack(side="left", padx=5)
             hover_color = "#74c7ec" if color == "#89b4fa" else "#45475a" if color == "#313244" else color
             self.add_hover_effect(btn, color, hover_color)
-        
+
         # Status indicator
         status_container = tk.Frame(bottom_frame, bg="#313244", relief="flat")
         status_container.pack(side="right", padx=5)
-        
+
         self.comprehensive_status = tk.Label(status_container,
                                             text="✅ Ready",
                                             bg="#313244",
@@ -1820,7 +1820,7 @@ class AutomationControllerGUI:
                                             padx=15,
                                             pady=8)
         self.comprehensive_status.pack()
-        
+
         # Initial welcome message
         self.append_comprehensive_output("=" * 60 + "\n", "info")
         self.append_comprehensive_output("🎯 COMPREHENSIVE DESKTOP CONTROLLER\n", "highlight")
@@ -1842,44 +1842,44 @@ class AutomationControllerGUI:
         """
         tab = tk.Frame(notebook, bg="#1e1e2e")
         notebook.add(tab, text="🧠 Learning AI")
-        
+
         # Header
         header_frame = tk.Frame(tab, bg="#1a1a2e")
         header_frame.pack(fill="x", pady=(10, 0), padx=10)
-        
+
         header = tk.Label(header_frame,
                           text="🧠 Virtual Language Model",
                           bg="#1a1a2e",
                           fg="#cba6f7",
                           font=("Segoe UI", 14, "bold"))
         header.pack(pady=12)
-        
+
         info = tk.Label(header_frame,
                         text="👁️ Observes Screen → 📚 Learns Patterns → 🎯 Controls Desktop",
                         bg="#1a1a2e",
                         fg="#a6adc8",
                         font=("Segoe UI", 9, "italic"))
         info.pack(pady=(0, 12))
-        
+
         # Main container with two columns
         main_container = tk.Frame(tab, bg="#1e1e2e")
         main_container.pack(fill="both", expand=True, padx=10, pady=5)
-        
+
         # Left column - Controls
         left_column = tk.Frame(main_container, bg="#1e1e2e")
         left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
-        
+
         # Learning stats
         stats_frame = tk.Frame(left_column, bg="#313244", relief="flat")
         stats_frame.pack(fill="x", pady=5, padx=5)
-        
+
         stats_title = tk.Label(stats_frame,
                               text="📊 Learning Statistics",
                               bg="#313244",
                               fg="#cba6f7",
                               font=("Segoe UI", 10, "bold"))
         stats_title.pack(pady=8)
-        
+
         self.vlm_stats_display = tk.Text(stats_frame,
                                          bg="#0f0f1e",
                                          fg="#cdd6f4",
@@ -1890,21 +1890,21 @@ class AutomationControllerGUI:
                                          pady=10,
                                          state='disabled')
         self.vlm_stats_display.pack(fill="x", padx=5, pady=(0, 8))
-        
+
         # Goal input section
         goal_frame = tk.Frame(left_column, bg="#1e1e2e")
         goal_frame.pack(fill="x", pady=(10, 5))
-        
+
         goal_label = tk.Label(goal_frame,
                              text="🎯 Goal for AI:",
                              bg="#1e1e2e",
                              fg="#a6adc8",
                              font=("Segoe UI", 9, "bold"))
         goal_label.pack(anchor="w", padx=5, pady=(0, 5))
-        
+
         goal_input_frame = tk.Frame(goal_frame, bg="#1e1e2e")
         goal_input_frame.pack(fill="x", padx=5)
-        
+
         self.vlm_goal_input = tk.Entry(goal_input_frame,
                                        bg="#313244",
                                        fg="#ffffff",
@@ -1913,22 +1913,22 @@ class AutomationControllerGUI:
                                        bd=2,
                                        insertbackground="#cba6f7")
         self.vlm_goal_input.pack(side="left", fill="x", expand=True, ipady=8)
-        
+
         # Action buttons
         actions_frame = tk.Frame(left_column, bg="#1e1e2e")
         actions_frame.pack(fill="x", pady=10, padx=5)
-        
+
         actions_label = tk.Label(actions_frame,
                                 text="⚡ Actions:",
                                 bg="#1e1e2e",
                                 fg="#a6adc8",
                                 font=("Segoe UI", 9, "bold"))
         actions_label.pack(anchor="w", pady=(0, 5))
-        
+
         # Row 1
         row1 = tk.Frame(actions_frame, bg="#1e1e2e")
         row1.pack(fill="x", pady=2)
-        
+
         observe_btn = tk.Button(row1,
                                text="👁️ Observe Screen",
                                bg="#89b4fa",
@@ -1941,7 +1941,7 @@ class AutomationControllerGUI:
                                pady=8)
         observe_btn.pack(side="left", expand=True, fill="x", padx=2)
         self.add_hover_effect(observe_btn, "#89b4fa", "#74c7ec")
-        
+
         decide_btn = tk.Button(row1,
                               text="🤔 Decide Action",
                               bg="#f9e2af",
@@ -1954,11 +1954,11 @@ class AutomationControllerGUI:
                               pady=8)
         decide_btn.pack(side="left", expand=True, fill="x", padx=2)
         self.add_hover_effect(decide_btn, "#f9e2af", "#f5c2e7")
-        
+
         # Row 2
         row2 = tk.Frame(actions_frame, bg="#1e1e2e")
         row2.pack(fill="x", pady=2)
-        
+
         execute_btn = tk.Button(row2,
                                text="▶️ Execute",
                                bg="#a6e3a1",
@@ -1971,7 +1971,7 @@ class AutomationControllerGUI:
                            pady=8)
         execute_btn.pack(side="left", expand=True, fill="x", padx=2)
         self.add_hover_effect(execute_btn, "#a6e3a1", "#94e2d5")
-        
+
         learn_btn = tk.Button(row2,
                              text="🧠 Learn Session",
                              bg="#cba6f7",
@@ -1984,11 +1984,11 @@ class AutomationControllerGUI:
                              pady=8)
         learn_btn.pack(side="left", expand=True, fill="x", padx=2)
         self.add_hover_effect(learn_btn, "#cba6f7", "#b4befe")
-        
+
         # Row 3
         row3 = tk.Frame(actions_frame, bg="#1e1e2e")
         row3.pack(fill="x", pady=2)
-        
+
         query_btn = tk.Button(row3,
                              text="💬 Query Knowledge",
                              bg="#313244",
@@ -2001,7 +2001,7 @@ class AutomationControllerGUI:
                              pady=8)
         query_btn.pack(side="left", expand=True, fill="x", padx=2)
         self.add_hover_effect(query_btn, "#313244", "#45475a")
-        
+
         refresh_btn = tk.Button(row3,
                                text="🔄 Refresh Stats",
                                bg="#313244",
@@ -2014,18 +2014,18 @@ class AutomationControllerGUI:
                                pady=8)
         refresh_btn.pack(side="left", expand=True, fill="x", padx=2)
         self.add_hover_effect(refresh_btn, "#313244", "#45475a")
-        
+
         # Knowledge display
         knowledge_frame = tk.Frame(left_column, bg="#1e1e2e")
         knowledge_frame.pack(fill="both", expand=True, pady=(10, 5))
-        
+
         knowledge_label = tk.Label(knowledge_frame,
                                   text="📚 Learned Knowledge:",
                                   bg="#1e1e2e",
                                   fg="#a6adc8",
                                   font=("Segoe UI", 9, "bold"))
         knowledge_label.pack(anchor="w", padx=5, pady=(0, 5))
-        
+
         self.vlm_knowledge_display = scrolledtext.ScrolledText(
             knowledge_frame,
             bg="#0f0f1e",
@@ -2038,18 +2038,18 @@ class AutomationControllerGUI:
             pady=10
         )
         self.vlm_knowledge_display.pack(fill="both", expand=True, padx=5, pady=5)
-        
+
         # Right column - Output
         right_column = tk.Frame(main_container, bg="#1e1e2e")
         right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
-        
+
         output_label = tk.Label(right_column,
                                text="📊 Activity Log:",
                                bg="#1e1e2e",
                                fg="#a6adc8",
                                font=("Segoe UI", 9, "bold"))
         output_label.pack(anchor="w", padx=5, pady=(0, 5))
-        
+
         self.vlm_output = scrolledtext.ScrolledText(
             right_column,
             bg="#0f0f1e",
@@ -2062,18 +2062,18 @@ class AutomationControllerGUI:
             pady=10
         )
         self.vlm_output.pack(fill="both", expand=True, padx=5, pady=5)
-        
+
         # Configure text tags
         self.vlm_output.tag_config("success", foreground="#a6e3a1", font=("Consolas", 9, "bold"))
         self.vlm_output.tag_config("error", foreground="#f38ba8", font=("Consolas", 9, "bold"))
         self.vlm_output.tag_config("info", foreground="#89dceb")
         self.vlm_output.tag_config("highlight", foreground="#cba6f7", font=("Consolas", 9, "bold"))
         self.vlm_output.tag_config("decision", foreground="#f9e2af", font=("Consolas", 9, "bold"))
-        
+
         # Bottom status
         bottom_frame = tk.Frame(tab, bg="#1e1e2e")
         bottom_frame.pack(fill="x", padx=10, pady=(5, 10))
-        
+
         help_btn = tk.Button(bottom_frame,
                             text="📖 How It Works",
                             bg="#89b4fa",
@@ -2086,7 +2086,7 @@ class AutomationControllerGUI:
                             pady=8)
         help_btn.pack(side="left", padx=5)
         self.add_hover_effect(help_btn, "#89b4fa", "#74c7ec")
-        
+
         clear_btn = tk.Button(bottom_frame,
                              text="🗑️ Clear Output",
                              bg="#313244",
@@ -2099,11 +2099,11 @@ class AutomationControllerGUI:
                              pady=8)
         clear_btn.pack(side="left", padx=5)
         self.add_hover_effect(clear_btn, "#313244", "#45475a")
-        
+
         # Status
         status_container = tk.Frame(bottom_frame, bg="#313244", relief="flat")
         status_container.pack(side="right", padx=5)
-        
+
         self.vlm_status = tk.Label(status_container,
                                   text="✅ Ready to Learn",
                                   bg="#313244",
@@ -2112,7 +2112,7 @@ class AutomationControllerGUI:
                                   padx=15,
                                   pady=8)
         self.vlm_status.pack()
-        
+
         # Initialize with welcome message
         self.vlm_append_output("=" * 60 + "\n", "info")
         self.vlm_append_output("🧠 VIRTUAL LANGUAGE MODEL\n", "highlight")
@@ -2126,7 +2126,7 @@ class AutomationControllerGUI:
         self.vlm_append_output("  💬 Answer questions about what it learned\n\n", "info")
         self.vlm_append_output("💡 Try: Click 'Observe Screen' to let it see your desktop!\n", "highlight")
         self.vlm_append_output("=" * 60 + "\n", "info")
-        
+
         # Load initial stats
         self.vlm_refresh_stats()
 
@@ -2134,37 +2134,37 @@ class AutomationControllerGUI:
         """Web Automation with Selenium"""
         tab = tk.Frame(notebook, bg="#1e1e2e")
         notebook.add(tab, text="🌐 Web Auto")
-        
+
         header_frame = tk.Frame(tab, bg="#1a1a2e")
         header_frame.pack(fill="x", pady=(10, 0), padx=10)
-        
+
         header = tk.Label(header_frame,
                           text="🌐 Intelligent Web Automation",
                           bg="#1a1a2e",
                           fg="#89dceb",
                           font=("Segoe UI", 14, "bold"))
         header.pack(pady=12)
-        
+
         info = tk.Label(header_frame,
                         text="🤖 AI-Powered Browser Control • Works in Replit Cloud",
                         bg="#1a1a2e",
                         fg="#a6adc8",
                         font=("Segoe UI", 9, "italic"))
         info.pack(pady=(0, 12))
-        
+
         input_section = tk.Frame(tab, bg="#1e1e2e")
         input_section.pack(fill="x", padx=10, pady=10)
-        
+
         input_label = tk.Label(input_section,
                                text="💬 Natural Language Command:",
                                bg="#1e1e2e",
                                fg="#a6adc8",
                                font=("Segoe UI", 9, "bold"))
         input_label.pack(anchor="w", padx=5, pady=(5, 2))
-        
+
         input_box_frame = tk.Frame(input_section, bg="#1e1e2e")
         input_box_frame.pack(fill="x", padx=5, pady=(0, 5))
-        
+
         self.web_auto_input = tk.Entry(input_box_frame,
                                        bg="#313244",
                                        fg="#ffffff",
@@ -2174,7 +2174,7 @@ class AutomationControllerGUI:
                                        insertbackground="#89dceb")
         self.web_auto_input.pack(side="left", fill="x", expand=True, ipady=8)
         self.web_auto_input.bind("<Return>", lambda e: self.execute_web_automation())
-        
+
         execute_btn = tk.Button(input_box_frame,
                                 text="🚀 Execute",
                                 bg="#89dceb",
@@ -2187,32 +2187,32 @@ class AutomationControllerGUI:
                                 pady=8)
         execute_btn.pack(side="right", padx=(5, 0))
         self.add_hover_effect(execute_btn, "#89dceb", "#74c7ec")
-        
+
         quick_frame = tk.Frame(tab, bg="#1a1a2e")
         quick_frame.pack(fill="both", expand=True, padx=10, pady=10)
-        
+
         quick_label = tk.Label(quick_frame,
                                text="⚡ Quick Actions",
                                bg="#1a1a2e",
                                fg="#f9e2af",
                                font=("Segoe UI", 11, "bold"))
         quick_label.pack(pady=10)
-        
+
         canvas = tk.Canvas(quick_frame, bg="#1a1a2e", highlightthickness=0)
         scrollbar = ttk.Scrollbar(quick_frame, orient="vertical", command=canvas.yview)
         scrollable_frame = tk.Frame(canvas, bg="#1a1a2e")
-        
+
         scrollable_frame.bind(
             "<Configure>",
             lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
         )
-        
+
         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
         canvas.configure(yscrollcommand=scrollbar.set)
-        
+
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
-        
+
         quick_actions = [
             ("🎯 LeetCode Problem 34", "open leetcode problem 34"),
             ("🎯 LeetCode Problem 1", "open leetcode problem 1"),
@@ -2225,7 +2225,7 @@ class AutomationControllerGUI:
             ("📺 YouTube Python Tutorial", "search youtube for python tutorial"),
             ("📺 YouTube Coding", "search youtube for coding tutorials"),
         ]
-        
+
         for text, command in quick_actions:
             btn = tk.Button(scrollable_frame,
                             text=text,
@@ -2241,10 +2241,10 @@ class AutomationControllerGUI:
                             activebackground="#45475a")
             btn.pack(fill="x", padx=8, pady=2)
             self.add_hover_effect(btn, "#313244", "#45475a")
-        
+
         control_frame = tk.Frame(tab, bg="#1e1e2e")
         control_frame.pack(fill="x", padx=10, pady=(0, 10))
-        
+
         init_btn = tk.Button(control_frame,
                              text="▶️ Start Browser",
                              bg="#313244",
@@ -2257,7 +2257,7 @@ class AutomationControllerGUI:
                              pady=6)
         init_btn.pack(side="left", padx=5)
         self.add_hover_effect(init_btn, "#313244", "#45475a")
-        
+
         close_btn = tk.Button(control_frame,
                               text="🔒 Close Browser",
                               bg="#313244",
@@ -2270,7 +2270,7 @@ class AutomationControllerGUI:
                               pady=6)
         close_btn.pack(side="left", padx=5)
         self.add_hover_effect(close_btn, "#313244", "#45475a")
-        
+
         screenshot_btn = tk.Button(control_frame,
                                    text="📸 Screenshot",
                                    bg="#313244",
@@ -2593,7 +2593,7 @@ class AutomationControllerGUI:
             ("🔒 Lock Computer", self.direct_lock_screen, "#f38ba8"),
             ("⚠️ Shutdown Computer", self.direct_shutdown_system, "#f38ba8"),
         ]
-        
+
         for text, command_func, color in direct_actions:
             btn = tk.Button(scrollable_frame,
                             text=text,
@@ -2610,7 +2610,7 @@ class AutomationControllerGUI:
             btn.pack(fill="x", padx=8, pady=3)
             hover_color = "#fab387" if color == "#f38ba8" else "#45475a"
             self.add_hover_effect(btn, color, hover_color)
-        
+
         # Separator
         separator = tk.Frame(scrollable_frame, bg="#45475a", height=2)
         separator.pack(fill="x", padx=8, pady=8)
@@ -3043,43 +3043,43 @@ class AutomationControllerGUI:
         """Advanced AI Enhancements - Multi-modal, Memory, Learning, Predictions"""
         tab = tk.Frame(notebook, bg="#1e1e2e")
         notebook.add(tab, text="🧠 Advanced AI")
-        
+
         header_frame = tk.Frame(tab, bg="#1a1a2e")
         header_frame.pack(fill="x", pady=(10, 0), padx=10)
-        
+
         header = tk.Label(header_frame,
                           text="🧠 Advanced AI Enhancements",
                           bg="#1a1a2e",
                           fg="#cba6f7",
                           font=("Segoe UI", 14, "bold"))
         header.pack(pady=12)
-        
+
         info = tk.Label(header_frame,
                         text="👁️ Multi-Modal • 🧠 Contextual Memory • 📚 Learning from Corrections • 🔮 Predictive Actions",
                         bg="#1a1a2e",
                         fg="#a6adc8",
                         font=("Segoe UI", 9, "italic"))
         info.pack(pady=(0, 12))
-        
+
         main_container = tk.Frame(tab, bg="#1e1e2e")
         main_container.pack(fill="both", expand=True, padx=10, pady=5)
-        
+
         left_column = tk.Frame(main_container, bg="#1e1e2e")
         left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
-        
+
         multi_modal_section = tk.Label(left_column,
                                        text="👁️ MULTI-MODAL AI",
                                        bg="#1e1e2e",
                                        fg="#cba6f7",
                                        font=("Segoe UI", 11, "bold"))
         multi_modal_section.pack(pady=(10, 8), anchor="w", padx=8)
-        
+
         mm_buttons = [
             ("🧠 Analyze Current Screen", lambda: self.advanced_ai_analyze_screen()),
             ("🎤 Voice + Vision Analysis", lambda: self.advanced_ai_voice_vision()),
             ("📊 Multi-Modal Statistics", lambda: self.advanced_ai_mm_stats())
         ]
-        
+
         for text, command in mm_buttons:
             btn = tk.Button(left_column,
                            text=text,
@@ -3095,21 +3095,21 @@ class AutomationControllerGUI:
                            activebackground="#45475a")
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
-        
+
         memory_section = tk.Label(left_column,
                                  text="🧠 CONTEXTUAL MEMORY",
                                  bg="#1e1e2e",
                                  fg="#89b4fa",
                                  font=("Segoe UI", 11, "bold"))
         memory_section.pack(pady=(15, 8), anchor="w", padx=8)
-        
+
         memory_buttons = [
             ("📝 Remember Something", lambda: self.advanced_ai_remember()),
             ("🔍 Recall Memories", lambda: self.advanced_ai_recall()),
             ("⚙️ Update Preferences", lambda: self.advanced_ai_preferences()),
             ("📊 Memory Statistics", lambda: self.advanced_ai_memory_stats())
         ]
-        
+
         for text, command in memory_buttons:
             btn = tk.Button(left_column,
                            text=text,
@@ -3125,20 +3125,20 @@ class AutomationControllerGUI:
                            activebackground="#45475a")
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
-        
+
         learning_section = tk.Label(left_column,
                                    text="📚 CORRECTION LEARNING",
                                    bg="#1e1e2e",
                                    fg="#a6e3a1",
                                    font=("Segoe UI", 11, "bold"))
         learning_section.pack(pady=(15, 8), anchor="w", padx=8)
-        
+
         learning_buttons = [
             ("✏️ Record Correction", lambda: self.advanced_ai_record_correction()),
             ("📈 Learning Report", lambda: self.advanced_ai_learning_report()),
             ("🎯 Apply Learning", lambda: self.advanced_ai_apply_learning())
         ]
-        
+
         for text, command in learning_buttons:
             btn = tk.Button(left_column,
                            text=text,
@@ -3154,20 +3154,20 @@ class AutomationControllerGUI:
                            activebackground="#45475a")
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
-        
+
         predictions_section = tk.Label(left_column,
                                       text="🔮 PREDICTIVE ACTIONS",
                                       bg="#1e1e2e",
                                       fg="#f9e2af",
                                       font=("Segoe UI", 11, "bold"))
         predictions_section.pack(pady=(15, 8), anchor="w", padx=8)
-        
+
         pred_buttons = [
             ("🔮 Get Predictions", lambda: self.advanced_ai_predictions()),
             ("💡 Proactive Suggestions", lambda: self.advanced_ai_suggestions()),
             ("📊 Prediction Accuracy", lambda: self.advanced_ai_accuracy())
         ]
-        
+
         for text, command in pred_buttons:
             btn = tk.Button(left_column,
                            text=text,
@@ -3183,17 +3183,17 @@ class AutomationControllerGUI:
                            activebackground="#45475a")
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
-        
+
         right_column = tk.Frame(main_container, bg="#1e1e2e")
         right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
-        
+
         output_label = tk.Label(right_column,
                                text="📋 Output Console",
                                bg="#1e1e2e",
                                fg="#ffffff",
                                font=("Segoe UI", 11, "bold"))
         output_label.pack(pady=(10, 5), anchor="w", padx=8)
-        
+
         self.advanced_ai_output = scrolledtext.ScrolledText(
             right_column,
             bg="#0f0f1e",
@@ -3207,13 +3207,13 @@ class AutomationControllerGUI:
             pady=10
         )
         self.advanced_ai_output.pack(fill="both", expand=True, padx=8, pady=(0, 10))
-        
+
         self.advanced_ai_output.tag_config("success", foreground="#a6e3a1")
         self.advanced_ai_output.tag_config("error", foreground="#f38ba8")
         self.advanced_ai_output.tag_config("warning", foreground="#f9e2af")
         self.advanced_ai_output.tag_config("info", foreground="#89b4fa")
         self.advanced_ai_output.tag_config("prediction", foreground="#cba6f7")
-        
+
         clear_btn = tk.Button(right_column,
                              text="🗑️ Clear Output",
                              bg="#45475a",
@@ -3621,7 +3621,7 @@ class AutomationControllerGUI:
             self.update_output("🎮 Self-Operating Computer Mode: DISABLED\n", "warning")
             self.update_output("Self-operating features are now turned off.\n", "info")
             self.update_output("=" * 60 + "\n\n", "info")
-    
+
     def open_user_settings(self):
         """Open user profile settings dialog"""
         try:
@@ -3634,7 +3634,7 @@ class AutomationControllerGUI:
         # Use personalized greeting from user profile
         personalized_greeting = self.user_profile.get_greeting()
         greeting = self.vatsal.get_greeting()
-        
+
         self.update_output("\n" + "=" * 60 + "\n", "info")
         self.update_output("🤖 Vatsal AI Assistant (Powered by VATSAL)\n", "success")
         self.update_output("=" * 60 + "\n", "info")
@@ -3644,7 +3644,7 @@ class AutomationControllerGUI:
         # Show proactive suggestion
         suggestion = self.vatsal.get_proactive_suggestion()
         self.update_output(f"{suggestion}\n\n", "command")
-        
+
         # Record interaction
         self.user_profile.record_interaction()
 
@@ -3748,23 +3748,23 @@ class AutomationControllerGUI:
             title = "Stats"
 
         messagebox.showinfo(title, stats_message)
-    
+
     def execute_vatsal_automator_command(self):
         """Execute command using VATSAL automator"""
         if not self.vatsal_automator:
             self._update_vatsal_automator_output("❌ VATSAL Automator not available. Check Gemini API key.\n", "error")
             return
-        
+
         command = self.vatsal_automator_input.get().strip()
         if not command:
             return
-        
+
         self.vatsal_automator_input.delete(0, tk.END)
         self._update_vatsal_automator_output(f"\n🎯 Command: {command}\n", "info")
-        
+
         thread = threading.Thread(target=self._process_vatsal_automator_command, args=(command,))
         thread.start()
-    
+
     def _vatsal_confirmation_callback(self, intent, risk_level):
         """Confirmation callback for destructive VATSAL actions"""
         result = messagebox.askyesno(
@@ -3773,13 +3773,13 @@ class AutomationControllerGUI:
             icon='warning'
         )
         return result
-    
+
     def _process_vatsal_automator_command(self, command):
         """Process VATSAL automator command in background"""
         try:
             self._update_vatsal_automator_output("🤔 Understanding command...\n", "info")
             result = self.vatsal_automator.execute_command(command, confirmation_callback=self._vatsal_confirmation_callback)
-            
+
             if "✓" in result:
                 self._update_vatsal_automator_output(f"\n{result}\n", "success")
             elif "✗" in result or "❌" in result:
@@ -3788,17 +3788,17 @@ class AutomationControllerGUI:
                 self._update_vatsal_automator_output(f"\n{result}\n", "warning")
             else:
                 self._update_vatsal_automator_output(f"\n{result}\n", "info")
-            
+
         except Exception as e:
             self._update_vatsal_automator_output(f"\n❌ Error: {str(e)}\n", "error")
-    
+
     def _update_vatsal_automator_output(self, message, tag=""):
         """Update VATSAL automator output display"""
         self.vatsal_automator_output.config(state='normal')
         self.vatsal_automator_output.insert(tk.END, message, tag)
         self.vatsal_automator_output.config(state='disabled')
         self.vatsal_automator_output.see(tk.END)
-    
+
     def vatsal_quick_action(self, command):
         """Execute quick action or clear output"""
         if command is None:
@@ -3806,99 +3806,99 @@ class AutomationControllerGUI:
             self.vatsal_automator_output.delete(1.0, tk.END)
             self.vatsal_automator_output.config(state='disabled')
             return
-        
+
         self.vatsal_automator_input.delete(0, tk.END)
         self.vatsal_automator_input.insert(0, command)
         self.execute_vatsal_automator_command()
-    
+
     def start_self_operating_text(self):
         """Start self-operating computer with text objective"""
         if not self.self_operating_mode:
             messagebox.showwarning(
-                "Feature Disabled", 
+                "Feature Disabled",
                 "🎮 Self-Operating Computer mode is currently DISABLED.\n\n"
                 "Please enable it using the '🎮 Self-Operating: OFF' toggle button in the header to use this feature."
             )
             self._update_soc_output("⚠️ Self-Operating mode is disabled. Enable it from the header toggle.\n", "warning")
             return
-        
+
         if not self.self_operating_computer:
             self._update_soc_output("❌ Self-Operating Computer not available. Check Gemini API key.\n", "error")
             return
-        
+
         if self.soc_running:
             messagebox.showwarning("Already Running", "Self-operating mode is already active!")
             return
-        
+
         objective = self.soc_objective.get("1.0", tk.END).strip()
         if not objective:
             messagebox.showwarning("No Objective", "Please enter an objective first!")
             return
-        
+
         self.soc_running = True
         self.soc_status_label.config(text=f"Status: Running...", fg="#f9e2af")
         self._update_soc_output(f"\n🎯 Starting self-operating mode...\n", "success")
         self._update_soc_output(f"📋 Objective: {objective}\n\n", "progress")
-        
+
         self.soc_thread = threading.Thread(target=self._run_self_operating, args=(objective,), daemon=True)
         self.soc_thread.start()
-        
+
         # Auto-minimize window so user can see AI working on desktop
         self.root.after(500, self.root.iconify)
-    
+
     def start_self_operating_voice(self):
         """Start self-operating computer with voice objective"""
         if not self.self_operating_mode:
             messagebox.showwarning(
-                "Feature Disabled", 
+                "Feature Disabled",
                 "🎮 Self-Operating Computer mode is currently DISABLED.\n\n"
                 "Please enable it using the '🎮 Self-Operating: OFF' toggle button in the header to use this feature."
             )
             self._update_soc_output("⚠️ Self-Operating mode is disabled. Enable it from the header toggle.\n", "warning")
             return
-        
+
         if not self.self_operating_computer:
             self._update_soc_output("❌ Self-Operating Computer not available. Check Gemini API key.\n", "error")
             return
-        
+
         if self.soc_running:
             messagebox.showwarning("Already Running", "Self-operating mode is already active!")
             return
-        
+
         self.soc_running = True
         self.soc_status_label.config(text="Status: Listening...", fg="#89b4fa")
         self._update_soc_output("\n🎤 Voice input mode activated...\n", "success")
         self._update_soc_output("Please state your objective clearly.\n\n", "progress")
-        
+
         self.soc_thread = threading.Thread(target=self._run_self_operating_voice, daemon=True)
         self.soc_thread.start()
-        
+
         # Auto-minimize window so user can see AI working on desktop
         self.root.after(500, self.root.iconify)
-    
+
     def stop_self_operating(self):
         """Stop the self-operating computer"""
         if not self.soc_running:
             messagebox.showinfo("Not Running", "Self-operating mode is not currently active.")
             return
-        
+
         self.soc_running = False
         self.soc_status_label.config(text="Status: Stopped", fg="#f38ba8")
         self._update_soc_output("\n🛑 Self-operating mode stopped by user.\n", "warning")
-    
+
     def _run_self_operating(self, objective):
         """Run self-operating computer in background"""
         try:
             import sys
             from io import StringIO
-            
+
             old_stdout = sys.stdout
             sys.stdout = StringIO()
-            
+
             class GUILogger:
                 def __init__(self, gui):
                     self.gui = gui
-                
+
                 def log(self, message, level="INFO"):
                     if "🔍" in message or "Analyzing" in message:
                         tag = "iteration"
@@ -3916,16 +3916,16 @@ class AutomationControllerGUI:
                         tag = "warning"
                     else:
                         tag = ""
-                    
+
                     self.gui._update_soc_output(message + "\n", tag)
-            
+
             logger = GUILogger(self)
             self.self_operating_computer._log = lambda msg, level="INFO": logger.log(msg, level)
-            
+
             result = self.self_operating_computer.operate(objective)
-            
+
             sys.stdout = old_stdout
-            
+
             if result.get("completed"):
                 self._update_soc_output(f"\n✅ Objective completed in {result['duration_seconds']}s!\n", "success")
                 self._update_soc_output(f"📊 Total iterations: {result['iterations']}\n", "progress")
@@ -3934,53 +3934,53 @@ class AutomationControllerGUI:
                 self._update_soc_output(f"\n⏸️ Session ended (max iterations reached)\n", "warning")
                 self._update_soc_output(f"📊 Total iterations: {result['iterations']}\n", "progress")
                 self.soc_status_label.config(text="Status: Incomplete", fg="#f9e2af")
-            
+
             self.soc_running = False
-            
+
         except Exception as e:
             self._update_soc_output(f"\n❌ Error: {str(e)}\n", "error")
             self.soc_status_label.config(text="Status: Error", fg="#f38ba8")
             self.soc_running = False
-    
+
     def _run_self_operating_voice(self):
         """Run self-operating computer with voice input"""
         try:
             result = self.self_operating_computer.operate_with_voice()
-            
+
             if not result:
                 self._update_soc_output("❌ Voice input failed. Please try again.\n", "error")
                 self.soc_status_label.config(text="Status: Ready", fg="#a6e3a1")
                 self.soc_running = False
                 return
-            
+
             if result.get("completed"):
                 self._update_soc_output(f"\n✅ Objective completed!\n", "success")
                 self.soc_status_label.config(text="Status: Completed ✅", fg="#a6e3a1")
             else:
                 self._update_soc_output(f"\n⏸️ Session ended\n", "warning")
                 self.soc_status_label.config(text="Status: Incomplete", fg="#f9e2af")
-            
+
             self.soc_running = False
-            
+
         except Exception as e:
             self._update_soc_output(f"\n❌ Error: {str(e)}\n", "error")
             self.soc_status_label.config(text="Status: Error", fg="#f38ba8")
             self.soc_running = False
-    
+
     def _update_soc_output(self, message, tag=""):
         """Update self-operating computer output display"""
         self.soc_output.config(state='normal')
         self.soc_output.insert(tk.END, message, tag)
         self.soc_output.config(state='disabled')
         self.soc_output.see(tk.END)
-    
+
     def clear_soc_output(self):
         """Clear self-operating computer output"""
         self.soc_output.config(state='normal')
         self.soc_output.delete(1.0, tk.END)
         self.soc_output.config(state='disabled')
         messagebox.showinfo("Cleared", "Output cleared!")
-    
+
     def show_soc_guide(self):
         """Show self-operating computer guide"""
         guide = """
@@ -4022,17 +4022,17 @@ SAFETY:
 Based on OthersideAI's self-operating-computer framework
 """
         messagebox.showinfo("Self-Operating Computer Guide", guide)
-    
+
     def view_soc_screenshots(self):
         """Open screenshots folder"""
         import subprocess
         import platform
-        
+
         screenshots_dir = Path("screenshots")
         if not screenshots_dir.exists():
             messagebox.showinfo("No Screenshots", "No screenshots have been taken yet.")
             return
-        
+
         try:
             if platform.system() == "Windows":
                 os.startfile(screenshots_dir)
@@ -4040,11 +4040,11 @@ Based on OthersideAI's self-operating-computer framework
                 subprocess.run(["open", screenshots_dir])
             else:
                 subprocess.run(["xdg-open", screenshots_dir])
-            
+
             self._update_soc_output("📸 Opened screenshots folder\n", "success")
         except Exception as e:
             messagebox.showerror("Error", f"Could not open folder: {str(e)}")
-    
+
     def auto_start_if_enabled(self):
         """Auto-start self-operating mode if enabled"""
         if self.auto_control_enabled:
@@ -4056,11 +4056,11 @@ Based on OthersideAI's self-operating-computer framework
                 "Auto Self-Control Mode is currently disabled.\n\n"
                 "Enable it using the toggle button to use Ctrl+Enter quick-start."
             )
-    
+
     def toggle_auto_control(self):
         """Toggle auto self-control mode on/off"""
         self.auto_control_enabled = not self.auto_control_enabled
-        
+
         if self.auto_control_enabled:
             self.auto_control_btn.config(
                 text="✅ Enabled",
@@ -4070,7 +4070,7 @@ Based on OthersideAI's self-operating-computer framework
             self._update_soc_output("\n🔄 Auto Self-Control Mode: ENABLED\n", "success")
             self._update_soc_output("AI will automatically start self-operating mode after commands.\n", "progress")
             messagebox.showinfo(
-                "Auto Mode Enabled", 
+                "Auto Mode Enabled",
                 "✅ Auto Self-Control Mode is now ENABLED!\n\n"
                 "When you give a command, AI will automatically:\n"
                 "1. Understand the command\n"
@@ -4092,63 +4092,63 @@ Based on OthersideAI's self-operating-computer framework
                 "❌ Auto Self-Control Mode is now DISABLED.\n\n"
                 "Use the Start buttons to manually begin self-operating mode."
             )
-    
+
     def execute_web_automation(self):
         """Execute web automation from input"""
         if not self.web_automator:
             self.update_output("❌ Web automation not available\n", "error")
             return
-        
+
         command = self.web_auto_input.get().strip()
         if not command:
             self.update_output("⚠️  Please enter a command\n", "warning")
             return
-        
+
         self.update_output(f"\n🤖 EXECUTING WEB AUTOMATION\n", "info")
         self.update_output(f"📋 Command: {command}\n", "info")
-        
+
         def run_automation():
             try:
                 result = self.web_automator.execute_task(command, interactive=False)
-                
+
                 if result.get('success'):
                     self.update_output(f"\n✅ Task completed successfully!\n", "success")
                     self.update_output(f"📊 Success rate: {result['successful_steps']}/{result['total_steps']}\n", "info")
                 else:
                     self.update_output(f"\n⚠️  Task completed with issues\n", "warning")
-                    
+
                 for i, step_result in enumerate(result.get('results', []), 1):
                     if step_result.get('success'):
                         self.update_output(f"   Step {i}: ✅ {step_result.get('message', 'Done')}\n", "success")
                     else:
                         self.update_output(f"   Step {i}: ❌ {step_result.get('error', 'Failed')}\n", "error")
-                
+
                 self.web_auto_input.delete(0, tk.END)
-                
+
             except Exception as e:
                 self.update_output(f"❌ Error: {str(e)}\n", "error")
-        
+
         thread = threading.Thread(target=run_automation, daemon=True)
         thread.start()
-    
+
     def quick_web_automation(self, command):
         """Quick web automation action"""
         if not self.web_automator:
             self.update_output("❌ Web automation not available\n", "error")
             return
-        
+
         self.web_auto_input.delete(0, tk.END)
         self.web_auto_input.insert(0, command)
         self.execute_web_automation()
-    
+
     def initialize_web_browser(self):
         """Initialize the web browser"""
         if not self.web_automator:
             self.update_output("❌ Web automation not available\n", "error")
             return
-        
+
         self.update_output("🌐 Initializing browser...\n", "info")
-        
+
         def init():
             try:
                 if self.web_automator.initialize_browser():
@@ -4158,29 +4158,29 @@ Based on OthersideAI's self-operating-computer framework
                     self.update_output("❌ Failed to initialize browser\n", "error")
             except Exception as e:
                 self.update_output(f"❌ Error: {str(e)}\n", "error")
-        
+
         thread = threading.Thread(target=init, daemon=True)
         thread.start()
-    
+
     def close_web_browser(self):
         """Close the web browser"""
         if not self.web_automator:
             self.update_output("❌ Web automation not available\n", "error")
             return
-        
+
         try:
             self.web_automator.close_browser()
             self.update_output("🔒 Browser closed\n", "info")
         except Exception as e:
             self.update_output(f"❌ Error closing browser: {str(e)}\n", "error")
-    
+
     def take_web_screenshot(self):
         """Take a screenshot of the current page"""
         import time
         if not self.web_automator:
             self.update_output("❌ Web automation not available\n", "error")
             return
-        
+
         try:
             filename = f"web_screenshot_{int(time.time())}.png"
             if self.web_automator.take_screenshot(filename):
@@ -4216,10 +4216,10 @@ Based on OthersideAI's self-operating-computer framework
         if self.processing:
             messagebox.showwarning("Busy", "Please wait for the current command to finish.")
             return
-        
+
         self.processing = True
         self.update_status("🔒 Locking...", "#f9e2af")
-        
+
         def lock_thread():
             try:
                 self.update_output(f"\n{'=' * 60}\n", "info")
@@ -4232,27 +4232,27 @@ Based on OthersideAI's self-operating-computer framework
                 self.update_status("❌ Error", "#f38ba8")
             finally:
                 self.processing = False
-        
+
         threading.Thread(target=lock_thread, daemon=True).start()
-    
+
     def direct_shutdown_system(self):
         """Directly shutdown the system without going through AI parsing"""
         if self.processing:
             messagebox.showwarning("Busy", "Please wait for the current command to finish.")
             return
-        
+
         # Confirm shutdown action
         confirm = messagebox.askyesno(
             "Confirm Shutdown",
             "Are you sure you want to shutdown the computer?\n\nThe system will shutdown in 10 seconds."
         )
-        
+
         if not confirm:
             return
-        
+
         self.processing = True
         self.update_status("⚠️ Shutting down...", "#f38ba8")
-        
+
         def shutdown_thread():
             try:
                 self.update_output(f"\n{'=' * 60}\n", "info")
@@ -4265,7 +4265,7 @@ Based on OthersideAI's self-operating-computer framework
                 self.update_status("❌ Error", "#f38ba8")
             finally:
                 self.processing = False
-        
+
         threading.Thread(target=shutdown_thread, daemon=True).start()
 
     def execute_command(self):
@@ -4296,7 +4296,7 @@ Based on OthersideAI's self-operating-computer framework
                     'command': command,
                     'timestamp': datetime.now().isoformat()
                 })
-            
+
             self.update_output(f"\n{'=' * 60}\n", "info")
             self.update_output(f"📝 You: {command}\n", "command")
             self.update_output(f"{'=' * 60}\n\n", "info")
@@ -4317,7 +4317,7 @@ Based on OthersideAI's self-operating-computer framework
                         f"Error: {error_msg}"
                     )
                     self.update_output(f"🤖 VATSAL: {vatsal_response}\n", "error")
-                    
+
                     # Speak error response if voice is enabled
                     if self.voice_commander and self.voice_enabled:
                         self.voice_commander.speak(vatsal_response)
@@ -4339,7 +4339,7 @@ Based on OthersideAI's self-operating-computer framework
                         'result': str(result['message']),
                         'timestamp': datetime.now().isoformat()
                     })
-                
+
                 # Get VATSAL response if mode is enabled
                 if self.vatsal_mode:
                     vatsal_response = self.get_vatsal_response(command, result['message'])
@@ -4370,14 +4370,14 @@ Based on OthersideAI's self-operating-computer framework
                         'error': str(result['message']),
                         'timestamp': datetime.now().isoformat()
                     })
-                
+
                 if self.vatsal_mode:
                     vatsal_response = self.vatsal.process_with_personality(
                         command,
                         f"Error: {result['message']}"
                     )
                     self.update_output(f"🤖 VATSAL: {vatsal_response}\n", "error")
-                    
+
                     # Speak error response if voice is enabled
                     if self.voice_commander and self.voice_enabled:
                         self.voice_commander.speak(vatsal_response)
@@ -4394,7 +4394,7 @@ Based on OthersideAI's self-operating-computer framework
                     'error': str(e),
                     'timestamp': datetime.now().isoformat()
                 })
-            
+
             if self.vatsal_mode:
                 self.update_output(f"🤖 VATSAL: Apologies, Sir. Encountered an unexpected error: {str(e)}\n", "error")
             else:
@@ -4444,55 +4444,55 @@ Based on OthersideAI's self-operating-computer framework
         if not self.voice_commander:
             messagebox.showerror("Voice Error", "Voice commander not available")
             return
-        
+
         if self.processing:
             messagebox.showwarning("Busy", "Please wait for the current command to finish.")
             return
-        
+
         def voice_thread():
             self.update_output("\n🎤 Listening for voice command...\n", "info")
             self.update_status("🎤 Listening...", "#f9e2af")
             self.root.after(0, lambda: self.voice_listen_btn.config(bg="#f38ba8"))
-            
+
             result = self.voice_commander.listen_once(timeout=10)
-            
+
             self.root.after(0, lambda: self.voice_listen_btn.config(bg="#a6e3a1"))
-            
+
             if result['success'] and result['command']:
                 self.update_output(f"✅ Heard: {result['command']}\n\n", "success")
-                
+
                 # Execute the command
                 self.command_input.delete(0, tk.END)
                 self.command_input.insert(0, result['command'])
                 self.execute_command()
-                
+
             else:
                 self.update_output(f"❌ {result['message']}\n", "error")
                 self.update_status("✅ Ready", "#a6e3a1")
-        
+
         thread = threading.Thread(target=voice_thread, daemon=True)
         thread.start()
-    
+
     def toggle_continuous_listening(self):
         """Toggle continuous voice listening mode"""
         if not self.voice_commander:
             messagebox.showerror("Voice Error", "Voice commander not available")
             return
-        
+
         if not self.voice_listening:
             # Start continuous listening (callback already set during init)
             result = self.voice_commander.start_continuous_listening()
-            
+
             if result['success']:
                 self.voice_listening = True
                 self.voice_continuous_btn.config(bg="#a6e3a1", text="🔇")
-                
+
                 # Show wake word status
                 wake_words = ", ".join(self.voice_commander.get_wake_words()[:3])
                 wake_status = ""
                 if self.voice_commander.wake_word_enabled:
                     wake_status = f"\n💬 Wake words: {wake_words}\n"
-                
+
                 self.update_output("\n🔊 Continuous voice listening ENABLED\n", "success")
                 self.update_output(wake_status, "info")
                 self.update_output("Say 'stop listening' to disable\n\n", "info")
@@ -4502,21 +4502,21 @@ Based on OthersideAI's self-operating-computer framework
         else:
             # Stop continuous listening
             result = self.voice_commander.stop_continuous_listening()
-            
+
             if result['success']:
                 self.voice_listening = False
                 self.voice_continuous_btn.config(bg="#45475a", text="🔊")
                 self.update_output("\n🔇 Continuous voice listening DISABLED\n", "warning")
                 self.update_status("✅ Ready", "#a6e3a1")
-    
+
     def toggle_wake_word(self):
         """Toggle wake word detection on/off"""
         if not self.voice_commander:
             messagebox.showerror("Voice Error", "Voice commander not available")
             return
-        
+
         result = self.voice_commander.toggle_wake_word()
-        
+
         if result['success']:
             if result['enabled']:
                 self.wake_word_btn.config(bg="#a6e3a1")
@@ -4528,41 +4528,41 @@ Based on OthersideAI's self-operating-computer framework
                 self.wake_word_btn.config(bg="#f9e2af")
                 self.update_output(f"\n💬 Wake word DISABLED\n", "warning")
                 self.update_output(f"Continuous listening will respond to all speech\n\n", "info")
-    
+
     def handle_voice_command(self, command):
         """Handle voice command from continuous listening"""
         print(f"📞 Callback received command: '{command}'")
         # Execute on main thread for thread safety
         self.root.after(0, lambda: self._execute_voice_command(command))
-    
+
     def _execute_voice_command(self, command):
         """Internal method to execute voice command on main thread"""
         print(f"🎯 Executing voice command on main thread: '{command}'")
         self.update_output(f"\n🎤 Voice Command: {command}\n", "info")
-        
+
         # Insert command and execute
         self.command_input.delete(0, tk.END)
         self.command_input.insert(0, command)
-        
+
         # Execute the command
         print(f"⚙️  Calling execute_command()...")
         self.execute_command()
         print(f"✅ execute_command() completed")
-    
+
     def toggle_sound_effects(self):
         """Toggle voice sound effects on/off"""
         if not self.voice_commander:
             messagebox.showerror("Voice Error", "Voice commander not available")
             return
-        
+
         result = self.voice_commander.toggle_sound_effects()
-        
+
         if result['success']:
             if result['enabled']:
                 self.sound_fx_btn.config(bg="#a6e3a1", text="🔊")
                 self.update_output(f"\n🔊 Voice sound effects ENABLED\n", "success")
                 self.update_output(f"You'll hear beeps during voice interactions\n", "info")
-                
+
                 # Play success sound to demonstrate
                 if self.voice_commander.sound_effects:
                     self.voice_commander.sound_effects.play_sound('success', async_play=True)
@@ -4570,7 +4570,7 @@ Based on OthersideAI's self-operating-computer framework
                 self.sound_fx_btn.config(bg="#45475a", text="🔇")
                 self.update_output(f"\n🔇 Voice sound effects DISABLED\n", "warning")
                 self.update_output(f"Voice commands will work silently\n", "info")
-    
+
     def toggle_gesture_voice(self):
         """Toggle gesture-activated voice listening (V sign → voice)"""
         if not self.gesture_voice_active:
@@ -4583,7 +4583,7 @@ Based on OthersideAI's self-operating-computer framework
             except Exception as e:
                 messagebox.showerror("Gesture Voice Error", f"Failed to initialize: {e}")
                 return
-            
+
             # Start gesture voice activator in background thread
             def run_gesture_voice():
                 try:
@@ -4591,7 +4591,7 @@ Based on OthersideAI's self-operating-computer framework
                 except Exception as e:
                     print(f"❌ Gesture voice error: {e}")
                     self.root.after(0, self._on_gesture_voice_stopped)
-            
+
             threading.Thread(target=run_gesture_voice, daemon=True).start()
             self.gesture_voice_active = True
             self.gesture_voice_btn.config(bg="#00ff88", text="✌️")
@@ -4610,29 +4610,29 @@ Based on OthersideAI's self-operating-computer framework
             if self.gesture_voice_activator:
                 self.gesture_voice_activator.stop()
             self._on_gesture_voice_stopped()
-    
+
     def _on_gesture_voice_stopped(self):
         """Callback when gesture voice activator stops (thread-safe)"""
         self.gesture_voice_active = False
         self.gesture_voice_btn.config(bg="#ffd700", text="✌️")
         self.update_output("\n✌️  Gesture Voice Activator DISABLED\n", "warning")
         self.update_status("✅ Ready", "#a6e3a1")
-    
+
     def handle_gesture_speech(self, speech_text):
         """Handle speech recognized from gesture activation (thread-safe)"""
         print(f"✌️ Gesture speech received: '{speech_text}'")
         # Route to existing voice command handler on main thread
         self.root.after(0, lambda: self.handle_voice_command(speech_text))
-    
+
     def toggle_gesture(self):
         """Toggle gesture recognition on/off (Two V signs for VATSAL greeting)"""
         if not self.gesture_assistant:
             messagebox.showerror("Gesture Error", "Hand Gesture Detector not available")
             return
-        
+
         if not self.gesture_running:
             result = self.gesture_assistant.start(camera_index=0)
-            
+
             if result['success']:
                 self.gesture_running = True
                 self.gesture_btn.config(bg="#a6e3a1", text="✌️✌️")
@@ -4651,12 +4651,12 @@ Based on OthersideAI's self-operating-computer framework
                 messagebox.showerror("Camera Error", result['message'])
         else:
             result = self.gesture_assistant.stop()
-            
+
             if result['success']:
                 self.gesture_running = False
                 self.gesture_btn.config(bg="#f9e2af", text="✌️")
                 self.update_output("\n✌️  Hand Gesture Detection DISABLED\n", "warning")
-                
+
                 stats = self.gesture_assistant.get_stats()
                 self.update_output(f"\n📊 Session Statistics:\n", "info")
                 self.update_output(f"• VATSAL detected: {stats['vatsal_detected']}\n", "info")
@@ -4664,11 +4664,11 @@ Based on OthersideAI's self-operating-computer framework
                 self.update_output(f"• Open palm: {stats['open_palm_detected']}\n", "info")
                 self.update_output(f"• Peace signs: {stats['peace_sign_detected']}\n\n", "info")
                 self.update_status("✅ Ready", "#a6e3a1")
-    
+
     def _handle_gesture_command(self, command):
         """
         Handle voice command from gesture detection.
-        
+
         THREAD SAFETY: This is called from the detection worker thread,
         so we use root.after(0, ...) to marshal execution to the main thread
         before touching any Tkinter widgets.
@@ -4676,18 +4676,18 @@ Based on OthersideAI's self-operating-computer framework
         print(f"✋ Gesture command received: '{command}'")
         # Marshal to main thread for thread-safe widget manipulation
         self.root.after(0, lambda: self._execute_voice_command(command))
-    
+
     def show_sound_settings(self):
         """Show sound effects settings dialog"""
         if not self.voice_commander or not self.voice_commander.sound_effects:
             messagebox.showerror("Sound Error", "Sound effects not available")
             return
-        
+
         settings_window = tk.Toplevel(self.root)
         settings_window.title("🔊 Sound Effects Settings")
         settings_window.geometry("500x450")
         settings_window.configure(bg="#1a1a2e")
-        
+
         header = tk.Label(settings_window,
                          text="🔊 Voice Sound Effects Settings",
                          bg="#1a1a2e",
@@ -4695,19 +4695,19 @@ Based on OthersideAI's self-operating-computer framework
                          font=("Segoe UI", 16, "bold"),
                          pady=20)
         header.pack()
-        
+
         # Sound effects status
         status_frame = tk.Frame(settings_window, bg="#2a2a3e", relief="flat")
         status_frame.pack(fill="x", padx=20, pady=10)
-        
+
         sounds_list = self.voice_commander.list_sound_effects()
         status_text = "🎵 Available Sound Effects:\n\n"
-        
+
         if sounds_list['success']:
             for name, info in sounds_list['sounds'].items():
                 status = "✅" if info['exists'] else "❌"
                 status_text += f"{status} {name.replace('_', ' ').title()}\n"
-        
+
         status_label = tk.Label(status_frame,
                                text=status_text,
                                bg="#2a2a3e",
@@ -4717,25 +4717,25 @@ Based on OthersideAI's self-operating-computer framework
                                pady=15,
                                padx=15)
         status_label.pack()
-        
+
         # Volume control
         volume_frame = tk.Frame(settings_window, bg="#1a1a2e")
         volume_frame.pack(fill="x", padx=20, pady=15)
-        
+
         volume_label = tk.Label(volume_frame,
                                text="🎚️ Volume:",
                                bg="#1a1a2e",
                                fg="#ffffff",
                                font=("Segoe UI", 12, "bold"))
         volume_label.pack(side="left", padx=10)
-        
+
         current_volume = self.voice_commander.sound_effects.volume if self.voice_commander.sound_effects else 0.8
-        
+
         def update_volume(val):
             volume = float(val)
             self.voice_commander.set_sound_volume(volume)
             volume_value.config(text=f"{int(volume * 100)}%")
-        
+
         volume_slider = tk.Scale(volume_frame,
                                 from_=0.0,
                                 to=1.0,
@@ -4748,18 +4748,18 @@ Based on OthersideAI's self-operating-computer framework
                                 length=250)
         volume_slider.set(current_volume)
         volume_slider.pack(side="left", padx=10)
-        
+
         volume_value = tk.Label(volume_frame,
                                text=f"{int(current_volume * 100)}%",
                                bg="#1a1a2e",
                                fg="#a6e3a1",
                                font=("Segoe UI", 11, "bold"))
         volume_value.pack(side="left", padx=10)
-        
+
         # Test sounds section
         test_frame = tk.Frame(settings_window, bg="#2a2a3e", relief="flat")
         test_frame.pack(fill="x", padx=20, pady=15)
-        
+
         test_header = tk.Label(test_frame,
                               text="🎵 Test Sounds:",
                               bg="#2a2a3e",
@@ -4767,15 +4767,15 @@ Based on OthersideAI's self-operating-computer framework
                               font=("Segoe UI", 12, "bold"),
                               pady=10)
         test_header.pack()
-        
+
         test_buttons_frame = tk.Frame(test_frame, bg="#2a2a3e")
         test_buttons_frame.pack(pady=10)
-        
+
         sound_names = ['wake_word', 'listening', 'processing', 'success', 'error']
-        
+
         def play_test_sound(sound_name):
             self.voice_commander.sound_effects.play_sound(sound_name, async_play=True)
-        
+
         for sound_name in sound_names:
             btn_text = sound_name.replace('_', ' ').title()
             test_btn = tk.Button(test_buttons_frame,
@@ -4790,11 +4790,11 @@ Based on OthersideAI's self-operating-computer framework
                                 pady=8)
             test_btn.pack(side="left", padx=5)
             self.add_hover_effect(test_btn, "#313244", "#45475a")
-        
+
         # Info section
         info_frame = tk.Frame(settings_window, bg="#1a1a2e")
         info_frame.pack(fill="x", padx=20, pady=15)
-        
+
         info_text = """
 💡 Tips:
 • Click sound names above to test them
@@ -4802,7 +4802,7 @@ Based on OthersideAI's self-operating-computer framework
 • Sound effects play during voice interactions
 • Toggle 🔊 button to enable/disable sounds
         """
-        
+
         info_label = tk.Label(info_frame,
                              text=info_text,
                              bg="#1a1a2e",
@@ -4810,7 +4810,7 @@ Based on OthersideAI's self-operating-computer framework
                              font=("Segoe UI", 10),
                              justify="left")
         info_label.pack()
-        
+
         # Close button
         close_btn = tk.Button(settings_window,
                              text="✅ Done",
@@ -5056,15 +5056,15 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
         if not self.security_dashboard:
             messagebox.showerror("Error", "Security Dashboard not initialized")
             return
-        
+
         sec_window = tk.Toplevel(self.root)
         sec_window.title("🛡️ AI-Powered Security Dashboard")
         sec_window.geometry("1000x700")
         sec_window.configure(bg="#1a1a2e")
-        
+
         header_frame = tk.Frame(sec_window, bg="#0f0f1e")
         header_frame.pack(fill="x", pady=(0, 10))
-        
+
         header = tk.Label(header_frame,
                           text="🛡️ Security Dashboard with Gemini AI",
                           bg="#0f0f1e",
@@ -5072,23 +5072,23 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                           font=("Segoe UI", 18, "bold"),
                           pady=15)
         header.pack()
-        
+
         subtitle = tk.Label(header_frame,
                            text="🤖 AI-Powered Threat Analysis • 🔐 Enhanced Security Features",
                            bg="#0f0f1e",
                            fg="#a6adc8",
                            font=("Segoe UI", 10, "italic"))
         subtitle.pack()
-        
+
         # Main content area
         main_frame = tk.Frame(sec_window, bg="#1a1a2e")
         main_frame.pack(fill="both", expand=True, padx=20, pady=10)
-        
+
         # Left panel - Actions
         left_panel = tk.Frame(main_frame, bg="#1e1e2e", width=300)
         left_panel.pack(side="left", fill="y", padx=(0, 10))
         left_panel.pack_propagate(False)
-        
+
         actions_label = tk.Label(left_panel,
                                 text="🎯 Security Actions",
                                 bg="#1e1e2e",
@@ -5096,7 +5096,7 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                                 font=("Segoe UI", 12, "bold"),
                                 pady=10)
         actions_label.pack()
-        
+
         # Security action buttons
         security_actions = [
             ("📊 Security Status", self.show_security_status),
@@ -5106,7 +5106,7 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
             ("📄 Full AI Report", self.show_ai_security_report),
             ("❓ Ask Security Question", self.ask_security_question)
         ]
-        
+
         for text, command in security_actions:
             btn = tk.Button(left_panel,
                            text=text,
@@ -5120,11 +5120,11 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                            padx=15,
                            pady=12)
             btn.pack(fill="x", padx=10, pady=5)
-        
+
         # Right panel - Display area
         right_panel = tk.Frame(main_frame, bg="#1e1e2e")
         right_panel.pack(side="right", fill="both", expand=True)
-        
+
         display_label = tk.Label(right_panel,
                                 text="📋 Security Information",
                                 bg="#1e1e2e",
@@ -5132,7 +5132,7 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
                                 font=("Segoe UI", 12, "bold"),
                                 pady=10)
         display_label.pack()
-        
+
         # Display area
         self.security_display = scrolledtext.ScrolledText(
             right_panel,
@@ -5145,7 +5145,7 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
             pady=15
         )
         self.security_display.pack(fill="both", expand=True, padx=10, pady=10)
-        
+
         # Show initial status
         status = self.security_dashboard.get_comprehensive_security_status()
         status_text = f"""
@@ -5181,7 +5181,7 @@ Authenticated: {status['dashboard_info']['authenticated']}
 Click the buttons on the left to access AI-powered security features.
         """
         self.security_display.insert("1.0", status_text)
-        
+
         close_btn = tk.Button(sec_window,
                               text="Close",
                               bg="#89b4fa",
@@ -5193,35 +5193,35 @@ Click the buttons on the left to access AI-powered security features.
                               padx=30,
                               pady=10)
         close_btn.pack(pady=20)
-    
+
     def show_security_status(self):
         """Show current security status"""
         if not hasattr(self, 'security_display'):
             messagebox.showinfo("Info", "Please open Security Dashboard first")
             return
-        
+
         self.security_display.delete("1.0", "end")
         self.security_display.insert("1.0", "Loading security status...\n")
         self.security_display.update()
-        
+
         status = self.security_dashboard.get_comprehensive_security_status()
         report = self.security_dashboard.generate_security_report()
-        
+
         self.security_display.delete("1.0", "end")
         self.security_display.insert("1.0", report)
-    
+
     def show_ai_threat_analysis(self):
         """Show AI-powered threat analysis"""
         if not hasattr(self, 'security_display'):
             messagebox.showinfo("Info", "Please open Security Dashboard first")
             return
-        
+
         self.security_display.delete("1.0", "end")
         self.security_display.insert("1.0", "🤖 Analyzing threats with Gemini AI...\nThis may take a moment...\n")
         self.security_display.update()
-        
+
         result = self.security_dashboard.ai_analyze_threats()
-        
+
         self.security_display.delete("1.0", "end")
         if result.get("success"):
             self.security_display.insert("1.0", f"""
@@ -5235,19 +5235,19 @@ Analysis Time: {result.get('timestamp', 'N/A')}
             """)
         else:
             self.security_display.insert("1.0", f"⚠️ Error: {result.get('message', 'Unknown error')}")
-    
+
     def show_ai_security_recommendations(self):
         """Show AI-powered security recommendations"""
         if not hasattr(self, 'security_display'):
             messagebox.showinfo("Info", "Please open Security Dashboard first")
             return
-        
+
         self.security_display.delete("1.0", "end")
         self.security_display.insert("1.0", "🤖 Generating security recommendations with Gemini AI...\n")
         self.security_display.update()
-        
+
         result = self.security_dashboard.ai_security_recommendations()
-        
+
         self.security_display.delete("1.0", "end")
         if result.get("success"):
             self.security_display.insert("1.0", f"""
@@ -5261,19 +5261,19 @@ Analysis Time: {result.get('timestamp', 'N/A')}
             """)
         else:
             self.security_display.insert("1.0", f"⚠️ Error: {result.get('message', 'Unknown error')}")
-    
+
     def show_ai_anomaly_detection(self):
         """Show AI-powered anomaly detection"""
         if not hasattr(self, 'security_display'):
             messagebox.showinfo("Info", "Please open Security Dashboard first")
             return
-        
+
         self.security_display.delete("1.0", "end")
         self.security_display.insert("1.0", "🤖 Detecting anomalies with Gemini AI...\n")
         self.security_display.update()
-        
+
         result = self.security_dashboard.ai_detect_anomalies()
-        
+
         self.security_display.delete("1.0", "end")
         if result.get("success"):
             self.security_display.insert("1.0", f"""
@@ -5287,43 +5287,43 @@ Analysis Time: {result.get('timestamp', 'N/A')}
             """)
         else:
             self.security_display.insert("1.0", f"⚠️ Error: {result.get('message', 'Unknown error')}")
-    
+
     def show_ai_security_report(self):
         """Show comprehensive AI-enhanced security report"""
         if not hasattr(self, 'security_display'):
             messagebox.showinfo("Info", "Please open Security Dashboard first")
             return
-        
+
         self.security_display.delete("1.0", "end")
         self.security_display.insert("1.0", "🤖 Generating comprehensive AI security report...\nThis may take a moment...\n")
         self.security_display.update()
-        
+
         report = self.security_dashboard.ai_generate_security_report()
-        
+
         self.security_display.delete("1.0", "end")
         self.security_display.insert("1.0", report)
-    
+
     def ask_security_question(self):
         """Ask a natural language security question"""
         if not hasattr(self, 'security_display'):
             messagebox.showinfo("Info", "Please open Security Dashboard first")
             return
-        
+
         question = simpledialog.askstring(
             "Security Question",
             "Ask me anything about your security status:",
             parent=self.root
         )
-        
+
         if not question:
             return
-        
+
         self.security_display.delete("1.0", "end")
         self.security_display.insert("1.0", f"❓ Question: {question}\n\n🤖 Thinking...\n")
         self.security_display.update()
-        
+
         result = self.security_dashboard.ai_natural_language_query(question)
-        
+
         self.security_display.delete("1.0", "end")
         if result.get("success"):
             self.security_display.insert("1.0", f"""
@@ -6925,18 +6925,18 @@ Answered: {result.get('timestamp', 'N/A')}
 
 
     # ==================== Comprehensive Controller Methods ====================
-    
+
     def load_comprehensive_command(self, command):
         """Load a predefined command into the input"""
         self.comprehensive_input.delete(0, tk.END)
         self.comprehensive_input.insert(0, command)
         self.comprehensive_input.focus()
-    
+
     def show_quick_actions_menu(self):
         """Show the main quick actions menu"""
         self.quick_feature_view.pack_forget()
         self.quick_menu_view.pack(fill="both", expand=True)
-    
+
     def toggle_sidebar(self):
         """Toggle sidebar expanded/collapsed state"""
         if self.sidebar_expanded:
@@ -6944,26 +6944,26 @@ Answered: {result.get('timestamp', 'N/A')}
             self.sidebar.config(width=50)
             self.sidebar_toggle_btn.config(text="▶")
             self.sidebar_title.pack_forget()
-            
+
             # Update button text to show only icons
             for btn, name, color in self.sidebar_buttons:
                 icon = [c for c in self.sidebar_categories if c[1] == name][0][0]
                 btn.config(text=icon, width=3)
-            
+
             self.sidebar_expanded = False
         else:
             # Expand sidebar
             self.sidebar.config(width=120)
             self.sidebar_toggle_btn.config(text="◀")
             self.sidebar_title.pack(pady=(5, 10))
-            
+
             # Restore full text
             for btn, name, color in self.sidebar_buttons:
                 icon = [c for c in self.sidebar_categories if c[1] == name][0][0]
                 btn.config(text=f"{icon}\n{name}", width=10)
-            
+
             self.sidebar_expanded = True
-    
+
     def scroll_to_category(self, category):
         """Scroll to and highlight a specific category"""
         # Update active category highlighting
@@ -6973,7 +6973,7 @@ Answered: {result.get('timestamp', 'N/A')}
                 self.active_sidebar_category = category
             else:
                 btn.config(bg="#313244", relief="flat", bd=0)
-        
+
         # Map category names to quick actions headers
         category_map = {
             "SYSTEM": "🖥️ SYSTEM",
@@ -6981,9 +6981,9 @@ Answered: {result.get('timestamp', 'N/A')}
             "WORK": "📁 PRODUCTIVITY",
             "MEDIA": "🎵 MEDIA"
         }
-        
+
         target_header = category_map.get(category, "")
-        
+
         # Scroll to the category header
         if target_header in self.category_headers:
             header_widget = self.category_headers[target_header]
@@ -6997,31 +6997,31 @@ Answered: {result.get('timestamp', 'N/A')}
                     y_pos = header_widget.winfo_y()
                     canvas_height = self.menu_canvas.winfo_height()
                     scroll_region = bbox[3]  # Total height
-                    
+
                     if scroll_region > canvas_height:
                         # Scroll to position
                         fraction = y_pos / scroll_region
                         self.menu_canvas.yview_moveto(fraction)
             except Exception as e:
                 print(f"Scroll error: {e}")
-    
+
     def show_quick_action_feature(self, title, description, color, feature_id):
         """Show the selected quick action feature"""
         # Hide menu, show feature view
         self.quick_menu_view.pack_forget()
         self.quick_feature_view.pack(fill="both", expand=True)
-        
+
         # Update title
         self.feature_title.config(text=title, fg=color)
-        
+
         # Clear previous content
         for widget in self.feature_content.winfo_children():
             widget.destroy()
-        
+
         # Create feature-specific content
         content_inner = tk.Frame(self.feature_content, bg="#181825")
         content_inner.pack(fill="both", expand=True, padx=15, pady=15)
-        
+
         # Description
         desc_label = tk.Label(content_inner,
                              text=description,
@@ -7030,7 +7030,7 @@ Answered: {result.get('timestamp', 'N/A')}
                              font=("Segoe UI", 10),
                              wraplength=350)
         desc_label.pack(pady=(0, 20))
-        
+
         # Feature-specific content
         if feature_id == "screenshot":
             self.create_screenshot_feature(content_inner, color)
@@ -7064,23 +7064,23 @@ Answered: {result.get('timestamp', 'N/A')}
             self.create_macro_recorder_feature(content_inner, color)
         elif feature_id == "mobile_control":
             self.create_mobile_control_feature(content_inner, color)
-    
+
     def create_workflow_builder_feature(self, parent, color):
         """Create workflow builder feature UI"""
         tk.Label(parent, text="💬 Workflow Builder", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         info_text = "Build complex automation workflows using plain English. The AI will convert your descriptions into executable steps."
         tk.Label(parent, text=info_text, bg="#181825", fg="#a6adc8",
                 font=("Segoe UI", 9), wraplength=350, justify="left").pack(pady=(0, 20))
-        
+
         btn = tk.Button(parent, text="💬 Open Workflow Builder",
                        bg=color, fg="#0f0f1e",
                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                        command=self.show_workflow_builder,
                        padx=30, pady=12)
         btn.pack(pady=10)
-    
+
     def create_macro_recorder_feature(self, parent, color):
         """Create macro recorder feature placeholder"""
         tk.Label(parent, text="🎬 Macro Recorder", bg="#181825", fg=color,
@@ -7089,7 +7089,7 @@ Answered: {result.get('timestamp', 'N/A')}
                 bg="#181825", fg="#a6adc8", font=("Segoe UI", 9)).pack(pady=(0, 20))
         tk.Label(parent, text="Use the Macro Recorder tab for full access",
                 bg="#181825", fg="#6c7086", font=("Segoe UI", 9, "italic")).pack()
-    
+
     def create_mobile_control_feature(self, parent, color):
         """Create mobile control feature placeholder"""
         tk.Label(parent, text="📱 Mobile Control", bg="#181825", fg=color,
@@ -7098,16 +7098,16 @@ Answered: {result.get('timestamp', 'N/A')}
                 bg="#181825", fg="#a6adc8", font=("Segoe UI", 9)).pack(pady=(0, 20))
         tk.Label(parent, text="Use the Mobile Companion tab for full access",
                 bg="#181825", fg="#6c7086", font=("Segoe UI", 9, "italic")).pack()
-    
+
     def create_hand_gesture_feature(self, parent, color):
         """Create hand gesture control feature UI"""
         tk.Label(parent, text="✋ Hand Gesture Control", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         info_text = "Control your mouse using hand gestures via webcam. Features 7 gestures: cursor movement, left/right click, scroll, drag, and volume control."
         tk.Label(parent, text=info_text, bg="#181825", fg="#a6adc8",
                 font=("Segoe UI", 9), wraplength=350, justify="left").pack(pady=(0, 20))
-        
+
         # Launch button
         btn = tk.Button(parent, text="🎥 Launch Hand Gesture Controller",
                        bg=color, fg="#0f0f1e",
@@ -7115,7 +7115,7 @@ Answered: {result.get('timestamp', 'N/A')}
                        command=self.launch_hand_gesture_controller,
                        padx=30, pady=12)
         btn.pack(pady=10)
-        
+
         # Info labels
         tk.Label(parent, text="📋 Requirements:", bg="#181825", fg="#89dceb",
                 font=("Segoe UI", 9, "bold")).pack(pady=(15, 5), anchor="w")
@@ -7125,28 +7125,28 @@ Answered: {result.get('timestamp', 'N/A')}
                 font=("Segoe UI", 8)).pack(anchor="w", padx=20)
         tk.Label(parent, text="• Plain background recommended", bg="#181825", fg="#a6adc8",
                 font=("Segoe UI", 8)).pack(anchor="w", padx=20)
-        
+
         tk.Label(parent, text="⌨️ Controls:", bg="#181825", fg="#89dceb",
                 font=("Segoe UI", 9, "bold")).pack(pady=(10, 5), anchor="w")
         tk.Label(parent, text="• Press 'Q' to quit", bg="#181825", fg="#a6adc8",
                 font=("Segoe UI", 8)).pack(anchor="w", padx=20)
         tk.Label(parent, text="• Press 'S' to toggle stats", bg="#181825", fg="#a6adc8",
                 font=("Segoe UI", 8)).pack(anchor="w", padx=20)
-    
+
     def launch_hand_gesture_controller(self):
         """Launch the hand gesture controller in a separate thread"""
         def run_controller():
             try:
                 from modules.automation.hand_gesture_controller import HandGestureController
-                
+
                 self.log_to_console("🎥 Initializing Hand Gesture Controller...")
-                
+
                 controller = HandGestureController()
-                
+
                 # Check dependencies
                 deps = controller.check_dependencies()
                 all_available = all(deps.values())
-                
+
                 if not all_available:
                     missing = [name for name, available in deps.items() if not available]
                     error_msg = f"Missing dependencies: {', '.join(missing)}\n"
@@ -7154,12 +7154,12 @@ Answered: {result.get('timestamp', 'N/A')}
                     self.log_to_console(f"❌ {error_msg}")
                     messagebox.showerror("Missing Dependencies", error_msg)
                     return
-                
+
                 self.log_to_console("✅ All dependencies available")
-                
+
                 # Initialize controller
                 result = controller.initialize()
-                
+
                 if not result["success"]:
                     error_msg = result.get("error", "Unknown error")
                     help_text = result.get("help", "")
@@ -7167,7 +7167,7 @@ Answered: {result.get('timestamp', 'N/A')}
                     self.log_to_console(f"❌ Initialization failed: {error_msg}")
                     messagebox.showerror("Initialization Failed", full_msg)
                     return
-                
+
                 self.log_to_console(f"✅ {result['message']}")
                 self.log_to_console(f"📺 Screen: {result['screen_size']}")
                 self.log_to_console(f"🎥 {result['camera']}")
@@ -7181,10 +7181,10 @@ Answered: {result.get('timestamp', 'N/A')}
                 self.log_to_console("  ✊ Closed fist         → Drag & drop")
                 self.log_to_console("\n⌨️  Press 'Q' to quit")
                 self.log_to_console("=" * 60 + "\n")
-                
+
                 # Start controller (this will open a VNC window)
                 result = controller.start(show_video=True)
-                
+
                 if result["success"]:
                     stats = result["stats"]
                     self.log_to_console("✅ Hand Gesture Controller stopped")
@@ -7197,201 +7197,201 @@ Answered: {result.get('timestamp', 'N/A')}
                     error_msg = result.get("error", "Unknown error")
                     self.log_to_console(f"❌ Error: {error_msg}")
                     messagebox.showerror("Runtime Error", error_msg)
-                    
+
             except Exception as e:
                 error_msg = f"Failed to launch hand gesture controller: {str(e)}"
                 self.log_to_console(f"❌ {error_msg}")
                 messagebox.showerror("Error", error_msg)
-        
+
         # Run in separate thread to avoid blocking GUI
         thread = threading.Thread(target=run_controller, daemon=True)
         thread.start()
-    
+
     def create_screenshot_feature(self, parent, color):
         """Create screenshot feature UI"""
-        tk.Label(parent, text="📸 Screenshot Options", bg="#181825", fg=color, 
+        tk.Label(parent, text="📸 Screenshot Options", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         btn = tk.Button(parent, text="📷 Capture Full Screen", bg="#313244", fg="#cdd6f4",
                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                        command=lambda: self.load_comprehensive_command("Take a screenshot"),
                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
-        
+
         btn2 = tk.Button(parent, text="🖼️ Capture Window", bg="#313244", fg="#cdd6f4",
                         font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                         command=lambda: self.load_comprehensive_command("Take screenshot of active window"),
                         padx=20, pady=12)
         btn2.pack(fill="x", pady=5)
         self.add_hover_effect(btn2, "#313244", "#45475a")
-    
+
     def create_lock_feature(self, parent, color):
         """Create lock PC feature UI"""
         tk.Label(parent, text="🔒 System Lock", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         tk.Label(parent, text="⚠️ This will lock your computer", bg="#181825", fg="#fab387",
                 font=("Segoe UI", 9)).pack(pady=5)
-        
+
         btn = tk.Button(parent, text="🔒 Lock Computer Now", bg="#f38ba8", fg="#0f0f1e",
                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                        command=lambda: self.load_comprehensive_command("Lock the computer"),
                        padx=20, pady=12)
         btn.pack(fill="x", pady=10)
         self.add_hover_effect(btn, "#f38ba8", "#f5c2e7")
-    
+
     def create_taskmanager_feature(self, parent, color):
         """Create task manager feature UI"""
         tk.Label(parent, text="📊 Task Manager", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         btn = tk.Button(parent, text="📊 Open Task Manager", bg="#313244", fg="#cdd6f4",
                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                        command=lambda: self.load_comprehensive_command("Open Task Manager"),
                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
-    
+
     def create_chrome_feature(self, parent, color):
         """Create Chrome feature UI"""
         tk.Label(parent, text="🌍 Chrome Browser", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         btn = tk.Button(parent, text="🌍 Open Chrome", bg="#313244", fg="#cdd6f4",
                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                        command=lambda: self.load_comprehensive_command("Open Chrome and go to Google"),
                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
-    
+
     def create_google_feature(self, parent, color):
         """Create Google search feature UI"""
         tk.Label(parent, text="🔍 Google Search", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         search_entry = tk.Entry(parent, bg="#313244", fg="#ffffff", font=("Segoe UI", 10),
                                relief="flat", insertbackground="#f9e2af")
         search_entry.insert(0, "Python tutorials")
         search_entry.pack(fill="x", pady=5, ipady=8)
-        
+
         btn = tk.Button(parent, text="🔍 Search Google", bg="#a6e3a1", fg="#0f0f1e",
                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                        command=lambda: self.load_comprehensive_command(f"Search Google for {search_entry.get()}"),
                        padx=20, pady=12)
         btn.pack(fill="x", pady=10)
         self.add_hover_effect(btn, "#a6e3a1", "#94e2d5")
-    
+
     def create_gmail_feature(self, parent, color):
         """Create Gmail feature UI"""
         tk.Label(parent, text="📧 Gmail", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         btn = tk.Button(parent, text="📧 Open Gmail", bg="#313244", fg="#cdd6f4",
                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                        command=lambda: self.load_comprehensive_command("Open Gmail in browser"),
                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
-    
+
     def create_whatsapp_feature(self, parent, color):
         """Create WhatsApp feature UI"""
         tk.Label(parent, text="💬 WhatsApp", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         btn = tk.Button(parent, text="💬 Open WhatsApp Web", bg="#313244", fg="#cdd6f4",
                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                        command=lambda: self.load_comprehensive_command("Open WhatsApp Web"),
                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
-    
+
     def create_vscode_feature(self, parent, color):
         """Create VS Code feature UI"""
         tk.Label(parent, text="📝 VS Code", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         btn = tk.Button(parent, text="📝 Launch VS Code", bg="#313244", fg="#cdd6f4",
                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                        command=lambda: self.load_comprehensive_command("Launch VS Code"),
                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
-    
+
     def create_explorer_feature(self, parent, color):
         """Create File Explorer feature UI"""
         tk.Label(parent, text="📂 File Explorer", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         btn = tk.Button(parent, text="📂 Open File Explorer", bg="#313244", fg="#cdd6f4",
                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                        command=lambda: self.load_comprehensive_command("Open File Explorer"),
                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
-    
+
     def create_notepad_feature(self, parent, color):
         """Create Notepad feature UI"""
         tk.Label(parent, text="🗒️ Notepad", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         btn = tk.Button(parent, text="🗒️ Open Notepad", bg="#313244", fg="#cdd6f4",
                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                        command=lambda: self.load_comprehensive_command("Open Notepad"),
                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
-    
+
     def create_spotify_feature(self, parent, color):
         """Create Spotify feature UI"""
         tk.Label(parent, text="🎵 Spotify", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         btn = tk.Button(parent, text="🎵 Launch Spotify", bg="#313244", fg="#cdd6f4",
                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                        command=lambda: self.load_comprehensive_command("Launch Spotify"),
                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
-    
+
     def create_youtube_feature(self, parent, color):
         """Create YouTube feature UI"""
         tk.Label(parent, text="🎬 YouTube", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         btn = tk.Button(parent, text="🎬 Open YouTube", bg="#313244", fg="#cdd6f4",
                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                        command=lambda: self.load_comprehensive_command("Open YouTube"),
                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
-    
+
     def create_volume_feature(self, parent, color):
         """Create Volume control feature UI"""
         tk.Label(parent, text="🔊 Volume Control", bg="#181825", fg=color,
                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
-        
+
         btn1 = tk.Button(parent, text="🔊 Volume Up", bg="#313244", fg="#cdd6f4",
                         font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                         command=lambda: self.load_comprehensive_command("Increase volume by 10%"),
                         padx=20, pady=12)
         btn1.pack(fill="x", pady=5)
         self.add_hover_effect(btn1, "#313244", "#45475a")
-        
+
         btn2 = tk.Button(parent, text="🔉 Volume Down", bg="#313244", fg="#cdd6f4",
                         font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                         command=lambda: self.load_comprehensive_command("Decrease volume by 10%"),
                         padx=20, pady=12)
         btn2.pack(fill="x", pady=5)
         self.add_hover_effect(btn2, "#313244", "#45475a")
-        
+
         btn3 = tk.Button(parent, text="🔇 Mute", bg="#f38ba8", fg="#0f0f1e",
                         font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                         command=lambda: self.load_comprehensive_command("Mute system volume"),
                         padx=20, pady=12)
         btn3.pack(fill="x", pady=5)
         self.add_hover_effect(btn3, "#f38ba8", "#f5c2e7")
-    
+
     def append_comprehensive_output(self, text, tag=None):
         """Append text to the comprehensive output display"""
         self.comprehensive_output.config(state='normal')
@@ -7402,19 +7402,19 @@ Answered: {result.get('timestamp', 'N/A')}
         self.comprehensive_output.see(tk.END)
         self.comprehensive_output.config(state='disabled')
         self.root.update_idletasks()
-    
+
     def clear_comprehensive_output(self):
         """Clear the comprehensive output display"""
         self.comprehensive_output.config(state='normal')
         self.comprehensive_output.delete(1.0, tk.END)
         self.comprehensive_output.config(state='disabled')
-        
+
         # Reset welcome message
         self.append_comprehensive_output("=" * 60 + "\n", "info")
         self.append_comprehensive_output("🎯 COMPREHENSIVE DESKTOP CONTROLLER\n", "highlight")
         self.append_comprehensive_output("=" * 60 + "\n", "info")
         self.append_comprehensive_output("\n✅ Output cleared. Ready for new command!\n\n", "success")
-    
+
     def update_comprehensive_phase(self, phase_name, status="active"):
         """Update the visual indicator for current phase"""
         colors = {
@@ -7422,37 +7422,37 @@ Answered: {result.get('timestamp', 'N/A')}
             "complete": "#a6e3a1",
             "inactive": "#6c7086"
         }
-        
+
         if phase_name in self.phase_labels:
             color = colors.get(status, colors["inactive"])
             self.phase_labels[phase_name].config(fg=color)
-    
+
     def execute_comprehensive_command(self):
         """Execute a comprehensive desktop control command"""
         command = self.comprehensive_input.get().strip()
-        
+
         if not command:
             messagebox.showwarning("Empty Command", "Please enter a command first!")
             return
-        
+
         if not self.comprehensive_controller:
             self.append_comprehensive_output("\n⚠️  Comprehensive Controller not available\n", "error")
             self.append_comprehensive_output("This feature requires local execution with display access.\n", "info")
             self.append_comprehensive_output("Download and run locally for full functionality.\n", "info")
             return
-        
+
         # Clear previous output
         self.comprehensive_output.config(state='normal')
         self.comprehensive_output.delete(1.0, tk.END)
         self.comprehensive_output.config(state='disabled')
-        
+
         # Update status
         self.comprehensive_status.config(text="⚙️ Processing...", fg="#f9e2af")
-        
+
         # Run in thread
         thread = threading.Thread(target=self._execute_comprehensive_task, args=(command,), daemon=True)
         thread.start()
-    
+
     def _execute_comprehensive_task(self, command):
         """Execute comprehensive task in background thread"""
         try:
@@ -7460,15 +7460,15 @@ Answered: {result.get('timestamp', 'N/A')}
             self.append_comprehensive_output("🎯 COMPREHENSIVE DESKTOP CONTROLLER\n", "highlight")
             self.append_comprehensive_output("=" * 60 + "\n", "info")
             self.append_comprehensive_output(f"Command: {command}\n\n", "info")
-            
+
             # Phase 1: Understand
             self.append_comprehensive_output("━" * 60 + "\n", "info")
             self.append_comprehensive_output("🧠 PHASE 1: UNDERSTANDING PROMPT\n", "phase1")
             self.append_comprehensive_output("━" * 60 + "\n", "info")
             self.update_comprehensive_phase("UNDERSTAND", "active")
-            
+
             understanding = self.comprehensive_controller.understand_prompt(command)
-            
+
             self.append_comprehensive_output("\n✅ Prompt Analysis Complete:\n", "success")
             self.append_comprehensive_output(f"   🎯 Goal: {understanding.get('primary_goal', 'N/A')}\n", "info")
             self.append_comprehensive_output(f"   📊 Complexity: {understanding.get('complexity_level', 'N/A')}\n", "info")
@@ -7476,43 +7476,43 @@ Answered: {result.get('timestamp', 'N/A')}
             apps = understanding.get('required_applications', [])
             if apps:
                 self.append_comprehensive_output(f"   🔧 Required Apps: {', '.join(apps)}\n", "info")
-            
+
             self.update_comprehensive_phase("UNDERSTAND", "complete")
-            
+
             # Phase 2: Break Down
             self.append_comprehensive_output("\n" + "━" * 60 + "\n", "info")
             self.append_comprehensive_output("📋 PHASE 2: BREAKING INTO STEPS\n", "phase2")
             self.append_comprehensive_output("━" * 60 + "\n", "info")
             self.update_comprehensive_phase("PLAN", "active")
-            
+
             execution_plan = self.comprehensive_controller.break_into_steps(understanding)
             steps = execution_plan.get("execution_plan", {}).get("steps", [])
-            
+
             self.append_comprehensive_output("\n✅ Execution Plan Created:\n", "success")
             self.append_comprehensive_output(f"   Total Steps: {len(steps)}\n", "info")
             self.append_comprehensive_output(f"   Estimated Time: {execution_plan.get('execution_plan', {}).get('estimated_time', 'N/A')}s\n\n", "info")
-            
+
             self.append_comprehensive_output("📝 Step Breakdown:\n", "highlight")
             for step in steps:
                 self.append_comprehensive_output(f"   {step['step_number']}. {step.get('description', 'N/A')}\n", "info")
                 self.append_comprehensive_output(f"      → Expected: {step.get('expected_outcome', 'N/A')}\n", "info")
-            
+
             self.update_comprehensive_phase("PLAN", "complete")
-            
+
             # Phase 3: Monitor & Execute
             self.append_comprehensive_output("\n" + "━" * 60 + "\n", "info")
             self.append_comprehensive_output("👁️  PHASE 3: EXECUTING WITH MONITORING\n", "phase3")
             self.append_comprehensive_output("━" * 60 + "\n", "info")
             self.update_comprehensive_phase("MONITOR", "active")
-            
+
             if self.comprehensive_controller.gui.demo_mode:
                 self.append_comprehensive_output("\n⚠️  DEMO MODE: Commands will be simulated\n", "error")
                 self.append_comprehensive_output("Download and run locally for actual execution\n\n", "info")
-            
+
             # Execute each step
             for i, step in enumerate(steps, 1):
                 self.append_comprehensive_output(f"\nStep {i}/{len(steps)}: {step.get('description', 'N/A')}\n", "highlight")
-                
+
                 if self.comprehensive_controller.gui.demo_mode:
                     self.append_comprehensive_output(f"   [DEMO] Would execute: {step.get('action_type', 'N/A')}\n", "info")
                     import time
@@ -7525,28 +7525,28 @@ Answered: {result.get('timestamp', 'N/A')}
                         self.append_comprehensive_output("   ✅ Step completed successfully\n", "success")
                     else:
                         self.append_comprehensive_output("   ⚠️  Step failed\n", "error")
-            
+
             self.update_comprehensive_phase("MONITOR", "complete")
-            
+
             # Summary
             self.append_comprehensive_output("\n" + "━" * 60 + "\n", "info")
             self.append_comprehensive_output("📊 EXECUTION SUMMARY\n", "highlight")
             self.append_comprehensive_output("━" * 60 + "\n", "info")
             self.append_comprehensive_output(f"\n✅ All phases completed!\n", "success")
             self.append_comprehensive_output(f"   Total Steps: {len(steps)}\n", "info")
-            
+
             if self.comprehensive_controller.gui.demo_mode:
                 self.append_comprehensive_output("\n💡 TIP: Download and run locally for full automation\n", "info")
-            
+
             self.append_comprehensive_output("\n" + "=" * 60 + "\n", "info")
-            
+
             # Update status
             self.comprehensive_status.config(text="✅ Completed", fg="#a6e3a1")
-            
+
         except Exception as e:
             self.append_comprehensive_output(f"\n❌ Error: {str(e)}\n", "error")
             self.comprehensive_status.config(text="❌ Error", fg="#f38ba8")
-    
+
     def show_comprehensive_guide(self):
         """Show comprehensive controller guide"""
         guide_text = """
@@ -7583,9 +7583,9 @@ Simple:
 For full functionality, download and run locally!
 """
         messagebox.showinfo("Comprehensive Controller Guide", guide_text)
-    
+
     # ==================== Virtual Language Model Methods ====================
-    
+
     def vlm_append_output(self, text, tag=None):
         """Append text to VLM output display"""
         self.vlm_output.config(state='normal')
@@ -7596,27 +7596,27 @@ For full functionality, download and run locally!
         self.vlm_output.see(tk.END)
         self.vlm_output.config(state='disabled')
         self.root.update_idletasks()
-    
+
     def vlm_clear_output(self):
         """Clear VLM output"""
         self.vlm_output.config(state='normal')
         self.vlm_output.delete(1.0, tk.END)
         self.vlm_output.config(state='disabled')
-        
+
         self.vlm_append_output("=" * 60 + "\n", "info")
         self.vlm_append_output("🧠 Output cleared. Ready for new learning!\n", "success")
         self.vlm_append_output("=" * 60 + "\n", "info")
-    
+
     def vlm_refresh_stats(self):
         """Refresh and display VLM statistics"""
         if not self.vlm:
             return
-        
+
         stats = self.vlm.get_stats()
-        
+
         self.vlm_stats_display.config(state='normal')
         self.vlm_stats_display.delete(1.0, tk.END)
-        
+
         stats_text = (
             f"📊 Observations: {stats['observations']}\n"
             f"🎨 UI Patterns: {stats['ui_patterns']}\n"
@@ -7624,150 +7624,150 @@ For full functionality, download and run locally!
             f"📋 Workflows: {stats['learned_workflows']}\n"
             f"✅ Success Rate: {stats['success_rate']:.1f}%"
         )
-        
+
         self.vlm_stats_display.insert(1.0, stats_text.strip())
         self.vlm_stats_display.config(state='disabled')
-        
+
         # Update knowledge display
         self.vlm_knowledge_display.config(state='normal')
         self.vlm_knowledge_display.delete(1.0, tk.END)
         self.vlm_knowledge_display.insert(1.0, stats['knowledge_summary'])
         self.vlm_knowledge_display.config(state='disabled')
-    
+
     def vlm_observe(self):
         """Let VLM observe the current screen"""
         if not self.vlm:
             messagebox.showwarning("VLM Not Available", "Virtual Language Model not initialized")
             return
-        
+
         self.vlm_status.config(text="👁️ Observing...", fg="#89b4fa")
         self.vlm_append_output("\n" + "━" * 60 + "\n", "info")
         self.vlm_append_output("👁️ OBSERVING SCREEN\n", "highlight")
         self.vlm_append_output("━" * 60 + "\n", "info")
-        
+
         # Run in thread
         thread = threading.Thread(target=self._vlm_observe_thread, daemon=True)
         thread.start()
-    
+
     def _vlm_observe_thread(self):
         """Observe in background thread"""
         try:
             result = self.vlm.observe_screen("user requested observation")
-            
+
             if result.get("demo"):
                 self.vlm_append_output("\n⚠️ DEMO MODE\n", "error")
                 self.vlm_append_output("Screen observation requires display access.\n", "info")
                 self.vlm_append_output("Download and run locally for full functionality.\n\n", "info")
             elif result.get("success"):
                 analysis = result.get("analysis", {})
-                
+
                 self.vlm_append_output("\n✅ Observation Complete!\n\n", "success")
                 self.vlm_append_output(f"📝 Description: {analysis.get('description', 'N/A')}\n", "info")
                 self.vlm_append_output(f"🎨 UI Elements Found: {len(analysis.get('ui_elements', []))}\n", "info")
-                
+
                 apps = analysis.get('visible_applications', [])
                 if apps:
                     self.vlm_append_output(f"💻 Applications: {', '.join(apps)}\n", "info")
-                
+
                 self.vlm_append_output(f"\n💡 Learning Insights:\n", "highlight")
                 self.vlm_append_output(f"{analysis.get('learning_insights', 'N/A')}\n", "info")
             else:
                 self.vlm_append_output("\n❌ Observation failed\n", "error")
                 self.vlm_append_output(f"Error: {result.get('message', 'Unknown error')}\n", "info")
-            
+
             self.vlm_append_output("━" * 60 + "\n", "info")
             self.vlm_refresh_stats()
             self.vlm_status.config(text="✅ Ready to Learn", fg="#a6e3a1")
-            
+
         except Exception as e:
             self.vlm_append_output(f"\n❌ Error: {str(e)}\n", "error")
             self.vlm_status.config(text="❌ Error", fg="#f38ba8")
-    
+
     def vlm_decide(self):
         """Let VLM decide an action"""
         if not self.vlm:
             messagebox.showwarning("VLM Not Available", "Virtual Language Model not initialized")
             return
-        
+
         goal = self.vlm_goal_input.get().strip()
-        
+
         if not goal:
             messagebox.showwarning("No Goal", "Please enter a goal first!")
             return
-        
+
         self.vlm_status.config(text="🤔 Deciding...", fg="#f9e2af")
         self.vlm_append_output("\n" + "━" * 60 + "\n", "info")
         self.vlm_append_output("🤔 MAKING DECISION\n", "decision")
         self.vlm_append_output("━" * 60 + "\n", "info")
         self.vlm_append_output(f"Goal: {goal}\n\n", "info")
-        
+
         # Run in thread
         thread = threading.Thread(target=self._vlm_decide_thread, args=(goal,), daemon=True)
         thread.start()
-    
+
     def _vlm_decide_thread(self, goal):
         """Decide in background thread"""
         try:
             decision = self.vlm.decide_action(goal)
-            
+
             self.vlm_append_output("✅ Decision Made!\n\n", "success")
             self.vlm_append_output(f"🎯 Action: {decision.get('action', 'N/A')}\n", "decision")
             self.vlm_append_output(f"📍 Target: {decision.get('target', 'N/A')}\n", "info")
             self.vlm_append_output(f"💭 Reasoning: {decision.get('reasoning', 'N/A')}\n", "info")
             self.vlm_append_output(f"📊 Confidence: {decision.get('confidence', 0):.2%}\n", "info")
-            
+
             alternatives = decision.get('alternative_actions', [])
             if alternatives:
                 self.vlm_append_output(f"\n🔄 Alternatives: {', '.join(alternatives)}\n", "info")
-            
+
             self.vlm_append_output("\n💡 Click 'Execute' to perform this action!\n", "highlight")
             self.vlm_append_output("━" * 60 + "\n", "info")
-            
+
             # Store decision for execution
             self.vlm_last_decision = decision
-            
+
             self.vlm_status.config(text="✅ Decision Ready", fg="#a6e3a1")
-            
+
         except Exception as e:
             self.vlm_append_output(f"\n❌ Error: {str(e)}\n", "error")
             self.vlm_status.config(text="❌ Error", fg="#f38ba8")
-    
+
     def vlm_execute(self):
         """Execute the last decided action"""
         if not self.vlm:
             messagebox.showwarning("VLM Not Available", "Virtual Language Model not initialized")
             return
-        
+
         goal = self.vlm_goal_input.get().strip()
-        
+
         if not goal:
             messagebox.showwarning("No Goal", "Please enter a goal first!")
             return
-        
+
         self.vlm_status.config(text="▶️ Executing...", fg="#a6e3a1")
-        
+
         # Run in thread
         thread = threading.Thread(target=self._vlm_execute_thread, args=(goal,), daemon=True)
         thread.start()
-    
+
     def _vlm_execute_thread(self, goal):
         """Execute in background thread"""
         try:
             self.vlm_append_output("\n" + "━" * 60 + "\n", "info")
             self.vlm_append_output("▶️ EXECUTING LEARNED ACTION\n", "success")
             self.vlm_append_output("━" * 60 + "\n", "info")
-            
+
             # First decide the action
             self.vlm_append_output("🤔 Analyzing goal and deciding action...\n", "info")
             decision = self.vlm.decide_action(goal)
-            
+
             self.vlm_append_output(f"✅ Decision: {decision.get('action', 'N/A')}\n", "decision")
             self.vlm_append_output(f"   Confidence: {decision.get('confidence', 0):.2%}\n\n", "info")
-            
+
             # Execute the action
             self.vlm_append_output("⚙️ Executing action...\n", "info")
             result = self.vlm.execute_learned_action(decision)
-            
+
             if result.get("demo"):
                 self.vlm_append_output("\n⚠️ DEMO MODE\n", "error")
                 self.vlm_append_output("Desktop control requires local execution.\n", "info")
@@ -7778,22 +7778,22 @@ For full functionality, download and run locally!
             else:
                 self.vlm_append_output("\n⚠️ Action Failed\n", "error")
                 self.vlm_append_output(f"Error: {result.get('message', 'Unknown error')}\n", "info")
-            
+
             self.vlm_append_output("━" * 60 + "\n", "info")
-            
+
             self.vlm_refresh_stats()
             self.vlm_status.config(text="✅ Ready to Learn", fg="#a6e3a1")
-            
+
         except Exception as e:
             self.vlm_append_output(f"\n❌ Error: {str(e)}\n", "error")
             self.vlm_status.config(text="❌ Error", fg="#f38ba8")
-    
+
     def vlm_learn_session(self):
         """Run an autonomous learning session"""
         if not self.vlm:
             messagebox.showwarning("VLM Not Available", "Virtual Language Model not initialized")
             return
-        
+
         # Ask for duration
         duration = simpledialog.askinteger(
             "Learning Session",
@@ -7802,10 +7802,10 @@ For full functionality, download and run locally!
             minvalue=1,
             maxvalue=30
         )
-        
+
         if not duration:
             return
-        
+
         if messagebox.askyesno(
             "Start Learning Session",
             f"The AI will autonomously explore and learn for {duration} minute(s).\n\n"
@@ -7819,7 +7819,7 @@ For full functionality, download and run locally!
             self.vlm_status.config(text="🧠 Learning...", fg="#cba6f7")
             thread = threading.Thread(target=self._vlm_learn_session_thread, args=(duration,), daemon=True)
             thread.start()
-    
+
     def _vlm_learn_session_thread(self, duration):
         """Run learning session in background"""
         try:
@@ -7827,38 +7827,38 @@ For full functionality, download and run locally!
             self.vlm_append_output("🧠 AUTONOMOUS LEARNING SESSION STARTING\n", "highlight")
             self.vlm_append_output("=" * 60 + "\n", "info")
             self.vlm_append_output(f"Duration: {duration} minute(s)\n\n", "info")
-            
+
             self.vlm.autonomous_learning_session(duration)
-            
+
             self.vlm_append_output("\n✅ Learning session complete!\n", "success")
             self.vlm_append_output("=" * 60 + "\n", "info")
-            
+
             self.vlm_refresh_stats()
             self.vlm_status.config(text="✅ Learning Complete", fg="#a6e3a1")
-            
+
         except Exception as e:
             self.vlm_append_output(f"\n❌ Error: {str(e)}\n", "error")
             self.vlm_status.config(text="❌ Error", fg="#f38ba8")
-    
+
     def vlm_query(self):
         """Query the learned knowledge"""
         if not self.vlm:
             messagebox.showwarning("VLM Not Available", "Virtual Language Model not initialized")
             return
-        
+
         question = simpledialog.askstring(
             "Query Knowledge",
             "Ask the AI about what it has learned:"
         )
-        
+
         if not question:
             return
-        
+
         self.vlm_status.config(text="💭 Thinking...", fg="#89dceb")
-        
+
         thread = threading.Thread(target=self._vlm_query_thread, args=(question,), daemon=True)
         thread.start()
-    
+
     def _vlm_query_thread(self, question):
         """Query in background thread"""
         try:
@@ -7866,19 +7866,19 @@ For full functionality, download and run locally!
             self.vlm_append_output("💬 KNOWLEDGE QUERY\n", "highlight")
             self.vlm_append_output("━" * 60 + "\n", "info")
             self.vlm_append_output(f"Question: {question}\n\n", "info")
-            
+
             answer = self.vlm.query_knowledge(question)
-            
+
             self.vlm_append_output("🤖 Answer:\n", "success")
             self.vlm_append_output(f"{answer}\n", "info")
             self.vlm_append_output("━" * 60 + "\n", "info")
-            
+
             self.vlm_status.config(text="✅ Ready to Learn", fg="#a6e3a1")
-            
+
         except Exception as e:
             self.vlm_append_output(f"\n❌ Error: {str(e)}\n", "error")
             self.vlm_status.config(text="❌ Error", fg="#f38ba8")
-    
+
     def show_vlm_help(self):
         """Show VLM help dialog"""
         help_text = (
@@ -7908,12 +7908,12 @@ For full functionality, download and run locally!
             "For full functionality, download and run locally!"
         )
         messagebox.showinfo("Virtual Language Model Help", help_text)
-    
+
     def view_comprehensive_screenshots(self):
         """View generated screenshots"""
         import os
         screenshot_files = [f for f in os.listdir('.') if f.startswith('step_') and f.endswith('.png')]
-        
+
         if not screenshot_files:
             messagebox.showinfo("Screenshots", "No screenshots found.\n\nScreenshots are generated during execution.\nDownload and run locally for full monitoring.")
         else:
@@ -7923,13 +7923,13 @@ For full functionality, download and run locally!
             if len(screenshot_files) > 10:
                 msg += f"\n... and {len(screenshot_files) - 10} more"
             messagebox.showinfo("Screenshots", msg)
-    
+
     def show_comprehensive_stats(self):
         """Show comprehensive controller statistics"""
         if not self.comprehensive_controller:
             messagebox.showinfo("Stats", "Controller not available")
             return
-        
+
         stats_text = f"""
 COMPREHENSIVE CONTROLLER STATS
 
@@ -7962,44 +7962,44 @@ keyboard, and screen access:
         """Macro Recorder Tab - Record and playback automation macros"""
         tab = tk.Frame(notebook, bg="#1e1e2e")
         notebook.add(tab, text="🎬 Macro Recorder")
-        
+
         # Header
         header_frame = tk.Frame(tab, bg="#1a1a2e")
         header_frame.pack(fill="x", pady=(10, 0), padx=10)
-        
+
         header = tk.Label(header_frame,
                           text="🎬 Macro Recorder & Playback",
                           bg="#1a1a2e",
                           fg="#f5c2e7",
                           font=("Segoe UI", 14, "bold"))
         header.pack(pady=12)
-        
+
         info = tk.Label(header_frame,
                         text="🎯 Record • 💾 Save • ▶️ Playback • 🔄 Loop • 📱 Remote Control",
                         bg="#1a1a2e",
                         fg="#a6adc8",
                         font=("Segoe UI", 9, "italic"))
         info.pack(pady=(0, 12))
-        
+
         # Main container
         main_container = tk.Frame(tab, bg="#1e1e2e")
         main_container.pack(fill="both", expand=True, padx=10, pady=5)
-        
+
         # Left column - Controls
         left_column = tk.Frame(main_container, bg="#1e1e2e")
         left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
-        
+
         # Recording controls
         record_frame = tk.Frame(left_column, bg="#313244", relief="flat")
         record_frame.pack(fill="x", pady=5)
-        
+
         record_label = tk.Label(record_frame,
                                 text="📹 Recording Controls",
                                 bg="#313244",
                                 fg="#f5c2e7",
                                 font=("Segoe UI", 11, "bold"))
         record_label.pack(pady=10)
-        
+
         # Record status
         self.macro_record_status = tk.Label(record_frame,
                                             text="⚫ Ready to Record",
@@ -8007,11 +8007,11 @@ keyboard, and screen access:
                                             fg="#a6adc8",
                                             font=("Segoe UI", 10))
         self.macro_record_status.pack(pady=5)
-        
+
         # Record buttons
         record_btn_frame = tk.Frame(record_frame, bg="#313244")
         record_btn_frame.pack(pady=10)
-        
+
         self.macro_start_record_btn = tk.Button(record_btn_frame,
                                                  text="🔴 Start Recording",
                                                  bg="#f38ba8",
@@ -8024,7 +8024,7 @@ keyboard, and screen access:
                                                  pady=10)
         self.macro_start_record_btn.pack(side="left", padx=5)
         self.add_hover_effect(self.macro_start_record_btn, "#f38ba8", "#eba0ac")
-        
+
         self.macro_stop_record_btn = tk.Button(record_btn_frame,
                                                 text="⏹️ Stop & Save",
                                                 bg="#89b4fa",
@@ -8038,25 +8038,25 @@ keyboard, and screen access:
                                                 state="disabled")
         self.macro_stop_record_btn.pack(side="left", padx=5)
         self.add_hover_effect(self.macro_stop_record_btn, "#89b4fa", "#74c7ec")
-        
+
         # Macro list
         list_frame = tk.Frame(left_column, bg="#313244", relief="flat")
         list_frame.pack(fill="both", expand=True, pady=10)
-        
+
         list_label = tk.Label(list_frame,
                               text="💾 Saved Macros",
                               bg="#313244",
                               fg="#a6e3a1",
                               font=("Segoe UI", 11, "bold"))
         list_label.pack(pady=10)
-        
+
         # Macro listbox
         macro_list_container = tk.Frame(list_frame, bg="#313244")
         macro_list_container.pack(fill="both", expand=True, padx=10, pady=(0, 10))
-        
+
         macro_scrollbar = tk.Scrollbar(macro_list_container)
         macro_scrollbar.pack(side="right", fill="y")
-        
+
         self.macro_listbox = tk.Listbox(macro_list_container,
                                          bg="#0f0f1e",
                                          fg="#cdd6f4",
@@ -8067,7 +8067,7 @@ keyboard, and screen access:
                                          yscrollcommand=macro_scrollbar.set)
         self.macro_listbox.pack(side="left", fill="both", expand=True)
         macro_scrollbar.config(command=self.macro_listbox.yview)
-        
+
         # Refresh button
         refresh_btn = tk.Button(list_frame,
                                 text="🔄 Refresh List",
@@ -8081,36 +8081,36 @@ keyboard, and screen access:
                                 pady=8)
         refresh_btn.pack(pady=5)
         self.add_hover_effect(refresh_btn, "#45475a", "#585b70")
-        
+
         # Right column - Playback & Output
         right_column = tk.Frame(main_container, bg="#1e1e2e")
         right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
-        
+
         # Playback controls
         playback_frame = tk.Frame(right_column, bg="#313244", relief="flat")
         playback_frame.pack(fill="x", pady=5)
-        
+
         playback_label = tk.Label(playback_frame,
                                   text="▶️ Playback Controls",
                                   bg="#313244",
                                   fg="#89dceb",
                                   font=("Segoe UI", 11, "bold"))
         playback_label.pack(pady=10)
-        
+
         # Repeat and speed controls
         controls_container = tk.Frame(playback_frame, bg="#313244")
         controls_container.pack(fill="x", padx=10, pady=10)
-        
+
         # Repeat count
         repeat_frame = tk.Frame(controls_container, bg="#313244")
         repeat_frame.pack(fill="x", pady=5)
-        
+
         tk.Label(repeat_frame,
                  text="🔄 Repeat:",
                  bg="#313244",
                  fg="#a6adc8",
                  font=("Segoe UI", 9)).pack(side="left", padx=5)
-        
+
         self.macro_repeat_var = tk.StringVar(value="1")
         repeat_spinbox = tk.Spinbox(repeat_frame,
                                      from_=1,
@@ -8122,17 +8122,17 @@ keyboard, and screen access:
                                      relief="flat",
                                      width=10)
         repeat_spinbox.pack(side="left", padx=5)
-        
+
         # Speed control
         speed_frame = tk.Frame(controls_container, bg="#313244")
         speed_frame.pack(fill="x", pady=5)
-        
+
         tk.Label(speed_frame,
                  text="⚡ Speed:",
                  bg="#313244",
                  fg="#a6adc8",
                  font=("Segoe UI", 9)).pack(side="left", padx=5)
-        
+
         self.macro_speed_var = tk.StringVar(value="1.0")
         speed_options = ["0.5x", "1.0x", "1.5x", "2.0x", "3.0x"]
         speed_combo = ttk.Combobox(speed_frame,
@@ -8143,11 +8143,11 @@ keyboard, and screen access:
                                     width=10)
         speed_combo.current(1)
         speed_combo.pack(side="left", padx=5)
-        
+
         # Playback buttons
         playback_btns = tk.Frame(playback_frame, bg="#313244")
         playback_btns.pack(pady=15)
-        
+
         play_btn = tk.Button(playback_btns,
                              text="▶️ Play Selected",
                              bg="#a6e3a1",
@@ -8160,7 +8160,7 @@ keyboard, and screen access:
                              pady=10)
         play_btn.pack(side="left", padx=5)
         self.add_hover_effect(play_btn, "#a6e3a1", "#94e2d5")
-        
+
         stop_btn = tk.Button(playback_btns,
                              text="⏹️ Stop",
                              bg="#f38ba8",
@@ -8173,7 +8173,7 @@ keyboard, and screen access:
                              pady=10)
         stop_btn.pack(side="left", padx=5)
         self.add_hover_effect(stop_btn, "#f38ba8", "#eba0ac")
-        
+
         delete_btn = tk.Button(playback_btns,
                                 text="🗑️ Delete",
                                 bg="#45475a",
@@ -8186,7 +8186,7 @@ keyboard, and screen access:
                                 pady=10)
         delete_btn.pack(side="left", padx=5)
         self.add_hover_effect(delete_btn, "#45475a", "#585b70")
-        
+
         # Output console
         output_label = tk.Label(right_column,
                                 text="📋 Macro Output",
@@ -8194,7 +8194,7 @@ keyboard, and screen access:
                                 fg="#a6adc8",
                                 font=("Segoe UI", 10, "bold"))
         output_label.pack(anchor="w", padx=5, pady=(10, 5))
-        
+
         self.macro_output = scrolledtext.ScrolledText(right_column,
                                                        bg="#0f0f1e",
                                                        fg="#cdd6f4",
@@ -8205,12 +8205,12 @@ keyboard, and screen access:
                                                        padx=10,
                                                        pady=10)
         self.macro_output.pack(fill="both", expand=True, padx=5, pady=5)
-        
+
         self.macro_output.tag_config("success", foreground="#a6e3a1")
         self.macro_output.tag_config("error", foreground="#f38ba8")
         self.macro_output.tag_config("info", foreground="#89dceb")
         self.macro_output.tag_config("event", foreground="#f9e2af")
-        
+
         # Initialize macro list
         self.refresh_macro_list()
 
@@ -8218,51 +8218,51 @@ keyboard, and screen access:
         """Mobile Operations Tab - Remote control interface"""
         tab = tk.Frame(notebook, bg="#1e1e2e")
         notebook.add(tab, text="📱 Mobile Control")
-        
+
         # Header
         header_frame = tk.Frame(tab, bg="#1a1a2e")
         header_frame.pack(fill="x", pady=(10, 0), padx=10)
-        
+
         header = tk.Label(header_frame,
                           text="📱 Mobile Companion Control",
                           bg="#1a1a2e",
                           fg="#89dceb",
                           font=("Segoe UI", 14, "bold"))
         header.pack(pady=12)
-        
+
         info = tk.Label(header_frame,
                         text="📡 Remote Access • 🎮 Mobile Commands • 🔔 Notifications • 🎬 Remote Macros",
                         bg="#1a1a2e",
                         fg="#a6adc8",
                         font=("Segoe UI", 9, "italic"))
         info.pack(pady=(0, 12))
-        
+
         # Main container
         main_container = tk.Frame(tab, bg="#1e1e2e")
         main_container.pack(fill="both", expand=True, padx=10, pady=5)
-        
+
         # Left column - Server info and status
         left_column = tk.Frame(main_container, bg="#1e1e2e")
         left_column.pack(side="left", fill="both", expand=True, padx=(0, 5))
-        
+
         # Server status
         status_frame = tk.Frame(left_column, bg="#313244", relief="flat")
         status_frame.pack(fill="x", pady=5)
-        
+
         status_label = tk.Label(status_frame,
                                 text="📡 Server Status",
                                 bg="#313244",
                                 fg="#89dceb",
                                 font=("Segoe UI", 11, "bold"))
         status_label.pack(pady=10)
-        
+
         self.mobile_status = tk.Label(status_frame,
                                        text="✅ Server Running",
                                        bg="#313244",
                                        fg="#a6e3a1",
                                        font=("Segoe UI", 10))
         self.mobile_status.pack(pady=5)
-        
+
         # Server info
         info_text = tk.Text(status_frame,
                             bg="#0f0f1e",
@@ -8275,12 +8275,12 @@ keyboard, and screen access:
                             state='disabled',
                             wrap=tk.WORD)
         info_text.pack(fill="x", padx=10, pady=10)
-        
+
         # Get domain info
         domain = os.environ.get('REPLIT_DEV_DOMAIN', 'localhost:5000')
-        
+
         info_text.config(state='normal')
-        info_text.insert("1.0", 
+        info_text.insert("1.0",
                          f"📱 Mobile Interface:\n"
                          f"https://{domain}/mobile\n\n"
                          f"💻 Desktop Dashboard:\n"
@@ -8289,18 +8289,18 @@ keyboard, and screen access:
                          f"📡 WebSocket: Connected\n"
                          f"🔔 Notifications: Enabled")
         info_text.config(state='disabled')
-        
+
         # Quick actions
         actions_frame = tk.Frame(left_column, bg="#313244", relief="flat")
         actions_frame.pack(fill="both", expand=True, pady=10)
-        
+
         actions_label = tk.Label(actions_frame,
                                  text="⚡ Quick Actions",
                                  bg="#313244",
                                  fg="#f9e2af",
                                  font=("Segoe UI", 11, "bold"))
         actions_label.pack(pady=10)
-        
+
         actions = [
             ("📱 Open Mobile Interface", lambda: self.open_mobile_interface()),
             ("💻 Open Desktop Dashboard", lambda: self.open_desktop_dashboard()),
@@ -8308,7 +8308,7 @@ keyboard, and screen access:
             ("📊 View Connected Clients", lambda: self.view_mobile_clients()),
             ("🔔 Send Test Notification", lambda: self.send_test_notification()),
         ]
-        
+
         for text, command in actions:
             btn = tk.Button(actions_frame,
                             text=text,
@@ -8323,11 +8323,11 @@ keyboard, and screen access:
                             pady=10)
             btn.pack(fill="x", padx=10, pady=3)
             self.add_hover_effect(btn, "#45475a", "#585b70")
-        
+
         # Right column - Mobile command history
         right_column = tk.Frame(main_container, bg="#1e1e2e")
         right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
-        
+
         # Command history
         history_label = tk.Label(right_column,
                                  text="📜 Mobile Command History",
@@ -8335,7 +8335,7 @@ keyboard, and screen access:
                                  fg="#a6adc8",
                                  font=("Segoe UI", 10, "bold"))
         history_label.pack(anchor="w", padx=5, pady=5)
-        
+
         self.mobile_history = scrolledtext.ScrolledText(right_column,
                                                         bg="#0f0f1e",
                                                         fg="#cdd6f4",
@@ -8346,12 +8346,12 @@ keyboard, and screen access:
                                                         padx=10,
                                                         pady=10)
         self.mobile_history.pack(fill="both", expand=True, padx=5, pady=5)
-        
+
         self.mobile_history.tag_config("timestamp", foreground="#6c7086")
         self.mobile_history.tag_config("command", foreground="#89dceb")
         self.mobile_history.tag_config("success", foreground="#a6e3a1")
         self.mobile_history.tag_config("error", foreground="#f38ba8")
-        
+
         # Add initial message
         self.mobile_append_history("📱 Mobile Companion Server is running", "success")
         self.mobile_append_history(f"🌐 Access from your phone: https://{domain}/mobile", "info")
@@ -8362,114 +8362,114 @@ keyboard, and screen access:
         if not self.macro_recorder:
             messagebox.showerror("Error", "Macro Recorder not initialized")
             return
-        
+
         name = simpledialog.askstring("Macro Name", "Enter a name for this macro:")
         if not name:
             return
-        
+
         self.current_macro_name = name
         self.macro_append_output(f"🔴 Starting macro recording: {name}\n", "info")
-        
+
         def on_event(event):
             event_type = event.get('type', 'unknown')
             self.macro_append_output(f"  • {event_type}\n", "event")
-        
+
         result = self.macro_recorder.start_recording(callback=on_event)
         self.macro_append_output(f"{result}\n", "success")
-        
+
         self.macro_record_status.config(text="🔴 Recording...", fg="#f38ba8")
         self.macro_start_record_btn.config(state="disabled")
         self.macro_stop_record_btn.config(state="normal")
         self.recording_active = True
-    
+
     def stop_macro_recording(self):
         """Stop recording and save macro"""
         if not self.macro_recorder or not self.recording_active:
             return
-        
+
         result = self.macro_recorder.stop_recording(name=self.current_macro_name)
         self.macro_append_output(f"{result}\n", "success")
-        
+
         self.macro_record_status.config(text="⚫ Ready to Record", fg="#a6adc8")
         self.macro_start_record_btn.config(state="normal")
         self.macro_stop_record_btn.config(state="disabled")
         self.recording_active = False
-        
+
         self.refresh_macro_list()
-    
+
     def refresh_macro_list(self):
         """Refresh the list of saved macros"""
         if not self.macro_recorder:
             return
-        
+
         self.macro_listbox.delete(0, tk.END)
         macros = self.macro_recorder.list_macros()
-        
+
         for macro in macros:
             display_text = f"{macro['name']} ({macro['event_count']} events, {macro['duration']:.1f}s)"
             self.macro_listbox.insert(tk.END, display_text)
-        
+
         if macros:
             self.macro_append_output(f"📋 Loaded {len(macros)} macro(s)\n", "info")
-    
+
     def play_macro(self):
         """Play the selected macro"""
         if not self.macro_recorder:
             messagebox.showerror("Error", "Macro Recorder not initialized")
             return
-        
+
         selection = self.macro_listbox.curselection()
         if not selection:
             messagebox.showwarning("No Selection", "Please select a macro to play")
             return
-        
+
         index = selection[0]
         macros = self.macro_recorder.list_macros()
         macro = macros[index]
-        
+
         repeat = int(self.macro_repeat_var.get())
         speed_str = self.macro_speed_var.get().replace('x', '')
         speed = float(speed_str)
-        
+
         self.macro_append_output(f"▶️ Playing macro: {macro['name']}\n", "info")
         self.macro_append_output(f"   Repeat: {repeat}x, Speed: {speed}x\n", "info")
-        
+
         def on_complete(message):
             self.macro_append_output(f"{message}\n", "success")
-        
-        result = self.macro_recorder.play_macro(macro_name=macro['name'], 
-                                                 repeat=repeat, 
+
+        result = self.macro_recorder.play_macro(macro_name=macro['name'],
+                                                 repeat=repeat,
                                                  speed=speed,
                                                  callback=on_complete)
         self.macro_append_output(f"{result}\n", "success")
-    
+
     def stop_macro_playback(self):
         """Stop macro playback"""
         if not self.macro_recorder:
             return
-        
+
         result = self.macro_recorder.stop_playback()
         self.macro_append_output(f"{result}\n", "info")
-    
+
     def delete_macro(self):
         """Delete the selected macro"""
         if not self.macro_recorder:
             return
-        
+
         selection = self.macro_listbox.curselection()
         if not selection:
             messagebox.showwarning("No Selection", "Please select a macro to delete")
             return
-        
+
         index = selection[0]
         macros = self.macro_recorder.list_macros()
         macro = macros[index]
-        
+
         if messagebox.askyesno("Confirm Delete", f"Delete macro '{macro['name']}'?"):
             result = self.macro_recorder.delete_macro(macro['name'])
             self.macro_append_output(f"{result}\n", "info")
             self.refresh_macro_list()
-    
+
     def macro_append_output(self, text, tag=None):
         """Append text to macro output console"""
         if hasattr(self, 'macro_output'):
@@ -8477,7 +8477,7 @@ keyboard, and screen access:
             self.macro_output.insert(tk.END, text, tag)
             self.macro_output.see(tk.END)
             self.macro_output.config(state='disabled')
-    
+
     # Mobile Operations Methods
     def open_mobile_interface(self):
         """Open mobile interface in browser"""
@@ -8485,55 +8485,55 @@ keyboard, and screen access:
         url = f"https://{domain}/mobile"
         self.mobile_append_history(f"🌐 Opening: {url}", "info")
         messagebox.showinfo("Mobile Interface", f"Mobile interface URL:\n\n{url}\n\nOpen this URL on your mobile device.")
-    
+
     def open_desktop_dashboard(self):
         """Open desktop dashboard"""
         domain = os.environ.get('REPLIT_DEV_DOMAIN', 'localhost:5000')
         url = f"https://{domain}/"
         self.mobile_append_history(f"💻 Opening: {url}", "info")
         messagebox.showinfo("Desktop Dashboard", f"Desktop dashboard URL:\n\n{url}")
-    
+
     def trigger_remote_macro(self):
         """Trigger a macro from mobile interface"""
         if not self.macro_recorder:
             messagebox.showerror("Error", "Macro Recorder not initialized")
             return
-        
+
         macros = self.macro_recorder.list_macros()
         if not macros:
             messagebox.showinfo("No Macros", "No saved macros available.\n\nRecord a macro first in the Macro Recorder tab.")
             return
-        
+
         macro_names = [m['name'] for m in macros]
-        
+
         # Simple selection dialog
         selection = simpledialog.askstring("Remote Macro",
                                             f"Available macros:\n{', '.join(macro_names)}\n\nEnter macro name:")
-        
+
         if selection and selection in macro_names:
             self.mobile_append_history(f"🎬 Triggered remote macro: {selection}", "command")
             self.mobile_append_history("   (Mobile trigger simulation)", "info")
             messagebox.showinfo("Success", f"Macro '{selection}' triggered!\n\nIn the full version, this would execute from your mobile device.")
         elif selection:
             self.mobile_append_history(f"❌ Macro not found: {selection}", "error")
-    
+
     def view_mobile_clients(self):
         """View connected mobile clients"""
         self.mobile_append_history("📊 Viewing connected clients...", "info")
-        messagebox.showinfo("Connected Clients", 
+        messagebox.showinfo("Connected Clients",
                             "Mobile Companion Server Status:\n\n"
                             "✅ Server Running\n"
                             "📡 WebSocket Enabled\n"
                             "🔔 Notifications Active\n\n"
                             "Connect your mobile device to:\n"
                             f"https://{os.environ.get('REPLIT_DEV_DOMAIN', 'localhost:5000')}/mobile")
-    
+
     def send_test_notification(self):
         """Send a test notification"""
         self.mobile_append_history("🔔 Sending test notification...", "command")
         messagebox.showinfo("Test Notification", "Test notification sent!\n\nCheck your mobile device if connected.")
         self.mobile_append_history("✅ Test notification sent", "success")
-    
+
     def mobile_append_history(self, text, tag=None):
         """Append text to mobile history console"""
         if hasattr(self, 'mobile_history'):
@@ -8543,7 +8543,7 @@ keyboard, and screen access:
             self.mobile_history.insert(tk.END, f"{text}\n", tag)
             self.mobile_history.see(tk.END)
             self.mobile_history.config(state='disabled')
-    
+
     def workflow_log(self, message, level="INFO"):
         """Log callback for workflow builder"""
         level_colors = {
@@ -8559,51 +8559,51 @@ keyboard, and screen access:
             self.workflow_output_text.insert(tk.END, f"{message}\n", (level.lower(),))
             self.workflow_output_text.see(tk.END)
             self.workflow_output_text.config(state='disabled')
-    
+
     def show_workflow_builder(self):
         """Open Natural Language Workflow Builder window"""
         if not self.nl_workflow_builder:
             messagebox.showerror("Error", "Workflow Builder not initialized")
             return
-        
+
         builder_window = tk.Toplevel(self.root)
         builder_window.title("💬 Natural Language Workflow Builder")
         builder_window.geometry("1000x700")
         builder_window.configure(bg="#0f0f1e")
-        
+
         header_frame = tk.Frame(builder_window, bg="#1a1a2e")
         header_frame.pack(fill="x", padx=20, pady=15)
-        
+
         header = tk.Label(header_frame,
                          text="💬 Natural Language Workflow Builder",
                          bg="#1a1a2e",
                          fg="#89b4fa",
                          font=("Segoe UI", 16, "bold"))
         header.pack(pady=10)
-        
+
         info = tk.Label(header_frame,
                        text="🎯 Describe workflows in plain English • 🤖 AI converts to automation • 💬 Test & refine • 💾 Save as templates",
                        bg="#1a1a2e",
                        fg="#a6adc8",
                        font=("Segoe UI", 9, "italic"))
         info.pack(pady=(0, 10))
-        
+
         main_container = tk.Frame(builder_window, bg="#0f0f1e")
         main_container.pack(fill="both", expand=True, padx=20, pady=10)
-        
+
         left_column = tk.Frame(main_container, bg="#0f0f1e")
         left_column.pack(side="left", fill="both", expand=True, padx=(0, 10))
-        
+
         examples_frame = tk.Frame(left_column, bg="#313244")
         examples_frame.pack(fill="x", pady=(0, 10))
-        
+
         examples_label = tk.Label(examples_frame,
                                  text="💡 Example Workflows",
                                  bg="#313244",
                                  fg="#f9e2af",
                                  font=("Segoe UI", 10, "bold"))
         examples_label.pack(pady=10)
-        
+
         examples_list = tk.Listbox(examples_frame,
                                    bg="#0f0f1e",
                                    fg="#cdd6f4",
@@ -8612,18 +8612,18 @@ keyboard, and screen access:
                                    selectmode=tk.SINGLE,
                                    relief="flat")
         examples_list.pack(fill="x", padx=10, pady=(0, 10))
-        
+
         examples = self.nl_workflow_builder.get_examples()
         for example in examples:
             examples_list.insert(tk.END, example['name'])
-        
+
         def use_example():
             selection = examples_list.curselection()
             if selection:
                 example = examples[selection[0]]
                 input_text.delete("1.0", tk.END)
                 input_text.insert("1.0", example['description'])
-        
+
         use_example_btn = tk.Button(examples_frame,
                                     text="📋 Use Selected Example",
                                     bg="#89b4fa",
@@ -8634,14 +8634,14 @@ keyboard, and screen access:
                                     command=use_example,
                                     pady=8)
         use_example_btn.pack(fill="x", padx=10, pady=(0, 10))
-        
+
         input_label = tk.Label(left_column,
                               text="💬 Describe Your Workflow:",
                               bg="#0f0f1e",
                               fg="#a6e3a1",
                               font=("Segoe UI", 11, "bold"))
         input_label.pack(anchor="w", pady=(10, 5))
-        
+
         input_text = tk.Text(left_column,
                             bg="#313244",
                             fg="#ffffff",
@@ -8652,19 +8652,19 @@ keyboard, and screen access:
                             padx=10,
                             pady=10)
         input_text.pack(fill="both", expand=True, pady=(0, 10))
-        
+
         button_frame = tk.Frame(left_column, bg="#0f0f1e")
         button_frame.pack(fill="x", pady=10)
-        
+
         def process_workflow():
             description = input_text.get("1.0", tk.END).strip()
             if not description:
                 messagebox.showwarning("Empty Input", "Please describe your workflow")
                 return
-            
+
             self.workflow_log(f"Processing: {description}", "INFO")
             result = self.nl_workflow_builder.describe_workflow(description)
-            
+
             if result.get("success"):
                 if result.get("type") == "workflow":
                     workflow = result["workflow"]
@@ -8674,10 +8674,10 @@ keyboard, and screen access:
                     output_text.insert(tk.END, "Steps:\n")
                     for i, step in enumerate(workflow.get("steps", []), 1):
                         output_text.insert(tk.END, f"{i}. {step.get('action')} - {step.get('parameters')}\n")
-                    
+
                     if workflow.get("suggestions"):
                         output_text.insert(tk.END, f"\n💡 Suggestions: {workflow['suggestions']}\n")
-                    
+
                     self.workflow_log(f"Generated workflow: {workflow.get('workflow_name')}", "SUCCESS")
                 else:
                     self.workflow_log(result.get("message", "AI response received"), "INFO")
@@ -8686,13 +8686,13 @@ keyboard, and screen access:
                 error = result.get("error", "Unknown error")
                 self.workflow_log(f"Error: {error}", "ERROR")
                 messagebox.showerror("Error", error)
-        
+
         def save_current_workflow():
             current_draft = self.nl_workflow_builder.get_current_draft()
             if not current_draft:
                 messagebox.showwarning("No Workflow", "Create a workflow first")
                 return
-            
+
             result = self.nl_workflow_builder.save_workflow()
             if result.get("success"):
                 self.workflow_log(f"Saved workflow: {result.get('name')}", "SUCCESS")
@@ -8701,14 +8701,14 @@ keyboard, and screen access:
             else:
                 self.workflow_log(f"Save failed: {result.get('error')}", "ERROR")
                 messagebox.showerror("Error", result.get("error"))
-        
+
         def clear_conversation():
             self.nl_workflow_builder.clear_conversation()
             self.nl_workflow_builder.clear_draft()
             input_text.delete("1.0", tk.END)
             output_text.delete("1.0", tk.END)
             self.workflow_log("Conversation cleared", "INFO")
-        
+
         process_btn = tk.Button(button_frame,
                                text="🤖 Build Workflow",
                                bg="#a6e3a1",
@@ -8720,7 +8720,7 @@ keyboard, and screen access:
                                padx=20,
                                pady=10)
         process_btn.pack(side="left", padx=5)
-        
+
         save_btn = tk.Button(button_frame,
                             text="💾 Save Workflow",
                             bg="#89b4fa",
@@ -8732,7 +8732,7 @@ keyboard, and screen access:
                             padx=20,
                             pady=10)
         save_btn.pack(side="left", padx=5)
-        
+
         clear_btn = tk.Button(button_frame,
                              text="🗑️ Clear",
                              bg="#f38ba8",
@@ -8744,17 +8744,17 @@ keyboard, and screen access:
                              padx=20,
                              pady=10)
         clear_btn.pack(side="left", padx=5)
-        
+
         right_column = tk.Frame(main_container, bg="#0f0f1e")
         right_column.pack(side="right", fill="both", expand=True)
-        
+
         output_label = tk.Label(right_column,
                                text="📋 Generated Workflow:",
                                bg="#0f0f1e",
                                fg="#cba6f7",
                                font=("Segoe UI", 11, "bold"))
         output_label.pack(anchor="w", pady=(0, 5))
-        
+
         output_text = tk.Text(right_column,
                              bg="#313244",
                              fg="#ffffff",
@@ -8764,17 +8764,17 @@ keyboard, and screen access:
                              padx=10,
                              pady=10)
         output_text.pack(fill="both", expand=True, pady=(0, 10))
-        
+
         saved_frame = tk.Frame(right_column, bg="#313244")
         saved_frame.pack(fill="x", pady=(10, 0))
-        
+
         saved_label = tk.Label(saved_frame,
                               text="💾 Saved Workflows",
                               bg="#313244",
                               fg="#f9e2af",
                               font=("Segoe UI", 10, "bold"))
         saved_label.pack(pady=10)
-        
+
         saved_list = tk.Listbox(saved_frame,
                                bg="#0f0f1e",
                                fg="#cdd6f4",
@@ -8783,18 +8783,18 @@ keyboard, and screen access:
                                selectmode=tk.SINGLE,
                                relief="flat")
         saved_list.pack(fill="x", padx=10, pady=(0, 10))
-        
+
         def refresh_saved_list():
             saved_list.delete(0, tk.END)
             workflows = self.nl_workflow_builder.list_templates()
             for wf in workflows:
                 saved_list.insert(tk.END, f"{wf['name']} ({wf['steps_count']} steps)")
-        
+
         def run_saved_workflow():
             selection = saved_list.curselection()
             if not selection:
                 return
-            
+
             workflows = self.nl_workflow_builder.list_templates()
             workflow = workflows[selection[0]]
             command = f"run workflow: {workflow['name']}"
@@ -8802,7 +8802,7 @@ keyboard, and screen access:
             self.command_input.delete(0, tk.END)
             self.command_input.insert(0, command)
             self.execute_command()
-        
+
         refresh_btn = tk.Button(saved_frame,
                                text="🔄 Refresh List",
                                bg="#45475a",
@@ -8813,7 +8813,7 @@ keyboard, and screen access:
                                command=refresh_saved_list,
                                pady=6)
         refresh_btn.pack(side="left", fill="x", expand=True, padx=(10, 5), pady=(0, 10))
-        
+
         run_btn = tk.Button(saved_frame,
                            text="▶️ Run Selected",
                            bg="#a6e3a1",
@@ -8824,17 +8824,17 @@ keyboard, and screen access:
                            command=run_saved_workflow,
                            pady=6)
         run_btn.pack(side="right", fill="x", expand=True, padx=(5, 10), pady=(0, 10))
-        
+
         log_frame = tk.Frame(builder_window, bg="#1a1a2e")
         log_frame.pack(fill="x", padx=20, pady=(0, 15))
-        
+
         log_label = tk.Label(log_frame,
                             text="📊 Activity Log",
                             bg="#1a1a2e",
                             fg="#f9e2af",
                             font=("Segoe UI", 9, "bold"))
         log_label.pack(anchor="w", padx=10, pady=(10, 5))
-        
+
         self.workflow_output_text = tk.Text(log_frame,
                                             bg="#0f0f1e",
                                             fg="#cdd6f4",
@@ -8845,13 +8845,13 @@ keyboard, and screen access:
                                             padx=10,
                                             pady=10)
         self.workflow_output_text.pack(fill="x", padx=10, pady=(0, 10))
-        
+
         self.workflow_output_text.tag_config("timestamp", foreground="#6c7086")
         self.workflow_output_text.tag_config("info", foreground="#89b4fa")
         self.workflow_output_text.tag_config("success", foreground="#a6e3a1")
         self.workflow_output_text.tag_config("error", foreground="#f38ba8")
         self.workflow_output_text.tag_config("warning", foreground="#f9e2af")
-        
+
         refresh_saved_list()
         self.workflow_log("Workflow Builder ready!", "SUCCESS")
 
