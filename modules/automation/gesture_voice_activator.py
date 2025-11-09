@@ -142,23 +142,49 @@ class GestureVoiceActivator:
         
         if not cap.isOpened():
             print(f"❌ Could not open camera {camera_index}!")
+            print("💡 Try changing camera_index on line 200:")
+            print("   - For camera 0: self.camera_index = 0")
+            print("   - For camera 1: self.camera_index = 1")
+            print("   - For camera 2: self.camera_index = 2")
             return None
         
+        # Set camera properties
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)  # Reduce buffer for real-time
         
-        print("⏳ Warming up camera (critical for Android/DroidCam)...")
-        time.sleep(2)
+        print("⏳ Warming up camera (4 seconds for Android/DroidCam)...")
+        time.sleep(4)  # Increased from 2 to 4 seconds
         
-        print("🔄 Discarding initial frames...")
-        for i in range(5):
+        print("🔄 Discarding initial black frames (15 frames)...")
+        black_count = 0
+        for i in range(15):  # Increased from 5 to 15 frames
             ret, frame = cap.read()
-            if ret:
+            if ret and frame is not None:
                 brightness = frame.mean()
-                print(f"   Frame {i+1}: Brightness {brightness:.1f}")
-            time.sleep(0.1)
+                is_black = brightness < 15
+                black_count += 1 if is_black else 0
+                status = "⚫ BLACK" if is_black else "✅ OK"
+                print(f"   Frame {i+1}: Brightness {brightness:.1f} {status}")
+            time.sleep(0.15)  # Increased delay between frames
         
-        print("✅ Camera ready!")
+        # Test final frame
+        print("\n🧪 Testing camera feed...")
+        ret, test_frame = cap.read()
+        if ret and test_frame is not None:
+            final_brightness = test_frame.mean()
+            print(f"   Final test brightness: {final_brightness:.1f}")
+            if final_brightness < 15:
+                print("\n⚠️  WARNING: Camera still showing black screen!")
+                print("💡 Solutions:")
+                print("   1. Try a different camera index (0, 2, or 3)")
+                print("   2. Close other apps using the camera")
+                print("   3. Restart DroidCam on phone and computer")
+                print("   4. Check DroidCam client shows video feed")
+            else:
+                print("   ✅ Camera feed is working!")
+        
+        print("\n✅ Camera initialization complete!")
         return cap
     
     def run(self):
