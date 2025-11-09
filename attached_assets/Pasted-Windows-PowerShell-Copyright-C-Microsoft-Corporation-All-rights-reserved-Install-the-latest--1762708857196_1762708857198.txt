@@ -1,0 +1,95 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+(.venv1) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL 1> python demo_opencv_hand_gesture.py
+======================================================================
+VATSAL AI - OpenCV Hand Gesture & Face Detection Demo
+======================================================================
+
+Features:
+  ✅ Face Detection (Haar Cascade)
+  ✅ Hand Gesture Recognition (Color + Contour Analysis)
+  ✅ Real-time Processing
+  ✅ No MediaPipe Required!
+
+Gestures:
+  👋 OPEN PALM - Activate voice listening
+  ✊ FIST - Stop/Cancel
+
+Controls:
+  Press 'q' in the video window to quit
+======================================================================
+
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1762707073.793047    3852 gesture_recognizer_graph.cc:129] Hand Gesture Recognizer contains CPU only ops. Sets HandGestureRecognizerGraph acceleration to Xnnpack.
+I0000 00:00:1762707073.798423    3852 hand_gesture_recognizer_graph.cc:250] Custom gesture classifier is not defined.
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+W0000 00:00:1762707073.848743   14812 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1762707073.881730   29480 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1762707073.883679   27580 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+W0000 00:00:1762707073.884099   27580 inference_feedback_manager.cc:114] Feedback manager requires a model with a single signature inference. Disabling support for feedback tensors.
+✅ MediaPipe gesture recognizer loaded
+   Available gestures: ['FIST', 'OPEN_PALM', 'POINTING_UP', 'THUMBS_DOWN', 'THUMBS_UP', 'PEACE_SIGN', 'ILOVEYOU']
+✅ MediaPipe pretrained model loaded
+   Gestures: ['FIST', 'OPEN_PALM', 'POINTING_UP', 'THUMBS_DOWN', 'THUMBS_UP', 'PEACE_SIGN', 'ILOVEYOU']
+
+======================================================================
+⚠️  CUSTOM TRAINED GESTURES NOT FOUND
+======================================================================
+   Expected model files at:
+   - biometric_data/hands\models\gesture_model.pkl
+   - biometric_data/hands\models\gesture_scaler.pkl
+   - biometric_data/hands\models\gesture_labels.pkl
+
+   Missing files: gesture_model.pkl, gesture_scaler.pkl, gesture_labels.pkl
+
+   📝 To train custom gestures:
+      1. Run: python train_hand_gestures.py
+      2. Capture samples for each gesture (50+ recommended)
+      3. Train the model
+      4. Restart the gesture detector
+
+   ℹ️  Currently using:
+      ✅ MediaPipe pretrained gestures (7 gestures)
+      ✅ Hardcoded finger-counting gestures
+======================================================================
+
+
+======================================================================
+🎯 GESTURE DETECTION SYSTEM - AVAILABLE GESTURES
+======================================================================
+
+📱 MediaPipe Pretrained Gestures (7 gestures):
+   ✅ NO TRAINING REQUIRED - Works instantly!
+   • FIST
+   • OPEN_PALM
+   • POINTING_UP
+   • THUMBS_DOWN
+   • THUMBS_UP
+   • PEACE_SIGN
+   • ILOVEYOU
+
+🎓 Custom Trained Gestures:
+   ❌ NOT CONFIGURED
+   ℹ️  Run 'python train_hand_gestures.py' to train custom gestures
+
+👆 Hardcoded Finger-Counting Gestures (4 gestures):
+   ✅ Always available (fallback method)
+   • OPEN_PALM
+   • FIST
+   • PEACE_SIGN
+   • THUMBS_UP
+
+📊 Total Available Gestures: 11
+======================================================================
+
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL 1\demo_opencv_hand_gesture.py", line 88, in <module>
+    main()
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL 1\demo_opencv_hand_gesture.py", line 47, in main
+    detector.set_face_callback(on_face_detected)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'OpenCVHandGestureDetector' object has no attribute 'set_face_callback'. Did you mean: 'set_gesture_callback'?
+(.venv1) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL 1> 
