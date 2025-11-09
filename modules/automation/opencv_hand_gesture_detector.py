@@ -18,7 +18,7 @@ class OpenCVHandGestureDetector:
     Supports both hardcoded gestures and custom trained gestures.
     """
     
-    def __init__(self, voice_commander=None, use_trained_model: bool = True):
+    def __init__(self, voice_commander=None, use_trained_model: bool = True, use_mediapipe: bool = True):
         self.voice_commander = voice_commander
         
         # Hand detection using skin color detection
@@ -47,21 +47,47 @@ class OpenCVHandGestureDetector:
             'fist_detected': 0,
             'thumbs_up_detected': 0,
             'peace_sign_detected': 0,
-            'custom_gestures_detected': 0
+            'custom_gestures_detected': 0,
+            'mediapipe_gestures_detected': 0
         }
         
         # Gesture detection parameters
         self.min_hand_area = 5000
         self.max_hand_area = 50000
         
-        # Trained model support
+        # MediaPipe pretrained model support
+        self.use_mediapipe = use_mediapipe
+        self.mediapipe_recognizer = None
+        
+        # Custom trained model support
         self.use_trained_model = use_trained_model
         self.gesture_trainer = None
         self.min_confidence = 0.6
         
-        # Load trained model if enabled
+        # Load MediaPipe pretrained model
+        if self.use_mediapipe:
+            self._load_mediapipe_model()
+        
+        # Load custom trained model if enabled
         if self.use_trained_model:
             self._load_trained_model()
+    
+    def _load_mediapipe_model(self):
+        """Load Google MediaPipe pretrained gesture model"""
+        try:
+            from modules.automation.mediapipe_gesture_recognizer import MediaPipeGestureRecognizer
+            
+            self.mediapipe_recognizer = MediaPipeGestureRecognizer()
+            
+            if self.mediapipe_recognizer.is_available():
+                print("✅ MediaPipe pretrained model loaded")
+                print(f"   Gestures: {self.mediapipe_recognizer.list_available_gestures()}")
+            else:
+                print("⚠️  MediaPipe model not available, will use other methods")
+                self.mediapipe_recognizer = None
+        except Exception as e:
+            print(f"⚠️  Could not load MediaPipe: {e}")
+            self.mediapipe_recognizer = None
     
     def start(self, camera_index: int = 0) -> Dict:
         """Start gesture detection"""
@@ -322,7 +348,12 @@ class OpenCVHandGestureDetector:
             return []
     
     def _analyze_contour_with_hybrid(self, frame, contour) -> Tuple[str, float]:
-        """Analyze contour using hybrid ML+hardcoded approach"""
+        """
+        Analyze contour using hybrid approach with 3 detection methods:
+        1. MediaPipe pretrained (7 gestures, no training needed)
+        2. Custom ML (user-trained gestures)  
+        3. Hardcoded finger-counting (fallback)
+        """
         try:
             # Get bounding box for this contour
             x, y, w, h = cv2.boundingRect(contour)
@@ -337,7 +368,14 @@ class OpenCVHandGestureDetector:
             # Extract ROI
             roi = frame[y:y+h, x:x+w]
             
-            # Try ML classification first
+            # 1. Try MediaPipe pretrained model first (best accuracy)
+            if self.mediapipe_recognizer is not None:
+                gesture, confidence = self.mediapipe_recognizer.recognize(roi)
+                if gesture is not None and confidence >= self.min_confidence:
+                    self.stats['mediapipe_gestures_detected'] += 1
+                    return gesture, confidence
+            
+            # 2. Try custom ML classification
             if self.gesture_trainer is not None:
                 gray_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
                 normalized_roi = cv2.resize(gray_roi, (128, 128))
@@ -348,7 +386,7 @@ class OpenCVHandGestureDetector:
                 if ml_gesture != "UNKNOWN" and confidence >= self.min_confidence:
                     return ml_gesture, confidence
             
-            # Fall back to finger counting
+            # 3. Fall back to finger counting
             hardcoded_gesture = self._analyze_contour_gesture(contour)
             return hardcoded_gesture, 1.0
             
