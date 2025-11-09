@@ -130,26 +130,9 @@ class GestureVoiceActivator:
         self.on_stop_callback = callback
     
     def detect_working_camera(self):
-        """Auto-detect first working camera (supports Android/DroidCam)"""
-        print("🔍 Auto-detecting cameras...")
-        
-        for index in range(4):
-            cap = cv2.VideoCapture(index)
-            if cap.isOpened():
-                time.sleep(0.5)
-                ret, frame = cap.read()
-                cap.release()
-                
-                if ret and frame is not None and frame.mean() > 10:
-                    print(f"✅ Found working camera at index {index}")
-                    return index
-                else:
-                    print(f"⚠️  Camera {index} opens but no valid feed")
-            else:
-                print(f"❌ Camera {index} not available")
-        
-        print("⚠️  No working camera found, defaulting to index 0")
-        return 0
+        """Simple camera detection - just returns the default camera index"""
+        # No loop - just use the camera index directly
+        return self.camera_index if self.camera_index is not None else 1
     
     def initialize_camera(self, camera_index):
         """Initialize camera with Android/DroidCam support (fixes black screen)"""
@@ -192,6 +175,7 @@ class GestureVoiceActivator:
             min_tracking_confidence=0.5
         )
         
+        # Set camera index directly (no auto-detection loop)
         if self.camera_index is None:
             self.camera_index = 1  # Change this: 0=default, 1=Android/DroidCam, 2=camera2, 3=camera3
         
