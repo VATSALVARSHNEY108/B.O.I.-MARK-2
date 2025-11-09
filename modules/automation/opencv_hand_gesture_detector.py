@@ -8,15 +8,17 @@ import numpy as np
 import threading
 import time
 from typing import Dict, Optional, Callable, Tuple
+import os
 
 
 class OpenCVHandGestureDetector:
     """
     Hand gesture detection using pure OpenCV.
     Works everywhere without MediaPipe dependency.
+    Supports both hardcoded gestures and custom trained gestures.
     """
     
-    def __init__(self, voice_commander=None):
+    def __init__(self, voice_commander=None, use_trained_model: bool = True):
         self.voice_commander = voice_commander
         
         # Hand detection using skin color detection
@@ -44,12 +46,22 @@ class OpenCVHandGestureDetector:
             'open_palm_detected': 0,
             'fist_detected': 0,
             'thumbs_up_detected': 0,
-            'peace_sign_detected': 0
+            'peace_sign_detected': 0,
+            'custom_gestures_detected': 0
         }
         
         # Gesture detection parameters
         self.min_hand_area = 5000
         self.max_hand_area = 50000
+        
+        # Trained model support
+        self.use_trained_model = use_trained_model
+        self.gesture_trainer = None
+        self.min_confidence = 0.6
+        
+        # Load trained model if enabled
+        if self.use_trained_model:
+            self._load_trained_model()
     
     def start(self, camera_index: int = 0) -> Dict:
         """Start gesture detection"""
@@ -214,6 +226,20 @@ class OpenCVHandGestureDetector:
                                 (255, 255, 0),
                                 2
                             )
+                        
+                        else:
+                            # Custom gesture detected by ML model
+                            self.stats['custom_gestures_detected'] += 1
+                            confidence = gesture_info.get('confidence', 0.0)
+                            cv2.putText(
+                                frame,
+                                f"{gesture} ({confidence*100:.1f}%)",
+                                (10, 60),
+                                cv2.FONT_HERSHEY_SIMPLEX,
+                                0.7,
+                                (255, 0, 255),
+                                2
+                            )
                     else:
                         self.hand_detected = False
                 else:
@@ -250,7 +276,7 @@ class OpenCVHandGestureDetector:
     def _detect_all_hand_gestures(self, frame) -> list:
         """
         Detect all hand gestures in the frame (for multiple hands).
-        Returns: List of {'gesture': str, 'contour': np.ndarray}
+        Returns: List of {'gesture': str, 'contour': np.ndarray, 'confidence': float}
         """
         try:
             # Convert to HSV for better skin detection
@@ -280,16 +306,55 @@ class OpenCVHandGestureDetector:
                 if area < self.min_hand_area or area > self.max_hand_area:
                     continue
                 
-                # Analyze contour to determine gesture
-                gesture = self._analyze_contour_gesture(contour)
+                # Try hybrid detection (ML + hardcoded)
+                gesture, confidence = self._analyze_contour_with_hybrid(frame, contour)
                 if gesture != "NONE":
-                    gestures.append({'gesture': gesture, 'contour': contour})
+                    gestures.append({
+                        'gesture': gesture, 
+                        'contour': contour,
+                        'confidence': confidence
+                    })
             
             return gestures
             
         except Exception as e:
             print(f"❌ Multi-hand detection error: {str(e)}")
             return []
+    
+    def _analyze_contour_with_hybrid(self, frame, contour) -> Tuple[str, float]:
+        """Analyze contour using hybrid ML+hardcoded approach"""
+        try:
+            # Get bounding box for this contour
+            x, y, w, h = cv2.boundingRect(contour)
+            
+            # Add padding
+            padding = 20
+            x = max(0, x - padding)
+            y = max(0, y - padding)
+            w = min(frame.shape[1] - x, w + 2 * padding)
+            h = min(frame.shape[0] - y, h + 2 * padding)
+            
+            # Extract ROI
+            roi = frame[y:y+h, x:x+w]
+            
+            # Try ML classification first
+            if self.gesture_trainer is not None:
+                gray_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+                normalized_roi = cv2.resize(gray_roi, (128, 128))
+                normalized_roi = cv2.equalizeHist(normalized_roi)
+                
+                ml_gesture, confidence = self._classify_gesture_ml(normalized_roi)
+                
+                if ml_gesture != "UNKNOWN" and confidence >= self.min_confidence:
+                    return ml_gesture, confidence
+            
+            # Fall back to finger counting
+            hardcoded_gesture = self._analyze_contour_gesture(contour)
+            return hardcoded_gesture, 1.0
+            
+        except Exception as e:
+            # Final fallback
+            return self._analyze_contour_gesture(contour), 1.0
     
     def _analyze_contour_gesture(self, contour) -> str:
         """Analyze a single contour to determine gesture type"""
@@ -487,3 +552,120 @@ class OpenCVHandGestureDetector:
     def is_running(self) -> bool:
         """Check if detector is running"""
         return self.running
+    
+    def _load_trained_model(self):
+        """Load trained gesture model if available"""
+        try:
+            from modules.automation.gesture_trainer import GestureTrainer
+            
+            self.gesture_trainer = GestureTrainer()
+            if self.gesture_trainer.load_model():
+                print(f"✅ Loaded trained gesture model with {len(self.gesture_trainer.labels)} custom gestures")
+                print(f"   Custom gestures: {list(self.gesture_trainer.labels.keys())}")
+            else:
+                print("ℹ️  No trained gesture model found. Using hardcoded gestures only.")
+                self.gesture_trainer = None
+        except Exception as e:
+            print(f"⚠️  Could not load trained model: {e}")
+            self.gesture_trainer = None
+    
+    def _detect_hand_roi(self, frame) -> Tuple[Optional[np.ndarray], Optional[np.ndarray]]:
+        """
+        Detect hand and return normalized 128x128 ROI for ML model
+        
+        Returns:
+            Tuple of (hand_roi as 128x128 grayscale, hand_contour)
+        """
+        try:
+            # Convert to HSV for skin detection
+            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+            
+            # Create skin mask
+            mask = cv2.inRange(hsv, self.lower_skin, self.upper_skin)
+            
+            # Morphological operations
+            kernel = np.ones((5, 5), np.uint8)
+            mask = cv2.erode(mask, kernel, iterations=1)
+            mask = cv2.dilate(mask, kernel, iterations=2)
+            mask = cv2.GaussianBlur(mask, (5, 5), 0)
+            
+            # Find contours
+            contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            
+            if not contours:
+                return None, None
+            
+            # Get largest contour
+            max_contour = max(contours, key=cv2.contourArea)
+            area = cv2.contourArea(max_contour)
+            
+            # Check reasonable hand size
+            if area < self.min_hand_area or area > self.max_hand_area:
+                return None, None
+            
+            # Get bounding box and extract ROI
+            x, y, w, h = cv2.boundingRect(max_contour)
+            
+            # Add padding
+            padding = 20
+            x = max(0, x - padding)
+            y = max(0, y - padding)
+            w = min(frame.shape[1] - x, w + 2 * padding)
+            h = min(frame.shape[0] - y, h + 2 * padding)
+            
+            # Extract and normalize ROI
+            roi = frame[y:y+h, x:x+w]
+            gray_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+            normalized_roi = cv2.resize(gray_roi, (128, 128))
+            normalized_roi = cv2.equalizeHist(normalized_roi)
+            
+            return normalized_roi, max_contour
+            
+        except Exception as e:
+            return None, None
+    
+    def _classify_gesture_ml(self, hand_roi: np.ndarray) -> Tuple[str, float]:
+        """
+        Classify gesture using trained ML model
+        
+        Args:
+            hand_roi: 128x128 grayscale hand image
+        
+        Returns:
+            Tuple of (gesture_name, confidence)
+        """
+        if self.gesture_trainer is None:
+            return "UNKNOWN", 0.0
+        
+        try:
+            gesture_name, confidence = self.gesture_trainer.predict_gesture(
+                hand_roi, 
+                min_confidence=self.min_confidence
+            )
+            return gesture_name, confidence
+        except Exception as e:
+            print(f"❌ ML classification error: {e}")
+            return "UNKNOWN", 0.0
+    
+    def _detect_gesture_hybrid(self, frame) -> Tuple[str, Optional[np.ndarray], float]:
+        """
+        Hybrid gesture detection: tries ML model first, falls back to hardcoded
+        
+        Returns:
+            Tuple of (gesture_name, hand_contour, confidence)
+        """
+        # First, try to detect hand and get ROI for ML
+        if self.gesture_trainer is not None:
+            hand_roi, hand_contour = self._detect_hand_roi(frame)
+            
+            if hand_roi is not None:
+                # Try ML classification
+                ml_gesture, confidence = self._classify_gesture_ml(hand_roi)
+                
+                if ml_gesture != "UNKNOWN" and confidence >= self.min_confidence:
+                    # ML model recognized it!
+                    return ml_gesture, hand_contour, confidence
+        
+        # Fall back to hardcoded finger-counting detection
+        hardcoded_gesture, hand_contour = self._detect_hand_gesture(frame)
+        return hardcoded_gesture, hand_contour, 1.0
