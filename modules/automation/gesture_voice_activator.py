@@ -98,31 +98,58 @@ class GestureVoiceActivator:
     def listen_audio(self):
         """Capture and process speech input"""
         self.listening = True
-        print("\n🎤 Listening... Speak now!")
-        #naudio = get_audio_feedback()
-        #audio.play_listening_start()
-
+        print("\n" + "="*60)
+        print("🎤 LISTENING MODE ACTIVATED")
+        print("="*60)
+        
         try:
             with sr.Microphone() as source:
-                self.recognizer.adjust_for_ambient_noise(source, duration=0.5)
-                audio_data = self.recognizer.listen(source, timeout=5, phrase_time_limit=10)
+                print("🔊 Adjusting for background noise (1 second)...")
+                self.recognizer.adjust_for_ambient_noise(source, duration=1)
+                
+                print("✅ Ready! SPEAK NOW! (You have 10 seconds)")
+                print("   Say something like: 'Hello' or 'Testing'")
+                print()
+                
+                # Increased timeout and energy threshold for better detection
+                self.recognizer.energy_threshold = 300  # Lower = more sensitive
+                audio_data = self.recognizer.listen(source, timeout=10, phrase_time_limit=8)
+                
+                print("✅ Audio captured! Processing...")
 
-            print("🔄 Processing speech...")
             text = self.recognizer.recognize_google(audio_data)
             self.last_text = text
-            print(f"✅ You said: '{text}'")
+            print(f"\n🎉 SUCCESS! You said: '{text}'")
+            print("="*60 + "\n")
 
             if self.on_speech_callback:
                 self.on_speech_callback(text)
 
         except sr.WaitTimeoutError:
-            print("⏱️ No speech detected")
+            print("\n⏱️  TIMEOUT - No speech detected")
+            print("💡 Make sure:")
+            print("   1. Microphone is not muted")
+            print("   2. You speak within 10 seconds")
+            print("   3. Speak loudly and clearly")
+            print("="*60 + "\n")
         except sr.UnknownValueError:
-            print("❓ Could not understand audio")
+            print("\n❓ Audio captured but couldn't understand")
+            print("💡 Try speaking louder and more clearly")
+            print("="*60 + "\n")
         except sr.RequestError as e:
-            print(f"❌ Speech recognition error: {e}")
+            print(f"\n❌ Speech recognition error: {e}")
+            print("💡 Check your internet connection")
+            print("="*60 + "\n")
+        except OSError as e:
+            print(f"\n❌ MICROPHONE ERROR: {e}")
+            print("💡 Solutions:")
+            print("   1. Run: python test_microphone.py")
+            print("   2. Check microphone permissions")
+            print("   3. Close other apps using microphone")
+            print("="*60 + "\n")
         except Exception as e:
-            print(f"❌ Error: {e}")
+            print(f"\n❌ Error: {e}")
+            print("="*60 + "\n")
         finally:
             self.listening = False
 
