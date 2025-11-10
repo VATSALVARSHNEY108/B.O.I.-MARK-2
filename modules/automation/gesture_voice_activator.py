@@ -186,6 +186,7 @@ class GestureVoiceActivator:
         self.hands = self.mp_hands.Hands(
             static_image_mode=False,
             max_num_hands=2,
+            model_complexity=0,  # Fixes MediaPipe warning (0=lite, 1=full)
             min_detection_confidence=0.7,
             min_tracking_confidence=0.5
         )
