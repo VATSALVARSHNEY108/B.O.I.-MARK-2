@@ -124,6 +124,7 @@ CONVERSATION MEMORY:
 MESSAGING & CONTACTS:
 - send_sms: Send SMS text message (parameters: contact_name OR phone, message)
 - send_email: Send email (parameters: contact_name OR email, subject, body)
+- dial_call: Make a phone call (parameters: phone_number [with country code, e.g., +1234567890], message [optional text-to-speech message])
 - send_html_email: Send HTML formatted email (parameters: to, subject, html_content)
 - send_email_with_attachment: Send email with file attachment (parameters: to, subject, body, attachments [list])
 - send_template_email: Send email using template (parameters: to, template [welcome/notification/report/invitation], template_vars)
@@ -550,9 +551,10 @@ IMPORTANT:
 - For "send to [name]" commands, use contact_name parameter
 - If user says "text John" or "message Sarah", use send_sms
 - If user says "email John" or "send email to Sarah", use send_email
+- If user says "call [number]" or "dial [number]" or "phone [number]", use dial_call with phone_number (must include country code, e.g., "+1234567890")
 - If user says "send this photo/file to John", use send_file with file_path
 - If user says "whatsapp [name/number]" or "send whatsapp to [name/number]", use send_whatsapp
-- For WhatsApp, phone must include country code (e.g., "+1234567890")
+- For WhatsApp and phone calls, phone must include country code (e.g., "+1234567890")
 - If user says "suggest improvements", "analyze my screen", "what can I improve", use suggest_screen_improvements
 - If user says "check for errors", "find bugs on screen", use check_screen_errors
 - If user says "give me tips", "quick suggestions", use get_screen_tips

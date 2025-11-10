@@ -6,6 +6,7 @@ import urllib.parse
 from modules.automation.gui_automation import GUIAutomation
 from contact_manager import ContactManager
 from messaging_service import MessagingService
+from modules.communication.phone_dialer import create_phone_dialer
 from youtube_automation import create_youtube_automation
 from whatsapp_automation import create_whatsapp_automation
 from modules.ai_features.code_generation import generate_code, explain_code, improve_code, debug_code
@@ -61,6 +62,7 @@ class CommandExecutor:
         self.gui = GUIAutomation()
         self.contact_manager = ContactManager()
         self.messaging = MessagingService(self.contact_manager)
+        self.phone_dialer = create_phone_dialer()
         self.memory = ConversationMemory()
         self.workflow_manager = WorkflowManager()
         self.youtube = create_youtube_automation(self.gui)
@@ -410,6 +412,12 @@ class CommandExecutor:
                 subject = parameters.get("subject", "")
                 body = parameters.get("body", "")
                 result = self.messaging.send_email(contact_name=contact_name, email=email, subject=subject, body=body)
+                return result
+
+            elif action == "dial_call":
+                phone_number = parameters.get("phone_number") or parameters.get("phone")
+                message = parameters.get("message")
+                result = self.phone_dialer.dial_call(phone_number=phone_number, message=message)
                 return result
 
             elif action == "send_html_email":

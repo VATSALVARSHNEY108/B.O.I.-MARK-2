@@ -1,0 +1,278 @@
+"""
+Phone Call Dialer for VATSAL
+Make voice calls using Twilio integration
+"""
+
+import os
+from typing import Optional, Dict
+from datetime import datetime
+
+
+class PhoneDialer:
+    """Make phone calls using Twilio"""
+    
+    def __init__(self):
+        self.twilio_available = False
+        self.demo_mode = True
+        self.call_history = []
+        
+        self._check_twilio()
+    
+    def _check_twilio(self):
+        """Check if Twilio credentials are available"""
+        if (os.environ.get("TWILIO_ACCOUNT_SID") and 
+            os.environ.get("TWILIO_AUTH_TOKEN") and
+            os.environ.get("TWILIO_PHONE_NUMBER")):
+            self.twilio_available = True
+            self.demo_mode = False
+            print("✅ Twilio phone dialer ready!")
+        else:
+            print("⚠️ Twilio not configured - phone dialer running in demo mode")
+    
+    def dial_call(self, phone_number: str, message: Optional[str] = None) -> Dict:
+        """
+        Dial a phone call to the specified number
+        
+        Args:
+            phone_number: Phone number to call (with country code, e.g., +1234567890)
+            message: Optional text-to-speech message to play when call is answered
+        
+        Returns:
+            Dict with success status and details
+        """
+        if not phone_number:
+            return {
+                "success": False,
+                "message": "No phone number provided"
+            }
+        
+        # Normalize phone number
+        phone_number = self._normalize_phone_number(phone_number)
+        
+        # Default message if none provided
+        if not message:
+            message = "This is an automated call from VATSAL AI Assistant. This is a test call. Thank you."
+        
+        # Log the call attempt
+        call_record = {
+            "phone": phone_number,
+            "message": message,
+            "timestamp": datetime.now().isoformat(),
+            "status": "pending"
+        }
+        
+        if self.demo_mode or not self.twilio_available:
+            print(f"\n📞 [DEMO MODE] Making call to: {phone_number}")
+            print(f"📝 Message: {message}")
+            call_record["status"] = "demo"
+            self.call_history.append(call_record)
+            return {
+                "success": True,
+                "message": f"[DEMO] Call would be placed to {phone_number}",
+                "demo": True,
+                "phone": phone_number
+            }
+        
+        try:
+            from twilio.rest import Client
+            
+            # Initialize Twilio client
+            client = Client(
+                os.environ.get("TWILIO_ACCOUNT_SID"),
+                os.environ.get("TWILIO_AUTH_TOKEN")
+            )
+            
+            twilio_phone = os.environ.get("TWILIO_PHONE_NUMBER")
+            
+            # Create TwiML for the call
+            twiml_url = self._create_twiml_url(message)
+            
+            # Make the call
+            call = client.calls.create(
+                to=phone_number,
+                from_=twilio_phone,
+                url=twiml_url,
+                method='GET'
+            )
+            
+            call_record["status"] = "success"
+            call_record["sid"] = call.sid
+            self.call_history.append(call_record)
+            
+            print(f"✅ Call initiated to {phone_number}")
+            print(f"📞 Call SID: {call.sid}")
+            
+            return {
+                "success": True,
+                "message": f"Call initiated to {phone_number}",
+                "sid": call.sid,
+                "phone": phone_number,
+                "status": call.status
+            }
+            
+        except Exception as e:
+            call_record["status"] = "failed"
+            call_record["error"] = str(e)
+            self.call_history.append(call_record)
+            
+            return {
+                "success": False,
+                "message": f"Error making call: {str(e)}",
+                "phone": phone_number
+            }
+    
+    def _normalize_phone_number(self, phone: str) -> str:
+        """Normalize phone number to E.164 format"""
+        # Remove common formatting characters
+        phone = phone.replace("-", "").replace("(", "").replace(")", "").replace(" ", "")
+        
+        # Add + if not present
+        if not phone.startswith("+"):
+            # Assume US/Canada if 10 digits
+            if len(phone) == 10:
+                phone = "+1" + phone
+            else:
+                phone = "+" + phone
+        
+        return phone
+    
+    def _create_twiml_url(self, message: str) -> str:
+        """
+        Create a TwiML URL for the voice message using Twimlets
+        Twimlets are simple, hosted TwiML apps from Twilio
+        """
+        from urllib.parse import quote
+        
+        # Encode the message for URL safety
+        encoded_message = quote(message)
+        
+        # Use Twilio's Twimlets Message endpoint for text-to-speech
+        # This will actually speak the message we provide
+        twiml_url = f'http://twimlets.com/message?Message={encoded_message}'
+        
+        return twiml_url
+    
+    def make_call_with_twiml(self, phone_number: str, twiml_content: str) -> Dict:
+        """
+        Make a call with custom TwiML content
+        
+        Args:
+            phone_number: Phone number to call
+            twiml_content: Custom TwiML XML content
+        
+        Returns:
+            Dict with success status and details
+        """
+        if self.demo_mode or not self.twilio_available:
+            print(f"\n📞 [DEMO MODE] Making call to: {phone_number}")
+            print(f"📝 TwiML: {twiml_content[:100]}...")
+            return {
+                "success": True,
+                "message": f"[DEMO] Call with custom TwiML would be placed to {phone_number}",
+                "demo": True
+            }
+        
+        try:
+            from twilio.rest import Client
+            
+            client = Client(
+                os.environ.get("TWILIO_ACCOUNT_SID"),
+                os.environ.get("TWILIO_AUTH_TOKEN")
+            )
+            
+            twilio_phone = os.environ.get("TWILIO_PHONE_NUMBER")
+            
+            # Make call with TwiML
+            call = client.calls.create(
+                to=phone_number,
+                from_=twilio_phone,
+                twiml=twiml_content
+            )
+            
+            return {
+                "success": True,
+                "message": f"Call initiated to {phone_number}",
+                "sid": call.sid,
+                "status": call.status
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"Error making call: {str(e)}"
+            }
+    
+    def get_call_status(self, call_sid: str) -> Dict:
+        """
+        Get the status of a call
+        
+        Args:
+            call_sid: Twilio call SID
+        
+        Returns:
+            Dict with call status information
+        """
+        if self.demo_mode or not self.twilio_available:
+            return {
+                "success": True,
+                "message": "[DEMO] Call status check",
+                "status": "completed",
+                "demo": True
+            }
+        
+        try:
+            from twilio.rest import Client
+            
+            client = Client(
+                os.environ.get("TWILIO_ACCOUNT_SID"),
+                os.environ.get("TWILIO_AUTH_TOKEN")
+            )
+            
+            call = client.calls(call_sid).fetch()
+            
+            return {
+                "success": True,
+                "sid": call.sid,
+                "status": call.status,
+                "duration": call.duration,
+                "from": call.from_,
+                "to": call.to,
+                "direction": call.direction
+            }
+            
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"Error fetching call status: {str(e)}"
+            }
+    
+    def get_call_history(self, limit: int = 10) -> list:
+        """Get recent call history"""
+        return self.call_history[-limit:]
+    
+    def quick_dial(self, name_or_number: str, message: Optional[str] = None) -> Dict:
+        """
+        Quick dial by name or number
+        Supports both direct phone numbers and contact names
+        
+        Args:
+            name_or_number: Either a phone number or contact name
+            message: Optional message to play
+        
+        Returns:
+            Dict with call status
+        """
+        # Check if it's a phone number (contains digits)
+        if any(char.isdigit() for char in name_or_number):
+            return self.dial_call(name_or_number, message)
+        else:
+            # Try to look up contact (would integrate with contact manager)
+            return {
+                "success": False,
+                "message": f"Contact lookup not implemented yet. Please provide a phone number with country code (e.g., +1234567890)"
+            }
+
+
+def create_phone_dialer():
+    """Factory function to create PhoneDialer instance"""
+    return PhoneDialer()

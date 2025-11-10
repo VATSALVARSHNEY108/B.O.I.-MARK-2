@@ -55,7 +55,7 @@ Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mo
 -   **psutil:** For system monitoring.
 -   **python-dotenv:** For environment variable management.
 -   **streamlit:** For web tools application.
--   **Twilio:** For SMS messaging.
+-   **Twilio:** For SMS messaging and phone call dialing.
 -   **Gmail SMTP:** For email sending.
 -   **watchdog:** For real-time file system monitoring.
 -   **speechrecognition & pyttsx3:** For voice commands and text-to-speech.
@@ -71,7 +71,13 @@ Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mo
 -   **Selenium:** For web automation and intelligent form filling.
 
 ## Recent Changes
--   **November 2025 (Latest Update):** Added **Audio Feedback System** for gesture recognition!
+-   **November 2025 (Latest Update):**
+    - Added **Phone Call Dialing** feature using Twilio integration!
+      - Make voice calls with natural commands like "call +1234567890"
+      - Text-to-speech message support for automated calls
+      - Call history tracking and status monitoring
+      - Demo mode for testing without Twilio credentials
+    - Added **Audio Feedback System** for gesture recognition!
     - **Rising Beep Sound** plays when hand gesture activates listening (800Hz → 1200Hz, 0.2s)
     - **Instant Confirmation** - user immediately knows system is ready for voice commands
     - **Dual Audio Backend**: Pygame (primary) for quality tones, system beep (fallback) for compatibility
