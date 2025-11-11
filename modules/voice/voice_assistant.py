@@ -17,6 +17,8 @@ class VoiceAssistant:
         self.command_callback = command_callback
         self.listening = False
         self.wake_word_enabled = True
+        self.is_speaking = False
+        self.speaking_lock = threading.Lock()
         # Simple and easy wake words for quick activation
         self.wake_words = ["vatsal", "hey vatsal", "ok vatsal", "watson", "hey watson", "ok watson", "hello", "open", "search", "oye", "bhai", "bhaiya", "bhaisahb"]
         # Action verbs that should be kept in the command
@@ -98,12 +100,34 @@ class VoiceAssistant:
         self.command_count = {}
     
     def speak(self, text):
-        """Convert text to speech"""
+        """Convert text to speech in a separate thread (non-blocking)"""
+        def speak_thread():
+            try:
+                with self.speaking_lock:
+                    self.is_speaking = True
+                    self.engine.say(text)
+                    self.engine.runAndWait()
+                    self.is_speaking = False
+            except Exception as e:
+                print(f"❌ Speech failed: {str(e)}")
+                self.is_speaking = False
+        
+        # Stop any ongoing speech before starting new one
+        self.stop_speaking()
+        
+        # Start speaking in background thread
+        thread = threading.Thread(target=speak_thread, daemon=True)
+        thread.start()
+    
+    def stop_speaking(self):
+        """Stop current speech immediately"""
         try:
-            self.engine.say(text)
-            self.engine.runAndWait()
+            if self.is_speaking:
+                # Stop the engine to interrupt current speech
+                self.engine.stop()
+                self.is_speaking = False
         except Exception as e:
-            print(f"❌ Speech failed: {str(e)}")
+            pass  # Silently ignore errors when stopping
     
     def listen_once(self):
         """Listen for a single voice command"""
@@ -197,14 +221,17 @@ class VoiceAssistant:
                 
                 while self.listening:
                     try:
+                        # Stop any ongoing speech before listening for new command
+                        self.stop_speaking()
+                        
                         # ULTRA FAST: Very short timeout and phrase limit for instant "bhai" detection
                         audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=3)
+                        
                         command = self.recognizer.recognize_google(audio)
                         command_lower = command.lower()
                         
                         if "stop listening" in command_lower:
                             self.listening = False
-                            self.speak("Stopping voice assistant")
                             print("👋 Voice assistant stopped")
                             break
                         
@@ -227,20 +254,17 @@ class VoiceAssistant:
                                             actual_command = command_parts[1]
                                         
                                         print(f"👂 Wake word detected with command: {actual_command}")
-                                        self.speak("Ji")
                                         
-                                        # Process the command immediately
+                                        # Process the command immediately (silently)
                                         if self.command_callback:
                                             response = self.command_callback(actual_command)
                                             if response:
                                                 self.speak(response)
-                                            else:
-                                                self.speak("Samajh nahi aaya")
                                         waiting_for_wake_word = True  # Reset for next command
                                     else:
                                         # Wake word only, wait for command
                                         print(f"👂 Wake word detected! Listening for command...")
-                                        self.speak("Ji, kaho")
+                                        self.speak("yes boss")
                                         waiting_for_wake_word = False
                                 else:
                                     continue
@@ -253,8 +277,6 @@ class VoiceAssistant:
                                     response = self.command_callback(command)
                                     if response:
                                         self.speak(response)
-                                    else:
-                                        self.speak("Samajh nahi aaya. Phir se kaho")
                         else:
                             print(f"✅ Command: {command}")
                             if self.command_callback:
@@ -1055,7 +1077,7 @@ Wake Words (say one of these first):
   • "Bhaisahb"
   • "Oye"
 
-Usage: Say wake word → Wait for "Ji, kaho" → Give your command
+Usage: Say wake word → Wait for "yes boss" → Give your command
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -1223,7 +1245,7 @@ Usage: Say wake word → Wait for "Ji, kaho" → Give your command
 
 Example Usage:
   1. Say "Bhai" (or even "Bha") ⚡
-  2. Wait for "Ji, kaho"
+  2. Wait for "yes boss"
   3. Say "Open Chrome"
   4. Done! ✅
 
