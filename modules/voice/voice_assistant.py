@@ -131,6 +131,9 @@ class VoiceAssistant:
     
     def listen_once(self):
         """Listen for a single voice command"""
+        # Stop any ongoing speech immediately when starting to listen
+        self.stop_speaking()
+        
         try:
             with sr.Microphone() as source:
                 print("🎤 Listening...")
@@ -263,6 +266,8 @@ class VoiceAssistant:
                                         waiting_for_wake_word = True  # Reset for next command
                                     else:
                                         # Wake word only, wait for command
+                                        # Stop any ongoing work immediately
+                                        self.stop_speaking()
                                         print(f"👂 Wake word detected! Listening for command...")
                                         self.speak("yes boss")
                                         waiting_for_wake_word = False
