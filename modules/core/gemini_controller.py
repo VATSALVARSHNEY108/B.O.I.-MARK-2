@@ -15,7 +15,7 @@ client = None
 
 class GeminiServiceError(Exception):
     """Custom exception for Gemini API service errors"""
-    def __init__(self, message: str, status_code: str | None = None):
+    def __init__(self, message: str, status_code: str = None):
         self.message = message
         self.status_code = status_code
         super().__init__(self.message)
@@ -191,13 +191,6 @@ QUICK INFORMATION (INSTANT RESPONSES - NO WEB SEARCH):
 - get_date_time: Get both date and time (parameters: none) - Use for "date and time", "current date time"
 - get_quick_weather: Get current weather instantly (parameters: city [optional, default: New York]) - Use for "what's the weather", "weather today", "temperature"
 - get_forecast: Get weather forecast (parameters: city [optional], days [optional, default: 3])
-- get_optimistic_weather: Get weather with positive, upbeat presentation (parameters: city [optional, default: New York]) - Use for "optimistic weather", "positive weather", "weather with good vibes", "cheerful weather"
-- get_optimistic_forecast: Get weather forecast presented optimistically (parameters: city [optional], days [optional, default: 3]) - Use for "optimistic forecast", "positive forecast", "uplifting forecast"
-
-BATCH FILE INTEGRATION (Desktop Files):
-- read_desktop_time: Read time and date from desktop file created by batch script (parameters: none) - Use for "read desktop time", "what does the desktop time say", "check time file"
-- read_reminders: Read all reminders from desktop reminder file (parameters: none) - Use for "show reminders", "what are my reminders", "read reminder file"
-- add_reminder: Add a new reminder to desktop file (parameters: text [required], due_time [optional]) - Use for "add reminder", "create reminder", "remind me to"
 
 CODE GENERATION & EXECUTION:
 - generate_code: Generate code using AI and display it (parameters: description, language [optional, auto-detected])
