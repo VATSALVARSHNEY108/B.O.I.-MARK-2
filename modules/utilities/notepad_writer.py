@@ -6,8 +6,15 @@ Handles opening Notepad in full screen and writing content
 import subprocess
 import time
 import pyperclip
-import pyautogui
 import os
+
+# Try to import pyautogui, but make it optional for cloud environments
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception:
+    PYAUTOGUI_AVAILABLE = False
+    pyautogui = None
 
 
 def write_to_notepad(content: str, fullscreen: bool = True, title: str = None) -> dict:
@@ -22,6 +29,12 @@ def write_to_notepad(content: str, fullscreen: bool = True, title: str = None) -
     Returns:
         dict with success status and details
     """
+    if not PYAUTOGUI_AVAILABLE:
+        return {
+            "success": False,
+            "message": "Notepad automation not available in cloud environment"
+        }
+    
     try:
         # Step 1: Open Notepad
         print("📝 Opening Notepad...")

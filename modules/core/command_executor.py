@@ -4,8 +4,8 @@ import webbrowser
 import time
 import urllib.parse
 from modules.automation.gui_automation import GUIAutomation
-from contact_manager import ContactManager
-from messaging_service import MessagingService
+from modules.utilities.contact_manager import ContactManager
+from modules.communication.messaging_service import MessagingService
 from modules.communication.phone_dialer import create_phone_dialer
 from youtube_automation import create_youtube_automation
 from whatsapp_automation import create_whatsapp_automation

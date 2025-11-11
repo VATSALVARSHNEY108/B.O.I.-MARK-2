@@ -21,6 +21,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 import tempfile
 
+# Load environment variables FIRST
+load_dotenv()
+
 # Add modules to path
 workspace_dir = Path(__file__).parent
 modules_dir = workspace_dir / 'modules'
@@ -35,9 +38,9 @@ try:
     executor = CommandExecutor()
 except Exception as e:
     st.error(f"Failed to load command executor: {e}")
+    import traceback
+    st.code(traceback.format_exc())
     executor = None
-
-load_dotenv()
 
 # Custom CSS
 st.markdown("""

@@ -1,7 +1,7 @@
 import os
 import base64
 from typing import Optional, Dict
-from contact_manager import ContactManager
+from modules.utilities.contact_manager import ContactManager
 
 class MessagingService:
     """Handles SMS and Email sending capabilities"""
