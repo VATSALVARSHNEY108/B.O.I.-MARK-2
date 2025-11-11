@@ -31,6 +31,7 @@ from spotify_desktop_automation import create_spotify_desktop_automation
 from weather_news_service import WeatherNewsService
 from translation_service import TranslationService
 from advanced_calculator import AdvancedCalculator
+from modules.utilities.quick_info import create_quick_info
 from password_vault import PasswordVault
 from quick_notes import QuickNotes
 from calendar_manager import CalendarManager
@@ -82,6 +83,7 @@ class CommandExecutor:
         self.weather_news = WeatherNewsService()
         self.translator = TranslationService()
         self.calculator = AdvancedCalculator()
+        self.quick_info = create_quick_info()
         self.password_vault = PasswordVault()
         self.notes = QuickNotes()
         self.calendar = CalendarManager()
