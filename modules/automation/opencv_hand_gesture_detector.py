@@ -177,6 +177,12 @@ class OpenCVHandGestureDetector:
         print("👍 Show THUMBS UP for approval")
         print("✌️✌️  Show TWO PEACE SIGNS (both hands) for VATSAL greeting")
         
+        # Create window and set it to a specific size and position
+        window_name = 'VATSAL - Hand Gesture'
+        cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+        cv2.resizeWindow(window_name, 320, 240)  # Small size: 320x240
+        cv2.moveWindow(window_name, 0, 0)  # Top-left corner position
+        
         while self.running:
             try:
                 ret, frame = self.cap.read()
@@ -311,7 +317,9 @@ class OpenCVHandGestureDetector:
                            (10, frame.shape[0] - 20),
                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                 
-                cv2.imshow('VATSAL - OpenCV Hand Gesture Detection', frame)
+                # Resize frame to smaller size for compact display
+                display_frame = cv2.resize(frame, (320, 240))
+                cv2.imshow(window_name, display_frame)
                 
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     self.running = False
