@@ -231,6 +231,12 @@ class GestureVoiceActivator:
         print("🎯 Show TWO V signs for VATSAL greeting")
         print("🎯 Show ONE V sign to start voice listening\n")
 
+        # Create window and set it to a specific size and position
+        window_name = 'VATSAL - Gesture Listener'
+        cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+        cv2.resizeWindow(window_name, 320, 240)  # Small size: 320x240
+        cv2.moveWindow(window_name, 0, 0)  # Top-left corner position
+
         self.running = True
         single_v_detected = False
         single_v_timer = 0
@@ -290,7 +296,9 @@ class GestureVoiceActivator:
                     cv2.putText(frame, f"Last: {self.last_text[:40]}", (10, h - 20),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
 
-                cv2.imshow('VATSAL AI - Gesture Listener (SMART CAMERA)', frame)
+                # Resize frame to smaller size for compact display
+                display_frame = cv2.resize(frame, (320, 240))
+                cv2.imshow(window_name, display_frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     print("\n⏹️ Stopping...")
                     break
