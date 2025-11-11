@@ -247,6 +247,73 @@ class CommandExecutor:
                     "message": f"Waited {seconds} seconds" if success else "Failed to wait"
                 }
 
+            # QUICK INFORMATION - Instant responses without web search
+            elif action == "get_time":
+                result = self.quick_info.get_current_time()
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_date":
+                result = self.quick_info.get_current_date(detailed=True)
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_day_info":
+                result = self.quick_info.get_day_info()
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_week_info":
+                result = self.quick_info.get_week_info()
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_month_info":
+                result = self.quick_info.get_month_info()
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_year_info":
+                result = self.quick_info.get_year_info()
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_date_time":
+                result = self.quick_info.get_date_and_time()
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_quick_weather":
+                city = parameters.get("city", "New York")
+                result = self.weather_news.get_weather(city)
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_forecast":
+                city = parameters.get("city", "New York")
+                days = parameters.get("days", 3)
+                result = self.weather_news.get_forecast(city, days)
+                return {
+                    "success": True,
+                    "message": result
+                }
+
             elif action == "search_web":
                 query = parameters.get("query", "")
                 url = f"https://www.google.com/search?q={query.replace(' ', '+')}"
