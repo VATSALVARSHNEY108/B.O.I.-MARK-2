@@ -1,5 +1,7 @@
 import os
 import json
+import time
+import random
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
@@ -10,6 +12,14 @@ load_dotenv()
 # Initialize client - will be set when API key is available
 client = None
 
+
+class GeminiServiceError(Exception):
+    """Custom exception for Gemini API service errors"""
+    def __init__(self, message: str, status_code: str | None = None):
+        self.message = message
+        self.status_code = status_code
+        super().__init__(self.message)
+
 def get_client():
     """Get or initialize the Gemini client"""
     global client
@@ -19,6 +29,92 @@ def get_client():
             raise ValueError("GEMINI_API_KEY environment variable not set")
         client = genai.Client(api_key=api_key)
     return client
+
+
+def _invoke_gemini(model: str, contents, config=None, max_attempts: int = 4):
+    """
+    Invoke Gemini API with exponential backoff retry logic.
+    
+    Handles 429 (RESOURCE_EXHAUSTED) and 503 (UNAVAILABLE) errors with:
+    - Exponential backoff with jitter
+    - Model fallback from gemini-2.0-flash to gemini-1.5-flash-latest
+    - User-friendly error messages
+    
+    Args:
+        model: Model name to use (e.g., 'gemini-2.0-flash')
+        contents: Content to send to the model
+        config: Optional GenerateContentConfig
+        max_attempts: Maximum retry attempts per model (default: 4)
+    
+    Returns:
+        API response object
+    
+    Raises:
+        GeminiServiceError: When all retries exhausted
+    """
+    api_client = get_client()
+    models_to_try = [model, "gemini-1.5-flash-latest"]
+    last_error = None
+    last_status_code = None
+    
+    for model_idx, current_model in enumerate(models_to_try):
+        for attempt in range(max_attempts):
+            try:
+                response = api_client.models.generate_content(
+                    model=current_model,
+                    contents=contents,
+                    config=config
+                )
+                
+                if attempt > 0 or model_idx > 0:
+                    print(f"✅ Gemini API call succeeded after {attempt + 1} attempt(s) with model {current_model}")
+                
+                return response
+                
+            except Exception as e:
+                error_str = str(e)
+                last_error = e
+                
+                is_rate_limit = "429" in error_str or "RESOURCE_EXHAUSTED" in error_str
+                is_unavailable = "503" in error_str or "UNAVAILABLE" in error_str
+                
+                if is_rate_limit:
+                    last_status_code = "429"
+                    error_type = "Rate limit"
+                elif is_unavailable:
+                    last_status_code = "503"
+                    error_type = "Service unavailable"
+                else:
+                    raise
+                
+                if attempt < max_attempts - 1:
+                    base_delay = 2 ** attempt
+                    jitter = random.uniform(0, 0.5)
+                    wait_time = min(base_delay + jitter, 8.0)
+                    
+                    print(f"⚠️ {error_type} ({last_status_code}) with {current_model}. "
+                          f"Retry {attempt + 1}/{max_attempts} in {wait_time:.1f}s...")
+                    time.sleep(wait_time)
+                else:
+                    if model_idx == 0:
+                        print(f"⚠️ Max retries reached for {current_model}. Trying fallback model...")
+                    else:
+                        print(f"❌ All retries exhausted for both models")
+    
+    if last_status_code == "429":
+        friendly_message = (
+            "The AI service is experiencing high demand right now. "
+            "Please try again in a moment, or check your API quota limits."
+        )
+    elif last_status_code == "503":
+        friendly_message = (
+            "The AI service is temporarily overloaded. "
+            "Please wait a moment and try again."
+        )
+    else:
+        friendly_message = "The AI service encountered an error. Please try again."
+    
+    raise GeminiServiceError(friendly_message, last_status_code)
 
 def validate_command_structure(data: dict) -> dict:
     """
@@ -633,8 +729,7 @@ For multi-step workflows, each step in steps array should have: {"action": "..."
 """
 
     try:
-        api_client = get_client()
-        response = api_client.models.generate_content(
+        response = _invoke_gemini(
             model="gemini-2.0-flash",
             contents=[
                 types.Content(role="user", parts=[types.Part(text=f"Parse this command: {user_input}")])
@@ -656,6 +751,13 @@ For multi-step workflows, each step in steps array should have: {"action": "..."
                 "description": "Could not parse command"
             }
 
+    except GeminiServiceError as e:
+        return {
+            "action": "error",
+            "parameters": {"error": e.message, "status_code": e.status_code},
+            "steps": [],
+            "description": e.message
+        }
     except json.JSONDecodeError as e:
         return {
             "action": "error",
@@ -676,12 +778,13 @@ def get_ai_suggestion(context: str) -> str:
     Get AI suggestions or help for automation tasks.
     """
     try:
-        api_client = get_client()
-        response = api_client.models.generate_content(
+        response = _invoke_gemini(
             model="gemini-2.0-flash",
             contents=f"As a desktop automation assistant, help with this: {context}"
         )
         return response.text or "No suggestion available"
+    except GeminiServiceError as e:
+        return f"⚠️ {e.message}"
     except Exception as e:
         return f"Error getting suggestion: {str(e)}"
 
