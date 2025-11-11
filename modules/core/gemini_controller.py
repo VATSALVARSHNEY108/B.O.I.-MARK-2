@@ -192,6 +192,11 @@ QUICK INFORMATION (INSTANT RESPONSES - NO WEB SEARCH):
 - get_quick_weather: Get current weather instantly (parameters: city [optional, default: New York]) - Use for "what's the weather", "weather today", "temperature"
 - get_forecast: Get weather forecast (parameters: city [optional], days [optional, default: 3])
 
+BATCH FILE INTEGRATION (Desktop Files):
+- read_desktop_time: Read time and date from desktop file created by batch script (parameters: none) - Use for "read desktop time", "what does the desktop time say", "check time file"
+- read_reminders: Read all reminders from desktop reminder file (parameters: none) - Use for "show reminders", "what are my reminders", "read reminder file"
+- add_reminder: Add a new reminder to desktop file (parameters: text [required], due_time [optional]) - Use for "add reminder", "create reminder", "remind me to"
+
 CODE GENERATION & EXECUTION:
 - generate_code: Generate code using AI and display it (parameters: description, language [optional, auto-detected])
 - write_code_to_editor: Generate code and write it to text editor (parameters: description, language [optional], editor [optional, default: notepad])

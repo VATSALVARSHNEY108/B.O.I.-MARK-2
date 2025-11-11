@@ -55,6 +55,7 @@ from visual_chat_monitor import create_visual_chat_monitor
 from smart_screen_monitor import create_smart_screen_monitor
 from desktop_rag import create_desktop_rag
 from communication_enhancements import create_communication_enhancements
+from modules.batch_file_reader import batch_reader
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -295,6 +296,40 @@ class CommandExecutor:
                 return {
                     "success": True,
                     "message": result
+                }
+
+            elif action == "read_desktop_time":
+                result = batch_reader.read_desktop_time()
+                return {
+                    "success": result.get("success"),
+                    "message": result.get("message")
+                }
+
+            elif action == "read_reminders":
+                result = batch_reader.read_reminders()
+                if result.get("success") and result.get("reminders"):
+                    formatted = batch_reader.format_reminders_for_display(result["reminders"])
+                    return {
+                        "success": True,
+                        "message": formatted
+                    }
+                return {
+                    "success": result.get("success"),
+                    "message": result.get("message")
+                }
+
+            elif action == "add_reminder":
+                text = parameters.get("text", "")
+                due_time = parameters.get("due_time", "")
+                if not text:
+                    return {
+                        "success": False,
+                        "message": "Please provide reminder text"
+                    }
+                result = batch_reader.add_reminder_via_python(text, due_time)
+                return {
+                    "success": result.get("success"),
+                    "message": result.get("message")
                 }
 
             elif action == "get_quick_weather":
