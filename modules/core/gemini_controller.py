@@ -84,6 +84,18 @@ DESKTOP AUTOMATION:
 - create_file: Create a file (parameters: filename, content)
 - wait: Wait for seconds (parameters: seconds)
 
+QUICK INFORMATION (INSTANT RESPONSES - NO WEB SEARCH):
+**IMPORTANT: Use these actions instead of search_web for weather/date/time queries**
+- get_time: Get current time (parameters: none) - Use for "what time is it", "current time", "show time"
+- get_date: Get current date with details (parameters: none) - Use for "what's the date", "today's date", "what day is it"
+- get_day_info: Get info about today (parameters: none) - Use for "what day is it", "day of week"
+- get_week_info: Get current week information (parameters: none) - Use for "what week", "week number"
+- get_month_info: Get current month details (parameters: none) - Use for "month info", "days in month"
+- get_year_info: Get current year progress (parameters: none) - Use for "year info", "day of year"
+- get_date_time: Get both date and time (parameters: none) - Use for "date and time", "current date time"
+- get_quick_weather: Get current weather instantly (parameters: city [optional, default: New York]) - Use for "what's the weather", "weather today", "temperature"
+- get_forecast: Get weather forecast (parameters: city [optional], days [optional, default: 3])
+
 CODE GENERATION & EXECUTION:
 - generate_code: Generate code using AI and display it (parameters: description, language [optional, auto-detected])
 - write_code_to_editor: Generate code and write it to text editor (parameters: description, language [optional], editor [optional, default: notepad])
