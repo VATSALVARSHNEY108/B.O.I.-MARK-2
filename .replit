@@ -17,15 +17,15 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "VATSAL AI Desktop Automation"
+args = "VATSAL AI Web Interface"
 
 [[workflows.workflow]]
-name = "VATSAL AI Desktop Automation"
+name = "VATSAL AI Web Interface"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "streamlit run vatsal.py --server.port=5000 --server.address=0.0.0.0 --server.headless=true"
+args = "streamlit run streamlit_app.py --server.port=5000 --server.address=0.0.0.0 --server.headless=true"
 waitForPort = 5000
 
 [workflows.workflow.metadata]
@@ -36,7 +36,7 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 34181
+localPort = 33327
 externalPort = 3003
 
 [[ports]]
