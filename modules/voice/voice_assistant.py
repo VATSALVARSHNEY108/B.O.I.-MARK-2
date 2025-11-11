@@ -258,7 +258,10 @@ class VoiceAssistant:
                                         
                                         print(f"👂 Wake word detected with command: {actual_command}")
                                         
-                                        # Process the command immediately (silently)
+                                        # Stop any ongoing speech before executing new command
+                                        self.stop_speaking()
+                                        
+                                        # Process the command immediately
                                         if self.command_callback:
                                             response = self.command_callback(actual_command)
                                             if response:
@@ -272,8 +275,12 @@ class VoiceAssistant:
                                 else:
                                     continue
                             else:
-                                # Already activated, process command
+                                # Already activated, process command without wake word
                                 print(f"✅ Command: {command}")
+                                
+                                # Stop any ongoing speech before executing new command
+                                self.stop_speaking()
+                                
                                 waiting_for_wake_word = True
                                 
                                 if self.command_callback:
@@ -282,6 +289,10 @@ class VoiceAssistant:
                                         self.speak(response)
                         else:
                             print(f"✅ Command: {command}")
+                            
+                            # Stop any ongoing speech before executing new command
+                            self.stop_speaking()
+                            
                             if self.command_callback:
                                 response = self.command_callback(command)
                                 if response:
