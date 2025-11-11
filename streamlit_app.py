@@ -115,12 +115,21 @@ if not api_key:
 # Sidebar
 with st.sidebar:
     st.markdown("## 🎤 Voice Commands")
+    
+    st.warning("⚠️ **IMPORTANT:** When you click Record, your browser will ask for microphone permission. Click **ALLOW**!")
+    
     st.markdown("""
-    ### How to use:
-    1. **Click 'Record Audio'** button below
-    2. **Speak your command** (in browser)
-    3. **Click 'Stop Recording'** when done
-    4. **Process** to execute
+    ### Step-by-Step:
+    1. **Click the microphone button** 🎤 below
+    2. **Allow microphone access** when browser asks
+    3. **Speak clearly** into your microphone
+    4. **Wait** - it will auto-process
+    
+    ### ❌ If Not Working:
+    - Check browser microphone permissions in settings
+    - Ensure microphone is not muted
+    - Try refreshing the page
+    - Use **Text Input** as alternative
     
     ### Example Commands:
     - "Open Chrome"
@@ -131,70 +140,103 @@ with st.sidebar:
     """)
     
     st.divider()
-    st.markdown("### ⚙️ Settings")
+    st.markdown("### ⚙️ Status")
     st.markdown(f"**API Key:** {'✅ Configured' if api_key else '❌ Missing'}")
     st.markdown(f"**Command Executor:** {'✅ Ready' if executor else '❌ Error'}")
+    
+    st.divider()
+    st.info("💡 **Tip:** If voice doesn't work, use the **Text Input** option below - it works the same way!")
 
 # Main content
 col1, col2 = st.columns([2, 1])
 
 with col1:
     st.markdown("## 🎙️ Voice Input")
-    st.markdown("**Record your command using your browser's microphone:**")
+    
+    # Important notice
+    st.info("🔔 **First Time?** Your browser will ask for microphone permission. Click **ALLOW** when prompted!")
+    
+    st.markdown("**Click the microphone icon below, speak clearly, then click stop:**")
     
     # Audio input using Streamlit's audio_input
-    audio_data = st.audio_input("🎤 Record your voice command")
+    audio_data = st.audio_input("🎤 Click here → Speak your command → Click stop")
     
     if audio_data:
         st.success("✅ Audio recorded! Processing...")
         
-        # Save audio to temporary file
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
-            tmp_file.write(audio_data.read())
-            tmp_file_path = tmp_file.name
+        # Get audio bytes
+        audio_bytes = audio_data.getvalue()
         
-        try:
-            # Use speech recognition on the audio file
-            recognizer = sr.Recognizer()
-            with sr.AudioFile(tmp_file_path) as source:
-                audio = recognizer.record(source)
-                try:
-                    command = recognizer.recognize_google(audio)
-                    st.markdown(f'<div class="command-box"><strong>🎤 You said:</strong> "{command}"</div>', unsafe_allow_html=True)
-                    
-                    # Process command
-                    if executor and api_key:
-                        with st.spinner("🤖 Processing command..."):
-                            try:
-                                result = parse_command(command)
-                                response = executor.execute(result)
-                                
-                                # Display result
-                                st.markdown('<div class="success-box"><strong>✅ Response:</strong><br>' + str(response) + '</div>', unsafe_allow_html=True)
-                                
-                                # Add to history
-                                st.session_state.history.insert(0, {
-                                    'command': command,
-                                    'response': str(response),
-                                    'timestamp': str(Path.ctime(Path(__file__)))
-                                })
-                            except Exception as e:
-                                st.markdown(f'<div class="error-box"><strong>❌ Error:</strong><br>{str(e)}</div>', unsafe_allow_html=True)
-                    else:
-                        st.warning("⚠️ Command executor not available or API key missing")
-                        
-                except sr.UnknownValueError:
-                    st.error("❌ Could not understand audio. Please speak clearly.")
-                except sr.RequestError as e:
-                    st.error(f"❌ Speech recognition service error: {e}")
-        except Exception as e:
-            st.error(f"❌ Error processing audio: {e}")
-        finally:
-            # Clean up temporary file
+        # Check if audio is not empty
+        if len(audio_bytes) < 100:
+            st.error("❌ Audio recording too short or empty. Try recording again and speak louder.")
+        else:
+            st.info(f"📊 Audio size: {len(audio_bytes)} bytes")
+            
+            # Save audio to temporary file
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
+                tmp_file.write(audio_bytes)
+                tmp_file_path = tmp_file.name
+            
             try:
-                os.unlink(tmp_file_path)
-            except:
-                pass
+                # Configure speech recognizer with better settings
+                recognizer = sr.Recognizer()
+                recognizer.energy_threshold = 300  # Lower = more sensitive
+                recognizer.dynamic_energy_threshold = False  # Prevent timeout issues
+                recognizer.pause_threshold = 0.8
+                
+                # Process audio file
+                with sr.AudioFile(tmp_file_path) as source:
+                    st.info("🔄 Processing audio...")
+                    # Adjust for ambient noise
+                    recognizer.adjust_for_ambient_noise(source, duration=0.5)
+                    # Record the audio
+                    audio = recognizer.record(source)
+                    
+                    try:
+                        st.info("🌐 Sending to Google Speech Recognition...")
+                        command = recognizer.recognize_google(audio, language="en-US")
+                        
+                        if command:
+                            st.markdown(f'<div class="command-box"><strong>🎤 You said:</strong> "{command}"</div>', unsafe_allow_html=True)
+                            
+                            # Process command
+                            if executor and api_key:
+                                with st.spinner("🤖 Processing command..."):
+                                    try:
+                                        result = parse_command(command)
+                                        response = executor.execute(result)
+                                        
+                                        # Display result
+                                        st.markdown('<div class="success-box"><strong>✅ Response:</strong><br>' + str(response) + '</div>', unsafe_allow_html=True)
+                                        
+                                        # Add to history
+                                        st.session_state.history.insert(0, {
+                                            'command': command,
+                                            'response': str(response),
+                                            'timestamp': str(Path.ctime(Path(__file__)))
+                                        })
+                                    except Exception as e:
+                                        st.markdown(f'<div class="error-box"><strong>❌ Command Error:</strong><br>{str(e)}</div>', unsafe_allow_html=True)
+                            else:
+                                st.warning("⚠️ Command executor not available or API key missing")
+                        else:
+                            st.warning("⚠️ No speech detected in audio")
+                            
+                    except sr.UnknownValueError:
+                        st.error("❌ **Could not understand audio**\n\n**Tips:**\n- Speak clearly and loudly\n- Reduce background noise\n- Try recording again\n- Use Text Input as alternative")
+                    except sr.RequestError as e:
+                        st.error(f"❌ **Speech recognition service error:** {e}\n\nPlease check your internet connection and try again.")
+            except Exception as e:
+                st.error(f"❌ **Error processing audio file:** {str(e)}\n\nTry using **Text Input** instead.")
+                import traceback
+                st.code(traceback.format_exc())
+            finally:
+                # Clean up temporary file
+                try:
+                    os.unlink(tmp_file_path)
+                except:
+                    pass
     
     st.divider()
     
