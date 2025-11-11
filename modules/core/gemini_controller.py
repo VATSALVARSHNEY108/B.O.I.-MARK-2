@@ -191,6 +191,8 @@ QUICK INFORMATION (INSTANT RESPONSES - NO WEB SEARCH):
 - get_date_time: Get both date and time (parameters: none) - Use for "date and time", "current date time"
 - get_quick_weather: Get current weather instantly (parameters: city [optional, default: New York]) - Use for "what's the weather", "weather today", "temperature"
 - get_forecast: Get weather forecast (parameters: city [optional], days [optional, default: 3])
+- get_optimistic_weather: Get weather with positive, upbeat presentation (parameters: city [optional, default: New York]) - Use for "optimistic weather", "positive weather", "weather with good vibes", "cheerful weather"
+- get_optimistic_forecast: Get weather forecast presented optimistically (parameters: city [optional], days [optional, default: 3]) - Use for "optimistic forecast", "positive forecast", "uplifting forecast"
 
 BATCH FILE INTEGRATION (Desktop Files):
 - read_desktop_time: Read time and date from desktop file created by batch script (parameters: none) - Use for "read desktop time", "what does the desktop time say", "check time file"

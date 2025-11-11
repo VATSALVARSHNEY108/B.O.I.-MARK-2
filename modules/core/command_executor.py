@@ -56,6 +56,7 @@ from smart_screen_monitor import create_smart_screen_monitor
 from desktop_rag import create_desktop_rag
 from communication_enhancements import create_communication_enhancements
 from modules.batch_file_reader import batch_reader
+from modules.utilities.optimistic_weather import optimistic_weather
 
 class CommandExecutor:
     """Executes parsed commands using the GUI automation module"""
@@ -343,7 +344,34 @@ class CommandExecutor:
             elif action == "get_forecast":
                 city = parameters.get("city", "New York")
                 days = parameters.get("days", 3)
+                try:
+                    days = int(days)
+                    days = max(1, min(days, 7))
+                except (ValueError, TypeError):
+                    days = 3
                 result = self.weather_news.get_forecast(city, days)
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_optimistic_weather":
+                city = parameters.get("city", "New York")
+                result = optimistic_weather.get_optimistic_weather_from_api(city)
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_optimistic_forecast":
+                city = parameters.get("city", "New York")
+                days = parameters.get("days", 3)
+                try:
+                    days = int(days)
+                    days = max(1, min(days, 7))
+                except (ValueError, TypeError):
+                    days = 3
+                result = optimistic_weather.get_forecast_optimistic(city, days)
                 return {
                     "success": True,
                     "message": result
