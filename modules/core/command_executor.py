@@ -121,6 +121,10 @@ class CommandExecutor:
         Execute a command dictionary returned by Gemini.
         Returns a result dict with success status and message.
         """
+        # Stop any ongoing AI speech when new task is executed
+        if hasattr(self, 'voice_assistant') and self.voice_assistant:
+            self.voice_assistant.stop_speaking()
+        
         if not command_dict:
             return {"success": False, "message": "No command provided"}
 
