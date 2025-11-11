@@ -19,10 +19,6 @@ author = "agent"
 task = "workflow.run"
 args = "VATSAL AI Desktop Automation"
 
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Mobile Companion Server"
-
 [[workflows.workflow]]
 name = "VATSAL AI Desktop Automation"
 author = "agent"
@@ -35,21 +31,13 @@ waitForPort = 5000
 [workflows.workflow.metadata]
 outputType = "webview"
 
-[[workflows.workflow]]
-name = "Mobile Companion Server"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python modules/network/mobile_companion_server.py"
-waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "webview"
-
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 34181
+externalPort = 3003
 
 [[ports]]
 localPort = 36919
