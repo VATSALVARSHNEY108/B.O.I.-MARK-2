@@ -693,14 +693,20 @@ class CommandExecutor:
                     return {"success": False, "message": f"Search failed: {str(e)}"}
             
             elif action == "screenshot":
-                import pyautogui
+                from datetime import datetime
                 filename = parameters.get("filename", f"screenshot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png")
                 try:
+                    import pyautogui
                     screenshot = pyautogui.screenshot()
                     screenshot.save(filename)
                     return {"success": True, "message": f"Screenshot saved as {filename}"}
+                except ImportError:
+                    return {"success": False, "message": "Screenshot not available: pyautogui not installed"}
                 except Exception as e:
-                    return {"success": False, "message": f"Screenshot failed: {str(e)}"}
+                    error_msg = str(e)
+                    if "display" in error_msg.lower() or "headless" in error_msg.lower():
+                        return {"success": False, "message": "Screenshot not available in headless/non-GUI environment"}
+                    return {"success": False, "message": f"Screenshot failed: {error_msg}"}
             
             elif action == "copy_text":
                 text = parameters.get("text", "")
