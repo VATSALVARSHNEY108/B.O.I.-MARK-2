@@ -71,6 +71,55 @@ class CommandExecutor:
             "original_result": result
         }
     
+    def execute(self, command_dict: dict) -> dict:
+        """
+        Main entry point for executing commands.
+        Routes to execute_workflow for multi-step commands or execute_single_action for single actions.
+        
+        Args:
+            command_dict: Parsed command dictionary with keys:
+                - action: str - Action name
+                - parameters: dict - Action parameters
+                - steps: list - Workflow steps (empty for single actions)
+                - description: str - Human-readable description
+        
+        Returns:
+            Dict with execution result and humanized message
+        """
+        try:
+            if not isinstance(command_dict, dict):
+                return {
+                    "success": False,
+                    "message": "Invalid command format: expected dictionary"
+                }
+            
+            action = command_dict.get("action", "")
+            parameters = command_dict.get("parameters", {})
+            steps = command_dict.get("steps", [])
+            
+            if not action:
+                return {
+                    "success": False,
+                    "message": "No action specified in command"
+                }
+            
+            if steps and len(steps) > 0:
+                return self.execute_workflow(steps)
+            else:
+                result = self.execute_single_action(action, parameters)
+                
+                if isinstance(result, dict) and "original_result" in result:
+                    return result
+                
+                return self._humanize_result(action, result)
+        
+        except Exception as e:
+            error_result = {
+                "success": False,
+                "message": f"Error executing command: {str(e)}"
+            }
+            return self._humanize_result("command_execution", error_result)
+    
     def execute_workflow(self, workflow_steps: list) -> dict:
         """
         Execute multi-step workflows with humanized feedback

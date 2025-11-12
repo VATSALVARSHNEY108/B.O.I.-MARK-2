@@ -28,7 +28,7 @@ outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "xvfb-run -a python3.11 launch_cli.py"
+args = "python launchers/launch_cli.py"
 
 [[ports]]
 localPort = 5000
