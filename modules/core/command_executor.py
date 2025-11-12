@@ -1,4 +1,157 @@
-elevant_files'][:5]:
+"""
+⚙️ Command Executor Module
+Executes commands with intelligence, personality, and humanized feedback
+Integrates Desktop RAG, Communication Enhancements, and Persona services
+"""
+
+from modules.intelligence.persona_response_service import create_persona_service
+from modules.intelligence.desktop_rag import DesktopRAG
+from modules.communication.communication_enhancements import CommunicationEnhancements
+
+
+class CommandExecutor:
+    """
+    Enhanced command executor with:
+    - Persona-based humanized responses
+    - Desktop RAG integration for file intelligence
+    - Communication enhancements for messages/emails
+    - Milestone celebrations and helpful tips
+    - Multi-step workflow execution
+    """
+    
+    def __init__(self):
+        """Initialize command executor with all intelligence modules"""
+        self.persona_service = create_persona_service()
+        self.desktop_rag = DesktopRAG()
+        self.comm_enhancements = CommunicationEnhancements()
+        self.command_count = 0
+        self.error_count = 0
+        
+        print("⚙️ Command Executor initialized")
+        print("   🤖 Persona Service: Active")
+        print("   🧠 Desktop RAG: Active")
+        print("   💬 Communication Enhancements: Active")
+    
+    def _humanize_result(self, action: str, result: dict) -> dict:
+        """
+        Wrap results with persona humanization
+        Add milestone celebrations and helpful tips
+        """
+        self.command_count += 1
+        
+        if not result.get("success", False):
+            self.error_count += 1
+        
+        humanized_message = self.persona_service.humanize_response(
+            action=action,
+            result=result,
+            context={"command_count": self.command_count}
+        )
+        
+        milestone_msg = ""
+        if self.command_count % 10 == 0:
+            milestone_msg = self.persona_service.celebrate_milestone(
+                self.command_count, 
+                action
+            )
+        
+        tip_msg = ""
+        if self.command_count % 8 == 0 and result.get("success", False):
+            tip_msg = self.persona_service.provide_helpful_tip()
+        
+        final_message = humanized_message
+        if milestone_msg:
+            final_message += f"\n\n{milestone_msg}"
+        if tip_msg:
+            final_message += f"\n\n{tip_msg}"
+        
+        return {
+            "success": result.get("success", False),
+            "message": final_message,
+            "original_result": result
+        }
+    
+    def execute_workflow(self, workflow_steps: list) -> dict:
+        """
+        Execute multi-step workflows with humanized feedback
+        
+        Args:
+            workflow_steps: List of action dictionaries to execute in sequence
+        
+        Returns:
+            Dict with workflow results and humanized messages
+        """
+        results = []
+        all_success = True
+        
+        intro_msg = self.persona_service.handle_processing()
+        print(intro_msg)
+        
+        for i, step in enumerate(workflow_steps, 1):
+            action = step.get("action")
+            parameters = step.get("parameters", {})
+            
+            print(f"\n📋 Step {i}/{len(workflow_steps)}: {action}")
+            
+            step_result = self.execute_single_action(action, parameters)
+            results.append({
+                "step": i,
+                "action": action,
+                "result": step_result
+            })
+            
+            if not step_result.get("success", False):
+                all_success = False
+                error_msg = self.persona_service.handle_misunderstanding()
+                print(f"❌ {error_msg}")
+                break
+        
+        workflow_result = {
+            "success": all_success,
+            "message": f"Workflow completed: {len(results)}/{len(workflow_steps)} steps executed",
+            "steps": results
+        }
+        
+        return self._humanize_result("workflow", workflow_result)
+    
+    def execute_single_action(self, action: str, parameters: dict = None) -> dict:
+        """
+        Execute a single action with Desktop RAG and Communication enhancements
+        
+        Args:
+            action: Action name to execute
+            parameters: Action parameters
+        
+        Returns:
+            Dict with execution result and humanized message
+        """
+        parameters = parameters or {}
+        
+        try:
+            if action == "index_desktop_rag":
+                folder_path = parameters.get("folder_path", ".")
+                result = self.desktop_rag.index_folder(folder_path)
+                if result.get("success"):
+                    msg = f"✅ Desktop indexed successfully!\n\n"
+                    msg += f"📊 Indexed {result['files_indexed']} files\n"
+                    msg += f"💾 Total size: {result['total_size_mb']} MB\n"
+                    msg += f"⏱️  Time: {result['time_taken']:.2f}s\n"
+                    return {"success": True, "message": msg}
+                else:
+                    return {"success": False, "message": f"❌ Error: {result.get('error', 'Unknown error')}"}
+
+            elif action == "search_files_rag":
+                query = parameters.get("query", "")
+                if not query:
+                    return {"success": False, "message": "Please provide a search query"}
+                
+                result = self.desktop_rag.search_files(query)
+                if result.get("success"):
+                    msg = f"🔍 Search Results for: '{query}'\n\n"
+                    msg += f"Found {result['total_results']} relevant files\n\n"
+                    if result.get('relevant_files'):
+                        msg += "Top matches:\n"
+                        for f in result.get('relevant_files')[:5]:
                             msg += f"  • {f}\n"
                     return {"success": True, "message": msg}
                 else:

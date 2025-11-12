@@ -85,27 +85,33 @@ demos/
 
 ## 📦 Modules Directory (Core Code)
 
-Core application code organized by functionality:
+Core application code organized by functionality.
+
+**Note:** All module directories contain `__init__.py` files for proper Python package structure (not shown for brevity).
 
 ```
 modules/
 ├── core/                  # Core command execution and GUI
-│   ├── command_executor.py
-│   ├── vatsal_assistant.py
+│   ├── command_executor.py        # 🆕 Enhanced with PersonaResponseService
+│   ├── gemini_controller.py
 │   ├── gui_app.py
-│   ├── enhanced_gui.py
-│   └── main.py
+│   ├── main.py
+│   ├── multimodal_control.py
+│   ├── vatsal_ai.py
+│   ├── vatsal_assistant.py
+│   └── vatsal_chatbot.py
 │
 ├── intelligence/          # AI and intelligence services
-│   ├── persona_response_service.py  # 🆕 Humanized AI responses
-│   ├── gemini_service.py
-│   ├── contextual_memory_enhanced.py
-│   ├── correction_learning.py
-│   ├── predictive_actions_engine.py
 │   ├── behavioral_learning.py
+│   ├── contextual_memory_enhanced.py
 │   ├── conversation_memory.py
+│   ├── correction_learning.py
+│   ├── data_intelligence.py
 │   ├── desktop_rag.py
-│   └── data_intelligence.py
+│   ├── persona_response_service.py  # 🆕 Humanized AI responses
+│   ├── predictive_actions_engine.py
+│   ├── user_profile_manager.py
+│   └── user_settings_dialog.py
 │
 ├── voice/                 # Voice recognition and TTS
 │   ├── voice_assistant.py         # 🆕 Enhanced with personality
@@ -121,11 +127,15 @@ modules/
 │   └── download_organizer.py
 │
 ├── ai_features/           # AI-powered features
-│   ├── code_generator.py
-│   ├── screenshot_analyzer.py
-│   ├── multimodal_ai_core.py
-│   ├── virtual_language_model.py
-│   └── advanced_ai_automation.py
+│   ├── ai_features.py
+│   ├── automation_ai.py
+│   ├── chatbots.py
+│   ├── code_generation.py
+│   ├── common_sense.py
+│   ├── emotional_intelligence.py
+│   ├── FULLSCREEN_APP_FEATURE.md
+│   ├── screenshot_analysis.py
+│   └── vision_ai.py
 │
 ├── monitoring/            # Screen and activity monitoring
 │   ├── smart_screen_monitor.py
