@@ -421,6 +421,158 @@ class CommandExecutor:
                     return {"success": True, "message": response}
                 except Exception as e:
                     return {"success": False, "message": f"Error: {str(e)}"}
+            
+            # TEXT GENERATION AI
+            elif action == "story_writer":
+                from modules.core.gemini_controller import chat_response
+                prompt_text = parameters.get("prompt", "")
+                genre = parameters.get("genre", "general")
+                length = parameters.get("length", "medium")
+                
+                full_prompt = f"Write a {length} {genre} story based on: {prompt_text}"
+                try:
+                    response = chat_response(full_prompt)
+                    return {"success": True, "message": f"📖 Story:\n\n{response}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
+            
+            elif action == "content_creator":
+                from modules.core.gemini_controller import chat_response
+                topic = parameters.get("topic", "")
+                content_type = parameters.get("content_type", "blog post")
+                tone = parameters.get("tone", "professional")
+                
+                prompt = f"Create a {tone} {content_type} about: {topic}"
+                try:
+                    response = chat_response(prompt)
+                    return {"success": True, "message": f"✍️ Content:\n\n{response}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
+            
+            elif action == "article_generator":
+                from modules.core.gemini_controller import chat_response
+                title = parameters.get("title", "")
+                keywords = parameters.get("keywords", [])
+                word_count = parameters.get("word_count", 800)
+                
+                keyword_str = ", ".join(keywords) if keywords else ""
+                prompt = f"Write a {word_count}-word article titled '{title}'"
+                if keyword_str:
+                    prompt += f" including keywords: {keyword_str}"
+                
+                try:
+                    response = chat_response(prompt)
+                    return {"success": True, "message": f"📰 Article:\n\n{response}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
+            
+            elif action == "copywriting_assistant":
+                from modules.core.gemini_controller import chat_response
+                product = parameters.get("product", "")
+                goal = parameters.get("goal", "persuade")
+                
+                prompt = f"Create persuasive marketing copy to {goal} for: {product}"
+                try:
+                    response = chat_response(prompt)
+                    return {"success": True, "message": f"💼 Marketing Copy:\n\n{response}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
+            
+            elif action == "technical_writer":
+                from modules.core.gemini_controller import chat_response
+                topic = parameters.get("topic", "")
+                audience = parameters.get("audience", "technical")
+                
+                prompt = f"Write technical documentation for {audience} audience about: {topic}"
+                try:
+                    response = chat_response(prompt)
+                    return {"success": True, "message": f"📚 Technical Documentation:\n\n{response}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
+            
+            # LANGUAGE PROCESSING AI
+            elif action == "text_translator":
+                from modules.core.gemini_controller import chat_response
+                text = parameters.get("text", "")
+                target_language = parameters.get("target_language", "")
+                source_language = parameters.get("source_language", "auto")
+                
+                prompt = f"Translate from {source_language} to {target_language}: {text}"
+                try:
+                    response = chat_response(prompt)
+                    return {"success": True, "message": f"🌐 Translation:\n\n{response}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
+            
+            elif action == "sentiment_analysis":
+                from modules.core.gemini_controller import chat_response
+                text = parameters.get("text", "")
+                
+                prompt = f"Analyze the sentiment of this text and provide a detailed emotional analysis: {text}"
+                try:
+                    response = chat_response(prompt)
+                    return {"success": True, "message": f"😊 Sentiment Analysis:\n\n{response}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
+            
+            elif action == "text_summarizer":
+                from modules.core.gemini_controller import chat_response
+                text = parameters.get("text", "")
+                length = parameters.get("length", "medium")
+                
+                prompt = f"Provide a {length} summary of: {text}"
+                try:
+                    response = chat_response(prompt)
+                    return {"success": True, "message": f"📝 Summary:\n\n{response}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
+            
+            elif action == "language_detector":
+                from modules.core.gemini_controller import chat_response
+                text = parameters.get("text", "")
+                
+                prompt = f"Identify the language of this text: {text}"
+                try:
+                    response = chat_response(prompt)
+                    return {"success": True, "message": f"🔍 Language Detection:\n\n{response}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
+            
+            elif action == "content_moderator":
+                from modules.core.gemini_controller import chat_response
+                text = parameters.get("text", "")
+                
+                prompt = f"Analyze this content for inappropriate material, hate speech, violence, or policy violations: {text}"
+                try:
+                    response = chat_response(prompt)
+                    return {"success": True, "message": f"🛡️ Content Moderation:\n\n{response}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
+            
+            # IMAGE GENERATION AI
+            elif action == "image_description_generator":
+                from modules.core.gemini_controller import chat_response
+                concept = parameters.get("concept", "")
+                style = parameters.get("style", "realistic")
+                
+                prompt = f"Generate a detailed AI art prompt in {style} style for: {concept}"
+                try:
+                    response = chat_response(prompt)
+                    return {"success": True, "message": f"🎨 AI Art Prompt:\n\n{response}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
+            
+            elif action == "style_transfer_description":
+                from modules.core.gemini_controller import chat_response
+                content = parameters.get("content", "")
+                style = parameters.get("style", "")
+                
+                prompt = f"Describe how to apply {style} style to {content} for style transfer"
+                try:
+                    response = chat_response(prompt)
+                    return {"success": True, "message": f"🎭 Style Transfer:\n\n{response}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
 
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")
