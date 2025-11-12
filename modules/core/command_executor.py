@@ -48,22 +48,7 @@ class CommandExecutor:
             context={"command_count": self.command_count}
         )
         
-        milestone_msg = ""
-        if self.command_count % 10 == 0:
-            milestone_msg = self.persona_service.celebrate_milestone(
-                self.command_count, 
-                action
-            )
-        
-        tip_msg = ""
-        if self.command_count % 8 == 0 and result.get("success", False):
-            tip_msg = self.persona_service.provide_helpful_tip()
-        
         final_message = humanized_message
-        if milestone_msg:
-            final_message += f"\n\n{milestone_msg}"
-        if tip_msg:
-            final_message += f"\n\n{tip_msg}"
         
         return {
             "success": result.get("success", False),
@@ -361,6 +346,30 @@ class CommandExecutor:
             elif action == "comm_features_summary":
                 summary = self.comm_enhancements.get_feature_summary()
                 return {"success": True, "message": summary}
+            
+            elif action == "get_time":
+                from datetime import datetime
+                now = datetime.now()
+                time_str = now.strftime("%I:%M %p")
+                return {"success": True, "message": f"⏰ {time_str}"}
+            
+            elif action == "get_date":
+                from datetime import datetime
+                now = datetime.now()
+                date_str = now.strftime("%A, %B %d, %Y")
+                return {"success": True, "message": f"📅 {date_str}"}
+            
+            elif action == "get_date_time":
+                from datetime import datetime
+                now = datetime.now()
+                dt_str = now.strftime("%A, %B %d, %Y at %I:%M %p")
+                return {"success": True, "message": f"📅 {dt_str}"}
+            
+            elif action == "get_day_info":
+                from datetime import datetime
+                now = datetime.now()
+                day_str = now.strftime("%A")
+                return {"success": True, "message": f"📅 Today is {day_str}"}
             
             elif action == "get_quick_weather":
                 city = parameters.get("city", "New York")
