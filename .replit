@@ -17,19 +17,18 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "VATSAL AI Web Interface"
+args = "VATSAL AI CLI"
 
 [[workflows.workflow]]
-name = "VATSAL AI Web Interface"
+name = "VATSAL AI CLI"
 author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "streamlit run streamlit_app.py --server.port=5000 --server.address=0.0.0.0 --server.headless=true"
-waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "webview"
+args = "xvfb-run -a python3.11 launch_cli.py"
 
 [[ports]]
 localPort = 5000

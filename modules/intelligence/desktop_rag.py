@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import mimetypes
 import re
-from gemini_controller import get_client
+from modules.core.gemini_controller import get_client
 from google.genai import types
 
 

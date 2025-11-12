@@ -3,8 +3,8 @@
 import os
 import sys
 from dotenv import load_dotenv
-from gemini_controller import parse_command, get_ai_suggestion
-from command_executor import CommandExecutor
+from modules.core.gemini_controller import parse_command, get_ai_suggestion
+from modules.core.command_executor import CommandExecutor
 
 load_dotenv()
 

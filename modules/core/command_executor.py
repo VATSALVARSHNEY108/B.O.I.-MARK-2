@@ -8,54 +8,54 @@ from modules.automation.media_control_helper import MediaControlHelper
 from modules.utilities.contact_manager import ContactManager
 from modules.communication.messaging_service import MessagingService
 from modules.communication.phone_dialer import create_phone_dialer
-from youtube_automation import create_youtube_automation
-from whatsapp_automation import create_whatsapp_automation
+from modules.utilities.youtube_automation import create_youtube_automation
+from modules.communication.whatsapp_automation import create_whatsapp_automation
 from modules.ai_features.code_generation import generate_code, explain_code, improve_code, debug_code
-from conversation_memory import ConversationMemory
+from modules.intelligence.conversation_memory import ConversationMemory
 from modules.ai_features.vision_ai import analyze_screenshot, extract_text_from_screenshot, get_screenshot_summary
-from screen_suggester import create_screen_suggester
-from email_sender import create_email_sender
-from system_monitor import get_cpu_usage, get_memory_usage, get_disk_usage, get_full_system_report, get_running_processes
-from advanced_file_operations import search_files, find_large_files, find_duplicate_files, organize_files_by_extension, find_old_files, get_directory_size
-from workflow_templates import WorkflowManager
-from code_executor import execute_python_code, execute_javascript_code, validate_code_safety
-from system_control import SystemController
-from app_scheduler import AppScheduler
-from download_organizer import DownloadOrganizer
-from voice_assistant import VoiceAssistant
-from smart_typing import SmartTyping
-from file_manager import FileManager
-from web_automation import WebAutomation
-from productivity_monitor import ProductivityMonitor
-from fun_features import FunFeatures
-from spotify_desktop_automation import create_spotify_desktop_automation
-from weather_news_service import WeatherNewsService
-from translation_service import TranslationService
-from advanced_calculator import AdvancedCalculator
+from modules.monitoring.screen_suggester import create_screen_suggester
+from modules.communication.email_sender import create_email_sender
+from modules.system.system_monitor import get_cpu_usage, get_memory_usage, get_disk_usage, get_full_system_report, get_running_processes
+from modules.file_management.advanced_file_operations import search_files, find_large_files, find_duplicate_files, organize_files_by_extension, find_old_files, get_directory_size
+from modules.smart_features.workflow_templates import WorkflowManager
+from modules.development.code_executor import execute_python_code, execute_javascript_code, validate_code_safety
+from modules.system.system_control import SystemController
+from modules.smart_features.app_scheduler import AppScheduler
+from modules.automation.download_organizer import DownloadOrganizer
+from modules.voice.voice_assistant import VoiceAssistant
+from modules.smart_features.smart_typing import SmartTyping
+from modules.file_management.file_manager import FileManager
+from modules.web.web_automation import WebAutomation
+from modules.productivity.productivity_monitor import ProductivityMonitor
+from modules.misc.fun_features import FunFeatures
+from modules.utilities.spotify_desktop_automation import create_spotify_desktop_automation
+from modules.utilities.weather_news_service import WeatherNewsService
+from modules.communication.translation_service import TranslationService
+from modules.utilities.advanced_calculator import AdvancedCalculator
 from modules.utilities.quick_info import create_quick_info
-from password_vault import PasswordVault
-from quick_notes import QuickNotes
-from calendar_manager import CalendarManager
-from ecosystem_manager import EcosystemManager
-from web_tools_launcher import create_web_tools_launcher
-from tools_mapper import create_tools_mapper
-from ai_features import create_ai_features
-from data_analysis import create_data_analysis_suite
-from behavioral_learning import create_behavioral_learning
-from workspace_manager import create_workspace_manager
-from multimodal_control import create_multimodal_control
+from modules.utilities.password_vault import PasswordVault
+from modules.utilities.quick_notes import QuickNotes
+from modules.utilities.calendar_manager import CalendarManager
+from modules.integration.ecosystem_manager import EcosystemManager
+from modules.web.web_tools_launcher import create_web_tools_launcher
+from modules.integration.tools_mapper import create_tools_mapper
+from modules.ai_features.ai_features import create_ai_features
+from modules.data_analysis.data_analysis import create_data_analysis_suite
+from modules.intelligence.behavioral_learning import create_behavioral_learning
+from modules.file_management.workspace_manager import create_workspace_manager
+from modules.core.multimodal_control import create_multimodal_control
 from modules.ai_features.automation_ai import create_advanced_ai_automation
-from data_intelligence import create_data_intelligence
-from collaboration_tools import create_collaboration_tools
-from creative_utilities import create_creative_utilities
-from security_enhancements import create_security_enhancements
-from human_interaction import create_human_interaction
-from cloud_ecosystem import create_cloud_ecosystem
-from chat_monitor import ChatMonitor
-from visual_chat_monitor import create_visual_chat_monitor
-from smart_screen_monitor import create_smart_screen_monitor
-from desktop_rag import create_desktop_rag
-from communication_enhancements import create_communication_enhancements
+from modules.intelligence.data_intelligence import create_data_intelligence
+from modules.misc.collaboration_tools import create_collaboration_tools
+from modules.misc.creative_utilities import create_creative_utilities
+from modules.security.security_enhancements import create_security_enhancements
+from modules.integration.human_interaction import create_human_interaction
+from modules.integration.cloud_ecosystem import create_cloud_ecosystem
+from modules.monitoring.chat_monitor import ChatMonitor
+from modules.monitoring.visual_chat_monitor import create_visual_chat_monitor
+from modules.monitoring.smart_screen_monitor import create_smart_screen_monitor
+from modules.intelligence.desktop_rag import create_desktop_rag
+from modules.communication.communication_enhancements import create_communication_enhancements
 from modules.batch_file_reader import batch_reader
 from modules.utilities.optimistic_weather import optimistic_weather
 

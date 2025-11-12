@@ -59,11 +59,6 @@ webdriver-manager>=4.0.2
 lxml>=6.0.2
 html2text>=2025.4.15
 
-# UI & Visualization
-streamlit>=1.40.2
-altair>=5.5.0
-pydeck>=0.9.1
-
 # Gaming & Graphics
 pygame>=2.6.1
 
@@ -282,10 +277,3 @@ jaraco.classes>=3.4.0
 jaraco.functools>=4.3.0
 jaraco.context>=6.0.1
 more-itertools>=10.8.0
-opencv-contrib-python
-security
-scikit-learn
-numpy
-opencv-python
-mediapipe
-twilio

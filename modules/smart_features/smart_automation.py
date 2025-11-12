@@ -24,7 +24,7 @@ from typing import List, Dict, Optional, Tuple
 from collections import defaultdict, Counter
 import threading
 
-from gemini_controller import get_client
+from modules.core.gemini_controller import get_client
 from google.genai import types
 
 

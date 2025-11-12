@@ -26,7 +26,7 @@ import threading
 from pathlib import Path
 
 from gui_automation import GUIAutomation
-from gemini_controller import get_client
+from modules.core.gemini_controller import get_client
 from google.genai import types
 
 try:

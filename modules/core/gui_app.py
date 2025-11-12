@@ -5,52 +5,52 @@ from tkinter import ttk, scrolledtext, messagebox, filedialog, simpledialog
 import threading
 import os
 from dotenv import load_dotenv
-from gemini_controller import parse_command, get_ai_suggestion
-from command_executor import CommandExecutor
-from vatsal_assistant import create_vatsal_assistant
-from advanced_smart_screen_monitor import create_advanced_smart_screen_monitor
-from ai_screen_monitoring_system import create_ai_screen_monitoring_system
+from modules.core.gemini_controller import parse_command, get_ai_suggestion
+from modules.core.command_executor import CommandExecutor
+from modules.core.vatsal_assistant import create_vatsal_assistant
+from modules.monitoring.advanced_smart_screen_monitor import create_advanced_smart_screen_monitor
+from modules.monitoring.ai_screen_monitoring_system import create_ai_screen_monitoring_system
 from modules.ai_features.chatbots import SimpleChatbot
-from file_automation import create_file_automation
-from clipboard_text_handler import ClipboardTextHandler
-from smart_automation import SmartAutomationManager
+from modules.automation.file_automation import create_file_automation
+from modules.smart_features.clipboard_text_handler import ClipboardTextHandler
+from modules.smart_features.smart_automation import SmartAutomationManager
 from datetime import datetime
 from pathlib import Path
-from desktop_controller_integration import DesktopFileController
-from desktop_sync_manager import auto_initialize_on_gui_start, DesktopSyncManager
-from comprehensive_desktop_controller import ComprehensiveDesktopController
+from modules.integration.desktop_controller_integration import DesktopFileController
+from modules.file_management.desktop_sync_manager import auto_initialize_on_gui_start, DesktopSyncManager
+from modules.automation.comprehensive_desktop_controller import ComprehensiveDesktopController
 from modules.ai_features.vision_ai import VirtualLanguageModel
-from gui_automation import GUIAutomation
+from modules.automation.gui_automation import GUIAutomation
 
-from productivity_dashboard import ProductivityDashboard
-from pomodoro_ai_coach import PomodoroAICoach
-from task_time_predictor import TaskTimePredictor
-from energy_level_tracker import EnergyLevelTracker
-from distraction_detector import DistractionDetector
-from productivity_monitor import ProductivityMonitor
-from password_vault import PasswordVault
-from calendar_manager import CalendarManager
-from quick_notes import QuickNotes
-from weather_news_service import WeatherNewsService
-from translation_service import TranslationService
-from smart_break_suggester import SmartBreakSuggester
-from selenium_web_automator import SeleniumWebAutomator
-from vatsal_desktop_automator import VATSALAutomator
-from self_operating_computer import SelfOperatingComputer
-from self_operating_integrations import SelfOperatingIntegrationHub, SmartTaskRouter
-from command_executor_integration import EnhancedCommandExecutor, CommandInterceptor
-from voice_commander import create_voice_commander
-from system_control import SystemController
-from websocket_client import get_websocket_client
-from macro_recorder import MacroRecorder, MacroTemplates
+from modules.productivity.productivity_dashboard import ProductivityDashboard
+from modules.productivity.pomodoro_ai_coach import PomodoroAICoach
+from modules.productivity.task_time_predictor import TaskTimePredictor
+from modules.productivity.energy_level_tracker import EnergyLevelTracker
+from modules.productivity.distraction_detector import DistractionDetector
+from modules.productivity.productivity_monitor import ProductivityMonitor
+from modules.utilities.password_vault import PasswordVault
+from modules.utilities.calendar_manager import CalendarManager
+from modules.utilities.quick_notes import QuickNotes
+from modules.utilities.weather_news_service import WeatherNewsService
+from modules.communication.translation_service import TranslationService
+from modules.productivity.smart_break_suggester import SmartBreakSuggester
+from modules.web.selenium_web_automator import SeleniumWebAutomator
+from modules.automation.vatsal_desktop_automator import VATSALAutomator
+from modules.automation.self_operating_computer import SelfOperatingComputer
+from modules.automation.self_operating_integrations import SelfOperatingIntegrationHub, SmartTaskRouter
+from modules.integration.command_executor_integration import EnhancedCommandExecutor, CommandInterceptor
+from modules.voice.voice_commander import create_voice_commander
+from modules.system.system_control import SystemController
+from modules.network.websocket_client import get_websocket_client
+from modules.automation.macro_recorder import MacroRecorder, MacroTemplates
 # Import hand gesture detectors (no face detection)
 from modules.automation.opencv_hand_gesture_detector import OpenCVHandGestureDetector
 from modules.automation.gesture_voice_activator import create_gesture_voice_activator, GestureVoiceActivator
-from nl_workflow_builder import create_nl_workflow_builder
-from workflow_templates import WorkflowManager
-from security_dashboard import SecurityDashboard
-from user_profile_manager import get_user_profile_manager
-from user_settings_dialog import open_user_settings
+from modules.smart_features.nl_workflow_builder import create_nl_workflow_builder
+from modules.smart_features.workflow_templates import WorkflowManager
+from modules.security.security_dashboard import SecurityDashboard
+from modules.intelligence.user_profile_manager import get_user_profile_manager
+from modules.intelligence.user_settings_dialog import open_user_settings
 
 load_dotenv()
 

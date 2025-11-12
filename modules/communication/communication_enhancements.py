@@ -17,7 +17,7 @@ import os
 import json
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Any
-from gemini_controller import get_client
+from modules.core.gemini_controller import get_client
 from google.genai import types
 
 

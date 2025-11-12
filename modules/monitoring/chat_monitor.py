@@ -10,7 +10,7 @@ import email
 from email.header import decode_header
 from datetime import datetime
 from typing import List, Dict, Optional
-from gemini_controller import get_client
+from modules.core.gemini_controller import get_client
 from google.genai import types
 
 
