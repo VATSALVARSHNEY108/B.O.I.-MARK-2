@@ -14,13 +14,45 @@ except Exception as e:
     pyautogui = None
     PYAUTOGUI_AVAILABLE = False
 
-from screenshot_analyzer import (
-    suggest_improvements,
-    analyze_screen_for_errors,
-    get_quick_tips,
-    analyze_code_on_screen,
-    analyze_website_design
-)
+# Import vision AI functions
+try:
+    from modules.ai_features.vision_ai import analyze_screenshot
+    VISION_AI_AVAILABLE = True
+except Exception as e:
+    print(f"⚠️  Vision AI not available: {e}")
+    VISION_AI_AVAILABLE = False
+    analyze_screenshot = None
+
+# Helper functions using vision_ai
+def suggest_improvements(screenshot_path):
+    """Get AI suggestions for screen improvements"""
+    if not VISION_AI_AVAILABLE:
+        return "Vision AI not available"
+    return analyze_screenshot(screenshot_path, "Suggest improvements for what you see on this screen")
+
+def analyze_screen_for_errors(screenshot_path):
+    """Check screen for errors"""
+    if not VISION_AI_AVAILABLE:
+        return "Vision AI not available"
+    return analyze_screenshot(screenshot_path, "Check this screen for any errors, bugs, or issues")
+
+def get_quick_tips(screenshot_path):
+    """Get quick tips for current screen"""
+    if not VISION_AI_AVAILABLE:
+        return "Vision AI not available"
+    return analyze_screenshot(screenshot_path, "Give me quick tips for using what's on this screen more effectively")
+
+def analyze_code_on_screen(screenshot_path):
+    """Analyze code visible on screen"""
+    if not VISION_AI_AVAILABLE:
+        return "Vision AI not available"
+    return analyze_screenshot(screenshot_path, "Analyze the code shown on this screen and suggest improvements")
+
+def analyze_website_design(screenshot_path):
+    """Analyze website design on screen"""
+    if not VISION_AI_AVAILABLE:
+        return "Vision AI not available"
+    return analyze_screenshot(screenshot_path, "Analyze this website design and suggest improvements for UI/UX")
 
 
 class ScreenSuggester:
