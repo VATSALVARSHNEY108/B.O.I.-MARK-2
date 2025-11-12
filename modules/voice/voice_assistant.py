@@ -138,12 +138,12 @@ class VoiceAssistant:
             with sr.Microphone() as source:
                 print("🎤 Listening...")
                 # Quick ambient noise adjustment for faster response
-                self.recognizer.adjust_for_ambient_noise(source, duration=0.3)
+                self.recognizer.adjust_for_ambient_noise(source, duration=1)
                 # Increased timeout and phrase limit for better detection
                 audio = self.recognizer.listen(source, timeout=10, phrase_time_limit=8)
                 
                 print("🔄 Processing...")
-                command = self.recognizer.recognize_google(audio)
+                command = self.recognizer.recognize_google(audio)  # type: ignore
                 print(f"✅ Heard: {command}")
                 
                 return command
@@ -218,7 +218,7 @@ class VoiceAssistant:
                 
                 # ULTRA QUICK calibration for instant startup
                 print("📊 Calibrating microphone (ULTRA FAST mode)...")
-                self.recognizer.adjust_for_ambient_noise(source, duration=0.2)
+                self.recognizer.adjust_for_ambient_noise(source, duration=1)
                 print("✅ Ready! Listening... (Say 'bhai' or any hint of it to activate!)")
                 waiting_for_wake_word = self.wake_word_enabled
                 
@@ -230,7 +230,7 @@ class VoiceAssistant:
                         # ULTRA FAST: Very short timeout and phrase limit for instant "bhai" detection
                         audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=3)
                         
-                        command = self.recognizer.recognize_google(audio)
+                        command = self.recognizer.recognize_google(audio)  # type: ignore
                         command_lower = command.lower()
                         
                         if "stop listening" in command_lower:

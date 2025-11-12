@@ -20,6 +20,7 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 import tempfile
+from datetime import datetime
 
 # Load environment variables FIRST
 load_dotenv()
@@ -192,13 +193,13 @@ with col1:
                 with sr.AudioFile(tmp_file_path) as source:
                     st.info("🔄 Processing audio...")
                     # Adjust for ambient noise
-                    recognizer.adjust_for_ambient_noise(source, duration=0.5)
+                    recognizer.adjust_for_ambient_noise(source, duration=1)
                     # Record the audio
                     audio = recognizer.record(source)
                     
                     try:
                         st.info("🌐 Sending to Google Speech Recognition...")
-                        command = recognizer.recognize_google(audio, language="en-US")
+                        command = recognizer.recognize_google(audio, language="en-US")  # type: ignore
                         
                         if command:
                             st.markdown(f'<div class="command-box"><strong>🎤 You said:</strong> "{command}"</div>', unsafe_allow_html=True)
@@ -207,7 +208,7 @@ with col1:
                             if executor and api_key:
                                 with st.spinner("🤖 Processing command..."):
                                     try:
-                                        result = parse_command(command)
+                                        result = parse_command(command)  # type: ignore
                                         response = executor.execute(result)
                                         
                                         # Display result
@@ -217,7 +218,7 @@ with col1:
                                         st.session_state.history.insert(0, {
                                             'command': command,
                                             'response': str(response),
-                                            'timestamp': str(Path.ctime(Path(__file__)))
+                                            'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                                         })
                                     except Exception as e:
                                         st.markdown(f'<div class="error-box"><strong>❌ Command Error:</strong><br>{str(e)}</div>', unsafe_allow_html=True)
@@ -252,7 +253,7 @@ with col1:
             with st.spinner("🤖 Processing..."):
                 if executor and api_key:
                     try:
-                        result = parse_command(text_command)
+                        result = parse_command(text_command)  # type: ignore
                         response = executor.execute(result)
                         st.markdown('<div class="success-box"><strong>✅ Response:</strong><br>' + str(response) + '</div>', unsafe_allow_html=True)
                         
@@ -260,7 +261,7 @@ with col1:
                         st.session_state.history.insert(0, {
                             'command': text_command,
                             'response': str(response),
-                            'timestamp': str(Path.ctime(Path(__file__)))
+                            'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         })
                     except Exception as e:
                         st.markdown(f'<div class="error-box"><strong>❌ Error:</strong><br>{str(e)}</div>', unsafe_allow_html=True)
