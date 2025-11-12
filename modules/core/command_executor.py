@@ -691,6 +691,209 @@ class CommandExecutor:
                     return {"success": True, "message": f"Opened web search for: {query}"}
                 except Exception as e:
                     return {"success": False, "message": f"Search failed: {str(e)}"}
+            
+            elif action == "screenshot":
+                import pyautogui
+                filename = parameters.get("filename", f"screenshot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png")
+                try:
+                    screenshot = pyautogui.screenshot()
+                    screenshot.save(filename)
+                    return {"success": True, "message": f"Screenshot saved as {filename}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Screenshot failed: {str(e)}"}
+            
+            elif action == "copy_text":
+                text = parameters.get("text", "")
+                try:
+                    import pyperclip
+                    pyperclip.copy(text)
+                    return {"success": True, "message": "Text copied to clipboard"}
+                except Exception as e:
+                    return {"success": False, "message": f"Copy failed: {str(e)}"}
+            
+            elif action == "paste_text":
+                try:
+                    import pyperclip
+                    text = pyperclip.paste()
+                    return {"success": True, "message": f"Clipboard: {text}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Paste failed: {str(e)}"}
+            
+            # FILE OPERATIONS
+            elif action == "search_files":
+                import os
+                query = parameters.get("query", "")
+                directory = parameters.get("directory", ".")
+                matches = []
+                try:
+                    for root, dirs, files in os.walk(directory):
+                        for file in files:
+                            if query.lower() in file.lower():
+                                matches.append(os.path.join(root, file))
+                                if len(matches) >= 20:
+                                    break
+                        if len(matches) >= 20:
+                            break
+                    
+                    if matches:
+                        msg = f"Found {len(matches)} files:\n" + "\n".join(matches[:10])
+                        if len(matches) > 10:
+                            msg += f"\n... and {len(matches) - 10} more"
+                        return {"success": True, "message": msg}
+                    else:
+                        return {"success": False, "message": "No files found"}
+                except Exception as e:
+                    return {"success": False, "message": f"Search failed: {str(e)}"}
+            
+            elif action == "find_large_files":
+                import os
+                directory = parameters.get("directory", ".")
+                min_size_mb = parameters.get("min_size_mb", 10)
+                large_files = []
+                try:
+                    for root, dirs, files in os.walk(directory):
+                        for file in files:
+                            filepath = os.path.join(root, file)
+                            try:
+                                size_mb = os.path.getsize(filepath) / (1024 * 1024)
+                                if size_mb >= min_size_mb:
+                                    large_files.append((filepath, size_mb))
+                            except:
+                                pass
+                    
+                    large_files.sort(key=lambda x: x[1], reverse=True)
+                    if large_files:
+                        msg = f"Found {len(large_files)} large files (>{min_size_mb}MB):\n"
+                        for filepath, size in large_files[:10]:
+                            msg += f"{size:.1f}MB - {filepath}\n"
+                        return {"success": True, "message": msg}
+                    else:
+                        return {"success": False, "message": f"No files larger than {min_size_mb}MB found"}
+                except Exception as e:
+                    return {"success": False, "message": f"Search failed: {str(e)}"}
+            
+            elif action == "directory_size":
+                import os
+                directory = parameters.get("directory", ".")
+                total_size = 0
+                try:
+                    for root, dirs, files in os.walk(directory):
+                        for file in files:
+                            filepath = os.path.join(root, file)
+                            try:
+                                total_size += os.path.getsize(filepath)
+                            except:
+                                pass
+                    
+                    size_mb = total_size / (1024 * 1024)
+                    size_gb = total_size / (1024 * 1024 * 1024)
+                    
+                    if size_gb >= 1:
+                        return {"success": True, "message": f"Directory size: {size_gb:.2f} GB"}
+                    else:
+                        return {"success": True, "message": f"Directory size: {size_mb:.2f} MB"}
+                except Exception as e:
+                    return {"success": False, "message": f"Size calculation failed: {str(e)}"}
+            
+            # SYSTEM CONTROL
+            elif action == "set_volume":
+                level = parameters.get("level", 50)
+                # Note: Volume control varies by OS, this is a stub
+                return {"success": False, "message": "Volume control not yet implemented for this system"}
+            
+            elif action == "mute_system":
+                return {"success": False, "message": "Mute control not yet implemented for this system"}
+            
+            elif action == "set_brightness":
+                level = parameters.get("level", 50)
+                return {"success": False, "message": "Brightness control not yet implemented for this system"}
+            
+            elif action == "shutdown_system":
+                return {"success": False, "message": "For safety, system shutdown must be done manually"}
+            
+            elif action == "restart_system":
+                return {"success": False, "message": "For safety, system restart must be done manually"}
+            
+            elif action == "lock_screen":
+                import subprocess
+                import platform
+                try:
+                    if platform.system() == "Windows":
+                        subprocess.run(["rundll32.exe", "user32.dll,LockWorkStation"])
+                    elif platform.system() == "Darwin":  # macOS
+                        subprocess.run(["/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession", "-suspend"])
+                    else:  # Linux
+                        subprocess.run(["xdg-screensaver", "lock"])
+                    return {"success": True, "message": "Screen locked"}
+                except Exception as e:
+                    return {"success": False, "message": f"Lock screen failed: {str(e)}"}
+
+            # DESKTOP AUTOMATION
+            elif action == "open_app":
+                app_name = parameters.get("app_name", "")
+                import subprocess
+                import platform
+                try:
+                    if platform.system() == "Windows":
+                        subprocess.Popen(app_name)
+                    elif platform.system() == "Darwin":  # macOS
+                        subprocess.Popen(["open", "-a", app_name])
+                    else:  # Linux
+                        subprocess.Popen(app_name, shell=True)
+                    return {"success": True, "message": f"Opening {app_name}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Failed to open {app_name}: {str(e)}"}
+            
+            elif action == "type_text":
+                text = parameters.get("text", "")
+                import pyautogui
+                try:
+                    pyautogui.write(text, interval=0.05)
+                    return {"success": True, "message": f"Typed: {text[:50]}..."}
+                except Exception as e:
+                    return {"success": False, "message": f"Typing failed: {str(e)}"}
+            
+            elif action == "press_key":
+                key = parameters.get("key", "")
+                import pyautogui
+                try:
+                    pyautogui.press(key)
+                    return {"success": True, "message": f"Pressed {key}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Key press failed: {str(e)}"}
+            
+            elif action == "click_mouse":
+                x = parameters.get("x")
+                y = parameters.get("y")
+                import pyautogui
+                try:
+                    if x and y:
+                        pyautogui.click(x, y)
+                        return {"success": True, "message": f"Clicked at ({x}, {y})"}
+                    else:
+                        pyautogui.click()
+                        return {"success": True, "message": "Clicked at current position"}
+                except Exception as e:
+                    return {"success": False, "message": f"Click failed: {str(e)}"}
+            
+            elif action == "move_mouse":
+                x = parameters.get("x", 0)
+                y = parameters.get("y", 0)
+                import pyautogui
+                try:
+                    pyautogui.moveTo(x, y)
+                    return {"success": True, "message": f"Moved mouse to ({x}, {y})"}
+                except Exception as e:
+                    return {"success": False, "message": f"Mouse move failed: {str(e)}"}
+            
+            elif action == "hotkey":
+                keys = parameters.get("keys", [])
+                import pyautogui
+                try:
+                    pyautogui.hotkey(*keys)
+                    return {"success": True, "message": f"Pressed hotkey: {'+'.join(keys)}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Hotkey failed: {str(e)}"}
 
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")
@@ -700,9 +903,18 @@ class CommandExecutor:
                 }
 
             else:
+                # Log unimplemented action for future prioritization
+                import logging
+                logging.info(f"Unimplemented action requested: {action}")
+                
+                # Provide helpful stub response
+                stub_message = f"The '{action}' feature is not yet implemented. "
+                stub_message += "Available features include: system monitoring, code generation, "
+                stub_message += "file operations, web search, screenshots, and basic automation."
+                
                 result = {
                     "success": False,
-                    "message": f"Unknown action: {action}"
+                    "message": stub_message
                 }
                 return self._humanize_result(action, result)
 
