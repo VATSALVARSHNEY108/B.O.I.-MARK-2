@@ -362,6 +362,41 @@ class CommandExecutor:
                 summary = self.comm_enhancements.get_feature_summary()
                 return {"success": True, "message": summary}
             
+            elif action == "get_quick_weather":
+                city = parameters.get("city", "New York")
+                try:
+                    import requests
+                    url = f"https://wttr.in/{city}?format=j1"
+                    response = requests.get(url, timeout=5)
+                    if response.status_code == 200:
+                        data = response.json()
+                        current = data['current_condition'][0]
+                        weather_report = f"🌤️ {city}: {current['temp_C']}°C ({current['temp_F']}°F), {current['weatherDesc'][0]['value']}"
+                        return {"success": True, "message": weather_report}
+                    else:
+                        return {"success": False, "message": f"Couldn't fetch weather for {city}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Weather error: {str(e)}"}
+
+            elif action == "get_forecast":
+                city = parameters.get("city", "New York")
+                days = max(1, int(parameters.get("days", 3)))
+                try:
+                    import requests
+                    url = f"https://wttr.in/{city}?format=j1"
+                    response = requests.get(url, timeout=5)
+                    if response.status_code == 200:
+                        data = response.json()
+                        forecast_data = data['weather'][:days]
+                        forecast = f"📅 {days}-day forecast for {city}:\n"
+                        for day in forecast_data:
+                            forecast += f"{day['date']}: {day['maxtempC']}°C/{day['mintempC']}°C - {day['hourly'][0]['weatherDesc'][0]['value']}\n"
+                        return {"success": True, "message": forecast}
+                    else:
+                        return {"success": False, "message": f"Couldn't fetch forecast for {city}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Forecast error: {str(e)}"}
+            
             elif action == "chatbot" or action == "chat" or action == "ask":
                 from modules.core.gemini_controller import chat_response
                 message = parameters.get("message", "")

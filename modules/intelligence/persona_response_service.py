@@ -17,6 +17,7 @@ class PersonaResponseService:
         self.consecutive_errors = 0
         self.last_interaction_time = None
         self.interaction_count = 0
+        self.brief_mode = True
         
         # Emotional intelligence phrases
         self.empathy_phrases = {
@@ -172,6 +173,15 @@ class PersonaResponseService:
         # Track interaction patterns
         self.interaction_count += 1
         self.last_interaction_time = datetime.now()
+        
+        if self.brief_mode:
+            base_text = message.strip() or "No additional details provided."
+            if success:
+                self.consecutive_errors = 0
+                return f"Done. {base_text}" if base_text else "Done."
+            else:
+                self.consecutive_errors += 1
+                return f"Sorry, that didn't work. {base_text}" if base_text else "Sorry, that didn't work."
         
         # Build humanized response
         response_parts = []
