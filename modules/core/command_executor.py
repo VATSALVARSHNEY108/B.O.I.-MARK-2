@@ -361,6 +361,18 @@ class CommandExecutor:
             elif action == "comm_features_summary":
                 summary = self.comm_enhancements.get_feature_summary()
                 return {"success": True, "message": summary}
+            
+            elif action == "chatbot" or action == "chat" or action == "ask":
+                from modules.core.gemini_controller import chat_response
+                message = parameters.get("message", "")
+                if not message:
+                    return {"success": False, "message": "Please provide a message to chat"}
+                
+                try:
+                    response = chat_response(message)
+                    return {"success": True, "message": f"🤖 {response}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Chat error: {str(e)}"}
 
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")

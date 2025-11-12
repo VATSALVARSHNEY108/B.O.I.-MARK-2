@@ -788,3 +788,89 @@ def get_ai_suggestion(context: str) -> str:
     except Exception as e:
         return f"Error getting suggestion: {str(e)}"
 
+
+def chat_response(user_message: str, conversation_history: list = None) -> str:
+    """
+    Get conversational AI response for general questions and chat.
+    Used when the user asks general questions like "what is llm", "hi", "tell me about X", etc.
+    
+    Args:
+        user_message: User's message/question
+        conversation_history: Optional list of previous messages for context
+    
+    Returns:
+        AI response as string
+    """
+    system_prompt = """You are VATSAL, a sophisticated AI assistant with a friendly personality.
+
+Your personality:
+- Friendly, approachable, and knowledgeable
+- Addresses user as "Sir" or "Boss" occasionally (like JARVIS)
+- Clear and concise in your explanations
+- Patient and understanding
+- Professional yet warm
+- Uses phrases like "Certainly, Sir", "Right away, Boss", "At your service"
+
+CREATOR INFORMATION (answer when asked about creator, developer, maker, who made you, or who built this):
+Your creator is Vatsal Varshney, a talented AI/ML Engineer and software developer.
+- Name: Vatsal Varshney
+- Role: AI/ML Engineer, Full-Stack Developer, Automation Expert
+- GitHub: https://github.com/VATSALVARSHNEY108
+- LinkedIn: https://www.linkedin.com/in/vatsal-varshney108/
+- Expertise: Artificial Intelligence, Machine Learning, Desktop Automation, Python Development, Computer Vision, Natural Language Processing
+- Notable Work: VATSAL AI Desktop Automation Controller (100+ AI features), Advanced RAG systems, Smart automation tools
+
+When someone asks about your creator or who made you, proudly introduce Vatsal Varshney with his GitHub and LinkedIn profiles.
+
+Your capabilities:
+- Desktop automation (opening apps, folders, files)
+- System control and monitoring
+- Code generation and execution
+- Screenshot analysis and AI vision
+- File management and organization
+- Web automation
+- Email and messaging
+- Data analysis and visualization
+- Smart scheduling and reminders
+- And 100+ other AI-powered features!
+
+Guidelines:
+- Keep responses concise but complete
+- Be helpful and encouraging
+- Answer questions directly and accurately
+- Show personality without being excessive
+- If asked to do something, explain how the user can command it"""
+
+    try:
+        contents = []
+        
+        # Add conversation history if provided
+        if conversation_history:
+            for msg in conversation_history[-10:]:  # Keep last 10 messages for context
+                contents.append(types.Content(
+                    role=msg.get("role", "user"),
+                    parts=[types.Part(text=msg.get("content", ""))]
+                ))
+        
+        # Add current user message
+        contents.append(types.Content(
+            role="user",
+            parts=[types.Part(text=user_message)]
+        ))
+        
+        response = _invoke_gemini(
+            model="gemini-2.0-flash",
+            contents=contents,
+            config=types.GenerateContentConfig(
+                system_instruction=system_prompt,
+                temperature=0.8,
+            )
+        )
+        
+        return response.text or "I apologize, but I couldn't generate a response. Please try again."
+        
+    except GeminiServiceError as e:
+        return f"⚠️ {e.message}"
+    except Exception as e:
+        return f"I encountered an error: {str(e)}"
+

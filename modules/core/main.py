@@ -124,12 +124,36 @@ class DesktopAutomationCLI:
                 
                 print("\n🤔 Processing your command with AI...")
                 
+                # Check if this is a simple greeting or general question
+                simple_queries = ['hi', 'hello', 'hey', 'good morning', 'good evening', 'good afternoon',
+                                'thanks', 'thank you', 'bye', 'goodbye', 'what is', 'who is', 
+                                'tell me about', 'explain', 'how does', 'why', 'when']
+                
+                is_simple_query = any(user_input.lower().startswith(q) for q in simple_queries)
+                
+                # For simple queries, use chatbot directly
+                if is_simple_query or len(user_input.split()) <= 5:
+                    from modules.core.gemini_controller import chat_response
+                    try:
+                        response = chat_response(user_input)
+                        print(f"\n🤖 {response}")
+                        continue
+                    except Exception as e:
+                        print(f"\n💬 {user_input}")
+                        # If chat fails, fall through to command parsing
+                
                 command_dict = parse_command(user_input)
                 
                 if command_dict.get("action") == "error":
-                    print(f"\n❌ {command_dict.get('description', 'Error processing command')}")
-                    suggestion = get_ai_suggestion(f"User tried: {user_input}, but got error. Suggest alternatives.")
-                    print(f"\n💡 Suggestion: {suggestion}")
+                    # Instead of showing error, try chatbot as fallback
+                    from modules.core.gemini_controller import chat_response
+                    try:
+                        response = chat_response(user_input)
+                        print(f"\n🤖 {response}")
+                    except Exception as e:
+                        print(f"\n❌ {command_dict.get('description', 'Error processing command')}")
+                        suggestion = get_ai_suggestion(f"User tried: {user_input}, but got error. Suggest alternatives.")
+                        print(f"\n💡 Suggestion: {suggestion}")
                     continue
                 
                 result = self.executor.execute(command_dict)
