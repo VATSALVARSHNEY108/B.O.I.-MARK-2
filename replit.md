@@ -10,10 +10,12 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 The AI Desktop Automation Controller is built with Python 3.11 and utilizes a modular architecture, enabling a wide range of desktop automation and AI-powered functionalities.
 
 ### UI/UX Decisions
-The system offers two GUI options:
+The system offers three interface options:
 1.  **Original GUI** (`gui_app.py`): A comprehensive, feature-rich interface with a tabbed design, live clock, quick-access buttons, and real-time console output.
 2.  **Enhanced Modern GUI** (`enhanced_gui.py`): A redesigned interface featuring a dark theme, a dashboard with live statistics, sidebar navigation, 6 major views, a stunning color palette (navy blue backgrounds, purple-blue accents), hover effects, and a professional high-contrast appearance with a terminal-style command prompt bar.
-Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mode. A CLI interface (`main.py`) is also available.
+3.  **Web Interface** (`streamlit_app.py`): A Streamlit-based web interface optimized for cloud/browser environments with browser audio input, voice response playback, real-time command processing, visual status indicators, command history, and quick reference guide. Ideal for Replit deployment.
+
+Both desktop GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mode. A CLI interface (`main.py`) is also available.
 
 ### Technical Implementations
 -   **AI Command Processing:** Gemini AI is integrated for natural language processing and converting commands into actions.
@@ -24,7 +26,12 @@ Both GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mo
 -   **Smart Automation & AI:** Provides 9 AI-powered features for various tasks.
 -   **Visual Chat Monitor:** AI-powered visual email/WhatsApp monitoring via real browser interface control.
 -   **System Control:** Manages system-level automation (lock screen, shutdown, restart, brightness, volume, disk cleanup) with cross-platform support. Includes new features for system information, clipboard, power management, window management, process management, quick app launchers, and timers/alarms.
--   **Voice Assistant:** An ultra-intelligent, interactive voice commanding system with advanced AI capabilities, supporting multiple wake words, NLU, context awareness, and entity extraction.
+-   **Voice Assistant:** An ultra-intelligent, interactive voice commanding system with advanced AI capabilities, supporting multiple wake words, NLU, context awareness, and entity extraction. Features include:
+    -   **Web-Based Voice Interface:** Browser audio input via Streamlit for cloud-compatible voice commands
+    -   **Voice Response Playback:** Text-to-speech (pyttsx3) integration with browser audio playback
+    -   **Visual Feedback:** Real-time status indicators, command history with timestamps, and processing spinners
+    -   **Quick Reference Guide:** Contextual command examples and documentation
+    -   **Graceful Fallback:** Continues working even when TTS dependencies are unavailable
 -   **Face & Gesture Assistant:** Computer vision-powered face detection and hand gesture recognition using OpenCV and MediaPipe. Detects user's face to greet them and recognizes hand gestures (open palm) to activate voice listening mode with audio feedback.
 -   **Self-Operating Computer:** Autonomous AI desktop control using Gemini Vision (Gemini 2.0 Flash Exp) for screen analysis and autonomous actions.
 -   **Real-Time WebSocket System:** A Flask-SocketIO based server provides a live dashboard for real-time monitoring of system stats and command execution.
