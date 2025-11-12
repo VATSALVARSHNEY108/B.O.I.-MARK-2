@@ -868,14 +868,24 @@ class VoiceAssistant:
                 song = command.replace("play", "").strip()
                 return f"play_music|{song}"
         
-        elif "pause" in command or "stop music" in command:
-            return "pause_music"
+        # Stop/pause any media (YouTube, video player, music player, etc.)
+        elif "stop" in command:
+            # Stop video, music, or any media playback
+            if any(media in command for media in ["video", "youtube", "music", "song", "sound", "playing", "playback"]):
+                return "stop_media"
+            # Generic stop command - also stop media
+            elif command.strip() in ["stop", "stop it"]:
+                return "stop_media"
         
-        elif "next song" in command or "skip" in command:
-            return "next_song"
+        elif "pause" in command:
+            # Pause/play toggle for any media
+            return "pause_media"
         
-        elif "previous song" in command:
-            return "previous_song"
+        elif "next song" in command or "next track" in command or "skip" in command:
+            return "next_track"
+        
+        elif "previous song" in command or "previous track" in command:
+            return "previous_track"
         
         # ==================== COMMUNICATION ====================
         elif "send email" in command or "email" in command:

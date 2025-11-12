@@ -4,6 +4,7 @@ import webbrowser
 import time
 import urllib.parse
 from modules.automation.gui_automation import GUIAutomation
+from modules.automation.media_control_helper import MediaControlHelper
 from modules.utilities.contact_manager import ContactManager
 from modules.communication.messaging_service import MessagingService
 from modules.communication.phone_dialer import create_phone_dialer
@@ -63,6 +64,7 @@ class CommandExecutor:
 
     def __init__(self):
         self.gui = GUIAutomation()
+        self.media_control = MediaControlHelper()
         self.contact_manager = ContactManager()
         self.messaging = MessagingService(self.contact_manager)
         self.phone_dialer = create_phone_dialer()
@@ -518,6 +520,22 @@ class CommandExecutor:
                 result = self.youtube.search_and_play(query, wait_time, use_mouse)
 
                 return result
+            
+            elif action == "stop_media":
+                print(f"  ⏹️  Stopping media playback...")
+                return self.media_control.stop()
+            
+            elif action == "pause_media" or action == "play_pause_media":
+                print(f"  ⏸️  Toggling play/pause...")
+                return self.media_control.play_pause()
+            
+            elif action == "next_track":
+                print(f"  ⏭️  Skipping to next track...")
+                return self.media_control.next_track()
+            
+            elif action == "previous_track":
+                print(f"  ⏮️  Going to previous track...")
+                return self.media_control.previous_track()
 
             elif action == "create_file":
                 filename = parameters.get("filename", "")
