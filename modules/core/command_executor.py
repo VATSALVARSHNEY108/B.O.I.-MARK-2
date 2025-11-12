@@ -373,6 +373,54 @@ class CommandExecutor:
                     return {"success": True, "message": f"🤖 {response}"}
                 except Exception as e:
                     return {"success": False, "message": f"Chat error: {str(e)}"}
+            
+            elif action == "conversational_ai":
+                from modules.core.gemini_controller import chat_response
+                message = parameters.get("message", "")
+                context = parameters.get("context", "general")
+                
+                try:
+                    response = chat_response(message)
+                    return {"success": True, "message": response}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
+            
+            elif action == "customer_service_bot":
+                from modules.core.gemini_controller import chat_response
+                query = parameters.get("query", "")
+                company_context = parameters.get("company_context", "")
+                
+                prompt = f"Customer query: {query}\nCompany context: {company_context}" if company_context else query
+                try:
+                    response = chat_response(prompt)
+                    return {"success": True, "message": response}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
+            
+            elif action == "educational_assistant":
+                from modules.core.gemini_controller import chat_response
+                topic = parameters.get("topic", "")
+                question = parameters.get("question", "")
+                level = parameters.get("level", "intermediate")
+                
+                prompt = f"Topic: {topic}\nLevel: {level}\nQuestion: {question}"
+                try:
+                    response = chat_response(prompt)
+                    return {"success": True, "message": response}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
+            
+            elif action == "domain_expert":
+                from modules.core.gemini_controller import chat_response
+                domain = parameters.get("domain", "")
+                question = parameters.get("question", "")
+                
+                prompt = f"As an expert in {domain}, please answer: {question}"
+                try:
+                    response = chat_response(prompt)
+                    return {"success": True, "message": response}
+                except Exception as e:
+                    return {"success": False, "message": f"Error: {str(e)}"}
 
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")
