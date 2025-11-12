@@ -1,36 +1,181 @@
 """
 ⚙️ Command Executor Module
 Executes commands with intelligence, personality, and humanized feedback
-Integrates Desktop RAG, Communication Enhancements, and Persona services
+Integrates all automation modules with Persona services
 """
 
+import os
+import platform
+import webbrowser
+import time
+import urllib.parse
+from modules.automation.gui_automation import GUIAutomation
+from modules.automation.media_control_helper import MediaControlHelper
+from modules.utilities.contact_manager import ContactManager
+from modules.communication.messaging_service import MessagingService
+from modules.communication.phone_dialer import create_phone_dialer
+from modules.utilities.youtube_automation import create_youtube_automation
+from modules.communication.whatsapp_automation import create_whatsapp_automation
+from modules.ai_features.code_generation import generate_code, explain_code, improve_code, debug_code
+from modules.intelligence.conversation_memory import ConversationMemory
+from modules.ai_features.vision_ai import analyze_screenshot, extract_text_from_screenshot, get_screenshot_summary
+from modules.monitoring.screen_suggester import create_screen_suggester
+from modules.communication.email_sender import create_email_sender
+from modules.system.system_monitor import get_cpu_usage, get_memory_usage, get_disk_usage, get_full_system_report, get_running_processes
+from modules.file_management.advanced_file_operations import search_files, find_large_files, find_duplicate_files, organize_files_by_extension, find_old_files, get_directory_size
+from modules.smart_features.workflow_templates import WorkflowManager
+from modules.development.code_executor import execute_python_code, execute_javascript_code, validate_code_safety
+from modules.system.system_control import SystemController
+from modules.smart_features.app_scheduler import AppScheduler
+from modules.automation.download_organizer import DownloadOrganizer
+from modules.voice.voice_assistant import VoiceAssistant
+from modules.smart_features.smart_typing import SmartTyping
+from modules.file_management.file_manager import FileManager
+from modules.web.web_automation import WebAutomation
+from modules.productivity.productivity_monitor import ProductivityMonitor
+from modules.misc.fun_features import FunFeatures
+from modules.utilities.spotify_desktop_automation import create_spotify_desktop_automation
+from modules.utilities.weather_news_service import WeatherNewsService
+from modules.communication.translation_service import TranslationService
+from modules.utilities.advanced_calculator import AdvancedCalculator
+from modules.utilities.quick_info import create_quick_info
+from modules.utilities.password_vault import PasswordVault
+from modules.utilities.quick_notes import QuickNotes
+from modules.utilities.calendar_manager import CalendarManager
+from modules.integration.ecosystem_manager import EcosystemManager
+from modules.web.web_tools_launcher import create_web_tools_launcher
+from modules.integration.tools_mapper import create_tools_mapper
+from modules.ai_features.ai_features import create_ai_features
+from modules.data_analysis.data_analysis import create_data_analysis_suite
+from modules.intelligence.behavioral_learning import create_behavioral_learning
+from modules.file_management.workspace_manager import create_workspace_manager
+from modules.core.multimodal_control import create_multimodal_control
+from modules.ai_features.automation_ai import create_advanced_ai_automation
+from modules.intelligence.data_intelligence import create_data_intelligence
+from modules.misc.collaboration_tools import create_collaboration_tools
+from modules.misc.creative_utilities import create_creative_utilities
+from modules.security.security_enhancements import create_security_enhancements
+from modules.integration.human_interaction import create_human_interaction
+from modules.integration.cloud_ecosystem import create_cloud_ecosystem
+from modules.monitoring.chat_monitor import ChatMonitor
+from modules.monitoring.visual_chat_monitor import create_visual_chat_monitor
+from modules.monitoring.smart_screen_monitor import create_smart_screen_monitor
+from modules.intelligence.desktop_rag import DesktopRAG, create_desktop_rag
+from modules.communication.communication_enhancements import CommunicationEnhancements, create_communication_enhancements
+from modules.batch_file_reader import batch_reader
+from modules.utilities.optimistic_weather import optimistic_weather
 from modules.intelligence.persona_response_service import create_persona_service
-from modules.intelligence.desktop_rag import DesktopRAG
-from modules.communication.communication_enhancements import CommunicationEnhancements
 
 
 class CommandExecutor:
     """
     Enhanced command executor with:
+    - Comprehensive automation capabilities (GUI, media, system control)
     - Persona-based humanized responses
     - Desktop RAG integration for file intelligence
     - Communication enhancements for messages/emails
-    - Milestone celebrations and helpful tips
+    - AI features (code generation, vision, NLP)
+    - Data analysis and productivity monitoring
     - Multi-step workflow execution
     """
     
     def __init__(self):
-        """Initialize command executor with all intelligence modules"""
-        self.persona_service = create_persona_service()
-        self.desktop_rag = DesktopRAG()
+        """Initialize command executor with all automation and intelligence modules"""
+        # GUI and Automation
+        self.gui = GUIAutomation()
+        self.media_control = MediaControlHelper()
+        
+        # Communication
+        self.contact_manager = ContactManager()
+        self.messaging = MessagingService(self.contact_manager)
+        self.phone_dialer = create_phone_dialer()
+        self.whatsapp = create_whatsapp_automation()
+        self.email_sender = create_email_sender()
         self.comm_enhancements = CommunicationEnhancements()
+        
+        # Media and Entertainment
+        self.youtube = create_youtube_automation(self.gui)
+        self.spotify = create_spotify_desktop_automation()
+        
+        # System Control and Monitoring
+        self.system_control = SystemController()
+        self.productivity_monitor = ProductivityMonitor()
+        
+        # File Management
+        self.file_manager = FileManager()
+        self.workspace_manager = create_workspace_manager()
+        self.download_organizer = DownloadOrganizer()
+        
+        # Workflow and Productivity
+        self.workflow_manager = WorkflowManager()
+        self.app_scheduler = AppScheduler()
+        self.smart_typing = SmartTyping()
+        self.notes = QuickNotes()
+        self.calendar = CalendarManager()
+        
+        # AI and Intelligence
+        self.memory = ConversationMemory()
+        self.desktop_rag = DesktopRAG()
+        self.persona_service = create_persona_service()
+        self.behavioral_learning = create_behavioral_learning()
+        self.data_intelligence = create_data_intelligence()
+        
+        # Screen and Vision
+        self.screen_suggester = create_screen_suggester()
+        self.chat_monitor = ChatMonitor()
+        self.visual_chat_monitor = create_visual_chat_monitor()
+        self.smart_screen_monitor = create_smart_screen_monitor()
+        
+        # Utilities and Services
+        self.weather_news = WeatherNewsService()
+        self.translator = TranslationService()
+        self.calculator = AdvancedCalculator()
+        self.quick_info = create_quick_info()
+        self.password_vault = PasswordVault()
+        self.fun_features = FunFeatures()
+        
+        # Web and Integrations
+        self.web_automation = WebAutomation()
+        self.web_tools = create_web_tools_launcher()
+        self.tools_mapper = create_tools_mapper()
+        
+        # Advanced AI Features
+        self.ai_features = create_ai_features()
+        self.data_analysis = create_data_analysis_suite()
+        self.multimodal_control = create_multimodal_control()
+        self.advanced_ai_automation = create_advanced_ai_automation()
+        
+        # Collaboration and Creative
+        self.collaboration_tools = create_collaboration_tools()
+        self.creative_utilities = create_creative_utilities()
+        
+        # Security and Cloud
+        self.security_enhancements = create_security_enhancements()
+        self.human_interaction = create_human_interaction()
+        self.cloud_ecosystem = create_cloud_ecosystem()
+        
+        # Voice Assistant
+        self.voice_assistant = VoiceAssistant()
+        
+        # Ecosystem Manager
+        self.ecosystem = EcosystemManager(
+            self.calendar,
+            self.notes,
+            self.productivity_monitor,
+            self.weather_news,
+            self.password_vault
+        )
+        
+        # Tracking for persona
         self.command_count = 0
         self.error_count = 0
         
-        print("⚙️ Command Executor initialized")
+        print("⚙️ Command Executor initialized with full automation suite")
         print("   🤖 Persona Service: Active")
         print("   🧠 Desktop RAG: Active")
         print("   💬 Communication Enhancements: Active")
+        print("   🎮 GUI Automation: Active")
+        print("   📊 40+ Modules Loaded")
     
     def _humanize_result(self, action: str, result: dict) -> dict:
         """
@@ -58,19 +203,13 @@ class CommandExecutor:
     
     def execute(self, command_dict: dict) -> dict:
         """
-        Main entry point for executing commands.
-        Routes to execute_workflow for multi-step commands or execute_single_action for single actions.
-        
-        Args:
-            command_dict: Parsed command dictionary with keys:
-                - action: str - Action name
-                - parameters: dict - Action parameters
-                - steps: list - Workflow steps (empty for single actions)
-                - description: str - Human-readable description
-        
-        Returns:
-            Dict with execution result and humanized message
+        Execute a command dictionary returned by Gemini.
+        Returns a result dict with success status and message (humanized).
         """
+        # Stop any ongoing AI speech when new task is executed
+        if hasattr(self, 'voice_assistant') and self.voice_assistant:
+            self.voice_assistant.stop_speaking()
+        
         try:
             if not isinstance(command_dict, dict):
                 return {
@@ -81,21 +220,28 @@ class CommandExecutor:
             action = command_dict.get("action", "")
             parameters = command_dict.get("parameters", {})
             steps = command_dict.get("steps", [])
-            
-            if not action:
-                return {
-                    "success": False,
-                    "message": "No action specified in command"
-                }
-            
+            description = command_dict.get("description", "")
+
+            print(f"\n📋 Task: {description}")
+
+            # Check for workflow first (workflows may not have action field)
             if steps and len(steps) > 0:
                 return self.execute_workflow(steps)
             else:
+                # Single action - validate action is present
+                if not action:
+                    return {
+                        "success": False,
+                        "message": "No action specified in command"
+                    }
+                
                 result = self.execute_single_action(action, parameters)
                 
+                # Check if result is already humanized
                 if isinstance(result, dict) and "original_result" in result:
                     return result
                 
+                # Apply humanization
                 return self._humanize_result(action, result)
         
         except Exception as e:
@@ -104,28 +250,21 @@ class CommandExecutor:
                 "message": f"Error executing command: {str(e)}"
             }
             return self._humanize_result("command_execution", error_result)
-    
-    def execute_workflow(self, workflow_steps: list) -> dict:
-        """
-        Execute multi-step workflows with humanized feedback
-        
-        Args:
-            workflow_steps: List of action dictionaries to execute in sequence
-        
-        Returns:
-            Dict with workflow results and humanized messages
-        """
+
+    def execute_workflow(self, steps: list) -> dict:
+        """Execute a multi-step workflow with humanized feedback"""
         results = []
         all_success = True
         
         intro_msg = self.persona_service.handle_processing()
         print(intro_msg)
-        
-        for i, step in enumerate(workflow_steps, 1):
+        print(f"\n🔄 Executing workflow with {len(steps)} steps...")
+
+        for i, step in enumerate(steps, 1):
             action = step.get("action")
             parameters = step.get("parameters", {})
-            
-            print(f"\n📋 Step {i}/{len(workflow_steps)}: {action}")
+
+            print(f"\n  Step {i}/{len(steps)}: {action}")
             
             step_result = self.execute_single_action(action, parameters)
             results.append({
@@ -133,36 +272,991 @@ class CommandExecutor:
                 "action": action,
                 "result": step_result
             })
-            
+
             if not step_result.get("success", False):
                 all_success = False
                 error_msg = self.persona_service.handle_misunderstanding()
                 print(f"❌ {error_msg}")
                 break
-        
+
         workflow_result = {
             "success": all_success,
-            "message": f"Workflow completed: {len(results)}/{len(workflow_steps)} steps executed",
+            "message": f"Workflow completed: {len(results)}/{len(steps)} steps executed",
             "steps": results
         }
         
         return self._humanize_result("workflow", workflow_result)
-    
-    def execute_single_action(self, action: str, parameters: dict = None) -> dict:
-        """
-        Execute a single action with Desktop RAG and Communication enhancements
-        
-        Args:
-            action: Action name to execute
-            parameters: Action parameters
-        
-        Returns:
-            Dict with execution result and humanized message
-        """
+
+    def execute_single_action(self, action: str, parameters: dict) -> dict:
+        """Execute a single action - comprehensive action handler"""
         parameters = parameters or {}
         
         try:
-            if action == "index_desktop_rag":
+            # ==================== GUI AUTOMATION ====================
+            if action == "open_app":
+                app_name = parameters.get("app_name", "")
+                success = self.gui.open_application(app_name)
+                return {
+                    "success": success,
+                    "message": f"Opened {app_name}" if success else f"Failed to open {app_name}"
+                }
+
+            elif action == "type_text":
+                text = parameters.get("text", "")
+                interval = parameters.get("interval", 0.05)
+                success = self.gui.type_text(text, interval)
+                return {
+                    "success": success,
+                    "message": f"Typed text" if success else "Failed to type text"
+                }
+
+            elif action == "click":
+                x = parameters.get("x")
+                y = parameters.get("y")
+                button = parameters.get("button", "left")
+                success = self.gui.click(x, y, button)
+                return {
+                    "success": success,
+                    "message": "Clicked" if success else "Failed to click"
+                }
+
+            elif action == "move_mouse":
+                x = parameters.get("x", 0)
+                y = parameters.get("y", 0)
+                success = self.gui.move_mouse(x, y)
+                return {
+                    "success": success,
+                    "message": f"Moved mouse to ({x}, {y})" if success else "Failed to move mouse"
+                }
+
+            elif action == "press_key":
+                key = parameters.get("key", "")
+                success = self.gui.press_key(key)
+                return {
+                    "success": success,
+                    "message": f"Pressed {key}" if success else f"Failed to press {key}"
+                }
+
+            elif action == "hotkey":
+                keys = parameters.get("keys", [])
+                if isinstance(keys, list):
+                    success = self.gui.hotkey(*keys)
+                    return {
+                        "success": success,
+                        "message": f"Pressed {'+'.join(keys)}" if success else "Failed to press hotkey"
+                    }
+                else:
+                    return {"success": False, "message": "Keys must be a list"}
+
+            elif action == "screenshot":
+                filename = parameters.get("filename", "screenshot.png")
+                success = self.gui.screenshot(filename)
+                return {
+                    "success": success,
+                    "message": f"Screenshot saved as {filename}" if success else "Failed to take screenshot"
+                }
+
+            elif action == "copy":
+                text = parameters.get("text", "")
+                success = self.gui.copy_to_clipboard(text)
+                return {
+                    "success": success,
+                    "message": "Copied to clipboard" if success else "Failed to copy"
+                }
+
+            elif action == "paste":
+                success = self.gui.paste_from_clipboard()
+                return {
+                    "success": success,
+                    "message": "Pasted from clipboard" if success else "Failed to paste"
+                }
+
+            elif action == "wait":
+                seconds = parameters.get("seconds", 1)
+                success = self.gui.wait(seconds)
+                return {
+                    "success": success,
+                    "message": f"Waited {seconds} seconds" if success else "Failed to wait"
+                }
+
+            # ==================== QUICK INFORMATION ====================
+            elif action == "get_time":
+                result = self.quick_info.get_current_time()
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_date":
+                result = self.quick_info.get_current_date(detailed=True)
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_day_info":
+                result = self.quick_info.get_day_info()
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_week_info":
+                result = self.quick_info.get_week_info()
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_month_info":
+                result = self.quick_info.get_month_info()
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_year_info":
+                result = self.quick_info.get_year_info()
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_date_time":
+                result = self.quick_info.get_date_and_time()
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "read_desktop_time":
+                result = batch_reader.read_desktop_time()
+                return {
+                    "success": result.get("success"),
+                    "message": result.get("message")
+                }
+
+            elif action == "read_reminders":
+                result = batch_reader.read_reminders()
+                if result.get("success") and result.get("reminders"):
+                    formatted = batch_reader.format_reminders_for_display(result["reminders"])
+                    return {
+                        "success": True,
+                        "message": formatted
+                    }
+                return {
+                    "success": result.get("success"),
+                    "message": result.get("message")
+                }
+
+            elif action == "add_reminder":
+                text = parameters.get("text", "")
+                due_time = parameters.get("due_time", "")
+                if not text:
+                    return {
+                        "success": False,
+                        "message": "Please provide reminder text"
+                    }
+                result = batch_reader.add_reminder_via_python(text, due_time)
+                return {
+                    "success": result.get("success"),
+                    "message": result.get("message")
+                }
+
+            # ==================== WEATHER ====================
+            elif action == "get_quick_weather":
+                city = parameters.get("city", "New York")
+                result = self.weather_news.get_weather(city)
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_forecast":
+                city = parameters.get("city", "New York")
+                days = parameters.get("days", 3)
+                try:
+                    days = int(days)
+                    days = max(1, min(days, 7))
+                except (ValueError, TypeError):
+                    days = 3
+                result = self.weather_news.get_forecast(city, days)
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_optimistic_weather":
+                city = parameters.get("city", "New York")
+                result = optimistic_weather.get_optimistic_weather_from_api(city)
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            elif action == "get_optimistic_forecast":
+                city = parameters.get("city", "New York")
+                days = parameters.get("days", 3)
+                try:
+                    days = int(days)
+                    days = max(1, min(days, 7))
+                except (ValueError, TypeError):
+                    days = 3
+                result = optimistic_weather.get_forecast_optimistic(city, days)
+                return {
+                    "success": True,
+                    "message": result
+                }
+
+            # ==================== WEB BROWSING ====================
+            elif action == "search_web":
+                query = parameters.get("query", "")
+                url = f"https://www.google.com/search?q={query.replace(' ', '+')}"
+                webbrowser.open(url)
+                return {
+                    "success": True,
+                    "message": f"Opened web search for: {query}"
+                }
+
+            # ==================== FOLDER OPERATIONS ====================
+            elif action == "open_folder":
+                folder_path = parameters.get("folder_path")
+                folder_name = parameters.get("folder_name")
+                success = self.gui.open_folder(folder_path=folder_path, folder_name=folder_name)
+                if success:
+                    target = folder_path if folder_path else folder_name
+                    return {
+                        "success": True,
+                        "message": f"Opened folder: {target}"
+                    }
+                else:
+                    base_msg = "Failed to open folder"
+                    if folder_name:
+                        base_msg = f"Failed to open folder: {folder_name}"
+                    
+                    suggestions = self.gui.last_folder_suggestions
+                    if suggestions:
+                        suggestions_text = ", ".join(f"'{s}'" for s in suggestions[:5])
+                        base_msg += f". Did you mean: {suggestions_text}?"
+                    
+                    return {
+                        "success": False,
+                        "message": base_msg,
+                        "suggestions": suggestions if suggestions else []
+                    }
+
+            elif action == "open_desktop_folder":
+                folder_name = parameters.get("folder_name")
+                success = self.gui.open_desktop_folder(folder_name=folder_name)
+                if success:
+                    msg = f"Opened Desktop folder: {folder_name}" if folder_name else "Opened Desktop"
+                    return {
+                        "success": True,
+                        "message": msg
+                    }
+                else:
+                    base_msg = f"Failed to open Desktop folder: {folder_name}" if folder_name else "Failed to open Desktop"
+                    suggestions = self.gui.last_folder_suggestions
+                    if suggestions:
+                        suggestions_text = ", ".join(f"'{s}'" for s in suggestions[:5])
+                        base_msg += f". Did you mean: {suggestions_text}?"
+                    return {
+                        "success": False,
+                        "message": base_msg,
+                        "suggestions": suggestions
+                    }
+
+            elif action == "open_desktop":
+                success = self.gui.open_desktop_folder()
+                return {
+                    "success": success,
+                    "message": "Opened Desktop" if success else "Failed to open Desktop"
+                }
+
+            # ==================== YOUTUBE ====================
+            elif action == "open_youtube":
+                video_url = parameters.get("video_url", "")
+                video_id = parameters.get("video_id", "")
+
+                if video_url:
+                    result = self.youtube.open_video_url(video_url)
+                    return result
+                elif video_id:
+                    url = f"https://www.youtube.com/watch?v={video_id}"
+                    result = self.youtube.open_video_url(url)
+                    return result
+                else:
+                    return {
+                        "success": False,
+                        "message": "No video URL or ID provided"
+                    }
+
+            elif action == "search_youtube":
+                query = parameters.get("query", "")
+
+                if not query:
+                    return {
+                        "success": False,
+                        "message": "No search query provided"
+                    }
+
+                result = self.youtube.search_only(query)
+                return result
+
+            elif action == "play_youtube_video":
+                query = parameters.get("query", "")
+                method = parameters.get("method", "auto")
+
+                if not query:
+                    return {
+                        "success": False,
+                        "message": "No search query provided"
+                    }
+
+                print(f"  🎬 Smart YouTube Player Activated")
+                print(f"  🔍 Query: {query}")
+
+                result = self.youtube.smart_play_video(query, method)
+
+                return result
+
+            elif action == "play_first_result":
+                wait_time = parameters.get("wait_time", 3)
+                use_mouse = parameters.get("use_mouse", True)
+
+                print(f"  ▶️  Playing first video from current search results...")
+                result = self.youtube.play_first_result(wait_time, use_mouse)
+
+                return result
+
+            elif action == "search_and_play":
+                query = parameters.get("query", "")
+                wait_time = parameters.get("wait_time", 3)
+                use_mouse = parameters.get("use_mouse", True)
+
+                if not query:
+                    return {
+                        "success": False,
+                        "message": "No search query provided"
+                    }
+
+                print(f"  🎬 Searching and playing: {query}")
+                result = self.youtube.search_and_play(query, wait_time, use_mouse)
+
+                return result
+            
+            # ==================== MEDIA CONTROL ====================
+            elif action == "stop_media":
+                print(f"  ⏹️  Stopping media playback...")
+                return self.media_control.stop()
+            
+            elif action == "pause_media" or action == "play_pause_media":
+                print(f"  ⏸️  Toggling play/pause...")
+                return self.media_control.play_pause()
+            
+            elif action == "next_track":
+                print(f"  ⏭️  Next track...")
+                return self.media_control.next_track()
+            
+            elif action == "previous_track":
+                print(f"  ⏮️  Previous track...")
+                return self.media_control.previous_track()
+            
+            elif action == "play_media":
+                print(f"  ▶️  Playing media...")
+                return self.media_control.play()
+            
+            # ==================== SYSTEM MONITORING ====================
+            elif action == "system_report":
+                print(f"  📊 Generating system report...")
+                report = get_full_system_report()
+
+                print(report)
+
+                return {
+                    "success": True,
+                    "message": "System report generated",
+                    "report": report
+                }
+
+            elif action == "check_cpu":
+                cpu = get_cpu_usage()
+                msg = f"CPU Usage: {cpu['usage_percent']}% ({cpu['status']})"
+                print(f"  {msg}")
+                return {"success": True, "message": msg, "data": cpu}
+
+            elif action == "check_memory":
+                mem = get_memory_usage()
+                msg = f"Memory: {mem['used_gb']}/{mem['total_gb']} ({mem['usage_percent']}% - {mem['status']})"
+                print(f"  {msg}")
+                return {"success": True, "message": msg, "data": mem}
+
+            elif action == "check_disk":
+                disk = get_disk_usage()
+                msg = f"Disk: {disk['used_gb']}/{disk['total_gb']} ({disk['usage_percent']}% - {disk['status']})"
+                print(f"  {msg}")
+                return {"success": True, "message": msg, "data": disk}
+
+            # ==================== FILE OPERATIONS ====================
+            elif action == "search_files":
+                pattern = parameters.get("pattern", "*")
+                directory = parameters.get("directory", ".")
+
+                print(f"  🔍 Searching for files: {pattern}")
+                files = search_files(pattern, directory)
+
+                msg = f"Found {len(files)} files matching '{pattern}'"
+                print(f"\n  {msg}")
+                for f in files[:20]:
+                    print(f"    • {f}")
+                if len(files) > 20:
+                    print(f"    ... and {len(files)-20} more")
+
+                return {
+                    "success": True,
+                    "message": msg,
+                    "files": files
+                }
+
+            elif action == "find_large_files":
+                directory = parameters.get("directory", ".")
+                min_size = parameters.get("min_size_mb", 10)
+
+                print(f"  🔍 Finding large files (>{min_size}MB)...")
+                large_files = find_large_files(directory, min_size)
+
+                print(f"\n  Found {len(large_files)} large files:")
+                for f in large_files[:10]:
+                    print(f"    • {f['size_mb']} - {f['path']}")
+
+                return {
+                    "success": True,
+                    "message": f"Found {len(large_files)} large files",
+                    "files": large_files
+                }
+
+            elif action == "directory_size":
+                directory = parameters.get("directory", ".")
+
+                print(f"  📊 Calculating directory size...")
+                size_info = get_directory_size(directory)
+
+                msg = f"{directory}: {size_info['total_size_gb']} ({size_info['file_count']} files)"
+                print(f"  {msg}")
+
+                return {
+                    "success": True,
+                    "message": msg,
+                    "data": size_info
+                }
+
+            # ==================== WORKFLOWS ====================
+            elif action == "save_workflow":
+                name = parameters.get("name", "")
+                steps = parameters.get("steps", [])
+                description = parameters.get("description", "")
+
+                if not name or not steps:
+                    return {
+                        "success": False,
+                        "message": "Workflow name and steps required"
+                    }
+
+                success = self.workflow_manager.save_workflow(name, steps, description)
+                return {
+                    "success": success,
+                    "message": f"Workflow '{name}' saved" if success else "Failed to save workflow"
+                }
+
+            elif action == "load_workflow":
+                name = parameters.get("name", "")
+
+                workflow = self.workflow_manager.load_workflow(name)
+                if workflow:
+                    return self.execute_workflow(workflow["steps"])
+                else:
+                    return {
+                        "success": False,
+                        "message": f"Workflow '{name}' not found"
+                    }
+
+            elif action == "list_workflows":
+                workflows = self.workflow_manager.list_workflows()
+
+                print(f"\n  📋 Saved Workflows ({len(workflows)}):")
+                for w in workflows:
+                    print(f"    • {w['name']}: {w['description']} ({w['steps_count']} steps, used {w['usage_count']} times)")
+
+                return {
+                    "success": True,
+                    "message": f"Found {len(workflows)} workflows",
+                    "workflows": workflows
+                }
+
+            # ==================== CONVERSATION MEMORY ====================
+            elif action == "show_history":
+                history = self.memory.get_recent_history(10)
+
+                print(f"\n  📜 Recent Command History:")
+                for entry in history:
+                    status = "✅" if entry["result"]["success"] else "❌"
+                    print(f"    {status} {entry['user_input']}")
+
+                return {
+                    "success": True,
+                    "message": f"Showing {len(history)} recent commands",
+                    "history": history
+                }
+
+            elif action == "show_statistics":
+                stats = self.memory.get_statistics()
+
+                msg = f"Total: {stats['total_commands']}, Success: {stats['successful']}, Failed: {stats['failed']}, Success Rate: {stats['success_rate']}"
+                print(f"\n  📊 Statistics: {msg}")
+
+                return {
+                    "success": True,
+                    "message": msg,
+                    "statistics": stats
+                }
+
+            # ==================== CODE GENERATION AND ANALYSIS ====================
+            elif action == "generate_code":
+                description = parameters.get("description", "")
+                language = parameters.get("language", None)
+
+                if not description:
+                    return {
+                        "success": False,
+                        "message": "No code description provided"
+                    }
+
+                print(f"  🤖 Generating code for: {description}...")
+                result = generate_code(description, language)
+
+                if result.get("success"):
+                    code = result["code"]
+                    detected_lang = result["language"]
+                    source = result.get("source", "ai")
+
+                    if source == "template":
+                        print(f"  ⚡ Using built-in template (instant!)")
+
+                    print(f"\n{'='*60}")
+                    print(f"  Generated {detected_lang.upper()} Code:")
+                    print(f"{'='*60}")
+                    print(code)
+                    print(f"{'='*60}\n")
+
+                    return {
+                        "success": True,
+                        "message": f"✅ Generated {detected_lang} code successfully!",
+                        "generated_code": code,
+                        "language": detected_lang
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "message": f"❌ Error: {result.get('error', 'Code generation failed')}"
+                    }
+
+            elif action == "write_code_to_editor":
+                description = parameters.get("description", "")
+                language = parameters.get("language", None)
+                editor = parameters.get("editor", "notepad")
+
+                if not description:
+                    return {
+                        "success": False,
+                        "message": "No code description provided"
+                    }
+
+                print(f"  🤖 Generating code for: {description}...")
+                result = generate_code(description, language)
+
+                if not result.get("success"):
+                    return {
+                        "success": False,
+                        "message": f"❌ Code generation failed: {result.get('error', 'Unknown error')}"
+                    }
+
+                code = result["code"]
+                detected_lang = result["language"]
+                source = result.get("source", "ai")
+
+                if source == "template":
+                    print(f"  ⚡ Using built-in template (instant!)")
+
+                print(f"\n  ✅ Generated {detected_lang} code ({len(code)} characters)")
+                print(f"  📝 Opening {editor}...")
+
+                self.gui.open_application(editor)
+                time.sleep(2)
+
+                print(f"  📋 Copying code to clipboard...")
+                self.gui.copy_to_clipboard(code)
+                time.sleep(0.5)
+
+                print(f"  📝 Pasting code into editor...")
+                self.gui.paste_from_clipboard()
+
+                print(f"  ✅ Done! Code written to {editor}")
+
+                return {
+                    "success": True,
+                    "message": f"✅ Generated and wrote {detected_lang} code to {editor}!",
+                    "generated_code": code,
+                    "language": detected_lang
+                }
+
+            elif action == "explain_code":
+                code = parameters.get("code", "")
+                language = parameters.get("language", "python")
+
+                if not code:
+                    return {
+                        "success": False,
+                        "message": "No code provided to explain"
+                    }
+
+                print(f"  🤔 Analyzing {language} code...")
+                explanation = explain_code(code, language)
+
+                print(f"\n{'='*60}")
+                print(f"  Code Explanation:")
+                print(f"{'='*60}")
+                print(explanation)
+                print(f"{'='*60}\n")
+
+                return {
+                    "success": True,
+                    "message": "Code explained successfully",
+                    "explanation": explanation
+                }
+
+            elif action == "improve_code":
+                code = parameters.get("code", "")
+                language = parameters.get("language", "python")
+
+                if not code:
+                    return {
+                        "success": False,
+                        "message": "No code provided to improve"
+                    }
+
+                print(f"  🔧 Improving {language} code...")
+                result = improve_code(code, language)
+
+                if result.get("success"):
+                    improved = result["code"]
+
+                    print(f"\n{'='*60}")
+                    print(f"  Improved Code:")
+                    print(f"{'='*60}")
+                    print(improved)
+                    print(f"{'='*60}\n")
+
+                    return {
+                        "success": True,
+                        "message": "Code improved successfully",
+                        "improved_code": improved
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "message": f"Error: {result.get('error')}"
+                    }
+
+            elif action == "debug_code":
+                code = parameters.get("code", "")
+                error_message = parameters.get("error_message", "")
+                language = parameters.get("language", "python")
+
+                if not code:
+                    return {
+                        "success": False,
+                        "message": "No code provided to debug"
+                    }
+
+                print(f"  🐛 Debugging {language} code...")
+                result = debug_code(code, error_message, language)
+
+                if result.get("success"):
+                    fixed = result["code"]
+
+                    print(f"\n{'='*60}")
+                    print(f"  Fixed Code:")
+                    print(f"{'='*60}")
+                    print(fixed)
+                    print(f"{'='*60}\n")
+
+                    return {
+                        "success": True,
+                        "message": "Code debugged and fixed",
+                        "fixed_code": fixed
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "message": f"Error: {result.get('error')}"
+                    }
+
+            elif action == "execute_code":
+                code = parameters.get("code", "")
+                language = parameters.get("language", "python").lower()
+
+                if not code:
+                    return {
+                        "success": False,
+                        "message": "No code provided to execute"
+                    }
+
+                safety_check = validate_code_safety(code, language)
+                if not safety_check["is_safe"]:
+                    return {
+                        "success": False,
+                        "message": f"Code safety check failed: {', '.join(safety_check['warnings'])}"
+                    }
+
+                print(f"  ▶️  Executing {language} code...")
+
+                if language == "python":
+                    result = execute_python_code(code)
+                elif language == "javascript":
+                    result = execute_javascript_code(code)
+                else:
+                    return {
+                        "success": False,
+                        "message": f"Execution not supported for {language}"
+                    }
+
+                if result["success"]:
+                    print(f"\n  ✅ Output:\n{result['output']}")
+                    return {
+                        "success": True,
+                        "message": "Code executed successfully",
+                        "output": result["output"]
+                    }
+                else:
+                    print(f"\n  ❌ Error:\n{result['error']}")
+                    return {
+                        "success": False,
+                        "message": f"Execution failed: {result['error']}"
+                    }
+
+            # ==================== VISION AI ====================
+            elif action == "analyze_screenshot":
+                image_path = parameters.get("image_path", "screenshot.png")
+                query = parameters.get("query", "Describe what you see")
+
+                print(f"  🔍 Analyzing screenshot: {image_path}...")
+                analysis = analyze_screenshot(image_path, query)
+
+                print(f"\n{'='*60}")
+                print(f"  Screenshot Analysis:")
+                print(f"{'='*60}")
+                print(analysis)
+                print(f"{'='*60}\n")
+
+                return {
+                    "success": True,
+                    "message": "Screenshot analyzed",
+                    "analysis": analysis
+                }
+
+            elif action == "extract_text":
+                image_path = parameters.get("image_path", "screenshot.png")
+
+                print(f"  📝 Extracting text from: {image_path}...")
+                text = extract_text_from_screenshot(image_path)
+
+                print(f"\n  Extracted Text:\n{text}\n")
+
+                return {
+                    "success": True,
+                    "message": "Text extracted from screenshot",
+                    "text": text
+                }
+
+            elif action == "suggest_screen_improvements":
+                result = self.screen_suggester.analyze_and_suggest()
+                return {
+                    "success": True,
+                    "message": "AI suggestions generated",
+                    "suggestions": result
+                }
+
+            elif action == "check_screen_errors":
+                result = self.screen_suggester.check_for_errors()
+                return {
+                    "success": True,
+                    "message": "Screen checked for errors",
+                    "errors": result
+                }
+
+            elif action == "get_screen_tips":
+                result = self.screen_suggester.get_quick_tips()
+                return {
+                    "success": True,
+                    "message": "Quick tips generated",
+                    "tips": result
+                }
+
+            elif action == "analyze_screen_code":
+                result = self.screen_suggester.analyze_code()
+                return {
+                    "success": True,
+                    "message": "Code analyzed",
+                    "analysis": result
+                }
+
+            elif action == "analyze_screen_design":
+                result = self.screen_suggester.analyze_website()
+                return {
+                    "success": True,
+                    "message": "Design analyzed",
+                    "analysis": result
+                }
+
+            # ==================== SCREEN MONITORING ====================
+            elif action == "monitor_screen":
+                query = parameters.get("query", "What's happening on my screen?")
+
+                if not query:
+                    return {
+                        "success": False,
+                        "message": "No question provided"
+                    }
+
+                result = self.smart_screen_monitor.smart_screenshot_with_context(query)
+
+                if result["success"]:
+                    return {
+                        "success": True,
+                        "message": f"❓ Q: {result['question']}\n\n💡 A: {result['answer']}"
+                    }
+                return result
+
+            # ==================== CONTACTS ====================
+            elif action == "add_contact":
+                name = parameters.get("name", "")
+                phone = parameters.get("phone")
+                email = parameters.get("email")
+                success = self.contact_manager.add_contact(name, phone, email)
+                return {
+                    "success": success,
+                    "message": f"Added contact: {name}" if success else f"Failed to add contact: {name}"
+                }
+
+            elif action == "list_contacts":
+                contacts = self.contact_manager.list_contacts()
+                if contacts:
+                    contact_list = "\n".join([
+                        f"  • {c['name']} - Phone: {c['phone'] or 'N/A'}, Email: {c['email'] or 'N/A'}"
+                        for c in contacts
+                    ])
+                    return {
+                        "success": True,
+                        "message": f"Contacts:\n{contact_list}"
+                    }
+                else:
+                    return {
+                        "success": True,
+                        "message": "No contacts found. Use 'add contact' to create one."
+                    }
+
+            elif action == "get_contact":
+                name = parameters.get("name", "")
+                contact = self.contact_manager.get_contact(name)
+                if contact:
+                    return {
+                        "success": True,
+                        "message": f"Contact: {contact['name']}\n  Phone: {contact['phone'] or 'N/A'}\n  Email: {contact['email'] or 'N/A'}"
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "message": f"Contact not found: {name}"
+                    }
+
+            # ==================== SYSTEM CONTROL ====================
+            elif action == "mute_mic":
+                result = self.system_control.mute_microphone()
+                return {"success": True, "message": result}
+
+            elif action == "unmute_mic":
+                result = self.system_control.unmute_microphone()
+                return {"success": True, "message": result}
+
+            elif action == "set_brightness":
+                level = parameters.get("level", 50)
+                result = self.system_control.set_brightness(level)
+                return {"success": True, "message": result}
+
+            elif action == "auto_brightness":
+                result = self.system_control.auto_brightness()
+                return {"success": True, "message": result}
+
+            elif action == "increase_brightness":
+                amount = parameters.get("amount", 10)
+                result = self.system_control.increase_brightness(amount)
+                return {"success": True, "message": result}
+
+            elif action == "decrease_brightness":
+                amount = parameters.get("amount", 10)
+                result = self.system_control.decrease_brightness(amount)
+                return {"success": True, "message": result}
+
+            elif action == "get_brightness":
+                level = self.system_control.get_brightness()
+                if level is not None:
+                    return {"success": True, "message": f"☀️ Current brightness: {level}%"}
+                else:
+                    return {"success": False, "message": "Unable to retrieve brightness level"}
+
+            elif action == "set_volume":
+                level = parameters.get("level", 50)
+                result = self.system_control.set_volume(level)
+                return {"success": True, "message": result}
+
+            elif action == "increase_volume":
+                amount = parameters.get("amount", 10)
+                result = self.system_control.increase_volume(amount)
+                return {"success": True, "message": result}
+
+            elif action == "decrease_volume":
+                amount = parameters.get("amount", 10)
+                result = self.system_control.decrease_volume(amount)
+                return {"success": True, "message": result}
+
+            elif action == "volume_up":
+                amount = parameters.get("amount", 10)
+                result = self.system_control.increase_volume(amount)
+                return {"success": True, "message": result}
+
+            elif action == "volume_down":
+                amount = parameters.get("amount", 10)
+                result = self.system_control.decrease_volume(amount)
+                return {"success": True, "message": result}
+
+            elif action == "mute_volume":
+                result = self.system_control.mute_volume()
+                return {"success": True, "message": result}
+
+            elif action == "unmute_volume":
+                result = self.system_control.unmute_volume()
+                return {"success": True, "message": result}
+
+            elif action == "toggle_mute":
+                result = self.system_control.toggle_mute()
+                return {"success": True, "message": result}
+
+            elif action == "get_volume":
+                result = self.system_control.get_volume_info()
+                return {"success": True, "message": result}
+
+            # ==================== DESKTOP RAG ====================
+            elif action == "index_desktop_rag":
                 folder_path = parameters.get("folder_path", ".")
                 result = self.desktop_rag.index_folder(folder_path)
                 if result.get("success"):
@@ -235,6 +1329,7 @@ class CommandExecutor:
                     msg += "\nNo files indexed yet. Try 'Index my desktop files' first."
                 return {"success": True, "message": msg}
 
+            # ==================== COMMUNICATION ENHANCEMENTS ====================
             elif action == "transcribe_voice":
                 audio_file = parameters.get("audio_file")
                 audio_url = parameters.get("audio_url")
@@ -346,66 +1441,8 @@ class CommandExecutor:
             elif action == "comm_features_summary":
                 summary = self.comm_enhancements.get_feature_summary()
                 return {"success": True, "message": summary}
-            
-            elif action == "get_time":
-                from datetime import datetime
-                now = datetime.now()
-                time_str = now.strftime("%I:%M %p")
-                return {"success": True, "message": f"⏰ {time_str}"}
-            
-            elif action == "get_date":
-                from datetime import datetime
-                now = datetime.now()
-                date_str = now.strftime("%A, %B %d, %Y")
-                return {"success": True, "message": f"📅 {date_str}"}
-            
-            elif action == "get_date_time":
-                from datetime import datetime
-                now = datetime.now()
-                dt_str = now.strftime("%A, %B %d, %Y at %I:%M %p")
-                return {"success": True, "message": f"📅 {dt_str}"}
-            
-            elif action == "get_day_info":
-                from datetime import datetime
-                now = datetime.now()
-                day_str = now.strftime("%A")
-                return {"success": True, "message": f"📅 Today is {day_str}"}
-            
-            elif action == "get_quick_weather":
-                city = parameters.get("city", "New York")
-                try:
-                    import requests
-                    url = f"https://wttr.in/{city}?format=j1"
-                    response = requests.get(url, timeout=5)
-                    if response.status_code == 200:
-                        data = response.json()
-                        current = data['current_condition'][0]
-                        weather_report = f"🌤️ {city}: {current['temp_C']}°C ({current['temp_F']}°F), {current['weatherDesc'][0]['value']}"
-                        return {"success": True, "message": weather_report}
-                    else:
-                        return {"success": False, "message": f"Couldn't fetch weather for {city}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Weather error: {str(e)}"}
 
-            elif action == "get_forecast":
-                city = parameters.get("city", "New York")
-                days = max(1, int(parameters.get("days", 3)))
-                try:
-                    import requests
-                    url = f"https://wttr.in/{city}?format=j1"
-                    response = requests.get(url, timeout=5)
-                    if response.status_code == 200:
-                        data = response.json()
-                        forecast_data = data['weather'][:days]
-                        forecast = f"📅 {days}-day forecast for {city}:\n"
-                        for day in forecast_data:
-                            forecast += f"{day['date']}: {day['maxtempC']}°C/{day['mintempC']}°C - {day['hourly'][0]['weatherDesc'][0]['value']}\n"
-                        return {"success": True, "message": forecast}
-                    else:
-                        return {"success": False, "message": f"Couldn't fetch forecast for {city}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Forecast error: {str(e)}"}
-            
+            # ==================== CHATBOT / AI CHAT ====================
             elif action == "chatbot" or action == "chat" or action == "ask":
                 from modules.core.gemini_controller import chat_response
                 message = parameters.get("message", "")
@@ -466,7 +1503,7 @@ class CommandExecutor:
                 except Exception as e:
                     return {"success": False, "message": f"Error: {str(e)}"}
             
-            # TEXT GENERATION AI
+            # ==================== TEXT GENERATION AI ====================
             elif action == "story_writer":
                 from modules.core.gemini_controller import chat_response
                 prompt_text = parameters.get("prompt", "")
@@ -492,441 +1529,16 @@ class CommandExecutor:
                     return {"success": True, "message": f"✍️ Content:\n\n{response}"}
                 except Exception as e:
                     return {"success": False, "message": f"Error: {str(e)}"}
-            
-            elif action == "article_generator":
-                from modules.core.gemini_controller import chat_response
-                title = parameters.get("title", "")
-                keywords = parameters.get("keywords", [])
-                word_count = parameters.get("word_count", 800)
-                
-                keyword_str = ", ".join(keywords) if keywords else ""
-                prompt = f"Write a {word_count}-word article titled '{title}'"
-                if keyword_str:
-                    prompt += f" including keywords: {keyword_str}"
-                
-                try:
-                    response = chat_response(prompt)
-                    return {"success": True, "message": f"📰 Article:\n\n{response}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Error: {str(e)}"}
-            
-            elif action == "copywriting_assistant":
-                from modules.core.gemini_controller import chat_response
-                product = parameters.get("product", "")
-                goal = parameters.get("goal", "persuade")
-                
-                prompt = f"Create persuasive marketing copy to {goal} for: {product}"
-                try:
-                    response = chat_response(prompt)
-                    return {"success": True, "message": f"💼 Marketing Copy:\n\n{response}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Error: {str(e)}"}
-            
-            elif action == "technical_writer":
-                from modules.core.gemini_controller import chat_response
-                topic = parameters.get("topic", "")
-                audience = parameters.get("audience", "technical")
-                
-                prompt = f"Write technical documentation for {audience} audience about: {topic}"
-                try:
-                    response = chat_response(prompt)
-                    return {"success": True, "message": f"📚 Technical Documentation:\n\n{response}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Error: {str(e)}"}
-            
-            # LANGUAGE PROCESSING AI
-            elif action == "text_translator":
-                from modules.core.gemini_controller import chat_response
-                text = parameters.get("text", "")
-                target_language = parameters.get("target_language", "")
-                source_language = parameters.get("source_language", "auto")
-                
-                prompt = f"Translate from {source_language} to {target_language}: {text}"
-                try:
-                    response = chat_response(prompt)
-                    return {"success": True, "message": f"🌐 Translation:\n\n{response}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Error: {str(e)}"}
-            
-            elif action == "sentiment_analysis":
-                from modules.core.gemini_controller import chat_response
-                text = parameters.get("text", "")
-                
-                prompt = f"Analyze the sentiment of this text and provide a detailed emotional analysis: {text}"
-                try:
-                    response = chat_response(prompt)
-                    return {"success": True, "message": f"😊 Sentiment Analysis:\n\n{response}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Error: {str(e)}"}
-            
-            elif action == "text_summarizer":
-                from modules.core.gemini_controller import chat_response
-                text = parameters.get("text", "")
-                length = parameters.get("length", "medium")
-                
-                prompt = f"Provide a {length} summary of: {text}"
-                try:
-                    response = chat_response(prompt)
-                    return {"success": True, "message": f"📝 Summary:\n\n{response}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Error: {str(e)}"}
-            
-            elif action == "language_detector":
-                from modules.core.gemini_controller import chat_response
-                text = parameters.get("text", "")
-                
-                prompt = f"Identify the language of this text: {text}"
-                try:
-                    response = chat_response(prompt)
-                    return {"success": True, "message": f"🔍 Language Detection:\n\n{response}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Error: {str(e)}"}
-            
-            elif action == "content_moderator":
-                from modules.core.gemini_controller import chat_response
-                text = parameters.get("text", "")
-                
-                prompt = f"Analyze this content for inappropriate material, hate speech, violence, or policy violations: {text}"
-                try:
-                    response = chat_response(prompt)
-                    return {"success": True, "message": f"🛡️ Content Moderation:\n\n{response}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Error: {str(e)}"}
-            
-            # IMAGE GENERATION AI
-            elif action == "image_description_generator":
-                from modules.core.gemini_controller import chat_response
-                concept = parameters.get("concept", "")
-                style = parameters.get("style", "realistic")
-                
-                prompt = f"Generate a detailed AI art prompt in {style} style for: {concept}"
-                try:
-                    response = chat_response(prompt)
-                    return {"success": True, "message": f"🎨 AI Art Prompt:\n\n{response}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Error: {str(e)}"}
-            
-            elif action == "style_transfer_description":
-                from modules.core.gemini_controller import chat_response
-                content = parameters.get("content", "")
-                style = parameters.get("style", "")
-                
-                prompt = f"Describe how to apply {style} style to {content} for style transfer"
-                try:
-                    response = chat_response(prompt)
-                    return {"success": True, "message": f"🎭 Style Transfer:\n\n{response}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Error: {str(e)}"}
 
-            # SYSTEM MONITORING
-            elif action == "system_report":
-                from modules.system.system_monitor import get_full_system_report
-                report = get_full_system_report()
-                return {"success": True, "message": report}
-            
-            elif action == "check_cpu":
-                from modules.system.system_monitor import get_cpu_usage
-                cpu = get_cpu_usage()
-                msg = f"💻 CPU: {cpu['usage_percent']}% ({cpu['status']}) - {cpu['cpu_count']} cores @ {cpu['current_frequency']}"
-                return {"success": True, "message": msg}
-            
-            elif action == "check_memory":
-                from modules.system.system_monitor import get_memory_usage
-                mem = get_memory_usage()
-                msg = f"💾 RAM: {mem['used_gb']}/{mem['total_gb']} ({mem['usage_percent']}%) - {mem['status']}"
-                return {"success": True, "message": msg}
-            
-            elif action == "check_disk":
-                from modules.system.system_monitor import get_disk_usage
-                disk = get_disk_usage()
-                msg = f"💿 Disk: {disk['used_gb']}/{disk['total_gb']} ({disk['usage_percent']}%) - {disk['status']}"
-                return {"success": True, "message": msg}
-            
-            # CODE GENERATION & EXECUTION
-            elif action == "generate_code":
-                from modules.ai_features.code_generation import generate_code_with_gemini
-                description = parameters.get("description", "")
-                language = parameters.get("language", "python")
-                try:
-                    code = generate_code_with_gemini(description, language)
-                    return {"success": True, "message": f"```{language}\n{code}\n```"}
-                except Exception as e:
-                    return {"success": False, "message": f"Code generation failed: {str(e)}"}
-            
-            elif action == "execute_code":
-                code = parameters.get("code", "")
-                language = parameters.get("language", "python")
-                if language == "python":
-                    import subprocess
-                    try:
-                        result = subprocess.run(
-                            ["python", "-c", code],
-                            capture_output=True,
-                            text=True,
-                            timeout=10
-                        )
-                        output = result.stdout if result.returncode == 0 else result.stderr
-                        return {"success": result.returncode == 0, "message": f"Output:\n{output}"}
-                    except Exception as e:
-                        return {"success": False, "message": f"Execution error: {str(e)}"}
-                else:
-                    return {"success": False, "message": f"Language {language} not supported for execution"}
-            
-            elif action == "explain_code":
-                from modules.ai_features.code_generation import explain_code_with_gemini
-                code = parameters.get("code", "")
-                language = parameters.get("language", "python")
-                try:
-                    explanation = explain_code_with_gemini(code, language)
-                    return {"success": True, "message": explanation}
-                except Exception as e:
-                    return {"success": False, "message": f"Code explanation failed: {str(e)}"}
-            
-            # BASIC OPERATIONS
-            elif action == "search_web":
-                query = parameters.get("query", "")
-                import webbrowser
-                try:
-                    webbrowser.open(f"https://www.google.com/search?q={query}")
-                    return {"success": True, "message": f"Opened web search for: {query}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Search failed: {str(e)}"}
-            
-            elif action == "screenshot":
-                from datetime import datetime
-                filename = parameters.get("filename", f"screenshot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png")
-                try:
-                    import pyautogui
-                    screenshot = pyautogui.screenshot()
-                    screenshot.save(filename)
-                    return {"success": True, "message": f"Screenshot saved as {filename}"}
-                except ImportError:
-                    return {"success": False, "message": "Screenshot not available: pyautogui not installed"}
-                except Exception as e:
-                    error_msg = str(e)
-                    if "display" in error_msg.lower() or "headless" in error_msg.lower():
-                        return {"success": False, "message": "Screenshot not available in headless/non-GUI environment"}
-                    return {"success": False, "message": f"Screenshot failed: {error_msg}"}
-            
-            elif action == "copy_text":
-                text = parameters.get("text", "")
-                try:
-                    import pyperclip
-                    pyperclip.copy(text)
-                    return {"success": True, "message": "Text copied to clipboard"}
-                except Exception as e:
-                    return {"success": False, "message": f"Copy failed: {str(e)}"}
-            
-            elif action == "paste_text":
-                try:
-                    import pyperclip
-                    text = pyperclip.paste()
-                    return {"success": True, "message": f"Clipboard: {text}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Paste failed: {str(e)}"}
-            
-            # FILE OPERATIONS
-            elif action == "search_files":
-                import os
-                query = parameters.get("query", "")
-                directory = parameters.get("directory", ".")
-                matches = []
-                try:
-                    for root, dirs, files in os.walk(directory):
-                        for file in files:
-                            if query.lower() in file.lower():
-                                matches.append(os.path.join(root, file))
-                                if len(matches) >= 20:
-                                    break
-                        if len(matches) >= 20:
-                            break
-                    
-                    if matches:
-                        msg = f"Found {len(matches)} files:\n" + "\n".join(matches[:10])
-                        if len(matches) > 10:
-                            msg += f"\n... and {len(matches) - 10} more"
-                        return {"success": True, "message": msg}
-                    else:
-                        return {"success": False, "message": "No files found"}
-                except Exception as e:
-                    return {"success": False, "message": f"Search failed: {str(e)}"}
-            
-            elif action == "find_large_files":
-                import os
-                directory = parameters.get("directory", ".")
-                min_size_mb = parameters.get("min_size_mb", 10)
-                large_files = []
-                try:
-                    for root, dirs, files in os.walk(directory):
-                        for file in files:
-                            filepath = os.path.join(root, file)
-                            try:
-                                size_mb = os.path.getsize(filepath) / (1024 * 1024)
-                                if size_mb >= min_size_mb:
-                                    large_files.append((filepath, size_mb))
-                            except:
-                                pass
-                    
-                    large_files.sort(key=lambda x: x[1], reverse=True)
-                    if large_files:
-                        msg = f"Found {len(large_files)} large files (>{min_size_mb}MB):\n"
-                        for filepath, size in large_files[:10]:
-                            msg += f"{size:.1f}MB - {filepath}\n"
-                        return {"success": True, "message": msg}
-                    else:
-                        return {"success": False, "message": f"No files larger than {min_size_mb}MB found"}
-                except Exception as e:
-                    return {"success": False, "message": f"Search failed: {str(e)}"}
-            
-            elif action == "directory_size":
-                import os
-                directory = parameters.get("directory", ".")
-                total_size = 0
-                try:
-                    for root, dirs, files in os.walk(directory):
-                        for file in files:
-                            filepath = os.path.join(root, file)
-                            try:
-                                total_size += os.path.getsize(filepath)
-                            except:
-                                pass
-                    
-                    size_mb = total_size / (1024 * 1024)
-                    size_gb = total_size / (1024 * 1024 * 1024)
-                    
-                    if size_gb >= 1:
-                        return {"success": True, "message": f"Directory size: {size_gb:.2f} GB"}
-                    else:
-                        return {"success": True, "message": f"Directory size: {size_mb:.2f} MB"}
-                except Exception as e:
-                    return {"success": False, "message": f"Size calculation failed: {str(e)}"}
-            
-            # SYSTEM CONTROL
-            elif action == "set_volume":
-                level = parameters.get("level", 50)
-                # Note: Volume control varies by OS, this is a stub
-                return {"success": False, "message": "Volume control not yet implemented for this system"}
-            
-            elif action == "mute_system":
-                return {"success": False, "message": "Mute control not yet implemented for this system"}
-            
-            elif action == "set_brightness":
-                level = parameters.get("level", 50)
-                return {"success": False, "message": "Brightness control not yet implemented for this system"}
-            
-            elif action == "shutdown_system":
-                return {"success": False, "message": "For safety, system shutdown must be done manually"}
-            
-            elif action == "restart_system":
-                return {"success": False, "message": "For safety, system restart must be done manually"}
-            
-            elif action == "lock_screen":
-                import subprocess
-                import platform
-                try:
-                    if platform.system() == "Windows":
-                        subprocess.run(["rundll32.exe", "user32.dll,LockWorkStation"])
-                    elif platform.system() == "Darwin":  # macOS
-                        subprocess.run(["/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession", "-suspend"])
-                    else:  # Linux
-                        subprocess.run(["xdg-screensaver", "lock"])
-                    return {"success": True, "message": "Screen locked"}
-                except Exception as e:
-                    return {"success": False, "message": f"Lock screen failed: {str(e)}"}
-
-            # DESKTOP AUTOMATION
-            elif action == "open_app":
-                app_name = parameters.get("app_name", "")
-                import subprocess
-                import platform
-                try:
-                    if platform.system() == "Windows":
-                        subprocess.Popen(app_name)
-                    elif platform.system() == "Darwin":  # macOS
-                        subprocess.Popen(["open", "-a", app_name])
-                    else:  # Linux
-                        subprocess.Popen(app_name, shell=True)
-                    return {"success": True, "message": f"Opening {app_name}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Failed to open {app_name}: {str(e)}"}
-            
-            elif action == "type_text":
-                text = parameters.get("text", "")
-                import pyautogui
-                try:
-                    pyautogui.write(text, interval=0.05)
-                    return {"success": True, "message": f"Typed: {text[:50]}..."}
-                except Exception as e:
-                    return {"success": False, "message": f"Typing failed: {str(e)}"}
-            
-            elif action == "press_key":
-                key = parameters.get("key", "")
-                import pyautogui
-                try:
-                    pyautogui.press(key)
-                    return {"success": True, "message": f"Pressed {key}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Key press failed: {str(e)}"}
-            
-            elif action == "click_mouse":
-                x = parameters.get("x")
-                y = parameters.get("y")
-                import pyautogui
-                try:
-                    if x and y:
-                        pyautogui.click(x, y)
-                        return {"success": True, "message": f"Clicked at ({x}, {y})"}
-                    else:
-                        pyautogui.click()
-                        return {"success": True, "message": "Clicked at current position"}
-                except Exception as e:
-                    return {"success": False, "message": f"Click failed: {str(e)}"}
-            
-            elif action == "move_mouse":
-                x = parameters.get("x", 0)
-                y = parameters.get("y", 0)
-                import pyautogui
-                try:
-                    pyautogui.moveTo(x, y)
-                    return {"success": True, "message": f"Moved mouse to ({x}, {y})"}
-                except Exception as e:
-                    return {"success": False, "message": f"Mouse move failed: {str(e)}"}
-            
-            elif action == "hotkey":
-                keys = parameters.get("keys", [])
-                import pyautogui
-                try:
-                    pyautogui.hotkey(*keys)
-                    return {"success": True, "message": f"Pressed hotkey: {'+'.join(keys)}"}
-                except Exception as e:
-                    return {"success": False, "message": f"Hotkey failed: {str(e)}"}
-
-            elif action == "error":
-                error_msg = parameters.get("error", "Unknown error")
+            # ==================== DEFAULT ====================
+            else:
                 return {
                     "success": False,
-                    "message": f"Command parsing error: {error_msg}"
+                    "message": f"Unknown action: {action}"
                 }
-
-            else:
-                # Log unimplemented action for future prioritization
-                import logging
-                logging.info(f"Unimplemented action requested: {action}")
-                
-                # Provide helpful stub response
-                stub_message = f"The '{action}' feature is not yet implemented. "
-                stub_message += "Available features include: system monitoring, code generation, "
-                stub_message += "file operations, web search, screenshots, and basic automation."
-                
-                result = {
-                    "success": False,
-                    "message": stub_message
-                }
-                return self._humanize_result(action, result)
 
         except Exception as e:
-            result = {
+            return {
                 "success": False,
-                "message": f"Error executing {action}: {str(e)}"
+                "message": f"Error executing action '{action}': {str(e)}"
             }
-            return self._humanize_result(action, result)
