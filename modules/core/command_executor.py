@@ -618,6 +618,80 @@ class CommandExecutor:
                 except Exception as e:
                     return {"success": False, "message": f"Error: {str(e)}"}
 
+            # SYSTEM MONITORING
+            elif action == "system_report":
+                from modules.system.system_monitor import get_full_system_report
+                report = get_full_system_report()
+                return {"success": True, "message": report}
+            
+            elif action == "check_cpu":
+                from modules.system.system_monitor import get_cpu_usage
+                cpu = get_cpu_usage()
+                msg = f"💻 CPU: {cpu['usage_percent']}% ({cpu['status']}) - {cpu['cpu_count']} cores @ {cpu['current_frequency']}"
+                return {"success": True, "message": msg}
+            
+            elif action == "check_memory":
+                from modules.system.system_monitor import get_memory_usage
+                mem = get_memory_usage()
+                msg = f"💾 RAM: {mem['used_gb']}/{mem['total_gb']} ({mem['usage_percent']}%) - {mem['status']}"
+                return {"success": True, "message": msg}
+            
+            elif action == "check_disk":
+                from modules.system.system_monitor import get_disk_usage
+                disk = get_disk_usage()
+                msg = f"💿 Disk: {disk['used_gb']}/{disk['total_gb']} ({disk['usage_percent']}%) - {disk['status']}"
+                return {"success": True, "message": msg}
+            
+            # CODE GENERATION & EXECUTION
+            elif action == "generate_code":
+                from modules.ai_features.code_generation import generate_code_with_gemini
+                description = parameters.get("description", "")
+                language = parameters.get("language", "python")
+                try:
+                    code = generate_code_with_gemini(description, language)
+                    return {"success": True, "message": f"```{language}\n{code}\n```"}
+                except Exception as e:
+                    return {"success": False, "message": f"Code generation failed: {str(e)}"}
+            
+            elif action == "execute_code":
+                code = parameters.get("code", "")
+                language = parameters.get("language", "python")
+                if language == "python":
+                    import subprocess
+                    try:
+                        result = subprocess.run(
+                            ["python", "-c", code],
+                            capture_output=True,
+                            text=True,
+                            timeout=10
+                        )
+                        output = result.stdout if result.returncode == 0 else result.stderr
+                        return {"success": result.returncode == 0, "message": f"Output:\n{output}"}
+                    except Exception as e:
+                        return {"success": False, "message": f"Execution error: {str(e)}"}
+                else:
+                    return {"success": False, "message": f"Language {language} not supported for execution"}
+            
+            elif action == "explain_code":
+                from modules.ai_features.code_generation import explain_code_with_gemini
+                code = parameters.get("code", "")
+                language = parameters.get("language", "python")
+                try:
+                    explanation = explain_code_with_gemini(code, language)
+                    return {"success": True, "message": explanation}
+                except Exception as e:
+                    return {"success": False, "message": f"Code explanation failed: {str(e)}"}
+            
+            # BASIC OPERATIONS
+            elif action == "search_web":
+                query = parameters.get("query", "")
+                import webbrowser
+                try:
+                    webbrowser.open(f"https://www.google.com/search?q={query}")
+                    return {"success": True, "message": f"Opened web search for: {query}"}
+                except Exception as e:
+                    return {"success": False, "message": f"Search failed: {str(e)}"}
+
             elif action == "error":
                 error_msg = parameters.get("error", "Unknown error")
                 return {
