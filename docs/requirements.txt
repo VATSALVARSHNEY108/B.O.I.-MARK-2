@@ -1,66 +1,279 @@
-# AI Desktop Automation Controller - Requirements
-# Python 3.11 Compatible
+# Python 3.11+ Requirements for VATSAL AI Desktop Automation
+#
+# NOTE FOR WINDOWS USERS:
+# - MediaPipe requires Python 3.10 or 3.11 on Windows (not 3.12 or 3.13)
+# - If using Python 3.12/3.13, the app will run without hand gesture features
+# - Face detection will still work (uses OpenCV only)
+#
+# Core Dependencies
+cryptography>=43.0.3
+google-genai>=1.0.0
+psutil>=6.1.0
+pyautogui>=0.9.54
+pyperclip>=1.9.0
+python-dotenv>=1.0.1
+pyttsx3>=2.98
+pywhatkit>=5.4
+requests>=2.32.3
+sift-stack-py>=0.9.1
+speechrecognition>=3.14.0
+watchdog>=6.0.0
 
-# AI & Core Functionality
-google-genai==1.0.0
+# Web Framework & WebSocket
+Flask>=3.1.2
+flask-cors>=6.0.1
+flask-restful>=0.3.10
+Flask-SocketIO>=5.5.1
+python-socketio>=5.14.3
+python-engineio>=4.12.3
+websockets>=14.2
+websocket-client>=1.9.0
+websockify>=0.13.0
+flasgger>=0.9.7.1
+aniso8601>=10.0.1
 
-# GUI Automation & Desktop Control
-PyAutoGUI==0.9.54
-pyperclip==1.9.0
-psutil==6.1.0
+# Data Science & Analysis
+data-analysis>=1.1.43
+pandas>=2.3.3
+scipy>=1.16.2
+scikit-learn>=1.7.2
+matplotlib>=3.10.7
+seaborn>=0.13.2
+statsmodels>=0.14.5
+astropy>=7.1.1
+astropy-iers-data>=0.2025.11.3.0.38.37
+pyerfa>=2.0.1.5
+healpy>=1.18.1
+oda-node>=0.1.55
+oda-knowledge-base>=0.7.28
 
-# Environment & Configuration
-python-dotenv==1.0.1
+# Computer Vision & MediaPipe
+opencv-contrib-python>=4.11.0.86
+pillow>=11.3.0
+pyzbar>=0.1.9
 
-# Voice Features
-pyttsx3==2.98
-SpeechRecognition==3.14.0
+# Web Automation & Scraping
+selenium>=4.38.0
+beautifulsoup4>=4.14.2
+webdriver-manager>=4.0.2
+lxml>=6.0.2
+html2text>=2025.4.15
 
-# Security & Encryption
-cryptography==43.0.3
+# Gaming & Graphics
+pygame>=2.6.1
 
-# HTTP Requests & APIs
-requests==2.32.3
+# AI & ML
+elevenlabs>=2.21.0
+nltk>=3.9.2
 
-# Messaging & Communication
-pywhatkit==5.4
+# Security & Authentication
+pyotp>=2.9.0
+qrcode>=8.2
+keyring>=25.6.0
+keyrings.cryptfile>=1.3.9
+pyjwt>=2.10.1
+argon2-cffi>=25.1.0
+argon2-cffi-bindings>=25.1.0
+pycryptodome>=3.23.0
 
-# File System Monitoring
-watchdog==6.0.0
+# Database & Data Storage
+redis>=7.0.1
+openpyxl>=3.1.5
+persist-queue>=1.1.0
+pymysql>=1.1.2
+peewee>=3.18.3
 
-# Web Tools Integration
-streamlit==1.40.2
+# Async & Network
+eventlet>=0.40.3
+trio>=0.31.0
+trio-websocket>=0.12.2
+httpx>=0.28.1
+dnspython>=2.8.0
 
-# Optional Dependencies (for specific features)
-# Uncomment if you need these features:
+# Utilities
+alive-progress>=3.3.0
+click>=8.3.0
+click-aliases>=1.0.5
+python-dateutil>=2.9.0.post0
+PyYAML>=6.0.3
+toml>=0.10.2
+tqdm>=4.67.1
+wikipedia>=1.4.0
+joblib>=1.5.2
+coloredlogs>=15.0.1
+humanfriendly>=10.0
+configparser>=7.2.0
+dynaconf>=3.2.12
+path.py>=12.5.0
+path>=17.1.1
+pydot>=4.0.1
+python-shell-colors>=0.4.0
+future>=1.0.0
+termcolor>=3.2.0
+retrying>=1.4.2
+logstash-formatter>=0.5.17
+pylogstash-context>=0.1.19
+colorama>=0.4.6
+pyreadline3>=3.5.4
+pywin32-ctypes>=0.2.3
+plyer>=2.1.0
 
-# twilio==9.3.7                    # For SMS messaging
-# Flask==3.0.3                     # If running web interface
-# beautifulsoup4==4.12.3           # For web scraping features
-# pandas==2.2.3                    # For data analysis features
-# numpy==2.1.3                     # Required by pandas
-# Pillow==11.0.0                   # For advanced image processing
-matplotlib
-nltk
-numpy
-openpyxl
-pandas
-scikit-learn
-seaborn
-sift-stack-py
-statsmodels
-selenium
-webdriver-manager
-opencv-python
-elevenlabs
-pygame
-eventlet
-flask
-flask-cors
-flask-socketio
-python-socketio
-flask-socketio
-pyotp
-qrcode
-socketio
-websockify
+# Windows-specific Audio Control
+comtypes>=1.4.1
+pycaw>=20240210
+
+# Type Checking
+pydantic>=2.12.3
+typing_extensions>=4.15.0
+
+# Git Integration
+GitPython>=3.1.45
+
+# Google Auth
+google-auth>=2.41.1
+protobuf>=5.29.5
+
+# Supporting Dependencies
+about-time>=4.2.1
+annotated-types>=0.7.0
+anyio>=4.11.0
+attrs>=25.4.0
+bidict>=0.23.1
+blinker>=1.9.0
+cachetools>=5.5.2
+certifi>=2025.10.5
+cffi>=2.0.0
+charset-normalizer>=3.4.4
+contourpy>=1.3.3
+cycler>=0.12.1
+et_xmlfile>=2.0.0
+eval_type_backport>=0.2.2
+fonttools>=4.60.1
+gitdb>=4.0.12
+graphemeu>=0.7.2
+greenlet>=3.2.4
+grpcio>=1.76.0
+h11>=0.16.0
+httpcore>=1.0.9
+idna>=3.11
+itsdangerous>=2.2.0
+Jinja2>=3.1.6
+jsonschema>=4.25.1
+jsonschema-specifications>=2025.9.1
+jwcrypto>=1.5.6
+kiwisolver>=1.4.9
+markdown-it-py>=4.0.0
+MarkupSafe>=3.0.3
+mdurl>=0.1.2
+MouseInfo>=0.1.3
+narwhals>=2.9.0
+netifaces>=0.10.6
+outcome>=1.3.0.post0
+packaging>=24.2
+pandas-stubs>=2.3.2.250926
+patsy>=1.0.2
+pyarrow>=22.0.0
+pyasn1>=0.6.1
+pyasn1-modules>=0.4.2
+pycparser>=2.23
+pydantic-core>=2.41.4
+PyGetWindow>=0.0.9
+Pygments>=2.19.2
+PyMsgBox>=2.0.1
+pyparsing>=3.2.5
+PyRect>=0.2.0
+PyScreeze>=1.0.1
+PySocks>=1.7.1
+python3-xlib>=0.15
+pytweening>=1.2.0
+pytz>=2025.2
+referencing>=0.37.0
+regex>=2025.10.23
+requests-toolbelt>=1.0.0
+rich>=13.9.4
+rpds-py>=0.28.0
+rsa>=4.9.1
+simple-websocket>=1.1.0
+six>=1.17.0
+smmap>=5.0.2
+sniffio>=1.3.1
+sortedcontainers>=2.4.0
+soupsieve>=2.8
+tenacity>=9.1.2
+threadpoolctl>=3.6.0
+tornado>=6.5.2
+types-protobuf>=6.32.1.20250918
+types-pytz>=2025.2.0.20250809
+types-PyYAML>=6.0.12.20250915
+types-requests>=2.32.4.20250913
+typing-inspection>=0.4.2
+tzdata>=2025.2
+urllib3>=2.5.0
+Werkzeug>=3.1.3
+wsproto>=1.2.0
+
+# Testing
+pytest>=8.4.2
+pytest-flask>=1.3.0
+iniconfig>=2.3.0
+
+# API & Swagger
+apispec>=6.8.4
+bravado>=12.0.1
+bravado-core>=6.1.1
+swagger-spec-validator>=3.0.4
+marshmallow>=4.1.0
+
+# RDF & Semantic Web
+rdflib>=7.4.0
+rdflib-jsonld>=0.6.2
+
+# CWL (Common Workflow Language)
+cwltool>=3.1.20251031082601
+cwl-utils>=0.40
+cwl-upgrader>=1.2.12
+schema-salad>=8.9
+prov==1.5.1
+spython>=0.3.14
+
+# Data Serialization
+msgpack>=1.1.2
+simplejson>=3.20.2
+minio>=6.0.2
+
+# YAML Processing
+ruamel.yaml>=0.18.16
+ruamel.yaml.clib>=0.2.14
+
+# CLI & Rich Output
+argcomplete>=3.6.3
+rich-argparse>=1.7.2
+pluggy>=1.6.0
+
+# JSON Schema & Validation
+jsonref>=1.1.0
+jsonpointer>=3.0.0
+fqdn>=1.5.1
+isoduration>=20.11.0
+rfc3339-validator>=0.1.4
+rfc3986-validator>=0.1.1
+rfc3987-syntax>=1.1.0
+uri-template>=1.3.0
+webcolors>=25.10.0
+
+# Parsing & Templates
+lark>=1.3.1
+mistune>=3.1.4
+
+# Utility Libraries
+networkx>=3.5
+arrow>=1.4.0
+monotonic>=1.6
+mypy-extensions>=1.1.0
+importlib-resources>=6.5.2
+filelock>=3.20.0
+CacheControl>=0.14.3
+jaraco.classes>=3.4.0
+jaraco.functools>=4.3.0
+jaraco.context>=6.0.1
+more-itertools>=10.8.0
