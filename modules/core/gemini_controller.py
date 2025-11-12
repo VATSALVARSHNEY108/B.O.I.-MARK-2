@@ -37,7 +37,7 @@ def _invoke_gemini(model: str, contents, config=None, max_attempts: int = 4):
     
     Handles 429 (RESOURCE_EXHAUSTED) and 503 (UNAVAILABLE) errors with:
     - Exponential backoff with jitter
-    - Model fallback from gemini-2.0-flash to gemini-1.5-flash-latest
+    - Model fallback from gemini-2.0-flash to gemini-2.0-flash
     - User-friendly error messages
     
     Args:
@@ -53,7 +53,7 @@ def _invoke_gemini(model: str, contents, config=None, max_attempts: int = 4):
         GeminiServiceError: When all retries exhausted
     """
     api_client = get_client()
-    models_to_try = [model, "gemini-1.5-flash-latest"]
+    models_to_try = [model, "gemini-2.0-flash"]
     last_error = None
     last_status_code = None
     

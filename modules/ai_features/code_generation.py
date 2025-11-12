@@ -1260,7 +1260,7 @@ Generate the {language} code now:"""
     models_to_try = [
         "gemini-2.5-flash",      # Latest stable model (2025)
         "gemini-2.0-flash-exp",  # Experimental fallback
-        "gemini-1.5-flash",      # Legacy fallback
+        "gemini-2.0-flash",      # Stable fallback
     ]
     
     last_error = None
@@ -1328,7 +1328,7 @@ Provide a clear, beginner-friendly explanation of:
 2. How it works (step by step)
 3. Key concepts used"""
 
-    models_to_try = ["gemini-2.5-flash", "gemini-2.0-flash-exp", "gemini-1.5-flash"]
+    models_to_try = ["gemini-2.0-flash", "gemini-2.5-flash-preview-05-20"]
     
     for model_name in models_to_try:
         try:
@@ -1360,7 +1360,7 @@ Improvements to make:
 
 Return ONLY the improved code, no explanations."""
 
-    models_to_try = ["gemini-2.5-flash", "gemini-2.0-flash-exp", "gemini-1.5-flash"]
+    models_to_try = ["gemini-2.0-flash", "gemini-2.5-flash-preview-05-20"]
     
     for model_name in models_to_try:
         try:
@@ -1402,7 +1402,7 @@ CODE:
 
 Provide the corrected code with the bug fixed. Return ONLY the fixed code."""
 
-    models_to_try = ["gemini-2.5-flash", "gemini-2.0-flash-exp", "gemini-1.5-flash"]
+    models_to_try = ["gemini-2.0-flash", "gemini-2.5-flash-preview-05-20"]
     
     for model_name in models_to_try:
         try:
