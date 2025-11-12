@@ -1,6 +1,6 @@
 """
-Voice Assistant Module
-Voice commands for hands-free automation control
+Voice Assistant Module - Enhanced with Empathy and Personality
+Voice commands for hands-free automation control with human-like interactions
 """
 
 import speech_recognition as sr
@@ -23,6 +23,10 @@ class VoiceAssistant:
         self.wake_words = ["vatsal", "hey vatsal", "ok vatsal", "watson", "hey watson", "ok watson", "hello", "open", "search", "oye", "bhai", "bhaiya", "bhaisahb"]
         # Action verbs that should be kept in the command
         self.action_wake_words = ["open", "search"]
+        
+        # Empathetic and conversational responses
+        self.misunderstanding_count = 0
+        self.last_misunderstanding_time = None
         
         # Phonetic variations and hints for ultra-fast "bhai" detection
         self.bhai_variations = [
@@ -130,31 +134,37 @@ class VoiceAssistant:
             pass  # Silently ignore errors when stopping
     
     def listen_once(self):
-        """Listen for a single voice command"""
+        """Listen for a single voice command with empathetic feedback"""
         # Stop any ongoing speech immediately when starting to listen
         self.stop_speaking()
         
         try:
             with sr.Microphone() as source:
-                print("🎤 Listening...")
+                print("🎤 I'm all ears! Listening...")
                 # Quick ambient noise adjustment for faster response
                 self.recognizer.adjust_for_ambient_noise(source, duration=1)
                 # Increased timeout and phrase limit for better detection
                 audio = self.recognizer.listen(source, timeout=10, phrase_time_limit=8)
                 
-                print("🔄 Processing...")
+                print("🔄 Got it! Processing what you said...")
                 command = self.recognizer.recognize_google(audio)  # type: ignore
-                print(f"✅ Heard: {command}")
+                print(f"✅ Heard loud and clear: {command}")
+                
+                # Reset misunderstanding count on success
+                self.misunderstanding_count = 0
                 
                 return command
         except sr.WaitTimeoutError:
-            return "❌ No speech detected"
+            return "⏰ I didn't hear anything - take your time and try again!"
         except sr.UnknownValueError:
-            return "❌ Could not understand audio"
+            self.misunderstanding_count += 1
+            if self.misunderstanding_count > 2:
+                return "😅 Having trouble hearing you clearly. Maybe try speaking a bit slower or closer to the mic?"
+            return "🤔 Sorry, I didn't quite catch that. Could you repeat?"
         except sr.RequestError as e:
-            return f"❌ Recognition service error: {str(e)}"
+            return f"🌐 Hmm, having trouble connecting to the speech service: {str(e)}"
         except Exception as e:
-            return f"❌ Error: {str(e)}"
+            return f"😔 Oops, something unexpected happened: {str(e)}"
     
     def check_for_wake_word(self, text):
         """Check if the text starts with any wake word - ULTRA FAST for 'bhai' detection"""
@@ -210,16 +220,18 @@ class VoiceAssistant:
         def listen_thread():
             with sr.Microphone() as source:
                 if self.wake_word_enabled:
-                    wake_words_str = ", ".join(self.wake_words)
-                    print(f"🎤 Voice assistant started! Say wake word ({wake_words_str}) followed by your command")
-                    print("   Or say 'stop listening' to quit")
+                    wake_words_str = ", ".join(self.wake_words[:5])  # Show first 5 wake words
+                    print(f"👋 Hey there! I'm ready to help!")
+                    print(f"🎤 Just say '{wake_words_str}' or any wake word to get my attention")
+                    print(f"💬 Say 'stop listening' whenever you want me to stop")
                 else:
-                    print("🎤 Voice assistant started (say 'stop listening' to quit)")
+                    print("👋 Hey! I'm ready and listening!")
+                    print("💬 Say 'stop listening' whenever you're done")
                 
                 # ULTRA QUICK calibration for instant startup
-                print("📊 Calibrating microphone (ULTRA FAST mode)...")
+                print("🎧 Tuning in to your voice...")
                 self.recognizer.adjust_for_ambient_noise(source, duration=1)
-                print("✅ Ready! Listening... (Say 'bhai' or any hint of it to activate!)")
+                print("✨ All set! I'm listening and ready to assist!")
                 waiting_for_wake_word = self.wake_word_enabled
                 
                 while self.listening:
@@ -256,7 +268,7 @@ class VoiceAssistant:
                                             # Remove non-action wake word (e.g., "hello open chrome" → "open chrome")
                                             actual_command = command_parts[1]
                                         
-                                        print(f"👂 Wake word detected with command: {actual_command}")
+                                        print(f"✨ Got it! Processing: {actual_command}")
                                         
                                         # Stop any ongoing speech before executing new command
                                         self.stop_speaking()
@@ -268,9 +280,18 @@ class VoiceAssistant:
                                                 self.speak(response)
                                         waiting_for_wake_word = True  # Reset for next command
                                     else:
-                                        # Wake word only, wait for command
-                                        print(f"👂 Wake word detected! Listening for command...")
-                                        self.speak("yes boss")
+                                        # Wake word only, wait for command - friendly responses
+                                        import random
+                                        wake_responses = [
+                                            "Yes boss! 😊",
+                                            "I'm here! What can I do? 👋",
+                                            "At your service! 🫡",
+                                            "Ready to help! ✨",
+                                            "What's up? 😄",
+                                            "How can I help? 💡"
+                                        ]
+                                        print(f"👂 {random.choice(wake_responses)}")
+                                        self.speak(random.choice(wake_responses))
                                         waiting_for_wake_word = False
                                 else:
                                     continue

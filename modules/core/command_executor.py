@@ -58,9 +58,10 @@ from modules.intelligence.desktop_rag import create_desktop_rag
 from modules.communication.communication_enhancements import create_communication_enhancements
 from modules.batch_file_reader import batch_reader
 from modules.utilities.optimistic_weather import optimistic_weather
+from modules.intelligence.persona_response_service import create_persona_service
 
 class CommandExecutor:
-    """Executes parsed commands using the GUI automation module"""
+    """Executes parsed commands using the GUI automation module - Enhanced with Personality"""
 
     def __init__(self):
         self.gui = GUIAutomation()
@@ -117,10 +118,19 @@ class CommandExecutor:
         self.smart_screen_monitor = create_smart_screen_monitor()
         self.desktop_rag = create_desktop_rag()
         self.comm_enhancements = create_communication_enhancements()
+        
+        # Personality and empathy service
+        self.persona = create_persona_service()
+    
+    def _humanize_result(self, action: str, result: dict) -> dict:
+        """Wrap result with humanized response from persona service"""
+        if result and isinstance(result, dict) and "message" in result:
+            result["message"] = self.persona.humanize_response(action, result)
+        return result
 
     def execute(self, command_dict: dict) -> dict:
         """
-        Execute a command dictionary returned by Gemini.
+        Execute a command dictionary returned by Gemini with personality and empathy.
         Returns a result dict with success status and message.
         """
         # Stop any ongoing AI speech when new task is executed
@@ -128,22 +138,39 @@ class CommandExecutor:
             self.voice_assistant.stop_speaking()
         
         if not command_dict:
-            return {"success": False, "message": "No command provided"}
+            return {"success": False, "message": self.persona.handle_misunderstanding()}
 
         action = command_dict.get("action", "")
         parameters = command_dict.get("parameters", {})
         steps = command_dict.get("steps", [])
         description = command_dict.get("description", "")
 
-        print(f"\n📋 Task: {description}")
+        # Show processing message with personality
+        if description:
+            print(f"\n💬 {self.persona.handle_processing()}")
+            print(f"📋 Task: {description}")
+        else:
+            print(f"\n✨ {self.persona.handle_processing()}")
 
         if steps:
-            return self.execute_workflow(steps)
+            result = self.execute_workflow(steps)
         else:
-            return self.execute_single_action(action, parameters)
+            result = self.execute_single_action(action, parameters)
+        
+        # Add proactive suggestions after successful commands
+        if result.get("success") and hasattr(self.persona, 'interaction_count'):
+            if self.persona.interaction_count % 10 == 0:
+                milestone = self.persona.celebrate_milestone(self.persona.interaction_count, action)
+                if milestone:
+                    result["message"] += f"\n\n{milestone}"
+            elif self.persona.interaction_count % 8 == 0:
+                tip = self.persona.provide_helpful_tip()
+                result["message"] += f"\n\n{tip}"
+        
+        return result
 
     def execute_workflow(self, steps: list) -> dict:
-        """Execute a multi-step workflow"""
+        """Execute a multi-step workflow with humanized feedback"""
         print(f"\n🔄 Executing workflow with {len(steps)} steps...")
 
         results = []
@@ -156,26 +183,36 @@ class CommandExecutor:
             results.append(result)
 
             if not result["success"]:
-                return {
+                error_result = {
                     "success": False,
                     "message": f"Workflow failed at step {i}: {result['message']}"
                 }
+                return self._humanize_result("workflow", error_result)
 
-        return {
+        success_result = {
             "success": True,
             "message": f"Workflow completed successfully ({len(steps)} steps)"
         }
+        return self._humanize_result("workflow", success_result)
 
     def execute_single_action(self, action: str, parameters: dict) -> dict:
-        """Execute a single action"""
+        """Execute a single action with humanized responses"""
         try:
+            # Detect user mood from parameters if available
+            if hasattr(self.persona, 'detect_user_mood') and parameters:
+                command_text = parameters.get('text', '') or parameters.get('query', '') or action
+                self.persona.detect_user_mood(command_text)
+            
             if action == "open_app":
                 app_name = parameters.get("app_name", "")
                 success = self.gui.open_application(app_name)
-                return {
+                result = {
                     "success": success,
                     "message": f"Opened {app_name}" if success else f"Failed to open {app_name}"
                 }
+                # Humanize the response
+                result["message"] = self.persona.humanize_response(action, result)
+                return result
 
             elif action == "type_text":
                 text = parameters.get("text", "")
@@ -3270,13 +3307,15 @@ class CommandExecutor:
                 }
 
             else:
-                return {
+                result = {
                     "success": False,
                     "message": f"Unknown action: {action}"
                 }
+                return self._humanize_result(action, result)
 
         except Exception as e:
-            return {
+            result = {
                 "success": False,
                 "message": f"Error executing {action}: {str(e)}"
             }
+            return self._humanize_result(action, result)
