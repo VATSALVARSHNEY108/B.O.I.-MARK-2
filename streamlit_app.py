@@ -216,6 +216,12 @@ col1, col2 = st.columns([2, 1])
 with col1:
     st.markdown("## 🎙️ Voice Input")
     
+    # Voice response status indicator
+    if st.session_state.voice_response_enabled:
+        st.success("🔊 Voice Responses: **ENABLED** - AI will speak responses")
+    else:
+        st.info("🔇 Voice Responses: **DISABLED** - Text only")
+    
     # Important notice
     st.info("🔔 **First Time?** Your browser will ask for microphone permission. Click **ALLOW** when prompted!")
     
@@ -369,8 +375,45 @@ with col2:
             with st.expander(f"🔹 {item['command'][:30]}..."):
                 st.markdown(f"**Command:** {item['command']}")
                 st.markdown(f"**Response:** {item['response']}")
+                st.markdown(f"**Time:** {item['timestamp']}")
     else:
         st.info("No commands executed yet")
+    
+    # Quick reference for common commands
+    st.divider()
+    st.markdown("## 💡 Quick Reference")
+    with st.expander("📖 Common Commands"):
+        st.markdown("""
+        **⏰ Time & Date:**
+        - "What time is it?"
+        - "What's the date?"
+        
+        **🔍 Search:**
+        - "Search for [query]"
+        - "Google [something]"
+        
+        **🌤️ Weather:**
+        - "What's the weather?"
+        - "Weather in [city]"
+        
+        **🔢 Calculator:**
+        - "Calculate 25 plus 37"
+        - "What is 100 divided by 4?"
+        
+        **🎵 Music:**
+        - "Play [song name]"
+        - "Play lofi beats"
+        
+        **💻 System:**
+        - "Screenshot"
+        - "Volume up/down"
+        - "Shutdown/Restart"
+        
+        **🎲 Fun:**
+        - "Tell me a joke"
+        - "Flip a coin"
+        - "Roll dice"
+        """)
 
 # Footer
 st.divider()
