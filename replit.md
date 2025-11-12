@@ -28,12 +28,22 @@ Both desktop GUIs are built with `tkinter` and support VATSAL Mode and Self-Oper
 -   **Smart Automation & AI:** Provides 9 AI-powered features for various tasks.
 -   **Visual Chat Monitor:** AI-powered visual email/WhatsApp monitoring via real browser interface control.
 -   **System Control:** Manages system-level automation (lock screen, shutdown, restart, brightness, volume, disk cleanup) with cross-platform support. Includes new features for system information, clipboard, power management, window management, process management, quick app launchers, and timers/alarms.
--   **Voice Assistant:** An ultra-intelligent, interactive voice commanding system with advanced AI capabilities, supporting multiple wake words ("vatsal", "bhai", "hello"), NLU, context awareness, and entity extraction. Features include:
+-   **Voice Assistant with Personality:** An ultra-intelligent, interactive voice commanding system with advanced AI capabilities and human-like empathy. Features include:
     -   **Voice Commands:** 50+ built-in voice commands for desktop automation, system control, file management, and AI interactions
-    -   **Voice Response:** Text-to-speech (pyttsx3) integration for spoken responses
-    -   **Wake Word Detection:** Multiple wake words with NLP-based intent recognition
-    -   **Context Awareness:** Maintains conversation context for follow-up commands
+    -   **Empathetic Responses:** Warm, friendly voice feedback with understanding and encouragement
+    -   **Wake Word Detection:** Multiple wake words ("vatsal", "bhai", "hello") with friendly acknowledgments
+    -   **Context Awareness:** Maintains conversation context for follow-up commands with natural flow
+    -   **Adaptive Feedback:** Escalating empathy for repeated errors, helpful tips for misunderstandings
     -   **Graceful Fallback:** Continues working even when TTS dependencies are unavailable
+-   **PersonaResponseService - Interactive & Humanized AI:** A comprehensive personality layer that transforms all AI interactions into warm, empathetic, and conversational experiences:
+    -   **Emotional Intelligence:** Detects user mood from commands (happy, frustrated, busy, tired) and adapts tone accordingly
+    -   **Humanized Responses:** Converts technical messages into friendly, encouraging feedback with personality
+    -   **Proactive Suggestions:** Context-aware recommendations based on time of day and user activity
+    -   **Milestone Celebrations:** Celebrates user achievements (10, 25, 50, 100+ commands) with encouraging messages
+    -   **Helpful Tips:** Periodic tips and suggestions to improve productivity and user experience
+    -   **Empathetic Error Handling:** Understanding responses for failures with offers to help and alternative approaches
+    -   **Conversational Flow:** Natural greetings, processing updates, acknowledgments, and farewells
+    -   **Mood-Adaptive Messaging:** Adjusts communication style based on detected user state
 -   **Face & Gesture Assistant:** Computer vision-powered face detection and hand gesture recognition using OpenCV and MediaPipe. Detects user's face to greet them and recognizes hand gestures (open palm) to activate voice listening mode with audio feedback.
 -   **Self-Operating Computer:** Autonomous AI desktop control using Gemini Vision (Gemini 2.0 Flash Exp) for screen analysis and autonomous actions.
 -   **Real-Time WebSocket System:** A Flask-SocketIO based server provides a live dashboard for real-time monitoring of system stats and command execution.
