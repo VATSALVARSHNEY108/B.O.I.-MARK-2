@@ -21,6 +21,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import tempfile
 from datetime import datetime
+import time
 
 # Load environment variables FIRST
 load_dotenv()
@@ -42,6 +43,50 @@ except Exception as e:
     import traceback
     st.code(traceback.format_exc())
     executor = None
+
+# Initialize TTS engine for voice responses
+@st.cache_resource
+def get_tts_engine():
+    """Initialize and cache the TTS engine"""
+    try:
+        import pyttsx3
+        engine = pyttsx3.init()
+        engine.setProperty('rate', 150)
+        engine.setProperty('volume', 0.9)
+        voices = engine.getProperty('voices')
+        if len(voices) > 0:
+            engine.setProperty('voice', voices[0].id)
+        return engine
+    except ImportError:
+        return None
+    except Exception as e:
+        return None
+
+def text_to_speech_file(text):
+    """Convert text to speech and return audio file path"""
+    try:
+        engine = get_tts_engine()
+        if not engine:
+            return None
+        
+        # Create temporary file for audio
+        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.wav')
+        temp_path = temp_file.name
+        temp_file.close()
+        
+        # Save speech to file
+        engine.save_to_file(text, temp_path)
+        engine.runAndWait()
+        
+        # Wait a moment for file to be written
+        time.sleep(0.5)
+        
+        if os.path.exists(temp_path) and os.path.getsize(temp_path) > 0:
+            return temp_path
+        return None
+    except Exception as e:
+        st.warning(f"⚠️ Failed to generate speech: {e}")
+        return None
 
 # Custom CSS
 st.markdown("""
@@ -105,6 +150,8 @@ if 'history' not in st.session_state:
     st.session_state.history = []
 if 'processing' not in st.session_state:
     st.session_state.processing = False
+if 'voice_response_enabled' not in st.session_state:
+    st.session_state.voice_response_enabled = True
 
 # Header
 st.markdown("# ✨ V.A.T.S.A.L. ✨")
@@ -144,9 +191,21 @@ with st.sidebar:
     """)
     
     st.divider()
+    st.markdown("### ⚙️ Settings")
+    
+    # Voice response toggle
+    st.session_state.voice_response_enabled = st.checkbox(
+        "🔊 Enable Voice Responses", 
+        value=st.session_state.voice_response_enabled,
+        help="When enabled, the AI will speak responses out loud"
+    )
+    
+    st.divider()
     st.markdown("### ⚙️ Status")
     st.markdown(f"**API Key:** {'✅ Configured' if api_key else '❌ Missing'}")
     st.markdown(f"**Command Executor:** {'✅ Ready' if executor else '❌ Error'}")
+    tts_engine = get_tts_engine()
+    st.markdown(f"**Voice Output:** {'✅ Available' if tts_engine else '❌ Not Available'}")
     
     st.divider()
     st.info("💡 **Tip:** If voice doesn't work, use the **Text Input** option below - it works the same way!")
@@ -210,14 +269,30 @@ with col1:
                                     try:
                                         result = parse_command(command)  # type: ignore
                                         response = executor.execute(result)
+                                        response_text = str(response)
                                         
                                         # Display result
-                                        st.markdown('<div class="success-box"><strong>✅ Response:</strong><br>' + str(response) + '</div>', unsafe_allow_html=True)
+                                        st.markdown('<div class="success-box"><strong>✅ Response:</strong><br>' + response_text + '</div>', unsafe_allow_html=True)
+                                        
+                                        # Voice response playback
+                                        if st.session_state.voice_response_enabled:
+                                            with st.spinner("🔊 Generating voice response..."):
+                                                audio_file = text_to_speech_file(response_text)
+                                                if audio_file and os.path.exists(audio_file):
+                                                    # Read audio file as bytes for st.audio
+                                                    try:
+                                                        with open(audio_file, 'rb') as f:
+                                                            audio_bytes = f.read()
+                                                        st.audio(audio_bytes, format="audio/wav")
+                                                        # Clean up temp file
+                                                        os.unlink(audio_file)
+                                                    except Exception as e:
+                                                        st.warning(f"⚠️ Could not play audio: {e}")
                                         
                                         # Add to history
                                         st.session_state.history.insert(0, {
                                             'command': command,
-                                            'response': str(response),
+                                            'response': response_text,
                                             'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                                         })
                                     except Exception as e:
@@ -255,12 +330,29 @@ with col1:
                     try:
                         result = parse_command(text_command)  # type: ignore
                         response = executor.execute(result)
-                        st.markdown('<div class="success-box"><strong>✅ Response:</strong><br>' + str(response) + '</div>', unsafe_allow_html=True)
+                        response_text = str(response)
+                        
+                        st.markdown('<div class="success-box"><strong>✅ Response:</strong><br>' + response_text + '</div>', unsafe_allow_html=True)
+                        
+                        # Voice response playback
+                        if st.session_state.voice_response_enabled:
+                            with st.spinner("🔊 Generating voice response..."):
+                                audio_file = text_to_speech_file(response_text)
+                                if audio_file and os.path.exists(audio_file):
+                                    # Read audio file as bytes for st.audio
+                                    try:
+                                        with open(audio_file, 'rb') as f:
+                                            audio_bytes = f.read()
+                                        st.audio(audio_bytes, format="audio/wav")
+                                        # Clean up temp file
+                                        os.unlink(audio_file)
+                                    except Exception as e:
+                                        st.warning(f"⚠️ Could not play audio: {e}")
                         
                         # Add to history
                         st.session_state.history.insert(0, {
                             'command': text_command,
-                            'response': str(response),
+                            'response': response_text,
                             'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         })
                     except Exception as e:
