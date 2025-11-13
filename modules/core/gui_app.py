@@ -363,16 +363,16 @@ class AutomationControllerGUI:
         title_frame.pack(pady=15)
 
         title = tk.Label(title_frame,
-                         text="✦ V.A.T.S.A.L. ✦",
+                         text="✨ V.A.T.S.A.L ✨",
                          bg=self.BG_CARD,
                          fg=self.TEXT_PRIMARY,
-                         font=("Arial", 32, "bold"))
+                         font=("Georgia", 36, "bold"))
         title.pack()
 
         subtitle = tk.Label(title_frame,
                             text="Vastly Advanced Technological System Above Limitations",
                             bg=self.BG_CARD,
-                            fg=self.TEXT_PRIMARY,
+                            fg=self.TEXT_SECONDARY,
                             font=("Georgia", 11, "italic"))
         subtitle.pack(pady=(5, 0))
 
@@ -401,35 +401,35 @@ class AutomationControllerGUI:
 
         self.vatsal_toggle_btn = tk.Button(stats_frame,
                                            text="• VATSAL: ON",
-                                           bg=self.BG_CARD,
-                                           fg=self.TEXT_PRIMARY,
-                                           font=("Arial", 10),
-                                           relief="raised",
+                                           bg=self.BG_SECONDARY,
+                                           fg=self.SUCCESS_COLOR,
+                                           font=("Arial", 10, "bold"),
+                                           relief="solid",
                                            borderwidth=2,
                                            cursor="hand2",
                                            command=self.toggle_vatsal_mode,
-                                           padx=10,
-                                           pady=3,
-                                           highlightbackground=self.TEXT_PRIMARY,
-                                           highlightthickness=1)
+                                           padx=15,
+                                           pady=5,
+                                           highlightbackground=self.BORDER_PRIMARY,
+                                           highlightthickness=2)
         self.vatsal_toggle_btn.pack(side="left", padx=5)
 
         separator3 = tk.Label(stats_frame, text="•", bg=self.BG_CARD, fg=self.TEXT_PRIMARY, font=("Arial", 10))
         separator3.pack(side="left", padx=5)
 
         self.self_operating_toggle_btn = tk.Button(stats_frame,
-                                                   text="🎮 Self-Operating: ON",
-                                                   bg=self.BG_CARD,
-                                                   fg=self.TEXT_PRIMARY,
-                                                   font=("Arial", 10),
-                                                   relief="raised",
+                                                   text="🔲 Self-Operating: ON",
+                                                   bg=self.BG_SECONDARY,
+                                                   fg=self.SUCCESS_COLOR,
+                                                   font=("Arial", 10, "bold"),
+                                                   relief="solid",
                                                    borderwidth=2,
                                                    cursor="hand2",
                                                    command=self.toggle_self_operating_mode,
-                                                   padx=10,
-                                                   pady=3,
-                                                   highlightbackground=self.TEXT_PRIMARY,
-                                                   highlightthickness=1)
+                                                   padx=15,
+                                                   pady=5,
+                                                   highlightbackground=self.BORDER_PRIMARY,
+                                                   highlightthickness=2)
         self.self_operating_toggle_btn.pack(side="left", padx=5)
 
         main_container = tk.Frame(

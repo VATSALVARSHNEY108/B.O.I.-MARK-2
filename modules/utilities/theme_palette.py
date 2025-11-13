@@ -38,28 +38,28 @@ class ThemePalette:
     """Centralized theme palette manager"""
     
     LIGHT_THEME = ColorScheme(
-        bg_base="#e8ded0",
-        bg_secondary="#FAFAF8",
-        bg_tertiary="#E8E7E2",
+        bg_base="#F5F1E8",
+        bg_secondary="#FAF8F3",
+        bg_tertiary="#FAF6EE",
         bg_card="#FFFFFF",
         
-        accent_primary="#00F2A6",
-        accent_secondary="#A65BFF",
-        accent_tertiary="#3ED1E0",
+        accent_primary="#007B55",
+        accent_secondary="#3a3a3a",
+        accent_tertiary="#5a5a5a",
         
-        text_primary="#000000",
-        text_secondary="#000000",
-        text_tertiary="#000000",
+        text_primary="#1a1a1a",
+        text_secondary="#5a5a5a",
+        text_tertiary="#8a8a8a",
         
-        border_primary="#D4D3CE",
-        border_secondary="#E8E7E2",
+        border_primary="#D9CFC0",
+        border_secondary="#E8DCCB",
         
-        success="#00F2A6",
+        success="#007B55",
         warning="#FFB84D",
         error="#FF6B6B",
         
-        hover_primary="#02C08A",
-        hover_secondary="#8343D0"
+        hover_primary="#E8DCCB",
+        hover_secondary="#F3EADA"
     )
     
     DARK_THEME = ColorScheme(
