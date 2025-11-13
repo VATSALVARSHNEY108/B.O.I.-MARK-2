@@ -5,6 +5,7 @@ import os
 import sys
 from datetime import datetime
 from dotenv import load_dotenv
+from PIL import Image, ImageTk
 
 from modules.core.gemini_controller import parse_command, get_ai_suggestion
 from modules.core.command_executor import CommandExecutor
@@ -75,6 +76,9 @@ class ModernVATSALGUI:
         self.root.configure(bg=self.BG_PRIMARY)
         self.root.geometry("1200x900")
         
+        # Set window icon
+        self._set_window_icon()
+        
         # State variables
         self.processing = False
         self.vatsal_mode = True
@@ -95,6 +99,23 @@ class ModernVATSALGUI:
         
         # Show welcome message
         self._show_welcome()
+    
+    def _set_window_icon(self):
+        """Set the window icon from logo file"""
+        try:
+            # Try to load the logo from assets folder
+            logo_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "assets", "vatsal_logo.png")
+            
+            if os.path.exists(logo_path):
+                # Load and set the icon
+                icon_image = Image.open(logo_path)
+                icon_photo = ImageTk.PhotoImage(icon_image)
+                self.root.iconphoto(True, icon_photo)
+                print(f"✅ Window icon loaded from: {logo_path}")
+            else:
+                print(f"⚠️ Logo file not found at: {logo_path}")
+        except Exception as e:
+            print(f"⚠️ Could not set window icon: {e}")
     
     def _initialize_modules(self):
         """Initialize all backend modules"""
