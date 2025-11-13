@@ -1,16 +1,18 @@
 # VATSAL Web GUI
 
-Modern HTML/CSS/JavaScript interface for the VATSAL AI System.
+Modern HTML/CSS/JavaScript interface for the VATSAL AI System with **bidirectional VNC GUI integration**.
 
 ## Features
 
 - **Modern Design**: Clean, responsive interface matching the VATSAL brand
 - **Real-time Updates**: Live date/time display and status indicators
 - **Command Execution**: Execute VATSAL commands through the web interface
+- **VNC GUI Integration**: Commands sent from web are executed in the VNC GUI
+- **Bidirectional Communication**: Web ↔ VNC command relay with real-time responses
 - **Console Output**: View responses and logs in an organized console
 - **Theme Toggle**: Switch between light and dark themes
 - **Status Controls**: Toggle VATSAL and Self-Operating modes
-- **API Integration**: REST API endpoints for backend communication
+- **API Integration**: REST API endpoints and WebSocket support
 
 ## Project Structure
 
@@ -29,14 +31,32 @@ web_gui/
 
 ## Running the Web GUI
 
-### Standalone Mode
+### Integrated Mode (Web + VNC) - Recommended
+Run both GUIs together for full bidirectional communication:
+
 ```bash
-cd web_gui
-python server.py
+# Terminal 1: Start Web GUI Server (will wait for VNC connection)
+python web_gui/server.py
+
+# Terminal 2: Start VNC GUI (auto-connects to Web GUI)
+python launchers/launch_gui.py
+```
+
+Once both are running:
+- Open http://localhost:5000 in your browser
+- Enter commands in the Web GUI
+- Commands execute in the VNC GUI
+- Results appear in both interfaces
+
+### Web GUI Only Mode
+Run standalone web server (commands won't execute until VNC GUI connects):
+```bash
+python web_gui/server.py
+# Open http://localhost:5000
 ```
 
 ### VNC Display Mode
-The web GUI can be displayed in a VNC environment alongside the main VATSAL GUI system.
+The integrated system works perfectly in VNC environments.
 
 ## API Endpoints
 
