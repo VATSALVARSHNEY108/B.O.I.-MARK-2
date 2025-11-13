@@ -871,8 +871,189 @@ class ModernVATSALGUI:
     # ========== MENU FUNCTIONS ==========
     
     def show_settings(self):
-        """Show settings dialog"""
-        messagebox.showinfo("Settings", "Settings panel - Coming soon!")
+        """Show feature listing panel"""
+        features_window = tk.Toplevel(self.root)
+        features_window.title("VATSAL Features")
+        features_window.geometry("700x600")
+        features_window.configure(bg=self.BG_PRIMARY)
+        
+        # Header
+        header_frame = tk.Frame(features_window, bg=self.BG_SECONDARY, relief="solid", borderwidth=2, highlightbackground=self.BORDER_PRIMARY)
+        header_frame.pack(fill="x", padx=20, pady=20)
+        
+        tk.Label(
+            header_frame,
+            text="🔧 VATSAL Features",
+            font=("Georgia", 20, "bold"),
+            bg=self.BG_SECONDARY,
+            fg=self.TEXT_PRIMARY
+        ).pack(pady=20)
+        
+        tk.Label(
+            header_frame,
+            text="100+ AI-Powered Features Available",
+            font=("Segoe UI", 11),
+            bg=self.BG_SECONDARY,
+            fg=self.TEXT_SECONDARY
+        ).pack(pady=(0, 20))
+        
+        # Create scrollable frame
+        canvas = tk.Canvas(features_window, bg=self.BG_PRIMARY, highlightthickness=0)
+        scrollbar = tk.Scrollbar(features_window, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg=self.BG_PRIMARY)
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        # Feature categories
+        features = {
+            "🤖 AI & Automation": [
+                "Natural language command processing",
+                "VATSAL AI personality assistant",
+                "Self-operating computer mode",
+                "Vision AI for screen understanding",
+                "Smart task routing and automation",
+                "AI-powered decision making"
+            ],
+            "🎯 Desktop Control": [
+                "File management and organization",
+                "Application launching and control",
+                "Window management",
+                "System settings control",
+                "Clipboard management",
+                "Desktop file synchronization"
+            ],
+            "🌐 Web Automation": [
+                "Browser automation with Selenium",
+                "Web scraping and data extraction",
+                "Form filling automation",
+                "Web navigation assistance",
+                "API integration support"
+            ],
+            "🎤 Voice & Gestures": [
+                "Voice command recognition",
+                "Text-to-speech responses",
+                "Hand gesture detection",
+                "Gesture-activated voice commands",
+                "Custom voice activation"
+            ],
+            "📊 Productivity": [
+                "Pomodoro timer with AI coaching",
+                "Task time prediction",
+                "Energy level tracking",
+                "Distraction detection",
+                "Productivity monitoring",
+                "Smart break suggestions",
+                "Productivity dashboard"
+            ],
+            "⚙️ Workflow & Macros": [
+                "Macro recording and playback",
+                "Natural language workflow builder",
+                "Workflow templates",
+                "Batch automation scripts",
+                "Custom workflow creation"
+            ],
+            "🔒 Security & Privacy": [
+                "Password vault management",
+                "Encrypted storage",
+                "Security dashboard",
+                "2FA integration",
+                "Biometric authentication"
+            ],
+            "📅 Utilities": [
+                "Calendar management",
+                "Quick notes",
+                "Weather and news service",
+                "Translation service",
+                "QR code generation",
+                "Screenshot tools"
+            ],
+            "🖥️ Monitoring": [
+                "Smart screen monitoring",
+                "AI screen analysis",
+                "Activity tracking",
+                "System resource monitoring",
+                "Application usage tracking"
+            ],
+            "🔗 Integration": [
+                "WebSocket communication",
+                "VNC GUI integration",
+                "Web GUI bridge",
+                "API endpoints",
+                "Third-party service integration"
+            ]
+        }
+        
+        # Add feature categories
+        for category, items in features.items():
+            category_frame = tk.Frame(
+                scrollable_frame,
+                bg=self.BG_SECONDARY,
+                relief="solid",
+                borderwidth=2,
+                highlightbackground=self.BORDER_PRIMARY
+            )
+            category_frame.pack(fill="x", padx=20, pady=10)
+            
+            tk.Label(
+                category_frame,
+                text=category,
+                font=("Segoe UI", 13, "bold"),
+                bg=self.BG_SECONDARY,
+                fg=self.TEXT_PRIMARY,
+                anchor="w"
+            ).pack(fill="x", padx=15, pady=(15, 10))
+            
+            for item in items:
+                item_frame = tk.Frame(category_frame, bg=self.BG_SECONDARY)
+                item_frame.pack(fill="x", padx=15, pady=2)
+                
+                tk.Label(
+                    item_frame,
+                    text="  •  ",
+                    font=("Segoe UI", 10),
+                    bg=self.BG_SECONDARY,
+                    fg=self.ACCENT_COLOR
+                ).pack(side="left")
+                
+                tk.Label(
+                    item_frame,
+                    text=item,
+                    font=("Segoe UI", 10),
+                    bg=self.BG_SECONDARY,
+                    fg=self.TEXT_PRIMARY,
+                    anchor="w"
+                ).pack(side="left", fill="x", expand=True, pady=3)
+            
+            # Add spacing after items
+            tk.Frame(category_frame, bg=self.BG_SECONDARY, height=10).pack()
+        
+        # Pack canvas and scrollbar
+        canvas.pack(side="left", fill="both", expand=True, padx=(20, 0))
+        scrollbar.pack(side="right", fill="y", padx=(0, 20))
+        
+        # Close button
+        close_btn = tk.Button(
+            features_window,
+            text="Close",
+            font=("Segoe UI", 11, "bold"),
+            bg=self.BUTTON_BG,
+            fg=self.TEXT_PRIMARY,
+            relief="solid",
+            borderwidth=2,
+            highlightbackground=self.BORDER_PRIMARY,
+            cursor="hand2",
+            padx=30,
+            pady=10,
+            command=features_window.destroy
+        )
+        close_btn.pack(pady=20)
+        self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
     
     def show_quick_actions(self):
         """Show quick actions menu"""
