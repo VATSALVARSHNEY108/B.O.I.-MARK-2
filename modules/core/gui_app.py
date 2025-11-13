@@ -404,6 +404,25 @@ class ModernVATSALGUI:
         title_frame = tk.Frame(title_section, bg=self.BG_SECONDARY)
         title_frame.pack()
         
+        # Add logo image to the left of title
+        try:
+            workspace_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            logo_path = os.path.join(workspace_dir, "assets", "vatsal_icon.png")
+            if not os.path.exists(logo_path):
+                logo_path = os.path.join(workspace_dir, "assets", "vatsal_logo.png")
+            
+            if os.path.exists(logo_path):
+                logo_img = Image.open(logo_path)
+                logo_img = logo_img.resize((50, 50), Image.Resampling.LANCZOS)
+                self.logo_photo = ImageTk.PhotoImage(logo_img)
+                tk.Label(
+                    title_frame,
+                    image=self.logo_photo,
+                    bg=self.BG_SECONDARY
+                ).pack(side="left", padx=(0, 20))
+        except Exception as e:
+            print(f"Could not load logo in header: {e}")
+        
         tk.Label(
             title_frame,
             text="✨",
