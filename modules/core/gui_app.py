@@ -728,7 +728,7 @@ class AutomationControllerGUI:
         input_frame.pack(fill="x", padx=20, pady=20)
 
         input_label = tk.Label(input_frame,
-                               text="✚ Command Input",
+                               text="➕ Command Input",
                                bg=self.BG_BASE,
                                fg=self.TEXT_PRIMARY,
                                font=("Arial", 12, "bold"))
@@ -738,14 +738,14 @@ class AutomationControllerGUI:
         input_container.pack(fill="x")
 
         self.command_input = tk.Entry(input_container,
-                                      bg=self.BG_CARD,
+                                      bg=self.BG_TERTIARY,
                                       fg=self.TEXT_PRIMARY,
                                       font=("Arial", 12),
                                       insertbackground=self.TEXT_PRIMARY,
                                       relief="solid",
-                                      borderwidth=1,
-                                      highlightbackground=self.TEXT_PRIMARY,
-                                      highlightcolor=self.TEXT_PRIMARY,
+                                      borderwidth=2,
+                                      highlightbackground=self.BORDER_PRIMARY,
+                                      highlightcolor=self.BORDER_PRIMARY,
                                       highlightthickness=1)
         self.command_input.pack(side="left", fill="both", expand=True, ipady=10, padx=(0, 12))
         self.command_input.bind("<Return>", lambda e: self.execute_command())
@@ -806,7 +806,7 @@ class AutomationControllerGUI:
         output_header.pack(fill="x", padx=20, pady=(20, 0))
 
         output_label = tk.Label(output_header,
-                                text="☰ Output Console",
+                                text="📋 Output Console",
                                 bg=self.BG_BASE,
                                 fg=self.TEXT_PRIMARY,
                                 font=("Arial", 12, "bold"))
@@ -831,17 +831,17 @@ class AutomationControllerGUI:
         output_text_container.pack(fill="both", expand=True, padx=20, pady=15)
 
         self.output_area = scrolledtext.ScrolledText(output_text_container,
-                                                     bg=self.BG_CARD,
+                                                     bg=self.BG_TERTIARY,
                                                      fg=self.TEXT_PRIMARY,
-                                                     font=("Courier", 10),
-                                                     relief="flat",
-                                                     borderwidth=0,
+                                                     font=("Arial", 10),
+                                                     relief="solid",
+                                                     borderwidth=1,
                                                      padx=15,
                                                      pady=15,
                                                      wrap="word",
                                                      insertbackground=self.TEXT_PRIMARY,
-                                                     highlightbackground=self.TEXT_PRIMARY,
-                                                     highlightthickness=0)
+                                                     highlightbackground=self.BORDER_PRIMARY,
+                                                     highlightthickness=1)
         self.output_area.pack(fill="both", expand=True)
         self.output_area.config(state="disabled")
 
