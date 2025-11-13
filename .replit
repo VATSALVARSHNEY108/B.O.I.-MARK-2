@@ -21,10 +21,6 @@ args = "VATSAL AI CLI"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Modern Web GUI"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "VATSAL GUI (VNC)"
 
 [[workflows.workflow]]
@@ -37,17 +33,6 @@ outputType = "console"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python launchers/launch_cli.py"
-
-[[workflows.workflow]]
-name = "Modern Web GUI"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "xvfb-run -a python vatsal.py"
-
-[workflows.workflow.metadata]
-outputType = "vnc"
 
 [[workflows.workflow]]
 name = "VATSAL GUI (VNC)"
