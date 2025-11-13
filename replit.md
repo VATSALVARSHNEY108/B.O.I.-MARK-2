@@ -57,6 +57,18 @@ Both desktop GUIs are built with `tkinter` and support VATSAL Mode and Self-Oper
 -   **Utility Modules:** Includes integrations for Spotify, YouTube, Weather & News, Translation, Calculator, Password Vault, Quick Notes, Calendar Manager, Timer & Stopwatch, Quick Reminders, Habit Tracker, Color Tools, QR Code Tools, Screenshot Annotator, Image Resizer, Batch Form Filler, and Hand Gesture Controller.
 
 ## Recent Changes (November 2025)
+### Smart Screen Analysis Feature (November 13, 2025)
+-   **Smart Analyze Screen:** Implemented complete smart screen monitoring feature with 5 action handlers
+-   **Commands Available:**
+    -   `smart_analyze_screen` - Analyze current screen with AI Vision (focus: general/errors/productivity/code/design)
+    -   `detect_screen_changes` - Monitor screen for changes over time
+    -   `monitor_for_content` - Watch screen until specific content appears
+    -   `productivity_check` - Get AI productivity insights from current screen
+    -   `ask_about_screen` - Take screenshot and answer specific questions
+-   **Data Preservation:** All handlers preserve complete SmartScreenMonitor response data for persona humanization
+-   **User Experience:** Natural language commands like "what is on screen right now" automatically work
+-   **Cloud Note:** Screenshot features require local desktop installation (not available in cloud/Replit environment)
+
 ### AI Performance Optimizations
 -   **Faster AI Responses:** Implemented comprehensive optimizations to reduce AI thinking time by 30-50%
 -   **Response Caching:** Added LRU cache (100 entries) for instant repeated command responses
