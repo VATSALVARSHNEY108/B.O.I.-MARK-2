@@ -76,27 +76,60 @@
         .button {
             width: 100%;
             padding: 15px;
-            background: #25D366;
+            background: linear-gradient(135deg, #25D366 0%, #20B858 100%);
             color: white;
             border: none;
             border-radius: 8px;
             font-size: 18px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.2s ease;
             margin-bottom: 10px;
+            box-shadow: 
+                0 6px 12px rgba(37, 211, 102, 0.3),
+                0 2px 4px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transform: translateY(0);
         }
         
         .button:hover {
-            background: #128C7E;
+            background: linear-gradient(135deg, #20B858 0%, #128C7E 100%);
+            box-shadow: 
+                0 8px 16px rgba(37, 211, 102, 0.4),
+                0 4px 8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+        
+        .button:active {
+            transform: translateY(0);
+            box-shadow: 
+                0 3px 6px rgba(37, 211, 102, 0.2),
+                inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         
         .button.secondary {
-            background: #34B7F1;
+            background: linear-gradient(135deg, #34B7F1 0%, #2A9FDB 100%);
+            box-shadow: 
+                0 6px 12px rgba(52, 183, 241, 0.3),
+                0 2px 4px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
         
         .button.secondary:hover {
-            background: #1E96C8;
+            background: linear-gradient(135deg, #2A9FDB 0%, #1E96C8 100%);
+            box-shadow: 
+                0 8px 16px rgba(52, 183, 241, 0.4),
+                0 4px 8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+        
+        .button.secondary:active {
+            transform: translateY(0);
+            box-shadow: 
+                0 3px 6px rgba(52, 183, 241, 0.2),
+                inset 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         
         .note {
