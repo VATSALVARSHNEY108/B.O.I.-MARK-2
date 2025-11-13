@@ -461,14 +461,16 @@ class ModernVATSALGUI:
             font=("Segoe UI", 10, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.ACTIVE_GREEN,
-            relief="raised",
-            borderwidth=1,
+            relief="flat",
+            borderwidth=2,
             cursor="hand2",
-            padx=18,
-            pady=8,
+            padx=20,
+            pady=10,
             command=self.toggle_vatsal,
-            highlightthickness=0,
-            overrelief="groove"
+            highlightthickness=2,
+            highlightbackground=self.BORDER_PRIMARY,
+            highlightcolor=self.BORDER_PRIMARY,
+            activebackground=self.BUTTON_HOVER
         )
         self.vatsal_toggle.pack(side="left", padx=(2, 12), pady=2)
         
@@ -479,14 +481,16 @@ class ModernVATSALGUI:
             font=("Segoe UI", 10, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.ACTIVE_GREEN,
-            relief="raised",
-            borderwidth=1,
+            relief="flat",
+            borderwidth=2,
             cursor="hand2",
-            padx=18,
-            pady=8,
+            padx=20,
+            pady=10,
             command=self.toggle_self_operating,
-            highlightthickness=0,
-            overrelief="groove"
+            highlightthickness=2,
+            highlightbackground=self.BORDER_PRIMARY,
+            highlightcolor=self.BORDER_PRIMARY,
+            activebackground=self.BUTTON_HOVER
         )
         self.soc_toggle.pack(side="left", padx=2, pady=2)
     
@@ -532,11 +536,11 @@ class ModernVATSALGUI:
             fg=self.TEXT_PRIMARY,
             font=("Segoe UI", 11),
             insertbackground=self.TEXT_PRIMARY,
-            relief="solid",
-            borderwidth=2,
+            relief="flat",
+            borderwidth=0,
             highlightbackground=self.BORDER_PRIMARY,
             highlightcolor=self.ACCENT_COLOR,
-            highlightthickness=1
+            highlightthickness=2
         )
         self.command_input.pack(side="left", fill="both", expand=True, ipady=14, padx=(0, 15))
         self.command_input.bind("<Return>", lambda e: self.execute_command())
@@ -558,14 +562,14 @@ class ModernVATSALGUI:
             font=("Segoe UI", 11, "bold"),
             bg=self.BUTTON_BG,
             fg=self.TEXT_PRIMARY,
-            relief="raised",
-            borderwidth=1,
+            relief="flat",
+            borderwidth=0,
             cursor="hand2",
             padx=28,
             pady=14,
             command=self.execute_command,
             highlightthickness=0,
-            overrelief="groove"
+            activebackground=self.BUTTON_HOVER
         )
         self.execute_btn.pack(side="left", padx=2, pady=2)
         self._add_hover_effect(self.execute_btn, self.BUTTON_BG, self.BUTTON_HOVER)
@@ -591,12 +595,13 @@ class ModernVATSALGUI:
                 font=("Segoe UI", 16),
                 bg=self.BUTTON_BG,
                 fg=self.TEXT_PRIMARY,
-                relief="raised",
-                borderwidth=1,
+                relief="flat",
+                borderwidth=0,
                 cursor="hand2",
                 width=3,
                 command=command,
                 highlightthickness=0,
+                activebackground=self.BUTTON_HOVER,
                 overrelief="groove"
             )
             btn.pack(side="left", padx=2, pady=2)
@@ -660,14 +665,16 @@ class ModernVATSALGUI:
             font=("Segoe UI", 10, "bold"),
             bg=self.BUTTON_BG,
             fg=self.TEXT_PRIMARY,
-            relief="raised",
-            borderwidth=1,
+            relief="flat",
+            borderwidth=2,
             cursor="hand2",
-            padx=18,
-            pady=8,
+            padx=20,
+            pady=10,
             command=self.clear_output,
-            highlightthickness=0,
-            overrelief="groove"
+            highlightthickness=2,
+            highlightbackground=self.BORDER_PRIMARY,
+            highlightcolor=self.BORDER_PRIMARY,
+            activebackground=self.BUTTON_HOVER
         )
         clear_btn.pack(side="right", padx=2, pady=2)
         self._add_hover_effect(clear_btn, self.BUTTON_BG, self.BUTTON_HOVER)
@@ -703,14 +710,16 @@ class ModernVATSALGUI:
             font=("Segoe UI", 10, "bold"),
             bg=self.BUTTON_BG,
             fg=self.TEXT_PRIMARY,
-            relief="raised",
-            borderwidth=1,
+            relief="flat",
+            borderwidth=2,
             cursor="hand2",
-            padx=18,
-            pady=8,
+            padx=20,
+            pady=10,
             command=self.clear_output,
-            highlightthickness=0,
-            overrelief="groove"
+            highlightthickness=2,
+            highlightbackground=self.BORDER_PRIMARY,
+            highlightcolor=self.BORDER_PRIMARY,
+            activebackground=self.BUTTON_HOVER
         )
         clear_btn_bottom.pack(side="right", padx=2, pady=2)
         self._add_hover_effect(clear_btn_bottom, self.BUTTON_BG, self.BUTTON_HOVER)
