@@ -298,6 +298,58 @@ class ModernVATSALGUI:
         # Output console section
         self._create_output_section(main_container)
     
+    def create_rounded_button(self, parent, text, command, bg_color=None, fg_color=None, width=None, height=None):
+        """Create a button with rounded corners and shadow effect"""
+        if bg_color is None:
+            bg_color = self.BUTTON_BG
+        if fg_color is None:
+            fg_color = self.TEXT_PRIMARY
+        
+        # Shadow container (offset for shadow effect)
+        shadow_frame = tk.Frame(parent, bg="#D0D0D0", bd=0)
+        
+        # Button container with rounded effect
+        btn_container = tk.Frame(shadow_frame, bg=bg_color, bd=0, highlightthickness=0)
+        btn_container.pack(padx=(0, 2), pady=(0, 2))  # Shadow offset
+        
+        # Actual button with flat relief for modern look
+        btn = tk.Button(
+            btn_container,
+            text=text,
+            command=command,
+            bg=bg_color,
+            fg=fg_color,
+            font=("Segoe UI", 11),
+            relief="flat",
+            bd=0,
+            padx=15,
+            pady=8,
+            cursor="hand2",
+            activebackground=self.BUTTON_HOVER,
+            activeforeground=fg_color
+        )
+        
+        if width:
+            btn.config(width=width)
+        if height:
+            btn.config(height=height)
+        
+        btn.pack()
+        
+        # Hover effects
+        def on_enter(e):
+            if btn['bg'] != self.ACTIVE_GREEN:
+                btn.config(bg=self.BUTTON_HOVER)
+        
+        def on_leave(e):
+            if btn['bg'] != self.ACTIVE_GREEN:
+                btn.config(bg=bg_color)
+        
+        btn.bind("<Enter>", on_enter)
+        btn.bind("<Leave>", on_leave)
+        
+        return shadow_frame, btn
+    
     def _create_header(self, parent):
         """Create header with title and status bar"""
         header = tk.Frame(
@@ -310,26 +362,26 @@ class ModernVATSALGUI:
         )
         header.pack(fill="x", pady=(0, 20))
         
-        # Title section
+        # Title section - REDUCED PADDING
         title_section = tk.Frame(header, bg=self.BG_SECONDARY)
-        title_section.pack(fill="x", padx=30, pady=(30, 20))
+        title_section.pack(fill="x", padx=30, pady=(20, 10))
         
-        # Main title with sparkles
+        # Main title with sparkles - SMALLER SIZE
         title_frame = tk.Frame(title_section, bg=self.BG_SECONDARY)
         title_frame.pack()
         
         tk.Label(
             title_frame,
             text="✨",
-            font=("Segoe UI", 28),
+            font=("Segoe UI", 22),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
-        ).pack(side="left", padx=(0, 20))
+        ).pack(side="left", padx=(0, 15))
         
         tk.Label(
             title_frame,
             text="V.A.T.S.A.L",
-            font=("Georgia", 56, "bold"),
+            font=("Georgia", 42, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY,
             anchor="center"
@@ -338,21 +390,21 @@ class ModernVATSALGUI:
         tk.Label(
             title_frame,
             text="✨",
-            font=("Segoe UI", 28),
+            font=("Segoe UI", 22),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
-        ).pack(side="left", padx=(20, 0))
+        ).pack(side="left", padx=(15, 0))
         
-        # Subtitle
+        # Subtitle - SMALLER
         tk.Label(
             title_section,
             text="Vastly Advanced Technological System Above Limitations",
-            font=("Georgia", 14, "italic"),
+            font=("Georgia", 12, "italic"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_SECONDARY
-        ).pack(pady=(8, 0))
+        ).pack(pady=(5, 0))
         
-        # Status bar
+        # Status bar - REDUCED PADDING
         status_bar = tk.Frame(
             header,
             bg=self.BG_SECONDARY,
@@ -360,7 +412,7 @@ class ModernVATSALGUI:
             borderwidth=1,
             highlightbackground=self.BORDER_PRIMARY
         )
-        status_bar.pack(fill="x", padx=30, pady=(20, 30))
+        status_bar.pack(fill="x", padx=30, pady=(15, 20))
         
         # Separator line
         tk.Frame(
@@ -402,39 +454,41 @@ class ModernVATSALGUI:
         toggles_frame = tk.Frame(status_bar, bg=self.BG_SECONDARY)
         toggles_frame.pack(side="right", pady=(20, 0))
         
-        # VATSAL toggle
+        # VATSAL toggle with curved shadow effect
         self.vatsal_toggle = tk.Button(
             toggles_frame,
             text="● VATSAL: ON",
             font=("Segoe UI", 10, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.ACTIVE_GREEN,
-            relief="solid",
-            borderwidth=2,
-            highlightbackground=self.BORDER_PRIMARY,
+            relief="raised",
+            borderwidth=1,
             cursor="hand2",
             padx=18,
             pady=8,
-            command=self.toggle_vatsal
+            command=self.toggle_vatsal,
+            highlightthickness=0,
+            overrelief="groove"
         )
-        self.vatsal_toggle.pack(side="left", padx=(0, 12))
+        self.vatsal_toggle.pack(side="left", padx=(2, 12), pady=2)
         
-        # Self-Operating toggle
+        # Self-Operating toggle with curved shadow effect
         self.soc_toggle = tk.Button(
             toggles_frame,
             text="🔲 Self-Operating: ON",
             font=("Segoe UI", 10, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.ACTIVE_GREEN,
-            relief="solid",
-            borderwidth=2,
-            highlightbackground=self.BORDER_PRIMARY,
+            relief="raised",
+            borderwidth=1,
             cursor="hand2",
             padx=18,
             pady=8,
-            command=self.toggle_self_operating
+            command=self.toggle_self_operating,
+            highlightthickness=0,
+            overrelief="groove"
         )
-        self.soc_toggle.pack(side="left")
+        self.soc_toggle.pack(side="left", padx=2, pady=2)
     
     def _create_command_section(self, parent):
         """Create command input section"""
@@ -497,21 +551,23 @@ class ModernVATSALGUI:
         )
         buttons_container.pack(side="left")
         
-        # Execute button
+        # Execute button with rounded effect
         self.execute_btn = tk.Button(
             buttons_container,
             text="▶ Execute",
             font=("Segoe UI", 11, "bold"),
             bg=self.BUTTON_BG,
             fg=self.TEXT_PRIMARY,
-            relief="flat",
-            borderwidth=0,
+            relief="raised",
+            borderwidth=1,
             cursor="hand2",
             padx=28,
             pady=14,
-            command=self.execute_command
+            command=self.execute_command,
+            highlightthickness=0,
+            overrelief="groove"
         )
-        self.execute_btn.pack(side="left")
+        self.execute_btn.pack(side="left", padx=2, pady=2)
         self._add_hover_effect(self.execute_btn, self.BUTTON_BG, self.BUTTON_HOVER)
         
         # Separator
@@ -535,13 +591,15 @@ class ModernVATSALGUI:
                 font=("Segoe UI", 16),
                 bg=self.BUTTON_BG,
                 fg=self.TEXT_PRIMARY,
-                relief="flat",
-                borderwidth=0,
+                relief="raised",
+                borderwidth=1,
                 cursor="hand2",
                 width=3,
-                command=command
+                command=command,
+                highlightthickness=0,
+                overrelief="groove"
             )
-            btn.pack(side="left")
+            btn.pack(side="left", padx=2, pady=2)
             self._add_hover_effect(btn, self.BUTTON_BG, self.BUTTON_HOVER)
             
             # Store button reference for state updates
@@ -602,15 +660,16 @@ class ModernVATSALGUI:
             font=("Segoe UI", 10, "bold"),
             bg=self.BUTTON_BG,
             fg=self.TEXT_PRIMARY,
-            relief="solid",
-            borderwidth=2,
-            highlightbackground=self.BORDER_PRIMARY,
+            relief="raised",
+            borderwidth=1,
             cursor="hand2",
             padx=18,
             pady=8,
-            command=self.clear_output
+            command=self.clear_output,
+            highlightthickness=0,
+            overrelief="groove"
         )
-        clear_btn.pack(side="right")
+        clear_btn.pack(side="right", padx=2, pady=2)
         self._add_hover_effect(clear_btn, self.BUTTON_BG, self.BUTTON_HOVER)
         
         # Output console
@@ -644,15 +703,16 @@ class ModernVATSALGUI:
             font=("Segoe UI", 10, "bold"),
             bg=self.BUTTON_BG,
             fg=self.TEXT_PRIMARY,
-            relief="solid",
-            borderwidth=2,
-            highlightbackground=self.BORDER_PRIMARY,
+            relief="raised",
+            borderwidth=1,
             cursor="hand2",
             padx=18,
             pady=8,
-            command=self.clear_output
+            command=self.clear_output,
+            highlightthickness=0,
+            overrelief="groove"
         )
-        clear_btn_bottom.pack(side="right")
+        clear_btn_bottom.pack(side="right", padx=2, pady=2)
         self._add_hover_effect(clear_btn_bottom, self.BUTTON_BG, self.BUTTON_HOVER)
     
     def _add_hover_effect(self, button, normal_color, hover_color):
@@ -1184,22 +1244,23 @@ class ModernVATSALGUI:
         canvas.pack(side="left", fill="both", expand=True, padx=(20, 0))
         scrollbar.pack(side="right", fill="y", padx=(0, 20))
         
-        # Close button
+        # Close button with curved shadow effect
         close_btn = tk.Button(
             features_window,
             text="Close",
             font=("Segoe UI", 11, "bold"),
             bg=self.BUTTON_BG,
             fg=self.TEXT_PRIMARY,
-            relief="solid",
-            borderwidth=2,
-            highlightbackground=self.BORDER_PRIMARY,
+            relief="raised",
+            borderwidth=1,
             cursor="hand2",
             padx=30,
             pady=10,
-            command=features_window.destroy
+            command=features_window.destroy,
+            highlightthickness=0,
+            overrelief="groove"
         )
-        close_btn.pack(pady=20)
+        close_btn.pack(pady=20, padx=2)
         self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
     
     def handle_voice_command(self, command):
