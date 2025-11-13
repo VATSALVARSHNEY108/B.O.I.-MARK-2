@@ -33,7 +33,6 @@ from modules.automation.gesture_voice_activator import create_gesture_voice_acti
 from modules.smart_features.nl_workflow_builder import create_nl_workflow_builder
 from modules.smart_features.workflow_templates import WorkflowManager
 from modules.intelligence.user_profile_manager import get_user_profile_manager
-from modules.utilities.theme_palette import create_theme_palette
 from modules.file_management.desktop_sync_manager import auto_initialize_on_gui_start, DesktopSyncManager
 from modules.productivity.productivity_dashboard import ProductivityDashboard
 from modules.productivity.pomodoro_ai_coach import PomodoroAICoach
@@ -59,19 +58,18 @@ class ModernVATSALGUI:
         self.root = root
         self.root.title("V.A.T.S.A.L - AI Desktop Assistant")
         
-        # Initialize theme colors (matching web GUI)
-        self.theme = create_theme_palette("light")
-        self.BG_PRIMARY = self.theme.bg_base
-        self.BG_SECONDARY = self.theme.bg_secondary
-        self.BG_TERTIARY = self.theme.bg_tertiary
-        self.BORDER_PRIMARY = self.theme.border_primary
-        self.TEXT_PRIMARY = self.theme.text_primary
-        self.TEXT_SECONDARY = self.theme.text_secondary
-        self.ACCENT_COLOR = self.theme.accent_secondary
-        self.BUTTON_BG = self.theme.hover_secondary
-        self.BUTTON_HOVER = self.theme.hover_primary
-        self.ACTIVE_GREEN = self.theme.accent_primary
-        self.CONSOLE_BG = self.theme.bg_tertiary
+        # Initialize theme colors (exact match to web GUI CSS)
+        self.BG_PRIMARY = "#F5F1E8"      # var(--bg-primary)
+        self.BG_SECONDARY = "#FAF8F3"    # var(--bg-secondary)
+        self.BORDER_PRIMARY = "#D9CFC0"  # var(--border-color)
+        self.TEXT_PRIMARY = "#1a1a1a"    # var(--text-primary)
+        self.TEXT_SECONDARY = "#5a5a5a"  # var(--text-secondary)
+        self.ACCENT_COLOR = "#3a3a3a"    # var(--accent-color)
+        self.BUTTON_BG = "#F3EADA"       # var(--button-bg)
+        self.BUTTON_HOVER = "#E8DCCB"    # var(--button-hover)
+        self.ACTIVE_GREEN = "#007B55"    # var(--active-green)
+        self.CONSOLE_BG = "#FAF6EE"      # var(--console-bg)
+        self.SHADOW_COLOR = "rgba(0, 0, 0, 0.08)"  # var(--shadow)
         
         # Configure root window
         self.root.configure(bg=self.BG_PRIMARY)
@@ -80,7 +78,7 @@ class ModernVATSALGUI:
         # State variables
         self.processing = False
         self.vatsal_mode = True
-        self.self_operating_mode = False
+        self.self_operating_mode = True  # Default to ON to match web GUI
         self.voice_enabled = False
         
         # Initialize core modules
@@ -317,10 +315,10 @@ class ModernVATSALGUI:
         tk.Label(
             title_frame,
             text="✨",
-            font=("Georgia", 32),
+            font=("Segoe UI", 28),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
-        ).pack(side="left", padx=(0, 15))
+        ).pack(side="left", padx=(0, 20))
         
         tk.Label(
             title_frame,
@@ -334,10 +332,10 @@ class ModernVATSALGUI:
         tk.Label(
             title_frame,
             text="✨",
-            font=("Georgia", 32),
+            font=("Segoe UI", 28),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
-        ).pack(side="left", padx=(15, 0))
+        ).pack(side="left", padx=(20, 0))
         
         # Subtitle
         tk.Label(
@@ -372,7 +370,7 @@ class ModernVATSALGUI:
         self.time_label = tk.Label(
             left_status,
             text="",
-            font=("Arial", 11),
+            font=("Segoe UI", 11),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_SECONDARY
         )
@@ -381,15 +379,15 @@ class ModernVATSALGUI:
         tk.Label(
             left_status,
             text=" • ",
-            font=("Arial", 11),
+            font=("Segoe UI", 11),
             bg=self.BG_SECONDARY,
             fg=self.ACCENT_COLOR
         ).pack(side="left")
         
         tk.Label(
             left_status,
-            text="310+ AI Features Available",
-            font=("Arial", 11),
+            text="100+ AI Features Available",
+            font=("Segoe UI", 11),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_SECONDARY
         ).pack(side="left")
@@ -402,14 +400,14 @@ class ModernVATSALGUI:
         self.vatsal_toggle = tk.Button(
             toggles_frame,
             text="● VATSAL: ON",
-            font=("Arial", 10, "bold"),
+            font=("Segoe UI", 10, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.ACTIVE_GREEN,
             relief="solid",
             borderwidth=2,
             highlightbackground=self.BORDER_PRIMARY,
             cursor="hand2",
-            padx=15,
+            padx=18,
             pady=8,
             command=self.toggle_vatsal
         )
@@ -418,15 +416,15 @@ class ModernVATSALGUI:
         # Self-Operating toggle
         self.soc_toggle = tk.Button(
             toggles_frame,
-            text="🔲 Self-Operating: OFF",
-            font=("Arial", 10, "bold"),
-            bg=self.BUTTON_BG,
-            fg=self.TEXT_PRIMARY,
+            text="🔲 Self-Operating: ON",
+            font=("Segoe UI", 10, "bold"),
+            bg=self.BG_SECONDARY,
+            fg=self.ACTIVE_GREEN,
             relief="solid",
             borderwidth=2,
             highlightbackground=self.BORDER_PRIMARY,
             cursor="hand2",
-            padx=15,
+            padx=18,
             pady=8,
             command=self.toggle_self_operating
         )
@@ -450,7 +448,7 @@ class ModernVATSALGUI:
         tk.Label(
             header,
             text="➕",
-            font=("Arial", 16),
+            font=("Segoe UI", 16),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left", padx=(0, 10))
@@ -458,7 +456,7 @@ class ModernVATSALGUI:
         tk.Label(
             header,
             text="Command Input",
-            font=("Arial", 15, "bold"),
+            font=("Segoe UI", 15, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left")
@@ -472,7 +470,7 @@ class ModernVATSALGUI:
             input_area,
             bg=self.CONSOLE_BG,
             fg=self.TEXT_PRIMARY,
-            font=("Arial", 12),
+            font=("Segoe UI", 11),
             insertbackground=self.TEXT_PRIMARY,
             relief="solid",
             borderwidth=2,
@@ -480,7 +478,7 @@ class ModernVATSALGUI:
             highlightcolor=self.ACCENT_COLOR,
             highlightthickness=1
         )
-        self.command_input.pack(side="left", fill="both", expand=True, ipady=12, padx=(0, 15))
+        self.command_input.pack(side="left", fill="both", expand=True, ipady=14, padx=(0, 15))
         self.command_input.bind("<Return>", lambda e: self.execute_command())
         
         # Buttons container
@@ -497,13 +495,13 @@ class ModernVATSALGUI:
         self.execute_btn = tk.Button(
             buttons_container,
             text="▶ Execute",
-            font=("Arial", 11, "bold"),
+            font=("Segoe UI", 11, "bold"),
             bg=self.BUTTON_BG,
             fg=self.TEXT_PRIMARY,
             relief="flat",
             borderwidth=0,
             cursor="hand2",
-            padx=25,
+            padx=28,
             pady=14,
             command=self.execute_command
         )
@@ -529,7 +527,7 @@ class ModernVATSALGUI:
             btn = tk.Button(
                 buttons_container,
                 text=icon,
-                font=("Arial", 16),
+                font=("Segoe UI", 16),
                 bg=self.BUTTON_BG,
                 fg=self.TEXT_PRIMARY,
                 relief="flat",
@@ -571,7 +569,7 @@ class ModernVATSALGUI:
         tk.Label(
             header_left,
             text="📋",
-            font=("Arial", 16),
+            font=("Segoe UI", 16),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left", padx=(0, 10))
@@ -579,7 +577,7 @@ class ModernVATSALGUI:
         tk.Label(
             header_left,
             text="Output Console",
-            font=("Arial", 15, "bold"),
+            font=("Segoe UI", 15, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left")
@@ -588,15 +586,15 @@ class ModernVATSALGUI:
         clear_btn = tk.Button(
             header,
             text="■ Clear",
-            font=("Arial", 10, "bold"),
+            font=("Segoe UI", 10, "bold"),
             bg=self.BUTTON_BG,
             fg=self.TEXT_PRIMARY,
             relief="solid",
-            borderwidth=1,
+            borderwidth=2,
             highlightbackground=self.BORDER_PRIMARY,
             cursor="hand2",
-            padx=15,
-            pady=6,
+            padx=18,
+            pady=8,
             command=self.clear_output
         )
         clear_btn.pack(side="right")
@@ -610,13 +608,13 @@ class ModernVATSALGUI:
             console_frame,
             bg=self.CONSOLE_BG,
             fg=self.TEXT_PRIMARY,
-            font=("Arial", 10),
+            font=("Segoe UI", 10),
             relief="solid",
             borderwidth=1,
             highlightbackground=self.BORDER_PRIMARY,
             highlightthickness=1,
-            padx=20,
-            pady=20,
+            padx=24,
+            pady=24,
             wrap="word",
             insertbackground=self.TEXT_PRIMARY
         )
@@ -630,15 +628,15 @@ class ModernVATSALGUI:
         clear_btn_bottom = tk.Button(
             footer,
             text="■ Clear",
-            font=("Arial", 10, "bold"),
+            font=("Segoe UI", 10, "bold"),
             bg=self.BUTTON_BG,
             fg=self.TEXT_PRIMARY,
             relief="solid",
-            borderwidth=1,
+            borderwidth=2,
             highlightbackground=self.BORDER_PRIMARY,
             cursor="hand2",
-            padx=15,
-            pady=6,
+            padx=18,
+            pady=8,
             command=self.clear_output
         )
         clear_btn_bottom.pack(side="right")
