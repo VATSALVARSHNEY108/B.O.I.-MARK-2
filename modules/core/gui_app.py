@@ -103,19 +103,32 @@ class ModernVATSALGUI:
     def _set_window_icon(self):
         """Set the window icon from logo file"""
         try:
-            # Try to load the logo from assets folder
-            logo_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "assets", "vatsal_logo.png")
+            # Get the workspace directory
+            workspace_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
             
-            if os.path.exists(logo_path):
-                # Load and set the icon
-                icon_image = Image.open(logo_path)
-                icon_photo = ImageTk.PhotoImage(icon_image)
-                self.root.iconphoto(True, icon_photo)
-                print(f"✅ Window icon loaded from: {logo_path}")
+            # Try icon version first (smaller, better for window icons)
+            icon_path = os.path.join(workspace_dir, "assets", "vatsal_icon.png")
+            if not os.path.exists(icon_path):
+                icon_path = os.path.join(workspace_dir, "assets", "vatsal_logo.png")
+            
+            if os.path.exists(icon_path):
+                # Load and resize for icon if needed
+                icon_image = Image.open(icon_path)
+                
+                # Resize if too large (icons work best at 64x64 or smaller)
+                if icon_image.size[0] > 256 or icon_image.size[1] > 256:
+                    icon_image = icon_image.resize((64, 64), Image.Resampling.LANCZOS)
+                
+                # Keep as instance variable to prevent garbage collection
+                self.icon_photo = ImageTk.PhotoImage(icon_image)
+                self.root.iconphoto(True, self.icon_photo)
+                print(f"✅ Window icon loaded from: {icon_path}")
             else:
-                print(f"⚠️ Logo file not found at: {logo_path}")
+                print(f"⚠️ Logo file not found")
         except Exception as e:
             print(f"⚠️ Could not set window icon: {e}")
+            import traceback
+            traceback.print_exc()
     
     def _initialize_modules(self):
         """Initialize all backend modules"""
