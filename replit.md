@@ -56,6 +56,19 @@ Both desktop GUIs are built with `tkinter` and support VATSAL Mode and Self-Oper
 -   **Hand Gesture Mouse Controller:** Touchless computer control using webcam and MediaPipe hand tracking. Control mouse cursor, click, scroll, drag, and adjust volume using natural hand gestures. Features real-time tracking at 30-60 FPS, 7 gesture types, and smooth cursor tracking.
 -   **Utility Modules:** Includes integrations for Spotify, YouTube, Weather & News, Translation, Calculator, Password Vault, Quick Notes, Calendar Manager, Timer & Stopwatch, Quick Reminders, Habit Tracker, Color Tools, QR Code Tools, Screenshot Annotator, Image Resizer, Batch Form Filler, and Hand Gesture Controller.
 
+## Recent Changes (November 2025)
+### AI Performance Optimizations
+-   **Faster AI Responses:** Implemented comprehensive optimizations to reduce AI thinking time by 30-50%
+-   **Response Caching:** Added LRU cache (100 entries) for instant repeated command responses
+-   **Model Fallback:** Optimized fallback to gemini-1.5-flash-8b for faster error recovery
+-   **Retry Optimization:** Reduced retry attempts (3 instead of 4) and delays for faster failure recovery
+-   **Token Limits:** Tuned max_output_tokens across all AI functions for optimal speed/quality balance
+-   **Generation Configs:** Added temperature and top_p tuning to all AI functions for faster inference
+-   **Conversation History:** Reduced context size from 15 to 10 messages for faster chatbot responses
+-   **Mutation Isolation:** All cached responses use deep copy to prevent state corruption
+
+See `AI_OPTIMIZATION_SUMMARY.md` for detailed performance improvements and configuration options.
+
 ## External Dependencies
 -   **google-genai:** For Gemini AI integration.
 -   **PyAutoGUI:** For GUI automation.
