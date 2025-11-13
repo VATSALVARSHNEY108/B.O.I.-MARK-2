@@ -414,13 +414,6 @@ class ModernVATSALGUI:
         )
         status_bar.pack(fill="x", padx=30, pady=(15, 20))
         
-        # Separator line
-        tk.Frame(
-            header,
-            bg=self.BORDER_PRIMARY,
-            height=1
-        ).place(relx=0.05, rely=0.75, relwidth=0.9)
-        
         # Left side - Date and time
         left_status = tk.Frame(status_bar, bg=self.BG_SECONDARY)
         left_status.pack(side="left", pady=(20, 0))
