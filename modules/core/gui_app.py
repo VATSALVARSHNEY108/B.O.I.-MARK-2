@@ -80,6 +80,9 @@ class ModernVATSALGUI:
         self.vatsal_mode = True
         self.self_operating_mode = True  # Default to ON to match web GUI
         self.voice_enabled = False
+        self.wakeup_listening = False
+        self.vsign_detecting = False
+        self.speaking_enabled = False
         
         # Initialize core modules
         self._initialize_modules()
@@ -515,12 +518,11 @@ class ModernVATSALGUI:
             width=2
         ).pack(side="left", fill="y")
         
-        # Icon buttons
+        # Icon buttons - Wakeup listener, V-sign detector, Speaking
         icon_buttons = [
-            ("🔧", self.show_settings, "Settings"),
-            ("🔊", self.toggle_voice, "Voice"),
-            ("⚡", self.show_quick_actions, "Quick Actions"),
-            ("⚙️", self.show_tools, "Tools")
+            ("👂", self.toggle_wakeup_listener, "Wakeup Word Listener"),
+            ("✌️", self.toggle_v_sign_detector, "V-Sign Detector"),
+            ("🗣️", self.toggle_speaking, "Speaking")
         ]
         
         for icon, command, tooltip in icon_buttons:
@@ -538,6 +540,14 @@ class ModernVATSALGUI:
             )
             btn.pack(side="left")
             self._add_hover_effect(btn, self.BUTTON_BG, self.BUTTON_HOVER)
+            
+            # Store button reference for state updates
+            if icon == "👂":
+                self.wakeup_btn = btn
+            elif icon == "✌️":
+                self.vsign_btn = btn
+            elif icon == "🗣️":
+                self.speaking_btn = btn
             
             # Separator
             if icon != icon_buttons[-1][0]:
@@ -758,8 +768,8 @@ class ModernVATSALGUI:
                         vatsal_response = self.vatsal.process_with_personality(command, result['message'])
                         self.update_output(f"🤖 VATSAL: {vatsal_response}\n", "success")
                         
-                        # Speak response if voice enabled
-                        if self.voice_enabled and self.voice_commander:
+                        # Speak response if speaking enabled
+                        if self.speaking_enabled and self.voice_commander:
                             try:
                                 self.voice_commander.speak(vatsal_response)
                             except:
@@ -869,6 +879,96 @@ class ModernVATSALGUI:
             self.update_output("\n🔇 Voice mode disabled\n", "warning")
     
     # ========== MENU FUNCTIONS ==========
+    
+    def toggle_wakeup_listener(self):
+        """Toggle wakeup word listener"""
+        self.wakeup_listening = not self.wakeup_listening
+        
+        if self.wakeup_listening:
+            self.wakeup_btn.config(bg=self.ACTIVE_GREEN, fg="white")
+            self.update_output("\n👂 Wakeup word listener activated\n", "success")
+            
+            # Start voice listening if available
+            if self.voice_commander and not self.voice_listening:
+                try:
+                    self.voice_listening = True
+                    self.voice_commander.start_continuous_listening(callback=self.handle_voice_command)
+                    self.update_output("Listening for wake word...\n", "info")
+                except Exception as e:
+                    self.update_output(f"⚠️ Could not start listener: {e}\n", "warning")
+                    self.wakeup_listening = False
+                    self.wakeup_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
+        else:
+            self.wakeup_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
+            self.update_output("\n👂 Wakeup word listener deactivated\n", "warning")
+            
+            # Stop voice listening
+            if self.voice_commander and self.voice_listening:
+                try:
+                    self.voice_listening = False
+                    self.voice_commander.stop_continuous_listening()
+                except Exception as e:
+                    print(f"Error stopping listener: {e}")
+    
+    def toggle_v_sign_detector(self):
+        """Toggle V-sign gesture detector"""
+        self.vsign_detecting = not self.vsign_detecting
+        
+        if self.vsign_detecting:
+            self.vsign_btn.config(bg=self.ACTIVE_GREEN, fg="white")
+            self.update_output("\n✌️ V-sign detector activated\n", "success")
+            
+            # Start gesture detection if available
+            if self.gesture_assistant and not self.gesture_running:
+                try:
+                    result = self.gesture_assistant.start()
+                    self.gesture_running = True
+                    self.update_output("Gesture detection active - show V-sign to trigger\n", "info")
+                    if result.get('status') == 'error':
+                        self.update_output(f"⚠️ {result.get('message', 'Unknown error')}\n", "warning")
+                except Exception as e:
+                    self.update_output(f"⚠️ Could not start detector: {e}\n", "warning")
+                    self.vsign_detecting = False
+                    self.vsign_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
+            elif not self.gesture_assistant:
+                self.update_output("⚠️ Gesture detector not available\n", "warning")
+                self.vsign_detecting = False
+                self.vsign_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
+        else:
+            self.vsign_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
+            self.update_output("\n✌️ V-sign detector deactivated\n", "warning")
+            
+            # Stop gesture detection
+            if self.gesture_assistant and self.gesture_running:
+                try:
+                    self.gesture_running = False
+                    self.gesture_assistant.stop()
+                except Exception as e:
+                    print(f"Error stopping detector: {e}")
+    
+    def toggle_speaking(self):
+        """Toggle text-to-speech"""
+        self.speaking_enabled = not self.speaking_enabled
+        
+        if self.speaking_enabled:
+            self.speaking_btn.config(bg=self.ACTIVE_GREEN, fg="white")
+            self.update_output("\n🗣️ Speaking mode enabled\n", "success")
+            
+            # Test speak
+            if self.voice_commander:
+                try:
+                    self.voice_commander.speak("Speaking mode activated")
+                except Exception as e:
+                    self.update_output(f"⚠️ Could not activate speaking: {e}\n", "warning")
+                    self.speaking_enabled = False
+                    self.speaking_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
+            else:
+                self.update_output("⚠️ Voice system not available\n", "warning")
+                self.speaking_enabled = False
+                self.speaking_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
+        else:
+            self.speaking_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
+            self.update_output("\n🗣️ Speaking mode disabled\n", "warning")
     
     def show_settings(self):
         """Show feature listing panel"""
@@ -1054,60 +1154,6 @@ class ModernVATSALGUI:
         )
         close_btn.pack(pady=20)
         self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
-    
-    def show_quick_actions(self):
-        """Show quick actions menu"""
-        quick_actions = tk.Toplevel(self.root)
-        quick_actions.title("Quick Actions")
-        quick_actions.geometry("400x500")
-        quick_actions.configure(bg=self.BG_SECONDARY)
-        
-        tk.Label(
-            quick_actions,
-            text="⚡ Quick Actions",
-            font=("Arial", 16, "bold"),
-            bg=self.BG_SECONDARY,
-            fg=self.TEXT_PRIMARY
-        ).pack(pady=20)
-        
-        actions = [
-            ("🔒 Lock Screen", "lock the screen"),
-            ("📸 Take Screenshot", "take a screenshot"),
-            ("📁 Open Downloads", "open downloads folder"),
-            ("🌐 Open Browser", "open chrome"),
-            ("📧 Check Email", "open gmail"),
-            ("🎵 Play Music", "play music"),
-            ("⏰ Set Timer", "set a timer for 5 minutes"),
-            ("📊 System Info", "show system information"),
-        ]
-        
-        for label, command in actions:
-            btn = tk.Button(
-                quick_actions,
-                text=label,
-                font=("Arial", 11),
-                bg=self.BUTTON_BG,
-                fg=self.TEXT_PRIMARY,
-                relief="solid",
-                borderwidth=1,
-                cursor="hand2",
-                padx=15,
-                pady=10,
-                command=lambda cmd=command: self._quick_command(cmd, quick_actions)
-            )
-            btn.pack(fill="x", padx=20, pady=5)
-            self._add_hover_effect(btn, self.BUTTON_BG, self.BUTTON_HOVER)
-    
-    def show_tools(self):
-        """Show tools menu"""
-        messagebox.showinfo("Tools", "Tools panel - Coming soon!")
-    
-    def _quick_command(self, command, window):
-        """Execute quick command"""
-        window.destroy()
-        self.command_input.delete(0, tk.END)
-        self.command_input.insert(0, command)
-        self.execute_command()
     
     def handle_voice_command(self, command):
         """Handle voice command callback"""
