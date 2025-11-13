@@ -354,17 +354,17 @@ class AutomationControllerGUI:
         title_frame.pack(pady=15)
 
         title = tk.Label(title_frame,
-                         text="✨ V.A.T.S.A.L. ✨",
+                         text="✦ V.A.T.S.A.L. ✦",
                          bg=self.BG_CARD,
                          fg=self.TEXT_PRIMARY,
-                         font=("Copperplate Gothic Bold", 32, "bold"))
+                         font=("Arial", 32, "bold"))
         title.pack()
 
         subtitle = tk.Label(title_frame,
-                            text="⚡ Vastly Advanced Technological System Above Limitations ⚡",
+                            text="Vastly Advanced Technological System Above Limitations",
                             bg=self.BG_CARD,
-                            fg=self.ACCENT_TERTIARY,
-                            font=("Georgia", 12, "italic"))
+                            fg=self.TEXT_PRIMARY,
+                            font=("Georgia", 11, "italic"))
         subtitle.pack(pady=(5, 0))
 
         stats_frame = tk.Frame(header_container, bg=self.BG_CARD)
@@ -373,76 +373,55 @@ class AutomationControllerGUI:
         self.time_label = tk.Label(stats_frame,
                                    text="",
                                    bg=self.BG_CARD,
-                                   fg=self.ACCENT_PRIMARY,
-                                   font=("Consolas", 11, "bold"))
-        self.time_label.pack(side="left", padx=15)
+                                   fg=self.TEXT_PRIMARY,
+                                   font=("Arial", 10))
+        self.time_label.pack(side="left", padx=5)
 
-        separator1 = tk.Label(stats_frame, text="●", bg=self.BG_CARD, fg=self.TEXT_SECONDARY, font=("Arial", 10))
+        separator1 = tk.Label(stats_frame, text="•", bg=self.BG_CARD, fg=self.TEXT_PRIMARY, font=("Arial", 10))
         separator1.pack(side="left", padx=5)
 
         features_label = tk.Label(stats_frame,
                                   text="100+ AI Features Available",
                                   bg=self.BG_CARD,
-                                  fg=self.ACCENT_TERTIARY,
-                                  font=("Arial Black", 10, "bold"))
-        features_label.pack(side="left", padx=15)
+                                  fg=self.TEXT_PRIMARY,
+                                  font=("Arial", 10))
+        features_label.pack(side="left", padx=5)
 
-        separator2 = tk.Label(stats_frame, text="●", bg=self.BG_SECONDARY, fg=self.TEXT_PRIMARY, font=("Arial", 10))
+        separator2 = tk.Label(stats_frame, text="•", bg=self.BG_CARD, fg=self.TEXT_PRIMARY, font=("Arial", 10))
         separator2.pack(side="left", padx=5)
 
         self.vatsal_toggle_btn = tk.Button(stats_frame,
-                                           text="🤖 VATSAL Mode: ON",
-                                           bg=self.ACCENT_TERTIARY,
-                                           fg=self.BG_CARD,
-                                           font=("Arial Black", 10, "bold"),
+                                           text="• VATSAL: ON",
+                                           bg=self.BG_CARD,
+                                           fg=self.TEXT_PRIMARY,
+                                           font=("Arial", 10),
                                            relief="solid",
-                                           borderwidth=2,
+                                           borderwidth=1,
                                            cursor="hand2",
                                            command=self.toggle_vatsal_mode,
-                                           padx=15,
-                                           pady=5,
-                                           highlightbackground=self.BORDER_PRIMARY,
+                                           padx=10,
+                                           pady=3,
+                                           highlightbackground=self.TEXT_PRIMARY,
                                            highlightthickness=1)
-        self.vatsal_toggle_btn.pack(side="left", padx=15)
-        self.add_hover_effect(self.vatsal_toggle_btn, self.ACCENT_TERTIARY, self.HOVER_PRIMARY)
+        self.vatsal_toggle_btn.pack(side="left", padx=5)
 
-        separator3 = tk.Label(stats_frame, text="●", bg=self.BG_SECONDARY, fg=self.TEXT_PRIMARY, font=("Arial", 10))
+        separator3 = tk.Label(stats_frame, text="•", bg=self.BG_CARD, fg=self.TEXT_PRIMARY, font=("Arial", 10))
         separator3.pack(side="left", padx=5)
 
         self.self_operating_toggle_btn = tk.Button(stats_frame,
                                                    text="🎮 Self-Operating: ON",
-                                                   bg=self.ACCENT_SECONDARY,
-                                                   fg=self.BG_CARD,
-                                                   font=("Arial Black", 10, "bold"),
+                                                   bg=self.BG_CARD,
+                                                   fg=self.TEXT_PRIMARY,
+                                                   font=("Arial", 10),
                                                    relief="solid",
-                                                   borderwidth=2,
+                                                   borderwidth=1,
                                                    cursor="hand2",
                                                    command=self.toggle_self_operating_mode,
-                                                   padx=15,
-                                                   pady=5,
-                                                   highlightbackground=self.BORDER_PRIMARY,
+                                                   padx=10,
+                                                   pady=3,
+                                                   highlightbackground=self.TEXT_PRIMARY,
                                                    highlightthickness=1)
-        self.self_operating_toggle_btn.pack(side="left", padx=15)
-        self.add_hover_effect(self.self_operating_toggle_btn, self.ACCENT_SECONDARY, self.HOVER_SECONDARY)
-
-        separator4 = tk.Label(stats_frame, text="●", bg=self.BG_SECONDARY, fg=self.TEXT_PRIMARY, font=("Arial", 10))
-        separator4.pack(side="left", padx=5)
-
-        self.user_settings_btn = tk.Button(stats_frame,
-                                          text="⚙️ User Settings",
-                                          bg=self.ACCENT_PRIMARY,
-                                          fg=self.BG_BASE,
-                                          font=("Arial Black", 10, "bold"),
-                                          relief="solid",
-                                          borderwidth=2,
-                                          cursor="hand2",
-                                          command=self.open_user_settings,
-                                          padx=15,
-                                          pady=5,
-                                          highlightbackground=self.BORDER_PRIMARY,
-                                          highlightthickness=1)
-        self.user_settings_btn.pack(side="left", padx=15)
-        self.add_hover_effect(self.user_settings_btn, self.ACCENT_PRIMARY, self.ACCENT_TERTIARY)
+        self.self_operating_toggle_btn.pack(side="left", padx=5)
 
         main_container = tk.Frame(
             self.root,
@@ -721,261 +700,139 @@ class AutomationControllerGUI:
 
         right_panel = tk.Frame(
             main_container,
-            bg=self.BG_SECONDARY,
-            highlightbackground=self.BORDER_PRIMARY,
-            highlightthickness=2
+            bg=self.BG_BASE,
+            highlightbackground=self.TEXT_PRIMARY,
+            highlightthickness=0
         )
-        right_panel.pack(side="right", fill="both", expand=True, padx=5)
+        right_panel.pack(fill="both", expand=True, padx=15, pady=15)
 
         command_card = tk.Frame(
             right_panel,
-            bg=self.BG_TERTIARY,
+            bg=self.BG_BASE,
             relief="solid",
-            highlightbackground=self.BORDER_PRIMARY,
+            highlightbackground=self.TEXT_PRIMARY,
             highlightthickness=2
         )
-        command_card.pack(fill="x", pady=5, padx=5)
+        command_card.pack(fill="x", pady=(0, 15))
 
-        input_frame = tk.Frame(command_card, bg=self.BG_TERTIARY)
-        input_frame.pack(fill="x", padx=15, pady=15)
+        input_frame = tk.Frame(command_card, bg=self.BG_BASE)
+        input_frame.pack(fill="x", padx=20, pady=20)
 
         input_label = tk.Label(input_frame,
-                               text="💬 Command Input 💬",
-                               bg=self.BG_TERTIARY,
-                               fg="#00d4ff",
-                               font=("Impact", 14, "bold"))
-        input_label.pack(anchor="w", pady=(0, 10))
+                               text="✚ Command Input",
+                               bg=self.BG_BASE,
+                               fg=self.TEXT_PRIMARY,
+                               font=("Arial", 12, "bold"))
+        input_label.pack(anchor="w", pady=(0, 12))
 
-        input_container = tk.Frame(input_frame, bg=self.BG_TERTIARY)
+        input_container = tk.Frame(input_frame, bg=self.BG_BASE)
         input_container.pack(fill="x")
 
         self.command_input = tk.Entry(input_container,
-                                      bg=self.BG_SECONDARY,
+                                      bg=self.BG_CARD,
                                       fg=self.TEXT_PRIMARY,
-                                      font=("Consolas", 13),
-                                      insertbackground="#00ff88",
+                                      font=("Arial", 12),
+                                      insertbackground=self.TEXT_PRIMARY,
                                       relief="solid",
-                                      borderwidth=2,
-                                      highlightbackground=self.BORDER_PRIMARY,
-                                      highlightcolor="#00d4ff",
+                                      borderwidth=1,
+                                      highlightbackground=self.TEXT_PRIMARY,
+                                      highlightcolor=self.TEXT_PRIMARY,
                                       highlightthickness=1)
-        self.command_input.pack(side="left", fill="both", expand=True, ipady=12, padx=(0, 10))
+        self.command_input.pack(side="left", fill="both", expand=True, ipady=10, padx=(0, 12))
         self.command_input.bind("<Return>", lambda e: self.execute_command())
 
-        # Voice command buttons
-        voice_frame = tk.Frame(input_container, bg=self.BG_TERTIARY)
-        voice_frame.pack(side="right", padx=(0, 10))
-
-        self.voice_listen_btn = tk.Button(voice_frame,
-                                          text="🎤",
-                                          bg="#00ff88",
-                                          fg=self.TEXT_PRIMARY,
-                                          font=("Arial Black", 14, "bold"),
-                                          relief="solid",
-                                          borderwidth=2,
-                                          cursor="hand2",
-                                          command=self.start_voice_listen,
-                                          padx=12,
-                                          pady=10,
-                                          highlightbackground=self.BORDER_PRIMARY,
-                                          activebackground="#00d4ff")
-        self.voice_listen_btn.pack(side="left", padx=2)
-        self.add_hover_effect(self.voice_listen_btn, "#00ff88", "#00d4ff")
-
-        self.voice_continuous_btn = tk.Button(voice_frame,
-                                              text="🔊",
-                                              bg="#b19cd9",
-                                              fg=self.TEXT_PRIMARY,
-                                              font=("Arial Black", 12, "bold"),
-                                              relief="solid",
-                                              borderwidth=2,
-                                              cursor="hand2",
-                                              command=self.toggle_continuous_listening,
-                                              padx=12,
-                                              pady=10,
-                                              highlightbackground=self.BORDER_PRIMARY,
-                                              activebackground="#ff0080")
-        self.voice_continuous_btn.pack(side="left", padx=2)
-        self.add_hover_effect(self.voice_continuous_btn, "#b19cd9", "#ff0080")
-
-        # Wake word toggle button
-        self.wake_word_btn = tk.Button(voice_frame,
-                                       text="💬",
-                                       bg="#00d4ff",
-                                       fg=self.TEXT_PRIMARY,
-                                       font=("Arial Black", 11, "bold"),
-                                       relief="solid",
-                                       borderwidth=2,
-                                       cursor="hand2",
-                                       command=self.toggle_wake_word,
-                                       padx=10,
-                                       pady=10,
-                                       highlightbackground=self.BORDER_PRIMARY,
-                                       activebackground="#00ff88")
-        self.wake_word_btn.pack(side="left", padx=2)
-        self.add_hover_effect(self.wake_word_btn, "#00d4ff", "#00ff88")
-
-        # Gesture Voice Activator button (V sign → voice)
-        self.gesture_voice_btn = tk.Button(voice_frame,
-                                           text="✌️",
-                                           bg="#ffd700",
-                                           fg=self.TEXT_PRIMARY,
-                                           font=("Arial Black", 12, "bold"),
-                                           relief="solid",
-                                           borderwidth=2,
-                                           cursor="hand2",
-                                           command=self.toggle_gesture_voice,
-                                           padx=10,
-                                           pady=10,
-                                           highlightbackground=self.BORDER_PRIMARY,
-                                           activebackground="#ffaa00")
-        self.gesture_voice_btn.pack(side="left", padx=2)
-        self.add_hover_effect(self.gesture_voice_btn, "#ffd700", "#ffaa00")
-
-        # Sound effects toggle button
-        self.sound_fx_btn = tk.Button(voice_frame,
-                                      text="🔊",
-                                      bg=self.ACCENT_PRIMARY,
-                                      fg=self.BG_BASE,
-                                      font=("Segoe UI", 11, "bold"),
-                                      relief="flat",
-                                      cursor="hand2",
-                                      command=self.toggle_sound_effects,
-                                      padx=10,
-                                      pady=10,
-                                      activebackground="#94e2d5")
-        self.sound_fx_btn.pack(side="left", padx=2)
-        self.add_hover_effect(self.sound_fx_btn, "#a6e3a1", "#94e2d5")
-
-        # Right-click to open sound settings
-        self.sound_fx_btn.bind("<Button-3>", lambda e: self.show_sound_settings())
-
         self.execute_btn = tk.Button(input_container,
-                                     text="⚡ Execute ⚡",
-                                     bg="#00ff88",
+                                     text="▶ Execute",
+                                     bg=self.BG_CARD,
                                      fg=self.TEXT_PRIMARY,
-                                     font=("Arial Black", 13, "bold"),
+                                     font=("Arial", 11, "bold"),
                                      relief="solid",
-                                     borderwidth=2,
+                                     borderwidth=1,
                                      cursor="hand2",
                                      command=self.execute_command,
-                                     padx=25,
-                                     pady=12,
-                                     highlightbackground=self.BORDER_PRIMARY,
-                                     activebackground="#00d4ff")
-        self.execute_btn.pack(side="right")
-        self.add_hover_effect(self.execute_btn, "#00ff88", "#00d4ff")
+                                     padx=20,
+                                     pady=10,
+                                     highlightbackground=self.TEXT_PRIMARY,
+                                     activebackground=self.BG_TERTIARY)
+        self.execute_btn.pack(side="left", padx=(0, 12))
+
+        # Icon buttons
+        icon_frame = tk.Frame(input_container, bg=self.BG_BASE)
+        icon_frame.pack(side="left")
+
+        icon_button_config = {
+            "bg": self.BG_CARD,
+            "fg": self.TEXT_PRIMARY,
+            "font": ("Arial", 14),
+            "relief": "solid",
+            "borderwidth": 1,
+            "cursor": "hand2",
+            "padx": 10,
+            "pady": 10,
+            "highlightbackground": self.TEXT_PRIMARY,
+        }
+
+        self.tool_btn = tk.Button(icon_frame, text="🔧", command=self.show_tools, **icon_button_config)
+        self.tool_btn.pack(side="left", padx=2)
+
+        self.voice_listen_btn = tk.Button(icon_frame, text="🔊", command=self.start_voice_listen, **icon_button_config)
+        self.voice_listen_btn.pack(side="left", padx=2)
+
+        self.quick_action_btn = tk.Button(icon_frame, text="⚡", command=self.show_quick_actions, **icon_button_config)
+        self.quick_action_btn.pack(side="left", padx=2)
+
+        self.settings_btn = tk.Button(icon_frame, text="⚙️", command=self.show_settings, **icon_button_config)
+        self.settings_btn.pack(side="left", padx=2)
 
         output_card = tk.Frame(
             right_panel,
-            bg=self.BG_TERTIARY,
+            bg=self.BG_BASE,
             relief="solid",
-            highlightbackground=self.BORDER_PRIMARY,
+            highlightbackground=self.TEXT_PRIMARY,
             highlightthickness=2
         )
-        output_card.pack(fill="both", expand=True, pady=5, padx=5)
+        output_card.pack(fill="both", expand=True)
 
-        output_header = tk.Frame(output_card, bg=self.BG_TERTIARY)
-        output_header.pack(fill="x", padx=15, pady=(15, 10))
+        output_header = tk.Frame(output_card, bg=self.BG_BASE)
+        output_header.pack(fill="x", padx=20, pady=(20, 0))
 
         output_label = tk.Label(output_header,
-                                text="📋 Output Console 📋",
-                                bg=self.BG_TERTIARY,
-                                fg="#00d4ff",
-                                font=("Impact", 14, "bold"))
+                                text="☰ Output Console",
+                                bg=self.BG_BASE,
+                                fg=self.TEXT_PRIMARY,
+                                font=("Arial", 12, "bold"))
         output_label.pack(side="left")
 
         clear_console_btn = tk.Button(output_header,
-                                      text="🗑️ Clear",
-                                      bg="#ff0080",
+                                      text="▣ Clear",
+                                      bg=self.BG_CARD,
                                       fg=self.TEXT_PRIMARY,
-                                      font=("Arial Black", 10, "bold"),
+                                      font=("Arial", 10, "bold"),
                                       relief="solid",
-                                      borderwidth=2,
+                                      borderwidth=1,
                                       cursor="hand2",
                                       command=self.clear_output,
-                                      padx=15,
-                                      pady=5,
-                                      highlightbackground=self.BORDER_PRIMARY,
-                                      activebackground="#b19cd9")
+                                      padx=12,
+                                      pady=6,
+                                      highlightbackground=self.TEXT_PRIMARY,
+                                      activebackground=self.BG_TERTIARY)
         clear_console_btn.pack(side="right")
-        self.add_hover_effect(clear_console_btn, "#ff0080", "#b19cd9")
 
         self.output_area = scrolledtext.ScrolledText(output_card,
-                                                     bg=self.BG_SECONDARY,
+                                                     bg=self.BG_CARD,
                                                      fg=self.TEXT_PRIMARY,
-                                                     font=("Consolas", 11),
-                                                     relief="solid",
-                                                     borderwidth=2,
-                                                     padx=15,
+                                                     font=("Arial", 10),
+                                                     relief="flat",
+                                                     borderwidth=0,
+                                                     padx=20,
                                                      pady=15,
                                                      wrap="word",
-                                                     insertbackground="#00ff88",
-                                                     highlightbackground=self.BORDER_PRIMARY,
-                                                     highlightthickness=1)
-        self.output_area.pack(fill="both", expand=True, padx=15, pady=(0, 15))
+                                                     insertbackground=self.TEXT_PRIMARY,
+                                                     highlightbackground=self.TEXT_PRIMARY,
+                                                     highlightthickness=0)
+        self.output_area.pack(fill="both", expand=True, padx=20, pady=15)
         self.output_area.config(state="disabled")
 
-        bottom_frame = tk.Frame(
-            self.root,
-            bg=self.BG_TERTIARY,
-            pady=12,
-            padx=20,
-            highlightbackground=self.BORDER_PRIMARY,
-            highlightthickness=2
-        )
-        bottom_frame.pack(fill="x", side="bottom", padx=5, pady=5)
-
-        button_config = {
-            "bg": "#0a0a0a",
-            "fg": "#ffffff",
-            "font": ("Arial Black", 10, "bold"),
-            "relief": "solid",
-            "borderwidth": 2,
-            "cursor": "hand2",
-            "padx": 18,
-            "pady": 8,
-            "highlightbackground": "#ffffff",
-            "activebackground": "#00d4ff"
-        }
-
-        help_btn = tk.Button(bottom_frame, text="❓ Full Help", command=self.show_help, **button_config)
-        help_btn.pack(side="left", padx=5)
-        self.add_hover_effect(help_btn, "#0a0a0a", "#00d4ff")
-
-        contacts_btn = tk.Button(bottom_frame, text="👥 Contacts", command=self.show_contacts, **button_config)
-        contacts_btn.pack(side="left", padx=5)
-        self.add_hover_effect(contacts_btn, "#0a0a0a", "#00ff88")
-
-        about_btn = tk.Button(bottom_frame, text="ℹ️ About", command=self.show_about, **button_config)
-        about_btn.pack(side="left", padx=5)
-        self.add_hover_effect(about_btn, "#0a0a0a", "#b19cd9")
-
-        suggest_btn = tk.Button(bottom_frame, text="💡 Suggestion", command=self.show_suggestion, **button_config)
-        suggest_btn.pack(side="left", padx=5)
-        self.add_hover_effect(suggest_btn, "#0a0a0a", "#ff0080")
-
-        security_btn = tk.Button(bottom_frame, text="🛡️ Security", command=self.show_security_dashboard, **button_config)
-        security_btn.pack(side="left", padx=5)
-        self.add_hover_effect(security_btn, "#0a0a0a", "#00d4ff")
-
-        status_container = tk.Frame(
-            bottom_frame,
-            bg=self.BG_SECONDARY,
-            relief="solid",
-            highlightbackground=self.BORDER_PRIMARY,
-            highlightthickness=2
-        )
-        status_container.pack(side="right", padx=10, pady=0)
-
-        self.status_label = tk.Label(status_container,
-                                     text="✅ Ready",
-                                     bg=self.BG_SECONDARY,
-                                     fg="#00ff88",
-                                     font=("Consolas", 11, "bold"),
-                                     padx=20,
-                                     pady=10)
-        self.status_label.pack()
 
     def add_gradient_effect(self, widget):
         widget.configure(highlightbackground="#45475a", highlightthickness=1)
@@ -4812,6 +4669,18 @@ Based on OthersideAI's self-operating-computer framework
                              pady=10)
         close_btn.pack(pady=15)
         self.add_hover_effect(close_btn, "#89b4fa", "#74c7ec")
+
+    def show_tools(self):
+        """Show tools menu"""
+        messagebox.showinfo("🔧 Tools", "Tools menu - Coming soon!\n\nAccess various automation tools and utilities.")
+
+    def show_quick_actions(self):
+        """Show quick actions menu"""
+        messagebox.showinfo("⚡ Quick Actions", "Quick Actions menu - Coming soon!\n\nAccess frequently used commands and shortcuts.")
+
+    def show_settings(self):
+        """Show settings menu"""
+        messagebox.showinfo("⚙️ Settings", "Settings menu - Coming soon!\n\nConfigure application preferences and options.")
 
     def show_help(self):
         help_window = tk.Toplevel(self.root)
