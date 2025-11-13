@@ -5,7 +5,7 @@ Modern HTML/CSS/JS interface for VATSAL AI System
 Connected to VNC GUI via Bridge
 """
 
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, make_response
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 import sys
@@ -24,17 +24,33 @@ from bridge import get_gui_bridge
 
 app = Flask(__name__)
 CORS(app)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 socketio = SocketIO(app, cors_allowed_origins="*")
+
+STATIC_VERSION = str(int(time.time()))
 
 bridge = get_gui_bridge()
 bridge.start()
 
 pending_requests = {}
 
+@app.after_request
+def add_no_cache_headers(response):
+    """Add cache control headers to prevent browser caching"""
+    if request.path.startswith('/static/'):
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+    return response
+
 @app.route('/')
 def index():
     """Serve the main web GUI"""
-    return render_template('index.html')
+    response = make_response(render_template('index.html', static_version=STATIC_VERSION))
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 def handle_vnc_response(response):
     """Callback to handle responses from VNC GUI"""
