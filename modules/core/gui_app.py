@@ -803,35 +803,56 @@ class AutomationControllerGUI:
                                 font=("Arial", 12, "bold"))
         output_label.pack(side="left")
 
-        clear_console_btn = tk.Button(output_header,
-                                      text="▣ Clear",
-                                      bg=self.BG_CARD,
-                                      fg=self.TEXT_PRIMARY,
-                                      font=("Arial", 10, "bold"),
-                                      relief="solid",
-                                      borderwidth=1,
-                                      cursor="hand2",
-                                      command=self.clear_output,
-                                      padx=12,
-                                      pady=6,
-                                      highlightbackground=self.TEXT_PRIMARY,
-                                      activebackground=self.BG_TERTIARY)
-        clear_console_btn.pack(side="right")
+        clear_top_btn = tk.Button(output_header,
+                                  text="▣ Clear",
+                                  bg=self.BG_CARD,
+                                  fg=self.TEXT_PRIMARY,
+                                  font=("Arial", 10, "bold"),
+                                  relief="solid",
+                                  borderwidth=1,
+                                  cursor="hand2",
+                                  command=self.clear_output,
+                                  padx=12,
+                                  pady=6,
+                                  highlightbackground=self.TEXT_PRIMARY,
+                                  activebackground=self.BG_TERTIARY)
+        clear_top_btn.pack(side="right")
 
-        self.output_area = scrolledtext.ScrolledText(output_card,
+        output_text_container = tk.Frame(output_card, bg=self.BG_BASE)
+        output_text_container.pack(fill="both", expand=True, padx=20, pady=15)
+
+        self.output_area = scrolledtext.ScrolledText(output_text_container,
                                                      bg=self.BG_CARD,
                                                      fg=self.TEXT_PRIMARY,
-                                                     font=("Arial", 10),
+                                                     font=("Courier", 10),
                                                      relief="flat",
                                                      borderwidth=0,
-                                                     padx=20,
+                                                     padx=15,
                                                      pady=15,
                                                      wrap="word",
                                                      insertbackground=self.TEXT_PRIMARY,
                                                      highlightbackground=self.TEXT_PRIMARY,
                                                      highlightthickness=0)
-        self.output_area.pack(fill="both", expand=True, padx=20, pady=15)
+        self.output_area.pack(fill="both", expand=True)
         self.output_area.config(state="disabled")
+
+        output_footer = tk.Frame(output_card, bg=self.BG_BASE)
+        output_footer.pack(fill="x", padx=20, pady=(0, 20))
+
+        clear_bottom_btn = tk.Button(output_footer,
+                                     text="▣ Clear",
+                                     bg=self.BG_CARD,
+                                     fg=self.TEXT_PRIMARY,
+                                     font=("Arial", 10, "bold"),
+                                     relief="solid",
+                                     borderwidth=1,
+                                     cursor="hand2",
+                                     command=self.clear_output,
+                                     padx=12,
+                                     pady=6,
+                                     highlightbackground=self.TEXT_PRIMARY,
+                                     activebackground=self.BG_TERTIARY)
+        clear_bottom_btn.pack(side="right")
 
 
     def add_gradient_effect(self, widget):
