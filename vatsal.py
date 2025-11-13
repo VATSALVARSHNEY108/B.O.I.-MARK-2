@@ -35,16 +35,14 @@ sys.path.insert(0, os.path.join(modules_dir, 'smart_features'))
 sys.path.insert(0, os.path.join(modules_dir, 'misc'))
 
 def main():
-    """Launch the Modern Web GUI application"""
+    """Launch the GUI application"""
     print("🚀 Starting VATSAL AI Desktop Automation...")
-    print("=" * 60)
-    print("🎨 Loading Modern Web GUI with eye-comforting design...")
     print("=" * 60)
     
     try:
-        # Import and run the Modern Web GUI
-        from modules.web.modern_web_gui import main as web_gui_main
-        web_gui_main()
+        # Import and run the GUI
+        from modules.core.gui_app import main as gui_main
+        gui_main()
     except Exception as e:
         print(f"❌ Error: {e}")
         import traceback
