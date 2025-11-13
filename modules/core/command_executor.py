@@ -1118,6 +1118,84 @@ class CommandExecutor:
                     "analysis": result
                 }
 
+            # ==================== SMART SCREEN ANALYSIS ====================
+            elif action == "smart_analyze_screen":
+                focus = parameters.get("focus", "general")
+                
+                print(f"\n🔍 Smart Screen Analysis (focus: {focus})...")
+                result = self.smart_screen_monitor.analyze_current_screen(focus)
+                
+                if result.get("success"):
+                    return {
+                        "success": True,
+                        "message": f"📸 Screen Analysis ({focus}):\n\n{result['analysis']}"
+                    }
+                else:
+                    return result
+
+            elif action == "detect_screen_changes":
+                interval = parameters.get("interval", 5)
+                duration = parameters.get("duration", 30)
+                
+                print(f"\n👁️ Detecting screen changes (interval: {interval}s, duration: {duration}s)...")
+                result = self.smart_screen_monitor.detect_screen_changes(interval, duration)
+                
+                return {
+                    "success": result.get("success", False),
+                    "message": result.get("message", "Screen change detection complete")
+                }
+
+            elif action == "monitor_for_content":
+                target = parameters.get("target", "")
+                check_interval = parameters.get("check_interval", 10)
+                max_checks = parameters.get("max_checks", 6)
+                
+                if not target:
+                    return {
+                        "success": False,
+                        "message": "Please specify what content to monitor for"
+                    }
+                
+                print(f"\n👀 Monitoring screen for: {target}")
+                result = self.smart_screen_monitor.monitor_for_content(target, check_interval, max_checks)
+                
+                return {
+                    "success": result.get("success", False),
+                    "message": result.get("message", "Content monitoring complete")
+                }
+
+            elif action == "productivity_check":
+                print("\n📊 Running productivity analysis...")
+                result = self.smart_screen_monitor.analyze_current_screen("productivity")
+                
+                if result.get("success"):
+                    return {
+                        "success": True,
+                        "message": f"📊 Productivity Analysis:\n\n{result['analysis']}"
+                    }
+                else:
+                    return result
+
+            elif action == "ask_about_screen":
+                question = parameters.get("question", "")
+                
+                if not question:
+                    return {
+                        "success": False,
+                        "message": "Please provide a question about the screen"
+                    }
+                
+                print(f"\n❓ Analyzing screen for: {question}")
+                result = self.smart_screen_monitor.analyze_current_screen("general")
+                
+                if result.get("success"):
+                    return {
+                        "success": True,
+                        "message": f"❓ Q: {question}\n\n💡 Analysis: {result['analysis']}"
+                    }
+                else:
+                    return result
+
             # ==================== SCREEN MONITORING ====================
             elif action == "monitor_screen":
                 query = parameters.get("query", "What's happening on my screen?")
