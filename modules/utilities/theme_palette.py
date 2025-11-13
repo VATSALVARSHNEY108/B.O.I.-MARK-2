@@ -38,7 +38,7 @@ class ThemePalette:
     """Centralized theme palette manager"""
     
     LIGHT_THEME = ColorScheme(
-        bg_base="#F6F5F0",
+        bg_base="#e8ded0",
         bg_secondary="#FAFAF8",
         bg_tertiary="#E8E7E2",
         bg_card="#FFFFFF",
@@ -47,9 +47,9 @@ class ThemePalette:
         accent_secondary="#A65BFF",
         accent_tertiary="#3ED1E0",
         
-        text_primary="#1E1E1E",
-        text_secondary="#4A4A4A",
-        text_tertiary="#7A7A7A",
+        text_primary="#000000",
+        text_secondary="#000000",
+        text_tertiary="#000000",
         
         border_primary="#D4D3CE",
         border_secondary="#E8E7E2",
