@@ -5,7 +5,7 @@ integrations = ["python_gemini:1.0.0", "spotify:1.0.0"]
 
 [nix]
 channel = "stable-25_05"
-packages = ["SDL2", "SDL2_image", "SDL2_mixer", "SDL2_ttf", "arrow-cpp", "borgbackup", "c-ares", "cacert", "cairo", "cargo", "chromedriver", "chromium", "cmake", "coreutils", "espeak-ng", "ffmpeg-full", "fontconfig", "freetype", "geckodriver", "ghostscript", "glibcLocales", "gmp", "gobject-introspection", "grpc", "gtk3", "iana-etc", "lcms2", "libGL", "libGLU", "libcxx", "liberfa", "libffi", "libiconv", "libimagequant", "libjpeg", "libpng", "libtiff", "libwebp", "libxcrypt", "openjpeg", "openssl", "pkg-config", "portmidi", "qhull", "rustc", "scrot", "sqlite", "tcl", "tigervnc", "tk", "util-linux", "x11vnc", "xcodebuild", "xorg.libX11", "xorg.libXext", "xorg.xinit", "xorg.xorgserver", "xsimd", "xvfb-run", "zbar", "zlib"]
+packages = ["SDL2", "SDL2_image", "SDL2_mixer", "SDL2_ttf", "arrow-cpp", "borgbackup", "c-ares", "cacert", "cairo", "cargo", "chromedriver", "chromium", "cmake", "coreutils", "espeak-ng", "ffmpeg-full", "fontconfig", "freetype", "geckodriver", "ghostscript", "glibcLocales", "gmp", "gobject-introspection", "grpc", "gtk3", "iana-etc", "lcms2", "libGL", "libGLU", "libcxx", "liberfa", "libffi", "libiconv", "libimagequant", "libjpeg", "libpng", "libtiff", "libwebp", "libxcrypt", "openjpeg", "openssl", "pkg-config", "portmidi", "python312Full", "qhull", "rustc", "scrot", "sqlite", "tcl", "tigervnc", "tk", "util-linux", "x11vnc", "xcodebuild", "xorg.libX11", "xorg.libXext", "xorg.xinit", "xorg.xorgserver", "xsimd", "xvfb-run", "zbar", "zlib"]
 
 [workflows]
 runButton = "Project"
@@ -19,6 +19,10 @@ author = "agent"
 task = "workflow.run"
 args = "VATSAL AI CLI"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Modern Web GUI"
+
 [[workflows.workflow]]
 name = "VATSAL AI CLI"
 author = "agent"
@@ -30,17 +34,29 @@ outputType = "console"
 task = "shell.exec"
 args = "python launchers/launch_cli.py"
 
+[[workflows.workflow]]
+name = "Modern Web GUI"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python launchers/launch_modern_web_gui.py"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
 [[ports]]
 localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 36919
-externalPort = 3001
-
-[[ports]]
 localPort = 39253
 externalPort = 3002
+
+[[ports]]
+localPort = 42361
+externalPort = 3001
 
 [[ports]]
 localPort = 42733

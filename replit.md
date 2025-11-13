@@ -12,12 +12,20 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 The AI Desktop Automation Controller is built with Python 3.11 and utilizes a modular architecture, enabling a wide range of desktop automation and AI-powered functionalities.
 
 ### UI/UX Decisions
-The system offers desktop GUI and CLI interfaces:
+The system offers desktop GUI, web GUI, and CLI interfaces:
 1.  **Original GUI** (`modules/core/gui_app.py`): A comprehensive, feature-rich interface with a tabbed design, live clock, quick-access buttons, and real-time console output.
 2.  **Enhanced Modern GUI** (`modules/core/enhanced_gui.py`): A redesigned interface featuring a dark theme, a dashboard with live statistics, sidebar navigation, 6 major views, a stunning color palette (navy blue backgrounds, purple-blue accents), hover effects, and a professional high-contrast appearance with a terminal-style command prompt bar.
-3.  **CLI Interface** (`launch_cli.py`): Command-line interface for cloud/headless environments (like Replit). Runs with xvfb for headless GUI automation. Perfect for remote deployment.
+3.  **Modern Web GUI** (`modules/web/modern_web_gui.py`): NEW! A beautiful web-based interface designed for eye comfort with an off-white/cream color scheme and 3D-like blocks. Features include:
+    -   **Eye-Comforting Design:** Soft off-white colors (#fafaf5, #f5f5f0, #e8e8dc) that reduce eye strain
+    -   **3D Block Effects:** Cards and panels with realistic shadows and depth for a modern look
+    -   **Real-Time Updates:** WebSocket integration for live command execution and status updates
+    -   **Responsive Layout:** Clean, organized interface with command input, output console, statistics, and command history
+    -   **Quick Actions:** One-click buttons for common tasks
+    -   **Live Clock & Status:** Real-time clock and online status indicator
+    -   **Accessible:** Works perfectly in browser, ideal for cloud/Replit environments
+4.  **CLI Interface** (`launch_cli.py`): Command-line interface for cloud/headless environments (like Replit). Runs with xvfb for headless GUI automation. Perfect for remote deployment.
 
-Both desktop GUIs are built with `tkinter` and support VATSAL Mode and Self-Operating Mode. All interfaces require `GEMINI_API_KEY` environment variable to be set.
+Desktop GUIs are built with `tkinter`. The Modern Web GUI is built with Flask and Flask-SocketIO. All interfaces require `GEMINI_API_KEY` environment variable to be set.
 
 ### Technical Implementations
 -   **AI Command Processing:** Gemini AI is integrated for natural language processing and converting commands into actions.
@@ -57,6 +65,27 @@ Both desktop GUIs are built with `tkinter` and support VATSAL Mode and Self-Oper
 -   **Utility Modules:** Includes integrations for Spotify, YouTube, Weather & News, Translation, Calculator, Password Vault, Quick Notes, Calendar Manager, Timer & Stopwatch, Quick Reminders, Habit Tracker, Color Tools, QR Code Tools, Screenshot Annotator, Image Resizer, Batch Form Filler, and Hand Gesture Controller.
 
 ## Recent Changes (November 2025)
+### Modern Web GUI (November 13, 2025)
+-   **New Eye-Comforting Interface:** Created a beautiful web-based GUI with off-white/cream colors and 3D-like blocks
+-   **Design Features:**
+    -   Soft, eye-comforting color palette (off-white backgrounds, cream accents)
+    -   3D block effects with realistic shadows and depth
+    -   Modern, clean layout with smooth hover effects
+    -   Real-time WebSocket communication for instant updates
+-   **Components:**
+    -   Voice command input with quick action buttons
+    -   Output console with color-coded messages
+    -   Statistics panel showing commands run, success rate, and active time
+    -   Recent commands history list
+    -   Live clock and online status indicator
+-   **Accessibility:** Works perfectly in browser environments, ideal for Replit cloud deployment
+-   **Launch Command:** `python launchers/launch_modern_web_gui.py`
+-   **File Locations:**
+    -   Backend: `modules/web/modern_web_gui.py`
+    -   Frontend HTML: `templates/modern_gui.html`
+    -   CSS: `static/modern_gui.css`
+    -   JavaScript: `static/modern_gui.js`
+
 ### Smart Screen Analysis Feature (November 13, 2025)
 -   **Smart Analyze Screen:** Implemented complete smart screen monitoring feature with 5 action handlers
 -   **Commands Available:**

@@ -1,8 +1,8 @@
 [project]
 name = "repl-nix-workspace"
 version = "0.1.0"
-description = "VATSAL AI Desktop Automation - Python 3.13+ Compatible"
-requires-python = ">=3.13"
+description = "VATSAL AI Desktop Automation - Python 3.11+ Compatible"
+requires-python = ">=3.11"
 dependencies = [
     "cryptography>=43.0.3",
     "psutil>=6.1.0",
