@@ -2,6 +2,7 @@ import os
 import json
 import time
 import random
+import copy
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
@@ -11,6 +12,11 @@ load_dotenv()
 
 # Initialize client - will be set when API key is available
 client = None
+
+# Simple response cache for frequently asked queries (speeds up repeated commands)
+_response_cache = {}
+_cache_max_size = 100
+_cache_access_order = []  # Track access order for LRU eviction
 
 
 class GeminiServiceError(Exception):
@@ -31,20 +37,20 @@ def get_client():
     return client
 
 
-def _invoke_gemini(model: str, contents, config=None, max_attempts: int = 4):
+def _invoke_gemini(model: str, contents, config=None, max_attempts: int = 3):
     """
     Invoke Gemini API with exponential backoff retry logic.
     
     Handles 429 (RESOURCE_EXHAUSTED) and 503 (UNAVAILABLE) errors with:
     - Exponential backoff with jitter
-    - Model fallback from gemini-2.0-flash to gemini-2.0-flash
+    - Model fallback from gemini-2.0-flash to gemini-1.5-flash-8b (faster model)
     - User-friendly error messages
     
     Args:
         model: Model name to use (e.g., 'gemini-2.0-flash')
         contents: Content to send to the model
         config: Optional GenerateContentConfig
-        max_attempts: Maximum retry attempts per model (default: 4)
+        max_attempts: Maximum retry attempts per model (default: 3, optimized for speed)
     
     Returns:
         API response object
@@ -53,7 +59,7 @@ def _invoke_gemini(model: str, contents, config=None, max_attempts: int = 4):
         GeminiServiceError: When all retries exhausted
     """
     api_client = get_client()
-    models_to_try = [model, "gemini-2.0-flash"]
+    models_to_try = [model, "gemini-1.5-flash-8b"]
     last_error = None
     last_status_code = None
     
@@ -88,16 +94,16 @@ def _invoke_gemini(model: str, contents, config=None, max_attempts: int = 4):
                     raise
                 
                 if attempt < max_attempts - 1:
-                    base_delay = 2 ** attempt
-                    jitter = random.uniform(0, 0.5)
-                    wait_time = min(base_delay + jitter, 8.0)
+                    base_delay = 1.5 ** attempt
+                    jitter = random.uniform(0, 0.3)
+                    wait_time = min(base_delay + jitter, 5.0)
                     
                     print(f"⚠️ {error_type} ({last_status_code}) with {current_model}. "
                           f"Retry {attempt + 1}/{max_attempts} in {wait_time:.1f}s...")
                     time.sleep(wait_time)
                 else:
                     if model_idx == 0:
-                        print(f"⚠️ Max retries reached for {current_model}. Trying fallback model...")
+                        print(f"⚠️ Max retries reached for {current_model}. Trying faster fallback model...")
                     else:
                         print(f"❌ All retries exhausted for both models")
     
@@ -149,11 +155,68 @@ def validate_command_structure(data: dict) -> dict:
     
     return data
 
+def _normalize_cache_key(user_input: str) -> str:
+    """Normalize user input to cache key, returns empty string if invalid"""
+    if not user_input or not user_input.strip():
+        return ""
+    return user_input.lower().strip()
+
+def _should_cache(response: dict) -> bool:
+    """Determine if response should be cached (only non-error responses)"""
+    return response.get("action") != "error"
+
+def _make_error_response(description: str, error: str = "", status_code: str = "") -> dict:
+    """Create standardized error response"""
+    return {
+        "action": "error",
+        "parameters": {"error": error} if error else {},
+        "steps": [],
+        "description": description
+    }
+
+def _return_isolated(response: dict) -> dict:
+    """Return deep copy of response to ensure mutation isolation"""
+    return copy.deepcopy(response)
+
+def _evict_lru_if_needed():
+    """Remove least recently used cache entry if at max size"""
+    global _response_cache, _cache_access_order
+    if len(_response_cache) >= _cache_max_size and _cache_access_order:
+        oldest_key = _cache_access_order.pop(0)
+        _response_cache.pop(oldest_key, None)
+
+def _record_cache_hit(cache_key: str):
+    """Update LRU tracking for cache hit"""
+    global _cache_access_order
+    if cache_key in _cache_access_order:
+        _cache_access_order.remove(cache_key)
+    _cache_access_order.append(cache_key)
+
+def _store_cache_entry(cache_key: str, response: dict):
+    """Store response in cache with deep copy and LRU tracking"""
+    global _response_cache, _cache_access_order
+    _evict_lru_if_needed()
+    _response_cache[cache_key] = copy.deepcopy(response)
+    _cache_access_order.append(cache_key)
+
 def parse_command(user_input: str) -> dict:
     """
     Uses Gemini to parse natural language commands into structured actions.
     Returns a dict with 'action', 'parameters', and 'steps' for multi-step workflows.
+    Includes LRU response caching with deep copy isolation for faster repeated queries.
     """
+    global _response_cache
+    
+    # Normalize cache key
+    cache_key = _normalize_cache_key(user_input)
+    if not cache_key:
+        return _return_isolated(_make_error_response("Empty command"))
+    
+    # Check cache first for faster response (cache hit path)
+    if cache_key in _response_cache:
+        _record_cache_hit(cache_key)
+        return _return_isolated(_response_cache[cache_key])
+    
     system_prompt = """You are a desktop automation assistant. Parse user commands into structured JSON actions.
 
 Available actions:
@@ -737,41 +800,42 @@ For multi-step workflows, each step in steps array should have: {"action": "..."
             config=types.GenerateContentConfig(
                 system_instruction=system_prompt,
                 response_mime_type="application/json",
+                temperature=0.1,
+                top_p=0.9,
+                max_output_tokens=500,
             ),
         )
 
         if response.text:
             result = json.loads(response.text)
-            return validate_command_structure(result)
+            validated_result = validate_command_structure(result)
+            
+            # Cache miss path: cache if successful, then return isolated copy
+            if _should_cache(validated_result):
+                _store_cache_entry(cache_key, validated_result)
+                return _return_isolated(_response_cache[cache_key])
+            
+            # Error responses: don't cache, but still return isolated
+            return _return_isolated(validated_result)
         else:
-            return {
-                "action": "error",
-                "parameters": {},
-                "steps": [],
-                "description": "Could not parse command"
-            }
+            return _return_isolated(_make_error_response("Could not parse command"))
 
     except GeminiServiceError as e:
-        return {
-            "action": "error",
-            "parameters": {"error": e.message, "status_code": e.status_code},
-            "steps": [],
-            "description": e.message
-        }
+        return _return_isolated(_make_error_response(
+            e.message,
+            error=e.message,
+            status_code=e.status_code or ""
+        ))
     except json.JSONDecodeError as e:
-        return {
-            "action": "error",
-            "parameters": {"error": str(e)},
-            "steps": [],
-            "description": "Invalid JSON response from AI"
-        }
+        return _return_isolated(_make_error_response(
+            "Invalid JSON response from AI",
+            error=str(e)
+        ))
     except Exception as e:
-        return {
-            "action": "error",
-            "parameters": {"error": str(e)},
-            "steps": [],
-            "description": f"Error parsing command: {str(e)}"
-        }
+        return _return_isolated(_make_error_response(
+            f"Error parsing command: {str(e)}",
+            error=str(e)
+        ))
 
 def get_ai_suggestion(context: str) -> str:
     """

@@ -82,7 +82,12 @@ Provide a helpful, conversational response:"""
             
             response = client.models.generate_content(
                 model='gemini-2.0-flash',
-                contents=prompt
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.7,
+                    top_p=0.9,
+                    max_output_tokens=800,
+                )
             )
             
             reply = response.text
@@ -117,7 +122,12 @@ Provide a helpful, professional, and empathetic response addressing the customer
             
             response = client.models.generate_content(
                 model='gemini-2.0-flash',
-                contents=prompt
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.5,
+                    top_p=0.9,
+                    max_output_tokens=600,
+                )
             )
             
             return response.text
@@ -142,7 +152,12 @@ Provide a clear, educational explanation with examples. Break down complex conce
             
             response = client.models.generate_content(
                 model='gemini-2.0-flash',
-                contents=prompt
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.4,
+                    top_p=0.9,
+                    max_output_tokens=700,
+                )
             )
             
             return response.text
@@ -165,7 +180,12 @@ Provide an expert-level response with specific details, facts, and insights:"""
             
             response = client.models.generate_content(
                 model='gemini-2.0-flash',
-                contents=prompt
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.3,
+                    top_p=0.9,
+                    max_output_tokens=800,
+                )
             )
             
             return response.text
@@ -197,7 +217,12 @@ Write an engaging, well-structured story:"""
             
             response = client.models.generate_content(
                 model='gemini-2.0-flash',
-                contents=instruction
+                contents=instruction,
+                config=types.GenerateContentConfig(
+                    temperature=0.9,
+                    top_p=0.95,
+                    max_output_tokens=1500,
+                )
             )
             
             return response.text

@@ -71,8 +71,8 @@ Guidelines:
                 "timestamp": datetime.now().isoformat()
             })
             
-            # Build conversation context (last 15 messages for better context)
-            recent_history = self.conversation_history[-15:]
+            # Build conversation context (last 10 messages - optimized for speed)
+            recent_history = self.conversation_history[-10:]
             
             # Format conversation for the prompt
             conversation_text = ""
@@ -83,15 +83,15 @@ Guidelines:
             # Create the full prompt with context
             full_prompt = f"{conversation_text}VATSAL:"
             
-            # Get response from Gemini
+            # Get response from Gemini with optimized config for faster responses
             response = self.client.models.generate_content(
                 model=self.model,
                 contents=full_prompt,
                 config=types.GenerateContentConfig(
                     system_instruction=self.system_prompt,
-                    temperature=0.8,
-                    max_output_tokens=1500,
-                    top_p=0.95,
+                    temperature=0.7,
+                    max_output_tokens=800,
+                    top_p=0.9,
                 )
             )
             
@@ -217,8 +217,9 @@ Guidelines:
                 model=self.model,
                 contents=summary_prompt,
                 config=types.GenerateContentConfig(
-                    temperature=0.3,
-                    max_output_tokens=300,
+                    temperature=0.2,
+                    max_output_tokens=250,
+                    top_p=0.9,
                 )
             )
             
