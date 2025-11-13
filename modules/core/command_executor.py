@@ -1157,12 +1157,20 @@ class CommandExecutor:
                     }
                 
                 print(f"\n👀 Monitoring screen for: {target}")
-                result = self.smart_screen_monitor.monitor_for_content(target, check_interval, max_checks)
+                result = self.smart_screen_monitor.monitor_for_specific_content(target, check_interval, max_checks)
                 
-                return {
-                    "success": result.get("success", False),
-                    "message": result.get("message", "Content monitoring complete")
-                }
+                if result.get("success"):
+                    # Preserve all original data from SmartScreenMonitor
+                    if result.get("found"):
+                        # Build user-friendly message but keep all original fields
+                        user_message = f"✅ {result.get('message', 'Content found!')}"
+                        if result.get('details'):
+                            user_message += f"\n\n{result['details']}"
+                        # Update message but preserve all other fields
+                        result["message"] = user_message
+                    return result
+                else:
+                    return result
 
             elif action == "productivity_check":
                 print("\n📊 Running productivity analysis...")
@@ -1186,12 +1194,15 @@ class CommandExecutor:
                     }
                 
                 print(f"\n❓ Analyzing screen for: {question}")
-                result = self.smart_screen_monitor.analyze_current_screen("general")
+                result = self.smart_screen_monitor.smart_screenshot_with_context(question)
                 
                 if result.get("success"):
                     return {
                         "success": True,
-                        "message": f"❓ Q: {question}\n\n💡 Analysis: {result['analysis']}"
+                        "message": f"❓ Q: {result['question']}\n\n💡 Answer: {result['answer']}",
+                        "screenshot": result.get("screenshot"),
+                        "question": result.get("question"),
+                        "answer": result.get("answer")
                     }
                 else:
                     return result
