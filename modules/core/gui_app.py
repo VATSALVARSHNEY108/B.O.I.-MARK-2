@@ -204,11 +204,14 @@ class ModernVATSALGUI:
             
             # Gesture voice activator
             try:
-                self.gesture_voice_activator = create_gesture_voice_activator()
+                self.gesture_voice_activator = create_gesture_voice_activator(
+                    on_speech_callback=self.handle_voice_command
+                )
                 self.gesture_voice_active = False
             except Exception as e:
                 self.gesture_voice_activator = None
                 self.gesture_voice_active = False
+                print(f"⚠️ Gesture voice activator unavailable: {e}")
             
             # Hand gesture detector
             try:
@@ -882,14 +885,17 @@ class ModernVATSALGUI:
     
     def toggle_wakeup_listener(self):
         """Toggle wakeup word listener"""
-        self.wakeup_listening = not self.wakeup_listening
-        
-        if self.wakeup_listening:
+        if not self.wakeup_listening:
+            # Start listening
+            self.wakeup_listening = True
             self.wakeup_btn.config(bg=self.ACTIVE_GREEN, fg="white")
             self.update_output("\n👂 Wakeup word listener activated\n", "success")
             
             # Start voice listening if available
-            if self.voice_commander and not self.voice_listening:
+            if self.voice_commander:
+                if self.voice_listening:
+                    self.update_output("⚠️ Voice listener already active\n", "warning")
+                    return
                 try:
                     self.voice_listening = True
                     self.voice_commander.start_continuous_listening(callback=self.handle_voice_command)
@@ -897,8 +903,15 @@ class ModernVATSALGUI:
                 except Exception as e:
                     self.update_output(f"⚠️ Could not start listener: {e}\n", "warning")
                     self.wakeup_listening = False
+                    self.voice_listening = False
                     self.wakeup_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
+            else:
+                self.update_output("⚠️ Voice commander not available\n", "warning")
+                self.wakeup_listening = False
+                self.wakeup_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
         else:
+            # Stop listening
+            self.wakeup_listening = False
             self.wakeup_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
             self.update_output("\n👂 Wakeup word listener deactivated\n", "warning")
             
@@ -909,48 +922,80 @@ class ModernVATSALGUI:
                     self.voice_commander.stop_continuous_listening()
                 except Exception as e:
                     print(f"Error stopping listener: {e}")
+                    # Force reset on error
+                    self.voice_listening = False
     
     def toggle_v_sign_detector(self):
-        """Toggle V-sign gesture detector"""
-        self.vsign_detecting = not self.vsign_detecting
-        
-        if self.vsign_detecting:
+        """Toggle V-sign gesture detector with voice activation"""
+        if not self.vsign_detecting:
+            # Starting detector
+            self.vsign_detecting = True
             self.vsign_btn.config(bg=self.ACTIVE_GREEN, fg="white")
             self.update_output("\n✌️ V-sign detector activated\n", "success")
+            self.update_output("Show ONE V-sign for 1 second to start voice listening\n", "info")
+            self.update_output("Show TWO V-signs to trigger VATSAL greeting\n", "info")
             
-            # Start gesture detection if available
-            if self.gesture_assistant and not self.gesture_running:
+            # Start gesture voice activator if available
+            if self.gesture_voice_activator:
+                if self.gesture_voice_active:
+                    self.update_output("⚠️ Gesture voice already running\n", "warning")
+                    return
+                    
                 try:
-                    result = self.gesture_assistant.start()
-                    self.gesture_running = True
-                    self.update_output("Gesture detection active - show V-sign to trigger\n", "info")
-                    if result.get('status') == 'error':
-                        self.update_output(f"⚠️ {result.get('message', 'Unknown error')}\n", "warning")
+                    # Register stop callback before starting
+                    self.gesture_voice_activator.set_stop_callback(self._on_gesture_voice_stopped)
+                    self.gesture_voice_active = True
+                    
+                    # Run gesture voice activator in background thread
+                    def run_gesture_voice():
+                        try:
+                            self.gesture_voice_activator.run()
+                        except Exception as e:
+                            print(f"Gesture voice error: {e}")
+                        finally:
+                            # Callback is called automatically in the run method
+                            pass
+                    
+                    threading.Thread(target=run_gesture_voice, daemon=True).start()
+                    self.update_output("Camera activated - show V-sign!\n", "success")
                 except Exception as e:
                     self.update_output(f"⚠️ Could not start detector: {e}\n", "warning")
                     self.vsign_detecting = False
+                    self.gesture_voice_active = False
                     self.vsign_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
-            elif not self.gesture_assistant:
-                self.update_output("⚠️ Gesture detector not available\n", "warning")
+            else:
+                self.update_output("⚠️ Gesture voice activator not available\n", "warning")
                 self.vsign_detecting = False
                 self.vsign_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
         else:
+            # Stopping detector
+            self.vsign_detecting = False
             self.vsign_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
             self.update_output("\n✌️ V-sign detector deactivated\n", "warning")
             
-            # Stop gesture detection
-            if self.gesture_assistant and self.gesture_running:
+            # Stop gesture voice activator
+            if self.gesture_voice_activator and self.gesture_voice_active:
                 try:
-                    self.gesture_running = False
-                    self.gesture_assistant.stop()
+                    self.gesture_voice_activator.stop()
+                    # _on_gesture_voice_stopped will be called automatically via callback
                 except Exception as e:
                     print(f"Error stopping detector: {e}")
+                    # Force reset state on error
+                    self.gesture_voice_active = False
+    
+    def _on_gesture_voice_stopped(self):
+        """Callback when gesture voice activator stops"""
+        self.gesture_voice_active = False
+        # Only reset button if detector was still marked as active
+        if self.vsign_detecting:
+            self.root.after(0, lambda: self.vsign_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY))
+            self.vsign_detecting = False
     
     def toggle_speaking(self):
         """Toggle text-to-speech"""
-        self.speaking_enabled = not self.speaking_enabled
-        
-        if self.speaking_enabled:
+        if not self.speaking_enabled:
+            # Enable speaking
+            self.speaking_enabled = True
             self.speaking_btn.config(bg=self.ACTIVE_GREEN, fg="white")
             self.update_output("\n🗣️ Speaking mode enabled\n", "success")
             
@@ -967,6 +1012,8 @@ class ModernVATSALGUI:
                 self.speaking_enabled = False
                 self.speaking_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
         else:
+            # Disable speaking
+            self.speaking_enabled = False
             self.speaking_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
             self.update_output("\n🗣️ Speaking mode disabled\n", "warning")
     

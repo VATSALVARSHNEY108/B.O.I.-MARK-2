@@ -172,6 +172,11 @@ class GestureVoiceActivator:
     def set_stop_callback(self, callback: Callable[[], None]):
         """Allow GUI to register a callback when stopped"""
         self.on_stop_callback = callback
+    
+    def stop(self):
+        """Stop the gesture voice activator"""
+        self.running = False
+        print("\n⏹️ Stopping gesture voice activator...")
 
     # ------------------------------------------------------
     def initialize_camera(self, camera_index):
