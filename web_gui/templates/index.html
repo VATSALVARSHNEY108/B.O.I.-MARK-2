@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V.A.T.S.A.L - Vastly Advanced Technological System Above Limitations</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="title-section">
+                <h1 class="main-title">
+                    <span class="star">✦</span>
+                    V.A.T.S.A.L
+                    <span class="star">✦</span>
+                </h1>
+                <p class="subtitle">Vastly Advanced Technological System Above Limitations</p>
+            </div>
+            <div class="status-bar">
+                <div class="status-item">
+                    <span id="current-date">Thursday, November 13, 2025</span>
+                    <span class="separator">•</span>
+                    <span id="current-time">02:06:14 PM</span>
+                </div>
+                <div class="status-item">
+                    <span class="separator">•</span>
+                    <span id="feature-count">100+ AI Features Available</span>
+                </div>
+                <div class="status-toggles">
+                    <button class="status-toggle active" id="vatsal-toggle">
+                        <span class="toggle-dot"></span>
+                        VATSAL: ON
+                    </button>
+                    <button class="status-toggle active" id="self-operating-toggle">
+                        <span class="toggle-icon">🤖</span>
+                        Self-Operating: ON
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <section class="command-section">
+            <div class="section-header">
+                <span class="section-icon">➕</span>
+                <h2>Command Input</h2>
+            </div>
+            <div class="command-input-area">
+                <input 
+                    type="text" 
+                    id="command-input" 
+                    class="command-input" 
+                    placeholder="Enter your command here..."
+                    autocomplete="off"
+                >
+                <div class="command-buttons">
+                    <button class="btn-execute" id="execute-btn">
+                        <span class="btn-icon">▶</span>
+                        Execute
+                    </button>
+                    <button class="icon-btn" id="settings-btn" title="Settings">
+                        <span>🔧</span>
+                    </button>
+                    <button class="icon-btn" id="volume-btn" title="Volume">
+                        <span>🔊</span>
+                    </button>
+                    <button class="icon-btn" id="power-btn" title="Power Options">
+                        <span>⚡</span>
+                    </button>
+                    <button class="icon-btn" id="theme-btn" title="Toggle Theme">
+                        <span>🎨</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="output-section">
+            <div class="section-header">
+                <div class="header-left">
+                    <span class="section-icon">≡</span>
+                    <h2>Output Console</h2>
+                </div>
+                <button class="btn-clear" id="clear-btn-top">
+                    <span class="btn-icon">■</span>
+                    Clear
+                </button>
+            </div>
+            <div class="output-console" id="output-console">
+                <div class="console-message system-message">
+                    <strong>VATSAL:</strong><br>
+                    Right away, Boss!
+                </div>
+                <div class="console-message response-message">
+                    <strong>Acknowledged:</strong> "Done, Hey there! What can I help you with today?"
+                </div>
+                <div class="console-message suggestion-message">
+                    Might I suggest, Vatsal Sir, providing me a taskk? I can assist ahnhting the weather to drafting an email, or generating some Python code. Just let me know you require. At
+                </div>
+                <div class="console-message technical-message">
+                    <span class="tech-icon">≡</span> <strong>Technical Details:</strong><br>
+                    Hey there! What man I help you with today?
+                </div>
+                <div class="console-message query-message">
+                    Would you like me organize your downloads folder?
+                </div>
+            </div>
+            <div class="console-footer">
+                <button class="btn-clear" id="clear-btn-bottom">
+                    <span class="btn-icon">■</span>
+                    Clear
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
