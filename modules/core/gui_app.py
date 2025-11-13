@@ -416,15 +416,25 @@ class ModernVATSALGUI:
     
     def _create_header(self, parent):
         """Create header with title and status bar"""
+        # Outer shadow for 3D effect
+        header_shadow_outer = tk.Frame(parent, bg="#A0A0A0", bd=0)
+        header_shadow_outer.pack(fill="x", pady=(0, 20))
+        
+        header_shadow_mid = tk.Frame(header_shadow_outer, bg="#B8B8B8", bd=0)
+        header_shadow_mid.pack(fill="x", padx=(0, 6), pady=(0, 6))
+        
+        header_shadow_inner = tk.Frame(header_shadow_mid, bg="#D0D0D0", bd=0)
+        header_shadow_inner.pack(fill="x", padx=(0, 3), pady=(0, 3))
+        
         header = tk.Frame(
-            parent,
+            header_shadow_inner,
             bg=self.BG_SECONDARY,
-            relief="solid",
-            borderwidth=2,
-            highlightbackground=self.BORDER_PRIMARY,
-            highlightthickness=0
+            relief="raised",
+            borderwidth=3,
+            highlightbackground="#FFFFFF",
+            highlightthickness=1
         )
-        header.pack(fill="x", pady=(0, 20))
+        header.pack(fill="x")
         
         # Title section - REDUCED PADDING
         title_section = tk.Frame(header, bg=self.BG_SECONDARY)
@@ -644,14 +654,25 @@ class ModernVATSALGUI:
     
     def _create_command_section(self, parent):
         """Create command input section"""
+        # Outer shadow for 3D effect
+        section_shadow_outer = tk.Frame(parent, bg="#A0A0A0", bd=0)
+        section_shadow_outer.pack(fill="x", pady=(0, 20))
+        
+        section_shadow_mid = tk.Frame(section_shadow_outer, bg="#B8B8B8", bd=0)
+        section_shadow_mid.pack(fill="x", padx=(0, 6), pady=(0, 6))
+        
+        section_shadow_inner = tk.Frame(section_shadow_mid, bg="#D0D0D0", bd=0)
+        section_shadow_inner.pack(fill="x", padx=(0, 3), pady=(0, 3))
+        
         section = tk.Frame(
-            parent,
+            section_shadow_inner,
             bg=self.BG_SECONDARY,
-            relief="solid",
-            borderwidth=2,
-            highlightbackground=self.BORDER_PRIMARY
+            relief="raised",
+            borderwidth=3,
+            highlightbackground="#FFFFFF",
+            highlightthickness=1
         )
-        section.pack(fill="x", pady=(0, 20))
+        section.pack(fill="x")
         
         # Section header
         header = tk.Frame(section, bg=self.BG_SECONDARY)
@@ -804,12 +825,23 @@ class ModernVATSALGUI:
     
     def _create_output_section(self, parent):
         """Create output console section"""
+        # Outer shadow for 3D effect
+        output_shadow_outer = tk.Frame(parent, bg="#A0A0A0", bd=0)
+        output_shadow_outer.pack(fill="both", expand=True)
+        
+        output_shadow_mid = tk.Frame(output_shadow_outer, bg="#B8B8B8", bd=0)
+        output_shadow_mid.pack(fill="both", expand=True, padx=(0, 6), pady=(0, 6))
+        
+        output_shadow_inner = tk.Frame(output_shadow_mid, bg="#D0D0D0", bd=0)
+        output_shadow_inner.pack(fill="both", expand=True, padx=(0, 3), pady=(0, 3))
+        
         section = tk.Frame(
-            parent,
+            output_shadow_inner,
             bg=self.BG_SECONDARY,
-            relief="solid",
-            borderwidth=2,
-            highlightbackground=self.BORDER_PRIMARY
+            relief="raised",
+            borderwidth=3,
+            highlightbackground="#FFFFFF",
+            highlightthickness=1
         )
         section.pack(fill="both", expand=True)
         
