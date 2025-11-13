@@ -300,6 +300,15 @@ class AutomationControllerGUI:
         # Auto-initialize desktop sync on startup
         threading.Thread(target=self.auto_desktop_sync, daemon=True).start()
 
+        # Initialize Web GUI Integration
+        try:
+            from web_gui.vnc_integration import integrate_vnc_with_web_gui
+            self.web_integration = integrate_vnc_with_web_gui(self)
+            print("✅ Web GUI Bridge connected - Commands from Web GUI will be executed here")
+        except Exception as e:
+            self.web_integration = None
+            print(f"⚠️ Web GUI Integration unavailable: {e}")
+
         self.show_vatsal_greeting()
 
     def setup_ui(self):
