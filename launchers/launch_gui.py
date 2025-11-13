@@ -8,7 +8,7 @@ import sys
 import os
 
 # Add all module directories to Python path
-workspace_dir = os.path.dirname(os.path.abspath(__file__))
+workspace_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 modules_dir = os.path.join(workspace_dir, 'modules')
 
 # Add modules and all subdirectories to path
@@ -41,7 +41,7 @@ def main():
         print("=" * 60)
         
         # Import and run the GUI app
-        from gui_app import main as gui_main
+        from modules.core.gui_app import main as gui_main
         
         gui_main()
         

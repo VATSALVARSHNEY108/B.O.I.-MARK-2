@@ -13,7 +13,13 @@ The AI Desktop Automation Controller is built with Python 3.11 and utilizes a mo
 
 ### UI/UX Decisions
 The system offers desktop GUI, web GUI, and CLI interfaces:
-1.  **Original GUI** (`modules/core/gui_app.py`): A comprehensive, feature-rich interface with a tabbed design, live clock, quick-access buttons, and real-time console output.
+1.  **Modern Cloud Linen GUI** (`modules/core/gui_app.py`): NEW! A beautifully redesigned tkinter interface featuring the modern Cloud Linen theme with neon cyber accents for VNC display. Features include:
+    -   **Eye-Comforting Design:** Soft, matte off-white base (#F6F5F0 Cloud Linen) with warm accents that reduce eye strain during extended use
+    -   **Neon Cyber Accents:** Vibrant neon colors - Mint (#00F2A6), Purple Glow (#A65BFF), and Cyan (#3ED1E0) - for a modern, futuristic aesthetic
+    -   **Professional Look:** Clean, sophisticated interface with smooth gradients and subtle shadows for depth
+    -   **Theme System:** Centralized ThemePalette module (`modules/utilities/theme_palette.py`) with semantic color constants for easy theming
+    -   **Accessibility:** High contrast ratios for text readability (Dark text #1E1E1E on light backgrounds)
+    -   **Dual Theme Support:** Built-in support for both light (Cloud Linen) and dark themes, switchable at runtime
 2.  **Enhanced Modern GUI** (`modules/core/enhanced_gui.py`): A redesigned interface featuring a dark theme, a dashboard with live statistics, sidebar navigation, 6 major views, a stunning color palette (navy blue backgrounds, purple-blue accents), hover effects, and a professional high-contrast appearance with a terminal-style command prompt bar.
 3.  **Modern Web GUI** (`modules/web/modern_web_gui.py`): NEW! A beautiful web-based interface designed for eye comfort with an off-white/cream color scheme and 3D-like blocks. Features include:
     -   **Eye-Comforting Design:** Soft off-white colors (#fafaf5, #f5f5f0, #e8e8dc) that reduce eye strain
