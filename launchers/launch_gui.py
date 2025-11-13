@@ -6,6 +6,14 @@ Launch the main GUI application with all features
 
 import sys
 import os
+import glob
+
+# Set LD_LIBRARY_PATH for numpy and other C++ dependent packages
+stdenv_lib_paths = glob.glob('/nix/store/*-gcc-*/lib')
+if stdenv_lib_paths:
+    current_ld_path = os.environ.get('LD_LIBRARY_PATH', '')
+    new_paths = ':'.join(stdenv_lib_paths)
+    os.environ['LD_LIBRARY_PATH'] = f"{new_paths}:{current_ld_path}" if current_ld_path else new_paths
 
 # Add all module directories to Python path
 workspace_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
