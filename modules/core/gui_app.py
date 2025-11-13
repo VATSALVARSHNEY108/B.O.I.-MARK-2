@@ -5,7 +5,7 @@ import os
 import sys
 from datetime import datetime
 from dotenv import load_dotenv
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageDraw
 
 from modules.core.gemini_controller import parse_command, get_ai_suggestion
 from modules.core.command_executor import CommandExecutor
@@ -332,8 +332,47 @@ class ModernVATSALGUI:
         # Output console section
         self._create_output_section(main_container)
     
+    def create_rounded_rectangle(self, width, height, radius, color):
+        """Create a rounded rectangle image using PIL"""
+        image = Image.new('RGBA', (width, height), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(image)
+        
+        # Draw rounded rectangle
+        draw.rounded_rectangle(
+            [(0, 0), (width-1, height-1)],
+            radius=radius,
+            fill=color
+        )
+        
+        return ImageTk.PhotoImage(image)
+    
+    def round_corners_canvas(self, canvas, width, height, radius, fill_color, outline_color=None, outline_width=0):
+        """Draw a rounded rectangle on a canvas"""
+        points = [
+            radius, 0,
+            width-radius, 0,
+            width, 0,
+            width, radius,
+            width, height-radius,
+            width, height,
+            width-radius, height,
+            radius, height,
+            0, height,
+            0, height-radius,
+            0, radius,
+            0, 0
+        ]
+        
+        return canvas.create_polygon(
+            points,
+            smooth=True,
+            fill=fill_color,
+            outline=outline_color or fill_color,
+            width=outline_width
+        )
+    
     def create_rounded_button(self, parent, text, command, bg_color=None, fg_color=None, width=None, height=None):
-        """Create a button with enhanced 3D effect and dramatic shadows"""
+        """Create a button with enhanced 3D effect, dramatic shadows, and rounded corners"""
         if bg_color is None:
             bg_color = self.BUTTON_BG
         if fg_color is None:
@@ -350,21 +389,18 @@ class ModernVATSALGUI:
         inner_shadow = tk.Frame(mid_shadow, bg="#CCCCCC", bd=0)
         inner_shadow.pack(padx=(0, 3), pady=(0, 3))
         
-        # Button container with bright highlight border for 3D effect
-        btn_container = tk.Frame(
-            inner_shadow, 
-            bg=bg_color, 
-            bd=2,
-            relief="raised",
-            highlightthickness=2,
-            highlightbackground="#FFFFFF",
-            highlightcolor="#FFFFFF"
+        # Canvas for rounded corners
+        canvas = tk.Canvas(
+            inner_shadow,
+            bg=self.BG_PRIMARY,
+            highlightthickness=0,
+            bd=0
         )
-        btn_container.pack()
+        canvas.pack()
         
-        # Actual button with enhanced appearance
+        # Actual button with enhanced appearance and rounded style
         btn = tk.Button(
-            btn_container,
+            canvas,
             text=text,
             command=command,
             bg=bg_color,
@@ -376,7 +412,8 @@ class ModernVATSALGUI:
             pady=10,
             cursor="hand2",
             activebackground=self.BUTTON_HOVER,
-            activeforeground=fg_color
+            activeforeground=fg_color,
+            borderwidth=0
         )
         
         if width:
@@ -384,28 +421,60 @@ class ModernVATSALGUI:
         if height:
             btn.config(height=height)
         
-        btn.pack()
+        # Create window in canvas for rounded effect
+        btn_window = canvas.create_window(0, 0, anchor='nw', window=btn)
+        
+        # Update canvas size to match button
+        btn.update_idletasks()
+        btn_width = btn.winfo_reqwidth()
+        btn_height = btn.winfo_reqheight()
+        
+        # Draw rounded rectangle background
+        radius = 15
+        canvas.config(width=btn_width, height=btn_height)
+        
+        # Draw rounded background
+        canvas_bg = canvas.create_rounded_rectangle = lambda x1, y1, x2, y2, r, **kwargs: canvas.create_polygon(
+            x1+r, y1,
+            x1+r, y1,
+            x2-r, y1,
+            x2-r, y1,
+            x2, y1,
+            x2, y1+r,
+            x2, y1+r,
+            x2, y2-r,
+            x2, y2-r,
+            x2, y2,
+            x2-r, y2,
+            x2-r, y2,
+            x1+r, y2,
+            x1+r, y2,
+            x1, y2,
+            x1, y2-r,
+            x1, y2-r,
+            x1, y1+r,
+            x1, y1+r,
+            x1, y1,
+            smooth=True,
+            **kwargs
+        )
         
         # Enhanced hover effects with dramatic 3D lift
         def on_enter(e):
             if btn['bg'] != self.ACTIVE_GREEN:
                 btn.config(bg=self.BUTTON_HOVER)
                 mid_shadow.pack_configure(padx=(0, 8), pady=(0, 8))
-                btn_container.config(relief="raised", bd=3)
         
         def on_leave(e):
             if btn['bg'] != self.ACTIVE_GREEN:
                 btn.config(bg=bg_color)
                 mid_shadow.pack_configure(padx=(0, 6), pady=(0, 6))
-                btn_container.config(relief="raised", bd=2)
         
         def on_press(e):
             mid_shadow.pack_configure(padx=(0, 2), pady=(0, 2))
-            btn_container.config(relief="sunken", bd=1)
         
         def on_release(e):
             mid_shadow.pack_configure(padx=(0, 6), pady=(0, 6))
-            btn_container.config(relief="raised", bd=2)
         
         btn.bind("<Enter>", on_enter)
         btn.bind("<Leave>", on_leave)
@@ -547,19 +616,22 @@ class ModernVATSALGUI:
         vatsal_shadow_mid = tk.Frame(vatsal_shadow_outer, bg="#B0B0B0", bd=0)
         vatsal_shadow_mid.pack(padx=(0, 5), pady=(0, 5))
         
-        vatsal_container = tk.Frame(
+        # Canvas for rounded VATSAL button
+        vatsal_canvas = tk.Canvas(
             vatsal_shadow_mid,
-            bg=self.BG_SECONDARY,
-            relief="raised",
-            borderwidth=3,
-            highlightthickness=2,
-            highlightbackground=self.BORDER_PRIMARY,
-            highlightcolor=self.BORDER_PRIMARY
+            bg=self.BG_PRIMARY,
+            highlightthickness=0,
+            bd=0,
+            width=200,
+            height=50
         )
-        vatsal_container.pack()
+        vatsal_canvas.pack()
+        
+        # Draw rounded background
+        self.round_corners_canvas(vatsal_canvas, 200, 50, 20, self.BG_SECONDARY, self.BORDER_PRIMARY, 3)
         
         self.vatsal_toggle = tk.Button(
-            vatsal_container,
+            vatsal_canvas,
             text="● VATSAL: ON",
             font=("Segoe UI", 11, "bold"),
             bg=self.BG_SECONDARY,
@@ -568,28 +640,24 @@ class ModernVATSALGUI:
             borderwidth=0,
             cursor="hand2",
             padx=24,
-            pady=12,
+            pady=8,
             command=self.toggle_vatsal,
             activebackground=self.BUTTON_HOVER
         )
-        self.vatsal_toggle.pack()
+        vatsal_canvas.create_window(100, 25, window=self.vatsal_toggle)
         
         # Enhanced 3D hover effect
         def vatsal_hover_enter(e):
             vatsal_shadow_mid.pack_configure(padx=(0, 7), pady=(0, 7))
-            vatsal_container.config(relief="raised", borderwidth=4)
         
         def vatsal_hover_leave(e):
             vatsal_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-            vatsal_container.config(relief="raised", borderwidth=3)
         
         def vatsal_press(e):
             vatsal_shadow_mid.pack_configure(padx=(0, 2), pady=(0, 2))
-            vatsal_container.config(relief="sunken")
         
         def vatsal_release(e):
             vatsal_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-            vatsal_container.config(relief="raised")
         
         self.vatsal_toggle.bind("<Enter>", vatsal_hover_enter)
         self.vatsal_toggle.bind("<Leave>", vatsal_hover_leave)
@@ -603,19 +671,22 @@ class ModernVATSALGUI:
         soc_shadow_mid = tk.Frame(soc_shadow_outer, bg="#B0B0B0", bd=0)
         soc_shadow_mid.pack(padx=(0, 5), pady=(0, 5))
         
-        soc_container = tk.Frame(
+        # Canvas for rounded Self-Operating button
+        soc_canvas = tk.Canvas(
             soc_shadow_mid,
-            bg=self.BG_SECONDARY,
-            relief="raised",
-            borderwidth=3,
-            highlightthickness=2,
-            highlightbackground=self.BORDER_PRIMARY,
-            highlightcolor=self.BORDER_PRIMARY
+            bg=self.BG_PRIMARY,
+            highlightthickness=0,
+            bd=0,
+            width=250,
+            height=50
         )
-        soc_container.pack()
+        soc_canvas.pack()
+        
+        # Draw rounded background
+        self.round_corners_canvas(soc_canvas, 250, 50, 20, self.BG_SECONDARY, self.BORDER_PRIMARY, 3)
         
         self.soc_toggle = tk.Button(
-            soc_container,
+            soc_canvas,
             text="🔲 Self-Operating: ON",
             font=("Segoe UI", 11, "bold"),
             bg=self.BG_SECONDARY,
@@ -624,28 +695,24 @@ class ModernVATSALGUI:
             borderwidth=0,
             cursor="hand2",
             padx=24,
-            pady=12,
+            pady=8,
             command=self.toggle_self_operating,
             activebackground=self.BUTTON_HOVER
         )
-        self.soc_toggle.pack()
+        soc_canvas.create_window(125, 25, window=self.soc_toggle)
         
         # Enhanced 3D hover effect
         def soc_hover_enter(e):
             soc_shadow_mid.pack_configure(padx=(0, 7), pady=(0, 7))
-            soc_container.config(relief="raised", borderwidth=4)
         
         def soc_hover_leave(e):
             soc_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-            soc_container.config(relief="raised", borderwidth=3)
         
         def soc_press(e):
             soc_shadow_mid.pack_configure(padx=(0, 2), pady=(0, 2))
-            soc_container.config(relief="sunken")
         
         def soc_release(e):
             soc_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-            soc_container.config(relief="raised")
         
         self.soc_toggle.bind("<Enter>", soc_hover_enter)
         self.soc_toggle.bind("<Leave>", soc_hover_leave)
@@ -721,16 +788,26 @@ class ModernVATSALGUI:
         btn_group_shadow_mid = tk.Frame(btn_group_shadow_outer, bg="#B0B0B0", bd=0)
         btn_group_shadow_mid.pack(padx=(0, 6), pady=(0, 6))
         
-        buttons_container = tk.Frame(
+        # Canvas for rounded button container
+        buttons_canvas = tk.Canvas(
             btn_group_shadow_mid,
-            bg=self.BUTTON_BG,
-            relief="raised",
-            borderwidth=3,
-            highlightbackground="#FFFFFF",
-            highlightthickness=2,
-            highlightcolor="#FFFFFF"
+            bg=self.BG_PRIMARY,
+            highlightthickness=0,
+            bd=0,
+            width=400,
+            height=65
         )
-        buttons_container.pack()
+        buttons_canvas.pack()
+        
+        # Draw rounded background for button group
+        self.round_corners_canvas(buttons_canvas, 400, 65, 20, self.BUTTON_BG, "#FFFFFF", 3)
+        
+        # Frame inside canvas for buttons
+        buttons_container = tk.Frame(
+            buttons_canvas,
+            bg=self.BUTTON_BG
+        )
+        buttons_canvas.create_window(200, 32, window=buttons_container)
         
         # Execute button with enhanced 3D effect
         self.execute_btn = tk.Button(
@@ -743,7 +820,7 @@ class ModernVATSALGUI:
             borderwidth=0,
             cursor="hand2",
             padx=32,
-            pady=16,
+            pady=14,
             command=self.execute_command,
             highlightthickness=0,
             activebackground=self.BUTTON_HOVER
@@ -753,11 +830,9 @@ class ModernVATSALGUI:
         # Enhanced 3D press effect for execute button
         def exec_press(e):
             self.execute_btn.config(relief="sunken")
-            buttons_container.config(borderwidth=2)
         
         def exec_release(e):
             self.execute_btn.config(relief="flat")
-            buttons_container.config(borderwidth=3)
         
         self.execute_btn.bind("<ButtonPress-1>", exec_press)
         self.execute_btn.bind("<ButtonRelease-1>", exec_release)
@@ -890,19 +965,22 @@ class ModernVATSALGUI:
         clear_shadow_mid = tk.Frame(clear_shadow_outer, bg="#B0B0B0", bd=0)
         clear_shadow_mid.pack(padx=(0, 5), pady=(0, 5))
         
-        clear_container = tk.Frame(
+        # Canvas for rounded Clear button (top)
+        clear_canvas = tk.Canvas(
             clear_shadow_mid,
-            bg=self.BUTTON_BG,
-            relief="raised",
-            borderwidth=3,
-            highlightthickness=2,
-            highlightbackground=self.BORDER_PRIMARY,
-            highlightcolor=self.BORDER_PRIMARY
+            bg=self.BG_PRIMARY,
+            highlightthickness=0,
+            bd=0,
+            width=120,
+            height=48
         )
-        clear_container.pack()
+        clear_canvas.pack()
+        
+        # Draw rounded background
+        self.round_corners_canvas(clear_canvas, 120, 48, 18, self.BUTTON_BG, self.BORDER_PRIMARY, 3)
         
         clear_btn = tk.Button(
-            clear_container,
+            clear_canvas,
             text="■ Clear",
             font=("Segoe UI", 11, "bold"),
             bg=self.BUTTON_BG,
@@ -911,28 +989,24 @@ class ModernVATSALGUI:
             borderwidth=0,
             cursor="hand2",
             padx=24,
-            pady=12,
+            pady=8,
             command=self.clear_output,
             activebackground=self.BUTTON_HOVER
         )
-        clear_btn.pack()
+        clear_canvas.create_window(60, 24, window=clear_btn)
         
         # Enhanced 3D hover effect
         def clear_hover_enter(e):
             clear_shadow_mid.pack_configure(padx=(0, 7), pady=(0, 7))
-            clear_container.config(relief="raised", borderwidth=4)
         
         def clear_hover_leave(e):
             clear_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-            clear_container.config(relief="raised", borderwidth=3)
         
         def clear_press(e):
             clear_shadow_mid.pack_configure(padx=(0, 2), pady=(0, 2))
-            clear_container.config(relief="sunken")
         
         def clear_release(e):
             clear_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-            clear_container.config(relief="raised")
         
         clear_btn.bind("<Enter>", clear_hover_enter)
         clear_btn.bind("<Leave>", clear_hover_leave)
@@ -972,19 +1046,22 @@ class ModernVATSALGUI:
         clear_b_shadow_mid = tk.Frame(clear_b_shadow_outer, bg="#B0B0B0", bd=0)
         clear_b_shadow_mid.pack(padx=(0, 5), pady=(0, 5))
         
-        clear_b_container = tk.Frame(
+        # Canvas for rounded Clear button (bottom)
+        clear_b_canvas = tk.Canvas(
             clear_b_shadow_mid,
-            bg=self.BUTTON_BG,
-            relief="raised",
-            borderwidth=3,
-            highlightthickness=2,
-            highlightbackground=self.BORDER_PRIMARY,
-            highlightcolor=self.BORDER_PRIMARY
+            bg=self.BG_PRIMARY,
+            highlightthickness=0,
+            bd=0,
+            width=120,
+            height=48
         )
-        clear_b_container.pack()
+        clear_b_canvas.pack()
+        
+        # Draw rounded background
+        self.round_corners_canvas(clear_b_canvas, 120, 48, 18, self.BUTTON_BG, self.BORDER_PRIMARY, 3)
         
         clear_btn_bottom = tk.Button(
-            clear_b_container,
+            clear_b_canvas,
             text="■ Clear",
             font=("Segoe UI", 11, "bold"),
             bg=self.BUTTON_BG,
@@ -993,28 +1070,24 @@ class ModernVATSALGUI:
             borderwidth=0,
             cursor="hand2",
             padx=24,
-            pady=12,
+            pady=8,
             command=self.clear_output,
             activebackground=self.BUTTON_HOVER
         )
-        clear_btn_bottom.pack()
+        clear_b_canvas.create_window(60, 24, window=clear_btn_bottom)
         
         # Enhanced 3D hover effect
         def clear_b_hover_enter(e):
             clear_b_shadow_mid.pack_configure(padx=(0, 7), pady=(0, 7))
-            clear_b_container.config(relief="raised", borderwidth=4)
         
         def clear_b_hover_leave(e):
             clear_b_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-            clear_b_container.config(relief="raised", borderwidth=3)
         
         def clear_b_press(e):
             clear_b_shadow_mid.pack_configure(padx=(0, 2), pady=(0, 2))
-            clear_b_container.config(relief="sunken")
         
         def clear_b_release(e):
             clear_b_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-            clear_b_container.config(relief="raised")
         
         clear_btn_bottom.bind("<Enter>", clear_b_hover_enter)
         clear_btn_bottom.bind("<Leave>", clear_b_hover_leave)
