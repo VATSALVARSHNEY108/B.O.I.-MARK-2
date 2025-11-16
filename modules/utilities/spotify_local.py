@@ -1,6 +1,6 @@
 """
 Simple Spotify Controller for Local Use
-Run this on your local computer to control Spotify
+Works with https://open.spotify.com/ redirect URI
 """
 
 import os
@@ -14,17 +14,16 @@ class SpotifyLocal:
     def __init__(self):
         self.client_id = os.getenv('SPOTIFY_CLIENT_ID')
         self.client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
-        self.redirect_uri = os.getenv('SPOTIFY_REDIRECT_URI', 'http://localhost:8888/callback')
+        self.redirect_uri = os.getenv('SPOTIFY_REDIRECT_URI', 'https://open.spotify.com/')
         self.access_token = None
         self.base_url = "https://api.spotify.com/v1/"
         
         if not self.client_id or not self.client_secret:
             print("⚠️  Warning: SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET not found in environment")
-            print("   Create a .env file with your Spotify credentials")
-            print("   See SPOTIFY_LOCAL_SETUP.md for instructions")
+            print("   Make sure your credentials are set in Replit Secrets or .env file")
     
     def authenticate(self):
-        """Authenticate with Spotify (one-time setup)"""
+        """Authenticate with Spotify"""
         scope = 'user-read-playback-state user-modify-playback-state user-read-currently-playing playlist-read-private user-library-read'
         
         auth_url = f'https://accounts.spotify.com/authorize?{urlencode({
@@ -35,22 +34,28 @@ class SpotifyLocal:
         })}'
         
         print("\n🎵 Spotify Authentication")
-        print("=" * 50)
+        print("=" * 60)
         print("1. Opening browser for Spotify authorization...")
         webbrowser.open(auth_url)
         
-        print(f"\n2. After you authorize, you'll be redirected to:")
+        print(f"\n2. After you authorize, Spotify will redirect you to:")
         print(f"   {self.redirect_uri}")
-        print("\n3. Copy the FULL URL from your browser address bar")
-        print("   (It will look like: http://localhost:8888/callback?code=...)")
+        print("\n3. Look at the URL in your browser address bar")
+        print("   It should have '?code=' somewhere in it")
+        print("\n4. Copy the FULL URL from your browser")
         
         callback_url = input("\nPaste the full URL here: ").strip()
         
         if 'code=' not in callback_url:
             print("❌ No authorization code found in URL")
+            print("   Make sure you copied the complete URL from the address bar")
             return False
         
-        code = callback_url.split('code=')[1].split('&')[0]
+        try:
+            code = callback_url.split('code=')[1].split('&')[0]
+        except:
+            print("❌ Could not extract code from URL")
+            return False
         
         token_url = 'https://accounts.spotify.com/api/token'
         data = {
@@ -71,7 +76,7 @@ class SpotifyLocal:
                 return True
             else:
                 print(f"❌ Authentication failed: {response.status_code}")
-                print(f"   {response.text}")
+                print(f"   Response: {response.text}")
                 return False
         except Exception as e:
             print(f"❌ Error during authentication: {e}")
@@ -216,25 +221,22 @@ class SpotifyLocal:
 
 def main():
     """Example usage"""
-    from dotenv import load_dotenv
-    load_dotenv()
-    
     print("\n🎵 Spotify Local Controller")
-    print("=" * 50)
+    print("=" * 60)
+    print("Using redirect URI: https://open.spotify.com/")
+    print("=" * 60)
     
     spotify = SpotifyLocal()
     
     if not spotify.client_id:
-        print("\n❌ Setup Required!")
-        print("\nPlease follow these steps:")
-        print("1. Read SPOTIFY_LOCAL_SETUP.md for complete instructions")
-        print("2. Create a .env file with your Spotify credentials")
-        print("3. Run this script again")
+        print("\n❌ Credentials not found!")
+        print("\nMake sure SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET")
+        print("are set in your environment (Replit Secrets or .env file)")
         return
     
     if spotify.authenticate():
         print("\n🎯 Testing Spotify Controls...")
-        print("-" * 50)
+        print("-" * 60)
         
         print("\n1. Current track:")
         print("  ", spotify.get_current_track())
@@ -243,15 +245,15 @@ def main():
         print("  ", spotify.get_playlists(5))
         
         print("\n✅ Spotify is working!")
-        print("\nAvailable commands:")
-        print("  - spotify.play()          # Resume playback")
-        print("  - spotify.pause()         # Pause")
-        print("  - spotify.next_track()    # Next song")
-        print("  - spotify.previous_track() # Previous song")
-        print("  - spotify.set_volume(50)  # Set volume to 50%")
-        print("  - spotify.get_current_track() # What's playing?")
-        print("  - spotify.search('song name') # Search")
-        print("  - spotify.get_playlists() # List playlists")
+        print("\nYou can now use these commands:")
+        print("  spotify.play()              # Resume playback")
+        print("  spotify.pause()             # Pause")
+        print("  spotify.next_track()        # Next song")
+        print("  spotify.previous_track()    # Previous song")
+        print("  spotify.set_volume(50)      # Set volume")
+        print("  spotify.get_current_track() # What's playing")
+        print("  spotify.search('song')      # Search")
+        print("  spotify.get_playlists()     # Your playlists")
 
 
 if __name__ == "__main__":

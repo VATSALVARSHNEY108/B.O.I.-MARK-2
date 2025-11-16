@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Simple Spotify Controller - Run this on your local computer
+Interactive Spotify Controller
+Works with https://open.spotify.com/ redirect URI
 """
 
 import os
@@ -8,55 +9,52 @@ import sys
 
 def check_setup():
     """Check if everything is set up correctly"""
-    from dotenv import load_dotenv
-    load_dotenv()
-    
     client_id = os.getenv('SPOTIFY_CLIENT_ID')
     client_secret = os.getenv('SPOTIFY_CLIENT_SECRET')
     
     if not client_id or not client_secret:
-        print("\n❌ Setup Required!")
-        print("\nYou need to set up your Spotify credentials first.")
-        print("\nQuick Setup Steps:")
-        print("1. Read QUICK_START_SPOTIFY.txt")
-        print("2. Copy .env.example to .env")
-        print("3. Add your Spotify credentials to .env")
-        print("\nFor detailed instructions, see: SPOTIFY_LOCAL_SETUP.md")
+        print("\n❌ Credentials not found!")
+        print("\nMake sure you have:")
+        print("  • SPOTIFY_CLIENT_ID set in environment")
+        print("  • SPOTIFY_CLIENT_SECRET set in environment")
+        print("\nOn Replit: Use Secrets panel")
+        print("On Local: Create .env file with these values")
         return False
     
     try:
         import requests
     except ImportError:
-        print("\n❌ Missing required package!")
-        print("\nPlease install dependencies:")
-        print("  pip install requests python-dotenv")
+        print("\n❌ Missing 'requests' package!")
+        print("\nInstall it with: pip install requests")
         return False
     
     return True
 
 def main():
-    """Main function"""
+    """Main interactive menu"""
     print("\n" + "="*60)
-    print("   🎵 SPOTIFY LOCAL CONTROLLER")
+    print("   🎵 SPOTIFY INTERACTIVE CONTROLLER")
+    print("="*60)
+    print("Using redirect URI: https://open.spotify.com/")
     print("="*60)
     
     if not check_setup():
         sys.exit(1)
     
-    from spotify_local import SpotifyLocal
+    from modules.utilities.spotify_local import SpotifyLocal
     
     spotify = SpotifyLocal()
     
-    print("\n📱 Authenticating with Spotify...")
-    print("   (This opens your browser for authorization)\n")
+    print("\n📱 Starting Spotify authentication...")
+    print("   Your browser will open for authorization\n")
     
     if not spotify.authenticate():
         print("\n❌ Authentication failed!")
-        print("   Please try again or check SPOTIFY_LOCAL_SETUP.md for help")
+        print("   Please try again")
         sys.exit(1)
     
     print("\n" + "="*60)
-    print("   🎯 TESTING SPOTIFY CONTROLS")
+    print("   🎯 SPOTIFY CONTROLS ACTIVE")
     print("="*60)
     
     while True:
@@ -95,7 +93,7 @@ def main():
             try:
                 print("\n" + spotify.set_volume(int(volume)))
             except:
-                print("Invalid volume number")
+                print("❌ Invalid volume number")
         
         elif choice == '7':
             query = input("Enter song or artist name: ").strip()
@@ -118,4 +116,3 @@ if __name__ == "__main__":
         print("\n\n👋 Interrupted. Goodbye!")
     except Exception as e:
         print(f"\n❌ Error: {e}")
-        print("\nFor help, see: SPOTIFY_LOCAL_SETUP.md")
