@@ -59,18 +59,18 @@ class ModernVATSALGUI:
         self.root = root
         self.root.title("V.A.T.S.A.L - AI Desktop Assistant")
         
-        # Initialize theme colors (exact match to web GUI CSS)
-        self.BG_PRIMARY = "#F5F1E8"      # var(--bg-primary)
-        self.BG_SECONDARY = "#FAF8F3"    # var(--bg-secondary)
-        self.BORDER_PRIMARY = "#D9CFC0"  # var(--border-color)
-        self.TEXT_PRIMARY = "#1a1a1a"    # var(--text-primary)
-        self.TEXT_SECONDARY = "#5a5a5a"  # var(--text-secondary)
-        self.ACCENT_COLOR = "#3a3a3a"    # var(--accent-color)
-        self.BUTTON_BG = "#F3EADA"       # var(--button-bg)
-        self.BUTTON_HOVER = "#E8DCCB"    # var(--button-hover)
-        self.ACTIVE_GREEN = "#007B55"    # var(--active-green)
-        self.CONSOLE_BG = "#FAF6EE"      # var(--console-bg)
-        self.SHADOW_COLOR = "rgba(0, 0, 0, 0.08)"  # var(--shadow)
+        # Initialize theme colors (dark navy/cyan theme to match VATSAL Chat & Auto pages)
+        self.BG_PRIMARY = "#1e2433"      # Dark navy background
+        self.BG_SECONDARY = "#252d3f"    # Slightly lighter navy
+        self.BORDER_PRIMARY = "#3a4458"  # Dark border
+        self.TEXT_PRIMARY = "#e8e8e8"    # Light text
+        self.TEXT_SECONDARY = "#b0b8c8"  # Muted light text
+        self.ACCENT_COLOR = "#1dd3b0"    # Cyan accent
+        self.BUTTON_BG = "#2a3447"       # Dark button background
+        self.BUTTON_HOVER = "#323d52"    # Hover state
+        self.ACTIVE_GREEN = "#1dd3b0"    # Cyan/turquoise active color
+        self.CONSOLE_BG = "#1a2230"      # Darker console background
+        self.SHADOW_COLOR = "rgba(0, 0, 0, 0.3)"  # Darker shadow
         
         # Configure root window
         self.root.configure(bg=self.BG_PRIMARY)
@@ -410,7 +410,7 @@ class ModernVATSALGUI:
         # Command input with better styling
         self.command_input = tk.Entry(
             input_row,
-            bg="white",
+            bg=self.CONSOLE_BG,
             fg=self.TEXT_PRIMARY,
             font=("Segoe UI", 12, "bold"),
             insertbackground=self.TEXT_PRIMARY,
@@ -499,7 +499,7 @@ class ModernVATSALGUI:
         
         self.output_area = scrolledtext.ScrolledText(
             console_frame,
-            bg="white",
+            bg=self.CONSOLE_BG,
             fg=self.TEXT_PRIMARY,
             font=("Consolas", 10, "bold"),
             relief="solid",
@@ -566,15 +566,15 @@ class ModernVATSALGUI:
         if fg_color is None:
             fg_color = self.TEXT_PRIMARY
         
-        # Outer shadow container (darker, more pronounced - ENHANCED!)
-        outer_shadow = tk.Frame(parent, bg="#707070", bd=0)
+        # Outer shadow container (darker, more pronounced - ENHANCED!) - darker for dark theme
+        outer_shadow = tk.Frame(parent, bg="#0f1419", bd=0)
         
-        # Mid shadow layer (stronger gradient - ENHANCED!)
-        mid_shadow = tk.Frame(outer_shadow, bg="#959595", bd=0)
+        # Mid shadow layer (stronger gradient - ENHANCED!) - subtle dark blue
+        mid_shadow = tk.Frame(outer_shadow, bg="#141a21", bd=0)
         mid_shadow.pack(padx=(0, 8), pady=(0, 8))
         
-        # Inner shadow layer (ENHANCED!)
-        inner_shadow = tk.Frame(mid_shadow, bg="#B8B8B8", bd=0)
+        # Inner shadow layer (ENHANCED!) - slightly lighter
+        inner_shadow = tk.Frame(mid_shadow, bg="#1a2230", bd=0)
         inner_shadow.pack(padx=(0, 4), pady=(0, 4))
         
         # Canvas for rounded corners
@@ -676,15 +676,15 @@ class ModernVATSALGUI:
         if bg_color is None:
             bg_color = self.BG_SECONDARY
         
-        # Outer shadow layer (darkest)
-        outer_shadow = tk.Frame(parent, bg="#707070", bd=0)
+        # Outer shadow layer (darkest) - darker for dark theme
+        outer_shadow = tk.Frame(parent, bg="#0f1419", bd=0)
         
-        # Mid shadow layer (gradient)
-        mid_shadow = tk.Frame(outer_shadow, bg="#959595", bd=0)
+        # Mid shadow layer (gradient) - subtle dark blue
+        mid_shadow = tk.Frame(outer_shadow, bg="#141a21", bd=0)
         mid_shadow.pack(padx=(0, 8), pady=(0, 8), fill="both", expand=True)
         
-        # Inner shadow layer (lightest shadow)
-        inner_shadow = tk.Frame(mid_shadow, bg="#B8B8B8", bd=0)
+        # Inner shadow layer (lightest shadow) - slightly lighter
+        inner_shadow = tk.Frame(mid_shadow, bg="#1a2230", bd=0)
         inner_shadow.pack(padx=(0, 4), pady=(0, 4), fill="both", expand=True)
         
         # Actual content frame
@@ -708,15 +708,15 @@ class ModernVATSALGUI:
         if fg_color is None:
             fg_color = self.TEXT_PRIMARY
         
-        # Outer shadow layer
-        outer_shadow = tk.Frame(parent, bg="#707070", bd=0)
+        # Outer shadow layer - darker for dark theme
+        outer_shadow = tk.Frame(parent, bg="#0f1419", bd=0)
         
-        # Mid shadow layer
-        mid_shadow = tk.Frame(outer_shadow, bg="#959595", bd=0)
+        # Mid shadow layer - subtle dark blue
+        mid_shadow = tk.Frame(outer_shadow, bg="#141a21", bd=0)
         mid_shadow.pack(padx=(0, 6), pady=(0, 6))
         
-        # Inner shadow layer
-        inner_shadow = tk.Frame(mid_shadow, bg="#B8B8B8", bd=0)
+        # Inner shadow layer - slightly lighter
+        inner_shadow = tk.Frame(mid_shadow, bg="#1a2230", bd=0)
         inner_shadow.pack(padx=(0, 3), pady=(0, 3))
         
         # Actual button

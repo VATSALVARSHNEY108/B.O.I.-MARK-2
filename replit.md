@@ -9,6 +9,7 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 -   **File Structure:** Well-organized modular architecture with modules/ directory containing core, voice, automation, ai_features, utilities, etc.
 
 ## Recent Changes (November 16, 2025)
+-   **Dark Theme UI Upgrade:** Updated GUI theme in `gui_app.py` to match the dark navy/cyan aesthetic from VATSAL Chat and VATSAL Auto pages. Changed from light beige to dark navy backgrounds (#1e2433), cyan accent colors (#1dd3b0), and updated all shadows to complement the dark theme.
 -   **Cloud Environment Compatibility:** Fixed CLI workflow to run successfully in cloud/headless environments (Replit) without X11 display. Added graceful fallback handling for PyAutoGUI-dependent features with clear user feedback.
 -   **System Dependencies:** Installed gcc-unwrapped to resolve libstdc++.so.6 missing library error for numpy and pandas compatibility.
 -   **Import Fixes:** Corrected import paths in smart_screen_monitor.py for analyze_screenshot function.
@@ -20,7 +21,7 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 The AI Desktop Automation Controller is built with Python 3.11 and utilizes a modular architecture, enabling a wide range of desktop automation and AI-powered functionalities.
 
 ### UI/UX Decisions
-The system primarily offers desktop GUIs built with `tkinter`, including a "Modern Cloud Linen GUI" with a soft, matte off-white base, neon cyber accents, and **beautiful multi-layer shadow effects** on all buttons and boxes for depth and aesthetic appeal. An "Enhanced Modern GUI" with a dark theme and dashboard is also available. A "Modern Web GUI" is built with Flask and Flask-SocketIO, featuring an eye-comforting off-white/cream design with 3D-like blocks for cloud/Replit environments. A CLI interface is available for headless environments.
+The system offers desktop GUIs built with `tkinter` featuring a **modern dark navy/cyan theme** with beautiful multi-layer shadow effects on all buttons and boxes for depth and aesthetic appeal. The dark theme uses navy backgrounds (#1e2433), cyan accents (#1dd3b0), and subtle dark shadows for a professional, cohesive look matching the VATSAL Chat and VATSAL Auto pages. A "Modern Web GUI" is built with Flask and Flask-SocketIO. A CLI interface is available for headless environments.
 
 ### Technical Implementations
 -   **AI Command Processing:** Gemini AI for natural language understanding and action conversion.
