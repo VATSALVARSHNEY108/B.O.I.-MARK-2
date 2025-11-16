@@ -8,11 +8,15 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 -   **Chat Monitoring:** User prefers visual/screen-based chat monitoring where AI controls the real Gmail/WhatsApp interface on screen, rather than background API calls. This allows them to watch the AI work in real-time.
 -   **File Structure:** Well-organized modular architecture with modules/ directory containing core, voice, automation, ai_features, utilities, etc.
 
+## Recent Changes (November 16, 2025)
+-   **GUI Aesthetic Upgrade:** Added beautiful multi-layer shadow effects to all buttons and boxes in `gui_app.py` for a modern, elevated 3D appearance.
+-   **Command Executor Comprehensive Upgrade:** Added 40+ missing system control actions including lock_screen, shutdown, restart, sleep, hibernate, system monitoring, window management, clipboard operations, and more. The executor now has complete coverage of all system_control.py functions.
+
 ## System Architecture
 The AI Desktop Automation Controller is built with Python 3.11 and utilizes a modular architecture, enabling a wide range of desktop automation and AI-powered functionalities.
 
 ### UI/UX Decisions
-The system primarily offers desktop GUIs built with `tkinter`, including a "Modern Cloud Linen GUI" with a soft, matte off-white base and neon cyber accents, and an "Enhanced Modern GUI" with a dark theme and dashboard. A "Modern Web GUI" is also available, built with Flask and Flask-SocketIO, featuring an eye-comforting off-white/cream design with 3D-like blocks for cloud/Replit environments. A CLI interface is available for headless environments.
+The system primarily offers desktop GUIs built with `tkinter`, including a "Modern Cloud Linen GUI" with a soft, matte off-white base, neon cyber accents, and **beautiful multi-layer shadow effects** on all buttons and boxes for depth and aesthetic appeal. An "Enhanced Modern GUI" with a dark theme and dashboard is also available. A "Modern Web GUI" is built with Flask and Flask-SocketIO, featuring an eye-comforting off-white/cream design with 3D-like blocks for cloud/Replit environments. A CLI interface is available for headless environments.
 
 ### Technical Implementations
 -   **AI Command Processing:** Gemini AI for natural language understanding and action conversion.
