@@ -394,137 +394,111 @@ class ModernVATSALGUI:
     
     def _create_command_section_for_tab(self, parent):
         """Create command input section for tab"""
-        # Enhanced outer shadow for dramatic 3D effect
-        section_shadow_outer = tk.Frame(parent, bg="#808080", bd=0)
-        section_shadow_outer.pack(fill="x", pady=(10, 20), padx=10)
-        
-        section_shadow_mid = tk.Frame(section_shadow_outer, bg="#A0A0A0", bd=0)
-        section_shadow_mid.pack(fill="x", padx=(0, 8), pady=(0, 8))
-        
-        section_shadow_inner = tk.Frame(section_shadow_mid, bg="#C0C0C0", bd=0)
-        section_shadow_inner.pack(fill="x", padx=(0, 4), pady=(0, 4))
-        
+        # Modern clean section with subtle shadow
         section = tk.Frame(
-            section_shadow_inner,
+            parent,
             bg=self.BG_SECONDARY,
-            relief="raised",
-            borderwidth=4,
-            highlightbackground="#FFFFFF",
-            highlightthickness=2
+            relief="flat",
+            borderwidth=1,
+            highlightbackground=self.BORDER_PRIMARY,
+            highlightthickness=1
         )
-        section.pack(fill="x")
+        section.pack(fill="x", pady=(15, 20), padx=15)
         
         # Section header
         header = tk.Frame(section, bg=self.BG_SECONDARY)
-        header.pack(fill="x", padx=25, pady=(25, 20))
+        header.pack(fill="x", padx=30, pady=(20, 15))
         
         tk.Label(
             header,
-            text="➕",
-            font=("Segoe UI", 16),
+            text="💬",
+            font=("Segoe UI", 18),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
-        ).pack(side="left", padx=(0, 10))
+        ).pack(side="left", padx=(0, 12))
         
         tk.Label(
             header,
             text="Command Input",
-            font=("Segoe UI", 15, "bold"),
+            font=("Segoe UI", 16, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left")
         
-        # Input area
+        # Input area with better layout
         input_area = tk.Frame(section, bg=self.BG_SECONDARY)
-        input_area.pack(fill="x", padx=25, pady=(0, 25))
+        input_area.pack(fill="x", padx=30, pady=(0, 25))
         
-        # Command input
+        # Input row
+        input_row = tk.Frame(input_area, bg=self.BG_SECONDARY)
+        input_row.pack(fill="x", pady=(0, 15))
+        
+        # Command input with better styling
         self.command_input = tk.Entry(
-            input_area,
-            bg=self.CONSOLE_BG,
+            input_row,
+            bg="white",
             fg=self.TEXT_PRIMARY,
-            font=("Segoe UI", 11),
+            font=("Segoe UI", 12),
             insertbackground=self.TEXT_PRIMARY,
-            relief="flat",
-            borderwidth=0,
+            relief="solid",
+            borderwidth=1,
             highlightbackground=self.BORDER_PRIMARY,
-            highlightcolor=self.ACCENT_COLOR,
-            highlightthickness=2
+            highlightcolor=self.ACTIVE_GREEN,
+            highlightthickness=1
         )
-        self.command_input.pack(side="left", fill="both", expand=True, ipady=14, padx=(0, 15))
+        self.command_input.pack(side="left", fill="both", expand=True, ipady=12)
         self.command_input.bind("<Return>", lambda e: self.execute_command())
         
-        # Buttons container
-        btn_group_shadow_outer = tk.Frame(input_area, bg="#909090", bd=0)
-        btn_group_shadow_outer.pack(side="left")
+        # Buttons row - separated for better organization
+        buttons_row = tk.Frame(input_area, bg=self.BG_SECONDARY)
+        buttons_row.pack(fill="x")
         
-        btn_group_shadow_mid = tk.Frame(btn_group_shadow_outer, bg="#B0B0B0", bd=0)
-        btn_group_shadow_mid.pack(padx=(0, 6), pady=(0, 6))
-        
-        buttons_canvas = tk.Canvas(
-            btn_group_shadow_mid,
-            bg=self.BG_PRIMARY,
-            highlightthickness=0,
-            bd=0,
-            width=550,
-            height=65
-        )
-        buttons_canvas.pack()
-        
-        self.round_corners_canvas(buttons_canvas, 550, 65, 20, self.BUTTON_BG, "#FFFFFF", 3)
-        
-        buttons_container = tk.Frame(
-            buttons_canvas,
-            bg=self.BUTTON_BG
-        )
-        buttons_canvas.create_window(275, 32, window=buttons_container)
-        
-        # Execute button
+        # Execute button - larger and more prominent
         self.execute_btn = tk.Button(
-            buttons_container,
-            text="▶ Execute",
-            font=("Segoe UI", 12, "bold"),
-            bg=self.BUTTON_BG,
-            fg=self.TEXT_PRIMARY,
+            buttons_row,
+            text="▶  Execute",
+            font=("Segoe UI", 13, "bold"),
+            bg=self.ACTIVE_GREEN,
+            fg="white",
             relief="flat",
             borderwidth=0,
             cursor="hand2",
-            padx=32,
-            pady=14,
+            padx=40,
+            pady=12,
             command=self.execute_command,
             highlightthickness=0,
-            activebackground=self.BUTTON_HOVER
+            activebackground="#006644"
         )
-        self.execute_btn.pack(side="left", padx=3, pady=3)
-        self._add_hover_effect(self.execute_btn, self.BUTTON_BG, self.BUTTON_HOVER)
+        self.execute_btn.pack(side="left", padx=(0, 15))
+        self._add_hover_effect(self.execute_btn, self.ACTIVE_GREEN, "#006644")
         
-        # Separator
-        tk.Frame(buttons_container, bg=self.BORDER_PRIMARY, width=2).pack(side="left", fill="y")
-        
-        # Icon buttons
+        # Icon buttons with labels - more intuitive
         icon_buttons = [
-            ("👂", self.toggle_wakeup_listener, "Wakeup Word Listener"),
-            ("✌️", self.toggle_v_sign_detector, "V-Sign Detector"),
-            ("🗣️", self.toggle_speaking, "Speaking")
+            ("👂", "Wake Word", self.toggle_wakeup_listener),
+            ("✌️", "V-Sign", self.toggle_v_sign_detector),
+            ("🗣️", "Speaking", self.toggle_speaking)
         ]
         
-        for icon, command, tooltip in icon_buttons:
+        for icon, label, command in icon_buttons:
+            btn_frame = tk.Frame(buttons_row, bg=self.BUTTON_BG, relief="solid", borderwidth=1, highlightbackground=self.BORDER_PRIMARY)
+            btn_frame.pack(side="left", padx=5)
+            
             btn = tk.Button(
-                buttons_container,
-                text=icon,
-                font=("Segoe UI", 18),
+                btn_frame,
+                text=f"{icon}\n{label}",
+                font=("Segoe UI", 11),
                 bg=self.BUTTON_BG,
                 fg=self.TEXT_PRIMARY,
-                relief="raised",
-                borderwidth=2,
+                relief="flat",
+                borderwidth=0,
                 cursor="hand2",
-                width=3,
+                padx=18,
+                pady=8,
                 command=command,
-                highlightthickness=1,
-                highlightbackground="#FFFFFF",
+                highlightthickness=0,
                 activebackground=self.BUTTON_HOVER
             )
-            btn.pack(side="left", padx=3, pady=3)
+            btn.pack()
             
             # Store button references
             if icon == "👂":
@@ -534,62 +508,67 @@ class ModernVATSALGUI:
             elif icon == "🗣️":
                 self.speaking_btn = btn
             
-            if icon != icon_buttons[-1][0]:
-                tk.Frame(buttons_container, bg=self.BORDER_PRIMARY, width=2).pack(side="left", fill="y")
+            self._add_hover_effect(btn, self.BUTTON_BG, self.BUTTON_HOVER)
     
     def _create_output_section_for_tab(self, parent):
         """Create output console section for tab"""
-        output_shadow_outer = tk.Frame(parent, bg="#808080", bd=0)
-        output_shadow_outer.pack(fill="both", expand=True, padx=10, pady=(0, 10))
-        
-        output_shadow_mid = tk.Frame(output_shadow_outer, bg="#A0A0A0", bd=0)
-        output_shadow_mid.pack(fill="both", expand=True, padx=(0, 8), pady=(0, 8))
-        
-        output_shadow_inner = tk.Frame(output_shadow_mid, bg="#C0C0C0", bd=0)
-        output_shadow_inner.pack(fill="both", expand=True, padx=(0, 4), pady=(0, 4))
-        
+        # Modern clean section
         section = tk.Frame(
-            output_shadow_inner,
+            parent,
             bg=self.BG_SECONDARY,
-            relief="raised",
-            borderwidth=4,
-            highlightbackground="#FFFFFF",
-            highlightthickness=2
+            relief="flat",
+            borderwidth=1,
+            highlightbackground=self.BORDER_PRIMARY,
+            highlightthickness=1
         )
-        section.pack(fill="both", expand=True)
+        section.pack(fill="both", expand=True, padx=15, pady=(0, 15))
         
         # Header
         header = tk.Frame(section, bg=self.BG_SECONDARY)
-        header.pack(fill="x", padx=25, pady=(25, 20))
+        header.pack(fill="x", padx=30, pady=(20, 15))
         
         tk.Label(
             header,
-            text="📋 Output Console",
-            font=("Segoe UI", 15, "bold"),
+            text="📋",
+            font=("Segoe UI", 18),
+            bg=self.BG_SECONDARY,
+            fg=self.TEXT_PRIMARY
+        ).pack(side="left", padx=(0, 12))
+        
+        tk.Label(
+            header,
+            text="Output Console",
+            font=("Segoe UI", 16, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left")
         
-        # Output console
+        # Output console with better styling
         console_frame = tk.Frame(section, bg=self.BG_SECONDARY)
-        console_frame.pack(fill="both", expand=True, padx=25, pady=(0, 25))
+        console_frame.pack(fill="both", expand=True, padx=30, pady=(0, 25))
         
         self.output_area = scrolledtext.ScrolledText(
             console_frame,
-            bg=self.CONSOLE_BG,
+            bg="white",
             fg=self.TEXT_PRIMARY,
-            font=("Segoe UI", 10),
+            font=("Consolas", 10),
             relief="solid",
             borderwidth=1,
             highlightbackground=self.BORDER_PRIMARY,
             highlightthickness=1,
-            padx=24,
-            pady=24,
+            padx=20,
+            pady=20,
             wrap="word",
             insertbackground=self.TEXT_PRIMARY
         )
         self.output_area.pack(fill="both", expand=True)
         self.output_area.config(state="disabled")
+        
+        # Configure text tags for better output formatting
+        self.output_area.tag_config("info", foreground="#2196F3")
+        self.output_area.tag_config("success", foreground=self.ACTIVE_GREEN, font=("Consolas", 10, "bold"))
+        self.output_area.tag_config("error", foreground="#D32F2F", font=("Consolas", 10, "bold"))
+        self.output_area.tag_config("warning", foreground="#FF9800")
     
     def create_rounded_rectangle(self, width, height, radius, color):
         """Create a rounded rectangle image using PIL"""
@@ -743,36 +722,26 @@ class ModernVATSALGUI:
         return outer_shadow, btn
     
     def _create_header(self, parent):
-        """Create header with title and status bar"""
-        # Enhanced outer shadow for dramatic 3D effect
-        header_shadow_outer = tk.Frame(parent, bg="#808080", bd=0)
-        header_shadow_outer.pack(fill="x", pady=(0, 20))
-        
-        header_shadow_mid = tk.Frame(header_shadow_outer, bg="#A0A0A0", bd=0)
-        header_shadow_mid.pack(fill="x", padx=(0, 8), pady=(0, 8))
-        
-        header_shadow_inner = tk.Frame(header_shadow_mid, bg="#C0C0C0", bd=0)
-        header_shadow_inner.pack(fill="x", padx=(0, 4), pady=(0, 4))
-        
+        """Create modern clean header"""
         header = tk.Frame(
-            header_shadow_inner,
+            parent,
             bg=self.BG_SECONDARY,
-            relief="raised",
-            borderwidth=4,
-            highlightbackground="#FFFFFF",
-            highlightthickness=2
+            relief="flat",
+            borderwidth=1,
+            highlightbackground=self.BORDER_PRIMARY,
+            highlightthickness=1
         )
-        header.pack(fill="x")
+        header.pack(fill="x", pady=(0, 15))
         
-        # Title section - REDUCED PADDING
+        # Title section with compact layout
         title_section = tk.Frame(header, bg=self.BG_SECONDARY)
-        title_section.pack(fill="x", padx=30, pady=(20, 10))
+        title_section.pack(fill="x", padx=25, pady=(15, 12))
         
-        # Main title with sparkles - SMALLER SIZE
+        # Compact title with logo
         title_frame = tk.Frame(title_section, bg=self.BG_SECONDARY)
-        title_frame.pack()
+        title_frame.pack(side="left")
         
-        # Add logo image to the left of title
+        # Add logo
         try:
             workspace_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
             logo_path = os.path.join(workspace_dir, "assets", "vatsal_icon.png")
@@ -781,202 +750,88 @@ class ModernVATSALGUI:
             
             if os.path.exists(logo_path):
                 logo_img = Image.open(logo_path)
-                logo_img = logo_img.resize((50, 50), Image.Resampling.LANCZOS)
+                logo_img = logo_img.resize((40, 40), Image.Resampling.LANCZOS)
                 self.logo_photo = ImageTk.PhotoImage(logo_img)
                 tk.Label(
                     title_frame,
                     image=self.logo_photo,
                     bg=self.BG_SECONDARY
-                ).pack(side="left", padx=(0, 20))
+                ).pack(side="left", padx=(0, 12))
         except Exception as e:
-            print(f"Could not load logo in header: {e}")
+            print(f"Could not load logo: {e}")
+        
+        # Title and subtitle in vertical layout
+        title_text = tk.Frame(title_frame, bg=self.BG_SECONDARY)
+        title_text.pack(side="left")
         
         tk.Label(
-            title_frame,
-            text="✨",
-            font=("Segoe UI", 22),
+            title_text,
+            text="V.A.T.S.A.L  AI Assistant",
+            font=("Segoe UI", 18, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
-        ).pack(side="left", padx=(0, 15))
+        ).pack(anchor="w")
         
         tk.Label(
-            title_frame,
-            text="V.A.T.S.A.L",
-            font=("Georgia", 42, "bold"),
-            bg=self.BG_SECONDARY,
-            fg=self.TEXT_PRIMARY,
-            anchor="center"
-        ).pack(side="left")
-        
-        tk.Label(
-            title_frame,
-            text="✨",
-            font=("Segoe UI", 22),
-            bg=self.BG_SECONDARY,
-            fg=self.TEXT_PRIMARY
-        ).pack(side="left", padx=(15, 0))
-        
-        # Subtitle - SMALLER
-        tk.Label(
-            title_section,
+            title_text,
             text="Vastly Advanced Technological System Above Limitations",
-            font=("Georgia", 12, "italic"),
+            font=("Segoe UI", 9),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_SECONDARY
-        ).pack(pady=(5, 0))
+        ).pack(anchor="w")
         
-        # Status bar - REDUCED PADDING
-        status_bar = tk.Frame(
-            header,
-            bg=self.BG_SECONDARY,
-            relief="flat",
-            borderwidth=1,
-            highlightbackground=self.BORDER_PRIMARY
-        )
-        status_bar.pack(fill="x", padx=30, pady=(15, 20))
+        # Compact status bar on right side
+        status_bar = tk.Frame(title_section, bg=self.BG_SECONDARY)
+        status_bar.pack(side="right")
         
-        # Left side - Date and time
-        left_status = tk.Frame(status_bar, bg=self.BG_SECONDARY)
-        left_status.pack(side="left", pady=(20, 0))
-        
+        # Time display
         self.time_label = tk.Label(
-            left_status,
+            status_bar,
             text="",
-            font=("Segoe UI", 11),
+            font=("Segoe UI", 10),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_SECONDARY
         )
-        self.time_label.pack(side="left")
+        self.time_label.pack(side="top", anchor="e", pady=(0, 5))
         
-        tk.Label(
-            left_status,
-            text=" • ",
-            font=("Segoe UI", 11),
-            bg=self.BG_SECONDARY,
-            fg=self.ACCENT_COLOR
-        ).pack(side="left")
-        
-        tk.Label(
-            left_status,
-            text="100+ AI Features Available",
-            font=("Segoe UI", 11),
-            bg=self.BG_SECONDARY,
-            fg=self.TEXT_SECONDARY
-        ).pack(side="left")
-        
-        # Right side - Status toggles
+        # Toggles in horizontal layout
         toggles_frame = tk.Frame(status_bar, bg=self.BG_SECONDARY)
-        toggles_frame.pack(side="right", pady=(20, 0))
+        toggles_frame.pack(side="top")
         
-        # VATSAL toggle with enhanced 3D shadow effect
-        vatsal_shadow_outer = tk.Frame(toggles_frame, bg="#909090", bd=0)
-        vatsal_shadow_outer.pack(side="left", padx=(2, 12), pady=2)
-        
-        vatsal_shadow_mid = tk.Frame(vatsal_shadow_outer, bg="#B0B0B0", bd=0)
-        vatsal_shadow_mid.pack(padx=(0, 5), pady=(0, 5))
-        
-        # Canvas for rounded VATSAL button
-        vatsal_canvas = tk.Canvas(
-            vatsal_shadow_mid,
-            bg=self.BG_PRIMARY,
-            highlightthickness=0,
-            bd=0,
-            width=200,
-            height=50
-        )
-        vatsal_canvas.pack()
-        
-        # Draw rounded background
-        self.round_corners_canvas(vatsal_canvas, 200, 50, 20, self.BG_SECONDARY, self.BORDER_PRIMARY, 3)
-        
+        # Simple modern toggle buttons
         self.vatsal_toggle = tk.Button(
-            vatsal_canvas,
+            toggles_frame,
             text="● VATSAL: ON",
-            font=("Segoe UI", 11, "bold"),
-            bg=self.BG_SECONDARY,
+            font=("Segoe UI", 9, "bold"),
+            bg=self.BUTTON_BG,
             fg=self.ACTIVE_GREEN,
-            relief="flat",
-            borderwidth=0,
+            relief="solid",
+            borderwidth=1,
             cursor="hand2",
-            padx=24,
-            pady=8,
+            padx=12,
+            pady=6,
             command=self.toggle_vatsal,
             activebackground=self.BUTTON_HOVER
         )
-        vatsal_canvas.create_window(100, 25, window=self.vatsal_toggle)
-        
-        # Enhanced 3D hover effect
-        def vatsal_hover_enter(e):
-            vatsal_shadow_mid.pack_configure(padx=(0, 7), pady=(0, 7))
-        
-        def vatsal_hover_leave(e):
-            vatsal_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-        
-        def vatsal_press(e):
-            vatsal_shadow_mid.pack_configure(padx=(0, 2), pady=(0, 2))
-        
-        def vatsal_release(e):
-            vatsal_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-        
-        self.vatsal_toggle.bind("<Enter>", vatsal_hover_enter)
-        self.vatsal_toggle.bind("<Leave>", vatsal_hover_leave)
-        self.vatsal_toggle.bind("<ButtonPress-1>", vatsal_press)
-        self.vatsal_toggle.bind("<ButtonRelease-1>", vatsal_release)
-        
-        # Self-Operating toggle with enhanced 3D shadow effect
-        soc_shadow_outer = tk.Frame(toggles_frame, bg="#909090", bd=0)
-        soc_shadow_outer.pack(side="left", padx=2, pady=2)
-        
-        soc_shadow_mid = tk.Frame(soc_shadow_outer, bg="#B0B0B0", bd=0)
-        soc_shadow_mid.pack(padx=(0, 5), pady=(0, 5))
-        
-        # Canvas for rounded Self-Operating button
-        soc_canvas = tk.Canvas(
-            soc_shadow_mid,
-            bg=self.BG_PRIMARY,
-            highlightthickness=0,
-            bd=0,
-            width=250,
-            height=50
-        )
-        soc_canvas.pack()
-        
-        # Draw rounded background
-        self.round_corners_canvas(soc_canvas, 250, 50, 20, self.BG_SECONDARY, self.BORDER_PRIMARY, 3)
+        self.vatsal_toggle.pack(side="left", padx=(0, 8))
+        self._add_hover_effect(self.vatsal_toggle, self.BUTTON_BG, self.BUTTON_HOVER)
         
         self.soc_toggle = tk.Button(
-            soc_canvas,
-            text="🔲 Self-Operating: ON",
-            font=("Segoe UI", 11, "bold"),
-            bg=self.BG_SECONDARY,
+            toggles_frame,
+            text="🤖 Self-Operating: ON",
+            font=("Segoe UI", 9, "bold"),
+            bg=self.BUTTON_BG,
             fg=self.ACTIVE_GREEN,
-            relief="flat",
-            borderwidth=0,
+            relief="solid",
+            borderwidth=1,
             cursor="hand2",
-            padx=24,
-            pady=8,
+            padx=12,
+            pady=6,
             command=self.toggle_self_operating,
             activebackground=self.BUTTON_HOVER
         )
-        soc_canvas.create_window(125, 25, window=self.soc_toggle)
-        
-        # Enhanced 3D hover effect
-        def soc_hover_enter(e):
-            soc_shadow_mid.pack_configure(padx=(0, 7), pady=(0, 7))
-        
-        def soc_hover_leave(e):
-            soc_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-        
-        def soc_press(e):
-            soc_shadow_mid.pack_configure(padx=(0, 2), pady=(0, 2))
-        
-        def soc_release(e):
-            soc_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-        
-        self.soc_toggle.bind("<Enter>", soc_hover_enter)
-        self.soc_toggle.bind("<Leave>", soc_hover_leave)
-        self.soc_toggle.bind("<ButtonPress-1>", soc_press)
-        self.soc_toggle.bind("<ButtonRelease-1>", soc_release)
+        self.soc_toggle.pack(side="left")
+        self._add_hover_effect(self.soc_toggle, self.BUTTON_BG, self.BUTTON_HOVER)
     
     def _create_command_section(self, parent):
         """Create command input section"""
