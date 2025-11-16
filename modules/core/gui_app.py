@@ -376,11 +376,6 @@ class ModernVATSALGUI:
         # Main command tab (original interface)
         self._create_main_command_tab(self.notebook)
 
-        # Essential feature tabs only (reduced from 23+ tabs)
-        self.create_vatsal_ai_tab(self.notebook)
-        self.create_vatsal_automator_tab(self.notebook)
-        self.create_self_operating_tab(self.notebook)
-
     def _create_main_command_tab(self, notebook):
         """Create the main command interface tab"""
         tab = tk.Frame(notebook, bg=self.BG_PRIMARY)

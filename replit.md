@@ -9,6 +9,7 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 -   **File Structure:** Well-organized modular architecture with modules/ directory containing core, voice, automation, ai_features, utilities, etc.
 
 ## Recent Changes (November 16, 2025)
+-   **Simplified GUI Interface:** Removed VATSAL Chat, VATSAL Auto, and Self-Operating tabs from `gui_app.py` for a cleaner, more focused interface. Now features only the Main command tab.
 -   **Light Slate Theme UI:** Updated entire GUI theme in `gui_app.py` to use a light cream background (#e8e4dc) with Slate gray accents. Features Slate 500 borders (#64748b), white console (#ffffff), emerald green execute button (#059669), and light Slate shadows, creating a modern, professional interface matching the web GUI design.
 -   **Cloud Environment Compatibility:** Fixed CLI workflow to run successfully in cloud/headless environments (Replit) without X11 display. Added graceful fallback handling for PyAutoGUI-dependent features with clear user feedback.
 -   **System Dependencies:** Installed gcc-unwrapped to resolve libstdc++.so.6 missing library error for numpy and pandas compatibility.
