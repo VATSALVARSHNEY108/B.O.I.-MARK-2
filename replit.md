@@ -9,7 +9,7 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 -   **File Structure:** Well-organized modular architecture with modules/ directory containing core, voice, automation, ai_features, utilities, etc.
 
 ## Recent Changes (November 16, 2025)
--   **Slate Color Palette UI:** Updated entire GUI theme in `gui_app.py` to use a professional Slate color palette. All colors now use Slate shades: Slate 900 backgrounds (#0f172a), Slate 100 text (#f1f5f9), Slate 500 accents (#64748b), creating a cohesive, modern dark interface.
+-   **Light Slate Theme UI:** Updated entire GUI theme in `gui_app.py` to use a light cream background (#e8e4dc) with Slate gray accents. Features Slate 500 borders (#64748b), white console (#ffffff), emerald green execute button (#059669), and light Slate shadows, creating a modern, professional interface matching the web GUI design.
 -   **Cloud Environment Compatibility:** Fixed CLI workflow to run successfully in cloud/headless environments (Replit) without X11 display. Added graceful fallback handling for PyAutoGUI-dependent features with clear user feedback.
 -   **System Dependencies:** Installed gcc-unwrapped to resolve libstdc++.so.6 missing library error for numpy and pandas compatibility.
 -   **Import Fixes:** Corrected import paths in smart_screen_monitor.py for analyze_screenshot function.
@@ -21,7 +21,7 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 The AI Desktop Automation Controller is built with Python 3.11 and utilizes a modular architecture, enabling a wide range of desktop automation and AI-powered functionalities.
 
 ### UI/UX Decisions
-The system offers desktop GUIs built with `tkinter` featuring a **professional Slate color palette** with beautiful multi-layer shadow effects on all buttons and boxes for depth and aesthetic appeal. The theme uses Slate 900 backgrounds (#0f172a), Slate 100 text (#f1f5f9), Slate 500 accents (#64748b), and Slate-based shadows for a cohesive, modern dark interface. A "Modern Web GUI" is built with Flask and Flask-SocketIO. A CLI interface is available for headless environments.
+The system offers desktop GUIs built with `tkinter` featuring a **light cream background with Slate gray accents** and beautiful multi-layer shadow effects on all buttons and boxes for depth and aesthetic appeal. The theme uses cream backgrounds (#e8e4dc), white console (#ffffff), Slate 500 borders/accents (#64748b), emerald green execute button (#059669), and light Slate-based shadows for a clean, professional interface. A "Modern Web GUI" is built with Flask and Flask-SocketIO. A CLI interface is available for headless environments.
 
 ### Technical Implementations
 -   **AI Command Processing:** Gemini AI for natural language understanding and action conversion.
