@@ -1359,7 +1359,141 @@ class CommandExecutor:
                 return {"success": True, "message": result}
 
             elif action == "sleep":
-                result = self.system_control.sleep_system()
+                result = self.system_control.sleep_mode()
+                return {"success": True, "message": result}
+
+            elif action == "hibernate":
+                result = self.system_control.hibernate()
+                return {"success": True, "message": result}
+
+            elif action == "cancel_shutdown":
+                result = self.system_control.cancel_shutdown_restart()
+                return {"success": True, "message": result}
+
+            elif action == "schedule_sleep":
+                time_str = parameters.get("time", "23:00")
+                result = self.system_control.schedule_sleep(time_str)
+                return {"success": True, "message": result}
+
+            elif action == "cancel_sleep":
+                result = self.system_control.cancel_sleep()
+                return {"success": True, "message": result}
+
+            elif action == "schedule_wake":
+                time_str = parameters.get("time", "07:00")
+                result = self.system_control.schedule_wake(time_str)
+                return {"success": True, "message": result}
+
+            elif action == "clear_temp":
+                result = self.system_control.clear_temp_files()
+                return {"success": True, "message": result}
+
+            elif action == "empty_recycle_bin":
+                result = self.system_control.empty_recycle_bin()
+                return {"success": True, "message": result}
+
+            elif action == "check_disk_space":
+                result = self.system_control.check_disk_space()
+                return {"success": True, "message": result}
+
+            elif action == "get_cpu_usage":
+                result = self.system_control.get_cpu_usage()
+                return {"success": True, "message": result}
+
+            elif action == "get_ram_usage":
+                result = self.system_control.get_ram_usage()
+                return {"success": True, "message": result}
+
+            elif action == "get_battery":
+                result = self.system_control.get_battery_status()
+                return {"success": True, "message": result}
+
+            elif action == "get_uptime":
+                result = self.system_control.get_system_uptime()
+                return {"success": True, "message": result}
+
+            elif action == "get_network_status":
+                result = self.system_control.get_network_status()
+                return {"success": True, "message": result}
+
+            elif action == "get_disk_usage":
+                result = self.system_control.get_disk_usage()
+                return {"success": True, "message": result}
+
+            elif action == "get_full_system_info":
+                result = self.system_control.get_system_info()
+                return {"success": True, "message": result}
+
+            elif action == "minimize_all":
+                result = self.system_control.minimize_all_windows()
+                return {"success": True, "message": result}
+
+            elif action == "show_desktop":
+                result = self.system_control.show_desktop()
+                return {"success": True, "message": result}
+
+            elif action == "list_windows":
+                result = self.system_control.list_open_windows()
+                return {"success": True, "message": result}
+
+            elif action == "list_processes":
+                limit = parameters.get("limit", 10)
+                result = self.system_control.list_running_processes(limit)
+                return {"success": True, "message": result}
+
+            elif action == "kill_process":
+                process_name = parameters.get("process_name", "")
+                result = self.system_control.kill_process(process_name)
+                return {"success": True, "message": result}
+
+            elif action == "open_calculator":
+                result = self.system_control.open_calculator()
+                return {"success": True, "message": result}
+
+            elif action == "open_notepad":
+                result = self.system_control.open_notepad()
+                return {"success": True, "message": result}
+
+            elif action == "open_task_manager":
+                result = self.system_control.open_task_manager()
+                return {"success": True, "message": result}
+
+            elif action == "open_file_explorer":
+                path = parameters.get("path", None)
+                result = self.system_control.open_file_explorer(path)
+                return {"success": True, "message": result}
+
+            elif action == "open_cmd":
+                result = self.system_control.open_command_prompt()
+                return {"success": True, "message": result}
+
+            elif action == "set_timer":
+                seconds = parameters.get("seconds", 60)
+                message = parameters.get("message", "Timer finished!")
+                result = self.system_control.set_timer(seconds, message)
+                return {"success": True, "message": result}
+
+            elif action == "set_alarm":
+                time_str = parameters.get("time", "")
+                message = parameters.get("message", "Alarm!")
+                result = self.system_control.set_alarm(time_str, message)
+                return {"success": True, "message": result}
+
+            elif action == "clipboard_copy":
+                text = parameters.get("text", "")
+                result = self.system_control.copy_to_clipboard(text)
+                return {"success": True, "message": result}
+
+            elif action == "clipboard_get":
+                result = self.system_control.get_clipboard()
+                return {"success": True, "message": result}
+
+            elif action == "clipboard_clear":
+                result = self.system_control.clear_clipboard()
+                return {"success": True, "message": result}
+
+            elif action == "open_volume_menu":
+                result = self.system_control.open_volume_brightness_menu()
                 return {"success": True, "message": result}
 
             # ==================== DESKTOP RAG ====================
