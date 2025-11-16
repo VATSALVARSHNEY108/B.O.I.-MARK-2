@@ -1344,6 +1344,24 @@ class CommandExecutor:
                 result = self.system_control.get_volume_info()
                 return {"success": True, "message": result}
 
+            elif action == "lock_screen":
+                result = self.system_control.lock_screen()
+                return {"success": True, "message": result}
+
+            elif action == "shutdown":
+                delay = parameters.get("delay", 10)
+                result = self.system_control.shutdown_system(delay)
+                return {"success": True, "message": result}
+
+            elif action == "restart":
+                delay = parameters.get("delay", 10)
+                result = self.system_control.restart_system(delay)
+                return {"success": True, "message": result}
+
+            elif action == "sleep":
+                result = self.system_control.sleep_system()
+                return {"success": True, "message": result}
+
             # ==================== DESKTOP RAG ====================
             elif action == "index_desktop_rag":
                 folder_path = parameters.get("folder_path", ".")
