@@ -786,7 +786,7 @@ class ModernVATSALGUI:
 
         tk.Label(
             title_text,
-            text="V.A.T.S.A.L  AI Assistant",
+            text="V.A.T.S.A.L.",
             font=("Segoe UI", 18, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
