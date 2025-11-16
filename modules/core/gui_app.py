@@ -338,17 +338,18 @@ class ModernVATSALGUI:
         notebook_frame = tk.Frame(parent, bg=self.BG_PRIMARY)
         notebook_frame.pack(fill="both", expand=True, pady=(0, 20))
         
-        # Create notebook with custom styling
+        # Create notebook with modern styling
         style = ttk.Style()
         style.configure("Custom.TNotebook", background=self.BG_PRIMARY, borderwidth=0)
         style.configure("Custom.TNotebook.Tab", 
                        background=self.BUTTON_BG,
                        foreground=self.TEXT_PRIMARY,
-                       padding=[15, 10],
-                       font=("Segoe UI", 10, "bold"))
+                       padding=[25, 12],
+                       font=("Segoe UI", 11, "bold"))
         style.map("Custom.TNotebook.Tab",
                  background=[("selected", self.ACTIVE_GREEN)],
-                 foreground=[("selected", "white")])
+                 foreground=[("selected", "white")],
+                 padding=[("selected", [25, 12])])
         
         self.notebook = ttk.Notebook(notebook_frame, style="Custom.TNotebook")
         self.notebook.pack(fill="both", expand=True)
@@ -356,30 +357,10 @@ class ModernVATSALGUI:
         # Main command tab (original interface)
         self._create_main_command_tab(self.notebook)
         
-        # Add all 23 feature tabs from old GUI with modern styling
+        # Essential feature tabs only (reduced from 23+ tabs)
         self.create_vatsal_ai_tab(self.notebook)
         self.create_vatsal_automator_tab(self.notebook)
         self.create_self_operating_tab(self.notebook)
-        self.create_comprehensive_controller_tab(self.notebook)
-        self.create_vlm_tab(self.notebook)
-        self.create_web_automation_tab(self.notebook)
-        self.create_code_tab(self.notebook)
-        self.create_desktop_tab(self.notebook)
-        self.create_file_automation_tab(self.notebook)
-        self.create_clipboard_text_tab(self.notebook)
-        self.create_messaging_tab(self.notebook)
-        self.create_system_tab(self.notebook)
-        self.create_productivity_tab(self.notebook)
-        self.create_utilities_tab(self.notebook)
-        self.create_ecosystem_tab(self.notebook)
-        self.create_ai_features_tab(self.notebook)
-        self.create_fun_tab(self.notebook)
-        self.create_advanced_ai_tab(self.notebook)
-        self.create_web_tools_tab(self.notebook)
-        self.create_productivity_hub_tab(self.notebook)
-        self.create_tools_utilities_tab(self.notebook)
-        self.create_macro_recorder_tab(self.notebook)
-        self.create_mobile_operations_tab(self.notebook)
     
     def _create_main_command_tab(self, notebook):
         """Create the main command interface tab"""
