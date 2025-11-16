@@ -5,7 +5,7 @@ integrations = ["python_gemini:1.0.0", "spotify:1.0.0"]
 
 [nix]
 channel = "stable-25_05"
-packages = ["SDL2", "SDL2_image", "SDL2_mixer", "SDL2_ttf", "arrow-cpp", "borgbackup", "c-ares", "cacert", "cairo", "cargo", "chromedriver", "chromium", "cmake", "coreutils", "espeak-ng", "ffmpeg-full", "fontconfig", "freetype", "geckodriver", "ghostscript", "glibcLocales", "gmp", "gobject-introspection", "grpc", "gtk3", "iana-etc", "lcms2", "libGL", "libGLU", "libcxx", "liberfa", "libffi", "libiconv", "libimagequant", "libjpeg", "libpng", "libtiff", "libwebp", "libxcrypt", "openjpeg", "openssl", "pkg-config", "portmidi", "python312Full", "qhull", "rustc", "scrot", "sqlite", "tcl", "tigervnc", "tk", "util-linux", "x11vnc", "xcodebuild", "xorg.libX11", "xorg.libXext", "xorg.xinit", "xorg.xorgserver", "xsimd", "xvfb-run", "zbar", "zlib", "gcc-unwrapped"]
+packages = ["SDL2", "SDL2_image", "SDL2_mixer", "SDL2_ttf", "arrow-cpp", "borgbackup", "c-ares", "cacert", "cairo", "cargo", "chromedriver", "chromium", "cmake", "coreutils", "espeak-ng", "ffmpeg-full", "fontconfig", "freetype", "gcc-unwrapped", "geckodriver", "ghostscript", "glibcLocales", "gmp", "gobject-introspection", "grpc", "gtk3", "iana-etc", "lcms2", "libGL", "libGLU", "libcxx", "liberfa", "libffi", "libiconv", "libimagequant", "libjpeg", "libpng", "libtiff", "libwebp", "libxcrypt", "openjpeg", "openssl", "pkg-config", "portmidi", "python312Full", "qhull", "rustc", "scrot", "sqlite", "tcl", "tigervnc", "tk", "util-linux", "x11vnc", "xcodebuild", "xorg.libX11", "xorg.libXext", "xorg.xinit", "xorg.xorgserver", "xsimd", "xvfb-run", "zbar", "zlib"]
 
 [workflows]
 runButton = "Project"
