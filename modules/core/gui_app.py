@@ -438,7 +438,7 @@ class ModernVATSALGUI:
             input_row,
             bg="white",
             fg=self.TEXT_PRIMARY,
-            font=("Segoe UI", 12),
+            font=("Segoe UI", 12, "bold"),
             insertbackground=self.TEXT_PRIMARY,
             relief="solid",
             borderwidth=1,
@@ -486,7 +486,7 @@ class ModernVATSALGUI:
             btn = tk.Button(
                 btn_frame,
                 text=f"{icon}\n{label}",
-                font=("Segoe UI", 11),
+                font=("Segoe UI", 11, "bold"),
                 bg=self.BUTTON_BG,
                 fg=self.TEXT_PRIMARY,
                 relief="flat",
@@ -551,7 +551,7 @@ class ModernVATSALGUI:
             console_frame,
             bg="white",
             fg=self.TEXT_PRIMARY,
-            font=("Consolas", 10),
+            font=("Consolas", 10, "bold"),
             relief="solid",
             borderwidth=1,
             highlightbackground=self.BORDER_PRIMARY,
@@ -775,7 +775,7 @@ class ModernVATSALGUI:
         tk.Label(
             title_text,
             text="Vastly Advanced Technological System Above Limitations",
-            font=("Segoe UI", 9),
+            font=("Segoe UI", 9, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_SECONDARY
         ).pack(anchor="w")
@@ -788,7 +788,7 @@ class ModernVATSALGUI:
         self.time_label = tk.Label(
             status_bar,
             text="",
-            font=("Segoe UI", 10),
+            font=("Segoe UI", 10, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_SECONDARY
         )
@@ -884,7 +884,7 @@ class ModernVATSALGUI:
             input_area,
             bg=self.CONSOLE_BG,
             fg=self.TEXT_PRIMARY,
-            font=("Segoe UI", 11),
+            font=("Segoe UI", 11, "bold"),
             insertbackground=self.TEXT_PRIMARY,
             relief="flat",
             borderwidth=0,
@@ -1136,7 +1136,7 @@ class ModernVATSALGUI:
             console_frame,
             bg=self.CONSOLE_BG,
             fg=self.TEXT_PRIMARY,
-            font=("Segoe UI", 10),
+            font=("Segoe UI", 10, "bold"),
             relief="solid",
             borderwidth=1,
             highlightbackground=self.BORDER_PRIMARY,
