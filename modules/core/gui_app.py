@@ -24,6 +24,7 @@ from modules.web.selenium_web_automator import SeleniumWebAutomator
 from modules.automation.vatsal_desktop_automator import VATSALAutomator
 from modules.automation.self_operating_computer import SelfOperatingComputer
 from modules.automation.self_operating_integrations import SelfOperatingIntegrationHub, SmartTaskRouter
+from modules.automation.automation_orchestrator import AutomationOrchestrator
 from modules.integration.command_executor_integration import EnhancedCommandExecutor, CommandInterceptor
 from modules.voice.voice_commander import create_voice_commander
 from modules.system.system_control import SystemController
@@ -54,31 +55,31 @@ load_dotenv()
 
 class ModernVATSALGUI:
     """Clean, modern VATSAL GUI matching web interface design"""
-    
+
     def __init__(self, root):
         self.root = root
         self.root.title("V.A.T.S.A.L - AI Desktop Assistant")
-        
-        # Initialize theme colors (Slate color palette)
-        self.BG_PRIMARY = "#0f172a"      # Slate 900 - Dark background
-        self.BG_SECONDARY = "#1e293b"    # Slate 800 - Slightly lighter
-        self.BORDER_PRIMARY = "#334155"  # Slate 700 - Borders
-        self.TEXT_PRIMARY = "#f1f5f9"    # Slate 100 - Light text
-        self.TEXT_SECONDARY = "#94a3b8"  # Slate 400 - Muted text
-        self.ACCENT_COLOR = "#64748b"    # Slate 500 - Accent
-        self.BUTTON_BG = "#334155"       # Slate 700 - Button background
-        self.BUTTON_HOVER = "#475569"    # Slate 600 - Hover state
-        self.ACTIVE_GREEN = "#64748b"    # Slate 500 - Active color
-        self.CONSOLE_BG = "#020617"      # Slate 950 - Darkest console
-        self.SHADOW_COLOR = "rgba(0, 0, 0, 0.4)"  # Dark shadow
-        
+
+        # Initialize theme colors (exact match to web GUI CSS)
+        self.BG_PRIMARY = "#F5F1E8"  # var(--bg-primary)
+        self.BG_SECONDARY = "#FAF8F3"  # var(--bg-secondary)
+        self.BORDER_PRIMARY = "#D9CFC0"  # var(--border-color)
+        self.TEXT_PRIMARY = "#1a1a1a"  # var(--text-primary)
+        self.TEXT_SECONDARY = "#5a5a5a"  # var(--text-secondary)
+        self.ACCENT_COLOR = "#3a3a3a"  # var(--accent-color)
+        self.BUTTON_BG = "#F3EADA"  # var(--button-bg)
+        self.BUTTON_HOVER = "#E8DCCB"  # var(--button-hover)
+        self.ACTIVE_GREEN = "#007B55"  # var(--active-green)
+        self.CONSOLE_BG = "#FAF6EE"  # var(--console-bg)
+        self.SHADOW_COLOR = "rgba(0, 0, 0, 0.08)"  # var(--shadow)
+
         # Configure root window
         self.root.configure(bg=self.BG_PRIMARY)
         self.root.geometry("1200x900")
-        
+
         # Set window icon
         self._set_window_icon()
-        
+
         # State variables
         self.processing = False
         self.vatsal_mode = True
@@ -87,38 +88,38 @@ class ModernVATSALGUI:
         self.wakeup_listening = False
         self.vsign_detecting = False
         self.speaking_enabled = False
-        
+
         # Initialize core modules
         self._initialize_modules()
-        
+
         # Build GUI
         self._create_gui()
-        
+
         # Start time updates
         self._update_time()
-        
+
         # Show welcome message
         self._show_welcome()
-    
+
     def _set_window_icon(self):
         """Set the window icon from logo file"""
         try:
             # Get the workspace directory
             workspace_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-            
+
             # Try icon version first (smaller, better for window icons)
             icon_path = os.path.join(workspace_dir, "assets", "vatsal_icon.png")
             if not os.path.exists(icon_path):
                 icon_path = os.path.join(workspace_dir, "assets", "vatsal_logo.png")
-            
+
             if os.path.exists(icon_path):
                 # Load and resize for icon if needed
                 icon_image = Image.open(icon_path)
-                
+
                 # Resize if too large (icons work best at 64x64 or smaller)
                 if icon_image.size[0] > 256 or icon_image.size[1] > 256:
                     icon_image = icon_image.resize((64, 64), Image.Resampling.LANCZOS)
-                
+
                 # Keep as instance variable to prevent garbage collection
                 self.icon_photo = ImageTk.PhotoImage(icon_image)
                 self.root.iconphoto(True, self.icon_photo)
@@ -129,19 +130,19 @@ class ModernVATSALGUI:
             print(f"⚠️ Could not set window icon: {e}")
             import traceback
             traceback.print_exc()
-    
+
     def _initialize_modules(self):
         """Initialize all backend modules"""
         try:
             # User profile manager
             self.user_profile = get_user_profile_manager()
-            
+
             # System controller
             self.system_controller = SystemController()
-            
+
             # Base executor
             self.base_executor = CommandExecutor()
-            
+
             # Enhanced executor with self-operating integration
             try:
                 self.executor = EnhancedCommandExecutor(self.base_executor)
@@ -151,7 +152,7 @@ class ModernVATSALGUI:
                 self.executor = self.base_executor
                 self.command_interceptor = None
                 print(f"⚠️ Using base executor: {e}")
-            
+
             # Core AI modules
             self.vatsal = create_vatsal_assistant()
             self.advanced_monitor = create_advanced_smart_screen_monitor()
@@ -160,27 +161,27 @@ class ModernVATSALGUI:
             self.clipboard_handler = ClipboardTextHandler()
             self.smart_automation = SmartAutomationManager()
             self.desktop_controller = DesktopFileController()
-            
+
             # Comprehensive desktop controller
             try:
                 self.comprehensive_controller = ComprehensiveDesktopController()
             except Exception as e:
                 self.comprehensive_controller = None
                 print(f"⚠️ Comprehensive controller unavailable: {e}")
-            
+
             # Chatbot
             try:
                 self.simple_chatbot = SimpleChatbot()
             except Exception as e:
                 self.simple_chatbot = None
-            
+
             # Web automator
             try:
                 self.web_automator = SeleniumWebAutomator()
             except Exception as e:
                 self.web_automator = None
                 print(f"⚠️ Web automator unavailable: {e}")
-            
+
             # Virtual Language Model
             try:
                 gui_automation = GUIAutomation()
@@ -190,14 +191,14 @@ class ModernVATSALGUI:
                 self.vlm = None
                 self.vlm_last_decision = None
                 print(f"⚠️ VLM unavailable: {e}")
-            
+
             # VATSAL Automator
             try:
                 self.vatsal_automator = VATSALAutomator()
             except Exception as e:
                 self.vatsal_automator = None
                 print(f"⚠️ VATSAL Automator unavailable: {e}")
-            
+
             # Self-Operating Computer
             try:
                 self.self_operating_computer = SelfOperatingComputer(verbose=True)
@@ -208,7 +209,7 @@ class ModernVATSALGUI:
                 self.soc_running = False
                 self.soc_thread = None
                 print(f"⚠️ Self-Operating Computer unavailable: {e}")
-            
+
             # Self-Operating Integration Hub
             try:
                 self.integration_hub = SelfOperatingIntegrationHub()
@@ -217,7 +218,7 @@ class ModernVATSALGUI:
                 self.integration_hub = None
                 self.task_router = None
                 print(f"⚠️ Integration hub unavailable: {e}")
-            
+
             # WebSocket client
             try:
                 self.ws_client = get_websocket_client()
@@ -226,7 +227,7 @@ class ModernVATSALGUI:
             except Exception as e:
                 self.ws_client = None
                 print(f"⚠️ WebSocket unavailable: {e}")
-            
+
             # Voice commander
             try:
                 self.voice_commander = create_voice_commander(command_callback=self.handle_voice_command)
@@ -235,7 +236,7 @@ class ModernVATSALGUI:
                 self.voice_commander = None
                 self.voice_listening = False
                 print(f"⚠️ Voice commander unavailable: {e}")
-            
+
             # Gesture voice activator
             try:
                 self.gesture_voice_activator = create_gesture_voice_activator(
@@ -246,7 +247,7 @@ class ModernVATSALGUI:
                 self.gesture_voice_activator = None
                 self.gesture_voice_active = False
                 print(f"⚠️ Gesture voice activator unavailable: {e}")
-            
+
             # Hand gesture detector
             try:
                 self.gesture_assistant = OpenCVHandGestureDetector(voice_commander=self.voice_commander)
@@ -257,7 +258,7 @@ class ModernVATSALGUI:
                 self.gesture_running = False
                 self.gesture_detector_type = None
                 print(f"⚠️ Gesture detector unavailable: {e}")
-            
+
             # Macro recorder
             try:
                 self.macro_recorder = MacroRecorder()
@@ -266,7 +267,7 @@ class ModernVATSALGUI:
                 self.macro_recorder = None
                 self.macro_templates = None
                 print(f"⚠️ Macro recorder unavailable: {e}")
-            
+
             # Workflow builder
             try:
                 self.workflow_builder = create_nl_workflow_builder()
@@ -275,7 +276,7 @@ class ModernVATSALGUI:
                 self.workflow_builder = None
                 self.workflow_manager = None
                 print(f"⚠️ Workflow builder unavailable: {e}")
-            
+
             # Productivity modules
             try:
                 self.productivity_dashboard = ProductivityDashboard()
@@ -287,7 +288,7 @@ class ModernVATSALGUI:
                 self.break_suggester = SmartBreakSuggester()
             except Exception as e:
                 print(f"⚠️ Productivity modules unavailable: {e}")
-            
+
             # Utility modules
             try:
                 self.password_vault = PasswordVault()
@@ -297,14 +298,14 @@ class ModernVATSALGUI:
                 self.translator = TranslationService()
             except Exception as e:
                 print(f"⚠️ Utility modules unavailable: {e}")
-            
+
             # Security dashboard
             try:
                 self.security_dashboard = SecurityDashboard()
             except Exception as e:
                 self.security_dashboard = None
                 print(f"⚠️ Security dashboard unavailable: {e}")
-            
+
             # Desktop sync manager
             try:
                 auto_initialize_on_gui_start()
@@ -312,77 +313,95 @@ class ModernVATSALGUI:
             except Exception as e:
                 self.desktop_sync_manager = None
                 print(f"⚠️ Desktop sync manager unavailable: {e}")
-                
+
+            # Automation Orchestrator - Real autonomous task execution
+            try:
+                self.automation_orchestrator = AutomationOrchestrator(
+                    command_executor=self.executor,
+                    self_operating_computer=self.self_operating_computer
+                )
+                # Set up callbacks for UI updates (thread-safe)
+                self.automation_orchestrator.set_callbacks(
+                    status_cb=self._orchestrator_status_update,
+                    completion_cb=self._orchestrator_task_complete,
+                    confirmation_cb=self._orchestrator_confirm_task
+                )
+                self.automation_orchestrator.start()
+                print("✅ Automation Orchestrator initialized and started")
+            except Exception as e:
+                self.automation_orchestrator = None
+                print(f"⚠️ Automation Orchestrator unavailable: {e}")
+
         except Exception as e:
             print(f"❌ Error initializing modules: {e}")
             messagebox.showerror("Initialization Error", f"Failed to initialize: {e}")
-    
+
     def _create_gui(self):
         """Create the main GUI layout with tabbed interface"""
         # Main container with padding
         main_container = tk.Frame(self.root, bg=self.BG_PRIMARY)
         main_container.pack(fill="both", expand=True, padx=20, pady=20)
-        
+
         # Header section
         self._create_header(main_container)
-        
+
         # Create tabbed notebook for all features
         self._create_tabbed_interface(main_container)
-        
+
         # Footer with buttons and status
         self._create_footer()
-    
+
     def _create_tabbed_interface(self, parent):
         """Create notebook with all feature tabs"""
         # Notebook container
         notebook_frame = tk.Frame(parent, bg=self.BG_PRIMARY)
         notebook_frame.pack(fill="both", expand=True, pady=(0, 20))
-        
+
         # Create notebook with modern styling
         style = ttk.Style()
         style.configure("Custom.TNotebook", background=self.BG_PRIMARY, borderwidth=0)
-        style.configure("Custom.TNotebook.Tab", 
-                       background=self.BUTTON_BG,
-                       foreground=self.TEXT_PRIMARY,
-                       padding=[25, 12],
-                       font=("Segoe UI", 11, "bold"))
+        style.configure("Custom.TNotebook.Tab",
+                        background=self.BUTTON_BG,
+                        foreground=self.TEXT_PRIMARY,
+                        padding=[25, 12],
+                        font=("Segoe UI", 11, "bold"))
         style.map("Custom.TNotebook.Tab",
-                 background=[("selected", self.ACTIVE_GREEN)],
-                 foreground=[("selected", "white")],
-                 padding=[("selected", [25, 12])])
-        
+                  background=[("selected", self.ACTIVE_GREEN)],
+                  foreground=[("selected", "white")],
+                  padding=[("selected", [25, 12])])
+
         self.notebook = ttk.Notebook(notebook_frame, style="Custom.TNotebook")
         self.notebook.pack(fill="both", expand=True)
-        
+
         # Main command tab (original interface)
         self._create_main_command_tab(self.notebook)
-        
+
         # Essential feature tabs only (reduced from 23+ tabs)
         self.create_vatsal_ai_tab(self.notebook)
         self.create_vatsal_automator_tab(self.notebook)
         self.create_self_operating_tab(self.notebook)
-    
+
     def _create_main_command_tab(self, notebook):
         """Create the main command interface tab"""
         tab = tk.Frame(notebook, bg=self.BG_PRIMARY)
         notebook.add(tab, text="🏠 Main")
-        
+
         # Command input section
         self._create_command_section_for_tab(tab)
-        
+
         # Output console section
         self._create_output_section_for_tab(tab)
-    
+
     def _create_command_section_for_tab(self, parent):
         """Create command input section for tab"""
         # Modern clean section with beautiful shadow
         section_shadow, section = self.create_shadowed_frame(parent)
         section_shadow.pack(fill="x", pady=(15, 20), padx=15)
-        
+
         # Section header
         header = tk.Frame(section, bg=self.BG_SECONDARY)
         header.pack(fill="x", padx=30, pady=(20, 15))
-        
+
         tk.Label(
             header,
             text="💬",
@@ -390,7 +409,7 @@ class ModernVATSALGUI:
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left", padx=(0, 12))
-        
+
         tk.Label(
             header,
             text="Command Input",
@@ -398,19 +417,19 @@ class ModernVATSALGUI:
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left")
-        
+
         # Input area with better layout
         input_area = tk.Frame(section, bg=self.BG_SECONDARY)
         input_area.pack(fill="x", padx=30, pady=(0, 25))
-        
+
         # Input row
         input_row = tk.Frame(input_area, bg=self.BG_SECONDARY)
         input_row.pack(fill="x", pady=(0, 15))
-        
+
         # Command input with better styling
         self.command_input = tk.Entry(
             input_row,
-            bg=self.CONSOLE_BG,
+            bg="white",
             fg=self.TEXT_PRIMARY,
             font=("Segoe UI", 12, "bold"),
             insertbackground=self.TEXT_PRIMARY,
@@ -422,11 +441,11 @@ class ModernVATSALGUI:
         )
         self.command_input.pack(side="left", fill="both", expand=True, ipady=12)
         self.command_input.bind("<Return>", lambda e: self.execute_command())
-        
+
         # Buttons row - separated for better organization
         buttons_row = tk.Frame(input_area, bg=self.BG_SECONDARY)
         buttons_row.pack(fill="x")
-        
+
         # Execute button - larger and more prominent with shadow
         execute_shadow, self.execute_btn = self.create_shadowed_button(
             buttons_row,
@@ -439,14 +458,14 @@ class ModernVATSALGUI:
             pady=12
         )
         execute_shadow.pack(side="left", padx=(0, 15))
-        
+
         # Icon buttons with labels - more intuitive with shadows
         icon_buttons = [
             ("👂", "Wake Word", self.toggle_wakeup_listener),
             ("✌️", "V-Sign", self.toggle_v_sign_detector),
             ("🗣️", "Speaking", self.toggle_speaking)
         ]
-        
+
         for icon, label, command in icon_buttons:
             # Create shadowed button
             btn_shadow, btn = self.create_shadowed_button(
@@ -458,7 +477,7 @@ class ModernVATSALGUI:
                 pady=8
             )
             btn_shadow.pack(side="left", padx=5)
-            
+
             # Store button references
             if icon == "👂":
                 self.wakeup_btn = btn
@@ -466,17 +485,17 @@ class ModernVATSALGUI:
                 self.vsign_btn = btn
             elif icon == "🗣️":
                 self.speaking_btn = btn
-    
+
     def _create_output_section_for_tab(self, parent):
         """Create output console section for tab"""
         # Modern clean section with beautiful shadow
         section_shadow, section = self.create_shadowed_frame(parent)
         section_shadow.pack(fill="both", expand=True, padx=15, pady=(0, 15))
-        
+
         # Header
         header = tk.Frame(section, bg=self.BG_SECONDARY)
         header.pack(fill="x", padx=30, pady=(20, 15))
-        
+
         tk.Label(
             header,
             text="📋",
@@ -484,7 +503,7 @@ class ModernVATSALGUI:
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left", padx=(0, 12))
-        
+
         tk.Label(
             header,
             text="Output Console",
@@ -492,14 +511,14 @@ class ModernVATSALGUI:
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left")
-        
+
         # Output console with better styling
         console_frame = tk.Frame(section, bg=self.BG_SECONDARY)
         console_frame.pack(fill="both", expand=True, padx=30, pady=(0, 25))
-        
+
         self.output_area = scrolledtext.ScrolledText(
             console_frame,
-            bg=self.CONSOLE_BG,
+            bg="white",
             fg=self.TEXT_PRIMARY,
             font=("Consolas", 10, "bold"),
             relief="solid",
@@ -513,44 +532,44 @@ class ModernVATSALGUI:
         )
         self.output_area.pack(fill="both", expand=True)
         self.output_area.config(state="disabled")
-        
-        # Configure text tags for better output formatting (Slate themed)
-        self.output_area.tag_config("info", foreground="#94a3b8")  # Slate 400
-        self.output_area.tag_config("success", foreground="#64748b", font=("Consolas", 10, "bold"))  # Slate 500
-        self.output_area.tag_config("error", foreground="#cbd5e1", font=("Consolas", 10, "bold"))  # Slate 300
-        self.output_area.tag_config("warning", foreground="#94a3b8")  # Slate 400
-    
+
+        # Configure text tags for better output formatting
+        self.output_area.tag_config("info", foreground="#2196F3")
+        self.output_area.tag_config("success", foreground=self.ACTIVE_GREEN, font=("Consolas", 10, "bold"))
+        self.output_area.tag_config("error", foreground="#D32F2F", font=("Consolas", 10, "bold"))
+        self.output_area.tag_config("warning", foreground="#FF9800")
+
     def create_rounded_rectangle(self, width, height, radius, color):
         """Create a rounded rectangle image using PIL"""
         image = Image.new('RGBA', (width, height), (0, 0, 0, 0))
         draw = ImageDraw.Draw(image)
-        
+
         # Draw rounded rectangle
         draw.rounded_rectangle(
-            [(0, 0), (width-1, height-1)],
+            [(0, 0), (width - 1, height - 1)],
             radius=radius,
             fill=color
         )
-        
+
         return ImageTk.PhotoImage(image)
-    
+
     def round_corners_canvas(self, canvas, width, height, radius, fill_color, outline_color=None, outline_width=0):
         """Draw a rounded rectangle on a canvas"""
         points = [
             radius, 0,
-            width-radius, 0,
+            width - radius, 0,
             width, 0,
             width, radius,
-            width, height-radius,
+            width, height - radius,
             width, height,
-            width-radius, height,
+            width - radius, height,
             radius, height,
             0, height,
-            0, height-radius,
+            0, height - radius,
             0, radius,
             0, 0
         ]
-        
+
         return canvas.create_polygon(
             points,
             smooth=True,
@@ -558,25 +577,25 @@ class ModernVATSALGUI:
             outline=outline_color or fill_color,
             width=outline_width
         )
-    
+
     def create_rounded_button(self, parent, text, command, bg_color=None, fg_color=None, width=None, height=None):
         """Create a button with enhanced 3D effect, dramatic shadows, and rounded corners"""
         if bg_color is None:
             bg_color = self.BUTTON_BG
         if fg_color is None:
             fg_color = self.TEXT_PRIMARY
-        
-        # Outer shadow container (darker, more pronounced - ENHANCED!) - Slate shadow
-        outer_shadow = tk.Frame(parent, bg="#020617", bd=0)
-        
-        # Mid shadow layer (stronger gradient - ENHANCED!) - Slate 900
-        mid_shadow = tk.Frame(outer_shadow, bg="#0f172a", bd=0)
+
+        # Outer shadow container (darker, more pronounced - ENHANCED!)
+        outer_shadow = tk.Frame(parent, bg="#707070", bd=0)
+
+        # Mid shadow layer (stronger gradient - ENHANCED!)
+        mid_shadow = tk.Frame(outer_shadow, bg="#959595", bd=0)
         mid_shadow.pack(padx=(0, 8), pady=(0, 8))
-        
-        # Inner shadow layer (ENHANCED!) - Slate 800
-        inner_shadow = tk.Frame(mid_shadow, bg="#1e293b", bd=0)
+
+        # Inner shadow layer (ENHANCED!)
+        inner_shadow = tk.Frame(mid_shadow, bg="#B8B8B8", bd=0)
         inner_shadow.pack(padx=(0, 4), pady=(0, 4))
-        
+
         # Canvas for rounded corners
         canvas = tk.Canvas(
             inner_shadow,
@@ -585,7 +604,7 @@ class ModernVATSALGUI:
             bd=0
         )
         canvas.pack()
-        
+
         # Actual button with enhanced appearance and rounded style
         btn = tk.Button(
             canvas,
@@ -603,90 +622,90 @@ class ModernVATSALGUI:
             activeforeground=fg_color,
             borderwidth=0
         )
-        
+
         if width:
             btn.config(width=width)
         if height:
             btn.config(height=height)
-        
+
         # Create window in canvas for rounded effect
         btn_window = canvas.create_window(0, 0, anchor='nw', window=btn)
-        
+
         # Update canvas size to match button
         btn.update_idletasks()
         btn_width = btn.winfo_reqwidth()
         btn_height = btn.winfo_reqheight()
-        
+
         # Draw rounded rectangle background
         radius = 15
         canvas.config(width=btn_width, height=btn_height)
-        
+
         # Draw rounded background
         canvas_bg = canvas.create_rounded_rectangle = lambda x1, y1, x2, y2, r, **kwargs: canvas.create_polygon(
-            x1+r, y1,
-            x1+r, y1,
-            x2-r, y1,
-            x2-r, y1,
+            x1 + r, y1,
+            x1 + r, y1,
+            x2 - r, y1,
+            x2 - r, y1,
             x2, y1,
-            x2, y1+r,
-            x2, y1+r,
-            x2, y2-r,
-            x2, y2-r,
+            x2, y1 + r,
+            x2, y1 + r,
+            x2, y2 - r,
+            x2, y2 - r,
             x2, y2,
-            x2-r, y2,
-            x2-r, y2,
-            x1+r, y2,
-            x1+r, y2,
+            x2 - r, y2,
+            x2 - r, y2,
+            x1 + r, y2,
+            x1 + r, y2,
             x1, y2,
-            x1, y2-r,
-            x1, y2-r,
-            x1, y1+r,
-            x1, y1+r,
+            x1, y2 - r,
+            x1, y2 - r,
+            x1, y1 + r,
+            x1, y1 + r,
             x1, y1,
             smooth=True,
             **kwargs
         )
-        
+
         # Enhanced hover effects with dramatic 3D lift
         def on_enter(e):
             if btn['bg'] != self.ACTIVE_GREEN:
                 btn.config(bg=self.BUTTON_HOVER)
                 mid_shadow.pack_configure(padx=(0, 8), pady=(0, 8))
-        
+
         def on_leave(e):
             if btn['bg'] != self.ACTIVE_GREEN:
                 btn.config(bg=bg_color)
                 mid_shadow.pack_configure(padx=(0, 6), pady=(0, 6))
-        
+
         def on_press(e):
             mid_shadow.pack_configure(padx=(0, 2), pady=(0, 2))
-        
+
         def on_release(e):
             mid_shadow.pack_configure(padx=(0, 6), pady=(0, 6))
-        
+
         btn.bind("<Enter>", on_enter)
         btn.bind("<Leave>", on_leave)
         btn.bind("<ButtonPress-1>", on_press)
         btn.bind("<ButtonRelease-1>", on_release)
-        
+
         return outer_shadow, btn
-    
+
     def create_shadowed_frame(self, parent, bg_color=None, **kwargs):
         """Create a frame with beautiful multi-layer shadow for aesthetic depth"""
         if bg_color is None:
             bg_color = self.BG_SECONDARY
-        
-        # Outer shadow layer (darkest) - Slate shadow
-        outer_shadow = tk.Frame(parent, bg="#020617", bd=0)
-        
-        # Mid shadow layer (gradient) - Slate 900
-        mid_shadow = tk.Frame(outer_shadow, bg="#0f172a", bd=0)
+
+        # Outer shadow layer (darkest)
+        outer_shadow = tk.Frame(parent, bg="#707070", bd=0)
+
+        # Mid shadow layer (gradient)
+        mid_shadow = tk.Frame(outer_shadow, bg="#959595", bd=0)
         mid_shadow.pack(padx=(0, 8), pady=(0, 8), fill="both", expand=True)
-        
-        # Inner shadow layer (lightest shadow) - Slate 800
-        inner_shadow = tk.Frame(mid_shadow, bg="#1e293b", bd=0)
+
+        # Inner shadow layer (lightest shadow)
+        inner_shadow = tk.Frame(mid_shadow, bg="#B8B8B8", bd=0)
         inner_shadow.pack(padx=(0, 4), pady=(0, 4), fill="both", expand=True)
-        
+
         # Actual content frame
         content_frame = tk.Frame(
             inner_shadow,
@@ -698,27 +717,27 @@ class ModernVATSALGUI:
             **kwargs
         )
         content_frame.pack(fill="both", expand=True)
-        
+
         return outer_shadow, content_frame
-    
+
     def create_shadowed_button(self, parent, text, command, bg_color=None, fg_color=None, **kwargs):
         """Create a regular button with beautiful shadow"""
         if bg_color is None:
             bg_color = self.BUTTON_BG
         if fg_color is None:
             fg_color = self.TEXT_PRIMARY
-        
-        # Outer shadow layer - Slate shadow
-        outer_shadow = tk.Frame(parent, bg="#020617", bd=0)
-        
-        # Mid shadow layer - Slate 900
-        mid_shadow = tk.Frame(outer_shadow, bg="#0f172a", bd=0)
+
+        # Outer shadow layer
+        outer_shadow = tk.Frame(parent, bg="#707070", bd=0)
+
+        # Mid shadow layer
+        mid_shadow = tk.Frame(outer_shadow, bg="#959595", bd=0)
         mid_shadow.pack(padx=(0, 6), pady=(0, 6))
-        
-        # Inner shadow layer - Slate 800
-        inner_shadow = tk.Frame(mid_shadow, bg="#1e293b", bd=0)
+
+        # Inner shadow layer
+        inner_shadow = tk.Frame(mid_shadow, bg="#B8B8B8", bd=0)
         inner_shadow.pack(padx=(0, 3), pady=(0, 3))
-        
+
         # Actual button
         btn = tk.Button(
             inner_shadow,
@@ -734,50 +753,50 @@ class ModernVATSALGUI:
             **kwargs
         )
         btn.pack()
-        
+
         # Enhanced hover effects
         def on_enter(e):
             btn.config(bg=self.BUTTON_HOVER)
             mid_shadow.pack_configure(padx=(0, 8), pady=(0, 8))
-        
+
         def on_leave(e):
             btn.config(bg=bg_color)
             mid_shadow.pack_configure(padx=(0, 6), pady=(0, 6))
-        
+
         def on_press(e):
             mid_shadow.pack_configure(padx=(0, 2), pady=(0, 2))
-        
+
         def on_release(e):
             mid_shadow.pack_configure(padx=(0, 6), pady=(0, 6))
-        
+
         btn.bind("<Enter>", on_enter)
         btn.bind("<Leave>", on_leave)
         btn.bind("<ButtonPress-1>", on_press)
         btn.bind("<ButtonRelease-1>", on_release)
-        
+
         return outer_shadow, btn
-    
+
     def _create_header(self, parent):
         """Create modern clean header"""
         # Create header with beautiful shadow
         header_shadow, header = self.create_shadowed_frame(parent)
         header_shadow.pack(fill="x", pady=(0, 15))
-        
+
         # Title section with compact layout
         title_section = tk.Frame(header, bg=self.BG_SECONDARY)
         title_section.pack(fill="x", padx=25, pady=(15, 12))
-        
+
         # Compact title with logo
         title_frame = tk.Frame(title_section, bg=self.BG_SECONDARY)
         title_frame.pack(side="left")
-        
+
         # Add logo
         try:
             workspace_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
             logo_path = os.path.join(workspace_dir, "assets", "vatsal_icon.png")
             if not os.path.exists(logo_path):
                 logo_path = os.path.join(workspace_dir, "assets", "vatsal_logo.png")
-            
+
             if os.path.exists(logo_path):
                 logo_img = Image.open(logo_path)
                 logo_img = logo_img.resize((40, 40), Image.Resampling.LANCZOS)
@@ -789,11 +808,11 @@ class ModernVATSALGUI:
                 ).pack(side="left", padx=(0, 12))
         except Exception as e:
             print(f"Could not load logo: {e}")
-        
+
         # Title and subtitle in vertical layout
         title_text = tk.Frame(title_frame, bg=self.BG_SECONDARY)
         title_text.pack(side="left")
-        
+
         tk.Label(
             title_text,
             text="V.A.T.S.A.L  AI Assistant",
@@ -801,7 +820,7 @@ class ModernVATSALGUI:
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(anchor="w")
-        
+
         tk.Label(
             title_text,
             text="Vastly Advanced Technological System Above Limitations",
@@ -809,11 +828,11 @@ class ModernVATSALGUI:
             bg=self.BG_SECONDARY,
             fg=self.TEXT_SECONDARY
         ).pack(anchor="w")
-        
+
         # Compact status bar on right side
         status_bar = tk.Frame(title_section, bg=self.BG_SECONDARY)
         status_bar.pack(side="right")
-        
+
         # Time display
         self.time_label = tk.Label(
             status_bar,
@@ -823,11 +842,11 @@ class ModernVATSALGUI:
             fg=self.TEXT_SECONDARY
         )
         self.time_label.pack(side="top", anchor="e", pady=(0, 5))
-        
+
         # Toggles in horizontal layout
         toggles_frame = tk.Frame(status_bar, bg=self.BG_SECONDARY)
         toggles_frame.pack(side="top")
-        
+
         # Simple modern toggle buttons with shadows
         vatsal_shadow, self.vatsal_toggle = self.create_shadowed_button(
             toggles_frame,
@@ -839,7 +858,7 @@ class ModernVATSALGUI:
             pady=6
         )
         vatsal_shadow.pack(side="left", padx=(0, 8))
-        
+
         soc_shadow, self.soc_toggle = self.create_shadowed_button(
             toggles_frame,
             text="🤖 Self-Operating: ON",
@@ -850,19 +869,19 @@ class ModernVATSALGUI:
             pady=6
         )
         soc_shadow.pack(side="left")
-    
+
     def _create_command_section(self, parent):
         """Create command input section"""
         # Enhanced outer shadow for dramatic 3D effect
         section_shadow_outer = tk.Frame(parent, bg="#808080", bd=0)
         section_shadow_outer.pack(fill="x", pady=(0, 20))
-        
+
         section_shadow_mid = tk.Frame(section_shadow_outer, bg="#A0A0A0", bd=0)
         section_shadow_mid.pack(fill="x", padx=(0, 8), pady=(0, 8))
-        
+
         section_shadow_inner = tk.Frame(section_shadow_mid, bg="#C0C0C0", bd=0)
         section_shadow_inner.pack(fill="x", padx=(0, 4), pady=(0, 4))
-        
+
         section = tk.Frame(
             section_shadow_inner,
             bg=self.BG_SECONDARY,
@@ -872,11 +891,11 @@ class ModernVATSALGUI:
             highlightthickness=2
         )
         section.pack(fill="x")
-        
+
         # Section header
         header = tk.Frame(section, bg=self.BG_SECONDARY)
         header.pack(fill="x", padx=25, pady=(25, 20))
-        
+
         tk.Label(
             header,
             text="➕",
@@ -884,7 +903,7 @@ class ModernVATSALGUI:
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left", padx=(0, 10))
-        
+
         tk.Label(
             header,
             text="Command Input",
@@ -892,11 +911,11 @@ class ModernVATSALGUI:
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left")
-        
+
         # Input area
         input_area = tk.Frame(section, bg=self.BG_SECONDARY)
         input_area.pack(fill="x", padx=25, pady=(0, 25))
-        
+
         # Command input
         self.command_input = tk.Entry(
             input_area,
@@ -912,14 +931,14 @@ class ModernVATSALGUI:
         )
         self.command_input.pack(side="left", fill="both", expand=True, ipady=14, padx=(0, 15))
         self.command_input.bind("<Return>", lambda e: self.execute_command())
-        
+
         # Buttons container with enhanced 3D shadow
         btn_group_shadow_outer = tk.Frame(input_area, bg="#909090", bd=0)
         btn_group_shadow_outer.pack(side="left")
-        
+
         btn_group_shadow_mid = tk.Frame(btn_group_shadow_outer, bg="#B0B0B0", bd=0)
         btn_group_shadow_mid.pack(padx=(0, 6), pady=(0, 6))
-        
+
         # Canvas for rounded button container (wider for more buttons)
         buttons_canvas = tk.Canvas(
             btn_group_shadow_mid,
@@ -930,17 +949,17 @@ class ModernVATSALGUI:
             height=65
         )
         buttons_canvas.pack()
-        
+
         # Draw rounded background for button group
         self.round_corners_canvas(buttons_canvas, 550, 65, 20, self.BUTTON_BG, "#FFFFFF", 3)
-        
+
         # Frame inside canvas for buttons
         buttons_container = tk.Frame(
             buttons_canvas,
             bg=self.BUTTON_BG
         )
         buttons_canvas.create_window(275, 32, window=buttons_container)
-        
+
         # Execute button with enhanced 3D effect
         self.execute_btn = tk.Button(
             buttons_container,
@@ -958,32 +977,32 @@ class ModernVATSALGUI:
             activebackground=self.BUTTON_HOVER
         )
         self.execute_btn.pack(side="left", padx=3, pady=3)
-        
+
         # Enhanced 3D press effect for execute button
         def exec_press(e):
             self.execute_btn.config(relief="sunken")
-        
+
         def exec_release(e):
             self.execute_btn.config(relief="flat")
-        
+
         self.execute_btn.bind("<ButtonPress-1>", exec_press)
         self.execute_btn.bind("<ButtonRelease-1>", exec_release)
         self._add_hover_effect(self.execute_btn, self.BUTTON_BG, self.BUTTON_HOVER)
-        
+
         # Separator
         tk.Frame(
             buttons_container,
             bg=self.BORDER_PRIMARY,
             width=2
         ).pack(side="left", fill="y")
-        
+
         # Icon buttons - Wakeup, V-sign, Speaking
         icon_buttons = [
             ("👂", self.toggle_wakeup_listener, "Wakeup Word Listener"),
             ("✌️", self.toggle_v_sign_detector, "V-Sign Detector"),
             ("🗣️", self.toggle_speaking, "Speaking")
         ]
-        
+
         for icon, command, tooltip in icon_buttons:
             btn = tk.Button(
                 buttons_container,
@@ -1001,33 +1020,37 @@ class ModernVATSALGUI:
                 activebackground=self.BUTTON_HOVER
             )
             btn.pack(side="left", padx=3, pady=3)
-            
+
             # Enhanced 3D press effect
             def make_press_handler(button):
                 def on_press(e):
                     button.config(relief="sunken", borderwidth=1)
+
                 return on_press
-            
+
             def make_release_handler(button):
                 def on_release(e):
                     button.config(relief="raised", borderwidth=2)
+
                 return on_release
-            
+
             def make_hover_enter(button):
                 def on_enter(e):
                     button.config(borderwidth=3, bg=self.BUTTON_HOVER)
+
                 return on_enter
-            
+
             def make_hover_leave(button):
                 def on_leave(e):
                     button.config(borderwidth=2, bg=self.BUTTON_BG)
+
                 return on_leave
-            
+
             btn.bind("<Enter>", make_hover_enter(btn))
             btn.bind("<Leave>", make_hover_leave(btn))
             btn.bind("<ButtonPress-1>", make_press_handler(btn))
             btn.bind("<ButtonRelease-1>", make_release_handler(btn))
-            
+
             # Store button reference for state updates
             if icon == "👂":
                 self.wakeup_btn = btn
@@ -1035,7 +1058,7 @@ class ModernVATSALGUI:
                 self.vsign_btn = btn
             elif icon == "🗣️":
                 self.speaking_btn = btn
-            
+
             # Separator
             if icon != icon_buttons[-1][0]:
                 tk.Frame(
@@ -1043,19 +1066,19 @@ class ModernVATSALGUI:
                     bg=self.BORDER_PRIMARY,
                     width=2
                 ).pack(side="left", fill="y")
-    
+
     def _create_output_section(self, parent):
         """Create output console section"""
         # Enhanced outer shadow for dramatic 3D effect
         output_shadow_outer = tk.Frame(parent, bg="#808080", bd=0)
         output_shadow_outer.pack(fill="both", expand=True)
-        
+
         output_shadow_mid = tk.Frame(output_shadow_outer, bg="#A0A0A0", bd=0)
         output_shadow_mid.pack(fill="both", expand=True, padx=(0, 8), pady=(0, 8))
-        
+
         output_shadow_inner = tk.Frame(output_shadow_mid, bg="#C0C0C0", bd=0)
         output_shadow_inner.pack(fill="both", expand=True, padx=(0, 4), pady=(0, 4))
-        
+
         section = tk.Frame(
             output_shadow_inner,
             bg=self.BG_SECONDARY,
@@ -1065,15 +1088,15 @@ class ModernVATSALGUI:
             highlightthickness=2
         )
         section.pack(fill="both", expand=True)
-        
+
         # Section header
         header = tk.Frame(section, bg=self.BG_SECONDARY)
         header.pack(fill="x", padx=25, pady=(25, 20))
-        
+
         # Left side
         header_left = tk.Frame(header, bg=self.BG_SECONDARY)
         header_left.pack(side="left")
-        
+
         tk.Label(
             header_left,
             text="📋",
@@ -1081,7 +1104,7 @@ class ModernVATSALGUI:
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left", padx=(0, 10))
-        
+
         tk.Label(
             header_left,
             text="Output Console",
@@ -1089,14 +1112,14 @@ class ModernVATSALGUI:
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left")
-        
+
         # Clear button (top) with enhanced 3D shadow
         clear_shadow_outer = tk.Frame(header, bg="#909090", bd=0)
         clear_shadow_outer.pack(side="right", padx=2, pady=2)
-        
+
         clear_shadow_mid = tk.Frame(clear_shadow_outer, bg="#B0B0B0", bd=0)
         clear_shadow_mid.pack(padx=(0, 5), pady=(0, 5))
-        
+
         # Canvas for rounded Clear button (top)
         clear_canvas = tk.Canvas(
             clear_shadow_mid,
@@ -1107,10 +1130,10 @@ class ModernVATSALGUI:
             height=48
         )
         clear_canvas.pack()
-        
+
         # Draw rounded background
         self.round_corners_canvas(clear_canvas, 120, 48, 18, self.BUTTON_BG, self.BORDER_PRIMARY, 3)
-        
+
         clear_btn = tk.Button(
             clear_canvas,
             text="■ Clear",
@@ -1126,30 +1149,30 @@ class ModernVATSALGUI:
             activebackground=self.BUTTON_HOVER
         )
         clear_canvas.create_window(60, 24, window=clear_btn)
-        
+
         # Enhanced 3D hover effect
         def clear_hover_enter(e):
             clear_shadow_mid.pack_configure(padx=(0, 7), pady=(0, 7))
-        
+
         def clear_hover_leave(e):
             clear_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-        
+
         def clear_press(e):
             clear_shadow_mid.pack_configure(padx=(0, 2), pady=(0, 2))
-        
+
         def clear_release(e):
             clear_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-        
+
         clear_btn.bind("<Enter>", clear_hover_enter)
         clear_btn.bind("<Leave>", clear_hover_leave)
         clear_btn.bind("<ButtonPress-1>", clear_press)
         clear_btn.bind("<ButtonRelease-1>", clear_release)
         self._add_hover_effect(clear_btn, self.BUTTON_BG, self.BUTTON_HOVER)
-        
+
         # Output console
         console_frame = tk.Frame(section, bg=self.BG_SECONDARY)
         console_frame.pack(fill="both", expand=True, padx=25, pady=(0, 15))
-        
+
         self.output_area = scrolledtext.ScrolledText(
             console_frame,
             bg=self.CONSOLE_BG,
@@ -1166,18 +1189,18 @@ class ModernVATSALGUI:
         )
         self.output_area.pack(fill="both", expand=True)
         self.output_area.config(state="disabled")
-        
+
         # Footer with clear button
         footer = tk.Frame(section, bg=self.BG_SECONDARY)
         footer.pack(fill="x", padx=25, pady=(0, 25))
-        
+
         # Clear button (bottom) with enhanced 3D shadow
         clear_b_shadow_outer = tk.Frame(footer, bg="#909090", bd=0)
         clear_b_shadow_outer.pack(side="right", padx=2, pady=2)
-        
+
         clear_b_shadow_mid = tk.Frame(clear_b_shadow_outer, bg="#B0B0B0", bd=0)
         clear_b_shadow_mid.pack(padx=(0, 5), pady=(0, 5))
-        
+
         # Canvas for rounded Clear button (bottom)
         clear_b_canvas = tk.Canvas(
             clear_b_shadow_mid,
@@ -1188,10 +1211,10 @@ class ModernVATSALGUI:
             height=48
         )
         clear_b_canvas.pack()
-        
+
         # Draw rounded background
         self.round_corners_canvas(clear_b_canvas, 120, 48, 18, self.BUTTON_BG, self.BORDER_PRIMARY, 3)
-        
+
         clear_btn_bottom = tk.Button(
             clear_b_canvas,
             text="■ Clear",
@@ -1207,26 +1230,26 @@ class ModernVATSALGUI:
             activebackground=self.BUTTON_HOVER
         )
         clear_b_canvas.create_window(60, 24, window=clear_btn_bottom)
-        
+
         # Enhanced 3D hover effect
         def clear_b_hover_enter(e):
             clear_b_shadow_mid.pack_configure(padx=(0, 7), pady=(0, 7))
-        
+
         def clear_b_hover_leave(e):
             clear_b_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-        
+
         def clear_b_press(e):
             clear_b_shadow_mid.pack_configure(padx=(0, 2), pady=(0, 2))
-        
+
         def clear_b_release(e):
             clear_b_shadow_mid.pack_configure(padx=(0, 5), pady=(0, 5))
-        
+
         clear_btn_bottom.bind("<Enter>", clear_b_hover_enter)
         clear_btn_bottom.bind("<Leave>", clear_b_hover_leave)
         clear_btn_bottom.bind("<ButtonPress-1>", clear_b_press)
         clear_btn_bottom.bind("<ButtonRelease-1>", clear_b_release)
         self._add_hover_effect(clear_btn_bottom, self.BUTTON_BG, self.BUTTON_HOVER)
-    
+
     def _create_footer(self):
         """Create footer with buttons and status"""
         footer = tk.Frame(
@@ -1238,15 +1261,15 @@ class ModernVATSALGUI:
             highlightthickness=2
         )
         footer.pack(fill="x", side="bottom", padx=20, pady=(0, 20))
-        
+
         # Inner container
         footer_content = tk.Frame(footer, bg=self.BG_SECONDARY)
         footer_content.pack(fill="x", padx=20, pady=15)
-        
+
         # Left side - Action buttons
         button_container = tk.Frame(footer_content, bg=self.BG_SECONDARY)
         button_container.pack(side="left")
-        
+
         # Define bottom buttons with beautiful shadows
         bottom_buttons = [
             ("❓ Help", self.show_help),
@@ -1255,7 +1278,7 @@ class ModernVATSALGUI:
             ("💡 Suggestion", self.show_suggestion),
             ("🛡️ Security", self.show_security_dashboard)
         ]
-        
+
         for text, command in bottom_buttons:
             btn_shadow, btn = self.create_shadowed_button(
                 button_container,
@@ -1266,7 +1289,7 @@ class ModernVATSALGUI:
                 pady=8
             )
             btn_shadow.pack(side="left", padx=5)
-        
+
         # Right side - Status label
         status_container = tk.Frame(
             footer_content,
@@ -1277,7 +1300,7 @@ class ModernVATSALGUI:
             highlightthickness=1
         )
         status_container.pack(side="right", padx=10)
-        
+
         self.status_label = tk.Label(
             status_container,
             text="✅ Ready",
@@ -1288,43 +1311,45 @@ class ModernVATSALGUI:
             pady=10
         )
         self.status_label.pack()
-    
+
     def _add_hover_effect(self, button, normal_color, hover_color):
         """Add hover effect to button"""
+
         def on_enter(e):
             button['background'] = hover_color
-        
+
         def on_leave(e):
             button['background'] = normal_color
-        
+
         button.bind("<Enter>", on_enter)
         button.bind("<Leave>", on_leave)
-    
+
     def add_hover_effect(self, button, normal_color, hover_color):
         """Add hover effect to button (legacy method for tab compatibility)"""
+
         def on_enter(e):
             button['background'] = hover_color
-        
+
         def on_leave(e):
             button['background'] = normal_color
-        
+
         button.bind("<Enter>", on_enter)
         button.bind("<Leave>", on_leave)
-    
+
     def add_gradient_effect(self, widget):
         """Add gradient border effect to widget"""
         widget.configure(highlightbackground=self.BORDER_PRIMARY, highlightthickness=1)
-    
+
     def _update_time(self):
         """Update time display"""
         current_time = datetime.now().strftime("%A, %B %d, %Y • %I:%M:%S %p")
         self.time_label.config(text=current_time)
         self.root.after(1000, self._update_time)
-    
+
     def _show_welcome(self):
         """Show welcome message"""
         api_key = os.getenv("GEMINI_API_KEY")
-        
+
         if api_key:
             self.update_output("✅ Gemini AI is ready!\n", "success")
             if self.vatsal and self.vatsal_mode:
@@ -1334,29 +1359,29 @@ class ModernVATSALGUI:
         else:
             self.update_output("⚠️ WARNING: GEMINI_API_KEY not found!\n", "warning")
             self.update_output("Please set your Gemini API key to use AI features.\n", "info")
-    
+
     # ========== COMMAND EXECUTION ==========
-    
+
     def execute_command(self):
         """Execute user command"""
         command = self.command_input.get().strip()
-        
+
         if not command:
             return
-        
+
         if self.processing:
             messagebox.showwarning("Busy", "Please wait for the current command to finish.")
             return
-        
+
         self.processing = True
         self.execute_btn.config(state="disabled", text="⏳ Processing...")
         self.command_input.delete(0, tk.END)
-        
+
         # Execute in thread
         thread = threading.Thread(target=self._execute_in_thread, args=(command,))
         thread.daemon = True
         thread.start()
-    
+
     def _execute_in_thread(self, command):
         """Execute command in separate thread"""
         try:
@@ -1369,11 +1394,11 @@ class ModernVATSALGUI:
                     })
                 except:
                     pass
-            
+
             self.update_output(f"\n{'=' * 60}\n", "info")
             self.update_output(f"📝 You: {command}\n", "command")
             self.update_output(f"{'=' * 60}\n\n", "info")
-            
+
             # VATSAL acknowledgment
             if self.vatsal_mode and self.vatsal and hasattr(self.vatsal, 'acknowledge_command'):
                 try:
@@ -1381,13 +1406,13 @@ class ModernVATSALGUI:
                     self.update_output(f"🤖 VATSAL: {ack}\n\n", "info")
                 except Exception as e:
                     print(f"VATSAL acknowledgment error: {e}")
-            
+
             # Parse and execute command
             command_dict = parse_command(command)
-            
+
             if command_dict.get("action") == "error":
                 error_msg = command_dict.get('description', 'Error processing command')
-                
+
                 if self.vatsal_mode and self.vatsal:
                     try:
                         vatsal_response = self.vatsal.process_with_personality(command, f"Error: {error_msg}")
@@ -1396,12 +1421,12 @@ class ModernVATSALGUI:
                         self.update_output(f"❌ {error_msg}\n", "error")
                 else:
                     self.update_output(f"❌ {error_msg}\n", "error")
-                
+
                 return
-            
+
             # Execute command
             result = self.executor.execute(command_dict)
-            
+
             if result["success"]:
                 # Broadcast command completed
                 if self.ws_client and hasattr(self.ws_client, 'connected') and self.ws_client.connected:
@@ -1413,13 +1438,13 @@ class ModernVATSALGUI:
                         })
                     except:
                         pass
-                
+
                 # Get VATSAL response if enabled
                 if self.vatsal_mode and self.vatsal:
                     try:
                         vatsal_response = self.vatsal.process_with_personality(command, result['message'])
                         self.update_output(f"🤖 VATSAL: {vatsal_response}\n", "success")
-                        
+
                         # Speak response if speaking enabled
                         if self.speaking_enabled and self.voice_commander:
                             try:
@@ -1440,21 +1465,21 @@ class ModernVATSALGUI:
                         self.update_output(f"❌ {result['message']}\n", "error")
                 else:
                     self.update_output(f"❌ {result['message']}\n", "error")
-        
+
         except Exception as e:
             if self.vatsal_mode and self.vatsal:
                 self.update_output(f"🤖 VATSAL: Apologies, encountered an error: {str(e)}\n", "error")
             else:
                 self.update_output(f"❌ Error: {str(e)}\n", "error")
-        
+
         finally:
             self.processing = False
             self.root.after(0, lambda: self.execute_btn.config(state="normal", text="▶ Execute"))
-    
+
     def update_output(self, message, msg_type="info"):
         """Update output console"""
         self.output_area.config(state="normal")
-        
+
         # Add message with color coding
         if msg_type == "command":
             self.output_area.insert(tk.END, message)
@@ -1466,22 +1491,22 @@ class ModernVATSALGUI:
             self.output_area.insert(tk.END, message)
         else:
             self.output_area.insert(tk.END, message)
-        
+
         self.output_area.see(tk.END)
         self.output_area.config(state="disabled")
-    
+
     def clear_output(self):
         """Clear output console"""
         self.output_area.config(state="normal")
         self.output_area.delete(1.0, tk.END)
         self.output_area.config(state="disabled")
-    
+
     # ========== TOGGLE FUNCTIONS ==========
-    
+
     def toggle_vatsal(self):
         """Toggle VATSAL mode"""
         self.vatsal_mode = not self.vatsal_mode
-        
+
         if self.vatsal_mode:
             self.vatsal_toggle.config(
                 text="● VATSAL: ON",
@@ -1496,11 +1521,11 @@ class ModernVATSALGUI:
                 bg=self.BUTTON_BG
             )
             self.update_output("\n⚠️ VATSAL mode disabled\n", "warning")
-    
+
     def toggle_self_operating(self):
         """Toggle self-operating mode"""
         self.self_operating_mode = not self.self_operating_mode
-        
+
         if self.self_operating_mode:
             self.soc_toggle.config(
                 text="🔲 Self-Operating: ON",
@@ -1515,11 +1540,11 @@ class ModernVATSALGUI:
                 bg=self.BUTTON_BG
             )
             self.update_output("\n⚠️ Self-Operating mode disabled\n", "warning")
-    
+
     def toggle_voice(self):
         """Toggle voice mode"""
         self.voice_enabled = not self.voice_enabled
-        
+
         if self.voice_enabled:
             self.update_output("\n🔊 Voice mode enabled\n", "success")
             if self.voice_commander:
@@ -1529,9 +1554,9 @@ class ModernVATSALGUI:
                     pass
         else:
             self.update_output("\n🔇 Voice mode disabled\n", "warning")
-    
+
     # ========== MENU FUNCTIONS ==========
-    
+
     def toggle_wakeup_listener(self):
         """Toggle wakeup word listener"""
         if not self.wakeup_listening:
@@ -1539,7 +1564,7 @@ class ModernVATSALGUI:
             self.wakeup_listening = True
             self.wakeup_btn.config(bg=self.ACTIVE_GREEN, fg="white")
             self.update_output("\n👂 Wakeup word listener activated\n", "success")
-            
+
             # Start voice listening if available
             if self.voice_commander:
                 if self.voice_listening:
@@ -1563,7 +1588,7 @@ class ModernVATSALGUI:
             self.wakeup_listening = False
             self.wakeup_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
             self.update_output("\n👂 Wakeup word listener deactivated\n", "warning")
-            
+
             # Stop voice listening
             if self.voice_commander and self.voice_listening:
                 try:
@@ -1573,7 +1598,7 @@ class ModernVATSALGUI:
                     print(f"Error stopping listener: {e}")
                     # Force reset on error
                     self.voice_listening = False
-    
+
     def toggle_v_sign_detector(self):
         """Toggle V-sign gesture detector with voice activation"""
         if not self.vsign_detecting:
@@ -1583,18 +1608,18 @@ class ModernVATSALGUI:
             self.update_output("\n✌️ V-sign detector activated\n", "success")
             self.update_output("Show ONE V-sign for 1 second to start voice listening\n", "info")
             self.update_output("Show TWO V-signs to trigger VATSAL greeting\n", "info")
-            
+
             # Start gesture voice activator if available
             if self.gesture_voice_activator:
                 if self.gesture_voice_active:
                     self.update_output("⚠️ Gesture voice already running\n", "warning")
                     return
-                    
+
                 try:
                     # Register stop callback before starting
                     self.gesture_voice_activator.set_stop_callback(self._on_gesture_voice_stopped)
                     self.gesture_voice_active = True
-                    
+
                     # Run gesture voice activator in background thread
                     def run_gesture_voice():
                         try:
@@ -1604,7 +1629,7 @@ class ModernVATSALGUI:
                         finally:
                             # Callback is called automatically in the run method
                             pass
-                    
+
                     threading.Thread(target=run_gesture_voice, daemon=True).start()
                     self.update_output("Camera activated - show V-sign!\n", "success")
                 except Exception as e:
@@ -1621,7 +1646,7 @@ class ModernVATSALGUI:
             self.vsign_detecting = False
             self.vsign_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
             self.update_output("\n✌️ V-sign detector deactivated\n", "warning")
-            
+
             # Stop gesture voice activator
             if self.gesture_voice_activator and self.gesture_voice_active:
                 try:
@@ -1631,7 +1656,7 @@ class ModernVATSALGUI:
                     print(f"Error stopping detector: {e}")
                     # Force reset state on error
                     self.gesture_voice_active = False
-    
+
     def _on_gesture_voice_stopped(self):
         """Callback when gesture voice activator stops"""
         self.gesture_voice_active = False
@@ -1639,7 +1664,7 @@ class ModernVATSALGUI:
         if self.vsign_detecting:
             self.root.after(0, lambda: self.vsign_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY))
             self.vsign_detecting = False
-    
+
     def toggle_speaking(self):
         """Toggle text-to-speech"""
         if not self.speaking_enabled:
@@ -1647,7 +1672,7 @@ class ModernVATSALGUI:
             self.speaking_enabled = True
             self.speaking_btn.config(bg=self.ACTIVE_GREEN, fg="white")
             self.update_output("\n🗣️ Speaking mode enabled\n", "success")
-            
+
             # Test speak
             if self.voice_commander:
                 try:
@@ -1665,18 +1690,19 @@ class ModernVATSALGUI:
             self.speaking_enabled = False
             self.speaking_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
             self.update_output("\n🗣️ Speaking mode disabled\n", "warning")
-    
+
     def show_settings(self):
         """Show feature listing panel"""
         features_window = tk.Toplevel(self.root)
         features_window.title("VATSAL Features")
         features_window.geometry("700x600")
         features_window.configure(bg=self.BG_PRIMARY)
-        
+
         # Header
-        header_frame = tk.Frame(features_window, bg=self.BG_SECONDARY, relief="solid", borderwidth=2, highlightbackground=self.BORDER_PRIMARY)
+        header_frame = tk.Frame(features_window, bg=self.BG_SECONDARY, relief="solid", borderwidth=2,
+                                highlightbackground=self.BORDER_PRIMARY)
         header_frame.pack(fill="x", padx=20, pady=20)
-        
+
         tk.Label(
             header_frame,
             text="🔧 VATSAL Features",
@@ -1684,7 +1710,7 @@ class ModernVATSALGUI:
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(pady=20)
-        
+
         tk.Label(
             header_frame,
             text="100+ AI-Powered Features Available",
@@ -1692,20 +1718,20 @@ class ModernVATSALGUI:
             bg=self.BG_SECONDARY,
             fg=self.TEXT_SECONDARY
         ).pack(pady=(0, 20))
-        
+
         # Create scrollable frame
         canvas = tk.Canvas(features_window, bg=self.BG_PRIMARY, highlightthickness=0)
         scrollbar = tk.Scrollbar(features_window, orient="vertical", command=canvas.yview)
         scrollable_frame = tk.Frame(canvas, bg=self.BG_PRIMARY)
-        
+
         scrollable_frame.bind(
             "<Configure>",
             lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
         )
-        
+
         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
         canvas.configure(yscrollcommand=scrollbar.set)
-        
+
         # Feature categories
         features = {
             "🤖 AI & Automation": [
@@ -1784,7 +1810,7 @@ class ModernVATSALGUI:
                 "Third-party service integration"
             ]
         }
-        
+
         # Add feature categories
         for category, items in features.items():
             category_frame = tk.Frame(
@@ -1795,7 +1821,7 @@ class ModernVATSALGUI:
                 highlightbackground=self.BORDER_PRIMARY
             )
             category_frame.pack(fill="x", padx=20, pady=10)
-            
+
             tk.Label(
                 category_frame,
                 text=category,
@@ -1804,11 +1830,11 @@ class ModernVATSALGUI:
                 fg=self.TEXT_PRIMARY,
                 anchor="w"
             ).pack(fill="x", padx=15, pady=(15, 10))
-            
+
             for item in items:
                 item_frame = tk.Frame(category_frame, bg=self.BG_SECONDARY)
                 item_frame.pack(fill="x", padx=15, pady=2)
-                
+
                 tk.Label(
                     item_frame,
                     text="  •  ",
@@ -1816,7 +1842,7 @@ class ModernVATSALGUI:
                     bg=self.BG_SECONDARY,
                     fg=self.ACCENT_COLOR
                 ).pack(side="left")
-                
+
                 tk.Label(
                     item_frame,
                     text=item,
@@ -1825,14 +1851,14 @@ class ModernVATSALGUI:
                     fg=self.TEXT_PRIMARY,
                     anchor="w"
                 ).pack(side="left", fill="x", expand=True, pady=3)
-            
+
             # Add spacing after items
             tk.Frame(category_frame, bg=self.BG_SECONDARY, height=10).pack()
-        
+
         # Pack canvas and scrollbar
         canvas.pack(side="left", fill="both", expand=True, padx=(20, 0))
         scrollbar.pack(side="right", fill="y", padx=(0, 20))
-        
+
         # Close button with curved shadow effect
         close_btn = tk.Button(
             features_window,
@@ -1851,9 +1877,9 @@ class ModernVATSALGUI:
         )
         close_btn.pack(pady=20, padx=2)
         self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
-    
+
     # ========== VOICE AND SOUND METHODS ==========
-    
+
     def start_voice_listen(self):
         """Start push-to-talk voice command"""
         if not self.voice_commander:
@@ -1885,7 +1911,7 @@ class ModernVATSALGUI:
                 self.update_status("⚠️ Voice Error", "#f38ba8")
 
         threading.Thread(target=voice_thread, daemon=True).start()
-    
+
     def toggle_continuous_listening(self):
         """Toggle continuous voice listening mode"""
         if not self.voice_commander:
@@ -1920,7 +1946,7 @@ class ModernVATSALGUI:
                 self.update_status("✅ Ready", self.ACTIVE_GREEN)
             else:
                 messagebox.showerror("Voice Error", result['message'])
-    
+
     def toggle_sound_effects(self):
         """Toggle voice sound effects on/off"""
         if not self.voice_commander:
@@ -1942,7 +1968,7 @@ class ModernVATSALGUI:
                 self.update_output(f"\n🔇 Voice sound effects DISABLED\n", "warning")
         else:
             messagebox.showerror("Sound Error", result.get('message', 'Error toggling sound effects'))
-    
+
     def show_sound_settings(self):
         """Show sound effects settings dialog"""
         if not self.voice_commander or not self.voice_commander.sound_effects:
@@ -1955,11 +1981,11 @@ class ModernVATSALGUI:
         settings_window.configure(bg=self.BG_PRIMARY)
 
         header = tk.Label(settings_window,
-                         text="🔊 Voice Sound Effects Settings",
-                         bg=self.BG_PRIMARY,
-                         fg=self.TEXT_PRIMARY,
-                         font=("Segoe UI", 16, "bold"),
-                         pady=20)
+                          text="🔊 Voice Sound Effects Settings",
+                          bg=self.BG_PRIMARY,
+                          fg=self.TEXT_PRIMARY,
+                          font=("Segoe UI", 16, "bold"),
+                          pady=20)
         header.pack()
 
         status_frame = tk.Frame(settings_window, bg=self.BG_SECONDARY, relief="flat")
@@ -1974,36 +2000,38 @@ class ModernVATSALGUI:
                 status_text += f"{status} {name.replace('_', ' ').title()}\n"
 
         status_label = tk.Label(status_frame,
-                               text=status_text,
-                               bg=self.BG_SECONDARY,
-                               fg=self.TEXT_PRIMARY,
-                               font=("Segoe UI", 11),
-                               justify="left",
-                               pady=15,
-                               padx=15)
+                                text=status_text,
+                                bg=self.BG_SECONDARY,
+                                fg=self.TEXT_PRIMARY,
+                                font=("Segoe UI", 11),
+                                justify="left",
+                                pady=15,
+                                padx=15)
         status_label.pack()
 
         close_btn = tk.Button(settings_window,
-                             text="Close",
-                             bg=self.BUTTON_BG,
-                             fg=self.TEXT_PRIMARY,
-                             font=("Segoe UI", 11, "bold"),
-                             relief="raised",
-                             cursor="hand2",
-                             command=settings_window.destroy,
-                             padx=30,
-                             pady=10)
+                              text="Close",
+                              bg=self.BUTTON_BG,
+                              fg=self.TEXT_PRIMARY,
+                              font=("Segoe UI", 11, "bold"),
+                              relief="raised",
+                              cursor="hand2",
+                              command=settings_window.destroy,
+                              padx=30,
+                              pady=10)
         close_btn.pack(pady=20)
         self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
-    
+
     def update_status(self, text, color):
         """Update status label"""
+
         def _update():
             self.status_label.config(text=text, fg=color)
+
         self.root.after(0, _update)
-    
+
     # ========== DIALOG METHODS ==========
-    
+
     def show_help(self):
         """Show help dialog"""
         help_window = tk.Toplevel(self.root)
@@ -2091,18 +2119,18 @@ For more information or support, check the About section.
         text_area.config(state='disabled')
 
         close_btn = tk.Button(help_window,
-                             text="Close",
-                             bg=self.BUTTON_BG,
-                             fg=self.TEXT_PRIMARY,
-                             font=("Segoe UI", 11, "bold"),
-                             relief="raised",
-                             cursor="hand2",
-                             command=help_window.destroy,
-                             padx=30,
-                             pady=10)
+                              text="Close",
+                              bg=self.BUTTON_BG,
+                              fg=self.TEXT_PRIMARY,
+                              font=("Segoe UI", 11, "bold"),
+                              relief="raised",
+                              cursor="hand2",
+                              command=help_window.destroy,
+                              padx=30,
+                              pady=10)
         close_btn.pack(pady=20)
         self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
-    
+
     def show_contacts(self):
         """Show contacts manager"""
         contacts_window = tk.Toplevel(self.root)
@@ -2146,18 +2174,18 @@ For more information or support, check the About section.
                              f"No contacts found or error loading contacts.\n\nUse the command:\n'Add contact NAME with phone NUMBER and email EMAIL'\n\nError details: {str(e)}")
 
         close_btn = tk.Button(contacts_window,
-                             text="Close",
-                             bg=self.BUTTON_BG,
-                             fg=self.TEXT_PRIMARY,
-                             font=("Segoe UI", 11, "bold"),
-                             relief="raised",
-                             cursor="hand2",
-                             command=contacts_window.destroy,
-                             padx=30,
-                             pady=10)
+                              text="Close",
+                              bg=self.BUTTON_BG,
+                              fg=self.TEXT_PRIMARY,
+                              font=("Segoe UI", 11, "bold"),
+                              relief="raised",
+                              cursor="hand2",
+                              command=contacts_window.destroy,
+                              padx=30,
+                              pady=10)
         close_btn.pack(pady=20)
         self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
-    
+
     def show_about(self):
         """Show about dialog"""
         about_window = tk.Toplevel(self.root)
@@ -2219,18 +2247,18 @@ personality and advanced automation capabilities.
         description.pack(padx=20, pady=20)
 
         close_btn = tk.Button(about_window,
-                             text="Close",
-                             bg=self.BUTTON_BG,
-                             fg=self.TEXT_PRIMARY,
-                             font=("Segoe UI", 11, "bold"),
-                             relief="raised",
-                             cursor="hand2",
-                             command=about_window.destroy,
-                             padx=30,
-                             pady=10)
+                              text="Close",
+                              bg=self.BUTTON_BG,
+                              fg=self.TEXT_PRIMARY,
+                              font=("Segoe UI", 11, "bold"),
+                              relief="raised",
+                              cursor="hand2",
+                              command=about_window.destroy,
+                              padx=30,
+                              pady=10)
         close_btn.pack(pady=20)
         self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
-    
+
     def show_suggestion(self):
         """Show VATSAL proactive suggestion"""
         if self.vatsal:
@@ -2238,7 +2266,7 @@ personality and advanced automation capabilities.
             self.update_output(f"\n{suggestion}\n\n", "info")
         else:
             self.update_output("\n💡 VATSAL AI is not available for suggestions\n\n", "warning")
-    
+
     def show_security_dashboard(self):
         """Display AI-Powered Security Dashboard"""
         if not self.security_dashboard:
@@ -2262,10 +2290,10 @@ personality and advanced automation capabilities.
         header.pack()
 
         subtitle = tk.Label(header_frame,
-                           text="🤖 AI-Powered Threat Analysis • 🔐 Enhanced Security Features",
-                           bg=self.BG_SECONDARY,
-                           fg=self.TEXT_SECONDARY,
-                           font=("Segoe UI", 10, "italic"))
+                            text="🤖 AI-Powered Threat Analysis • 🔐 Enhanced Security Features",
+                            bg=self.BG_SECONDARY,
+                            fg=self.TEXT_SECONDARY,
+                            font=("Segoe UI", 10, "italic"))
         subtitle.pack()
 
         main_frame = tk.Frame(sec_window, bg=self.BG_PRIMARY)
@@ -2293,24 +2321,77 @@ personality and advanced automation capabilities.
             text_area.insert(1.0, f"Security Dashboard:\n\nError loading: {str(e)}\n")
 
         close_btn = tk.Button(sec_window,
-                             text="Close",
-                             bg=self.BUTTON_BG,
-                             fg=self.TEXT_PRIMARY,
-                             font=("Segoe UI", 11, "bold"),
-                             relief="raised",
-                             cursor="hand2",
-                             command=sec_window.destroy,
-                             padx=30,
-                             pady=10)
+                              text="Close",
+                              bg=self.BUTTON_BG,
+                              fg=self.TEXT_PRIMARY,
+                              font=("Segoe UI", 11, "bold"),
+                              relief="raised",
+                              cursor="hand2",
+                              command=sec_window.destroy,
+                              padx=30,
+                              pady=10)
         close_btn.pack(pady=20)
         self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
-    
+
     def handle_voice_command(self, command):
         """Handle voice command callback"""
         self.root.after(0, lambda: self.command_input.delete(0, tk.END))
         self.root.after(0, lambda: self.command_input.insert(0, command))
         self.root.after(0, self.execute_command)
-    
+
+    def _orchestrator_status_update(self, message):
+        """Callback for orchestrator status updates (thread-safe)"""
+
+        def update_ui():
+            # Update chat display if it exists
+            if hasattr(self, 'vatsal_conversation_display'):
+                self.vatsal_conversation_display.config(state='normal')
+                timestamp = datetime.now().strftime("%H:%M:%S")
+                self.vatsal_conversation_display.insert(tk.END, f"[{timestamp}] ", "timestamp")
+                self.vatsal_conversation_display.insert(tk.END, "🤖 Auto: ", "vatsal")
+                self.vatsal_conversation_display.insert(tk.END, f"{message}\n")
+                self.vatsal_conversation_display.see(tk.END)
+                self.vatsal_conversation_display.config(state='disabled')
+
+        self.root.after(0, update_ui)
+
+    def _orchestrator_task_complete(self, task):
+        """Callback when orchestrator completes a task (thread-safe)"""
+
+        def update_ui():
+            if hasattr(self, 'vatsal_conversation_display'):
+                self.vatsal_conversation_display.config(state='normal')
+                timestamp = datetime.now().strftime("%H:%M:%S")
+                self.vatsal_conversation_display.insert(tk.END, f"[{timestamp}] ", "timestamp")
+
+                if task.state.value == "completed":
+                    self.vatsal_conversation_display.insert(tk.END, "✅ Task Complete: ", "vatsal")
+                    self.vatsal_conversation_display.insert(tk.END, f"{task.intent}\n")
+                    if task.result:
+                        self.vatsal_conversation_display.insert(tk.END, f"Result: {task.result}\n")
+                else:
+                    self.vatsal_conversation_display.insert(tk.END, "❌ Task Failed: ", "vatsal")
+                    self.vatsal_conversation_display.insert(tk.END, f"{task.intent}\n")
+                    if task.error:
+                        self.vatsal_conversation_display.insert(tk.END, f"Error: {task.error}\n")
+
+                self.vatsal_conversation_display.see(tk.END)
+                self.vatsal_conversation_display.config(state='disabled')
+
+        self.root.after(0, update_ui)
+
+    def _orchestrator_confirm_task(self, intent, command):
+        """Callback to confirm potentially destructive tasks (thread-safe)"""
+        result = messagebox.askyesno(
+            "Autonomous Task Confirmation",
+            f"The autonomous system wants to execute:\n\n"
+            f"Task: {intent}\n"
+            f"Command: {command}\n\n"
+            f"This action may make changes to your system.\n"
+            f"Do you want to proceed?"
+        )
+        return result
+
     def create_vatsal_ai_tab(self, notebook):
         """Simple VATSAL Chatbot"""
         tab = tk.Frame(notebook, bg="#1a1d2e")
@@ -2468,11 +2549,11 @@ personality and advanced automation capabilities.
         description_frame.pack(fill="x", padx=10, pady=5)
 
         desc_text = tk.Label(description_frame,
-                            text="Intelligent desktop automation that uses Gemini only for understanding commands.\nAll actions execute locally via Python modules. Destructive actions require confirmation.",
-                            bg="#1a1d2e",
-                            fg="#b0b0b0",
-                            font=("Segoe UI", 9),
-                            justify="left")
+                             text="Intelligent desktop automation that uses Gemini only for understanding commands.\nAll actions execute locally via Python modules. Destructive actions require confirmation.",
+                             bg="#1a1d2e",
+                             fg="#b0b0b0",
+                             font=("Segoe UI", 9),
+                             justify="left")
         desc_text.pack(anchor="w", padx=10, pady=5)
 
         self.vatsal_automator_output = scrolledtext.ScrolledText(
@@ -2508,12 +2589,12 @@ personality and advanced automation capabilities.
         input_box_frame.pack(fill="x", padx=5, pady=(0, 5))
 
         self.vatsal_automator_input = tk.Entry(input_box_frame,
-                                                bg="#2e3350",
-                                                fg="#e0e0e0",
-                                                font=("Segoe UI", 12),
-                                                relief="solid",
-                                                bd=2,
-                                                insertbackground="#00d4aa")
+                                               bg="#2e3350",
+                                               fg="#e0e0e0",
+                                               font=("Segoe UI", 12),
+                                               relief="solid",
+                                               bd=2,
+                                               insertbackground="#00d4aa")
         self.vatsal_automator_input.pack(side="left", fill="x", expand=True, ipady=10)
         self.vatsal_automator_input.bind("<Return>", lambda e: self.execute_vatsal_automator_command())
 
@@ -2534,10 +2615,10 @@ personality and advanced automation capabilities.
         quick_actions_frame.pack(fill="x", padx=10, pady=(0, 10))
 
         actions_label = tk.Label(quick_actions_frame,
-                                text="⚡ Quick Actions:",
-                                bg="#1a1d2e",
-                                fg="#b0b0b0",
-                                font=("Segoe UI", 9, "bold"))
+                                 text="⚡ Quick Actions:",
+                                 bg="#1a1d2e",
+                                 fg="#b0b0b0",
+                                 font=("Segoe UI", 9, "bold"))
         actions_label.pack(anchor="w", padx=5, pady=(5, 2))
 
         button_container = tk.Frame(quick_actions_frame, bg="#1a1d2e")
@@ -2553,15 +2634,15 @@ personality and advanced automation capabilities.
 
         for text, command in quick_actions:
             btn = tk.Button(button_container,
-                           text=text,
-                           bg="#2e3350",
-                           fg="#e0e0e0",
-                           font=("Segoe UI", 9, "bold"),
-                           relief="flat",
-                           cursor="hand2",
-                           command=lambda cmd=command: self.vatsal_quick_action(cmd),
-                           padx=12,
-                           pady=8)
+                            text=text,
+                            bg="#2e3350",
+                            fg="#e0e0e0",
+                            font=("Segoe UI", 9, "bold"),
+                            relief="flat",
+                            cursor="hand2",
+                            command=lambda cmd=command: self.vatsal_quick_action(cmd),
+                            padx=12,
+                            pady=8)
             btn.pack(side="left", padx=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
 
@@ -2570,7 +2651,8 @@ personality and advanced automation capabilities.
         tab = tk.Frame(notebook, bg=self.BG_PRIMARY)
         notebook.add(tab, text="🎮 Self-Operating")
 
-        header_frame = tk.Frame(tab, bg=self.BG_SECONDARY, relief="flat", bd=1, highlightbackground=self.BORDER_PRIMARY, highlightthickness=1)
+        header_frame = tk.Frame(tab, bg=self.BG_SECONDARY, relief="flat", bd=1, highlightbackground=self.BORDER_PRIMARY,
+                                highlightthickness=1)
         header_frame.pack(fill="x", pady=(10, 0), padx=10)
 
         header = tk.Label(header_frame,
@@ -2591,11 +2673,11 @@ personality and advanced automation capabilities.
         desc_frame.pack(fill="x", padx=10, pady=5)
 
         desc_text = tk.Label(desc_frame,
-                            text="AI views your screen like a human and autonomously performs mouse/keyboard actions to accomplish objectives.\nInspired by OthersideAI's self-operating-computer, powered by Gemini Vision.",
-                            bg=self.BG_PRIMARY,
-                            fg=self.TEXT_SECONDARY,
-                            font=("Segoe UI", 9),
-                            justify="left")
+                             text="AI views your screen like a human and autonomously performs mouse/keyboard actions to accomplish objectives.\nInspired by OthersideAI's self-operating-computer, powered by Gemini Vision.",
+                             bg=self.BG_PRIMARY,
+                             fg=self.TEXT_SECONDARY,
+                             font=("Segoe UI", 9),
+                             justify="left")
         desc_text.pack(anchor="w", padx=10, pady=5)
 
         main_container = tk.Frame(tab, bg="#1a1d2e")
@@ -2608,13 +2690,13 @@ personality and advanced automation capabilities.
         status_frame.pack(fill="x", pady=(0, 10))
 
         status_label = tk.Label(status_frame,
-                               text="Status: Ready",
-                               bg="#2e3350",
-                               fg="#00ff88",
-                               font=("Segoe UI", 10, "bold"),
-                               anchor="w",
-                               padx=10,
-                               pady=8)
+                                text="Status: Ready",
+                                bg="#2e3350",
+                                fg="#00ff88",
+                                font=("Segoe UI", 10, "bold"),
+                                anchor="w",
+                                padx=10,
+                                pady=8)
         status_label.pack(fill="x")
         self.soc_status_label = status_label
 
@@ -2622,31 +2704,31 @@ personality and advanced automation capabilities.
         input_section.pack(fill="x", pady=(5, 10))
 
         input_label = tk.Label(input_section,
-                              text="🎯 Enter your objective:",
-                              bg="#1a1d2e",
-                              fg="#b0b0b0",
-                              font=("Segoe UI", 9, "bold"))
+                               text="🎯 Enter your objective:",
+                               bg="#1a1d2e",
+                               fg="#b0b0b0",
+                               font=("Segoe UI", 9, "bold"))
         input_label.pack(anchor="w", padx=5, pady=(0, 5))
 
         self.soc_objective = tk.Text(input_section,
-                                    bg="#2e3350",
-                                    fg="#e0e0e0",
-                                    font=("Segoe UI", 11),
-                                    height=3,
-                                    relief="solid",
-                                    bd=2,
-                                    insertbackground="#cba6f7",
-                                    padx=8,
-                                    pady=8,
-                                    wrap=tk.WORD)
+                                     bg="#2e3350",
+                                     fg="#e0e0e0",
+                                     font=("Segoe UI", 11),
+                                     height=3,
+                                     relief="solid",
+                                     bd=2,
+                                     insertbackground="#cba6f7",
+                                     padx=8,
+                                     pady=8,
+                                     wrap=tk.WORD)
         self.soc_objective.pack(fill="x", padx=5)
         self.soc_objective.bind('<Control-Return>', lambda e: self.auto_start_if_enabled())
 
         hint_label = tk.Label(input_section,
-                             text="💡 Tip: Press Ctrl+Enter to quick-start when Auto Mode is enabled",
-                             bg="#1a1d2e",
-                             fg="#b0b0b0",
-                             font=("Segoe UI", 8, "italic"))
+                              text="💡 Tip: Press Ctrl+Enter to quick-start when Auto Mode is enabled",
+                              bg="#1a1d2e",
+                              fg="#b0b0b0",
+                              font=("Segoe UI", 8, "italic"))
         hint_label.pack(anchor="w", padx=5, pady=(2, 0))
 
         controls_frame = tk.Frame(left_column, bg="#1a1d2e")
@@ -2679,15 +2761,15 @@ personality and advanced automation capabilities.
         self.add_hover_effect(start_voice_btn, "#89b4fa", "#74c7ec")
 
         stop_btn = tk.Button(controls_frame,
-                            text="⏹️ Stop",
-                            bg="#00d4aa",
-                            fg="#0f0f1e",
-                            font=("Segoe UI", 10, "bold"),
-                            relief="flat",
-                            cursor="hand2",
-                            command=self.stop_self_operating,
-                            padx=20,
-                            pady=10)
+                             text="⏹️ Stop",
+                             bg="#00d4aa",
+                             fg="#0f0f1e",
+                             font=("Segoe UI", 10, "bold"),
+                             relief="flat",
+                             cursor="hand2",
+                             command=self.stop_self_operating,
+                             padx=20,
+                             pady=10)
         stop_btn.pack(side="left", expand=True, fill="x", padx=(2, 5))
         self.add_hover_effect(stop_btn, "#f38ba8", "#eba0ac")
 
@@ -2716,48 +2798,48 @@ personality and advanced automation capabilities.
         self.add_hover_effect(self.auto_control_btn, "#313244", "#45475a")
 
         toggle_info = tk.Label(toggle_frame,
-                              text="When enabled, AI will automatically start self-operating mode after commands",
-                              bg="#1a1d2e",
-                              fg="#b0b0b0",
-                              font=("Segoe UI", 8, "italic"))
+                               text="When enabled, AI will automatically start self-operating mode after commands",
+                               bg="#1a1d2e",
+                               fg="#b0b0b0",
+                               font=("Segoe UI", 8, "italic"))
         toggle_info.pack(side="left", padx=10)
 
         examples_frame = tk.Frame(left_column, bg="#1a1d2e")
         examples_frame.pack(fill="x", pady=(10, 5))
 
         examples_label = tk.Label(examples_frame,
-                                 text="💡 Example Objectives:",
-                                 bg="#1a1d2e",
-                                 fg="#b0b0b0",
-                                 font=("Segoe UI", 9, "bold"))
+                                  text="💡 Example Objectives:",
+                                  bg="#1a1d2e",
+                                  fg="#b0b0b0",
+                                  font=("Segoe UI", 9, "bold"))
         examples_label.pack(anchor="w", padx=5)
 
         examples_text = tk.Text(examples_frame,
-                               bg="#16182a",
-                               fg="#89dceb",
-                               font=("Consolas", 8),
-                               height=5,
-                               relief="flat",
-                               padx=8,
-                               pady=8,
-                               wrap=tk.WORD)
+                                bg="#16182a",
+                                fg="#89dceb",
+                                font=("Consolas", 8),
+                                height=5,
+                                relief="flat",
+                                padx=8,
+                                pady=8,
+                                wrap=tk.WORD)
         examples_text.pack(fill="x", padx=5, pady=5)
         examples_text.insert("1.0",
-            "• Open Google Chrome and search for Python tutorials\n"
-            "• Open a new file in Notepad and write 'Hello World'\n"
-            "• Go to YouTube and play a video about AI\n"
-            "• Open Calculator and calculate 25 * 47\n"
-            "• Create a new folder on Desktop named 'AI Projects'")
+                             "• Open Google Chrome and search for Python tutorials\n"
+                             "• Open a new file in Notepad and write 'Hello World'\n"
+                             "• Go to YouTube and play a video about AI\n"
+                             "• Open Calculator and calculate 25 * 47\n"
+                             "• Create a new folder on Desktop named 'AI Projects'")
         examples_text.config(state='disabled')
 
         right_column = tk.Frame(main_container, bg="#1a1d2e")
         right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
 
         output_label = tk.Label(right_column,
-                               text="📊 Real-Time Output:",
-                               bg="#1a1d2e",
-                               fg="#b0b0b0",
-                               font=("Segoe UI", 9, "bold"))
+                                text="📊 Real-Time Output:",
+                                bg="#1a1d2e",
+                                fg="#b0b0b0",
+                                font=("Segoe UI", 9, "bold"))
         output_label.pack(anchor="w", padx=5, pady=(0, 5))
 
         self.soc_output = scrolledtext.ScrolledText(
@@ -2792,15 +2874,15 @@ personality and advanced automation capabilities.
 
         for text, command, color in buttons:
             btn = tk.Button(bottom_frame,
-                           text=text,
-                           bg=color,
-                           fg="#0f0f1e" if color != "#313244" else "#ffffff",
-                           font=("Segoe UI", 9, "bold"),
-                           relief="flat",
-                           cursor="hand2",
-                           command=command,
-                           padx=15,
-                           pady=8)
+                            text=text,
+                            bg=color,
+                            fg="#0f0f1e" if color != "#313244" else "#ffffff",
+                            font=("Segoe UI", 9, "bold"),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            padx=15,
+                            pady=8)
             btn.pack(side="left", expand=True, fill="x", padx=3)
             hover_color = "#b4befe" if color == "#89b4fa" else "#74c7ec" if color == "#89dceb" else "#45475a"
             self.add_hover_effect(btn, color, hover_color)
@@ -2851,11 +2933,11 @@ personality and advanced automation capabilities.
             phase_container.pack(side="left", expand=True, fill="x", padx=5, pady=5)
 
             label = tk.Label(phase_container,
-                            text=f"{icon} {name}",
-                            bg="#2e3350",
-                            fg=color,
-                            font=("Segoe UI", 9, "bold"),
-                            pady=8)
+                             text=f"{icon} {name}",
+                             bg="#2e3350",
+                             fg=color,
+                             font=("Segoe UI", 9, "bold"),
+                             pady=8)
             label.pack()
             self.phase_labels[name] = label
 
@@ -2872,10 +2954,10 @@ personality and advanced automation capabilities.
         input_section.pack(fill="x", pady=(5, 10))
 
         input_label = tk.Label(input_section,
-                              text="🎯 Enter your automation command:",
-                              bg="#1a1d2e",
-                              fg="#b0b0b0",
-                              font=("Segoe UI", 9, "bold"))
+                               text="🎯 Enter your automation command:",
+                               bg="#1a1d2e",
+                               fg="#b0b0b0",
+                               font=("Segoe UI", 9, "bold"))
         input_label.pack(anchor="w", padx=5, pady=(0, 5))
 
         # Input box with send button
@@ -2883,25 +2965,25 @@ personality and advanced automation capabilities.
         input_box_frame.pack(fill="x", padx=5)
 
         self.comprehensive_input = tk.Entry(input_box_frame,
-                                           bg="#2e3350",
-                                           fg="#e0e0e0",
-                                           font=("Segoe UI", 11),
-                                           relief="solid",
-                                           bd=2,
-                                           insertbackground="#f9e2af")
+                                            bg="#2e3350",
+                                            fg="#e0e0e0",
+                                            font=("Segoe UI", 11),
+                                            relief="solid",
+                                            bd=2,
+                                            insertbackground="#f9e2af")
         self.comprehensive_input.pack(side="left", fill="x", expand=True, ipady=8)
         self.comprehensive_input.bind("<Return>", lambda e: self.execute_comprehensive_command())
 
         execute_btn = tk.Button(input_box_frame,
-                               text="▶️ Execute",
-                               bg="#f9e2af",
-                               fg="#0f0f1e",
-                               font=("Segoe UI", 10, "bold"),
-                               relief="flat",
-                               cursor="hand2",
-                               command=self.execute_comprehensive_command,
-                               padx=20,
-                               pady=8)
+                                text="▶️ Execute",
+                                bg="#f9e2af",
+                                fg="#0f0f1e",
+                                font=("Segoe UI", 10, "bold"),
+                                relief="flat",
+                                cursor="hand2",
+                                command=self.execute_comprehensive_command,
+                                padx=20,
+                                pady=8)
         execute_btn.pack(side="right", padx=(5, 0))
         self.add_hover_effect(execute_btn, "#f9e2af", "#f5c2e7")
 
@@ -3053,27 +3135,27 @@ personality and advanced automation capabilities.
         examples_frame.pack(fill="x", pady=(10, 5))
 
         examples_label = tk.Label(examples_frame,
-                                 text="💡 Example Prompts:",
-                                 bg="#1a1d2e",
-                                 fg="#b0b0b0",
-                                 font=("Segoe UI", 9, "bold"))
+                                  text="💡 Example Prompts:",
+                                  bg="#1a1d2e",
+                                  fg="#b0b0b0",
+                                  font=("Segoe UI", 9, "bold"))
         examples_label.pack(anchor="w", padx=5)
 
         examples_text = tk.Text(examples_frame,
-                               bg="#16182a",
-                               fg="#89dceb",
-                               font=("Consolas", 8),
-                               height=4,
-                               relief="flat",
-                               padx=8,
-                               pady=8,
-                               wrap=tk.WORD)
+                                bg="#16182a",
+                                fg="#89dceb",
+                                font=("Consolas", 8),
+                                height=4,
+                                relief="flat",
+                                padx=8,
+                                pady=8,
+                                wrap=tk.WORD)
         examples_text.pack(fill="x", padx=5, pady=5)
         examples_text.insert("1.0",
-            "• Open Chrome, navigate to GitHub, and screenshot\n"
-            "• Launch Spotify and play jazz music\n"
-            "• Search Google for Python tutorials, open first 3 results\n"
-            "• Create a new folder on Desktop named 'Projects'")
+                             "• Open Chrome, navigate to GitHub, and screenshot\n"
+                             "• Launch Spotify and play jazz music\n"
+                             "• Search Google for Python tutorials, open first 3 results\n"
+                             "• Create a new folder on Desktop named 'Projects'")
         examples_text.config(state='disabled')
 
         # Right column - Output
@@ -3081,10 +3163,10 @@ personality and advanced automation capabilities.
         right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
 
         output_label = tk.Label(right_column,
-                               text="📊 Execution Output:",
-                               bg="#1a1d2e",
-                               fg="#b0b0b0",
-                               font=("Segoe UI", 9, "bold"))
+                                text="📊 Execution Output:",
+                                bg="#1a1d2e",
+                                fg="#b0b0b0",
+                                font=("Segoe UI", 9, "bold"))
         output_label.pack(anchor="w", padx=5, pady=(0, 5))
 
         # Output display with scrollbar
@@ -3123,15 +3205,15 @@ personality and advanced automation capabilities.
 
         for btn_text, command, color in buttons:
             btn = tk.Button(bottom_frame,
-                           text=btn_text,
-                           bg=color,
-                           fg="#0f0f1e" if color != "#313244" else "#ffffff",
-                           font=("Segoe UI", 9, "bold"),
-                           relief="flat",
-                           cursor="hand2",
-                           command=command,
-                           padx=15,
-                           pady=8)
+                            text=btn_text,
+                            bg=color,
+                            fg="#0f0f1e" if color != "#313244" else "#ffffff",
+                            font=("Segoe UI", 9, "bold"),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            padx=15,
+                            pady=8)
             btn.pack(side="left", padx=5)
             hover_color = "#74c7ec" if color == "#89b4fa" else "#45475a" if color == "#313244" else color
             self.add_hover_effect(btn, color, hover_color)
@@ -3141,12 +3223,12 @@ personality and advanced automation capabilities.
         status_container.pack(side="right", padx=5)
 
         self.comprehensive_status = tk.Label(status_container,
-                                            text="✅ Ready",
-                                            bg="#2e3350",
-                                            fg="#00ff88",
-                                            font=("Segoe UI", 9, "bold"),
-                                            padx=15,
-                                            pady=8)
+                                             text="✅ Ready",
+                                             bg="#2e3350",
+                                             fg="#00ff88",
+                                             font=("Segoe UI", 9, "bold"),
+                                             padx=15,
+                                             pady=8)
         self.comprehensive_status.pack()
 
         # Initial welcome message
@@ -3202,10 +3284,10 @@ personality and advanced automation capabilities.
         stats_frame.pack(fill="x", pady=5, padx=5)
 
         stats_title = tk.Label(stats_frame,
-                              text="📊 Learning Statistics",
-                              bg="#2e3350",
-                              fg="#cba6f7",
-                              font=("Segoe UI", 10, "bold"))
+                               text="📊 Learning Statistics",
+                               bg="#2e3350",
+                               fg="#cba6f7",
+                               font=("Segoe UI", 10, "bold"))
         stats_title.pack(pady=8)
 
         self.vlm_stats_display = tk.Text(stats_frame,
@@ -3224,10 +3306,10 @@ personality and advanced automation capabilities.
         goal_frame.pack(fill="x", pady=(10, 5))
 
         goal_label = tk.Label(goal_frame,
-                             text="🎯 Goal for AI:",
-                             bg="#1a1d2e",
-                             fg="#b0b0b0",
-                             font=("Segoe UI", 9, "bold"))
+                              text="🎯 Goal for AI:",
+                              bg="#1a1d2e",
+                              fg="#b0b0b0",
+                              font=("Segoe UI", 9, "bold"))
         goal_label.pack(anchor="w", padx=5, pady=(0, 5))
 
         goal_input_frame = tk.Frame(goal_frame, bg="#1a1d2e")
@@ -3247,10 +3329,10 @@ personality and advanced automation capabilities.
         actions_frame.pack(fill="x", pady=10, padx=5)
 
         actions_label = tk.Label(actions_frame,
-                                text="⚡ Actions:",
-                                bg="#1a1d2e",
-                                fg="#b0b0b0",
-                                font=("Segoe UI", 9, "bold"))
+                                 text="⚡ Actions:",
+                                 bg="#1a1d2e",
+                                 fg="#b0b0b0",
+                                 font=("Segoe UI", 9, "bold"))
         actions_label.pack(anchor="w", pady=(0, 5))
 
         # Row 1
@@ -3258,28 +3340,28 @@ personality and advanced automation capabilities.
         row1.pack(fill="x", pady=2)
 
         observe_btn = tk.Button(row1,
-                               text="👁️ Observe Screen",
-                               bg="#00d4aa",
-                               fg="#0f0f1e",
-                               font=("Segoe UI", 9, "bold"),
-                               relief="flat",
-                               cursor="hand2",
-                               command=self.vlm_observe,
-                               padx=15,
-                               pady=8)
+                                text="👁️ Observe Screen",
+                                bg="#00d4aa",
+                                fg="#0f0f1e",
+                                font=("Segoe UI", 9, "bold"),
+                                relief="flat",
+                                cursor="hand2",
+                                command=self.vlm_observe,
+                                padx=15,
+                                pady=8)
         observe_btn.pack(side="left", expand=True, fill="x", padx=2)
         self.add_hover_effect(observe_btn, "#89b4fa", "#74c7ec")
 
         decide_btn = tk.Button(row1,
-                              text="🤔 Decide Action",
-                              bg="#f9e2af",
-                              fg="#0f0f1e",
-                              font=("Segoe UI", 9, "bold"),
-                              relief="flat",
-                              cursor="hand2",
-                              command=self.vlm_decide,
-                              padx=15,
-                              pady=8)
+                               text="🤔 Decide Action",
+                               bg="#f9e2af",
+                               fg="#0f0f1e",
+                               font=("Segoe UI", 9, "bold"),
+                               relief="flat",
+                               cursor="hand2",
+                               command=self.vlm_decide,
+                               padx=15,
+                               pady=8)
         decide_btn.pack(side="left", expand=True, fill="x", padx=2)
         self.add_hover_effect(decide_btn, "#f9e2af", "#f5c2e7")
 
@@ -3288,28 +3370,28 @@ personality and advanced automation capabilities.
         row2.pack(fill="x", pady=2)
 
         execute_btn = tk.Button(row2,
-                               text="▶️ Execute",
-                               bg="#00ff88",
-                               fg="#0f0f1e",
-                           font=("Segoe UI", 9, "bold"),
-                           relief="flat",
-                           cursor="hand2",
-                           command=self.vlm_execute,
-                           padx=15,
-                           pady=8)
+                                text="▶️ Execute",
+                                bg="#00ff88",
+                                fg="#0f0f1e",
+                                font=("Segoe UI", 9, "bold"),
+                                relief="flat",
+                                cursor="hand2",
+                                command=self.vlm_execute,
+                                padx=15,
+                                pady=8)
         execute_btn.pack(side="left", expand=True, fill="x", padx=2)
         self.add_hover_effect(execute_btn, "#a6e3a1", "#94e2d5")
 
         learn_btn = tk.Button(row2,
-                             text="🧠 Learn Session",
-                             bg="#cba6f7",
-                             fg="#0f0f1e",
-                             font=("Segoe UI", 9, "bold"),
-                             relief="flat",
-                             cursor="hand2",
-                             command=self.vlm_learn_session,
-                             padx=15,
-                             pady=8)
+                              text="🧠 Learn Session",
+                              bg="#cba6f7",
+                              fg="#0f0f1e",
+                              font=("Segoe UI", 9, "bold"),
+                              relief="flat",
+                              cursor="hand2",
+                              command=self.vlm_learn_session,
+                              padx=15,
+                              pady=8)
         learn_btn.pack(side="left", expand=True, fill="x", padx=2)
         self.add_hover_effect(learn_btn, "#cba6f7", "#b4befe")
 
@@ -3318,28 +3400,28 @@ personality and advanced automation capabilities.
         row3.pack(fill="x", pady=2)
 
         query_btn = tk.Button(row3,
-                             text="💬 Query Knowledge",
-                             bg="#2e3350",
-                             fg="#e0e0e0",
-                             font=("Segoe UI", 9, "bold"),
-                             relief="flat",
-                             cursor="hand2",
-                             command=self.vlm_query,
-                             padx=15,
-                             pady=8)
+                              text="💬 Query Knowledge",
+                              bg="#2e3350",
+                              fg="#e0e0e0",
+                              font=("Segoe UI", 9, "bold"),
+                              relief="flat",
+                              cursor="hand2",
+                              command=self.vlm_query,
+                              padx=15,
+                              pady=8)
         query_btn.pack(side="left", expand=True, fill="x", padx=2)
         self.add_hover_effect(query_btn, "#313244", "#45475a")
 
         refresh_btn = tk.Button(row3,
-                               text="🔄 Refresh Stats",
-                               bg="#2e3350",
-                               fg="#e0e0e0",
-                               font=("Segoe UI", 9, "bold"),
-                               relief="flat",
-                               cursor="hand2",
-                               command=self.vlm_refresh_stats,
-                               padx=15,
-                               pady=8)
+                                text="🔄 Refresh Stats",
+                                bg="#2e3350",
+                                fg="#e0e0e0",
+                                font=("Segoe UI", 9, "bold"),
+                                relief="flat",
+                                cursor="hand2",
+                                command=self.vlm_refresh_stats,
+                                padx=15,
+                                pady=8)
         refresh_btn.pack(side="left", expand=True, fill="x", padx=2)
         self.add_hover_effect(refresh_btn, "#313244", "#45475a")
 
@@ -3348,10 +3430,10 @@ personality and advanced automation capabilities.
         knowledge_frame.pack(fill="both", expand=True, pady=(10, 5))
 
         knowledge_label = tk.Label(knowledge_frame,
-                                  text="📚 Learned Knowledge:",
-                                  bg="#1a1d2e",
-                                  fg="#b0b0b0",
-                                  font=("Segoe UI", 9, "bold"))
+                                   text="📚 Learned Knowledge:",
+                                   bg="#1a1d2e",
+                                   fg="#b0b0b0",
+                                   font=("Segoe UI", 9, "bold"))
         knowledge_label.pack(anchor="w", padx=5, pady=(0, 5))
 
         self.vlm_knowledge_display = scrolledtext.ScrolledText(
@@ -3372,10 +3454,10 @@ personality and advanced automation capabilities.
         right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
 
         output_label = tk.Label(right_column,
-                               text="📊 Activity Log:",
-                               bg="#1a1d2e",
-                               fg="#b0b0b0",
-                               font=("Segoe UI", 9, "bold"))
+                                text="📊 Activity Log:",
+                                bg="#1a1d2e",
+                                fg="#b0b0b0",
+                                font=("Segoe UI", 9, "bold"))
         output_label.pack(anchor="w", padx=5, pady=(0, 5))
 
         self.vlm_output = scrolledtext.ScrolledText(
@@ -3403,28 +3485,28 @@ personality and advanced automation capabilities.
         bottom_frame.pack(fill="x", padx=10, pady=(5, 10))
 
         help_btn = tk.Button(bottom_frame,
-                            text="📖 How It Works",
-                            bg="#00d4aa",
-                            fg="#0f0f1e",
-                            font=("Segoe UI", 9, "bold"),
-                            relief="flat",
-                            cursor="hand2",
-                            command=self.show_vlm_help,
-                            padx=15,
-                            pady=8)
+                             text="📖 How It Works",
+                             bg="#00d4aa",
+                             fg="#0f0f1e",
+                             font=("Segoe UI", 9, "bold"),
+                             relief="flat",
+                             cursor="hand2",
+                             command=self.show_vlm_help,
+                             padx=15,
+                             pady=8)
         help_btn.pack(side="left", padx=5)
         self.add_hover_effect(help_btn, "#89b4fa", "#74c7ec")
 
         clear_btn = tk.Button(bottom_frame,
-                             text="🗑️ Clear Output",
-                             bg="#2e3350",
-                             fg="#e0e0e0",
-                             font=("Segoe UI", 9, "bold"),
-                             relief="flat",
-                             cursor="hand2",
-                             command=self.vlm_clear_output,
-                             padx=15,
-                             pady=8)
+                              text="🗑️ Clear Output",
+                              bg="#2e3350",
+                              fg="#e0e0e0",
+                              font=("Segoe UI", 9, "bold"),
+                              relief="flat",
+                              cursor="hand2",
+                              command=self.vlm_clear_output,
+                              padx=15,
+                              pady=8)
         clear_btn.pack(side="left", padx=5)
         self.add_hover_effect(clear_btn, "#313244", "#45475a")
 
@@ -3433,12 +3515,12 @@ personality and advanced automation capabilities.
         status_container.pack(side="right", padx=5)
 
         self.vlm_status = tk.Label(status_container,
-                                  text="✅ Ready to Learn",
-                                  bg="#2e3350",
-                                  fg="#00ff88",
-                                  font=("Segoe UI", 9, "bold"),
-                                  padx=15,
-                                  pady=8)
+                                   text="✅ Ready to Learn",
+                                   bg="#2e3350",
+                                   fg="#00ff88",
+                                   font=("Segoe UI", 9, "bold"),
+                                   padx=15,
+                                   pady=8)
         self.vlm_status.pack()
 
         # Initialize with welcome message
@@ -4410,25 +4492,25 @@ personality and advanced automation capabilities.
 
         for text, command in mm_buttons:
             btn = tk.Button(left_column,
-                           text=text,
-                           bg="#2e3350",
-                           fg="#e0e0e0",
-                           font=("Segoe UI", 10),
-                           relief="flat",
-                           cursor="hand2",
-                           command=command,
-                           anchor="w",
-                           padx=15,
-                           pady=10,
-                           activebackground="#3d4466")
+                            text=text,
+                            bg="#2e3350",
+                            fg="#e0e0e0",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            anchor="w",
+                            padx=15,
+                            pady=10,
+                            activebackground="#3d4466")
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
 
         memory_section = tk.Label(left_column,
-                                 text="🧠 CONTEXTUAL MEMORY",
-                                 bg="#1a1d2e",
-                                 fg="#00d4aa",
-                                 font=("Segoe UI", 11, "bold"))
+                                  text="🧠 CONTEXTUAL MEMORY",
+                                  bg="#1a1d2e",
+                                  fg="#00d4aa",
+                                  font=("Segoe UI", 11, "bold"))
         memory_section.pack(pady=(15, 8), anchor="w", padx=8)
 
         memory_buttons = [
@@ -4440,25 +4522,25 @@ personality and advanced automation capabilities.
 
         for text, command in memory_buttons:
             btn = tk.Button(left_column,
-                           text=text,
-                           bg="#2e3350",
-                           fg="#e0e0e0",
-                           font=("Segoe UI", 10),
-                           relief="flat",
-                           cursor="hand2",
-                           command=command,
-                           anchor="w",
-                           padx=15,
-                           pady=10,
-                           activebackground="#3d4466")
+                            text=text,
+                            bg="#2e3350",
+                            fg="#e0e0e0",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            anchor="w",
+                            padx=15,
+                            pady=10,
+                            activebackground="#3d4466")
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
 
         learning_section = tk.Label(left_column,
-                                   text="📚 CORRECTION LEARNING",
-                                   bg="#1a1d2e",
-                                   fg="#00ff88",
-                                   font=("Segoe UI", 11, "bold"))
+                                    text="📚 CORRECTION LEARNING",
+                                    bg="#1a1d2e",
+                                    fg="#00ff88",
+                                    font=("Segoe UI", 11, "bold"))
         learning_section.pack(pady=(15, 8), anchor="w", padx=8)
 
         learning_buttons = [
@@ -4469,25 +4551,25 @@ personality and advanced automation capabilities.
 
         for text, command in learning_buttons:
             btn = tk.Button(left_column,
-                           text=text,
-                           bg="#2e3350",
-                           fg="#e0e0e0",
-                           font=("Segoe UI", 10),
-                           relief="flat",
-                           cursor="hand2",
-                           command=command,
-                           anchor="w",
-                           padx=15,
-                           pady=10,
-                           activebackground="#3d4466")
+                            text=text,
+                            bg="#2e3350",
+                            fg="#e0e0e0",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            anchor="w",
+                            padx=15,
+                            pady=10,
+                            activebackground="#3d4466")
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
 
         predictions_section = tk.Label(left_column,
-                                      text="🔮 PREDICTIVE ACTIONS",
-                                      bg="#1a1d2e",
-                                      fg="#f9e2af",
-                                      font=("Segoe UI", 11, "bold"))
+                                       text="🔮 PREDICTIVE ACTIONS",
+                                       bg="#1a1d2e",
+                                       fg="#f9e2af",
+                                       font=("Segoe UI", 11, "bold"))
         predictions_section.pack(pady=(15, 8), anchor="w", padx=8)
 
         pred_buttons = [
@@ -4498,17 +4580,17 @@ personality and advanced automation capabilities.
 
         for text, command in pred_buttons:
             btn = tk.Button(left_column,
-                           text=text,
-                           bg="#2e3350",
-                           fg="#e0e0e0",
-                           font=("Segoe UI", 10),
-                           relief="flat",
-                           cursor="hand2",
-                           command=command,
-                           anchor="w",
-                           padx=15,
-                           pady=10,
-                           activebackground="#3d4466")
+                            text=text,
+                            bg="#2e3350",
+                            fg="#e0e0e0",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            anchor="w",
+                            padx=15,
+                            pady=10,
+                            activebackground="#3d4466")
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
 
@@ -4516,10 +4598,10 @@ personality and advanced automation capabilities.
         right_column.pack(side="right", fill="both", expand=True, padx=(5, 0))
 
         output_label = tk.Label(right_column,
-                               text="📋 Output Console",
-                               bg="#1a1d2e",
-                               fg="#e0e0e0",
-                               font=("Segoe UI", 11, "bold"))
+                                text="📋 Output Console",
+                                bg="#1a1d2e",
+                                fg="#e0e0e0",
+                                font=("Segoe UI", 11, "bold"))
         output_label.pack(pady=(10, 5), anchor="w", padx=8)
 
         self.advanced_ai_output = scrolledtext.ScrolledText(
@@ -4543,15 +4625,15 @@ personality and advanced automation capabilities.
         self.advanced_ai_output.tag_config("prediction", foreground="#cba6f7")
 
         clear_btn = tk.Button(right_column,
-                             text="🗑️ Clear Output",
-                             bg="#3d4466",
-                             fg="#e0e0e0",
-                             font=("Segoe UI", 9),
-                             relief="flat",
-                             cursor="hand2",
-                             command=lambda: self.advanced_ai_clear_output(),
-                             padx=15,
-                             pady=8)
+                              text="🗑️ Clear Output",
+                              bg="#3d4466",
+                              fg="#e0e0e0",
+                              font=("Segoe UI", 9),
+                              relief="flat",
+                              cursor="hand2",
+                              command=lambda: self.advanced_ai_clear_output(),
+                              padx=15,
+                              pady=8)
         clear_btn.pack(pady=(0, 10), padx=8)
         self.add_hover_effect(clear_btn, "#45475a", "#585b70")
 
@@ -5005,7 +5087,7 @@ personality and advanced automation capabilities.
         thread.start()
 
     def _process_vatsal_ai_message(self, user_message):
-        """Process message with Simple Chat in background"""
+        """Process message with Simple Chat in background with autonomous execution"""
         try:
             if self.simple_chatbot:
                 response = self.simple_chatbot.chat(user_message)
@@ -5013,8 +5095,79 @@ personality and advanced automation capabilities.
                 response = "Chatbot not available. Please check your Gemini API key configuration."
 
             self._add_vatsal_ai_message("VATSAL", response)
+
+            # Autonomous mode: Detect and execute tasks
+            if self.self_operating_mode and self.automation_orchestrator:
+                autonomous_suggestions = self._detect_autonomous_actions(user_message, response)
+
+                if autonomous_suggestions:
+                    # Show suggestions
+                    suggestion_text = "\n💡 Autonomous Suggestions:\n" + "\n".join(
+                        f"  • {s}" for s in autonomous_suggestions
+                    )
+                    self._add_vatsal_ai_message("VATSAL", suggestion_text)
+
+                    # Auto-execute if user explicitly requested execution
+                    if any(word in user_message.lower() for word in ['execute', 'run', 'do it', 'perform', 'start']):
+                        self._execute_autonomous_task(user_message, response)
+
         except Exception as e:
             self._add_vatsal_ai_message("VATSAL", f"Sorry, I encountered an error: {str(e)}")
+
+    def _detect_autonomous_actions(self, user_msg, ai_response):
+        """Detect potential autonomous actions from conversation"""
+        suggestions = []
+        msg_lower = user_msg.lower()
+
+        # Code execution
+        if any(word in msg_lower for word in ['code', 'program', 'script', 'function']):
+            suggestions.append("I can execute code in a sandbox environment")
+            if self.self_operating_computer:
+                suggestions.append("Self-operating mode can test this code")
+
+        # File operations
+        elif any(word in msg_lower for word in ['file', 'folder', 'organize', 'clean']):
+            suggestions.append("I can organize files automatically")
+            suggestions.append("Ready to execute file operations")
+
+        # System tasks
+        elif any(word in msg_lower for word in ['open', 'launch', 'start', 'close']):
+            suggestions.append("I can execute system commands")
+            if self.executor:
+                suggestions.append("Command executor ready")
+
+        # Task automation
+        elif any(word in msg_lower for word in ['automate', 'schedule', 'workflow']):
+            suggestions.append("I can create automated workflows")
+            suggestions.append("Self-operating mode available")
+
+        return suggestions[:3]
+
+    def _execute_autonomous_task(self, user_msg, ai_response):
+        """Execute autonomous task using the orchestrator"""
+        if not self.automation_orchestrator:
+            return
+
+        msg_lower = user_msg.lower()
+
+        # Determine task type and create task
+        if 'self' in msg_lower or 'auto' in msg_lower:
+            task_type = "self_operating"
+            intent = "Self-operating task"
+        else:
+            task_type = "command"
+            intent = "Command execution task"
+
+        # Submit task to orchestrator
+        task_id = self.automation_orchestrator.submit_task(
+            intent=intent,
+            command=user_msg,
+            task_type=task_type,
+            require_confirmation=False  # Confirmation handled by callback
+        )
+
+        if task_id:
+            self._add_vatsal_ai_message("VATSAL", f"🤖 Autonomous task queued: {task_id}")
 
     def _add_vatsal_ai_message(self, sender, message):
         """Add message to VATSAL conversation display"""
@@ -5058,24 +5211,57 @@ personality and advanced automation capabilities.
         messagebox.showinfo("Cleared", "Chat cleared! Ready for a fresh conversation.")
 
     def show_vatsal_ai_stats(self):
-        """Show chatbot statistics"""
+        """Show comprehensive chatbot and autonomous system statistics"""
+        # Chatbot stats
         if self.simple_chatbot:
             conv_count = len(self.simple_chatbot.conversation_history)
-            stats_message = f"""
-📊 VATSAL Simple Chatbot Statistics
-
-💬 Current Conversation: {conv_count // 2} exchanges
-🤖 Model: Gemini 2.5 Flash (Latest)
-🧠 Memory: Remembers last 10 exchanges
-✅ Status: Active and ready to chat!
-🎯 Purpose: Quick questions & friendly conversations
-"""
-            title = "VATSAL Stats"
+            chatbot_status = f"""💬 Chat Session:
+  • Conversation: {conv_count // 2} exchanges
+  • Model: Gemini 2.5 Flash (Latest)
+  • Memory: Last 10 exchanges
+  • Status: ✅ Active"""
         else:
-            stats_message = "Chatbot not available. Please check configuration."
-            title = "Stats"
+            chatbot_status = "💬 Chat: ❌ Not available"
 
-        messagebox.showinfo(title, stats_message)
+        # Autonomous system stats
+        if self.automation_orchestrator:
+            orch_stats = self.automation_orchestrator.get_statistics()
+            autonomous_status = f"""
+🤖 Autonomous System:
+  • Autonomous Mode: {'✅ ON' if self.self_operating_mode else '❌ OFF'}
+  • Orchestrator: {'✅ Running' if orch_stats['orchestrator_running'] else '❌ Stopped'}
+  • Total Tasks: {orch_stats['total_tasks']}
+  • Successful: {orch_stats['successful_tasks']}
+  • Failed: {orch_stats['failed_tasks']}
+  • Running: {orch_stats['running_tasks']}
+  • Pending: {orch_stats['pending_tasks']}"""
+        else:
+            autonomous_status = "\n🤖 Autonomous: ❌ Not available"
+
+        # Self-operating status
+        if self.self_operating_computer:
+            self_op_status = "\n🎮 Self-Operating: ✅ Ready"
+        else:
+            self_op_status = "\n🎮 Self-Operating: ❌ Not available"
+
+        # Executor status
+        if self.executor:
+            exec_status = "\n⚡ Command Executor: ✅ Ready"
+        else:
+            exec_status = "\n⚡ Command Executor: ❌ Not available"
+
+        stats_message = f"""📊 VATSAL AI System Statistics
+
+{chatbot_status}{autonomous_status}{self_op_status}{exec_status}
+
+🎯 Features Available:
+  • Real-time AI conversation
+  • Context-aware autonomous suggestions
+  • Proactive task execution
+  • Self-operating capabilities
+"""
+
+        messagebox.showinfo("VATSAL AI Stats", stats_message)
 
     def execute_vatsal_automator_command(self):
         """Execute command using VATSAL automator"""
@@ -5106,7 +5292,8 @@ personality and advanced automation capabilities.
         """Process VATSAL automator command in background"""
         try:
             self._update_vatsal_automator_output("🤔 Understanding command...\n", "info")
-            result = self.vatsal_automator.execute_command(command, confirmation_callback=self._vatsal_confirmation_callback)
+            result = self.vatsal_automator.execute_command(command,
+                                                           confirmation_callback=self._vatsal_confirmation_callback)
 
             if "✓" in result:
                 self._update_vatsal_automator_output(f"\n{result}\n", "success")
@@ -5147,7 +5334,8 @@ personality and advanced automation capabilities.
                 "🎮 Self-Operating Computer mode is currently DISABLED.\n\n"
                 "Please enable it using the '🎮 Self-Operating: OFF' toggle button in the header to use this feature."
             )
-            self._update_soc_output("⚠️ Self-Operating mode is disabled. Enable it from the header toggle.\n", "warning")
+            self._update_soc_output("⚠️ Self-Operating mode is disabled. Enable it from the header toggle.\n",
+                                    "warning")
             return
 
         if not self.self_operating_computer:
@@ -5182,7 +5370,8 @@ personality and advanced automation capabilities.
                 "🎮 Self-Operating Computer mode is currently DISABLED.\n\n"
                 "Please enable it using the '🎮 Self-Operating: OFF' toggle button in the header to use this feature."
             )
-            self._update_soc_output("⚠️ Self-Operating mode is disabled. Enable it from the header toggle.\n", "warning")
+            self._update_soc_output("⚠️ Self-Operating mode is disabled. Enable it from the header toggle.\n",
+                                    "warning")
             return
 
         if not self.self_operating_computer:
@@ -5441,7 +5630,8 @@ Based on OthersideAI's self-operating-computer framework
 
                 if result.get('success'):
                     self.update_output(f"\n✅ Task completed successfully!\n", "success")
-                    self.update_output(f"📊 Success rate: {result['successful_steps']}/{result['total_steps']}\n", "info")
+                    self.update_output(f"📊 Success rate: {result['successful_steps']}/{result['total_steps']}\n",
+                                       "info")
                 else:
                     self.update_output(f"\n⚠️  Task completed with issues\n", "warning")
 
@@ -5990,11 +6180,11 @@ Based on OthersideAI's self-operating-computer framework
         settings_window.configure(bg="#252941")
 
         header = tk.Label(settings_window,
-                         text="🔊 Voice Sound Effects Settings",
-                         bg="#252941",
-                         fg="#e0e0e0",
-                         font=("Segoe UI", 16, "bold"),
-                         pady=20)
+                          text="🔊 Voice Sound Effects Settings",
+                          bg="#252941",
+                          fg="#e0e0e0",
+                          font=("Segoe UI", 16, "bold"),
+                          pady=20)
         header.pack()
 
         # Sound effects status
@@ -6010,13 +6200,13 @@ Based on OthersideAI's self-operating-computer framework
                 status_text += f"{status} {name.replace('_', ' ').title()}\n"
 
         status_label = tk.Label(status_frame,
-                               text=status_text,
-                               bg="#2a2a3e",
-                               fg="#e0e0e0",
-                               font=("Segoe UI", 11),
-                               justify="left",
-                               pady=15,
-                               padx=15)
+                                text=status_text,
+                                bg="#2a2a3e",
+                                fg="#e0e0e0",
+                                font=("Segoe UI", 11),
+                                justify="left",
+                                pady=15,
+                                padx=15)
         status_label.pack()
 
         # Volume control
@@ -6024,10 +6214,10 @@ Based on OthersideAI's self-operating-computer framework
         volume_frame.pack(fill="x", padx=20, pady=15)
 
         volume_label = tk.Label(volume_frame,
-                               text="🎚️ Volume:",
-                               bg="#252941",
-                               fg="#e0e0e0",
-                               font=("Segoe UI", 12, "bold"))
+                                text="🎚️ Volume:",
+                                bg="#252941",
+                                fg="#e0e0e0",
+                                font=("Segoe UI", 12, "bold"))
         volume_label.pack(side="left", padx=10)
 
         current_volume = self.voice_commander.sound_effects.volume if self.voice_commander.sound_effects else 0.8
@@ -6038,23 +6228,23 @@ Based on OthersideAI's self-operating-computer framework
             volume_value.config(text=f"{int(volume * 100)}%")
 
         volume_slider = tk.Scale(volume_frame,
-                                from_=0.0,
-                                to=1.0,
-                                resolution=0.1,
-                                orient="horizontal",
-                                bg="#2e3350",
-                                fg="#e0e0e0",
-                                highlightthickness=0,
-                                command=update_volume,
-                                length=250)
+                                 from_=0.0,
+                                 to=1.0,
+                                 resolution=0.1,
+                                 orient="horizontal",
+                                 bg="#2e3350",
+                                 fg="#e0e0e0",
+                                 highlightthickness=0,
+                                 command=update_volume,
+                                 length=250)
         volume_slider.set(current_volume)
         volume_slider.pack(side="left", padx=10)
 
         volume_value = tk.Label(volume_frame,
-                               text=f"{int(current_volume * 100)}%",
-                               bg="#252941",
-                               fg="#00ff88",
-                               font=("Segoe UI", 11, "bold"))
+                                text=f"{int(current_volume * 100)}%",
+                                bg="#252941",
+                                fg="#00ff88",
+                                font=("Segoe UI", 11, "bold"))
         volume_value.pack(side="left", padx=10)
 
         # Test sounds section
@@ -6062,11 +6252,11 @@ Based on OthersideAI's self-operating-computer framework
         test_frame.pack(fill="x", padx=20, pady=15)
 
         test_header = tk.Label(test_frame,
-                              text="🎵 Test Sounds:",
-                              bg="#2a2a3e",
-                              fg="#f9e2af",
-                              font=("Segoe UI", 12, "bold"),
-                              pady=10)
+                               text="🎵 Test Sounds:",
+                               bg="#2a2a3e",
+                               fg="#f9e2af",
+                               font=("Segoe UI", 12, "bold"),
+                               pady=10)
         test_header.pack()
 
         test_buttons_frame = tk.Frame(test_frame, bg="#2a2a3e")
@@ -6080,15 +6270,15 @@ Based on OthersideAI's self-operating-computer framework
         for sound_name in sound_names:
             btn_text = sound_name.replace('_', ' ').title()
             test_btn = tk.Button(test_buttons_frame,
-                                text=btn_text,
-                                bg="#2e3350",
-                                fg="#e0e0e0",
-                                font=("Segoe UI", 9),
-                                relief="flat",
-                                cursor="hand2",
-                                command=lambda s=sound_name: play_test_sound(s),
-                                padx=15,
-                                pady=8)
+                                 text=btn_text,
+                                 bg="#2e3350",
+                                 fg="#e0e0e0",
+                                 font=("Segoe UI", 9),
+                                 relief="flat",
+                                 cursor="hand2",
+                                 command=lambda s=sound_name: play_test_sound(s),
+                                 padx=15,
+                                 pady=8)
             test_btn.pack(side="left", padx=5)
             self.add_hover_effect(test_btn, "#313244", "#45475a")
 
@@ -6105,24 +6295,24 @@ Based on OthersideAI's self-operating-computer framework
         """
 
         info_label = tk.Label(info_frame,
-                             text=info_text,
-                             bg="#252941",
-                             fg="#b0b0b0",
-                             font=("Segoe UI", 10),
-                             justify="left")
+                              text=info_text,
+                              bg="#252941",
+                              fg="#b0b0b0",
+                              font=("Segoe UI", 10),
+                              justify="left")
         info_label.pack()
 
         # Close button
         close_btn = tk.Button(settings_window,
-                             text="✅ Done",
-                             bg="#00d4aa",
-                             fg="#0f0f1e",
-                             font=("Segoe UI", 11, "bold"),
-                             relief="flat",
-                             cursor="hand2",
-                             command=settings_window.destroy,
-                             padx=30,
-                             pady=10)
+                              text="✅ Done",
+                              bg="#00d4aa",
+                              fg="#0f0f1e",
+                              font=("Segoe UI", 11, "bold"),
+                              relief="flat",
+                              cursor="hand2",
+                              command=settings_window.destroy,
+                              padx=30,
+                              pady=10)
         close_btn.pack(pady=15)
         self.add_hover_effect(close_btn, "#89b4fa", "#74c7ec")
 
@@ -6375,10 +6565,10 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
         header.pack()
 
         subtitle = tk.Label(header_frame,
-                           text="🤖 AI-Powered Threat Analysis • 🔐 Enhanced Security Features",
-                           bg="#16182a",
-                           fg="#b0b0b0",
-                           font=("Segoe UI", 10, "italic"))
+                            text="🤖 AI-Powered Threat Analysis • 🔐 Enhanced Security Features",
+                            bg="#16182a",
+                            fg="#b0b0b0",
+                            font=("Segoe UI", 10, "italic"))
         subtitle.pack()
 
         # Main content area
@@ -6391,11 +6581,11 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
         left_panel.pack_propagate(False)
 
         actions_label = tk.Label(left_panel,
-                                text="🎯 Security Actions",
-                                bg="#1a1d2e",
-                                fg="#f9e2af",
-                                font=("Segoe UI", 12, "bold"),
-                                pady=10)
+                                 text="🎯 Security Actions",
+                                 bg="#1a1d2e",
+                                 fg="#f9e2af",
+                                 font=("Segoe UI", 12, "bold"),
+                                 pady=10)
         actions_label.pack()
 
         # Security action buttons
@@ -6410,16 +6600,16 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
 
         for text, command in security_actions:
             btn = tk.Button(left_panel,
-                           text=text,
-                           bg="#2e3350",
-                           fg="#e0e0e0",
-                           font=("Segoe UI", 10),
-                           relief="flat",
-                           cursor="hand2",
-                           command=command,
-                           anchor="w",
-                           padx=15,
-                           pady=12)
+                            text=text,
+                            bg="#2e3350",
+                            fg="#e0e0e0",
+                            font=("Segoe UI", 10),
+                            relief="flat",
+                            cursor="hand2",
+                            command=command,
+                            anchor="w",
+                            padx=15,
+                            pady=12)
             btn.pack(fill="x", padx=10, pady=5)
 
         # Right panel - Display area
@@ -6427,11 +6617,11 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
         right_panel.pack(side="right", fill="both", expand=True)
 
         display_label = tk.Label(right_panel,
-                                text="📋 Security Information",
-                                bg="#1a1d2e",
-                                fg="#f9e2af",
-                                font=("Segoe UI", 12, "bold"),
-                                pady=10)
+                                 text="📋 Security Information",
+                                 bg="#1a1d2e",
+                                 fg="#f9e2af",
+                                 font=("Segoe UI", 12, "bold"),
+                                 pady=10)
         display_label.pack()
 
         # Display area
@@ -6451,7 +6641,7 @@ Toggle VATSAL Mode ON/OFF anytime from the header.
         status = self.security_dashboard.get_comprehensive_security_status()
         status_text = f"""
 🛡️ SECURITY DASHBOARD STATUS
-{'='*60}
+{'=' * 60}
 
 Security Level: {status['dashboard_info']['security_level'].upper()}
 Current User: {status['dashboard_info']['current_user'] or 'Not Authenticated'}
@@ -6527,7 +6717,7 @@ Click the buttons on the left to access AI-powered security features.
         if result.get("success"):
             self.security_display.insert("1.0", f"""
 🤖 AI-POWERED THREAT ANALYSIS
-{'='*60}
+{'=' * 60}
 
 Threat Count: {result.get('threat_count', 0)}
 Analysis Time: {result.get('timestamp', 'N/A')}
@@ -6553,7 +6743,7 @@ Analysis Time: {result.get('timestamp', 'N/A')}
         if result.get("success"):
             self.security_display.insert("1.0", f"""
 💡 AI-POWERED SECURITY RECOMMENDATIONS
-{'='*60}
+{'=' * 60}
 
 Current Security Level: {result.get('security_level', 'N/A').upper()}
 Analysis Time: {result.get('timestamp', 'N/A')}
@@ -6579,7 +6769,7 @@ Analysis Time: {result.get('timestamp', 'N/A')}
         if result.get("success"):
             self.security_display.insert("1.0", f"""
 🔍 AI-POWERED ANOMALY DETECTION
-{'='*60}
+{'=' * 60}
 
 Activities Analyzed: {result.get('activities_analyzed', 0)}
 Analysis Time: {result.get('timestamp', 'N/A')}
@@ -6596,7 +6786,8 @@ Analysis Time: {result.get('timestamp', 'N/A')}
             return
 
         self.security_display.delete("1.0", "end")
-        self.security_display.insert("1.0", "🤖 Generating comprehensive AI security report...\nThis may take a moment...\n")
+        self.security_display.insert("1.0",
+                                     "🤖 Generating comprehensive AI security report...\nThis may take a moment...\n")
         self.security_display.update()
 
         report = self.security_dashboard.ai_generate_security_report()
@@ -6629,7 +6820,7 @@ Analysis Time: {result.get('timestamp', 'N/A')}
         if result.get("success"):
             self.security_display.insert("1.0", f"""
 ❓ SECURITY QUESTION & ANSWER
-{'='*60}
+{'=' * 60}
 
 Question: {result.get('question', question)}
 Answered: {result.get('timestamp', 'N/A')}
@@ -8224,7 +8415,6 @@ Answered: {result.get('timestamp', 'N/A')}
             import traceback
             self.update_output(f"Details: {traceback.format_exc()}\n", "error")
 
-
     # ==================== Comprehensive Controller Methods ====================
 
     def load_comprehensive_command(self, command):
@@ -8325,11 +8515,11 @@ Answered: {result.get('timestamp', 'N/A')}
 
         # Description
         desc_label = tk.Label(content_inner,
-                             text=description,
-                             bg="#181825",
-                             fg="#b0b0b0",
-                             font=("Segoe UI", 10),
-                             wraplength=350)
+                              text=description,
+                              bg="#181825",
+                              fg="#b0b0b0",
+                              font=("Segoe UI", 10),
+                              wraplength=350)
         desc_label.pack(pady=(0, 20))
 
         # Feature-specific content
@@ -8369,73 +8559,74 @@ Answered: {result.get('timestamp', 'N/A')}
     def create_workflow_builder_feature(self, parent, color):
         """Create workflow builder feature UI"""
         tk.Label(parent, text="💬 Workflow Builder", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         info_text = "Build complex automation workflows using plain English. The AI will convert your descriptions into executable steps."
         tk.Label(parent, text=info_text, bg="#181825", fg="#b0b0b0",
-                font=("Segoe UI", 9), wraplength=350, justify="left").pack(pady=(0, 20))
+                 font=("Segoe UI", 9), wraplength=350, justify="left").pack(pady=(0, 20))
 
         btn = tk.Button(parent, text="💬 Open Workflow Builder",
-                       bg=color, fg="#0f0f1e",
-                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                       command=self.show_workflow_builder,
-                       padx=30, pady=12)
+                        bg=color, fg="#0f0f1e",
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=self.show_workflow_builder,
+                        padx=30, pady=12)
         btn.pack(pady=10)
 
     def create_macro_recorder_feature(self, parent, color):
         """Create macro recorder feature placeholder"""
         tk.Label(parent, text="🎬 Macro Recorder", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
         tk.Label(parent, text="Record and playback mouse & keyboard actions",
-                bg="#181825", fg="#b0b0b0", font=("Segoe UI", 9)).pack(pady=(0, 20))
+                 bg="#181825", fg="#b0b0b0", font=("Segoe UI", 9)).pack(pady=(0, 20))
         tk.Label(parent, text="Use the Macro Recorder tab for full access",
-                bg="#181825", fg="#b0b0b0", font=("Segoe UI", 9, "italic")).pack()
+                 bg="#181825", fg="#b0b0b0", font=("Segoe UI", 9, "italic")).pack()
 
     def create_mobile_control_feature(self, parent, color):
         """Create mobile control feature placeholder"""
         tk.Label(parent, text="📱 Mobile Control", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
         tk.Label(parent, text="Control your desktop from mobile devices",
-                bg="#181825", fg="#b0b0b0", font=("Segoe UI", 9)).pack(pady=(0, 20))
+                 bg="#181825", fg="#b0b0b0", font=("Segoe UI", 9)).pack(pady=(0, 20))
         tk.Label(parent, text="Use the Mobile Companion tab for full access",
-                bg="#181825", fg="#b0b0b0", font=("Segoe UI", 9, "italic")).pack()
+                 bg="#181825", fg="#b0b0b0", font=("Segoe UI", 9, "italic")).pack()
 
     def create_hand_gesture_feature(self, parent, color):
         """Create hand gesture control feature UI"""
         tk.Label(parent, text="✋ Hand Gesture Control", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         info_text = "Control your mouse using hand gestures via webcam. Features 7 gestures: cursor movement, left/right click, scroll, drag, and volume control."
         tk.Label(parent, text=info_text, bg="#181825", fg="#b0b0b0",
-                font=("Segoe UI", 9), wraplength=350, justify="left").pack(pady=(0, 20))
+                 font=("Segoe UI", 9), wraplength=350, justify="left").pack(pady=(0, 20))
 
         # Launch button
         btn = tk.Button(parent, text="🎥 Launch Hand Gesture Controller",
-                       bg=color, fg="#0f0f1e",
-                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                       command=self.launch_hand_gesture_controller,
-                       padx=30, pady=12)
+                        bg=color, fg="#0f0f1e",
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=self.launch_hand_gesture_controller,
+                        padx=30, pady=12)
         btn.pack(pady=10)
 
         # Info labels
         tk.Label(parent, text="📋 Requirements:", bg="#181825", fg="#89dceb",
-                font=("Segoe UI", 9, "bold")).pack(pady=(15, 5), anchor="w")
+                 font=("Segoe UI", 9, "bold")).pack(pady=(15, 5), anchor="w")
         tk.Label(parent, text="• Working webcam", bg="#181825", fg="#b0b0b0",
-                font=("Segoe UI", 8)).pack(anchor="w", padx=20)
+                 font=("Segoe UI", 8)).pack(anchor="w", padx=20)
         tk.Label(parent, text="• Good lighting conditions", bg="#181825", fg="#b0b0b0",
-                font=("Segoe UI", 8)).pack(anchor="w", padx=20)
+                 font=("Segoe UI", 8)).pack(anchor="w", padx=20)
         tk.Label(parent, text="• Plain background recommended", bg="#181825", fg="#b0b0b0",
-                font=("Segoe UI", 8)).pack(anchor="w", padx=20)
+                 font=("Segoe UI", 8)).pack(anchor="w", padx=20)
 
         tk.Label(parent, text="⌨️ Controls:", bg="#181825", fg="#89dceb",
-                font=("Segoe UI", 9, "bold")).pack(pady=(10, 5), anchor="w")
+                 font=("Segoe UI", 9, "bold")).pack(pady=(10, 5), anchor="w")
         tk.Label(parent, text="• Press 'Q' to quit", bg="#181825", fg="#b0b0b0",
-                font=("Segoe UI", 8)).pack(anchor="w", padx=20)
+                 font=("Segoe UI", 8)).pack(anchor="w", padx=20)
         tk.Label(parent, text="• Press 'S' to toggle stats", bg="#181825", fg="#b0b0b0",
-                font=("Segoe UI", 8)).pack(anchor="w", padx=20)
+                 font=("Segoe UI", 8)).pack(anchor="w", padx=20)
 
     def launch_hand_gesture_controller(self):
         """Launch the hand gesture controller in a separate thread"""
+
         def run_controller():
             try:
                 from modules.automation.hand_gesture_controller import HandGestureController
@@ -8511,185 +8702,185 @@ Answered: {result.get('timestamp', 'N/A')}
     def create_screenshot_feature(self, parent, color):
         """Create screenshot feature UI"""
         tk.Label(parent, text="📸 Screenshot Options", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         btn = tk.Button(parent, text="📷 Capture Full Screen", bg="#2e3350", fg="#e0e0e0",
-                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                       command=lambda: self.load_comprehensive_command("Take a screenshot"),
-                       padx=20, pady=12)
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Take a screenshot"),
+                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
 
         btn2 = tk.Button(parent, text="🖼️ Capture Window", bg="#2e3350", fg="#e0e0e0",
-                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                        command=lambda: self.load_comprehensive_command("Take screenshot of active window"),
-                        padx=20, pady=12)
+                         font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                         command=lambda: self.load_comprehensive_command("Take screenshot of active window"),
+                         padx=20, pady=12)
         btn2.pack(fill="x", pady=5)
         self.add_hover_effect(btn2, "#313244", "#45475a")
 
     def create_lock_feature(self, parent, color):
         """Create lock PC feature UI"""
         tk.Label(parent, text="🔒 System Lock", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         tk.Label(parent, text="⚠️ This will lock your computer", bg="#181825", fg="#00d4aa",
-                font=("Segoe UI", 9)).pack(pady=5)
+                 font=("Segoe UI", 9)).pack(pady=5)
 
         btn = tk.Button(parent, text="🔒 Lock Computer Now", bg="#00d4aa", fg="#0f0f1e",
-                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                       command=lambda: self.load_comprehensive_command("Lock the computer"),
-                       padx=20, pady=12)
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Lock the computer"),
+                        padx=20, pady=12)
         btn.pack(fill="x", pady=10)
         self.add_hover_effect(btn, "#f38ba8", "#f5c2e7")
 
     def create_taskmanager_feature(self, parent, color):
         """Create task manager feature UI"""
         tk.Label(parent, text="📊 Task Manager", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         btn = tk.Button(parent, text="📊 Open Task Manager", bg="#2e3350", fg="#e0e0e0",
-                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                       command=lambda: self.load_comprehensive_command("Open Task Manager"),
-                       padx=20, pady=12)
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Open Task Manager"),
+                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
 
     def create_chrome_feature(self, parent, color):
         """Create Chrome feature UI"""
         tk.Label(parent, text="🌍 Chrome Browser", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         btn = tk.Button(parent, text="🌍 Open Chrome", bg="#2e3350", fg="#e0e0e0",
-                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                       command=lambda: self.load_comprehensive_command("Open Chrome and go to Google"),
-                       padx=20, pady=12)
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Open Chrome and go to Google"),
+                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
 
     def create_google_feature(self, parent, color):
         """Create Google search feature UI"""
         tk.Label(parent, text="🔍 Google Search", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         search_entry = tk.Entry(parent, bg="#2e3350", fg="#e0e0e0", font=("Segoe UI", 10),
-                               relief="flat", insertbackground="#f9e2af")
+                                relief="flat", insertbackground="#f9e2af")
         search_entry.insert(0, "Python tutorials")
         search_entry.pack(fill="x", pady=5, ipady=8)
 
         btn = tk.Button(parent, text="🔍 Search Google", bg="#00ff88", fg="#0f0f1e",
-                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                       command=lambda: self.load_comprehensive_command(f"Search Google for {search_entry.get()}"),
-                       padx=20, pady=12)
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command(f"Search Google for {search_entry.get()}"),
+                        padx=20, pady=12)
         btn.pack(fill="x", pady=10)
         self.add_hover_effect(btn, "#a6e3a1", "#94e2d5")
 
     def create_gmail_feature(self, parent, color):
         """Create Gmail feature UI"""
         tk.Label(parent, text="📧 Gmail", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         btn = tk.Button(parent, text="📧 Open Gmail", bg="#2e3350", fg="#e0e0e0",
-                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                       command=lambda: self.load_comprehensive_command("Open Gmail in browser"),
-                       padx=20, pady=12)
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Open Gmail in browser"),
+                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
 
     def create_whatsapp_feature(self, parent, color):
         """Create WhatsApp feature UI"""
         tk.Label(parent, text="💬 WhatsApp", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         btn = tk.Button(parent, text="💬 Open WhatsApp Web", bg="#2e3350", fg="#e0e0e0",
-                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                       command=lambda: self.load_comprehensive_command("Open WhatsApp Web"),
-                       padx=20, pady=12)
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Open WhatsApp Web"),
+                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
 
     def create_vscode_feature(self, parent, color):
         """Create VS Code feature UI"""
         tk.Label(parent, text="📝 VS Code", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         btn = tk.Button(parent, text="📝 Launch VS Code", bg="#2e3350", fg="#e0e0e0",
-                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                       command=lambda: self.load_comprehensive_command("Launch VS Code"),
-                       padx=20, pady=12)
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Launch VS Code"),
+                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
 
     def create_explorer_feature(self, parent, color):
         """Create File Explorer feature UI"""
         tk.Label(parent, text="📂 File Explorer", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         btn = tk.Button(parent, text="📂 Open File Explorer", bg="#2e3350", fg="#e0e0e0",
-                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                       command=lambda: self.load_comprehensive_command("Open File Explorer"),
-                       padx=20, pady=12)
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Open File Explorer"),
+                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
 
     def create_notepad_feature(self, parent, color):
         """Create Notepad feature UI"""
         tk.Label(parent, text="🗒️ Notepad", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         btn = tk.Button(parent, text="🗒️ Open Notepad", bg="#2e3350", fg="#e0e0e0",
-                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                       command=lambda: self.load_comprehensive_command("Open Notepad"),
-                       padx=20, pady=12)
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Open Notepad"),
+                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
 
     def create_spotify_feature(self, parent, color):
         """Create Spotify feature UI"""
         tk.Label(parent, text="🎵 Spotify", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         btn = tk.Button(parent, text="🎵 Launch Spotify", bg="#2e3350", fg="#e0e0e0",
-                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                       command=lambda: self.load_comprehensive_command("Launch Spotify"),
-                       padx=20, pady=12)
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Launch Spotify"),
+                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
 
     def create_youtube_feature(self, parent, color):
         """Create YouTube feature UI"""
         tk.Label(parent, text="🎬 YouTube", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         btn = tk.Button(parent, text="🎬 Open YouTube", bg="#2e3350", fg="#e0e0e0",
-                       font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                       command=lambda: self.load_comprehensive_command("Open YouTube"),
-                       padx=20, pady=12)
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.load_comprehensive_command("Open YouTube"),
+                        padx=20, pady=12)
         btn.pack(fill="x", pady=5)
         self.add_hover_effect(btn, "#313244", "#45475a")
 
     def create_volume_feature(self, parent, color):
         """Create Volume control feature UI"""
         tk.Label(parent, text="🔊 Volume Control", bg="#181825", fg=color,
-                font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
+                 font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
         btn1 = tk.Button(parent, text="🔊 Volume Up", bg="#2e3350", fg="#e0e0e0",
-                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                        command=lambda: self.load_comprehensive_command("Increase volume by 10%"),
-                        padx=20, pady=12)
+                         font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                         command=lambda: self.load_comprehensive_command("Increase volume by 10%"),
+                         padx=20, pady=12)
         btn1.pack(fill="x", pady=5)
         self.add_hover_effect(btn1, "#313244", "#45475a")
 
         btn2 = tk.Button(parent, text="🔉 Volume Down", bg="#2e3350", fg="#e0e0e0",
-                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                        command=lambda: self.load_comprehensive_command("Decrease volume by 10%"),
-                        padx=20, pady=12)
+                         font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                         command=lambda: self.load_comprehensive_command("Decrease volume by 10%"),
+                         padx=20, pady=12)
         btn2.pack(fill="x", pady=5)
         self.add_hover_effect(btn2, "#313244", "#45475a")
 
         btn3 = tk.Button(parent, text="🔇 Mute", bg="#00d4aa", fg="#0f0f1e",
-                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
-                        command=lambda: self.load_comprehensive_command("Mute system volume"),
-                        padx=20, pady=12)
+                         font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                         command=lambda: self.load_comprehensive_command("Mute system volume"),
+                         padx=20, pady=12)
         btn3.pack(fill="x", pady=5)
         self.add_hover_effect(btn3, "#f38ba8", "#f5c2e7")
 
@@ -8772,8 +8963,10 @@ Answered: {result.get('timestamp', 'N/A')}
 
             self.append_comprehensive_output("\n✅ Prompt Analysis Complete:\n", "success")
             self.append_comprehensive_output(f"   🎯 Goal: {understanding.get('primary_goal', 'N/A')}\n", "info")
-            self.append_comprehensive_output(f"   📊 Complexity: {understanding.get('complexity_level', 'N/A')}\n", "info")
-            self.append_comprehensive_output(f"   ⏱️  Estimated Time: {understanding.get('estimated_duration', 'N/A')}s\n", "info")
+            self.append_comprehensive_output(f"   📊 Complexity: {understanding.get('complexity_level', 'N/A')}\n",
+                                             "info")
+            self.append_comprehensive_output(
+                f"   ⏱️  Estimated Time: {understanding.get('estimated_duration', 'N/A')}s\n", "info")
             apps = understanding.get('required_applications', [])
             if apps:
                 self.append_comprehensive_output(f"   🔧 Required Apps: {', '.join(apps)}\n", "info")
@@ -8791,11 +8984,14 @@ Answered: {result.get('timestamp', 'N/A')}
 
             self.append_comprehensive_output("\n✅ Execution Plan Created:\n", "success")
             self.append_comprehensive_output(f"   Total Steps: {len(steps)}\n", "info")
-            self.append_comprehensive_output(f"   Estimated Time: {execution_plan.get('execution_plan', {}).get('estimated_time', 'N/A')}s\n\n", "info")
+            self.append_comprehensive_output(
+                f"   Estimated Time: {execution_plan.get('execution_plan', {}).get('estimated_time', 'N/A')}s\n\n",
+                "info")
 
             self.append_comprehensive_output("📝 Step Breakdown:\n", "highlight")
             for step in steps:
-                self.append_comprehensive_output(f"   {step['step_number']}. {step.get('description', 'N/A')}\n", "info")
+                self.append_comprehensive_output(f"   {step['step_number']}. {step.get('description', 'N/A')}\n",
+                                                 "info")
                 self.append_comprehensive_output(f"      → Expected: {step.get('expected_outcome', 'N/A')}\n", "info")
 
             self.update_comprehensive_phase("PLAN", "complete")
@@ -8812,10 +9008,12 @@ Answered: {result.get('timestamp', 'N/A')}
 
             # Execute each step
             for i, step in enumerate(steps, 1):
-                self.append_comprehensive_output(f"\nStep {i}/{len(steps)}: {step.get('description', 'N/A')}\n", "highlight")
+                self.append_comprehensive_output(f"\nStep {i}/{len(steps)}: {step.get('description', 'N/A')}\n",
+                                                 "highlight")
 
                 if self.comprehensive_controller.gui.demo_mode:
-                    self.append_comprehensive_output(f"   [DEMO] Would execute: {step.get('action_type', 'N/A')}\n", "info")
+                    self.append_comprehensive_output(f"   [DEMO] Would execute: {step.get('action_type', 'N/A')}\n",
+                                                     "info")
                     import time
                     time.sleep(0.5)
                     self.append_comprehensive_output("   ✅ Demo step completed\n", "success")
@@ -9108,14 +9306,14 @@ For full functionality, download and run locally!
             return
 
         if messagebox.askyesno(
-            "Start Learning Session",
-            f"The AI will autonomously explore and learn for {duration} minute(s).\n\n"
-            "It will:\n"
-            "• Observe the screen\n"
-            "• Identify UI patterns\n"
-            "• Learn workflows\n"
-            "• Make test actions\n\n"
-            "Continue?"
+                "Start Learning Session",
+                f"The AI will autonomously explore and learn for {duration} minute(s).\n\n"
+                "It will:\n"
+                "• Observe the screen\n"
+                "• Identify UI patterns\n"
+                "• Learn workflows\n"
+                "• Make test actions\n\n"
+                "Continue?"
         ):
             self.vlm_status.config(text="🧠 Learning...", fg="#cba6f7")
             thread = threading.Thread(target=self._vlm_learn_session_thread, args=(duration,), daemon=True)
@@ -9216,7 +9414,8 @@ For full functionality, download and run locally!
         screenshot_files = [f for f in os.listdir('.') if f.startswith('step_') and f.endswith('.png')]
 
         if not screenshot_files:
-            messagebox.showinfo("Screenshots", "No screenshots found.\n\nScreenshots are generated during execution.\nDownload and run locally for full monitoring.")
+            messagebox.showinfo("Screenshots",
+                                "No screenshots found.\n\nScreenshots are generated during execution.\nDownload and run locally for full monitoring.")
         else:
             msg = f"Found {len(screenshot_files)} screenshots:\n\n"
             for f in sorted(screenshot_files[:10]):
@@ -9314,29 +9513,29 @@ keyboard, and screen access:
         record_btn_frame.pack(pady=10)
 
         self.macro_start_record_btn = tk.Button(record_btn_frame,
-                                                 text="🔴 Start Recording",
-                                                 bg="#00d4aa",
-                                                 fg="#0f0f1e",
-                                                 font=("Segoe UI", 10, "bold"),
-                                                 relief="flat",
-                                                 cursor="hand2",
-                                                 command=self.start_macro_recording,
-                                                 padx=20,
-                                                 pady=10)
-        self.macro_start_record_btn.pack(side="left", padx=5)
-        self.add_hover_effect(self.macro_start_record_btn, "#f38ba8", "#eba0ac")
-
-        self.macro_stop_record_btn = tk.Button(record_btn_frame,
-                                                text="⏹️ Stop & Save",
+                                                text="🔴 Start Recording",
                                                 bg="#00d4aa",
                                                 fg="#0f0f1e",
                                                 font=("Segoe UI", 10, "bold"),
                                                 relief="flat",
                                                 cursor="hand2",
-                                                command=self.stop_macro_recording,
+                                                command=self.start_macro_recording,
                                                 padx=20,
-                                                pady=10,
-                                                state="disabled")
+                                                pady=10)
+        self.macro_start_record_btn.pack(side="left", padx=5)
+        self.add_hover_effect(self.macro_start_record_btn, "#f38ba8", "#eba0ac")
+
+        self.macro_stop_record_btn = tk.Button(record_btn_frame,
+                                               text="⏹️ Stop & Save",
+                                               bg="#00d4aa",
+                                               fg="#0f0f1e",
+                                               font=("Segoe UI", 10, "bold"),
+                                               relief="flat",
+                                               cursor="hand2",
+                                               command=self.stop_macro_recording,
+                                               padx=20,
+                                               pady=10,
+                                               state="disabled")
         self.macro_stop_record_btn.pack(side="left", padx=5)
         self.add_hover_effect(self.macro_stop_record_btn, "#89b4fa", "#74c7ec")
 
@@ -9359,13 +9558,13 @@ keyboard, and screen access:
         macro_scrollbar.pack(side="right", fill="y")
 
         self.macro_listbox = tk.Listbox(macro_list_container,
-                                         bg="#16182a",
-                                         fg="#e0e0e0",
-                                         font=("Consolas", 10),
-                                         relief="flat",
-                                         selectbackground="#45475a",
-                                         selectforeground="#f5c2e7",
-                                         yscrollcommand=macro_scrollbar.set)
+                                        bg="#16182a",
+                                        fg="#e0e0e0",
+                                        font=("Consolas", 10),
+                                        relief="flat",
+                                        selectbackground="#45475a",
+                                        selectforeground="#f5c2e7",
+                                        yscrollcommand=macro_scrollbar.set)
         self.macro_listbox.pack(side="left", fill="both", expand=True)
         macro_scrollbar.config(command=self.macro_listbox.yview)
 
@@ -9414,14 +9613,14 @@ keyboard, and screen access:
 
         self.macro_repeat_var = tk.StringVar(value="1")
         repeat_spinbox = tk.Spinbox(repeat_frame,
-                                     from_=1,
-                                     to=100,
-                                     textvariable=self.macro_repeat_var,
-                                     bg="#16182a",
-                                     fg="#e0e0e0",
-                                     font=("Segoe UI", 10),
-                                     relief="flat",
-                                     width=10)
+                                    from_=1,
+                                    to=100,
+                                    textvariable=self.macro_repeat_var,
+                                    bg="#16182a",
+                                    fg="#e0e0e0",
+                                    font=("Segoe UI", 10),
+                                    relief="flat",
+                                    width=10)
         repeat_spinbox.pack(side="left", padx=5)
 
         # Speed control
@@ -9437,11 +9636,11 @@ keyboard, and screen access:
         self.macro_speed_var = tk.StringVar(value="1.0")
         speed_options = ["0.5x", "1.0x", "1.5x", "2.0x", "3.0x"]
         speed_combo = ttk.Combobox(speed_frame,
-                                    values=speed_options,
-                                    textvariable=self.macro_speed_var,
-                                    state="readonly",
-                                    font=("Segoe UI", 9),
-                                    width=10)
+                                   values=speed_options,
+                                   textvariable=self.macro_speed_var,
+                                   state="readonly",
+                                   font=("Segoe UI", 9),
+                                   width=10)
         speed_combo.current(1)
         speed_combo.pack(side="left", padx=5)
 
@@ -9476,15 +9675,15 @@ keyboard, and screen access:
         self.add_hover_effect(stop_btn, "#f38ba8", "#eba0ac")
 
         delete_btn = tk.Button(playback_btns,
-                                text="🗑️ Delete",
-                                bg="#3d4466",
-                                fg="#e0e0e0",
-                                font=("Segoe UI", 10, "bold"),
-                                relief="flat",
-                                cursor="hand2",
-                                command=self.delete_macro,
-                                padx=20,
-                                pady=10)
+                               text="🗑️ Delete",
+                               bg="#3d4466",
+                               fg="#e0e0e0",
+                               font=("Segoe UI", 10, "bold"),
+                               relief="flat",
+                               cursor="hand2",
+                               command=self.delete_macro,
+                               padx=20,
+                               pady=10)
         delete_btn.pack(side="left", padx=5)
         self.add_hover_effect(delete_btn, "#45475a", "#585b70")
 
@@ -9497,14 +9696,14 @@ keyboard, and screen access:
         output_label.pack(anchor="w", padx=5, pady=(10, 5))
 
         self.macro_output = scrolledtext.ScrolledText(right_column,
-                                                       bg="#16182a",
-                                                       fg="#e0e0e0",
-                                                       font=("Consolas", 9),
-                                                       wrap=tk.WORD,
-                                                       state='disabled',
-                                                       relief="flat",
-                                                       padx=10,
-                                                       pady=10)
+                                                      bg="#16182a",
+                                                      fg="#e0e0e0",
+                                                      font=("Consolas", 9),
+                                                      wrap=tk.WORD,
+                                                      state='disabled',
+                                                      relief="flat",
+                                                      padx=10,
+                                                      pady=10)
         self.macro_output.pack(fill="both", expand=True, padx=5, pady=5)
 
         self.macro_output.tag_config("success", foreground="#a6e3a1")
@@ -9558,10 +9757,10 @@ keyboard, and screen access:
         status_label.pack(pady=10)
 
         self.mobile_status = tk.Label(status_frame,
-                                       text="✅ Server Running",
-                                       bg="#2e3350",
-                                       fg="#00ff88",
-                                       font=("Segoe UI", 10))
+                                      text="✅ Server Running",
+                                      bg="#2e3350",
+                                      fg="#00ff88",
+                                      font=("Segoe UI", 10))
         self.mobile_status.pack(pady=5)
 
         # Server info
@@ -9739,9 +9938,9 @@ keyboard, and screen access:
             self.macro_append_output(f"{message}\n", "success")
 
         result = self.macro_recorder.play_macro(macro_name=macro['name'],
-                                                 repeat=repeat,
-                                                 speed=speed,
-                                                 callback=on_complete)
+                                                repeat=repeat,
+                                                speed=speed,
+                                                callback=on_complete)
         self.macro_append_output(f"{result}\n", "success")
 
     def stop_macro_playback(self):
@@ -9785,7 +9984,8 @@ keyboard, and screen access:
         domain = os.environ.get('REPLIT_DEV_DOMAIN', 'localhost:5000')
         url = f"https://{domain}/mobile"
         self.mobile_append_history(f"🌐 Opening: {url}", "info")
-        messagebox.showinfo("Mobile Interface", f"Mobile interface URL:\n\n{url}\n\nOpen this URL on your mobile device.")
+        messagebox.showinfo("Mobile Interface",
+                            f"Mobile interface URL:\n\n{url}\n\nOpen this URL on your mobile device.")
 
     def open_desktop_dashboard(self):
         """Open desktop dashboard"""
@@ -9802,19 +10002,21 @@ keyboard, and screen access:
 
         macros = self.macro_recorder.list_macros()
         if not macros:
-            messagebox.showinfo("No Macros", "No saved macros available.\n\nRecord a macro first in the Macro Recorder tab.")
+            messagebox.showinfo("No Macros",
+                                "No saved macros available.\n\nRecord a macro first in the Macro Recorder tab.")
             return
 
         macro_names = [m['name'] for m in macros]
 
         # Simple selection dialog
         selection = simpledialog.askstring("Remote Macro",
-                                            f"Available macros:\n{', '.join(macro_names)}\n\nEnter macro name:")
+                                           f"Available macros:\n{', '.join(macro_names)}\n\nEnter macro name:")
 
         if selection and selection in macro_names:
             self.mobile_append_history(f"🎬 Triggered remote macro: {selection}", "command")
             self.mobile_append_history("   (Mobile trigger simulation)", "info")
-            messagebox.showinfo("Success", f"Macro '{selection}' triggered!\n\nIn the full version, this would execute from your mobile device.")
+            messagebox.showinfo("Success",
+                                f"Macro '{selection}' triggered!\n\nIn the full version, this would execute from your mobile device.")
         elif selection:
             self.mobile_append_history(f"❌ Macro not found: {selection}", "error")
 
@@ -9876,17 +10078,17 @@ keyboard, and screen access:
         header_frame.pack(fill="x", padx=20, pady=15)
 
         header = tk.Label(header_frame,
-                         text="💬 Natural Language Workflow Builder",
-                         bg="#252941",
-                         fg="#00d4aa",
-                         font=("Segoe UI", 16, "bold"))
+                          text="💬 Natural Language Workflow Builder",
+                          bg="#252941",
+                          fg="#00d4aa",
+                          font=("Segoe UI", 16, "bold"))
         header.pack(pady=10)
 
         info = tk.Label(header_frame,
-                       text="🎯 Describe workflows in plain English • 🤖 AI converts to automation • 💬 Test & refine • 💾 Save as templates",
-                       bg="#252941",
-                       fg="#b0b0b0",
-                       font=("Segoe UI", 9, "italic"))
+                        text="🎯 Describe workflows in plain English • 🤖 AI converts to automation • 💬 Test & refine • 💾 Save as templates",
+                        bg="#252941",
+                        fg="#b0b0b0",
+                        font=("Segoe UI", 9, "italic"))
         info.pack(pady=(0, 10))
 
         main_container = tk.Frame(builder_window, bg="#16182a")
@@ -9899,10 +10101,10 @@ keyboard, and screen access:
         examples_frame.pack(fill="x", pady=(0, 10))
 
         examples_label = tk.Label(examples_frame,
-                                 text="💡 Example Workflows",
-                                 bg="#2e3350",
-                                 fg="#f9e2af",
-                                 font=("Segoe UI", 10, "bold"))
+                                  text="💡 Example Workflows",
+                                  bg="#2e3350",
+                                  fg="#f9e2af",
+                                  font=("Segoe UI", 10, "bold"))
         examples_label.pack(pady=10)
 
         examples_list = tk.Listbox(examples_frame,
@@ -9937,21 +10139,21 @@ keyboard, and screen access:
         use_example_btn.pack(fill="x", padx=10, pady=(0, 10))
 
         input_label = tk.Label(left_column,
-                              text="💬 Describe Your Workflow:",
-                              bg="#16182a",
-                              fg="#00ff88",
-                              font=("Segoe UI", 11, "bold"))
+                               text="💬 Describe Your Workflow:",
+                               bg="#16182a",
+                               fg="#00ff88",
+                               font=("Segoe UI", 11, "bold"))
         input_label.pack(anchor="w", pady=(10, 5))
 
         input_text = tk.Text(left_column,
-                            bg="#2e3350",
-                            fg="#e0e0e0",
-                            font=("Segoe UI", 11),
-                            height=8,
-                            wrap=tk.WORD,
-                            relief="flat",
-                            padx=10,
-                            pady=10)
+                             bg="#2e3350",
+                             fg="#e0e0e0",
+                             font=("Segoe UI", 11),
+                             height=8,
+                             wrap=tk.WORD,
+                             relief="flat",
+                             padx=10,
+                             pady=10)
         input_text.pack(fill="both", expand=True, pady=(0, 10))
 
         button_frame = tk.Frame(left_column, bg="#16182a")
@@ -10011,78 +10213,78 @@ keyboard, and screen access:
             self.workflow_log("Conversation cleared", "INFO")
 
         process_btn = tk.Button(button_frame,
-                               text="🤖 Build Workflow",
-                               bg="#00ff88",
-                               fg="#0f0f1e",
-                               font=("Segoe UI", 10, "bold"),
-                               relief="flat",
-                               cursor="hand2",
-                               command=process_workflow,
-                               padx=20,
-                               pady=10)
+                                text="🤖 Build Workflow",
+                                bg="#00ff88",
+                                fg="#0f0f1e",
+                                font=("Segoe UI", 10, "bold"),
+                                relief="flat",
+                                cursor="hand2",
+                                command=process_workflow,
+                                padx=20,
+                                pady=10)
         process_btn.pack(side="left", padx=5)
 
         save_btn = tk.Button(button_frame,
-                            text="💾 Save Workflow",
-                            bg="#00d4aa",
-                            fg="#0f0f1e",
-                            font=("Segoe UI", 10, "bold"),
-                            relief="flat",
-                            cursor="hand2",
-                            command=save_current_workflow,
-                            padx=20,
-                            pady=10)
-        save_btn.pack(side="left", padx=5)
-
-        clear_btn = tk.Button(button_frame,
-                             text="🗑️ Clear",
+                             text="💾 Save Workflow",
                              bg="#00d4aa",
                              fg="#0f0f1e",
                              font=("Segoe UI", 10, "bold"),
                              relief="flat",
                              cursor="hand2",
-                             command=clear_conversation,
+                             command=save_current_workflow,
                              padx=20,
                              pady=10)
+        save_btn.pack(side="left", padx=5)
+
+        clear_btn = tk.Button(button_frame,
+                              text="🗑️ Clear",
+                              bg="#00d4aa",
+                              fg="#0f0f1e",
+                              font=("Segoe UI", 10, "bold"),
+                              relief="flat",
+                              cursor="hand2",
+                              command=clear_conversation,
+                              padx=20,
+                              pady=10)
         clear_btn.pack(side="left", padx=5)
 
         right_column = tk.Frame(main_container, bg="#16182a")
         right_column.pack(side="right", fill="both", expand=True)
 
         output_label = tk.Label(right_column,
-                               text="📋 Generated Workflow:",
-                               bg="#16182a",
-                               fg="#cba6f7",
-                               font=("Segoe UI", 11, "bold"))
+                                text="📋 Generated Workflow:",
+                                bg="#16182a",
+                                fg="#cba6f7",
+                                font=("Segoe UI", 11, "bold"))
         output_label.pack(anchor="w", pady=(0, 5))
 
         output_text = tk.Text(right_column,
-                             bg="#2e3350",
-                             fg="#e0e0e0",
-                             font=("Consolas", 10),
-                             wrap=tk.WORD,
-                             relief="flat",
-                             padx=10,
-                             pady=10)
+                              bg="#2e3350",
+                              fg="#e0e0e0",
+                              font=("Consolas", 10),
+                              wrap=tk.WORD,
+                              relief="flat",
+                              padx=10,
+                              pady=10)
         output_text.pack(fill="both", expand=True, pady=(0, 10))
 
         saved_frame = tk.Frame(right_column, bg="#2e3350")
         saved_frame.pack(fill="x", pady=(10, 0))
 
         saved_label = tk.Label(saved_frame,
-                              text="💾 Saved Workflows",
-                              bg="#2e3350",
-                              fg="#f9e2af",
-                              font=("Segoe UI", 10, "bold"))
+                               text="💾 Saved Workflows",
+                               bg="#2e3350",
+                               fg="#f9e2af",
+                               font=("Segoe UI", 10, "bold"))
         saved_label.pack(pady=10)
 
         saved_list = tk.Listbox(saved_frame,
-                               bg="#16182a",
-                               fg="#e0e0e0",
-                               font=("Segoe UI", 9),
-                               height=8,
-                               selectmode=tk.SINGLE,
-                               relief="flat")
+                                bg="#16182a",
+                                fg="#e0e0e0",
+                                font=("Segoe UI", 9),
+                                height=8,
+                                selectmode=tk.SINGLE,
+                                relief="flat")
         saved_list.pack(fill="x", padx=10, pady=(0, 10))
 
         def refresh_saved_list():
@@ -10105,35 +10307,35 @@ keyboard, and screen access:
             self.execute_command()
 
         refresh_btn = tk.Button(saved_frame,
-                               text="🔄 Refresh List",
-                               bg="#3d4466",
-                               fg="#e0e0e0",
-                               font=("Segoe UI", 9),
-                               relief="flat",
-                               cursor="hand2",
-                               command=refresh_saved_list,
-                               pady=6)
+                                text="🔄 Refresh List",
+                                bg="#3d4466",
+                                fg="#e0e0e0",
+                                font=("Segoe UI", 9),
+                                relief="flat",
+                                cursor="hand2",
+                                command=refresh_saved_list,
+                                pady=6)
         refresh_btn.pack(side="left", fill="x", expand=True, padx=(10, 5), pady=(0, 10))
 
         run_btn = tk.Button(saved_frame,
-                           text="▶️ Run Selected",
-                           bg="#00ff88",
-                           fg="#0f0f1e",
-                           font=("Segoe UI", 9, "bold"),
-                           relief="flat",
-                           cursor="hand2",
-                           command=run_saved_workflow,
-                           pady=6)
+                            text="▶️ Run Selected",
+                            bg="#00ff88",
+                            fg="#0f0f1e",
+                            font=("Segoe UI", 9, "bold"),
+                            relief="flat",
+                            cursor="hand2",
+                            command=run_saved_workflow,
+                            pady=6)
         run_btn.pack(side="right", fill="x", expand=True, padx=(5, 10), pady=(0, 10))
 
         log_frame = tk.Frame(builder_window, bg="#252941")
         log_frame.pack(fill="x", padx=20, pady=(0, 15))
 
         log_label = tk.Label(log_frame,
-                            text="📊 Activity Log",
-                            bg="#252941",
-                            fg="#f9e2af",
-                            font=("Segoe UI", 9, "bold"))
+                             text="📊 Activity Log",
+                             bg="#252941",
+                             fg="#f9e2af",
+                             font=("Segoe UI", 9, "bold"))
         log_label.pack(anchor="w", padx=10, pady=(10, 5))
 
         self.workflow_output_text = tk.Text(log_frame,
@@ -10156,10 +10358,10 @@ keyboard, and screen access:
         refresh_saved_list()
         self.workflow_log("Workflow Builder ready!", "SUCCESS")
 
-
     def run(self):
         """Start the GUI"""
         self.root.mainloop()
+
 
 def main():
     """Main entry point"""
