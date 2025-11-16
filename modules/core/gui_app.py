@@ -375,16 +375,9 @@ class ModernVATSALGUI:
     
     def _create_command_section_for_tab(self, parent):
         """Create command input section for tab"""
-        # Modern clean section with subtle shadow
-        section = tk.Frame(
-            parent,
-            bg=self.BG_SECONDARY,
-            relief="flat",
-            borderwidth=1,
-            highlightbackground=self.BORDER_PRIMARY,
-            highlightthickness=1
-        )
-        section.pack(fill="x", pady=(15, 20), padx=15)
+        # Modern clean section with beautiful shadow
+        section_shadow, section = self.create_shadowed_frame(parent)
+        section_shadow.pack(fill="x", pady=(15, 20), padx=15)
         
         # Section header
         header = tk.Frame(section, bg=self.BG_SECONDARY)
@@ -434,26 +427,20 @@ class ModernVATSALGUI:
         buttons_row = tk.Frame(input_area, bg=self.BG_SECONDARY)
         buttons_row.pack(fill="x")
         
-        # Execute button - larger and more prominent
-        self.execute_btn = tk.Button(
+        # Execute button - larger and more prominent with shadow
+        execute_shadow, self.execute_btn = self.create_shadowed_button(
             buttons_row,
             text="▶  Execute",
-            font=("Segoe UI", 13, "bold"),
-            bg=self.ACTIVE_GREEN,
-            fg="white",
-            relief="flat",
-            borderwidth=0,
-            cursor="hand2",
-            padx=40,
-            pady=12,
             command=self.execute_command,
-            highlightthickness=0,
-            activebackground="#006644"
+            bg_color=self.ACTIVE_GREEN,
+            fg_color="white",
+            font=("Segoe UI", 13, "bold"),
+            padx=40,
+            pady=12
         )
-        self.execute_btn.pack(side="left", padx=(0, 15))
-        self._add_hover_effect(self.execute_btn, self.ACTIVE_GREEN, "#006644")
+        execute_shadow.pack(side="left", padx=(0, 15))
         
-        # Icon buttons with labels - more intuitive
+        # Icon buttons with labels - more intuitive with shadows
         icon_buttons = [
             ("👂", "Wake Word", self.toggle_wakeup_listener),
             ("✌️", "V-Sign", self.toggle_v_sign_detector),
@@ -461,25 +448,16 @@ class ModernVATSALGUI:
         ]
         
         for icon, label, command in icon_buttons:
-            btn_frame = tk.Frame(buttons_row, bg=self.BUTTON_BG, relief="solid", borderwidth=1, highlightbackground=self.BORDER_PRIMARY)
-            btn_frame.pack(side="left", padx=5)
-            
-            btn = tk.Button(
-                btn_frame,
+            # Create shadowed button
+            btn_shadow, btn = self.create_shadowed_button(
+                buttons_row,
                 text=f"{icon}\n{label}",
-                font=("Segoe UI", 11, "bold"),
-                bg=self.BUTTON_BG,
-                fg=self.TEXT_PRIMARY,
-                relief="flat",
-                borderwidth=0,
-                cursor="hand2",
-                padx=18,
-                pady=8,
                 command=command,
-                highlightthickness=0,
-                activebackground=self.BUTTON_HOVER
+                font=("Segoe UI", 11, "bold"),
+                padx=18,
+                pady=8
             )
-            btn.pack()
+            btn_shadow.pack(side="left", padx=5)
             
             # Store button references
             if icon == "👂":
@@ -488,21 +466,12 @@ class ModernVATSALGUI:
                 self.vsign_btn = btn
             elif icon == "🗣️":
                 self.speaking_btn = btn
-            
-            self._add_hover_effect(btn, self.BUTTON_BG, self.BUTTON_HOVER)
     
     def _create_output_section_for_tab(self, parent):
         """Create output console section for tab"""
-        # Modern clean section
-        section = tk.Frame(
-            parent,
-            bg=self.BG_SECONDARY,
-            relief="flat",
-            borderwidth=1,
-            highlightbackground=self.BORDER_PRIMARY,
-            highlightthickness=1
-        )
-        section.pack(fill="both", expand=True, padx=15, pady=(0, 15))
+        # Modern clean section with beautiful shadow
+        section_shadow, section = self.create_shadowed_frame(parent)
+        section_shadow.pack(fill="both", expand=True, padx=15, pady=(0, 15))
         
         # Header
         header = tk.Frame(section, bg=self.BG_SECONDARY)
@@ -597,16 +566,16 @@ class ModernVATSALGUI:
         if fg_color is None:
             fg_color = self.TEXT_PRIMARY
         
-        # Outer shadow container (darker, more pronounced)
-        outer_shadow = tk.Frame(parent, bg="#909090", bd=0)
+        # Outer shadow container (darker, more pronounced - ENHANCED!)
+        outer_shadow = tk.Frame(parent, bg="#707070", bd=0)
         
-        # Mid shadow layer (stronger gradient)
-        mid_shadow = tk.Frame(outer_shadow, bg="#B0B0B0", bd=0)
-        mid_shadow.pack(padx=(0, 6), pady=(0, 6))
+        # Mid shadow layer (stronger gradient - ENHANCED!)
+        mid_shadow = tk.Frame(outer_shadow, bg="#959595", bd=0)
+        mid_shadow.pack(padx=(0, 8), pady=(0, 8))
         
-        # Inner shadow layer
-        inner_shadow = tk.Frame(mid_shadow, bg="#CCCCCC", bd=0)
-        inner_shadow.pack(padx=(0, 3), pady=(0, 3))
+        # Inner shadow layer (ENHANCED!)
+        inner_shadow = tk.Frame(mid_shadow, bg="#B8B8B8", bd=0)
+        inner_shadow.pack(padx=(0, 4), pady=(0, 4))
         
         # Canvas for rounded corners
         canvas = tk.Canvas(
@@ -702,17 +671,97 @@ class ModernVATSALGUI:
         
         return outer_shadow, btn
     
-    def _create_header(self, parent):
-        """Create modern clean header"""
-        header = tk.Frame(
-            parent,
-            bg=self.BG_SECONDARY,
+    def create_shadowed_frame(self, parent, bg_color=None, **kwargs):
+        """Create a frame with beautiful multi-layer shadow for aesthetic depth"""
+        if bg_color is None:
+            bg_color = self.BG_SECONDARY
+        
+        # Outer shadow layer (darkest)
+        outer_shadow = tk.Frame(parent, bg="#707070", bd=0)
+        
+        # Mid shadow layer (gradient)
+        mid_shadow = tk.Frame(outer_shadow, bg="#959595", bd=0)
+        mid_shadow.pack(padx=(0, 8), pady=(0, 8), fill="both", expand=True)
+        
+        # Inner shadow layer (lightest shadow)
+        inner_shadow = tk.Frame(mid_shadow, bg="#B8B8B8", bd=0)
+        inner_shadow.pack(padx=(0, 4), pady=(0, 4), fill="both", expand=True)
+        
+        # Actual content frame
+        content_frame = tk.Frame(
+            inner_shadow,
+            bg=bg_color,
             relief="flat",
             borderwidth=1,
             highlightbackground=self.BORDER_PRIMARY,
-            highlightthickness=1
+            highlightthickness=1,
+            **kwargs
         )
-        header.pack(fill="x", pady=(0, 15))
+        content_frame.pack(fill="both", expand=True)
+        
+        return outer_shadow, content_frame
+    
+    def create_shadowed_button(self, parent, text, command, bg_color=None, fg_color=None, **kwargs):
+        """Create a regular button with beautiful shadow"""
+        if bg_color is None:
+            bg_color = self.BUTTON_BG
+        if fg_color is None:
+            fg_color = self.TEXT_PRIMARY
+        
+        # Outer shadow layer
+        outer_shadow = tk.Frame(parent, bg="#707070", bd=0)
+        
+        # Mid shadow layer
+        mid_shadow = tk.Frame(outer_shadow, bg="#959595", bd=0)
+        mid_shadow.pack(padx=(0, 6), pady=(0, 6))
+        
+        # Inner shadow layer
+        inner_shadow = tk.Frame(mid_shadow, bg="#B8B8B8", bd=0)
+        inner_shadow.pack(padx=(0, 3), pady=(0, 3))
+        
+        # Actual button
+        btn = tk.Button(
+            inner_shadow,
+            text=text,
+            command=command,
+            bg=bg_color,
+            fg=fg_color,
+            relief="flat",
+            borderwidth=0,
+            cursor="hand2",
+            activebackground=self.BUTTON_HOVER,
+            activeforeground=fg_color,
+            **kwargs
+        )
+        btn.pack()
+        
+        # Enhanced hover effects
+        def on_enter(e):
+            btn.config(bg=self.BUTTON_HOVER)
+            mid_shadow.pack_configure(padx=(0, 8), pady=(0, 8))
+        
+        def on_leave(e):
+            btn.config(bg=bg_color)
+            mid_shadow.pack_configure(padx=(0, 6), pady=(0, 6))
+        
+        def on_press(e):
+            mid_shadow.pack_configure(padx=(0, 2), pady=(0, 2))
+        
+        def on_release(e):
+            mid_shadow.pack_configure(padx=(0, 6), pady=(0, 6))
+        
+        btn.bind("<Enter>", on_enter)
+        btn.bind("<Leave>", on_leave)
+        btn.bind("<ButtonPress-1>", on_press)
+        btn.bind("<ButtonRelease-1>", on_release)
+        
+        return outer_shadow, btn
+    
+    def _create_header(self, parent):
+        """Create modern clean header"""
+        # Create header with beautiful shadow
+        header_shadow, header = self.create_shadowed_frame(parent)
+        header_shadow.pack(fill="x", pady=(0, 15))
         
         # Title section with compact layout
         title_section = tk.Frame(header, bg=self.BG_SECONDARY)
@@ -779,40 +828,28 @@ class ModernVATSALGUI:
         toggles_frame = tk.Frame(status_bar, bg=self.BG_SECONDARY)
         toggles_frame.pack(side="top")
         
-        # Simple modern toggle buttons
-        self.vatsal_toggle = tk.Button(
+        # Simple modern toggle buttons with shadows
+        vatsal_shadow, self.vatsal_toggle = self.create_shadowed_button(
             toggles_frame,
             text="● VATSAL: ON",
-            font=("Segoe UI", 9, "bold"),
-            bg=self.BUTTON_BG,
-            fg=self.ACTIVE_GREEN,
-            relief="solid",
-            borderwidth=1,
-            cursor="hand2",
-            padx=12,
-            pady=6,
             command=self.toggle_vatsal,
-            activebackground=self.BUTTON_HOVER
+            fg_color=self.ACTIVE_GREEN,
+            font=("Segoe UI", 9, "bold"),
+            padx=12,
+            pady=6
         )
-        self.vatsal_toggle.pack(side="left", padx=(0, 8))
-        self._add_hover_effect(self.vatsal_toggle, self.BUTTON_BG, self.BUTTON_HOVER)
+        vatsal_shadow.pack(side="left", padx=(0, 8))
         
-        self.soc_toggle = tk.Button(
+        soc_shadow, self.soc_toggle = self.create_shadowed_button(
             toggles_frame,
             text="🤖 Self-Operating: ON",
-            font=("Segoe UI", 9, "bold"),
-            bg=self.BUTTON_BG,
-            fg=self.ACTIVE_GREEN,
-            relief="solid",
-            borderwidth=1,
-            cursor="hand2",
-            padx=12,
-            pady=6,
             command=self.toggle_self_operating,
-            activebackground=self.BUTTON_HOVER
+            fg_color=self.ACTIVE_GREEN,
+            font=("Segoe UI", 9, "bold"),
+            padx=12,
+            pady=6
         )
-        self.soc_toggle.pack(side="left")
-        self._add_hover_effect(self.soc_toggle, self.BUTTON_BG, self.BUTTON_HOVER)
+        soc_shadow.pack(side="left")
     
     def _create_command_section(self, parent):
         """Create command input section"""
@@ -1210,7 +1247,7 @@ class ModernVATSALGUI:
         button_container = tk.Frame(footer_content, bg=self.BG_SECONDARY)
         button_container.pack(side="left")
         
-        # Define bottom buttons
+        # Define bottom buttons with beautiful shadows
         bottom_buttons = [
             ("❓ Help", self.show_help),
             ("👥 Contacts", self.show_contacts),
@@ -1220,22 +1257,15 @@ class ModernVATSALGUI:
         ]
         
         for text, command in bottom_buttons:
-            btn = tk.Button(
+            btn_shadow, btn = self.create_shadowed_button(
                 button_container,
                 text=text,
-                font=("Segoe UI", 10, "bold"),
-                bg=self.BUTTON_BG,
-                fg=self.TEXT_PRIMARY,
-                relief="raised",
-                borderwidth=2,
-                cursor="hand2",
-                padx=15,
-                pady=8,
                 command=command,
-                activebackground=self.BUTTON_HOVER
+                font=("Segoe UI", 10, "bold"),
+                padx=15,
+                pady=8
             )
-            btn.pack(side="left", padx=5)
-            self._add_hover_effect(btn, self.BUTTON_BG, self.BUTTON_HOVER)
+            btn_shadow.pack(side="left", padx=5)
         
         # Right side - Status label
         status_container = tk.Frame(
