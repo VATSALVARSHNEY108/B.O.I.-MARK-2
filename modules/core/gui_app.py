@@ -1455,6 +1455,21 @@ class ModernVATSALGUI:
         button.bind("<Enter>", on_enter)
         button.bind("<Leave>", on_leave)
     
+    def add_hover_effect(self, button, normal_color, hover_color):
+        """Add hover effect to button (legacy method for tab compatibility)"""
+        def on_enter(e):
+            button['background'] = hover_color
+        
+        def on_leave(e):
+            button['background'] = normal_color
+        
+        button.bind("<Enter>", on_enter)
+        button.bind("<Leave>", on_leave)
+    
+    def add_gradient_effect(self, widget):
+        """Add gradient border effect to widget"""
+        widget.configure(highlightbackground=self.BORDER_PRIMARY, highlightthickness=1)
+    
     def _update_time(self):
         """Update time display"""
         current_time = datetime.now().strftime("%A, %B %d, %Y • %I:%M:%S %p")
