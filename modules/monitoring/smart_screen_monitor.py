@@ -7,7 +7,7 @@ import time
 import os
 from datetime import datetime
 from modules.automation.gui_automation import GUIAutomation
-from screenshot_analyzer import analyze_screenshot
+from modules.ai_features.screenshot_analysis import analyze_screenshot
 from modules.core.gemini_controller import get_client
 from google.genai import types
 

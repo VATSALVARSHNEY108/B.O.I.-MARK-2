@@ -4,7 +4,17 @@ Provides cross-platform media playback control
 """
 
 import platform
-import pyautogui
+from typing import Any
+
+pyautogui: Any = None
+PYAUTOGUI_AVAILABLE = False
+
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception as e:
+    PYAUTOGUI_AVAILABLE = False
+    print(f"⚠️  PyAutoGUI not available (no display): {e}")
 
 
 class MediaControlHelper:
@@ -15,6 +25,8 @@ class MediaControlHelper:
     
     def play_pause(self):
         """Toggle play/pause for media"""
+        if not PYAUTOGUI_AVAILABLE:
+            return {"success": False, "message": "PyAutoGUI not available in this environment"}
         try:
             pyautogui.press('playpause')
             return {"success": True, "message": "Play/Pause toggled"}
@@ -23,6 +35,8 @@ class MediaControlHelper:
     
     def next_track(self):
         """Skip to next track"""
+        if not PYAUTOGUI_AVAILABLE:
+            return {"success": False, "message": "PyAutoGUI not available in this environment"}
         try:
             pyautogui.press('nexttrack')
             return {"success": True, "message": "Next track"}
@@ -31,6 +45,8 @@ class MediaControlHelper:
     
     def previous_track(self):
         """Go to previous track"""
+        if not PYAUTOGUI_AVAILABLE:
+            return {"success": False, "message": "PyAutoGUI not available in this environment"}
         try:
             pyautogui.press('prevtrack')
             return {"success": True, "message": "Previous track"}
@@ -39,6 +55,8 @@ class MediaControlHelper:
     
     def stop(self):
         """Stop media playback"""
+        if not PYAUTOGUI_AVAILABLE:
+            return {"success": False, "message": "PyAutoGUI not available in this environment"}
         try:
             pyautogui.press('stop')
             return {"success": True, "message": "Media stopped"}
@@ -47,6 +65,8 @@ class MediaControlHelper:
     
     def volume_up(self, steps=1):
         """Increase volume"""
+        if not PYAUTOGUI_AVAILABLE:
+            return {"success": False, "message": "PyAutoGUI not available in this environment"}
         try:
             for _ in range(steps):
                 pyautogui.press('volumeup')
@@ -56,6 +76,8 @@ class MediaControlHelper:
     
     def volume_down(self, steps=1):
         """Decrease volume"""
+        if not PYAUTOGUI_AVAILABLE:
+            return {"success": False, "message": "PyAutoGUI not available in this environment"}
         try:
             for _ in range(steps):
                 pyautogui.press('volumedown')
@@ -65,6 +87,8 @@ class MediaControlHelper:
     
     def mute(self):
         """Mute/unmute volume"""
+        if not PYAUTOGUI_AVAILABLE:
+            return {"success": False, "message": "PyAutoGUI not available in this environment"}
         try:
             pyautogui.press('volumemute')
             return {"success": True, "message": "Volume muted/unmuted"}

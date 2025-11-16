@@ -7,7 +7,17 @@ import qrcode
 from PIL import Image
 import os
 from datetime import datetime
-import pyautogui
+from typing import Any
+
+pyautogui: Any = None
+PYAUTOGUI_AVAILABLE = False
+
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception as e:
+    PYAUTOGUI_AVAILABLE = False
+    print(f"⚠️  PyAutoGUI not available (no display): {e}")
 
 try:
     from pyzbar.pyzbar import decode
@@ -128,6 +138,9 @@ class QRCodeTools:
         try:
             if not PYZBAR_AVAILABLE:
                 return "❌ pyzbar library not available. QR code reading requires additional system dependencies."
+            
+            if not PYAUTOGUI_AVAILABLE:
+                return "❌ Screenshot capture not available in this environment (no display)"
             
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             screenshot_path = os.path.join(self.output_dir, f"qr_screenshot_{timestamp}.png")

@@ -5,7 +5,17 @@ Provides cross-platform window management functionality
 
 import platform
 import subprocess
-import pyautogui
+from typing import Any
+
+pyautogui: Any = None
+PYAUTOGUI_AVAILABLE = False
+
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception as e:
+    PYAUTOGUI_AVAILABLE = False
+    print(f"⚠️  PyAutoGUI not available (no display): {e}")
 
 
 class WindowControlHelper:
@@ -16,6 +26,8 @@ class WindowControlHelper:
     
     def minimize_active_window(self):
         """Minimize the currently active window"""
+        if not PYAUTOGUI_AVAILABLE:
+            return {"success": False, "message": "PyAutoGUI not available in this environment"}
         try:
             if self.os == "Windows":
                 pyautogui.hotkey('win', 'down')
@@ -31,6 +43,8 @@ class WindowControlHelper:
     
     def maximize_active_window(self):
         """Maximize the currently active window"""
+        if not PYAUTOGUI_AVAILABLE:
+            return {"success": False, "message": "PyAutoGUI not available in this environment"}
         try:
             if self.os == "Windows":
                 pyautogui.hotkey('win', 'up')
@@ -48,6 +62,8 @@ class WindowControlHelper:
     
     def close_active_window(self):
         """Close the currently active window"""
+        if not PYAUTOGUI_AVAILABLE:
+            return {"success": False, "message": "PyAutoGUI not available in this environment"}
         try:
             if self.os == "Windows":
                 pyautogui.hotkey('alt', 'f4')
@@ -63,6 +79,8 @@ class WindowControlHelper:
     
     def switch_desktop(self, direction="right"):
         """Switch to next/previous virtual desktop"""
+        if not PYAUTOGUI_AVAILABLE:
+            return {"success": False, "message": "PyAutoGUI not available in this environment"}
         try:
             if self.os == "Windows":
                 if direction == "right":
@@ -87,6 +105,8 @@ class WindowControlHelper:
     
     def show_desktop(self):
         """Show desktop / minimize all windows"""
+        if not PYAUTOGUI_AVAILABLE:
+            return {"success": False, "message": "PyAutoGUI not available in this environment"}
         try:
             if self.os == "Windows":
                 pyautogui.hotkey('win', 'd')

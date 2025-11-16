@@ -4,8 +4,18 @@ Pick colors from screen, convert between formats (HEX, RGB, HSL, HSV)
 """
 
 import colorsys
-import pyautogui
 import re
+from typing import Any
+
+pyautogui: Any = None
+PYAUTOGUI_AVAILABLE = False
+
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception as e:
+    PYAUTOGUI_AVAILABLE = False
+    print(f"⚠️  PyAutoGUI not available (no display): {e}")
 
 class ColorTools:
     def __init__(self):
@@ -13,6 +23,8 @@ class ColorTools:
     
     def pick_color_from_screen(self):
         """Pick a color from the current mouse position"""
+        if not PYAUTOGUI_AVAILABLE:
+            return "❌ Color picker not available in this environment (no display)"
         try:
             x, y = pyautogui.position()
             screenshot = pyautogui.screenshot()

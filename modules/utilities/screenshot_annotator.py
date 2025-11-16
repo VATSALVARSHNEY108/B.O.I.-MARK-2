@@ -4,9 +4,19 @@ Add text, arrows, highlights, and shapes to screenshots
 """
 
 from PIL import Image, ImageDraw, ImageFont
-import pyautogui
 import os
 from datetime import datetime
+from typing import Any
+
+pyautogui: Any = None
+PYAUTOGUI_AVAILABLE = False
+
+try:
+    import pyautogui
+    PYAUTOGUI_AVAILABLE = True
+except Exception as e:
+    PYAUTOGUI_AVAILABLE = False
+    print(f"⚠️  PyAutoGUI not available (no display): {e}")
 
 class ScreenshotAnnotator:
     def __init__(self):
@@ -17,6 +27,8 @@ class ScreenshotAnnotator:
     
     def take_screenshot(self, filename=None):
         """Take a new screenshot"""
+        if not PYAUTOGUI_AVAILABLE:
+            return "❌ Screenshot capture not available in this environment (no display)"
         try:
             if filename is None:
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
