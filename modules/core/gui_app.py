@@ -2567,33 +2567,33 @@ personality and advanced automation capabilities.
 
     def create_self_operating_tab(self, notebook):
         """Self-Operating Computer - Autonomous AI Control with Vision"""
-        tab = tk.Frame(notebook, bg="#1a1d2e")
+        tab = tk.Frame(notebook, bg=self.BG_PRIMARY)
         notebook.add(tab, text="🎮 Self-Operating")
 
-        header_frame = tk.Frame(tab, bg="#252941")
+        header_frame = tk.Frame(tab, bg=self.BG_SECONDARY, relief="flat", bd=1, highlightbackground=self.BORDER_PRIMARY, highlightthickness=1)
         header_frame.pack(fill="x", pady=(10, 0), padx=10)
 
         header = tk.Label(header_frame,
                           text="🎮 Self-Operating Computer",
-                          bg="#252941",
-                          fg="#cba6f7",
+                          bg=self.BG_SECONDARY,
+                          fg=self.TEXT_PRIMARY,
                           font=("Segoe UI", 14, "bold"))
         header.pack(pady=12)
 
         info = tk.Label(header_frame,
                         text="👁️ AI Vision • 🖱️ Autonomous Control • 🎯 Goal-Driven Operation",
-                        bg="#252941",
-                        fg="#b0b0b0",
+                        bg=self.BG_SECONDARY,
+                        fg=self.TEXT_SECONDARY,
                         font=("Segoe UI", 9, "italic"))
         info.pack(pady=(0, 12))
 
-        desc_frame = tk.Frame(tab, bg="#1a1d2e")
+        desc_frame = tk.Frame(tab, bg=self.BG_PRIMARY)
         desc_frame.pack(fill="x", padx=10, pady=5)
 
         desc_text = tk.Label(desc_frame,
                             text="AI views your screen like a human and autonomously performs mouse/keyboard actions to accomplish objectives.\nInspired by OthersideAI's self-operating-computer, powered by Gemini Vision.",
-                            bg="#1a1d2e",
-                            fg="#b0b0b0",
+                            bg=self.BG_PRIMARY,
+                            fg=self.TEXT_SECONDARY,
                             font=("Segoe UI", 9),
                             justify="left")
         desc_text.pack(anchor="w", padx=10, pady=5)
