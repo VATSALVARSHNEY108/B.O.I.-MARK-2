@@ -1,0 +1,49 @@
+╔════════════════════════════════════════════════════════════════╗
+║     🎵 SPOTIFY PROMPTS THAT WORK NOW IN YOUR GUI APP          ║
+╚════════════════════════════════════════════════════════════════╝
+
+Your GUI app is in DESKTOP MODE (keyboard shortcuts)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ COMMANDS THAT WORK NOW:
+
+Play Spotify         → Toggles play/pause (Space key)
+Pause music          → Toggles play/pause (Space key)
+Next song            → Skip to next (Ctrl+Right)
+Previous song        → Go back (Ctrl+Left)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ COMMANDS THAT DON'T WORK YET (Need API Upgrade):
+
+Play [specific song]
+Set volume to [number]
+What's playing?
+Show my playlists
+Search Spotify for [query]
+Shuffle on/off
+Repeat on/off
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 TO UNLOCK ALL COMMANDS:
+
+Read: SPOTIFY_GUI_APP_GUIDE.md
+It shows how to upgrade to API mode in 2 minutes!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 TL;DR - What You Can Do:
+
+RIGHT NOW:
+• Type "Play Spotify" in GUI → Music plays/pauses
+• Type "Next song" in GUI → Skip track
+
+AFTER UPGRADE (2 min setup):
+• Type "Play Bohemian Rhapsody" → Plays that song
+• Type "What's playing?" → Shows current track
+• Type "Set volume to 50" → Sets volume
+• 50+ more commands!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
