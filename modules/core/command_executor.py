@@ -35,6 +35,7 @@ from modules.web.web_automation import WebAutomation
 from modules.productivity.productivity_monitor import ProductivityMonitor
 from modules.misc.fun_features import FunFeatures
 from modules.utilities.spotify_desktop_automation import create_spotify_desktop_automation
+from modules.utilities.spotify_local import SpotifyLocal
 from modules.utilities.weather_news_service import WeatherNewsService
 from modules.communication.translation_service import TranslationService
 from modules.utilities.advanced_calculator import AdvancedCalculator
@@ -95,7 +96,20 @@ class CommandExecutor:
         
         # Media and Entertainment
         self.youtube = create_youtube_automation(self.gui)
-        self.spotify = create_spotify_desktop_automation()
+        
+        # Spotify - Try API mode first, fallback to desktop mode
+        self.spotify_mode = "desktop"
+        try:
+            if os.getenv('SPOTIFY_CLIENT_ID') and os.getenv('SPOTIFY_CLIENT_SECRET'):
+                self.spotify = SpotifyLocal()
+                self.spotify_mode = "api"
+                print("🎵 Spotify API mode enabled")
+            else:
+                self.spotify = create_spotify_desktop_automation()
+                print("🎵 Spotify Desktop mode (limited features)")
+        except Exception as e:
+            self.spotify = create_spotify_desktop_automation()
+            print(f"🎵 Spotify Desktop mode (API failed: {e})")
         
         # System Control and Monitoring
         self.system_control = SystemController()
@@ -665,6 +679,122 @@ class CommandExecutor:
             elif action == "play_media":
                 print(f"  ▶️  Playing media...")
                 return self.media_control.play()
+            
+            # ==================== SPOTIFY CONTROL ====================
+            elif action == "spotify_play":
+                print(f"  ▶️  Playing Spotify...")
+                result = self.spotify.play()
+                return {"success": True, "message": result if isinstance(result, str) else result.get("message", "Playing")}
+            
+            elif action == "spotify_pause":
+                print(f"  ⏸️  Pausing Spotify...")
+                result = self.spotify.pause()
+                return {"success": True, "message": result if isinstance(result, str) else result.get("message", "Paused")}
+            
+            elif action == "spotify_next":
+                print(f"  ⏭️  Next track on Spotify...")
+                result = self.spotify.next_track()
+                return {"success": True, "message": result if isinstance(result, str) else result.get("message", "Next track")}
+            
+            elif action == "spotify_previous":
+                print(f"  ⏮️  Previous track on Spotify...")
+                result = self.spotify.previous_track()
+                return {"success": True, "message": result if isinstance(result, str) else result.get("message", "Previous track")}
+            
+            elif action == "spotify_play_track":
+                query = parameters.get("query", "")
+                if not query:
+                    return {"success": False, "message": "No song name provided"}
+                
+                print(f"  🎵 Playing '{query}' on Spotify...")
+                
+                if self.spotify_mode == "api":
+                    result = self.spotify.play_track(query)
+                    if isinstance(result, dict):
+                        return result
+                    return {"success": True, "message": result}
+                else:
+                    result = self.spotify.play_track(query)
+                    if isinstance(result, dict):
+                        return result
+                    return {"success": True, "message": result}
+            
+            elif action == "spotify_volume":
+                volume = parameters.get("volume", 50)
+                print(f"  🔊 Setting Spotify volume to {volume}%...")
+                
+                if self.spotify_mode == "api":
+                    result = self.spotify.set_volume(volume)
+                    if isinstance(result, dict):
+                        return result
+                    return {"success": True, "message": result}
+                else:
+                    return {"success": False, "message": "Volume control requires API mode. Desktop mode can only use volume up/down."}
+            
+            elif action == "spotify_current_track":
+                print(f"  🎵 Getting current track...")
+                result = self.spotify.get_current_track()
+                if isinstance(result, dict):
+                    return result
+                return {"success": True, "message": result}
+            
+            elif action == "spotify_search":
+                query = parameters.get("query", "")
+                search_type = parameters.get("type", "track")
+                
+                if not query:
+                    return {"success": False, "message": "No search query provided"}
+                
+                print(f"  🔍 Searching Spotify for '{query}'...")
+                
+                if self.spotify_mode == "api":
+                    result = self.spotify.search(query, search_type)
+                    if isinstance(result, dict):
+                        return result
+                    return {"success": True, "message": result}
+                else:
+                    return {"success": False, "message": "Search requires API mode. Upgrade to use this feature."}
+            
+            elif action == "spotify_playlists":
+                print(f"  📚 Getting your Spotify playlists...")
+                
+                if self.spotify_mode == "api":
+                    result = self.spotify.get_playlists()
+                    if isinstance(result, dict):
+                        return result
+                    return {"success": True, "message": result}
+                else:
+                    return {"success": False, "message": "Playlists require API mode. Upgrade to use this feature."}
+            
+            elif action == "spotify_shuffle":
+                state = parameters.get("state", True)
+                print(f"  🔀 Setting Spotify shuffle to {state}...")
+                
+                if self.spotify_mode == "api":
+                    result = self.spotify.shuffle(state)
+                    if isinstance(result, dict):
+                        return result
+                    return {"success": True, "message": result}
+                else:
+                    result = self.spotify.shuffle()
+                    if isinstance(result, dict):
+                        return result
+                    return {"success": True, "message": result}
+            
+            elif action == "spotify_repeat":
+                state = parameters.get("state", "context")
+                print(f"  🔁 Setting Spotify repeat to {state}...")
+                
+                if self.spotify_mode == "api":
+                    result = self.spotify.repeat(state)
+                    if isinstance(result, dict):
+                        return result
+                    return {"success": True, "message": result}
+                else:
+                    result = self.spotify.repeat()
+                    if isinstance(result, dict):
+                        return result
+                    return {"success": True, "message": result}
             
             # ==================== SYSTEM MONITORING ====================
             elif action == "system_report":
