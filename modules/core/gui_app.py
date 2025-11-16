@@ -356,19 +356,30 @@ class ModernVATSALGUI:
         # Main command tab (original interface)
         self._create_main_command_tab(self.notebook)
         
-        # Add all feature tabs from old GUI
+        # Add all 23 feature tabs from old GUI with modern styling
         self.create_vatsal_ai_tab(self.notebook)
         self.create_vatsal_automator_tab(self.notebook)
         self.create_self_operating_tab(self.notebook)
         self.create_comprehensive_controller_tab(self.notebook)
         self.create_vlm_tab(self.notebook)
         self.create_web_automation_tab(self.notebook)
+        self.create_code_tab(self.notebook)
+        self.create_desktop_tab(self.notebook)
+        self.create_file_automation_tab(self.notebook)
+        self.create_clipboard_text_tab(self.notebook)
+        self.create_messaging_tab(self.notebook)
+        self.create_system_tab(self.notebook)
+        self.create_productivity_tab(self.notebook)
+        self.create_utilities_tab(self.notebook)
+        self.create_ecosystem_tab(self.notebook)
+        self.create_ai_features_tab(self.notebook)
+        self.create_fun_tab(self.notebook)
+        self.create_advanced_ai_tab(self.notebook)
+        self.create_web_tools_tab(self.notebook)
+        self.create_productivity_hub_tab(self.notebook)
+        self.create_tools_utilities_tab(self.notebook)
         self.create_macro_recorder_tab(self.notebook)
-        
-        # TODO: Add remaining tabs
-        # self.create_code_tab(self.notebook)
-        # self.create_desktop_tab(self.notebook)
-        # ... (will add in next steps)
+        self.create_mobile_operations_tab(self.notebook)
     
     def _create_main_command_tab(self, notebook):
         """Create the main command interface tab"""
