@@ -57,23 +57,13 @@ class SpotifyDesktopAutomation:
             return False
     
     def open_spotify(self):
-        """Open Spotify application"""
+        """Open Spotify web player"""
         try:
-            if self.is_windows:
-                # Try to open Spotify on Windows
-                import subprocess
-                subprocess.Popen(['spotify.exe'], shell=True)
-            elif self.is_mac:
-                import subprocess
-                subprocess.Popen(['open', '-a', 'Spotify'])
-            elif self.is_linux:
-                import subprocess
-                subprocess.Popen(['spotify'])
-            
-            time.sleep(2)
-            return {"success": True, "message": "🎵 Opening Spotify..."}
+            import webbrowser
+            webbrowser.open('https://open.spotify.com/')
+            return "🎵 Opening Spotify web player..."
         except Exception as e:
-            return {"success": False, "message": f"Failed to open Spotify: {str(e)}"}
+            return f"❌ Could not open Spotify: {str(e)}"
     
     def play_pause(self):
         """Toggle play/pause"""

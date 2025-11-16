@@ -796,6 +796,11 @@ class CommandExecutor:
                         return result
                     return {"success": True, "message": result}
             
+            elif action == "spotify_open" or action == "open_spotify":
+                print(f"  🎵 Opening Spotify web player...")
+                result = self.spotify.open_spotify()
+                return {"success": True, "message": result}
+            
             # ==================== SYSTEM MONITORING ====================
             elif action == "system_report":
                 print(f"  📊 Generating system report...")

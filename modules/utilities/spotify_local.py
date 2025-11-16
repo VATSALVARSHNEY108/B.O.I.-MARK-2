@@ -217,6 +217,14 @@ class SpotifyLocal:
             
             return f"📚 Your playlists:\n" + "\n".join(playlists)
         return result.get('message', 'Could not get playlists')
+    
+    def open_spotify(self):
+        """Open Spotify web player"""
+        try:
+            webbrowser.open('https://open.spotify.com/')
+            return "🎵 Opening Spotify web player..."
+        except Exception as e:
+            return f"❌ Could not open Spotify: {str(e)}"
 
 
 def main():
