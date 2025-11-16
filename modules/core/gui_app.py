@@ -331,6 +331,9 @@ class ModernVATSALGUI:
         
         # Output console section
         self._create_output_section(main_container)
+        
+        # Footer with buttons and status
+        self._create_footer()
     
     def create_rounded_rectangle(self, width, height, radius, color):
         """Create a rounded rectangle image using PIL"""
@@ -788,26 +791,26 @@ class ModernVATSALGUI:
         btn_group_shadow_mid = tk.Frame(btn_group_shadow_outer, bg="#B0B0B0", bd=0)
         btn_group_shadow_mid.pack(padx=(0, 6), pady=(0, 6))
         
-        # Canvas for rounded button container
+        # Canvas for rounded button container (wider for more buttons)
         buttons_canvas = tk.Canvas(
             btn_group_shadow_mid,
             bg=self.BG_PRIMARY,
             highlightthickness=0,
             bd=0,
-            width=400,
+            width=550,
             height=65
         )
         buttons_canvas.pack()
         
         # Draw rounded background for button group
-        self.round_corners_canvas(buttons_canvas, 400, 65, 20, self.BUTTON_BG, "#FFFFFF", 3)
+        self.round_corners_canvas(buttons_canvas, 550, 65, 20, self.BUTTON_BG, "#FFFFFF", 3)
         
         # Frame inside canvas for buttons
         buttons_container = tk.Frame(
             buttons_canvas,
             bg=self.BUTTON_BG
         )
-        buttons_canvas.create_window(200, 32, window=buttons_container)
+        buttons_canvas.create_window(275, 32, window=buttons_container)
         
         # Execute button with enhanced 3D effect
         self.execute_btn = tk.Button(
@@ -845,11 +848,14 @@ class ModernVATSALGUI:
             width=2
         ).pack(side="left", fill="y")
         
-        # Icon buttons - Wakeup listener, V-sign detector, Speaking
+        # Icon buttons - Voice listen, Continuous, Wakeup, V-sign, Speaking, Sound
         icon_buttons = [
+            ("🎤", self.start_voice_listen, "Voice Listen"),
+            ("🔊", self.toggle_continuous_listening, "Continuous Listening"),
             ("👂", self.toggle_wakeup_listener, "Wakeup Word Listener"),
             ("✌️", self.toggle_v_sign_detector, "V-Sign Detector"),
-            ("🗣️", self.toggle_speaking, "Speaking")
+            ("🗣️", self.toggle_speaking, "Speaking"),
+            ("🔔", self.toggle_sound_effects, "Sound Effects")
         ]
         
         for icon, command, tooltip in icon_buttons:
@@ -897,12 +903,20 @@ class ModernVATSALGUI:
             btn.bind("<ButtonRelease-1>", make_release_handler(btn))
             
             # Store button reference for state updates
-            if icon == "👂":
+            if icon == "🎤":
+                self.voice_listen_btn = btn
+            elif icon == "🔊":
+                self.voice_continuous_btn = btn
+            elif icon == "👂":
                 self.wakeup_btn = btn
             elif icon == "✌️":
                 self.vsign_btn = btn
             elif icon == "🗣️":
                 self.speaking_btn = btn
+            elif icon == "🔔":
+                self.sound_fx_btn = btn
+                # Right-click to open sound settings
+                btn.bind("<Button-3>", lambda e: self.show_sound_settings())
             
             # Separator
             if icon != icon_buttons[-1][0]:
@@ -1094,6 +1108,75 @@ class ModernVATSALGUI:
         clear_btn_bottom.bind("<ButtonPress-1>", clear_b_press)
         clear_btn_bottom.bind("<ButtonRelease-1>", clear_b_release)
         self._add_hover_effect(clear_btn_bottom, self.BUTTON_BG, self.BUTTON_HOVER)
+    
+    def _create_footer(self):
+        """Create footer with buttons and status"""
+        footer = tk.Frame(
+            self.root,
+            bg=self.BG_SECONDARY,
+            relief="raised",
+            borderwidth=4,
+            highlightbackground=self.BORDER_PRIMARY,
+            highlightthickness=2
+        )
+        footer.pack(fill="x", side="bottom", padx=20, pady=(0, 20))
+        
+        # Inner container
+        footer_content = tk.Frame(footer, bg=self.BG_SECONDARY)
+        footer_content.pack(fill="x", padx=20, pady=15)
+        
+        # Left side - Action buttons
+        button_container = tk.Frame(footer_content, bg=self.BG_SECONDARY)
+        button_container.pack(side="left")
+        
+        # Define bottom buttons
+        bottom_buttons = [
+            ("❓ Help", self.show_help),
+            ("👥 Contacts", self.show_contacts),
+            ("ℹ️ About", self.show_about),
+            ("💡 Suggestion", self.show_suggestion),
+            ("🛡️ Security", self.show_security_dashboard)
+        ]
+        
+        for text, command in bottom_buttons:
+            btn = tk.Button(
+                button_container,
+                text=text,
+                font=("Segoe UI", 10, "bold"),
+                bg=self.BUTTON_BG,
+                fg=self.TEXT_PRIMARY,
+                relief="raised",
+                borderwidth=2,
+                cursor="hand2",
+                padx=15,
+                pady=8,
+                command=command,
+                activebackground=self.BUTTON_HOVER
+            )
+            btn.pack(side="left", padx=5)
+            self._add_hover_effect(btn, self.BUTTON_BG, self.BUTTON_HOVER)
+        
+        # Right side - Status label
+        status_container = tk.Frame(
+            footer_content,
+            bg=self.CONSOLE_BG,
+            relief="solid",
+            borderwidth=2,
+            highlightbackground=self.BORDER_PRIMARY,
+            highlightthickness=1
+        )
+        status_container.pack(side="right", padx=10)
+        
+        self.status_label = tk.Label(
+            status_container,
+            text="✅ Ready",
+            bg=self.CONSOLE_BG,
+            fg=self.ACTIVE_GREEN,
+            font=("Segoe UI", 11, "bold"),
+            padx=20,
+            pady=10
+        )
+        self.status_label.pack()
     
     def _add_hover_effect(self, button, normal_color, hover_color):
         """Add hover effect to button"""
@@ -1641,6 +1724,459 @@ class ModernVATSALGUI:
             overrelief="groove"
         )
         close_btn.pack(pady=20, padx=2)
+        self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
+    
+    # ========== VOICE AND SOUND METHODS ==========
+    
+    def start_voice_listen(self):
+        """Start push-to-talk voice command"""
+        if not self.voice_commander:
+            messagebox.showerror("Voice Error", "Voice commander not available")
+            return
+
+        if self.processing:
+            messagebox.showwarning("Busy", "Please wait for the current command to finish.")
+            return
+
+        def voice_thread():
+            self.update_output("\n🎤 Listening for voice command...\n", "info")
+            self.update_status("🎤 Listening...", self.ACCENT_COLOR)
+            self.root.after(0, lambda: self.voice_listen_btn.config(bg=self.ACTIVE_GREEN))
+
+            result = self.voice_commander.listen_once(timeout=10)
+
+            self.root.after(0, lambda: self.voice_listen_btn.config(bg=self.BUTTON_BG))
+
+            if result['success'] and result['text']:
+                self.root.after(0, lambda: self.command_input.delete(0, tk.END))
+                self.root.after(0, lambda: self.command_input.insert(0, result['text']))
+                self.update_output(f"📝 Voice command received: {result['text']}\n\n", "success")
+                self.update_status("✅ Ready", self.ACTIVE_GREEN)
+                self.root.after(100, self.execute_command)
+            else:
+                error_msg = result.get('message', 'No command received')
+                self.update_output(f"❌ Voice error: {error_msg}\n", "error")
+                self.update_status("⚠️ Voice Error", "#f38ba8")
+
+        threading.Thread(target=voice_thread, daemon=True).start()
+    
+    def toggle_continuous_listening(self):
+        """Toggle continuous voice listening mode"""
+        if not self.voice_commander:
+            messagebox.showerror("Voice Error", "Voice commander not available")
+            return
+
+        if not self.voice_listening:
+            result = self.voice_commander.start_continuous_listening()
+
+            if result['success']:
+                self.voice_listening = True
+                self.voice_continuous_btn.config(bg=self.ACTIVE_GREEN)
+
+                wake_words = ", ".join(self.voice_commander.get_wake_words()[:3])
+                wake_status = ""
+                if self.voice_commander.wake_word_enabled:
+                    wake_status = f"\n💬 Wake words: {wake_words}\n"
+
+                self.update_output("\n🔊 Continuous voice listening ENABLED\n", "success")
+                self.update_output(wake_status, "info")
+                self.update_output("Say 'stop listening' to disable\n\n", "info")
+                self.update_status("🎤 Voice Active", self.ACTIVE_GREEN)
+            else:
+                messagebox.showerror("Voice Error", result['message'])
+        else:
+            result = self.voice_commander.stop_continuous_listening()
+
+            if result['success']:
+                self.voice_listening = False
+                self.voice_continuous_btn.config(bg=self.BUTTON_BG)
+                self.update_output("\n🔇 Continuous voice listening DISABLED\n", "warning")
+                self.update_status("✅ Ready", self.ACTIVE_GREEN)
+            else:
+                messagebox.showerror("Voice Error", result['message'])
+    
+    def toggle_sound_effects(self):
+        """Toggle voice sound effects on/off"""
+        if not self.voice_commander:
+            messagebox.showerror("Voice Error", "Voice commander not available")
+            return
+
+        result = self.voice_commander.toggle_sound_effects()
+
+        if result['success']:
+            if result['enabled']:
+                self.sound_fx_btn.config(bg=self.ACTIVE_GREEN)
+                self.update_output(f"\n🔊 Voice sound effects ENABLED\n", "success")
+                self.update_output(f"You'll hear beeps during voice interactions\n", "info")
+
+                if self.voice_commander.sound_effects:
+                    self.voice_commander.sound_effects.play_sound('success', async_play=True)
+            else:
+                self.sound_fx_btn.config(bg=self.BUTTON_BG)
+                self.update_output(f"\n🔇 Voice sound effects DISABLED\n", "warning")
+        else:
+            messagebox.showerror("Sound Error", result.get('message', 'Error toggling sound effects'))
+    
+    def show_sound_settings(self):
+        """Show sound effects settings dialog"""
+        if not self.voice_commander or not self.voice_commander.sound_effects:
+            messagebox.showerror("Sound Error", "Sound effects not available")
+            return
+
+        settings_window = tk.Toplevel(self.root)
+        settings_window.title("🔊 Sound Effects Settings")
+        settings_window.geometry("500x450")
+        settings_window.configure(bg=self.BG_PRIMARY)
+
+        header = tk.Label(settings_window,
+                         text="🔊 Voice Sound Effects Settings",
+                         bg=self.BG_PRIMARY,
+                         fg=self.TEXT_PRIMARY,
+                         font=("Segoe UI", 16, "bold"),
+                         pady=20)
+        header.pack()
+
+        status_frame = tk.Frame(settings_window, bg=self.BG_SECONDARY, relief="flat")
+        status_frame.pack(fill="x", padx=20, pady=10)
+
+        sounds_list = self.voice_commander.list_sound_effects()
+        status_text = "🎵 Available Sound Effects:\n\n"
+
+        if sounds_list['success']:
+            for name, info in sounds_list['sounds'].items():
+                status = "✅" if info['exists'] else "❌"
+                status_text += f"{status} {name.replace('_', ' ').title()}\n"
+
+        status_label = tk.Label(status_frame,
+                               text=status_text,
+                               bg=self.BG_SECONDARY,
+                               fg=self.TEXT_PRIMARY,
+                               font=("Segoe UI", 11),
+                               justify="left",
+                               pady=15,
+                               padx=15)
+        status_label.pack()
+
+        close_btn = tk.Button(settings_window,
+                             text="Close",
+                             bg=self.BUTTON_BG,
+                             fg=self.TEXT_PRIMARY,
+                             font=("Segoe UI", 11, "bold"),
+                             relief="raised",
+                             cursor="hand2",
+                             command=settings_window.destroy,
+                             padx=30,
+                             pady=10)
+        close_btn.pack(pady=20)
+        self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
+    
+    def update_status(self, text, color):
+        """Update status label"""
+        def _update():
+            self.status_label.config(text=text, fg=color)
+        self.root.after(0, _update)
+    
+    # ========== DIALOG METHODS ==========
+    
+    def show_help(self):
+        """Show help dialog"""
+        help_window = tk.Toplevel(self.root)
+        help_window.title("❓ Help Guide")
+        help_window.geometry("900x700")
+        help_window.configure(bg=self.BG_PRIMARY)
+
+        header = tk.Label(help_window,
+                          text="🤖 VATSAL AI Desktop Assistant - Help Guide",
+                          bg=self.BG_PRIMARY,
+                          fg=self.TEXT_PRIMARY,
+                          font=("Segoe UI", 16, "bold"),
+                          pady=20)
+        header.pack()
+
+        text_area = scrolledtext.ScrolledText(help_window,
+                                              bg=self.CONSOLE_BG,
+                                              fg=self.TEXT_PRIMARY,
+                                              font=("Segoe UI", 11),
+                                              wrap="word",
+                                              padx=20,
+                                              pady=20)
+        text_area.pack(fill="both", expand=True, padx=20, pady=(0, 20))
+
+        help_text = """
+🎯 QUICK START GUIDE
+
+The VATSAL AI Desktop Assistant is your personal AI-powered assistant for automating tasks on your computer.
+
+📋 HOW TO USE:
+
+1. Type a natural language command in the input field
+2. Press Enter or click the Execute button
+3. View the results in the Output Console
+
+💡 EXAMPLE COMMANDS:
+
+Desktop Control:
+• "Take a screenshot"
+• "Open notepad"
+• "Search Google for Python tutorials"
+• "Lock the computer"
+• "Open Task Manager"
+
+File Management:
+• "Create a folder named Projects"
+• "Search for PDF files"
+• "Organize desktop files"
+• "Move file to Documents"
+
+Voice & Automation:
+• Click the 🎤 button to use push-to-talk voice
+• Click the 🔊 button for continuous voice listening
+• Use V-sign detector for hands-free voice activation
+
+🎯 FEATURES:
+
+✅ Natural Language Processing
+✅ Voice Commands
+✅ Self-Operating Computer Mode
+✅ Desktop Automation
+✅ Web Automation with Selenium
+✅ File Management
+✅ Productivity Tools
+✅ Security Dashboard
+✅ And 100+ more features!
+
+⌨️ KEYBOARD SHORTCUTS:
+
+• Enter - Execute command
+• Ctrl+Return - Quick execute (when enabled)
+
+🛡️ SECURITY:
+
+• All commands are processed securely
+• Sensitive data is encrypted
+• User confirmation for destructive actions
+
+💬 SUPPORT:
+
+For more information or support, check the About section.
+        """
+
+        text_area.insert(1.0, help_text)
+        text_area.config(state='disabled')
+
+        close_btn = tk.Button(help_window,
+                             text="Close",
+                             bg=self.BUTTON_BG,
+                             fg=self.TEXT_PRIMARY,
+                             font=("Segoe UI", 11, "bold"),
+                             relief="raised",
+                             cursor="hand2",
+                             command=help_window.destroy,
+                             padx=30,
+                             pady=10)
+        close_btn.pack(pady=20)
+        self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
+    
+    def show_contacts(self):
+        """Show contacts manager"""
+        contacts_window = tk.Toplevel(self.root)
+        contacts_window.title("👥 Contacts Manager")
+        contacts_window.geometry("700x600")
+        contacts_window.configure(bg=self.BG_PRIMARY)
+
+        header = tk.Label(contacts_window,
+                          text="👥 Contact Manager",
+                          bg=self.BG_PRIMARY,
+                          fg=self.TEXT_PRIMARY,
+                          font=("Segoe UI", 16, "bold"),
+                          pady=20)
+        header.pack()
+
+        info = tk.Label(contacts_window,
+                        text="Manage your contacts for email and messaging automation",
+                        bg=self.BG_PRIMARY,
+                        fg=self.TEXT_SECONDARY,
+                        font=("Segoe UI", 10))
+        info.pack()
+
+        text_area = scrolledtext.ScrolledText(contacts_window,
+                                              bg=self.CONSOLE_BG,
+                                              fg=self.TEXT_PRIMARY,
+                                              font=("Segoe UI", 11),
+                                              wrap="word",
+                                              padx=20,
+                                              pady=20)
+        text_area.pack(fill="both", expand=True, padx=20, pady=20)
+
+        try:
+            command_dict = parse_command("List all contacts")
+            result = self.executor.execute(command_dict)
+            if result["success"]:
+                text_area.insert(1.0, result["message"])
+            else:
+                text_area.insert(1.0, f"Error: {result['message']}")
+        except Exception as e:
+            text_area.insert(1.0,
+                             f"No contacts found or error loading contacts.\n\nUse the command:\n'Add contact NAME with phone NUMBER and email EMAIL'\n\nError details: {str(e)}")
+
+        close_btn = tk.Button(contacts_window,
+                             text="Close",
+                             bg=self.BUTTON_BG,
+                             fg=self.TEXT_PRIMARY,
+                             font=("Segoe UI", 11, "bold"),
+                             relief="raised",
+                             cursor="hand2",
+                             command=contacts_window.destroy,
+                             padx=30,
+                             pady=10)
+        close_btn.pack(pady=20)
+        self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
+    
+    def show_about(self):
+        """Show about dialog"""
+        about_window = tk.Toplevel(self.root)
+        about_window.title("ℹ️ About VATSAL")
+        about_window.geometry("700x600")
+        about_window.configure(bg=self.BG_PRIMARY)
+
+        header = tk.Label(about_window,
+                          text="🤖 VATSAL - AI Desktop Assistant",
+                          bg=self.BG_PRIMARY,
+                          fg=self.TEXT_PRIMARY,
+                          font=("Segoe UI", 18, "bold"),
+                          pady=20)
+        header.pack()
+
+        version = tk.Label(about_window,
+                           text="Version 2.1.0 - VATSAL Edition (Powered by VATSAL)",
+                           bg=self.BG_PRIMARY,
+                           fg=self.ACCENT_COLOR,
+                           font=("Segoe UI", 11))
+        version.pack()
+
+        description_frame = tk.Frame(about_window, bg=self.BG_SECONDARY)
+        description_frame.pack(fill="both", expand=True, padx=30, pady=30)
+
+        description = tk.Label(description_frame,
+                               text="""
+⚡ VATSAL - Your Intelligent Desktop AI Assistant
+
+Powered by Google Gemini AI & VATSAL Framework
+
+VATSAL is your intelligent AI assistant with sophisticated 
+personality and advanced automation capabilities.
+
+🤖 Features:
+• Natural Language Understanding
+• Voice Command Support
+• Self-Operating Computer Mode
+• Desktop & Web Automation
+• Productivity Tools & Dashboards
+• Security & Privacy Features
+
+💡 Technology Stack:
+• Google Gemini AI
+• Python 3.11
+• Tkinter GUI
+• OpenCV
+• Selenium WebDriver
+• And many more...
+
+🌟 Created by the VATSAL Team
+
+© 2024 VATSAL. All rights reserved.
+                               """,
+                               bg=self.BG_SECONDARY,
+                               fg=self.TEXT_PRIMARY,
+                               font=("Segoe UI", 11),
+                               justify="left")
+        description.pack(padx=20, pady=20)
+
+        close_btn = tk.Button(about_window,
+                             text="Close",
+                             bg=self.BUTTON_BG,
+                             fg=self.TEXT_PRIMARY,
+                             font=("Segoe UI", 11, "bold"),
+                             relief="raised",
+                             cursor="hand2",
+                             command=about_window.destroy,
+                             padx=30,
+                             pady=10)
+        close_btn.pack(pady=20)
+        self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
+    
+    def show_suggestion(self):
+        """Show VATSAL proactive suggestion"""
+        if self.vatsal:
+            suggestion = self.vatsal.get_proactive_suggestion()
+            self.update_output(f"\n{suggestion}\n\n", "info")
+        else:
+            self.update_output("\n💡 VATSAL AI is not available for suggestions\n\n", "warning")
+    
+    def show_security_dashboard(self):
+        """Display AI-Powered Security Dashboard"""
+        if not self.security_dashboard:
+            messagebox.showerror("Error", "Security Dashboard not initialized")
+            return
+
+        sec_window = tk.Toplevel(self.root)
+        sec_window.title("🛡️ AI-Powered Security Dashboard")
+        sec_window.geometry("1000x700")
+        sec_window.configure(bg=self.BG_PRIMARY)
+
+        header_frame = tk.Frame(sec_window, bg=self.BG_SECONDARY)
+        header_frame.pack(fill="x", pady=(0, 10))
+
+        header = tk.Label(header_frame,
+                          text="🛡️ Security Dashboard with Gemini AI",
+                          bg=self.BG_SECONDARY,
+                          fg="#f38ba8",
+                          font=("Segoe UI", 18, "bold"),
+                          pady=15)
+        header.pack()
+
+        subtitle = tk.Label(header_frame,
+                           text="🤖 AI-Powered Threat Analysis • 🔐 Enhanced Security Features",
+                           bg=self.BG_SECONDARY,
+                           fg=self.TEXT_SECONDARY,
+                           font=("Segoe UI", 10, "italic"))
+        subtitle.pack()
+
+        main_frame = tk.Frame(sec_window, bg=self.BG_PRIMARY)
+        main_frame.pack(fill="both", expand=True, padx=20, pady=10)
+
+        text_area = scrolledtext.ScrolledText(main_frame,
+                                              bg=self.CONSOLE_BG,
+                                              fg=self.TEXT_PRIMARY,
+                                              font=("Segoe UI", 11),
+                                              wrap="word",
+                                              padx=20,
+                                              pady=20)
+        text_area.pack(fill="both", expand=True)
+
+        try:
+            if hasattr(self.security_dashboard, 'get_security_status'):
+                status = self.security_dashboard.get_security_status()
+                text_area.insert(1.0, f"Security Status: {status}\n\n")
+            else:
+                text_area.insert(1.0, "🛡️ Security Dashboard\n\n")
+                text_area.insert(tk.END, "Security features are available.\n\n")
+            text_area.insert(tk.END, "For full security features, please use the command:\n")
+            text_area.insert(tk.END, "'Show security dashboard' or 'Run security scan'\n")
+        except Exception as e:
+            text_area.insert(1.0, f"Security Dashboard:\n\nError loading: {str(e)}\n")
+
+        close_btn = tk.Button(sec_window,
+                             text="Close",
+                             bg=self.BUTTON_BG,
+                             fg=self.TEXT_PRIMARY,
+                             font=("Segoe UI", 11, "bold"),
+                             relief="raised",
+                             cursor="hand2",
+                             command=sec_window.destroy,
+                             padx=30,
+                             pady=10)
+        close_btn.pack(pady=20)
         self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
     
     def handle_voice_command(self, command):
