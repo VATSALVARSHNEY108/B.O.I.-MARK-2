@@ -19,10 +19,13 @@ class SpotifyAutomation:
         """Get access token from Replit connector"""
         try:
             x_replit_token = None
-            if os.getenv('REPL_IDENTITY'):
-                x_replit_token = 'repl ' + os.getenv('REPL_IDENTITY')
-            elif os.getenv('WEB_REPL_RENEWAL'):
-                x_replit_token = 'depl ' + os.getenv('WEB_REPL_RENEWAL')
+            repl_identity = os.getenv('REPL_IDENTITY')
+            web_repl_renewal = os.getenv('WEB_REPL_RENEWAL')
+            
+            if repl_identity:
+                x_replit_token = 'repl ' + repl_identity
+            elif web_repl_renewal:
+                x_replit_token = 'depl ' + web_repl_renewal
             
             if not x_replit_token or not self.connector_hostname:
                 return None
