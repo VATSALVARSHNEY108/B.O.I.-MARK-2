@@ -337,7 +337,7 @@ class ModernVATSALGUI:
             messagebox.showerror("Initialization Error", f"Failed to initialize: {e}")
 
     def _create_gui(self):
-        """Create the main GUI layout with tabbed interface"""
+        """Create the main GUI layout"""
         # Main container with padding
         main_container = tk.Frame(self.root, bg=self.BG_PRIMARY)
         main_container.pack(fill="both", expand=True, padx=20, pady=20)
@@ -345,47 +345,23 @@ class ModernVATSALGUI:
         # Header section
         self._create_header(main_container)
 
-        # Create tabbed notebook for all features
-        self._create_tabbed_interface(main_container)
+        # Create main interface directly (no tabs)
+        self._create_main_interface(main_container)
 
         # Footer with buttons and status
         self._create_footer()
 
-    def _create_tabbed_interface(self, parent):
-        """Create notebook with all feature tabs"""
-        # Notebook container
-        notebook_frame = tk.Frame(parent, bg=self.BG_PRIMARY)
-        notebook_frame.pack(fill="both", expand=True, pady=(0, 20))
-
-        # Create notebook with modern styling
-        style = ttk.Style()
-        style.configure("Custom.TNotebook", background=self.BG_PRIMARY, borderwidth=0)
-        style.configure("Custom.TNotebook.Tab",
-                        background=self.BUTTON_BG,
-                        foreground=self.TEXT_PRIMARY,
-                        padding=[25, 12],
-                        font=("Segoe UI", 11, "bold"))
-        style.map("Custom.TNotebook.Tab",
-                  background=[("selected", self.ACTIVE_GREEN)],
-                  foreground=[("selected", "white")],
-                  padding=[("selected", [25, 12])])
-
-        self.notebook = ttk.Notebook(notebook_frame, style="Custom.TNotebook")
-        self.notebook.pack(fill="both", expand=True)
-
-        # Main command tab (original interface)
-        self._create_main_command_tab(self.notebook)
-
-    def _create_main_command_tab(self, notebook):
-        """Create the main command interface tab"""
-        tab = tk.Frame(notebook, bg=self.BG_PRIMARY)
-        notebook.add(tab, text="🏠 Main")
+    def _create_main_interface(self, parent):
+        """Create the main command interface (no tabs)"""
+        # Content container
+        content_frame = tk.Frame(parent, bg=self.BG_PRIMARY)
+        content_frame.pack(fill="both", expand=True, pady=(0, 20))
 
         # Command input section
-        self._create_command_section_for_tab(tab)
+        self._create_command_section_for_tab(content_frame)
 
         # Output console section
-        self._create_output_section_for_tab(tab)
+        self._create_output_section_for_tab(content_frame)
 
     def _create_command_section_for_tab(self, parent):
         """Create command input section for tab"""
