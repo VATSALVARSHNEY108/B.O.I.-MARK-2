@@ -503,12 +503,9 @@ class ModernVATSALGUI:
         
         # Icon buttons
         icon_buttons = [
-            ("🎤", self.start_voice_listen, "Voice Listen"),
-            ("🔊", self.toggle_continuous_listening, "Continuous Listening"),
             ("👂", self.toggle_wakeup_listener, "Wakeup Word Listener"),
             ("✌️", self.toggle_v_sign_detector, "V-Sign Detector"),
-            ("🗣️", self.toggle_speaking, "Speaking"),
-            ("🔔", self.toggle_sound_effects, "Sound Effects")
+            ("🗣️", self.toggle_speaking, "Speaking")
         ]
         
         for icon, command, tooltip in icon_buttons:
@@ -530,19 +527,12 @@ class ModernVATSALGUI:
             btn.pack(side="left", padx=3, pady=3)
             
             # Store button references
-            if icon == "🎤":
-                self.voice_listen_btn = btn
-            elif icon == "🔊":
-                self.voice_continuous_btn = btn
-            elif icon == "👂":
+            if icon == "👂":
                 self.wakeup_btn = btn
             elif icon == "✌️":
                 self.vsign_btn = btn
             elif icon == "🗣️":
                 self.speaking_btn = btn
-            elif icon == "🔔":
-                self.sound_fx_btn = btn
-                btn.bind("<Button-3>", lambda e: self.show_sound_settings())
             
             if icon != icon_buttons[-1][0]:
                 tk.Frame(buttons_container, bg=self.BORDER_PRIMARY, width=2).pack(side="left", fill="y")
@@ -1114,14 +1104,11 @@ class ModernVATSALGUI:
             width=2
         ).pack(side="left", fill="y")
         
-        # Icon buttons - Voice listen, Continuous, Wakeup, V-sign, Speaking, Sound
+        # Icon buttons - Wakeup, V-sign, Speaking
         icon_buttons = [
-            ("🎤", self.start_voice_listen, "Voice Listen"),
-            ("🔊", self.toggle_continuous_listening, "Continuous Listening"),
             ("👂", self.toggle_wakeup_listener, "Wakeup Word Listener"),
             ("✌️", self.toggle_v_sign_detector, "V-Sign Detector"),
-            ("🗣️", self.toggle_speaking, "Speaking"),
-            ("🔔", self.toggle_sound_effects, "Sound Effects")
+            ("🗣️", self.toggle_speaking, "Speaking")
         ]
         
         for icon, command, tooltip in icon_buttons:
@@ -1169,20 +1156,12 @@ class ModernVATSALGUI:
             btn.bind("<ButtonRelease-1>", make_release_handler(btn))
             
             # Store button reference for state updates
-            if icon == "🎤":
-                self.voice_listen_btn = btn
-            elif icon == "🔊":
-                self.voice_continuous_btn = btn
-            elif icon == "👂":
+            if icon == "👂":
                 self.wakeup_btn = btn
             elif icon == "✌️":
                 self.vsign_btn = btn
             elif icon == "🗣️":
                 self.speaking_btn = btn
-            elif icon == "🔔":
-                self.sound_fx_btn = btn
-                # Right-click to open sound settings
-                btn.bind("<Button-3>", lambda e: self.show_sound_settings())
             
             # Separator
             if icon != icon_buttons[-1][0]:
@@ -2022,11 +2001,11 @@ class ModernVATSALGUI:
         def voice_thread():
             self.update_output("\n🎤 Listening for voice command...\n", "info")
             self.update_status("🎤 Listening...", self.ACCENT_COLOR)
-            self.root.after(0, lambda: self.voice_listen_btn.config(bg=self.ACTIVE_GREEN))
+            # self.root.after(0, lambda: self.voice_listen_btn.config(bg=self.ACTIVE_GREEN))
 
             result = self.voice_commander.listen_once(timeout=10)
 
-            self.root.after(0, lambda: self.voice_listen_btn.config(bg=self.BUTTON_BG))
+            # self.root.after(0, lambda: self.voice_listen_btn.config(bg=self.BUTTON_BG))
 
             if result['success'] and result['text']:
                 self.root.after(0, lambda: self.command_input.delete(0, tk.END))
@@ -2052,7 +2031,7 @@ class ModernVATSALGUI:
 
             if result['success']:
                 self.voice_listening = True
-                self.voice_continuous_btn.config(bg=self.ACTIVE_GREEN)
+                # self.voice_continuous_btn.config(bg=self.ACTIVE_GREEN)
 
                 wake_words = ", ".join(self.voice_commander.get_wake_words()[:3])
                 wake_status = ""
@@ -2070,7 +2049,7 @@ class ModernVATSALGUI:
 
             if result['success']:
                 self.voice_listening = False
-                self.voice_continuous_btn.config(bg=self.BUTTON_BG)
+                # self.voice_continuous_btn.config(bg=self.BUTTON_BG)
                 self.update_output("\n🔇 Continuous voice listening DISABLED\n", "warning")
                 self.update_status("✅ Ready", self.ACTIVE_GREEN)
             else:
@@ -2086,14 +2065,14 @@ class ModernVATSALGUI:
 
         if result['success']:
             if result['enabled']:
-                self.sound_fx_btn.config(bg=self.ACTIVE_GREEN)
+                # self.sound_fx_btn.config(bg=self.ACTIVE_GREEN)
                 self.update_output(f"\n🔊 Voice sound effects ENABLED\n", "success")
                 self.update_output(f"You'll hear beeps during voice interactions\n", "info")
 
                 if self.voice_commander.sound_effects:
                     self.voice_commander.sound_effects.play_sound('success', async_play=True)
             else:
-                self.sound_fx_btn.config(bg=self.BUTTON_BG)
+                # self.sound_fx_btn.config(bg=self.BUTTON_BG)
                 self.update_output(f"\n🔇 Voice sound effects DISABLED\n", "warning")
         else:
             messagebox.showerror("Sound Error", result.get('message', 'Error toggling sound effects'))
@@ -5935,11 +5914,11 @@ Based on OthersideAI's self-operating-computer framework
         def voice_thread():
             self.update_output("\n🎤 Listening for voice command...\n", "info")
             self.update_status("🎤 Listening...", "#f9e2af")
-            self.root.after(0, lambda: self.voice_listen_btn.config(bg="#00d4aa"))
+            # self.root.after(0, lambda: self.voice_listen_btn.config(bg="#00d4aa"))
 
             result = self.voice_commander.listen_once(timeout=10)
 
-            self.root.after(0, lambda: self.voice_listen_btn.config(bg="#00ff88"))
+            # self.root.after(0, lambda: self.voice_listen_btn.config(bg="#00ff88"))
 
             if result['success'] and result['command']:
                 self.update_output(f"✅ Heard: {result['command']}\n\n", "success")
@@ -5968,7 +5947,7 @@ Based on OthersideAI's self-operating-computer framework
 
             if result['success']:
                 self.voice_listening = True
-                self.voice_continuous_btn.config(bg="#00ff88", text="🔇")
+                # self.voice_continuous_btn.config(bg="#00ff88", text="🔇")
 
                 # Show wake word status
                 wake_words = ", ".join(self.voice_commander.get_wake_words()[:3])
@@ -5988,7 +5967,7 @@ Based on OthersideAI's self-operating-computer framework
 
             if result['success']:
                 self.voice_listening = False
-                self.voice_continuous_btn.config(bg="#3d4466", text="🔊")
+                # self.voice_continuous_btn.config(bg="#3d4466", text="🔊")
                 self.update_output("\n🔇 Continuous voice listening DISABLED\n", "warning")
                 self.update_status("✅ Ready", "#a6e3a1")
 
@@ -6042,7 +6021,7 @@ Based on OthersideAI's self-operating-computer framework
 
         if result['success']:
             if result['enabled']:
-                self.sound_fx_btn.config(bg="#00ff88", text="🔊")
+                # self.sound_fx_btn.config(bg="#00ff88", text="🔊")
                 self.update_output(f"\n🔊 Voice sound effects ENABLED\n", "success")
                 self.update_output(f"You'll hear beeps during voice interactions\n", "info")
 
@@ -6050,7 +6029,7 @@ Based on OthersideAI's self-operating-computer framework
                 if self.voice_commander.sound_effects:
                     self.voice_commander.sound_effects.play_sound('success', async_play=True)
             else:
-                self.sound_fx_btn.config(bg="#3d4466", text="🔇")
+                # self.sound_fx_btn.config(bg="#3d4466", text="🔇")
                 self.update_output(f"\n🔇 Voice sound effects DISABLED\n", "warning")
                 self.update_output(f"Voice commands will work silently\n", "info")
 
