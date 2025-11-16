@@ -10312,18 +10312,9 @@ keyboard, and screen access:
         self.workflow_log("Workflow Builder ready!", "SUCCESS")
 
 
-def main():
-    root = tk.Tk()
-    app = AutomationControllerGUI(root)
-    root.mainloop()
-
-
-if __name__ == "__main__":
-    
     def run(self):
         """Start the GUI"""
         self.root.mainloop()
-
 
 def main():
     """Main entry point"""
