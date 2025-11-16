@@ -60,18 +60,18 @@ class ModernVATSALGUI:
         self.root = root
         self.root.title("V.A.T.S.A.L - AI Desktop Assistant")
 
-        # Initialize theme colors (Light cream with Slate gray accents)
-        self.BG_PRIMARY = "#e8e4dc"  # Light cream/beige background
-        self.BG_SECONDARY = "#f5f3ef"  # Lighter cream for cards/sections
-        self.BORDER_PRIMARY = "#64748b"  # Slate 500 - Gray borders
-        self.TEXT_PRIMARY = "#1e293b"  # Slate 800 - Dark text
-        self.TEXT_SECONDARY = "#475569"  # Slate 600 - Muted text
-        self.ACCENT_COLOR = "#64748b"  # Slate 500 - Accent
-        self.BUTTON_BG = "#cbd5e1"  # Slate 300 - Light gray button
-        self.BUTTON_HOVER = "#94a3b8"  # Slate 400 - Hover state
-        self.ACTIVE_GREEN = "#059669"  # Emerald 600 - Green execute button
-        self.CONSOLE_BG = "#ffffff"  # White console background
-        self.SHADOW_COLOR = "rgba(100, 116, 139, 0.2)"  # Slate shadow
+        # Initialize theme colors (exact match to web GUI CSS)
+        self.BG_PRIMARY = "#F5F1E8"  # var(--bg-primary)
+        self.BG_SECONDARY = "#FAF8F3"  # var(--bg-secondary)
+        self.BORDER_PRIMARY = "#D9CFC0"  # var(--border-color)
+        self.TEXT_PRIMARY = "#1a1a1a"  # var(--text-primary)
+        self.TEXT_SECONDARY = "#5a5a5a"  # var(--text-secondary)
+        self.ACCENT_COLOR = "#3a3a3a"  # var(--accent-color)
+        self.BUTTON_BG = "#F3EADA"  # var(--button-bg)
+        self.BUTTON_HOVER = "#E8DCCB"  # var(--button-hover)
+        self.ACTIVE_GREEN = "#007B55"  # var(--active-green)
+        self.CONSOLE_BG = "#FAF6EE"  # var(--console-bg)
+        self.SHADOW_COLOR = "rgba(0, 0, 0, 0.08)"  # var(--shadow)
 
         # Configure root window
         self.root.configure(bg=self.BG_PRIMARY)
@@ -533,11 +533,11 @@ class ModernVATSALGUI:
         self.output_area.pack(fill="both", expand=True)
         self.output_area.config(state="disabled")
 
-        # Configure text tags for better output formatting (for white console)
-        self.output_area.tag_config("info", foreground="#3b82f6")  # Blue
-        self.output_area.tag_config("success", foreground=self.ACTIVE_GREEN, font=("Consolas", 10, "bold"))  # Emerald green
-        self.output_area.tag_config("error", foreground="#64748b", font=("Consolas", 10, "bold"))  # Slate 500
-        self.output_area.tag_config("warning", foreground="#f59e0b")  # Amber
+        # Configure text tags for better output formatting
+        self.output_area.tag_config("info", foreground="#2196F3")
+        self.output_area.tag_config("success", foreground=self.ACTIVE_GREEN, font=("Consolas", 10, "bold"))
+        self.output_area.tag_config("error", foreground="#D32F2F", font=("Consolas", 10, "bold"))
+        self.output_area.tag_config("warning", foreground="#FF9800")
 
     def create_rounded_rectangle(self, width, height, radius, color):
         """Create a rounded rectangle image using PIL"""
@@ -585,15 +585,15 @@ class ModernVATSALGUI:
         if fg_color is None:
             fg_color = self.TEXT_PRIMARY
 
-        # Outer shadow container - Slate gray for light theme
-        outer_shadow = tk.Frame(parent, bg="#94a3b8", bd=0)
+        # Outer shadow container (darker, more pronounced - ENHANCED!)
+        outer_shadow = tk.Frame(parent, bg="#707070", bd=0)
 
-        # Mid shadow layer - lighter Slate
-        mid_shadow = tk.Frame(outer_shadow, bg="#cbd5e1", bd=0)
+        # Mid shadow layer (stronger gradient - ENHANCED!)
+        mid_shadow = tk.Frame(outer_shadow, bg="#959595", bd=0)
         mid_shadow.pack(padx=(0, 8), pady=(0, 8))
 
-        # Inner shadow layer - lightest Slate
-        inner_shadow = tk.Frame(mid_shadow, bg="#e2e8f0", bd=0)
+        # Inner shadow layer (ENHANCED!)
+        inner_shadow = tk.Frame(mid_shadow, bg="#B8B8B8", bd=0)
         inner_shadow.pack(padx=(0, 4), pady=(0, 4))
 
         # Canvas for rounded corners
@@ -695,15 +695,15 @@ class ModernVATSALGUI:
         if bg_color is None:
             bg_color = self.BG_SECONDARY
 
-        # Outer shadow layer - Slate gray for light theme
-        outer_shadow = tk.Frame(parent, bg="#94a3b8", bd=0)
+        # Outer shadow layer (darkest)
+        outer_shadow = tk.Frame(parent, bg="#707070", bd=0)
 
-        # Mid shadow layer - lighter Slate
-        mid_shadow = tk.Frame(outer_shadow, bg="#cbd5e1", bd=0)
+        # Mid shadow layer (gradient)
+        mid_shadow = tk.Frame(outer_shadow, bg="#959595", bd=0)
         mid_shadow.pack(padx=(0, 8), pady=(0, 8), fill="both", expand=True)
 
-        # Inner shadow layer - lightest Slate
-        inner_shadow = tk.Frame(mid_shadow, bg="#e2e8f0", bd=0)
+        # Inner shadow layer (lightest shadow)
+        inner_shadow = tk.Frame(mid_shadow, bg="#B8B8B8", bd=0)
         inner_shadow.pack(padx=(0, 4), pady=(0, 4), fill="both", expand=True)
 
         # Actual content frame
@@ -727,15 +727,15 @@ class ModernVATSALGUI:
         if fg_color is None:
             fg_color = self.TEXT_PRIMARY
 
-        # Outer shadow layer - Slate gray for light theme
-        outer_shadow = tk.Frame(parent, bg="#94a3b8", bd=0)
+        # Outer shadow layer
+        outer_shadow = tk.Frame(parent, bg="#707070", bd=0)
 
-        # Mid shadow layer - lighter Slate
-        mid_shadow = tk.Frame(outer_shadow, bg="#cbd5e1", bd=0)
+        # Mid shadow layer
+        mid_shadow = tk.Frame(outer_shadow, bg="#959595", bd=0)
         mid_shadow.pack(padx=(0, 6), pady=(0, 6))
 
-        # Inner shadow layer - lightest Slate
-        inner_shadow = tk.Frame(mid_shadow, bg="#e2e8f0", bd=0)
+        # Inner shadow layer
+        inner_shadow = tk.Frame(mid_shadow, bg="#B8B8B8", bd=0)
         inner_shadow.pack(padx=(0, 3), pady=(0, 3))
 
         # Actual button
