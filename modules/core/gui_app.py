@@ -59,18 +59,18 @@ class ModernVATSALGUI:
         self.root = root
         self.root.title("V.A.T.S.A.L - AI Desktop Assistant")
         
-        # Initialize theme colors (dark navy/cyan theme to match VATSAL Chat & Auto pages)
-        self.BG_PRIMARY = "#1e2433"      # Dark navy background
-        self.BG_SECONDARY = "#252d3f"    # Slightly lighter navy
-        self.BORDER_PRIMARY = "#3a4458"  # Dark border
-        self.TEXT_PRIMARY = "#e8e8e8"    # Light text
-        self.TEXT_SECONDARY = "#b0b8c8"  # Muted light text
-        self.ACCENT_COLOR = "#1dd3b0"    # Cyan accent
-        self.BUTTON_BG = "#2a3447"       # Dark button background
-        self.BUTTON_HOVER = "#323d52"    # Hover state
-        self.ACTIVE_GREEN = "#1dd3b0"    # Cyan/turquoise active color
-        self.CONSOLE_BG = "#1a2230"      # Darker console background
-        self.SHADOW_COLOR = "rgba(0, 0, 0, 0.3)"  # Darker shadow
+        # Initialize theme colors (Slate color palette)
+        self.BG_PRIMARY = "#0f172a"      # Slate 900 - Dark background
+        self.BG_SECONDARY = "#1e293b"    # Slate 800 - Slightly lighter
+        self.BORDER_PRIMARY = "#334155"  # Slate 700 - Borders
+        self.TEXT_PRIMARY = "#f1f5f9"    # Slate 100 - Light text
+        self.TEXT_SECONDARY = "#94a3b8"  # Slate 400 - Muted text
+        self.ACCENT_COLOR = "#64748b"    # Slate 500 - Accent
+        self.BUTTON_BG = "#334155"       # Slate 700 - Button background
+        self.BUTTON_HOVER = "#475569"    # Slate 600 - Hover state
+        self.ACTIVE_GREEN = "#64748b"    # Slate 500 - Active color
+        self.CONSOLE_BG = "#020617"      # Slate 950 - Darkest console
+        self.SHADOW_COLOR = "rgba(0, 0, 0, 0.4)"  # Dark shadow
         
         # Configure root window
         self.root.configure(bg=self.BG_PRIMARY)
@@ -514,11 +514,11 @@ class ModernVATSALGUI:
         self.output_area.pack(fill="both", expand=True)
         self.output_area.config(state="disabled")
         
-        # Configure text tags for better output formatting
-        self.output_area.tag_config("info", foreground="#2196F3")
-        self.output_area.tag_config("success", foreground=self.ACTIVE_GREEN, font=("Consolas", 10, "bold"))
-        self.output_area.tag_config("error", foreground="#D32F2F", font=("Consolas", 10, "bold"))
-        self.output_area.tag_config("warning", foreground="#FF9800")
+        # Configure text tags for better output formatting (Slate themed)
+        self.output_area.tag_config("info", foreground="#94a3b8")  # Slate 400
+        self.output_area.tag_config("success", foreground="#64748b", font=("Consolas", 10, "bold"))  # Slate 500
+        self.output_area.tag_config("error", foreground="#cbd5e1", font=("Consolas", 10, "bold"))  # Slate 300
+        self.output_area.tag_config("warning", foreground="#94a3b8")  # Slate 400
     
     def create_rounded_rectangle(self, width, height, radius, color):
         """Create a rounded rectangle image using PIL"""
@@ -566,15 +566,15 @@ class ModernVATSALGUI:
         if fg_color is None:
             fg_color = self.TEXT_PRIMARY
         
-        # Outer shadow container (darker, more pronounced - ENHANCED!) - darker for dark theme
-        outer_shadow = tk.Frame(parent, bg="#0f1419", bd=0)
+        # Outer shadow container (darker, more pronounced - ENHANCED!) - Slate shadow
+        outer_shadow = tk.Frame(parent, bg="#020617", bd=0)
         
-        # Mid shadow layer (stronger gradient - ENHANCED!) - subtle dark blue
-        mid_shadow = tk.Frame(outer_shadow, bg="#141a21", bd=0)
+        # Mid shadow layer (stronger gradient - ENHANCED!) - Slate 900
+        mid_shadow = tk.Frame(outer_shadow, bg="#0f172a", bd=0)
         mid_shadow.pack(padx=(0, 8), pady=(0, 8))
         
-        # Inner shadow layer (ENHANCED!) - slightly lighter
-        inner_shadow = tk.Frame(mid_shadow, bg="#1a2230", bd=0)
+        # Inner shadow layer (ENHANCED!) - Slate 800
+        inner_shadow = tk.Frame(mid_shadow, bg="#1e293b", bd=0)
         inner_shadow.pack(padx=(0, 4), pady=(0, 4))
         
         # Canvas for rounded corners
@@ -676,15 +676,15 @@ class ModernVATSALGUI:
         if bg_color is None:
             bg_color = self.BG_SECONDARY
         
-        # Outer shadow layer (darkest) - darker for dark theme
-        outer_shadow = tk.Frame(parent, bg="#0f1419", bd=0)
+        # Outer shadow layer (darkest) - Slate shadow
+        outer_shadow = tk.Frame(parent, bg="#020617", bd=0)
         
-        # Mid shadow layer (gradient) - subtle dark blue
-        mid_shadow = tk.Frame(outer_shadow, bg="#141a21", bd=0)
+        # Mid shadow layer (gradient) - Slate 900
+        mid_shadow = tk.Frame(outer_shadow, bg="#0f172a", bd=0)
         mid_shadow.pack(padx=(0, 8), pady=(0, 8), fill="both", expand=True)
         
-        # Inner shadow layer (lightest shadow) - slightly lighter
-        inner_shadow = tk.Frame(mid_shadow, bg="#1a2230", bd=0)
+        # Inner shadow layer (lightest shadow) - Slate 800
+        inner_shadow = tk.Frame(mid_shadow, bg="#1e293b", bd=0)
         inner_shadow.pack(padx=(0, 4), pady=(0, 4), fill="both", expand=True)
         
         # Actual content frame
@@ -708,15 +708,15 @@ class ModernVATSALGUI:
         if fg_color is None:
             fg_color = self.TEXT_PRIMARY
         
-        # Outer shadow layer - darker for dark theme
-        outer_shadow = tk.Frame(parent, bg="#0f1419", bd=0)
+        # Outer shadow layer - Slate shadow
+        outer_shadow = tk.Frame(parent, bg="#020617", bd=0)
         
-        # Mid shadow layer - subtle dark blue
-        mid_shadow = tk.Frame(outer_shadow, bg="#141a21", bd=0)
+        # Mid shadow layer - Slate 900
+        mid_shadow = tk.Frame(outer_shadow, bg="#0f172a", bd=0)
         mid_shadow.pack(padx=(0, 6), pady=(0, 6))
         
-        # Inner shadow layer - slightly lighter
-        inner_shadow = tk.Frame(mid_shadow, bg="#1a2230", bd=0)
+        # Inner shadow layer - Slate 800
+        inner_shadow = tk.Frame(mid_shadow, bg="#1e293b", bd=0)
         inner_shadow.pack(padx=(0, 3), pady=(0, 3))
         
         # Actual button
