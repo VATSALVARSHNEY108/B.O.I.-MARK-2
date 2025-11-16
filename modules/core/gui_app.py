@@ -318,7 +318,7 @@ class ModernVATSALGUI:
             messagebox.showerror("Initialization Error", f"Failed to initialize: {e}")
     
     def _create_gui(self):
-        """Create the main GUI layout matching web design"""
+        """Create the main GUI layout with tabbed interface"""
         # Main container with padding
         main_container = tk.Frame(self.root, bg=self.BG_PRIMARY)
         main_container.pack(fill="both", expand=True, padx=20, pady=20)
@@ -326,14 +326,269 @@ class ModernVATSALGUI:
         # Header section
         self._create_header(main_container)
         
-        # Command input section
-        self._create_command_section(main_container)
-        
-        # Output console section
-        self._create_output_section(main_container)
+        # Create tabbed notebook for all features
+        self._create_tabbed_interface(main_container)
         
         # Footer with buttons and status
         self._create_footer()
+    
+    def _create_tabbed_interface(self, parent):
+        """Create notebook with all feature tabs"""
+        # Notebook container
+        notebook_frame = tk.Frame(parent, bg=self.BG_PRIMARY)
+        notebook_frame.pack(fill="both", expand=True, pady=(0, 20))
+        
+        # Create notebook with custom styling
+        style = ttk.Style()
+        style.configure("Custom.TNotebook", background=self.BG_PRIMARY, borderwidth=0)
+        style.configure("Custom.TNotebook.Tab", 
+                       background=self.BUTTON_BG,
+                       foreground=self.TEXT_PRIMARY,
+                       padding=[15, 10],
+                       font=("Segoe UI", 10, "bold"))
+        style.map("Custom.TNotebook.Tab",
+                 background=[("selected", self.ACTIVE_GREEN)],
+                 foreground=[("selected", "white")])
+        
+        self.notebook = ttk.Notebook(notebook_frame, style="Custom.TNotebook")
+        self.notebook.pack(fill="both", expand=True)
+        
+        # Main command tab (original interface)
+        self._create_main_command_tab(self.notebook)
+        
+        # Add all feature tabs from old GUI
+        self.create_vatsal_ai_tab(self.notebook)
+        self.create_vatsal_automator_tab(self.notebook)
+        self.create_self_operating_tab(self.notebook)
+        self.create_comprehensive_controller_tab(self.notebook)
+        self.create_vlm_tab(self.notebook)
+        self.create_web_automation_tab(self.notebook)
+        self.create_macro_recorder_tab(self.notebook)
+        
+        # TODO: Add remaining tabs
+        # self.create_code_tab(self.notebook)
+        # self.create_desktop_tab(self.notebook)
+        # ... (will add in next steps)
+    
+    def _create_main_command_tab(self, notebook):
+        """Create the main command interface tab"""
+        tab = tk.Frame(notebook, bg=self.BG_PRIMARY)
+        notebook.add(tab, text="🏠 Main")
+        
+        # Command input section
+        self._create_command_section_for_tab(tab)
+        
+        # Output console section
+        self._create_output_section_for_tab(tab)
+    
+    def _create_command_section_for_tab(self, parent):
+        """Create command input section for tab"""
+        # Enhanced outer shadow for dramatic 3D effect
+        section_shadow_outer = tk.Frame(parent, bg="#808080", bd=0)
+        section_shadow_outer.pack(fill="x", pady=(10, 20), padx=10)
+        
+        section_shadow_mid = tk.Frame(section_shadow_outer, bg="#A0A0A0", bd=0)
+        section_shadow_mid.pack(fill="x", padx=(0, 8), pady=(0, 8))
+        
+        section_shadow_inner = tk.Frame(section_shadow_mid, bg="#C0C0C0", bd=0)
+        section_shadow_inner.pack(fill="x", padx=(0, 4), pady=(0, 4))
+        
+        section = tk.Frame(
+            section_shadow_inner,
+            bg=self.BG_SECONDARY,
+            relief="raised",
+            borderwidth=4,
+            highlightbackground="#FFFFFF",
+            highlightthickness=2
+        )
+        section.pack(fill="x")
+        
+        # Section header
+        header = tk.Frame(section, bg=self.BG_SECONDARY)
+        header.pack(fill="x", padx=25, pady=(25, 20))
+        
+        tk.Label(
+            header,
+            text="➕",
+            font=("Segoe UI", 16),
+            bg=self.BG_SECONDARY,
+            fg=self.TEXT_PRIMARY
+        ).pack(side="left", padx=(0, 10))
+        
+        tk.Label(
+            header,
+            text="Command Input",
+            font=("Segoe UI", 15, "bold"),
+            bg=self.BG_SECONDARY,
+            fg=self.TEXT_PRIMARY
+        ).pack(side="left")
+        
+        # Input area
+        input_area = tk.Frame(section, bg=self.BG_SECONDARY)
+        input_area.pack(fill="x", padx=25, pady=(0, 25))
+        
+        # Command input
+        self.command_input = tk.Entry(
+            input_area,
+            bg=self.CONSOLE_BG,
+            fg=self.TEXT_PRIMARY,
+            font=("Segoe UI", 11),
+            insertbackground=self.TEXT_PRIMARY,
+            relief="flat",
+            borderwidth=0,
+            highlightbackground=self.BORDER_PRIMARY,
+            highlightcolor=self.ACCENT_COLOR,
+            highlightthickness=2
+        )
+        self.command_input.pack(side="left", fill="both", expand=True, ipady=14, padx=(0, 15))
+        self.command_input.bind("<Return>", lambda e: self.execute_command())
+        
+        # Buttons container
+        btn_group_shadow_outer = tk.Frame(input_area, bg="#909090", bd=0)
+        btn_group_shadow_outer.pack(side="left")
+        
+        btn_group_shadow_mid = tk.Frame(btn_group_shadow_outer, bg="#B0B0B0", bd=0)
+        btn_group_shadow_mid.pack(padx=(0, 6), pady=(0, 6))
+        
+        buttons_canvas = tk.Canvas(
+            btn_group_shadow_mid,
+            bg=self.BG_PRIMARY,
+            highlightthickness=0,
+            bd=0,
+            width=550,
+            height=65
+        )
+        buttons_canvas.pack()
+        
+        self.round_corners_canvas(buttons_canvas, 550, 65, 20, self.BUTTON_BG, "#FFFFFF", 3)
+        
+        buttons_container = tk.Frame(
+            buttons_canvas,
+            bg=self.BUTTON_BG
+        )
+        buttons_canvas.create_window(275, 32, window=buttons_container)
+        
+        # Execute button
+        self.execute_btn = tk.Button(
+            buttons_container,
+            text="▶ Execute",
+            font=("Segoe UI", 12, "bold"),
+            bg=self.BUTTON_BG,
+            fg=self.TEXT_PRIMARY,
+            relief="flat",
+            borderwidth=0,
+            cursor="hand2",
+            padx=32,
+            pady=14,
+            command=self.execute_command,
+            highlightthickness=0,
+            activebackground=self.BUTTON_HOVER
+        )
+        self.execute_btn.pack(side="left", padx=3, pady=3)
+        self._add_hover_effect(self.execute_btn, self.BUTTON_BG, self.BUTTON_HOVER)
+        
+        # Separator
+        tk.Frame(buttons_container, bg=self.BORDER_PRIMARY, width=2).pack(side="left", fill="y")
+        
+        # Icon buttons
+        icon_buttons = [
+            ("🎤", self.start_voice_listen, "Voice Listen"),
+            ("🔊", self.toggle_continuous_listening, "Continuous Listening"),
+            ("👂", self.toggle_wakeup_listener, "Wakeup Word Listener"),
+            ("✌️", self.toggle_v_sign_detector, "V-Sign Detector"),
+            ("🗣️", self.toggle_speaking, "Speaking"),
+            ("🔔", self.toggle_sound_effects, "Sound Effects")
+        ]
+        
+        for icon, command, tooltip in icon_buttons:
+            btn = tk.Button(
+                buttons_container,
+                text=icon,
+                font=("Segoe UI", 18),
+                bg=self.BUTTON_BG,
+                fg=self.TEXT_PRIMARY,
+                relief="raised",
+                borderwidth=2,
+                cursor="hand2",
+                width=3,
+                command=command,
+                highlightthickness=1,
+                highlightbackground="#FFFFFF",
+                activebackground=self.BUTTON_HOVER
+            )
+            btn.pack(side="left", padx=3, pady=3)
+            
+            # Store button references
+            if icon == "🎤":
+                self.voice_listen_btn = btn
+            elif icon == "🔊":
+                self.voice_continuous_btn = btn
+            elif icon == "👂":
+                self.wakeup_btn = btn
+            elif icon == "✌️":
+                self.vsign_btn = btn
+            elif icon == "🗣️":
+                self.speaking_btn = btn
+            elif icon == "🔔":
+                self.sound_fx_btn = btn
+                btn.bind("<Button-3>", lambda e: self.show_sound_settings())
+            
+            if icon != icon_buttons[-1][0]:
+                tk.Frame(buttons_container, bg=self.BORDER_PRIMARY, width=2).pack(side="left", fill="y")
+    
+    def _create_output_section_for_tab(self, parent):
+        """Create output console section for tab"""
+        output_shadow_outer = tk.Frame(parent, bg="#808080", bd=0)
+        output_shadow_outer.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+        
+        output_shadow_mid = tk.Frame(output_shadow_outer, bg="#A0A0A0", bd=0)
+        output_shadow_mid.pack(fill="both", expand=True, padx=(0, 8), pady=(0, 8))
+        
+        output_shadow_inner = tk.Frame(output_shadow_mid, bg="#C0C0C0", bd=0)
+        output_shadow_inner.pack(fill="both", expand=True, padx=(0, 4), pady=(0, 4))
+        
+        section = tk.Frame(
+            output_shadow_inner,
+            bg=self.BG_SECONDARY,
+            relief="raised",
+            borderwidth=4,
+            highlightbackground="#FFFFFF",
+            highlightthickness=2
+        )
+        section.pack(fill="both", expand=True)
+        
+        # Header
+        header = tk.Frame(section, bg=self.BG_SECONDARY)
+        header.pack(fill="x", padx=25, pady=(25, 20))
+        
+        tk.Label(
+            header,
+            text="📋 Output Console",
+            font=("Segoe UI", 15, "bold"),
+            bg=self.BG_SECONDARY,
+            fg=self.TEXT_PRIMARY
+        ).pack(side="left")
+        
+        # Output console
+        console_frame = tk.Frame(section, bg=self.BG_SECONDARY)
+        console_frame.pack(fill="both", expand=True, padx=25, pady=(0, 25))
+        
+        self.output_area = scrolledtext.ScrolledText(
+            console_frame,
+            bg=self.CONSOLE_BG,
+            fg=self.TEXT_PRIMARY,
+            font=("Segoe UI", 10),
+            relief="solid",
+            borderwidth=1,
+            highlightbackground=self.BORDER_PRIMARY,
+            highlightthickness=1,
+            padx=24,
+            pady=24,
+            wrap="word",
+            insertbackground=self.TEXT_PRIMARY
+        )
+        self.output_area.pack(fill="both", expand=True)
+        self.output_area.config(state="disabled")
     
     def create_rounded_rectangle(self, width, height, radius, color):
         """Create a rounded rectangle image using PIL"""
