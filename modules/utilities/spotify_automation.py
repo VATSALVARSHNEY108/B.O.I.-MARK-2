@@ -1,4 +1,124 @@
- return {"success": True, "message": "⏮️ Previous track"}
+"""
+Spotify Automation using Replit Connector
+Controls Spotify via Web API with OAuth handled by Replit
+"""
+
+import os
+import requests
+import json
+
+
+class SpotifyAutomation:
+    """Control Spotify using Web API with Replit connector authentication"""
+    
+    def __init__(self):
+        self.base_url = "https://api.spotify.com/v1/"
+        self.connector_hostname = os.getenv('REPLIT_CONNECTORS_HOSTNAME')
+        
+    def _get_access_token(self):
+        """Get access token from Replit connector"""
+        try:
+            x_replit_token = None
+            if os.getenv('REPL_IDENTITY'):
+                x_replit_token = 'repl ' + os.getenv('REPL_IDENTITY')
+            elif os.getenv('WEB_REPL_RENEWAL'):
+                x_replit_token = 'depl ' + os.getenv('WEB_REPL_RENEWAL')
+            
+            if not x_replit_token or not self.connector_hostname:
+                return None
+            
+            url = f"https://{self.connector_hostname}/api/v2/connection?include_secrets=true&connector_names=spotify"
+            headers = {
+                'Accept': 'application/json',
+                'X_REPLIT_TOKEN': x_replit_token
+            }
+            
+            response = requests.get(url, headers=headers)
+            if response.status_code == 200:
+                data = response.json()
+                items = data.get('items', [])
+                if items:
+                    connection = items[0]
+                    access_token = connection.get('settings', {}).get('access_token')
+                    if not access_token:
+                        oauth_creds = connection.get('settings', {}).get('oauth', {}).get('credentials', {})
+                        access_token = oauth_creds.get('access_token')
+                    return access_token
+            return None
+        except Exception as e:
+            print(f"Error getting access token: {e}")
+            return None
+    
+    def _make_spotify_request(self, endpoint, method='GET', data=None):
+        """Make authenticated request to Spotify API"""
+        try:
+            access_token = self._get_access_token()
+            if not access_token:
+                return {"success": False, "message": "Failed to get Spotify access token. Make sure Spotify is connected."}
+            
+            url = self.base_url + endpoint
+            headers = {
+                'Authorization': f'Bearer {access_token}',
+                'Content-Type': 'application/json'
+            }
+            
+            if method == 'GET':
+                response = requests.get(url, headers=headers)
+            elif method == 'POST':
+                response = requests.post(url, headers=headers, json=data)
+            elif method == 'PUT':
+                response = requests.put(url, headers=headers, json=data)
+            elif method == 'DELETE':
+                response = requests.delete(url, headers=headers)
+            else:
+                return {"success": False, "message": f"Unsupported HTTP method: {method}"}
+            
+            if response.status_code in [200, 201, 204]:
+                if response.status_code == 204:
+                    return {"success": True, "data": {}}
+                try:
+                    return {"success": True, "data": response.json()}
+                except:
+                    return {"success": True, "data": {}}
+            elif response.status_code == 404:
+                return {"success": False, "message": "No active Spotify device found. Please open Spotify on a device."}
+            else:
+                try:
+                    error_data = response.json()
+                    error_msg = error_data.get('error', {}).get('message', 'Unknown error')
+                    return {"success": False, "message": f"Spotify API error: {error_msg}"}
+                except:
+                    return {"success": False, "message": f"Spotify API error: Status {response.status_code}"}
+        except Exception as e:
+            return {"success": False, "message": f"Request failed: {str(e)}"}
+    
+    def play(self, uri=None):
+        """Start/resume playback or play specific track/playlist"""
+        data = {"uris": [uri]} if uri else None
+        result = self._make_spotify_request('me/player/play', 'PUT', data)
+        if result.get('success'):
+            return {"success": True, "message": "▶️ Resumed playback" if not uri else f"▶️ Playing"}
+        return result
+    
+    def pause(self):
+        """Pause playback"""
+        result = self._make_spotify_request('me/player/pause', 'PUT')
+        if result.get('success'):
+            return {"success": True, "message": "⏸️ Paused playback"}
+        return result
+    
+    def next_track(self):
+        """Skip to next track"""
+        result = self._make_spotify_request('me/player/next', 'POST')
+        if result.get('success'):
+            return {"success": True, "message": "⏭️ Next track"}
+        return result
+    
+    def previous_track(self):
+        """Go to previous track"""
+        result = self._make_spotify_request('me/player/previous', 'POST')
+        if result.get('success'):
+            return {"success": True, "message": "⏮️ Previous track"}
         return result
     
     def set_volume(self, volume_percent):
@@ -100,14 +220,12 @@
         """Search and play first matching track"""
         search_result = self.search(query, 'track', 1)
         
-        # Check if search failed at API level
         if not search_result.get('success'):
             return {
                 "success": False,
                 "message": f"Spotify search failed: {search_result.get('message', 'Unknown error')}"
             }
         
-        # Check if results were found
         if search_result.get('results'):
             track = search_result['results'][0]
             play_result = self.play(track['uri'])
@@ -118,7 +236,6 @@
                 }
             return play_result
         
-        # No results found
         return {"success": False, "message": f"Track '{query}' not found on Spotify. Try being more specific or check the spelling."}
     
     def get_playlists(self, limit=20):
