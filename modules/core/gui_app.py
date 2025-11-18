@@ -24,7 +24,6 @@ from modules.web.selenium_web_automator import SeleniumWebAutomator
 from modules.automation.vatsal_desktop_automator import VATSALAutomator
 from modules.automation.self_operating_computer import SelfOperatingComputer
 from modules.automation.self_operating_integrations import SelfOperatingIntegrationHub, SmartTaskRouter
-from modules.automation.automation_orchestrator import AutomationOrchestrator
 from modules.integration.command_executor_integration import EnhancedCommandExecutor, CommandInterceptor
 from modules.voice.voice_commander import create_voice_commander
 from modules.system.system_control import SystemController
