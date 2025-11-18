@@ -461,11 +461,11 @@ class ModernVATSALGUI:
         """Create output console section for tab"""
         # Modern clean section with beautiful shadow
         section_shadow, section = self.create_shadowed_frame(parent)
-        section_shadow.pack(fill="both", expand=True, padx=15, pady=(0, 15))
+        section_shadow.pack(fill="both", expand=True, padx=10, pady=(0, 10))
 
         # Header
         header = tk.Frame(section, bg=self.BG_SECONDARY)
-        header.pack(fill="x", padx=30, pady=(20, 15))
+        header.pack(fill="x", padx=20, pady=(15, 10))
 
         tk.Label(
             header,
@@ -485,7 +485,7 @@ class ModernVATSALGUI:
 
         # Output console with better styling
         console_frame = tk.Frame(section, bg=self.BG_SECONDARY)
-        console_frame.pack(fill="both", expand=True, padx=30, pady=(0, 25))
+        console_frame.pack(fill="both", expand=True, padx=20, pady=(0, 35))
 
         self.output_area = scrolledtext.ScrolledText(
             console_frame,
@@ -1062,7 +1062,7 @@ class ModernVATSALGUI:
 
         # Section header
         header = tk.Frame(section, bg=self.BG_SECONDARY)
-        header.pack(fill="x", padx=25, pady=(25, 20))
+        header.pack(fill="x", padx=20, pady=(20, 15))
 
         # Left side
         header_left = tk.Frame(header, bg=self.BG_SECONDARY)
@@ -1142,7 +1142,7 @@ class ModernVATSALGUI:
 
         # Output console
         console_frame = tk.Frame(section, bg=self.BG_SECONDARY)
-        console_frame.pack(fill="both", expand=True, padx=25, pady=(0, 15))
+        console_frame.pack(fill="both", expand=True, padx=20, pady=(0, 20))
 
         self.output_area = scrolledtext.ScrolledText(
             console_frame,
@@ -1163,7 +1163,7 @@ class ModernVATSALGUI:
 
         # Footer with clear button
         footer = tk.Frame(section, bg=self.BG_SECONDARY)
-        footer.pack(fill="x", padx=25, pady=(0, 25))
+        footer.pack(fill="x", padx=20, pady=(0, 30))
 
         # Clear button (bottom) with enhanced 3D shadow
         clear_b_shadow_outer = tk.Frame(footer, bg="#909090", bd=0)
