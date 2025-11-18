@@ -27,6 +27,7 @@ echo 9.  Developer Tools
 echo 10. Media Control
 echo 11. Automation
 echo 12. Apps ^& Utilities
+echo 13. Legacy Utilities (Time/Reminders)
 echo.
 echo 0. Exit
 echo.
@@ -45,6 +46,7 @@ if "%category%"=="9" goto developer
 if "%category%"=="10" goto media
 if "%category%"=="11" goto automation
 if "%category%"=="12" goto apps
+if "%category%"=="13" goto legacy
 if "%category%"=="0" exit
 
 goto menu
@@ -374,3 +376,10 @@ if "%choice%"=="3" call apps\quick_notes.bat & goto apps
 if "%choice%"=="0" goto menu
 
 goto apps
+
+REM ==========================================
+REM LEGACY UTILITIES CATEGORY
+REM ==========================================
+:legacy
+call legacy_utilities\legacy_menu.bat
+goto menu
