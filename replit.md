@@ -8,7 +8,8 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 -   **Chat Monitoring:** User prefers visual/screen-based chat monitoring where AI controls the real Gmail/WhatsApp interface on screen, rather than background API calls. This allows them to watch the AI work in real-time.
 -   **File Structure:** Well-organized modular architecture with modules/ directory containing core, voice, automation, ai_features, utilities, etc.
 
-## Recent Changes (November 16, 2025)
+## Recent Changes (November 18, 2025)
+-   **Batch Utilities Integration:** Integrated all Windows batch file utilities into the GUI with a new "Batch Tools" button. Created comprehensive `BatchUtilities` class implementing Python equivalents of 20+ batch scripts including volume control, power options, battery info, file organization, network info, disk cleanup, process management, and more. Features categorized access (System Control, File Management, Network, Maintenance) with proper threading for long-running operations and cross-platform support (Windows/macOS/Linux).
 -   **Simplified GUI Interface:** Removed all tabs from `gui_app.py` for a streamlined single-view interface. Removed VATSAL Chat, VATSAL Auto, and Self-Operating tabs, and eliminated the tab selection interface entirely for a cleaner, more focused experience.
 -   **Light Slate Theme UI:** Updated entire GUI theme in `gui_app.py` to use a light cream background (#e8e4dc) with Slate gray accents. Features Slate 500 borders (#64748b), white console (#ffffff), emerald green execute button (#059669), and light Slate shadows, creating a modern, professional interface matching the web GUI design.
 -   **Cloud Environment Compatibility:** Fixed CLI workflow to run successfully in cloud/headless environments (Replit) without X11 display. Added graceful fallback handling for PyAutoGUI-dependent features with clear user feedback.
@@ -45,6 +46,7 @@ The system offers desktop GUIs built with `tkinter` featuring a **light cream ba
 -   **AI-Powered Security Dashboard:** Gemini AI-powered security management with biometric auth, 2FA, encrypted storage, and threat analysis.
 -   **Batch Form Filler System:** Comprehensive form automation for web (Selenium) and desktop (PyAutoGUI) with intelligent field detection.
 -   **Hand Gesture Mouse Controller:** Touchless computer control using webcam and MediaPipe hand tracking for mouse functions.
+-   **Batch Utilities System:** Comprehensive Python implementation of 20+ batch file utilities with GUI integration. Includes system control (volume, power, battery, screenshots), file management (search, organize, backup, duplicates), network tools (info, WiFi, speed test), and maintenance (disk cleanup, process/startup management, browser cleaner). Features cross-platform support with thread-safe UI updates and proper error handling.
 -   **Utility Modules:** Integrations for Spotify, YouTube, Weather & News, Translation, Calculator, Password Vault, Quick Notes, Calendar Manager, Timer & Stopwatch, Quick Reminders, Habit Tracker, Color Tools, QR Code Tools, Screenshot Annotator, Image Resizer, Batch Form Filler, and Hand Gesture Controller.
 -   **AI Performance Optimizations:** Implemented response caching, model fallback, retry optimization, token limit tuning, and generation config adjustments for faster AI responses.
 
