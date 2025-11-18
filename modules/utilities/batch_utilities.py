@@ -94,25 +94,85 @@ class BatchUtilities:
     def volume_control(self, action, value=None):
         """Control system volume"""
         try:
-            if not self.is_windows:
-                return {"success": False, "error": "Volume control currently only supports Windows"}
-
-            if action == "mute":
-                os.system("nircmd.exe mutesysvolume 2")
-                return {"success": True, "message": "Volume muted/unmuted"}
-            elif action == "up":
-                os.system("nircmd.exe changesysvolume 2000")
-                return {"success": True, "message": "Volume increased"}
-            elif action == "down":
-                os.system("nircmd.exe changesysvolume -2000")
-                return {"success": True, "message": "Volume decreased"}
-            elif action == "set" and value is not None:
-                # nircmd uses 0-65535 range
-                level = int((value / 100) * 65535)
-                os.system(f"nircmd.exe setsysvolume {level}")
-                return {"success": True, "message": f"Volume set to {value}%"}
+            # macOS volume control
+            if sys.platform == "darwin":
+                try:
+                    if action == "up":
+                        subprocess.run(["osascript", "-e", "set volume output volume ((output volume of (get volume settings)) + 10)"], check=True)
+                        return {"success": True, "message": "Volume increased"}
+                    elif action == "down":
+                        subprocess.run(["osascript", "-e", "set volume output volume ((output volume of (get volume settings)) - 10)"], check=True)
+                        return {"success": True, "message": "Volume decreased"}
+                    elif action == "mute":
+                        subprocess.run(["osascript", "-e", "set volume output muted (not (output muted of (get volume settings)))"], check=True)
+                        return {"success": True, "message": "Volume muted/unmuted"}
+                    elif action == "set" and value is not None:
+                        subprocess.run(["osascript", "-e", f"set volume output volume {value}"], check=True)
+                        return {"success": True, "message": f"Volume set to {value}%"}
+                    return {"success": False, "error": "Invalid volume action"}
+                except subprocess.CalledProcessError as e:
+                    return {"success": False, "error": f"Volume control failed: {str(e)}"}
+            
+            # Linux volume control
+            elif sys.platform.startswith("linux"):
+                try:
+                    if action == "up":
+                        subprocess.run(["amixer", "set", "Master", "5%+"], check=True)
+                        return {"success": True, "message": "Volume increased"}
+                    elif action == "down":
+                        subprocess.run(["amixer", "set", "Master", "5%-"], check=True)
+                        return {"success": True, "message": "Volume decreased"}
+                    elif action == "mute":
+                        subprocess.run(["amixer", "set", "Master", "toggle"], check=True)
+                        return {"success": True, "message": "Volume muted/unmuted"}
+                    elif action == "set" and value is not None:
+                        subprocess.run(["amixer", "set", "Master", f"{value}%"], check=True)
+                        return {"success": True, "message": f"Volume set to {value}%"}
+                    return {"success": False, "error": "Invalid volume action"}
+                except subprocess.CalledProcessError as e:
+                    return {"success": False, "error": f"Volume control failed: {str(e)}"}
+                except FileNotFoundError:
+                    return {"success": False, "error": "amixer not found. Please install alsa-utils"}
+            
+            # Windows volume control
+            elif self.is_windows:
+                try:
+                    # Try using pycaw library for proper Windows volume control
+                    from ctypes import cast, POINTER
+                    from comtypes import CLSCTX_ALL
+                    from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+                    
+                    devices = AudioUtilities.GetSpeakers()
+                    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+                    volume = cast(interface, POINTER(IAudioEndpointVolume))
+                    
+                    if action == "mute":
+                        current_mute = volume.GetMute()
+                        volume.SetMute(not current_mute, None)
+                        return {"success": True, "message": "Volume muted" if not current_mute else "Volume unmuted"}
+                    elif action == "up":
+                        current_vol = volume.GetMasterVolumeLevelScalar()
+                        new_vol = min(1.0, current_vol + 0.1)
+                        volume.SetMasterVolumeLevelScalar(new_vol, None)
+                        return {"success": True, "message": f"Volume increased to {int(new_vol*100)}%"}
+                    elif action == "down":
+                        current_vol = volume.GetMasterVolumeLevelScalar()
+                        new_vol = max(0.0, current_vol - 0.1)
+                        volume.SetMasterVolumeLevelScalar(new_vol, None)
+                        return {"success": True, "message": f"Volume decreased to {int(new_vol*100)}%"}
+                    elif action == "set" and value is not None:
+                        volume.SetMasterVolumeLevelScalar(value / 100, None)
+                        return {"success": True, "message": f"Volume set to {value}%"}
+                    else:
+                        return {"success": False, "error": "Invalid volume action"}
+                        
+                except ImportError:
+                    return {"success": False, "error": "Volume control requires pycaw library. Install with: pip install pycaw comtypes"}
+                except Exception as e:
+                    return {"success": False, "error": f"Volume control failed: {str(e)}"}
             else:
-                return {"success": False, "error": "Invalid volume action"}
+                return {"success": False, "error": "Volume control not supported on this platform"}
+                
         except Exception as e:
             return {"success": False, "error": str(e)}
 
@@ -121,43 +181,73 @@ class BatchUtilities:
         try:
             if not self.is_windows:
                 # Unix-like systems
-                if option == "shutdown":
-                    subprocess.run(["shutdown", "-h", "now"], check=True)
-                elif option == "restart":
-                    subprocess.run(["shutdown", "-r", "now"], check=True)
-                elif option == "sleep":
-                    if sys.platform == "darwin":  # macOS
-                        subprocess.run(["pmset", "sleepnow"], check=True)
-                    else:  # Linux
-                        subprocess.run(["systemctl", "suspend"], check=True)
-                elif option == "lock":
-                    if sys.platform == "darwin":
-                        subprocess.run(["/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession", "-suspend"], check=True)
+                try:
+                    if option == "shutdown":
+                        result = subprocess.run(["shutdown", "-h", "now"], capture_output=True)
+                        if result.returncode != 0:
+                            return {"success": False, "error": f"Shutdown failed: {result.stderr.decode()}"}
+                    elif option == "restart":
+                        result = subprocess.run(["shutdown", "-r", "now"], capture_output=True)
+                        if result.returncode != 0:
+                            return {"success": False, "error": f"Restart failed: {result.stderr.decode()}"}
+                    elif option == "sleep":
+                        if sys.platform == "darwin":  # macOS
+                            result = subprocess.run(["pmset", "sleepnow"], capture_output=True)
+                        else:  # Linux
+                            result = subprocess.run(["systemctl", "suspend"], capture_output=True)
+                        if result.returncode != 0:
+                            return {"success": False, "error": f"Sleep failed: {result.stderr.decode()}"}
+                    elif option == "lock":
+                        if sys.platform == "darwin":
+                            result = subprocess.run(["/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession", "-suspend"], capture_output=True)
+                        else:
+                            result = subprocess.run(["loginctl", "lock-session"], capture_output=True)
+                        if result.returncode != 0:
+                            return {"success": False, "error": f"Lock failed: {result.stderr.decode()}"}
                     else:
-                        subprocess.run(["loginctl", "lock-session"], check=True)
-                return {"success": True, "message": f"Power option '{option}' executed"}
+                        return {"success": False, "error": "Invalid power option for this platform"}
+                    return {"success": True, "message": f"Power option '{option}' executed successfully"}
+                except FileNotFoundError:
+                    return {"success": False, "error": "Power control command not found on this system"}
+                except subprocess.CalledProcessError as e:
+                    return {"success": False, "error": f"Power command failed: {str(e)}"}
             else:
                 # Windows
-                if option == "shutdown":
-                    os.system("shutdown /s /t 5")
-                    return {"success": True, "message": "Shutting down in 5 seconds..."}
-                elif option == "restart":
-                    os.system("shutdown /r /t 5")
-                    return {"success": True, "message": "Restarting in 5 seconds..."}
-                elif option == "sleep":
-                    os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
-                    return {"success": True, "message": "Entering sleep mode..."}
-                elif option == "hibernate":
-                    os.system("shutdown /h")
-                    return {"success": True, "message": "Hibernating..."}
-                elif option == "lock":
-                    os.system("rundll32.exe user32.dll,LockWorkStation")
-                    return {"success": True, "message": "Locking computer..."}
-                elif option == "logoff":
-                    os.system("shutdown /l")
-                    return {"success": True, "message": "Logging off..."}
-                else:
-                    return {"success": False, "error": "Invalid power option"}
+                try:
+                    if option == "shutdown":
+                        result = subprocess.run(["shutdown", "/s", "/t", "5"], capture_output=True)
+                        if result.returncode != 0:
+                            return {"success": False, "error": "Shutdown command failed"}
+                        return {"success": True, "message": "Shutting down in 5 seconds..."}
+                    elif option == "restart":
+                        result = subprocess.run(["shutdown", "/r", "/t", "5"], capture_output=True)
+                        if result.returncode != 0:
+                            return {"success": False, "error": "Restart command failed"}
+                        return {"success": True, "message": "Restarting in 5 seconds..."}
+                    elif option == "sleep":
+                        result = subprocess.run(["rundll32.exe", "powrprof.dll,SetSuspendState", "0,1,0"], capture_output=True)
+                        if result.returncode != 0:
+                            return {"success": False, "error": "Sleep command failed"}
+                        return {"success": True, "message": "Entering sleep mode..."}
+                    elif option == "hibernate":
+                        result = subprocess.run(["shutdown", "/h"], capture_output=True)
+                        if result.returncode != 0:
+                            return {"success": False, "error": "Hibernate command failed"}
+                        return {"success": True, "message": "Hibernating..."}
+                    elif option == "lock":
+                        result = subprocess.run(["rundll32.exe", "user32.dll,LockWorkStation"], capture_output=True)
+                        if result.returncode != 0:
+                            return {"success": False, "error": "Lock command failed"}
+                        return {"success": True, "message": "Locking computer..."}
+                    elif option == "logoff":
+                        result = subprocess.run(["shutdown", "/l"], capture_output=True)
+                        if result.returncode != 0:
+                            return {"success": False, "error": "Logoff command failed"}
+                        return {"success": True, "message": "Logging off..."}
+                    else:
+                        return {"success": False, "error": "Invalid power option"}
+                except Exception as e:
+                    return {"success": False, "error": f"Power command failed: {str(e)}"}
         except Exception as e:
             return {"success": False, "error": str(e)}
 

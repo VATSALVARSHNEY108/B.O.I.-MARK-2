@@ -2486,16 +2486,33 @@ personality and advanced automation capabilities.
             buttons_frame.columnconfigure(i, weight=1)
 
     def _batch_action(self, output_widget, action_func):
-        """Execute a batch action and display results"""
-        try:
+        """Execute a batch action and display results (with threading for long operations)"""
+        def update_processing():
             output_widget.config(state="normal")
             output_widget.delete(1.0, tk.END)
             output_widget.insert(1.0, "⏳ Processing...\n\n")
             output_widget.config(state="disabled")
-            output_widget.update()
 
-            result = action_func()
+        def execute_and_display():
+            try:
+                result = action_func()
+                
+                # Update UI from main thread
+                self.root.after(0, lambda: self._display_batch_result(output_widget, result))
+            except Exception as e:
+                error_result = {"success": False, "error": str(e)}
+                self.root.after(0, lambda: self._display_batch_result(output_widget, error_result))
 
+        # Update processing message
+        update_processing()
+        
+        # Execute in background thread to prevent UI freezing
+        thread = threading.Thread(target=execute_and_display, daemon=True)
+        thread.start()
+
+    def _display_batch_result(self, output_widget, result):
+        """Display batch action result in output widget (call from main thread)"""
+        try:
             output_widget.config(state="normal")
             output_widget.delete(1.0, tk.END)
 
@@ -2520,6 +2537,14 @@ personality and advanced automation capabilities.
                         output_widget.insert(tk.END, "\nFiles processed:\n")
                         for file in result["files"][:20]:
                             output_widget.insert(tk.END, f"  • {file}\n")
+                    if "duplicates" in result:
+                        output_widget.insert(tk.END, f"\nDuplicates found: {len(result['duplicates'])}\n")
+                        for dup in result["duplicates"][:10]:
+                            output_widget.insert(tk.END, f"  • {dup['duplicate']}\n    (original: {dup['original']})\n")
+                    if "results" in result and "count" in result:
+                        output_widget.insert(tk.END, f"\nSearch Results ({result['count']}):\n")
+                        for item in result["results"][:20]:
+                            output_widget.insert(tk.END, f"  • {item['name']} ({item['type']})\n    Path: {item['path']}\n")
             else:
                 output_widget.insert(1.0, f"❌ ERROR: {result.get('error', 'Unknown error')}\n")
 
@@ -2535,6 +2560,7 @@ personality and advanced automation capabilities.
         delay = messagebox.askquestion("Screenshot", "Add 5 second delay?")
         delay_time = 5 if delay == "yes" else 0
         
+        # Update UI from main thread
         output_widget.config(state="normal")
         output_widget.delete(1.0, tk.END)
         if delay_time > 0:
@@ -2542,10 +2568,15 @@ personality and advanced automation capabilities.
         else:
             output_widget.insert(1.0, "⏳ Taking screenshot...\n")
         output_widget.config(state="disabled")
-        output_widget.update()
-
-        result = self.batch_utilities.take_screenshot(delay=delay_time)
-        self._batch_action(output_widget, lambda: result)
+        
+        # Use threading to avoid blocking UI during delay
+        def take_screenshot_threaded():
+            result = self.batch_utilities.take_screenshot(delay=delay_time)
+            # Update UI from main thread via after()
+            self.root.after(0, lambda: self._display_batch_result(output_widget, result))
+        
+        thread = threading.Thread(target=take_screenshot_threaded, daemon=True)
+        thread.start()
 
     def _batch_power_menu(self, output_widget):
         """Show power options menu"""
