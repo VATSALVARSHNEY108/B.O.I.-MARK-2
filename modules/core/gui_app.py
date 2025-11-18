@@ -49,6 +49,7 @@ from modules.utilities.weather_news_service import WeatherNewsService
 from modules.communication.translation_service import TranslationService
 from modules.productivity.smart_break_suggester import SmartBreakSuggester
 from modules.security.security_dashboard import SecurityDashboard
+from modules.utilities.batch_utilities import get_batch_utilities
 
 load_dotenv()
 
@@ -331,6 +332,14 @@ class ModernVATSALGUI:
             except Exception as e:
                 self.automation_orchestrator = None
                 print(f"⚠️ Automation Orchestrator unavailable: {e}")
+
+            # Batch Utilities - Python implementations of batch file functionalities
+            try:
+                self.batch_utilities = get_batch_utilities()
+                print("✅ Batch Utilities initialized")
+            except Exception as e:
+                self.batch_utilities = None
+                print(f"⚠️ Batch Utilities unavailable: {e}")
 
         except Exception as e:
             print(f"❌ Error initializing modules: {e}")
@@ -1247,7 +1256,8 @@ class ModernVATSALGUI:
             ("👥 Contacts", self.show_contacts),
             ("ℹ️ About", self.show_about),
             ("💡 Suggestion", self.show_suggestion),
-            ("🛡️ Security", self.show_security_dashboard)
+            ("🛡️ Security", self.show_security_dashboard),
+            ("🔧 Batch Tools", self.show_batch_utilities)
         ]
 
         for text, command in bottom_buttons:
@@ -2303,6 +2313,359 @@ personality and advanced automation capabilities.
                               pady=10)
         close_btn.pack(pady=20)
         self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
+
+    def show_batch_utilities(self):
+        """Show comprehensive batch utilities menu"""
+        if not self.batch_utilities:
+            messagebox.showerror("Error", "Batch Utilities not initialized")
+            return
+
+        batch_window = tk.Toplevel(self.root)
+        batch_window.title("🔧 Batch Utilities")
+        batch_window.geometry("1000x700")
+        batch_window.configure(bg=self.BG_PRIMARY)
+
+        header_frame = tk.Frame(batch_window, bg=self.BG_SECONDARY)
+        header_frame.pack(fill="x", pady=(0, 10))
+
+        header = tk.Label(header_frame,
+                          text="🔧 Batch Utilities - System Control & Automation",
+                          bg=self.BG_SECONDARY,
+                          fg=self.TEXT_PRIMARY,
+                          font=("Segoe UI", 18, "bold"),
+                          pady=15)
+        header.pack()
+
+        subtitle = tk.Label(header_frame,
+                            text="Python implementations of all batch file functionalities",
+                            bg=self.BG_SECONDARY,
+                            fg=self.TEXT_SECONDARY,
+                            font=("Segoe UI", 10, "italic"))
+        subtitle.pack()
+
+        # Create notebook for categorized utilities
+        notebook = ttk.Notebook(batch_window)
+        notebook.pack(fill="both", expand=True, padx=20, pady=10)
+
+        # System Control Tab
+        sys_frame = tk.Frame(notebook, bg=self.BG_PRIMARY)
+        notebook.add(sys_frame, text="⚙️ System Control")
+        self._create_system_control_tab(sys_frame)
+
+        # File Management Tab
+        file_frame = tk.Frame(notebook, bg=self.BG_PRIMARY)
+        notebook.add(file_frame, text="📁 File Management")
+        self._create_file_management_tab(file_frame)
+
+        # Network Tab
+        net_frame = tk.Frame(notebook, bg=self.BG_PRIMARY)
+        notebook.add(net_frame, text="🌐 Network")
+        self._create_network_tab(net_frame)
+
+        # Maintenance Tab
+        maint_frame = tk.Frame(notebook, bg=self.BG_PRIMARY)
+        notebook.add(maint_frame, text="🔧 Maintenance")
+        self._create_maintenance_tab(maint_frame)
+
+        close_btn = tk.Button(batch_window,
+                              text="Close",
+                              bg=self.BUTTON_BG,
+                              fg=self.TEXT_PRIMARY,
+                              font=("Segoe UI", 11, "bold"),
+                              relief="raised",
+                              cursor="hand2",
+                              command=batch_window.destroy,
+                              padx=30,
+                              pady=10)
+        close_btn.pack(pady=20)
+        self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
+
+    def _create_system_control_tab(self, parent):
+        """Create system control utilities tab"""
+        scroll = scrolledtext.ScrolledText(parent, bg=self.CONSOLE_BG, fg=self.TEXT_PRIMARY,
+                                           font=("Segoe UI", 10), wrap="word", padx=20, pady=20)
+        scroll.pack(fill="both", expand=True, padx=10, pady=10)
+
+        buttons_frame = tk.Frame(parent, bg=self.BG_PRIMARY)
+        buttons_frame.pack(fill="x", padx=10, pady=10)
+
+        system_tools = [
+            ("💻 System Info", lambda: self._batch_action(scroll, self.batch_utilities.get_system_info)),
+            ("🔋 Battery Info", lambda: self._batch_action(scroll, self.batch_utilities.get_battery_info)),
+            ("📸 Screenshot", lambda: self._batch_screenshot(scroll)),
+            ("📋 Processes", lambda: self._batch_action(scroll, self.batch_utilities.get_process_list)),
+            ("⚡ Power Options", lambda: self._batch_power_menu(scroll)),
+            ("🔊 Volume Control", lambda: self._batch_volume_menu(scroll))
+        ]
+
+        for i, (text, command) in enumerate(system_tools):
+            btn = tk.Button(buttons_frame, text=text, command=command, bg=self.BUTTON_BG,
+                            fg=self.TEXT_PRIMARY, font=("Segoe UI", 10, "bold"),
+                            relief="raised", cursor="hand2", padx=15, pady=8)
+            btn.grid(row=i//3, column=i%3, padx=5, pady=5, sticky="ew")
+            self._add_hover_effect(btn, self.BUTTON_BG, self.BUTTON_HOVER)
+
+        for i in range(3):
+            buttons_frame.columnconfigure(i, weight=1)
+
+    def _create_file_management_tab(self, parent):
+        """Create file management utilities tab"""
+        scroll = scrolledtext.ScrolledText(parent, bg=self.CONSOLE_BG, fg=self.TEXT_PRIMARY,
+                                           font=("Segoe UI", 10), wrap="word", padx=20, pady=20)
+        scroll.pack(fill="both", expand=True, padx=10, pady=10)
+
+        buttons_frame = tk.Frame(parent, bg=self.BG_PRIMARY)
+        buttons_frame.pack(fill="x", padx=10, pady=10)
+
+        file_tools = [
+            ("📂 Organize Downloads", lambda: self._batch_action(scroll, self.batch_utilities.organize_downloads)),
+            ("🔍 Search Files", lambda: self._batch_search_files(scroll)),
+            ("🔄 Find Duplicates", lambda: self._batch_find_duplicates(scroll)),
+            ("💾 Create Backup", lambda: self._batch_create_backup(scroll))
+        ]
+
+        for i, (text, command) in enumerate(file_tools):
+            btn = tk.Button(buttons_frame, text=text, command=command, bg=self.BUTTON_BG,
+                            fg=self.TEXT_PRIMARY, font=("Segoe UI", 10, "bold"),
+                            relief="raised", cursor="hand2", padx=15, pady=8)
+            btn.grid(row=i//3, column=i%3, padx=5, pady=5, sticky="ew")
+            self._add_hover_effect(btn, self.BUTTON_BG, self.BUTTON_HOVER)
+
+        for i in range(3):
+            buttons_frame.columnconfigure(i, weight=1)
+
+    def _create_network_tab(self, parent):
+        """Create network utilities tab"""
+        scroll = scrolledtext.ScrolledText(parent, bg=self.CONSOLE_BG, fg=self.TEXT_PRIMARY,
+                                           font=("Segoe UI", 10), wrap="word", padx=20, pady=20)
+        scroll.pack(fill="both", expand=True, padx=10, pady=10)
+
+        buttons_frame = tk.Frame(parent, bg=self.BG_PRIMARY)
+        buttons_frame.pack(fill="x", padx=10, pady=10)
+
+        net_tools = [
+            ("🌐 Network Info", lambda: self._batch_action(scroll, self.batch_utilities.get_network_info)),
+            ("🔗 Active Connections", lambda: self._batch_action(scroll, self.batch_utilities.get_active_connections)),
+            ("⚡ Speed Test", lambda: self._batch_action(scroll, self.batch_utilities.test_network_speed))
+        ]
+
+        for i, (text, command) in enumerate(net_tools):
+            btn = tk.Button(buttons_frame, text=text, command=command, bg=self.BUTTON_BG,
+                            fg=self.TEXT_PRIMARY, font=("Segoe UI", 10, "bold"),
+                            relief="raised", cursor="hand2", padx=15, pady=8)
+            btn.grid(row=i//3, column=i%3, padx=5, pady=5, sticky="ew")
+            self._add_hover_effect(btn, self.BUTTON_BG, self.BUTTON_HOVER)
+
+        for i in range(3):
+            buttons_frame.columnconfigure(i, weight=1)
+
+    def _create_maintenance_tab(self, parent):
+        """Create maintenance utilities tab"""
+        scroll = scrolledtext.ScrolledText(parent, bg=self.CONSOLE_BG, fg=self.TEXT_PRIMARY,
+                                           font=("Segoe UI", 10), wrap="word", padx=20, pady=20)
+        scroll.pack(fill="both", expand=True, padx=10, pady=10)
+
+        buttons_frame = tk.Frame(parent, bg=self.BG_PRIMARY)
+        buttons_frame.pack(fill="x", padx=10, pady=10)
+
+        maint_tools = [
+            ("🗑️ Disk Cleanup", lambda: self._batch_disk_cleanup(scroll)),
+            ("🚀 Startup Programs", lambda: self._batch_action(scroll, self.batch_utilities.get_startup_programs)),
+            ("🌐 Browser Cleanup", lambda: self._batch_browser_cleanup(scroll)),
+            ("❌ Kill Process", lambda: self._batch_kill_process(scroll))
+        ]
+
+        for i, (text, command) in enumerate(maint_tools):
+            btn = tk.Button(buttons_frame, text=text, command=command, bg=self.BUTTON_BG,
+                            fg=self.TEXT_PRIMARY, font=("Segoe UI", 10, "bold"),
+                            relief="raised", cursor="hand2", padx=15, pady=8)
+            btn.grid(row=i//3, column=i%3, padx=5, pady=5, sticky="ew")
+            self._add_hover_effect(btn, self.BUTTON_BG, self.BUTTON_HOVER)
+
+        for i in range(3):
+            buttons_frame.columnconfigure(i, weight=1)
+
+    def _batch_action(self, output_widget, action_func):
+        """Execute a batch action and display results"""
+        try:
+            output_widget.config(state="normal")
+            output_widget.delete(1.0, tk.END)
+            output_widget.insert(1.0, "⏳ Processing...\n\n")
+            output_widget.config(state="disabled")
+            output_widget.update()
+
+            result = action_func()
+
+            output_widget.config(state="normal")
+            output_widget.delete(1.0, tk.END)
+
+            if result.get("success"):
+                output_widget.insert(1.0, "✅ SUCCESS\n\n", "success")
+                if "info" in result:
+                    for key, value in result["info"].items():
+                        output_widget.insert(tk.END, f"{key}: {value}\n")
+                elif "processes" in result:
+                    output_widget.insert(tk.END, f"Top {len(result['processes'])} Processes:\n\n")
+                    for proc in result["processes"]:
+                        output_widget.insert(tk.END, f"PID: {proc['PID']} | {proc['Name']} | CPU: {proc['CPU']} | Mem: {proc['Memory']}\n")
+                elif "connections" in result:
+                    output_widget.insert(tk.END, f"Active Connections ({len(result['connections'])}):\n\n")
+                    for conn in result["connections"]:
+                        output_widget.insert(tk.END, f"{conn['Local']} → {conn['Remote']} | Status: {conn['Status']}\n")
+                elif "result" in result:
+                    output_widget.insert(tk.END, result["result"])
+                elif "message" in result:
+                    output_widget.insert(tk.END, result["message"] + "\n")
+                    if "files" in result:
+                        output_widget.insert(tk.END, "\nFiles processed:\n")
+                        for file in result["files"][:20]:
+                            output_widget.insert(tk.END, f"  • {file}\n")
+            else:
+                output_widget.insert(1.0, f"❌ ERROR: {result.get('error', 'Unknown error')}\n")
+
+            output_widget.config(state="disabled")
+        except Exception as e:
+            output_widget.config(state="normal")
+            output_widget.delete(1.0, tk.END)
+            output_widget.insert(1.0, f"❌ ERROR: {str(e)}\n")
+            output_widget.config(state="disabled")
+
+    def _batch_screenshot(self, output_widget):
+        """Take a screenshot with optional delay"""
+        delay = messagebox.askquestion("Screenshot", "Add 5 second delay?")
+        delay_time = 5 if delay == "yes" else 0
+        
+        output_widget.config(state="normal")
+        output_widget.delete(1.0, tk.END)
+        if delay_time > 0:
+            output_widget.insert(1.0, f"⏳ Taking screenshot in {delay_time} seconds...\n")
+        else:
+            output_widget.insert(1.0, "⏳ Taking screenshot...\n")
+        output_widget.config(state="disabled")
+        output_widget.update()
+
+        result = self.batch_utilities.take_screenshot(delay=delay_time)
+        self._batch_action(output_widget, lambda: result)
+
+    def _batch_power_menu(self, output_widget):
+        """Show power options menu"""
+        power_window = tk.Toplevel(self.root)
+        power_window.title("⚡ Power Options")
+        power_window.geometry("400x400")
+        power_window.configure(bg=self.BG_PRIMARY)
+
+        tk.Label(power_window, text="⚡ Power Options", bg=self.BG_PRIMARY,
+                 fg=self.TEXT_PRIMARY, font=("Segoe UI", 14, "bold"), pady=20).pack()
+
+        options = [
+            ("🔌 Shutdown", "shutdown"),
+            ("🔄 Restart", "restart"),
+            ("💤 Sleep", "sleep"),
+            ("🔒 Lock", "lock"),
+            ("📴 Hibernate", "hibernate"),
+            ("🚪 Logoff", "logoff")
+        ]
+
+        for text, option in options:
+            btn = tk.Button(power_window, text=text,
+                            command=lambda o=option: self._execute_power_option(o, output_widget, power_window),
+                            bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY,
+                            font=("Segoe UI", 11, "bold"), relief="raised",
+                            cursor="hand2", padx=20, pady=10, width=20)
+            btn.pack(pady=5)
+            self._add_hover_effect(btn, self.BUTTON_BG, self.BUTTON_HOVER)
+
+    def _execute_power_option(self, option, output_widget, window):
+        """Execute power option with confirmation"""
+        if messagebox.askyesno("Confirm", f"Are you sure you want to {option}?"):
+            window.destroy()
+            result = self.batch_utilities.power_options(option)
+            self._batch_action(output_widget, lambda: result)
+
+    def _batch_volume_menu(self, output_widget):
+        """Show volume control menu"""
+        vol_window = tk.Toplevel(self.root)
+        vol_window.title("🔊 Volume Control")
+        vol_window.geometry("400x300")
+        vol_window.configure(bg=self.BG_PRIMARY)
+
+        tk.Label(vol_window, text="🔊 Volume Control", bg=self.BG_PRIMARY,
+                 fg=self.TEXT_PRIMARY, font=("Segoe UI", 14, "bold"), pady=20).pack()
+
+        options = [
+            ("🔊 Volume Up", "up"),
+            ("🔉 Volume Down", "down"),
+            ("🔇 Mute/Unmute", "mute"),
+            ("📊 Set to 50%", "set_50")
+        ]
+
+        for text, action in options:
+            if action == "set_50":
+                btn = tk.Button(vol_window, text=text,
+                                command=lambda: self._execute_volume(output_widget, "set", 50, vol_window),
+                                bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY,
+                                font=("Segoe UI", 11, "bold"), relief="raised",
+                                cursor="hand2", padx=20, pady=10, width=20)
+            else:
+                btn = tk.Button(vol_window, text=text,
+                                command=lambda a=action: self._execute_volume(output_widget, a, None, vol_window),
+                                bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY,
+                                font=("Segoe UI", 11, "bold"), relief="raised",
+                                cursor="hand2", padx=20, pady=10, width=20)
+            btn.pack(pady=5)
+            self._add_hover_effect(btn, self.BUTTON_BG, self.BUTTON_HOVER)
+
+    def _execute_volume(self, output_widget, action, value, window):
+        """Execute volume control"""
+        window.destroy()
+        result = self.batch_utilities.volume_control(action, value)
+        self._batch_action(output_widget, lambda: result)
+
+    def _batch_search_files(self, output_widget):
+        """Search for files"""
+        pattern = tk.simpledialog.askstring("Search Files", "Enter search pattern:")
+        if pattern:
+            result = self.batch_utilities.search_files(pattern)
+            self._batch_action(output_widget, lambda: result)
+
+    def _batch_find_duplicates(self, output_widget):
+        """Find duplicate files"""
+        if messagebox.askyesno("Find Duplicates", "Search in Downloads folder?"):
+            result = self.batch_utilities.find_duplicates()
+        else:
+            directory = filedialog.askdirectory(title="Select Directory")
+            if directory:
+                result = self.batch_utilities.find_duplicates(directory)
+            else:
+                return
+        self._batch_action(output_widget, lambda: result)
+
+    def _batch_create_backup(self, output_widget):
+        """Create a backup"""
+        source = filedialog.askdirectory(title="Select Source Directory")
+        if source:
+            result = self.batch_utilities.create_backup(source)
+            self._batch_action(output_widget, lambda: result)
+
+    def _batch_disk_cleanup(self, output_widget):
+        """Perform disk cleanup with confirmation"""
+        if messagebox.askyesno("Disk Cleanup", "This will clean temporary files. Continue?"):
+            result = self.batch_utilities.disk_cleanup()
+            self._batch_action(output_widget, lambda: result)
+
+    def _batch_browser_cleanup(self, output_widget):
+        """Perform browser cleanup with confirmation"""
+        if messagebox.askyesno("Browser Cleanup", "This will clean browser cache. Continue?"):
+            result = self.batch_utilities.browser_cleanup()
+            self._batch_action(output_widget, lambda: result)
+
+    def _batch_kill_process(self, output_widget):
+        """Kill a process"""
+        pid_or_name = tk.simpledialog.askstring("Kill Process", "Enter PID or process name:")
+        if pid_or_name:
+            if messagebox.askyesno("Confirm", f"Kill process '{pid_or_name}'?"):
+                result = self.batch_utilities.kill_process(pid_or_name)
+                self._batch_action(output_widget, lambda: result)
 
     def handle_voice_command(self, command):
         """Handle voice command callback"""
