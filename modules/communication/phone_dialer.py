@@ -1,9 +1,12 @@
 """
 Phone Call Dialer for VATSAL
-Make voice calls using Twilio integration
+Make voice calls using Twilio integration or Phone Link
 """
 
 import os
+import platform
+import webbrowser
+import subprocess
 from typing import Optional, Dict
 from datetime import datetime
 
@@ -15,6 +18,7 @@ class PhoneDialer:
         self.twilio_available = False
         self.demo_mode = True
         self.call_history = []
+        self.is_windows = platform.system() == "Windows"
         
         self._check_twilio()
     
@@ -270,6 +274,109 @@ class PhoneDialer:
             return {
                 "success": False,
                 "message": f"Contact lookup not implemented yet. Please provide a phone number with country code (e.g., +1234567890)"
+            }
+    
+    def dial_with_phone_link(self, phone_number: str) -> Dict:
+        """
+        Dial a call using Windows Phone Link (Your Phone app)
+        This opens Phone Link and initiates a call without needing Twilio
+        
+        Args:
+            phone_number: Phone number to dial (any format)
+        
+        Returns:
+            Dict with success status and details
+        """
+        if not phone_number:
+            return {
+                "success": False,
+                "message": "No phone number provided"
+            }
+        
+        # Clean the phone number (remove spaces, dashes, etc.)
+        cleaned_number = phone_number.replace("-", "").replace("(", "").replace(")", "").replace(" ", "").replace("+", "")
+        
+        try:
+            # Log the call attempt
+            call_record = {
+                "phone": phone_number,
+                "method": "phone_link",
+                "timestamp": datetime.now().isoformat(),
+                "status": "initiated"
+            }
+            self.call_history.append(call_record)
+            
+            if self.is_windows:
+                # Use tel: URI protocol which Phone Link handles
+                # This will automatically open Phone Link and dial the number
+                tel_uri = f"tel:{cleaned_number}"
+                
+                # Try multiple methods to ensure it works
+                try:
+                    # Method 1: Use webbrowser to open tel: URI
+                    webbrowser.open(tel_uri)
+                    print(f"📞 Opening Phone Link to dial: {phone_number}")
+                except:
+                    # Method 2: Use subprocess with start command
+                    subprocess.Popen(['start', tel_uri], shell=True)
+                
+                return {
+                    "success": True,
+                    "message": f"📱 Opening Phone Link to dial {phone_number}",
+                    "phone": phone_number,
+                    "method": "phone_link"
+                }
+            else:
+                # On non-Windows systems, try generic tel: URI
+                tel_uri = f"tel:{cleaned_number}"
+                webbrowser.open(tel_uri)
+                
+                return {
+                    "success": True,
+                    "message": f"📱 Opening default phone app to dial {phone_number}",
+                    "phone": phone_number,
+                    "method": "tel_uri"
+                }
+                
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"❌ Error dialing with Phone Link: {str(e)}",
+                "phone": phone_number
+            }
+    
+    def open_phone_link(self) -> Dict:
+        """
+        Open Windows Phone Link app
+        
+        Returns:
+            Dict with success status
+        """
+        try:
+            if self.is_windows:
+                # Open Phone Link using ms-yourphone: protocol
+                try:
+                    webbrowser.open("ms-yourphone:")
+                    return {
+                        "success": True,
+                        "message": "📱 Opening Phone Link app..."
+                    }
+                except:
+                    # Alternative: Use shell command
+                    subprocess.Popen(['start', 'ms-yourphone:'], shell=True)
+                    return {
+                        "success": True,
+                        "message": "📱 Opening Phone Link app..."
+                    }
+            else:
+                return {
+                    "success": False,
+                    "message": "Phone Link is only available on Windows"
+                }
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"Error opening Phone Link: {str(e)}"
             }
 
 

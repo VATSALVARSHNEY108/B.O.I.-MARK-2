@@ -801,6 +801,24 @@ class CommandExecutor:
                 result = self.spotify.open_spotify()
                 return {"success": True, "message": result}
             
+            # ==================== PHONE LINK CALLS ====================
+            elif action == "dial_phone_link" or action == "phone_link_dial":
+                phone_number = parameters.get("phone", "") or parameters.get("number", "")
+                if not phone_number:
+                    return {
+                        "success": False,
+                        "message": "No phone number provided. Please specify a phone number to dial."
+                    }
+                
+                print(f"  📱 Dialing {phone_number} with Phone Link...")
+                result = self.phone_dialer.dial_with_phone_link(phone_number)
+                return result
+            
+            elif action == "open_phone_link":
+                print(f"  📱 Opening Phone Link app...")
+                result = self.phone_dialer.open_phone_link()
+                return result
+            
             # ==================== SYSTEM MONITORING ====================
             elif action == "system_report":
                 print(f"  📊 Generating system report...")
