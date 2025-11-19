@@ -3,8 +3,13 @@ Quick WhatsApp Desktop Test
 Opens a specific contact in WhatsApp
 """
 
-from whatsapp_automation import create_whatsapp_automation
 import sys
+import os
+
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
+
+from modules.communication.whatsapp_automation import create_whatsapp_automation
 
 def main():
     print("=" * 60)

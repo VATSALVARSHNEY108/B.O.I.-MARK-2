@@ -1,0 +1,72 @@
+WhatsApp Message Templates
+===========================
+
+These templates can be used with the batch messaging system.
+Use {placeholders} that match column names in your CSV file.
+
+BUSINESS TEMPLATES:
+-------------------
+
+1. Order Confirmation:
+Hi {name}, your order #{order_id} has been confirmed! Expected delivery: {delivery_date}. Thank you for shopping with us!
+
+2. Appointment Reminder:
+Hello {name}, this is a reminder for your appointment on {date} at {time}. Location: {location}. See you soon!
+
+3. Payment Reminder:
+Dear {name}, your payment of {amount} for {service} is due on {due_date}. Please pay at your earliest convenience.
+
+4. Product Launch:
+Hi {name}! We're excited to announce our new {product}! Special launch price: {price}. Order now at {link}
+
+5. Event Invitation:
+Hello {name}! You're invited to {event_name} on {date} at {venue}. RSVP by {rsvp_date}. Hope to see you there!
+
+6. Shipping Update:
+Hi {name}, great news! Your order #{order_id} has been shipped and will arrive by {delivery_date}. Track: {tracking_link}
+
+7. Survey Request:
+Hello {name}, we value your feedback! Please take 2 minutes to complete our survey: {survey_link}. Thank you!
+
+8. Discount Offer:
+Hi {name}! Exclusive offer just for you: {discount}% off on {product}. Use code: {promo_code}. Valid until {expiry_date}
+
+PERSONAL TEMPLATES:
+-------------------
+
+1. Birthday Wishes:
+Happy Birthday {name}! 🎉 Wishing you an amazing year ahead filled with joy and success!
+
+2. Thank You Message:
+Hi {name}, thank you so much for {reason}! I really appreciate your {quality}.
+
+3. Meeting Follow-up:
+Hi {name}, great meeting with you today! As discussed, I'll send you {item} by {date}. Let's stay in touch!
+
+4. General Greeting:
+Hello {name}! Hope you're doing well. Just wanted to reach out and say hi!
+
+CUSTOMER SERVICE TEMPLATES:
+---------------------------
+
+1. Support Ticket Resolved:
+Hi {name}, your support ticket #{ticket_id} has been resolved. Please let us know if you need further assistance.
+
+2. Service Downtime Notice:
+Dear {name}, our {service} will be under maintenance on {date} from {start_time} to {end_time}. We apologize for any inconvenience.
+
+3. Account Update:
+Hello {name}, your {account_type} account has been successfully updated. Changes will take effect from {effective_date}.
+
+HOW TO USE:
+-----------
+
+1. Create a CSV file with required columns (e.g., name, order_id, date)
+2. Choose or customize a template above
+3. Run: python scripts/whatsapp_batch.py send your_file.csv --template "Your template text here"
+
+Example:
+python scripts/whatsapp_batch.py send customers.csv --template "Hi {name}, your order #{order_id} is ready!"
+
+For more help:
+python scripts/whatsapp_batch.py --help

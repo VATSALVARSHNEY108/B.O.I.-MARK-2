@@ -111,7 +111,7 @@ def send_image(phone_or_name, image_path, caption=""):
 def send_to_group(group_id, message):
     """Send message to WhatsApp group"""
     wa = WhatsAppAutomation()
-    result = wa.send_to_group(group_id, message)
+    result = wa.send_to_group_instantly(group_id, message)
     print(result['message'])
 
 
