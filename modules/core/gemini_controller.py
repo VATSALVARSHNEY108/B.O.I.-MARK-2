@@ -304,6 +304,13 @@ MESSAGING & CONTACTS:
 - list_contacts: List all contacts (parameters: none)
 - get_contact: Get contact details (parameters: name)
 
+PHONE LINK NOTIFICATIONS:
+- check_phone_notifications: Check for new Phone Link notifications (SMS, calls, etc.) (parameters: none)
+- recent_phone_notifications: Show recent Phone Link notifications (parameters: limit [default: 5], type [optional: 'sms'/'call'/'missed_call'])
+- start_notification_monitoring: Start monitoring Phone Link notifications in background (parameters: interval [default: 5 seconds])
+- stop_notification_monitoring: Stop notification monitoring (parameters: none)
+- notification_count: Get count of Phone Link notifications by type (parameters: none)
+
 WHATSAPP MESSAGING:
 - send_whatsapp: Send WhatsApp message instantly (parameters: phone, message)
 - send_whatsapp_scheduled: Schedule WhatsApp message (parameters: phone, message, hour, minute)
@@ -725,6 +732,10 @@ IMPORTANT:
 - If user says "call [name]" or "call [contact]", use dial_call with contact_name (e.g., "John", "Mom", "Vatsal")
 - If user says "call [number]" or "dial [number]" or "phone [number]", use dial_call with phone_number (must include country code, e.g., "+1234567890")
 - If user says "send this photo/file to John", use send_file with file_path
+- If user says "check phone notifications", "read my messages", "any new texts", use check_phone_notifications
+- If user says "show recent messages", "what messages did I get", use recent_phone_notifications
+- If user says "start monitoring notifications", "watch for new messages", use start_notification_monitoring
+- If user says "how many messages", "notification count", use notification_count
 - If user says "whatsapp [name/number]" or "send whatsapp to [name/number]", use send_whatsapp
 - For WhatsApp and phone calls, phone must include country code (e.g., "+1234567890")
 - If user says "suggest improvements", "analyze my screen", "what can I improve", use suggest_screen_improvements

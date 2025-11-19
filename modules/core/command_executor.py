@@ -14,6 +14,7 @@ from modules.automation.media_control_helper import MediaControlHelper
 from modules.utilities.contact_manager import ContactManager
 from modules.communication.messaging_service import MessagingService
 from modules.communication.phone_dialer import create_phone_dialer
+from modules.communication.phone_link_monitor import create_phone_link_monitor
 from modules.utilities.youtube_automation import create_youtube_automation
 from modules.communication.whatsapp_automation import create_whatsapp_automation
 from modules.ai_features.code_generation import generate_code, explain_code, improve_code, debug_code
@@ -90,6 +91,7 @@ class CommandExecutor:
         self.contact_manager = ContactManager()
         self.messaging = MessagingService(self.contact_manager)
         self.phone_dialer = create_phone_dialer()
+        self.phone_link_monitor = create_phone_link_monitor()
         self.whatsapp = create_whatsapp_automation()
         self.email_sender = create_email_sender()
         self.comm_enhancements = CommunicationEnhancements()
@@ -837,6 +839,87 @@ class CommandExecutor:
                 print(f"  📱 Opening Phone Link app...")
                 result = self.phone_dialer.open_phone_link()
                 return result
+            
+            # ==================== PHONE LINK NOTIFICATIONS ====================
+            elif action == "check_phone_notifications" or action == "read_phone_notifications":
+                print(f"  📱 Checking Phone Link notifications...")
+                new_notifs = self.phone_link_monitor.check_new_notifications()
+                
+                if new_notifs:
+                    messages = [f"📱 {len(new_notifs)} new notification(s):\n"]
+                    for i, notif in enumerate(new_notifs, 1):
+                        messages.append(f"\n{i}. {notif['type'].upper()}")
+                        if notif.get('sender'):
+                            messages.append(f"   From: {notif['sender']}")
+                        if notif.get('title'):
+                            messages.append(f"   {notif['title']}")
+                        if notif.get('message'):
+                            messages.append(f"   {notif['message']}")
+                    
+                    return {
+                        "success": True,
+                        "message": "\n".join(messages),
+                        "notifications": new_notifs
+                    }
+                else:
+                    return {
+                        "success": True,
+                        "message": "ℹ️ No new Phone Link notifications"
+                    }
+            
+            elif action == "recent_phone_notifications":
+                limit = parameters.get("limit", 5)
+                notif_type = parameters.get("type", None)
+                
+                print(f"  📋 Getting recent notifications...")
+                recent = self.phone_link_monitor.get_recent_notifications(limit, notif_type)
+                
+                if recent:
+                    messages = [f"📋 Recent notifications ({len(recent)}):\n"]
+                    for i, notif in enumerate(recent, 1):
+                        messages.append(f"\n{i}. {notif['type'].upper()}")
+                        if notif.get('title'):
+                            messages.append(f"   {notif['title']}")
+                        if notif.get('message'):
+                            messages.append(f"   {notif['message'][:100]}")
+                    
+                    return {
+                        "success": True,
+                        "message": "\n".join(messages),
+                        "notifications": recent
+                    }
+                else:
+                    return {
+                        "success": True,
+                        "message": "ℹ️ No stored notifications"
+                    }
+            
+            elif action == "start_notification_monitoring":
+                interval = parameters.get("interval", 5)
+                print(f"  📱 Starting notification monitoring...")
+                result = self.phone_link_monitor.start_monitoring(interval)
+                return result
+            
+            elif action == "stop_notification_monitoring":
+                print(f"  ⏹️ Stopping notification monitoring...")
+                result = self.phone_link_monitor.stop_monitoring()
+                return result
+            
+            elif action == "notification_count":
+                print(f"  📊 Getting notification counts...")
+                counts = self.phone_link_monitor.get_unread_count()
+                
+                messages = [f"📊 Total notifications: {counts['total']}\n"]
+                if counts.get('by_type'):
+                    messages.append("By type:")
+                    for notif_type, count in counts['by_type'].items():
+                        messages.append(f"  • {notif_type}: {count}")
+                
+                return {
+                    "success": True,
+                    "message": "\n".join(messages),
+                    "data": counts
+                }
             
             # ==================== SYSTEM MONITORING ====================
             elif action == "system_report":
