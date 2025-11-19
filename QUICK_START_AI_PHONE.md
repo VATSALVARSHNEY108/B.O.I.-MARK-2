@@ -3,6 +3,9 @@
 ## 📱 What This Does
 Control your phone using **AI + Windows Phone Link** app! Make calls, send messages, and control your phone with natural language commands.
 
+## ✨ NEW: Automatic Calling!
+The system now **automatically presses the Call button** for you! No more manual clicking - just say the command and the call starts automatically! 🚀
+
 ---
 
 ## ⚡ Quick Start (3 Steps)

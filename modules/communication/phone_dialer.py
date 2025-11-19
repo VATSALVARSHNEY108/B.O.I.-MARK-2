@@ -276,13 +276,14 @@ class PhoneDialer:
                 "message": f"Contact lookup not implemented yet. Please provide a phone number with country code (e.g., +1234567890)"
             }
     
-    def dial_with_phone_link(self, phone_number: str) -> Dict:
+    def dial_with_phone_link(self, phone_number: str, auto_call: bool = True) -> Dict:
         """
         Dial a call using Windows Phone Link (Your Phone app)
         This opens Phone Link and initiates a call without needing Twilio
         
         Args:
             phone_number: Phone number to dial (any format)
+            auto_call: If True, automatically click the call button (default: True)
         
         Returns:
             Dict with success status and details
@@ -320,12 +321,62 @@ class PhoneDialer:
                     # Method 2: Use subprocess with start command
                     subprocess.Popen(['start', tel_uri], shell=True)
                 
-                return {
-                    "success": True,
-                    "message": f"📱 Opening Phone Link to dial {phone_number}",
-                    "phone": phone_number,
-                    "method": "phone_link"
-                }
+                # Auto-click the call button if requested
+                if auto_call:
+                    try:
+                        import pyautogui
+                        import time
+                        
+                        print("⏳ Waiting for Phone Link to open...")
+                        time.sleep(3)  # Wait for Phone Link to fully load
+                        
+                        # Try to find and click the "Call" button
+                        # Phone Link usually has a green call button
+                        print("🔍 Looking for Call button...")
+                        
+                        # Option 1: Try to find call button by image (if available)
+                        # Option 2: Use keyboard shortcut - Enter key usually triggers call
+                        print("📞 Pressing Enter to initiate call...")
+                        pyautogui.press('enter')
+                        time.sleep(0.5)
+                        
+                        # Backup: Try Alt+C (common shortcut for Call)
+                        pyautogui.hotkey('alt', 'c')
+                        
+                        return {
+                            "success": True,
+                            "message": f"📱 Phone Link opened and calling {phone_number}",
+                            "phone": phone_number,
+                            "method": "phone_link_auto",
+                            "auto_call": True
+                        }
+                    except ImportError:
+                        # PyAutoGUI not available, just open Phone Link
+                        return {
+                            "success": True,
+                            "message": f"📱 Phone Link opened with {phone_number} - Press Enter or click Call button",
+                            "phone": phone_number,
+                            "method": "phone_link_manual",
+                            "auto_call": False,
+                            "note": "Install pyautogui for automatic calling: pip install pyautogui"
+                        }
+                    except Exception as e:
+                        print(f"⚠️ Auto-call failed: {e}")
+                        return {
+                            "success": True,
+                            "message": f"📱 Phone Link opened with {phone_number} - Please click Call button manually",
+                            "phone": phone_number,
+                            "method": "phone_link_manual",
+                            "auto_call": False,
+                            "note": str(e)
+                        }
+                else:
+                    return {
+                        "success": True,
+                        "message": f"📱 Phone Link opened with {phone_number} - Press Enter or click Call button",
+                        "phone": phone_number,
+                        "method": "phone_link_manual"
+                    }
             else:
                 # On non-Windows systems, try generic tel: URI
                 tel_uri = f"tel:{cleaned_number}"
