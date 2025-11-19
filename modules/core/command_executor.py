@@ -801,7 +801,21 @@ class CommandExecutor:
                 result = self.spotify.open_spotify()
                 return {"success": True, "message": result}
             
-            # ==================== PHONE LINK CALLS ====================
+            # ==================== PHONE CALLS ====================
+            elif action == "dial_call" or action == "make_call" or action == "call_contact":
+                name_or_number = parameters.get("contact", "") or parameters.get("name", "") or parameters.get("phone", "") or parameters.get("number", "")
+                message = parameters.get("message", None)
+                
+                if not name_or_number:
+                    return {
+                        "success": False,
+                        "message": "No contact name or phone number provided. Please specify who to call."
+                    }
+                
+                print(f"  📞 Calling {name_or_number}...")
+                result = self.phone_dialer.quick_dial(name_or_number, message)
+                return result
+            
             elif action == "dial_phone_link" or action == "phone_link_dial":
                 phone_number = parameters.get("phone", "") or parameters.get("number", "")
                 if not phone_number:
