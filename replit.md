@@ -37,7 +37,7 @@ The system offers desktop GUIs built with `tkinter` featuring a light cream back
 -   **AI Phone Link Controller:** Gemini AI-powered Windows Phone Link automation for natural language phone control (interactive chat, quick dialing, command history).
 -   **Utility Modules:** Integrations for Spotify, YouTube, Weather & News, Translation, Calculator, Password Vault, Quick Notes, Calendar Manager, Timer & Stopwatch, Quick Reminders, Habit Tracker, Color Tools, QR Code Tools, Screenshot Annotator, Image Resizer, Batch Form Filler, and Hand Gesture Controller.
 -   **AI Performance Optimizations:** Implemented response caching, model fallback, retry optimization, token limit tuning, and generation config adjustments.
--   **WhatsApp Automation:** Comprehensive batch messaging and individual messaging systems for WhatsApp, including personalized templates, image sending, scheduling, and contact integration.
+-   **WhatsApp Automation:** Comprehensive batch messaging and individual messaging systems for WhatsApp, including personalized templates, image sending, scheduling, and full contact management system. Features contact CRUD operations (add/edit/rename/delete), search functionality, import/export CSV, create batch CSV from contacts, automatic contact name resolution in batch messaging, seamless integration across all WhatsApp tools. Documentation: `docs/WHATSAPP_CONTACT_MANAGER_GUIDE.md`, `docs/WHATSAPP_BATCH_AUTOMATION_GUIDE.md`.
 -   **Phone Link Notification Monitor:** System for monitoring and parsing Windows Action Center notifications from Phone Link.
 -   **Contact-Based Calling:** Full contact management system with name-based calling integrated with Phone Link.
 

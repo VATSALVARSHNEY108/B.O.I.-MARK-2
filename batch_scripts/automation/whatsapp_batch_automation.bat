@@ -35,17 +35,18 @@ echo.
 echo  %CYAN%MANAGEMENT:%RESET%
 echo  5. View Batch Logs
 echo  6. View Available Templates
-echo  7. Open Data Folder
+echo  7. Manage Contacts
+echo  8. Open Data Folder
 echo.
 echo  %CYAN%HELP:%RESET%
-echo  8. Quick Start Guide
-echo  9. View Example Templates
+echo  9. Quick Start Guide
+echo  10. View Example Templates
 echo  0. Exit
 echo.
 echo %BLUE%================================================================%RESET%
 echo.
 
-set /p choice="Select option (0-9): "
+set /p choice="Select option (0-10): "
 
 if "%choice%"=="1" goto BATCH_SEND
 if "%choice%"=="2" goto BATCH_SEND_TEMPLATE
@@ -53,9 +54,10 @@ if "%choice%"=="3" goto BATCH_IMAGES
 if "%choice%"=="4" goto CREATE_TEMPLATE
 if "%choice%"=="5" goto VIEW_LOGS
 if "%choice%"=="6" goto VIEW_TEMPLATES
-if "%choice%"=="7" goto OPEN_DATA_FOLDER
-if "%choice%"=="8" goto QUICK_START
-if "%choice%"=="9" goto VIEW_EXAMPLES
+if "%choice%"=="7" goto MANAGE_CONTACTS
+if "%choice%"=="8" goto OPEN_DATA_FOLDER
+if "%choice%"=="9" goto QUICK_START
+if "%choice%"=="10" goto VIEW_EXAMPLES
 if "%choice%"=="0" goto END
 
 echo %RED%Invalid option!%RESET%
@@ -279,6 +281,14 @@ echo.
 pause
 goto MENU
 
+:MANAGE_CONTACTS
+cls
+echo.
+echo %GREEN%Opening Contact Manager...%RESET%
+echo.
+call "%SCRIPT_DIR%\whatsapp_contacts.bat"
+goto MENU
+
 :OPEN_DATA_FOLDER
 cls
 echo.
@@ -300,10 +310,15 @@ echo %YELLOW%Step 1: Create a CSV Template%RESET%
 echo   Use option 4 to create a template CSV file
 echo   This will create a sample file with the correct format
 echo.
-echo %YELLOW%Step 2: Edit the CSV File%RESET%
-echo   Open the CSV file in Excel or any text editor
-echo   Add your contacts' phone numbers (with country code)
-echo   Add names and messages
+echo %YELLOW%Step 2: Edit the CSV File or Use Contacts%RESET%
+echo   Option A: Manual entry
+echo     - Open CSV in Excel/text editor
+echo     - Add phone numbers (with country code)
+echo     - Add names and messages
+echo   Option B: Use Contact Manager (Option 7)
+echo     - Add/manage contacts by name
+echo     - Create batch CSV from saved contacts
+echo     - Message by name instead of phone numbers!
 echo.
 echo %YELLOW%Step 3: Send Batch Messages%RESET%
 echo   Use option 1 for basic sending (CSV has messages)
@@ -312,6 +327,7 @@ echo   Use option 3 for sending images
 echo.
 echo %YELLOW%Important Notes:%RESET%
 echo   - Phone numbers MUST include country code: +1234567890
+echo   - OR use Contact Manager to message by name!
 echo   - Recommended delay: 20-25 seconds between messages
 echo   - WhatsApp Web must be logged in on your browser
 echo   - Don't send too many messages per day (max ~250)

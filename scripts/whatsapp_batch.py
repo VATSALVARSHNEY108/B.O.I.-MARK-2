@@ -17,6 +17,7 @@ project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
 
 from modules.communication.whatsapp_automation import WhatsAppAutomation
+from scripts.whatsapp_contact_manager import WhatsAppContactManager
 
 
 class WhatsAppBatchMessenger:
@@ -30,6 +31,7 @@ class WhatsAppBatchMessenger:
             log_file: Optional path to log file (default: data/whatsapp_batch_log.json)
         """
         self.wa = WhatsAppAutomation()
+        self.contact_manager = WhatsAppContactManager()
         
         if log_file is None:
             log_file = os.path.join(project_root, "data", "whatsapp_batch_log.json")
@@ -49,6 +51,30 @@ class WhatsAppBatchMessenger:
             ]
         )
         self.logger = logging.getLogger(__name__)
+    
+    def resolve_phone_or_name(self, phone_or_name: str) -> Optional[str]:
+        """
+        Resolve phone number from contact name or return phone number if valid
+        
+        Args:
+            phone_or_name: Phone number or contact name
+        
+        Returns:
+            Phone number or None if not found
+        """
+        if phone_or_name.startswith('+'):
+            return phone_or_name
+        
+        phone = self.contact_manager.get_contact_phone(phone_or_name)
+        if phone:
+            return phone
+        
+        if phone_or_name.replace('+', '').replace('-', '').replace(' ', '').isdigit():
+            if not phone_or_name.startswith('+'):
+                self.logger.warning(f"Phone number {phone_or_name} should include country code")
+            return phone_or_name
+        
+        return None
     
     def process_template(self, template: str, data: Dict[str, str]) -> str:
         """
@@ -122,13 +148,24 @@ class WhatsAppBatchMessenger:
                 print(f"{'='*60}\n")
                 
                 for i, contact in enumerate(contacts, 1):
-                    phone = contact.get('phone', '').strip()
+                    phone_or_name = contact.get('phone', '').strip()
                     name = contact.get('name', 'Unknown').strip()
                     
-                    if not phone:
-                        self.logger.warning(f"Skipping row {i}: No phone number")
+                    if not phone_or_name:
+                        self.logger.warning(f"Skipping row {i}: No phone/name provided")
                         results["skipped"] += 1
                         continue
+                    
+                    phone = self.resolve_phone_or_name(phone_or_name)
+                    if not phone:
+                        self.logger.warning(f"Skipping {name}: Could not resolve phone number from '{phone_or_name}'")
+                        results["skipped"] += 1
+                        continue
+                    
+                    if not name or name == 'Unknown':
+                        contact_info = self.contact_manager.find_contact(phone_or_name)
+                        if contact_info:
+                            name = contact_info['name']
                     
                     if message_template:
                         message = self.process_template(message_template, contact)
@@ -250,13 +287,24 @@ class WhatsAppBatchMessenger:
                 print(f"{'='*60}\n")
                 
                 for i, contact in enumerate(contacts, 1):
-                    phone = contact.get('phone', '').strip()
+                    phone_or_name = contact.get('phone', '').strip()
                     name = contact.get('name', 'Unknown').strip()
                     
-                    if not phone:
-                        self.logger.warning(f"Skipping row {i}: No phone number")
+                    if not phone_or_name:
+                        self.logger.warning(f"Skipping row {i}: No phone/name provided")
                         results["skipped"] += 1
                         continue
+                    
+                    phone = self.resolve_phone_or_name(phone_or_name)
+                    if not phone:
+                        self.logger.warning(f"Skipping {name}: Could not resolve phone number from '{phone_or_name}'")
+                        results["skipped"] += 1
+                        continue
+                    
+                    if not name or name == 'Unknown':
+                        contact_info = self.contact_manager.find_contact(phone_or_name)
+                        if contact_info:
+                            name = contact_info['name']
                     
                     caption = ""
                     if caption_template:
