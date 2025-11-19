@@ -40,9 +40,10 @@ class AIPhoneLinkController:
         if api_key:
             try:
                 genai.configure(api_key=api_key)
-                self.model = genai.GenerativeModel('gemini-pro')
+                # Use updated Gemini model name (gemini-pro is deprecated)
+                self.model = genai.GenerativeModel('gemini-1.5-flash')
                 self.ai_enabled = True
-                print("✅ AI Engine Ready (Google Gemini)")
+                print("✅ AI Engine Ready (Google Gemini 1.5 Flash)")
             except Exception as e:
                 print(f"⚠️ AI setup failed: {e}")
                 self.ai_enabled = False
@@ -129,9 +130,14 @@ Only respond with valid JSON.
                     if len(parts) > 1:
                         # Get text after trigger word
                         name_part = parts[1].strip()
-                        # Remove common words
-                        for word in ['at', 'on', 'using', 'with', 'phone', 'link']:
-                            name_part = name_part.replace(word, '').strip()
+                        
+                        # Remove common words (only if they are whole words, not substrings)
+                        # Use word boundary matching to avoid removing parts of names
+                        words_to_remove = ['at', 'on', 'using', 'with', 'phone', 'link', 'the', 'a', 'my']
+                        name_words = name_part.split()
+                        filtered_words = [w for w in name_words if w not in words_to_remove]
+                        name_part = ' '.join(filtered_words).strip()
+                        
                         if name_part:
                             contact_name = name_part
                             break
