@@ -256,33 +256,49 @@ class PhoneDialer:
         """Get recent call history"""
         return self.call_history[-limit:]
     
-    def quick_dial(self, name_or_number: str, message: Optional[str] = None) -> Dict:
+    def quick_dial(self, name_or_number: str, message: Optional[str] = None, use_phone_link: bool = True) -> Dict:
         """
         Quick dial by name or number
         Supports both direct phone numbers and contact names
+        Uses Phone Link by default for actual calling
         
         Args:
             name_or_number: Either a phone number or contact name
-            message: Optional message to play
+            message: Optional message to play (only for Twilio)
+            use_phone_link: If True (default), use Phone Link. If False, use Twilio
         
         Returns:
             Dict with call status
         """
         # Check if it's a phone number (contains digits and common phone chars)
         if any(char.isdigit() for char in name_or_number) and any(c in name_or_number for c in ['+', '-', '(', ')', ' '] + list('0123456789')):
-            # Looks like a phone number
-            return self.dial_call(name_or_number, message)
+            # Looks like a phone number - use it directly
+            phone_number = name_or_number
+            contact_name = None
         else:
             # Try to look up contact by name
             phone_number = self.contact_manager.get_phone(name_or_number)
-            if phone_number:
-                print(f"📇 Found contact '{name_or_number}' → {phone_number}")
-                return self.dial_call(phone_number, message)
-            else:
+            contact_name = name_or_number
+            
+            if not phone_number:
                 return {
                     "success": False,
                     "message": f"Contact '{name_or_number}' not found. Add contact or provide phone number."
                 }
+            
+            print(f"📇 Found contact '{name_or_number}' → {phone_number}")
+        
+        # Use Phone Link by default (works on Windows without requiring Twilio)
+        if use_phone_link and self.is_windows:
+            result = self.dial_with_phone_link(phone_number, auto_call=True)
+            # Add contact name to result if available
+            if contact_name and result.get('success'):
+                result['contact_name'] = contact_name
+                result['message'] = f"📱 Calling {contact_name} ({phone_number})"
+            return result
+        else:
+            # Fall back to Twilio (requires API credentials)
+            return self.dial_call(phone_number, message)
     
     def call_contact(self, name: str, auto_call: bool = True) -> Dict:
         """
