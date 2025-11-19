@@ -9,6 +9,7 @@ import webbrowser
 import subprocess
 from typing import Optional, Dict
 from datetime import datetime
+from modules.utilities.contact_manager import ContactManager
 
 
 class PhoneDialer:
@@ -19,6 +20,7 @@ class PhoneDialer:
         self.demo_mode = True
         self.call_history = []
         self.is_windows = platform.system() == "Windows"
+        self.contact_manager = ContactManager()
         
         self._check_twilio()
     
@@ -266,15 +268,66 @@ class PhoneDialer:
         Returns:
             Dict with call status
         """
-        # Check if it's a phone number (contains digits)
-        if any(char.isdigit() for char in name_or_number):
+        # Check if it's a phone number (contains digits and common phone chars)
+        if any(char.isdigit() for char in name_or_number) and any(c in name_or_number for c in ['+', '-', '(', ')', ' '] + list('0123456789')):
+            # Looks like a phone number
             return self.dial_call(name_or_number, message)
         else:
-            # Try to look up contact (would integrate with contact manager)
-            return {
-                "success": False,
-                "message": f"Contact lookup not implemented yet. Please provide a phone number with country code (e.g., +1234567890)"
-            }
+            # Try to look up contact by name
+            phone_number = self.contact_manager.get_phone(name_or_number)
+            if phone_number:
+                print(f"📇 Found contact '{name_or_number}' → {phone_number}")
+                return self.dial_call(phone_number, message)
+            else:
+                return {
+                    "success": False,
+                    "message": f"Contact '{name_or_number}' not found. Add contact or provide phone number."
+                }
+    
+    def call_contact(self, name: str, auto_call: bool = True) -> Dict:
+        """
+        Call a contact by name using Phone Link
+        
+        Args:
+            name: Contact name to call
+            auto_call: If True, automatically press call button
+        
+        Returns:
+            Dict with success status and details
+        """
+        # Look up contact
+        phone_number = self.contact_manager.get_phone(name)
+        
+        if not phone_number:
+            # Try to find similar contacts
+            similar = self.contact_manager.search_contacts(name)
+            if similar:
+                contacts_list = ", ".join([c['name'] for c in similar[:3]])
+                return {
+                    "success": False,
+                    "message": f"Contact '{name}' not found. Did you mean: {contacts_list}?"
+                }
+            else:
+                return {
+                    "success": False,
+                    "message": f"Contact '{name}' not found. Add contact first or provide phone number."
+                }
+        
+        # Get full contact info for better logging
+        contact = self.contact_manager.get_contact(name)
+        contact_name = contact.get('name', name)
+        
+        print(f"📇 Calling {contact_name} at {phone_number}")
+        
+        # Call using Phone Link
+        result = self.dial_with_phone_link(phone_number, auto_call=auto_call)
+        
+        # Update message to include contact name
+        if result['success']:
+            result['message'] = f"📱 Calling {contact_name} ({phone_number})"
+            result['contact_name'] = contact_name
+        
+        return result
     
     def dial_with_phone_link(self, phone_number: str, auto_call: bool = True) -> Dict:
         """

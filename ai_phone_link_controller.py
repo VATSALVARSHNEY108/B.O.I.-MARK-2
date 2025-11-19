@@ -67,22 +67,25 @@ class AIPhoneLinkController:
         try:
             # Create AI prompt to understand the command
             prompt = f"""
-You are a phone control assistant. Analyze this command and extract the action and phone number if any.
+You are a phone control assistant. Analyze this command and extract the action, phone number, and contact name.
 
 User command: "{user_input}"
 
 Response format (JSON):
 {{
-    "action": "dial" | "open_phone_link" | "send_message" | "unknown",
+    "action": "dial" | "call_contact" | "open_phone_link" | "send_message" | "unknown",
     "phone_number": "extracted phone number or null",
+    "contact_name": "extracted contact name or null",
     "message": "message content if any or null",
     "confidence": 0.0 to 1.0
 }}
 
 Examples:
-- "Call mom at +1234567890" → {{"action": "dial", "phone_number": "+1234567890", "message": null, "confidence": 0.9}}
-- "Open Phone Link" → {{"action": "open_phone_link", "phone_number": null, "message": null, "confidence": 1.0}}
-- "Dial 9876543210" → {{"action": "dial", "phone_number": "9876543210", "message": null, "confidence": 0.95}}
+- "Call mom" → {{"action": "call_contact", "phone_number": null, "contact_name": "mom", "message": null, "confidence": 0.95}}
+- "Call mom at +1234567890" → {{"action": "dial", "phone_number": "+1234567890", "contact_name": "mom", "message": null, "confidence": 0.9}}
+- "Open Phone Link" → {{"action": "open_phone_link", "phone_number": null, "contact_name": null, "message": null, "confidence": 1.0}}
+- "Dial 9876543210" → {{"action": "dial", "phone_number": "9876543210", "contact_name": null, "message": null, "confidence": 0.95}}
+- "Call John Smith" → {{"action": "call_contact", "phone_number": null, "contact_name": "John Smith", "message": null, "confidence": 0.9}}
 
 Only respond with valid JSON.
 """
@@ -116,9 +119,28 @@ Only respond with valid JSON.
         phone_match = re.search(r'[\+\d][\d\-\(\)\s]{7,}', text)
         phone_number = phone_match.group(0).strip() if phone_match else None
         
+        # Extract contact name (words after "call" or "dial" that aren't phone numbers)
+        contact_name = None
+        if not phone_number:
+            # Look for name after call/dial
+            for trigger in ['call', 'dial', 'ring', 'phone']:
+                if trigger in text_lower:
+                    parts = text_lower.split(trigger, 1)
+                    if len(parts) > 1:
+                        # Get text after trigger word
+                        name_part = parts[1].strip()
+                        # Remove common words
+                        for word in ['at', 'on', 'using', 'with', 'phone', 'link']:
+                            name_part = name_part.replace(word, '').strip()
+                        if name_part:
+                            contact_name = name_part
+                            break
+        
         # Determine action
-        if any(word in text_lower for word in ['dial', 'call', 'phone', 'ring']):
+        if phone_number:
             action = "dial"
+        elif contact_name:
+            action = "call_contact"
         elif any(word in text_lower for word in ['open', 'launch', 'start']):
             action = "open_phone_link"
         elif any(word in text_lower for word in ['message', 'text', 'sms']):
@@ -129,6 +151,7 @@ Only respond with valid JSON.
         return {
             "action": action,
             "phone_number": phone_number,
+            "contact_name": contact_name,
             "message": None,
             "confidence": 0.7
         }
@@ -145,15 +168,20 @@ Only respond with valid JSON.
         """
         action = command.get("action", "unknown")
         phone_number = command.get("phone_number")
+        contact_name = command.get("contact_name")
         
         print(f"\n🤖 AI Understanding:")
         print(f"   Action: {action}")
         print(f"   Phone: {phone_number or 'N/A'}")
+        print(f"   Contact: {contact_name or 'N/A'}")
         print(f"   Confidence: {command.get('confidence', 0):.0%}")
         print()
         
         if action == "dial" and phone_number:
             return self.phone_dialer.dial_with_phone_link(phone_number)
+        
+        elif action == "call_contact" and contact_name:
+            return self.phone_dialer.call_contact(contact_name)
         
         elif action == "open_phone_link":
             return self.phone_dialer.open_phone_link()
@@ -167,7 +195,7 @@ Only respond with valid JSON.
         else:
             return {
                 "success": False,
-                "message": "Could not understand command. Try: 'Call +1234567890' or 'Open Phone Link'"
+                "message": "Could not understand command. Try: 'Call Mom' or 'Call +1234567890'"
             }
     
     def process_command(self, user_input: str) -> Dict:

@@ -91,6 +91,9 @@ controller.quick_dial("+1234567890")
 
 **With AI (Smart Mode):**
 ```
+✅ "Call Mom"  ← NEW: Call by name!
+✅ "Call Dad"
+✅ "Call John Smith"
 ✅ "Call my friend at +1234567890"
 ✅ "Dial 9876543210"
 ✅ "Ring +91 98765 43210"
@@ -100,12 +103,24 @@ controller.quick_dial("+1234567890")
 
 **Without AI (Basic Mode):**
 ```
+✅ "Call Mom"  ← NEW: Call by name!
 ✅ "Call +1234567890"
 ✅ "Dial 9876543210"
 ✅ "Open Phone Link"
 ```
 
 Both work! AI just makes it smarter. 🧠
+
+### 📇 **NEW: Contact Management**
+```bash
+# Manage your contacts
+python manage_contacts.py
+
+# Or use batch file
+launchers\manage_contacts.bat
+```
+
+Then call anyone by name: **"Call Mom"** instead of typing numbers! 🎉
 
 ---
 

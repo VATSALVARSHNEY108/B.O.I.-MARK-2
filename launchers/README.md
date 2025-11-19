@@ -8,6 +8,20 @@ Quick access batch files and scripts to launch the AI Phone Link Controller.
 
 ### Windows Batch Files (.bat)
 
+#### **manage_contacts.bat** 📇
+🆕 **Contact Manager**
+- Add, edit, delete contacts
+- Call contacts by name
+- Import sample contacts
+- Best for: Managing your phone contacts
+
+**How to use:**
+```
+Double-click the file
+```
+
+---
+
 #### **ai_phone_controller.bat**
 🎯 **Interactive AI Phone Controller**
 - Launches full AI chat mode
