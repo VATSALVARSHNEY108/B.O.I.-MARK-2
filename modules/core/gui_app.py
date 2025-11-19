@@ -49,6 +49,9 @@ from modules.communication.translation_service import TranslationService
 from modules.productivity.smart_break_suggester import SmartBreakSuggester
 from modules.security.security_dashboard import SecurityDashboard
 from modules.utilities.batch_utilities import get_batch_utilities
+from modules.communication.phone_dialer import create_phone_dialer
+from modules.utilities.contact_manager import ContactManager
+from ai_phone_link_controller import AIPhoneLinkController
 
 load_dotenv()
 
@@ -298,6 +301,18 @@ class ModernVATSALGUI:
                 self.translator = TranslationService()
             except Exception as e:
                 print(f"⚠️ Utility modules unavailable: {e}")
+            
+            # Phone Link & Contact Management
+            try:
+                self.phone_dialer = create_phone_dialer()
+                self.contact_manager = ContactManager()
+                self.ai_phone_controller = AIPhoneLinkController()
+                print("✅ Phone Link Controller initialized")
+            except Exception as e:
+                self.phone_dialer = None
+                self.contact_manager = None
+                self.ai_phone_controller = None
+                print(f"⚠️ Phone Link unavailable: {e}")
 
             # Security dashboard
             try:
@@ -1253,6 +1268,7 @@ class ModernVATSALGUI:
         bottom_buttons = [
             ("❓ Help", self.show_help),
             ("👥 Contacts", self.show_contacts),
+            ("📞 Phone Link", self.show_phone_link_control),
             ("ℹ️ About", self.show_about),
             ("💡 Suggestion", self.show_suggestion),
             ("🛡️ Security", self.show_security_dashboard),
@@ -2377,6 +2393,220 @@ personality and advanced automation capabilities.
                               padx=30,
                               pady=10)
         close_btn.pack(pady=20)
+        self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
+    
+    def show_phone_link_control(self):
+        """Show Phone Link Control & Contact Management"""
+        if not self.phone_dialer:
+            messagebox.showerror("Error", "Phone Link not initialized")
+            return
+        
+        phone_window = tk.Toplevel(self.root)
+        phone_window.title("📞 Phone Link Control")
+        phone_window.geometry("1000x700")
+        phone_window.configure(bg=self.BG_PRIMARY)
+        
+        header_frame = tk.Frame(phone_window, bg=self.BG_SECONDARY)
+        header_frame.pack(fill="x", pady=(0, 10))
+        
+        header = tk.Label(header_frame,
+                          text="📞 Phone Link Control - Windows Phone Integration",
+                          bg=self.BG_SECONDARY,
+                          fg=self.TEXT_PRIMARY,
+                          font=("Segoe UI", 18, "bold"),
+                          pady=15)
+        header.pack()
+        
+        subtitle = tk.Label(header_frame,
+                            text="Call contacts by name • Automatic dialing • Contact management",
+                            bg=self.BG_SECONDARY,
+                            fg=self.TEXT_SECONDARY,
+                            font=("Segoe UI", 10, "italic"))
+        subtitle.pack()
+        
+        # Main container
+        main_frame = tk.Frame(phone_window, bg=self.BG_PRIMARY)
+        main_frame.pack(fill="both", expand=True, padx=20, pady=10)
+        
+        # Left panel - Quick Call
+        left_panel = tk.Frame(main_frame, bg=self.BG_SECONDARY, relief="raised", bd=2)
+        left_panel.pack(side="left", fill="both", expand=True, padx=(0, 10))
+        
+        # Quick Call Section
+        call_header = tk.Label(left_panel,
+                               text="📱 Quick Call",
+                               bg=self.BG_SECONDARY,
+                               fg=self.TEXT_PRIMARY,
+                               font=("Segoe UI", 14, "bold"),
+                               pady=10)
+        call_header.pack()
+        
+        # Call by name input
+        name_frame = tk.Frame(left_panel, bg=self.BG_SECONDARY)
+        name_frame.pack(fill="x", padx=20, pady=10)
+        
+        tk.Label(name_frame,
+                 text="Contact Name:",
+                 bg=self.BG_SECONDARY,
+                 fg=self.TEXT_PRIMARY,
+                 font=("Segoe UI", 11)).pack(anchor="w", pady=(0, 5))
+        
+        self.phone_name_input = tk.Entry(name_frame,
+                                          bg="white",
+                                          fg=self.TEXT_PRIMARY,
+                                          font=("Segoe UI", 12),
+                                          relief="solid",
+                                          bd=1)
+        self.phone_name_input.pack(fill="x", ipady=8)
+        
+        # Or separator
+        tk.Label(left_panel,
+                 text="— OR —",
+                 bg=self.BG_SECONDARY,
+                 fg=self.TEXT_SECONDARY,
+                 font=("Segoe UI", 9)).pack(pady=5)
+        
+        # Call by number input
+        number_frame = tk.Frame(left_panel, bg=self.BG_SECONDARY)
+        number_frame.pack(fill="x", padx=20, pady=10)
+        
+        tk.Label(number_frame,
+                 text="Phone Number:",
+                 bg=self.BG_SECONDARY,
+                 fg=self.TEXT_PRIMARY,
+                 font=("Segoe UI", 11)).pack(anchor="w", pady=(0, 5))
+        
+        self.phone_number_input = tk.Entry(number_frame,
+                                            bg="white",
+                                            fg=self.TEXT_PRIMARY,
+                                            font=("Segoe UI", 12),
+                                            relief="solid",
+                                            bd=1)
+        self.phone_number_input.pack(fill="x", ipady=8)
+        
+        # Call button
+        call_btn = tk.Button(left_panel,
+                             text="📞 Call Now (Auto-Dial)",
+                             bg=self.ACTIVE_GREEN,
+                             fg="white",
+                             font=("Segoe UI", 13, "bold"),
+                             relief="raised",
+                             cursor="hand2",
+                             command=self.make_phone_call,
+                             padx=30,
+                             pady=15)
+        call_btn.pack(pady=20)
+        self._add_hover_effect(call_btn, self.ACTIVE_GREEN, "#006644")
+        
+        # Call history
+        history_label = tk.Label(left_panel,
+                                 text="📜 Recent Calls",
+                                 bg=self.BG_SECONDARY,
+                                 fg=self.TEXT_PRIMARY,
+                                 font=("Segoe UI", 12, "bold"))
+        history_label.pack(pady=(10, 5))
+        
+        self.phone_history_text = scrolledtext.ScrolledText(left_panel,
+                                                             bg=self.CONSOLE_BG,
+                                                             fg=self.TEXT_PRIMARY,
+                                                             font=("Segoe UI", 9),
+                                                             wrap="word",
+                                                             height=8,
+                                                             relief="solid",
+                                                             bd=1)
+        self.phone_history_text.pack(fill="both", expand=True, padx=20, pady=(0, 20))
+        
+        # Right panel - Contact Manager
+        right_panel = tk.Frame(main_frame, bg=self.BG_SECONDARY, relief="raised", bd=2)
+        right_panel.pack(side="right", fill="both", expand=True, padx=(10, 0))
+        
+        contact_header = tk.Label(right_panel,
+                                  text="📇 Contacts",
+                                  bg=self.BG_SECONDARY,
+                                  fg=self.TEXT_PRIMARY,
+                                  font=("Segoe UI", 14, "bold"),
+                                  pady=10)
+        contact_header.pack()
+        
+        # Search contacts
+        search_frame = tk.Frame(right_panel, bg=self.BG_SECONDARY)
+        search_frame.pack(fill="x", padx=20, pady=10)
+        
+        tk.Label(search_frame,
+                 text="Search:",
+                 bg=self.BG_SECONDARY,
+                 fg=self.TEXT_PRIMARY,
+                 font=("Segoe UI", 10)).pack(side="left", padx=(0, 10))
+        
+        self.contact_search_input = tk.Entry(search_frame,
+                                              bg="white",
+                                              fg=self.TEXT_PRIMARY,
+                                              font=("Segoe UI", 10),
+                                              relief="solid",
+                                              bd=1)
+        self.contact_search_input.pack(side="left", fill="x", expand=True, ipady=5)
+        self.contact_search_input.bind("<KeyRelease>", lambda e: self.search_contacts())
+        
+        # Contact list
+        contacts_frame = tk.Frame(right_panel, bg=self.BG_SECONDARY)
+        contacts_frame.pack(fill="both", expand=True, padx=20, pady=10)
+        
+        self.contacts_listbox = tk.Listbox(contacts_frame,
+                                            bg="white",
+                                            fg=self.TEXT_PRIMARY,
+                                            font=("Segoe UI", 10),
+                                            relief="solid",
+                                            bd=1,
+                                            selectmode=tk.SINGLE)
+        self.contacts_listbox.pack(side="left", fill="both", expand=True)
+        
+        scrollbar = tk.Scrollbar(contacts_frame, command=self.contacts_listbox.yview)
+        scrollbar.pack(side="right", fill="y")
+        self.contacts_listbox.config(yscrollcommand=scrollbar.set)
+        
+        # Double-click to call
+        self.contacts_listbox.bind("<Double-Button-1>", self.call_selected_contact)
+        
+        # Contact management buttons
+        btn_frame = tk.Frame(right_panel, bg=self.BG_SECONDARY)
+        btn_frame.pack(fill="x", padx=20, pady=(10, 20))
+        
+        buttons = [
+            ("➕ Add", self.add_contact),
+            ("✏️ Edit", self.edit_contact),
+            ("🗑️ Delete", self.delete_contact),
+            ("🔄 Refresh", self.refresh_contacts),
+        ]
+        
+        for text, command in buttons:
+            btn = tk.Button(btn_frame,
+                            text=text,
+                            bg=self.BUTTON_BG,
+                            fg=self.TEXT_PRIMARY,
+                            font=("Segoe UI", 9, "bold"),
+                            relief="raised",
+                            cursor="hand2",
+                            command=command,
+                            padx=10,
+                            pady=5)
+            btn.pack(side="left", padx=5, expand=True, fill="x")
+            self._add_hover_effect(btn, self.BUTTON_BG, self.BUTTON_HOVER)
+        
+        # Load initial contacts
+        self.refresh_contacts()
+        
+        # Close button
+        close_btn = tk.Button(phone_window,
+                              text="Close",
+                              bg=self.BUTTON_BG,
+                              fg=self.TEXT_PRIMARY,
+                              font=("Segoe UI", 11, "bold"),
+                              relief="raised",
+                              cursor="hand2",
+                              command=phone_window.destroy,
+                              padx=30,
+                              pady=10)
+        close_btn.pack(pady=10)
         self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
 
     def _create_system_control_tab(self, parent):
@@ -10721,6 +10951,172 @@ keyboard, and screen access:
 
         refresh_saved_list()
         self.workflow_log("Workflow Builder ready!", "SUCCESS")
+    
+    # Phone Link & Contact Management Methods
+    
+    def make_phone_call(self):
+        """Make a phone call using Phone Link"""
+        name = self.phone_name_input.get().strip()
+        number = self.phone_number_input.get().strip()
+        
+        if not name and not number:
+            messagebox.showwarning("Input Required", "Please enter a contact name or phone number")
+            return
+        
+        try:
+            if name:
+                # Call by name
+                result = self.phone_dialer.call_contact(name)
+            else:
+                # Call by number
+                result = self.phone_dialer.dial_with_phone_link(number)
+            
+            # Show result
+            if result['success']:
+                message = result['message']
+                self.phone_history_text.insert("1.0", f"✅ {message}\n")
+                self.phone_name_input.delete(0, tk.END)
+                self.phone_number_input.delete(0, tk.END)
+                messagebox.showinfo("Call Initiated", message)
+            else:
+                message = result['message']
+                self.phone_history_text.insert("1.0", f"❌ {message}\n")
+                messagebox.showerror("Call Failed", message)
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to make call: {str(e)}")
+    
+    def refresh_contacts(self):
+        """Refresh the contacts list"""
+        self.contacts_listbox.delete(0, tk.END)
+        
+        try:
+            contacts = self.contact_manager.list_contacts()
+            for contact in sorted(contacts, key=lambda x: x['name']):
+                display = f"{contact['name']}: {contact.get('phone', 'No phone')}"
+                self.contacts_listbox.insert(tk.END, display)
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load contacts: {str(e)}")
+    
+    def search_contacts(self):
+        """Search and filter contacts"""
+        query = self.contact_search_input.get().strip()
+        self.contacts_listbox.delete(0, tk.END)
+        
+        try:
+            if query:
+                contacts = self.contact_manager.search_contacts(query)
+            else:
+                contacts = self.contact_manager.list_contacts()
+            
+            for contact in sorted(contacts, key=lambda x: x['name']):
+                display = f"{contact['name']}: {contact.get('phone', 'No phone')}"
+                self.contacts_listbox.insert(tk.END, display)
+        except Exception as e:
+            pass
+    
+    def call_selected_contact(self, event):
+        """Call the selected contact (double-click handler)"""
+        selection = self.contacts_listbox.curselection()
+        if not selection:
+            return
+        
+        selected_text = self.contacts_listbox.get(selection[0])
+        contact_name = selected_text.split(':')[0].strip()
+        
+        try:
+            result = self.phone_dialer.call_contact(contact_name)
+            
+            if result['success']:
+                message = result['message']
+                self.phone_history_text.insert("1.0", f"✅ {message}\n")
+                messagebox.showinfo("Call Initiated", message)
+            else:
+                message = result['message']
+                self.phone_history_text.insert("1.0", f"❌ {message}\n")
+                messagebox.showerror("Call Failed", message)
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to call contact: {str(e)}")
+    
+    def add_contact(self):
+        """Add a new contact"""
+        from tkinter import simpledialog
+        
+        name = simpledialog.askstring("Add Contact", "Enter contact name:")
+        if not name:
+            return
+        
+        phone = simpledialog.askstring("Add Contact", "Enter phone number\n(with country code, e.g., +1234567890):")
+        if not phone:
+            return
+        
+        email = simpledialog.askstring("Add Contact", "Enter email (optional):", initialvalue="")
+        
+        try:
+            if self.contact_manager.add_contact(name, phone, email or None):
+                messagebox.showinfo("Success", f"Contact '{name}' added successfully!")
+                self.refresh_contacts()
+            else:
+                messagebox.showerror("Error", "Failed to add contact")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to add contact: {str(e)}")
+    
+    def edit_contact(self):
+        """Edit the selected contact"""
+        from tkinter import simpledialog
+        
+        selection = self.contacts_listbox.curselection()
+        if not selection:
+            messagebox.showwarning("No Selection", "Please select a contact to edit")
+            return
+        
+        selected_text = self.contacts_listbox.get(selection[0])
+        contact_name = selected_text.split(':')[0].strip()
+        
+        contact = self.contact_manager.get_contact(contact_name)
+        if not contact:
+            messagebox.showerror("Error", "Contact not found")
+            return
+        
+        phone = simpledialog.askstring("Edit Contact",
+                                       f"Enter new phone number for '{contact['name']}':",
+                                       initialvalue=contact.get('phone', ''))
+        if phone is None:
+            return
+        
+        email = simpledialog.askstring("Edit Contact",
+                                       f"Enter new email for '{contact['name']}':",
+                                       initialvalue=contact.get('email', ''))
+        
+        try:
+            if self.contact_manager.update_contact(contact_name, phone=phone or None, email=email or None):
+                messagebox.showinfo("Success", f"Contact '{contact['name']}' updated!")
+                self.refresh_contacts()
+            else:
+                messagebox.showerror("Error", "Failed to update contact")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to update contact: {str(e)}")
+    
+    def delete_contact(self):
+        """Delete the selected contact"""
+        selection = self.contacts_listbox.curselection()
+        if not selection:
+            messagebox.showwarning("No Selection", "Please select a contact to delete")
+            return
+        
+        selected_text = self.contacts_listbox.get(selection[0])
+        contact_name = selected_text.split(':')[0].strip()
+        
+        if not messagebox.askyesno("Confirm Delete", f"Delete contact '{contact_name}'?"):
+            return
+        
+        try:
+            if self.contact_manager.delete_contact(contact_name):
+                messagebox.showinfo("Success", f"Contact '{contact_name}' deleted!")
+                self.refresh_contacts()
+            else:
+                messagebox.showerror("Error", "Failed to delete contact")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to delete contact: {str(e)}")
 
     def run(self):
         """Start the GUI"""
