@@ -1,0 +1,220 @@
+ can be ignored when running in bare mode.
+2025-11-19 16:04:11.051 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-19 16:04:11.051 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-19 16:04:11.052 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-19 16:04:11.052 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-19 16:04:11.052 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-19 16:04:11.052 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+pygame 2.6.1 (SDL 2.28.4, Python 3.10.11)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+2025-11-19 16:04:13.703907: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-11-19 16:04:14.820660: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+✅ Window icon loaded from: C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL 10\assets\vatsal_icon.png
+📺 Screen size detected: 1920x1080
+⚠️ Twilio not configured - phone dialer running in demo mode
+📱 WhatsApp automation ready
+📧 Email Sender (DEMO MODE - credentials not configured)
+💬 Communication Enhancements initialized
+   ✅ 8 advanced features ready
+🎵 Spotify API mode enabled
+🧠 Advanced Desktop RAG initialized
+   📊 Indexed files: 0
+   🏷️  Tagged files: 0
+   🔗 File relationships: 0
+🤖 AI Screen Suggester ready!
+📱 Chat Monitor initialized
+   ⚠️  Gmail credentials not configured
+   ⚠️  Twilio credentials not configured
+📺 Screen size detected: 1920x1080
+📱 Visual Chat Monitor initialized
+   ✅ Will control real Gmail/WhatsApp on your screen
+📺 Screen size detected: 1920x1080
+👁️ Smart Screen Monitor initialized
+⚙️ Command Executor initialized with full automation suite
+   🤖 Persona Service: Active
+   🧠 Desktop RAG: Active
+   💬 Communication Enhancements: Active
+   🎮 GUI Automation: Active
+   📊 40+ Modules Loaded
+✅ Self-Operating Computer initialized
+📺 Screen size detected: 1920x1080
+✅ Comprehensive Desktop Controller initialized
+✅ Command Parser initialized
+🎯 Task Coordinator initialized
+✅ Enhanced Command Executor initialized with self-operating support
+✅ Enhanced Command Executor initialized
+📺 Screen size detected: 1920x1080
+🚀 Advanced Smart Screen Monitor initialized
+   ✨ Enhanced with multi-modal AI intelligence
+📺 Screen size detected: 1920x1080
+🚀 AI Screen Monitoring System initialized
+   ✨ 8 AI analysis modes available
+   📊 Analytics tracking enabled
+   🧠 Pattern learning active
+📁 File Automation System initialized
+📺 Screen size detected: 1920x1080
+🔧 Initializing automation capabilities...
+📺 Screen size detected: 1920x1080
+⚠️ Twilio not configured - phone dialer running in demo mode
+📱 WhatsApp automation ready
+📧 Email Sender (DEMO MODE - credentials not configured)
+💬 Communication Enhancements initialized
+   ✅ 8 advanced features ready
+🎵 Spotify API mode enabled
+🧠 Advanced Desktop RAG initialized
+   📊 Indexed files: 0
+   🏷️  Tagged files: 0
+   🔗 File relationships: 0
+🤖 AI Screen Suggester ready!
+📱 Chat Monitor initialized
+   ⚠️  Gmail credentials not configured
+   ⚠️  Twilio credentials not configured
+📺 Screen size detected: 1920x1080
+📱 Visual Chat Monitor initialized
+   ✅ Will control real Gmail/WhatsApp on your screen
+📺 Screen size detected: 1920x1080
+👁️ Smart Screen Monitor initialized
+⚙️ Command Executor initialized with full automation suite
+   🤖 Persona Service: Active
+   🧠 Desktop RAG: Active
+   💬 Communication Enhancements: Active
+   🎮 GUI Automation: Active
+   📊 40+ Modules Loaded
+🧠 Initializing emotional intelligence...
+🎯 Initializing common sense reasoning...
+📺 Screen size detected: 1920x1080
+✅ Self-Operating Computer initialized
+📺 Screen size detected: 1920x1080
+✅ Comprehensive Desktop Controller initialized
+✅ Command Parser initialized
+✅ WebSocket client connected
+✅ Voice sound effects initialized
+✅ Created default sound effects in voice_sounds/
+🔊 Voice sound effects ready!
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1763548457.598245   28052 gesture_recognizer_graph.cc:129] Hand Gesture Recognizer contains CPU only ops. Sets HandGestureRecognizerGraph acceleration to Xnnpack.
+I0000 00:00:1763548457.601397   28052 hand_gesture_recognizer_graph.cc:250] Custom gesture classifier is not defined.
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+✅ MediaPipe gesture recognizer loaded
+   Available gestures: ['FIST', 'OPEN_PALM', 'ONE_FINGER_UP', 'THUMBS_DOWN', 'THUMBS_UP', 'PEACE_SIGN', 'ROCK_SIGN']
+✅ MediaPipe pretrained model loaded
+   Gestures: ['FIST', 'OPEN_PALM', 'ONE_FINGER_UP', 'THUMBS_DOWN', 'THUMBS_UP', 'PEACE_SIGN', 'ROCK_SIGN', 'SPOCK', 'OK_CIRCLE', 'PINCH']
+
+======================================================================
+⚠️  CUSTOM TRAINED GESTURES NOT FOUND
+======================================================================
+   Expected model files at:
+   - biometric_data/hands\models\gesture_model.pkl
+   - biometric_data/hands\models\gesture_scaler.pkl
+   - biometric_data/hands\models\gesture_labels.pkl
+
+   Missing files: gesture_model.pkl, gesture_scaler.pkl, gesture_labels.pkl
+
+   📝 To train custom gestures:
+      1. Run: python train_hand_gestures.py
+      2. Capture samples for each gesture (50+ recommended)
+      3. Train the model
+      4. Restart the gesture detector
+
+   ℹ️  Currently using:
+      ✅ MediaPipe pretrained gestures (7 gestures)
+      ✅ Hardcoded finger-counting gestures
+======================================================================
+
+
+======================================================================
+🎯 GESTURE DETECTION SYSTEM - AVAILABLE GESTURES
+======================================================================
+
+📱 MediaPipe Pretrained Gestures (10 gestures):
+   ✅ NO TRAINING REQUIRED - Works instantly!
+   • FIST
+   • OPEN_PALM
+   • ONE_FINGER_UP
+   • THUMBS_DOWN
+   • THUMBS_UP
+   • PEACE_SIGN
+   • ROCK_SIGN
+   • SPOCK
+   • OK_CIRCLE
+   • PINCH
+
+🎓 Custom Trained Gestures:
+   ❌ NOT CONFIGURED
+   ℹ️  Run 'python train_hand_gestures.py' on local machine to train
+   📝 Recommended: Train 10+ custom gestures for best accuracy
+
+👆 Hardcoded Finger-Counting Gestures (4 gestures):
+   ✅ Always available (fallback method)
+   • OPEN_PALM
+   • FIST
+   • PEACE_SIGN
+   • THUMBS_UP
+
+📊 Total Configured Gestures: 4
+======================================================================
+
+⚠️ Twilio not configured - phone dialer running in demo mode
+⚠️ Twilio not configured - phone dialer running in demo mode
+📺 Screen size detected: 1920x1080
+⚠️ Twilio not configured - phone dialer running in demo mode
+📱 WhatsApp automation ready
+📧 Email Sender (DEMO MODE - credentials not configured)
+💬 Communication Enhancements initialized
+   ✅ 8 advanced features ready
+🎵 Spotify API mode enabled
+🧠 Advanced Desktop RAG initialized
+   📊 Indexed files: 0
+   🏷️  Tagged files: 0
+   🔗 File relationships: 0
+🤖 AI Screen Suggester ready!
+📱 Chat Monitor initialized
+   ⚠️  Gmail credentials not configured
+   ⚠️  Twilio credentials not configured
+📺 Screen size detected: 1920x1080
+📱 Visual Chat Monitor initialized
+   ✅ Will control real Gmail/WhatsApp on your screen
+📺 Screen size detected: 1920x1080
+👁️ Smart Screen Monitor initialized
+⚙️ Command Executor initialized with full automation suite
+   🤖 Persona Service: Active
+   🧠 Desktop RAG: Active
+   💬 Communication Enhancements: Active
+   🎮 GUI Automation: Active
+   📊 40+ Modules Loaded
+✅ AI Engine Ready (Google Gemini 1.5 Flash)
+✅ Phone Link Controller initialized
+⚠️ Security dashboard unavailable: module 'cv2.face' has no attribute 'LBPHFaceRecognizer_create'
+
+============================================================
+🚀 DESKTOP SYNC MANAGER - AUTO STARTUP
+============================================================
+
+📊 Startup Sequence Results:
+------------------------------------------------------------
+✅ Setup Desktop Structure: SUCCESS
+   Total folders: 6
+❌ Prepare Batch File: FAILED
+   Batch file 'desktop_file_controller.bat' not found!
+      Current directory: C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL 10
+      Script directory: C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL 10\modules\file_management
+      Looking for: C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL 10\modules\file_management\desktop_file_controller.bat
+      💡 Please download 'desktop_file_controller.bat' from Replit
+         and place it in: C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL 10\modules\file_management
+✅ Create Desktop Structure: SUCCESS
+   Total folders: 7
+
+============================================================
+⚠️  Some steps had issues. Check details above.
+============================================================
+
+⚠️ Automation Orchestrator unavailable: name 'AutomationOrchestrator' is not defined
+✅ Batch Utilities initialized
+⚠️ WebSocket Client connection failed: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /socket.io/?transport=polling&EIO=4&t=1763548457.577953 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002ACA07611B0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+⚠️ Rate limit (429) with gemini-2.0-flash. Retry 1/3 in 1.2s...
+⚠️ Rate limit (429) with gemini-2.0-flash. Retry 2/3 in 1.8s...
+✅ Gemini API call succeeded after 3 attempt(s) with model gemini-2.0-flash
+
+📋 Task: Call vatsal
+
+📋 Task: Dial call to Vatsal

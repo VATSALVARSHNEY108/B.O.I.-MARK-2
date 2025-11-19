@@ -803,7 +803,12 @@ class CommandExecutor:
             
             # ==================== PHONE CALLS ====================
             elif action == "dial_call" or action == "make_call" or action == "call_contact":
-                name_or_number = parameters.get("contact", "") or parameters.get("name", "") or parameters.get("phone", "") or parameters.get("number", "")
+                name_or_number = (parameters.get("contact", "") or 
+                                 parameters.get("contact_name", "") or 
+                                 parameters.get("name", "") or 
+                                 parameters.get("phone", "") or 
+                                 parameters.get("phone_number", "") or 
+                                 parameters.get("number", ""))
                 message = parameters.get("message", None)
                 
                 if not name_or_number:
