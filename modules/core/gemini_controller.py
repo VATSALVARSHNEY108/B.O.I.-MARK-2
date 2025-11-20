@@ -746,6 +746,10 @@ IMPORTANT:
 - If user says "schedule whatsapp at 3pm", use send_whatsapp_scheduled with hour=15
 - Extract contact names accurately (e.g., "John", "Sarah", "Mom", "Boss")
 - If user says "write code for X" or "generate code for X", use write_code_to_editor action with description parameter
+- **IMPORTANT**: If user says "generate code for X in notepad", "write code for X to notepad", "generate code for X in editor", "code for X in notepad", use write_code_to_editor action (NOT generate_code)
+- For "in notepad", "to notepad", "in text editor", "in editor" phrases, always use write_code_to_editor
+- extract editor from phrases like "in notepad", "in VS Code", "to text editor" and pass as editor parameter
+- If user says just "generate code for X" (without "in notepad" or "to editor"), use generate_code to only display the code
 - Extract the programming task description accurately from the user's command
 - Language is optional and will be auto-detected from the description if not specified
 - For "explain this code" or "what does this code do", use explain_code
