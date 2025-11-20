@@ -575,6 +575,11 @@ class SystemController:
                 result = subprocess.run(f'shutdown /s /t {delay_seconds}', shell=True, capture_output=True, text=True)
                 print(f"Shutdown command executed (Windows): return code {result.returncode}")
                 
+                if result.returncode != 0:
+                    error_msg = result.stderr.strip() if result.stderr else "Unknown error"
+                    print(f"Shutdown command failed: {error_msg}")
+                    return f"❌ Failed to shutdown: {error_msg}\n💡 Make sure you have administrator privileges."
+                
                 if delay_seconds > 0:
                     return f"⚠️ Computer will shutdown in {delay_seconds} seconds.\n💡 Run 'cancel shutdown' command to abort."
                 else:
@@ -634,16 +639,28 @@ class SystemController:
     def restart_system(self, delay_seconds=10):
         """Restart the computer with optional delay"""
         try:
+            print(f"🔄 Attempting to restart system (delay: {delay_seconds}s)...")
+            
             if self.os in ["Darwin", "Linux"]:
                 if self.shutdown_process and self.shutdown_process.poll() is None:
                     self.shutdown_process.terminate()
                     self.shutdown_process = None
             
             if self.os == "Windows":
-                subprocess.run("shutdown /a", shell=True, check=False)
-                subprocess.Popen(f'shutdown /r /t {delay_seconds}', shell=True)
+                # Cancel any existing shutdown first
+                subprocess.run("shutdown /a", shell=True, check=False, capture_output=True)
+                
+                # Schedule restart with proper error handling
+                result = subprocess.run(f'shutdown /r /t {delay_seconds}', shell=True, capture_output=True, text=True)
+                print(f"Restart command executed (Windows): return code {result.returncode}")
+                
+                if result.returncode != 0:
+                    error_msg = result.stderr.strip() if result.stderr else "Unknown error"
+                    print(f"Restart command failed: {error_msg}")
+                    return f"❌ Failed to restart: {error_msg}\n💡 Make sure you have administrator privileges."
+                
                 if delay_seconds > 0:
-                    return f"🔄 Computer will restart in {delay_seconds} seconds. Run 'cancel shutdown' to abort."
+                    return f"🔄 Computer will restart in {delay_seconds} seconds.\n💡 Run 'cancel shutdown' to abort."
                 else:
                     return "🔄 Restarting computer now..."
             elif self.os == "Darwin":
