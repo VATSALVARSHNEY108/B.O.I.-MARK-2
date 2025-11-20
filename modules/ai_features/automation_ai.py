@@ -6,10 +6,18 @@ Email summarizer, document generator, code review, and AI macro suggestions
 import json
 import os
 import re
-import tkinter as tk
-from tkinter import simpledialog, messagebox
 from datetime import datetime
 from typing import Dict, List, Any
+
+try:
+    import tkinter as tk
+    from tkinter import simpledialog, messagebox
+    TKINTER_AVAILABLE = True
+except (ImportError, ModuleNotFoundError):
+    tk = None
+    simpledialog = None
+    messagebox = None
+    TKINTER_AVAILABLE = False
 
 # AI feature imports
 try:
@@ -355,6 +363,9 @@ class AdvancedAIIntegration:
     
     def append_output(self, text: str, tag: str = "info"):
         """Append text to advanced AI output console"""
+        if not TKINTER_AVAILABLE:
+            print(f"[{tag}] {text.strip()}")
+            return
         if not hasattr(self.gui, 'advanced_ai_output'):
             return
         
@@ -418,6 +429,9 @@ class AdvancedAIIntegration:
     
     def remember_something(self):
         """Remember information"""
+        if not TKINTER_AVAILABLE:
+            self.append_output("❌ GUI-only feature: This requires a graphical interface\n", "error")
+            return
         if not self.contextual_memory:
             self.append_output("❌ Contextual Memory not available\n", "error")
             return
@@ -437,6 +451,9 @@ class AdvancedAIIntegration:
     
     def recall_memories(self):
         """Recall stored memories"""
+        if not TKINTER_AVAILABLE:
+            self.append_output("❌ GUI-only feature: This requires a graphical interface\n", "error")
+            return
         if not self.contextual_memory:
             self.append_output("❌ Contextual Memory not available\n", "error")
             return
@@ -458,6 +475,9 @@ class AdvancedAIIntegration:
     
     def update_preferences(self):
         """Update user preferences"""
+        if not TKINTER_AVAILABLE:
+            self.append_output("❌ GUI-only feature: This requires a graphical interface\n", "error")
+            return
         if not self.contextual_memory:
             self.append_output("❌ Contextual Memory not available\n", "error")
             return
@@ -503,6 +523,9 @@ class AdvancedAIIntegration:
     
     def record_correction(self):
         """Record a correction"""
+        if not TKINTER_AVAILABLE:
+            self.append_output("❌ GUI-only feature: This requires a graphical interface\n", "error")
+            return
         if not self.correction_learning:
             self.append_output("❌ Correction Learning not available\n", "error")
             return
@@ -564,6 +587,9 @@ class AdvancedAIIntegration:
     
     def apply_learning(self):
         """Apply learned corrections"""
+        if not TKINTER_AVAILABLE:
+            self.append_output("❌ GUI-only feature: This requires a graphical interface\n", "error")
+            return
         if not self.correction_learning:
             self.append_output("❌ Correction Learning not available\n", "error")
             return
@@ -660,6 +686,9 @@ class AdvancedAIIntegration:
     
     def clear_output(self):
         """Clear the advanced AI output console"""
+        if not TKINTER_AVAILABLE:
+            print("Output cleared (console mode)")
+            return
         if hasattr(self.gui, 'advanced_ai_output'):
             self.gui.advanced_ai_output.config(state='normal')
             self.gui.advanced_ai_output.delete(1.0, tk.END)

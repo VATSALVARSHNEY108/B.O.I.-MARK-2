@@ -7,10 +7,16 @@ Covers Display, Sound, Network, Bluetooth, Privacy, Personalization, System, Acc
 import subprocess
 import platform
 import os
-import winreg
 import json
 from pathlib import Path
 from typing import Dict, List, Any, Optional
+
+try:
+    import winreg
+    WINREG_AVAILABLE = True
+except (ImportError, ModuleNotFoundError):
+    winreg = None
+    WINREG_AVAILABLE = False
 
 
 class Windows11SettingsController:
@@ -1266,8 +1272,12 @@ class Windows11SettingsController:
         except WindowsError:
             return None
     
-    def _write_registry(self, path: str, key: str, value: Any, reg_type: int = winreg.REG_DWORD) -> bool:
+    def _write_registry(self, path: str, key: str, value: Any, reg_type: Optional[int] = None) -> bool:
         """Write Windows Registry value"""
+        if not WINREG_AVAILABLE or winreg is None:
+            return False
+        if reg_type is None:
+            reg_type = winreg.REG_DWORD
         try:
             registry = winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER)
             registry_key = winreg.OpenKey(registry, path, 0, winreg.KEY_WRITE)
