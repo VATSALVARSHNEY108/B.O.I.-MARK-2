@@ -25,11 +25,7 @@ args = "VATSAL GUI (VNC)"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "VATSAL GUI"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "VATSAL Web GUI"
+args = "VATSAL Desktop Mode"
 
 [[workflows.workflow]]
 name = "VATSAL AI CLI"
@@ -54,7 +50,7 @@ task = "shell.exec"
 args = "xvfb-run -a python launchers/launch_gui.py"
 
 [[workflows.workflow]]
-name = "VATSAL GUI"
+name = "VATSAL Desktop Mode"
 author = "agent"
 
 [[workflows.workflow.tasks]]
@@ -63,18 +59,6 @@ args = "python launchers/launch_gui.py"
 
 [workflows.workflow.metadata]
 outputType = "vnc"
-
-[[workflows.workflow]]
-name = "VATSAL Web GUI"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python web_gui/server.py"
-waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "webview"
 
 [[ports]]
 localPort = 5000
