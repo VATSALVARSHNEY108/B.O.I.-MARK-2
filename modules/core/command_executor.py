@@ -28,6 +28,7 @@ from modules.file_management.advanced_file_operations import search_files, find_
 from modules.smart_features.workflow_templates import WorkflowManager
 from modules.development.code_executor import execute_python_code, execute_javascript_code, validate_code_safety
 from modules.system.system_control import SystemController
+from modules.system.windows11_settings_controller import get_windows11_controller
 from modules.smart_features.app_scheduler import AppScheduler
 from modules.automation.download_organizer import DownloadOrganizer
 from modules.voice.voice_assistant import VoiceAssistant
@@ -118,6 +119,17 @@ class CommandExecutor:
         # System Control and Monitoring
         self.system_control = SystemController()
         self.productivity_monitor = ProductivityMonitor()
+        
+        # Windows 11 Settings Controller (only on Windows)
+        if platform.system() == "Windows":
+            try:
+                self.win11_settings = get_windows11_controller()
+                print("⚙️ Windows 11 Settings Controller: Active")
+            except Exception as e:
+                self.win11_settings = None
+                print(f"⚠️ Windows 11 Settings Controller unavailable: {e}")
+        else:
+            self.win11_settings = None
         
         # File Management
         self.file_manager = FileManager()
@@ -1846,6 +1858,453 @@ class CommandExecutor:
             elif action == "open_volume_menu":
                 result = self.system_control.open_volume_brightness_menu()
                 return {"success": True, "message": result}
+
+            # ==================== WINDOWS 11 SETTINGS ====================
+            # Display Settings
+            elif action == "get_display_info":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                result = self.win11_settings.get_display_info()
+                return result
+            
+            elif action == "set_display_resolution":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                width = parameters.get("width", 1920)
+                height = parameters.get("height", 1080)
+                result = self.win11_settings.set_display_resolution(width, height)
+                return result
+            
+            elif action == "set_display_scaling":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                scale = parameters.get("scale", 100)
+                result = self.win11_settings.set_display_scaling(scale)
+                return result
+            
+            elif action == "set_night_light":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                temperature = parameters.get("temperature", 4800)
+                result = self.win11_settings.set_night_light(enabled, temperature)
+                return result
+            
+            elif action == "set_refresh_rate":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                rate = parameters.get("rate", 60)
+                result = self.win11_settings.set_refresh_rate(rate)
+                return result
+            
+            # Sound Settings
+            elif action == "list_audio_devices":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                device_type = parameters.get("type", "playback")
+                result = self.win11_settings.list_audio_devices(device_type)
+                return result
+            
+            elif action == "set_default_audio_device":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                device_name = parameters.get("device_name", "")
+                device_type = parameters.get("type", "playback")
+                result = self.win11_settings.set_default_audio_device(device_name, device_type)
+                return result
+            
+            elif action == "set_spatial_sound":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                format_type = parameters.get("format", "WindowsSonic")
+                result = self.win11_settings.set_spatial_sound(enabled, format_type)
+                return result
+            
+            # Network Settings
+            elif action == "get_network_adapters":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                result = self.win11_settings.get_network_adapters()
+                return result
+            
+            elif action == "set_wifi":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_wifi_state(enabled)
+                return result
+            
+            elif action == "set_airplane_mode":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_airplane_mode(enabled)
+                return result
+            
+            elif action == "set_mobile_hotspot":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                ssid = parameters.get("ssid", None)
+                password = parameters.get("password", None)
+                result = self.win11_settings.set_mobile_hotspot(enabled, ssid, password)
+                return result
+            
+            elif action == "set_proxy":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                server = parameters.get("server", None)
+                port = parameters.get("port", None)
+                result = self.win11_settings.set_proxy(enabled, server, port)
+                return result
+            
+            elif action == "flush_dns":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                result = self.win11_settings.flush_dns_cache()
+                return result
+            
+            elif action == "reset_network":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                adapter = parameters.get("adapter", None)
+                result = self.win11_settings.reset_network_adapter(adapter)
+                return result
+            
+            # Bluetooth Settings
+            elif action == "set_bluetooth":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_bluetooth_state(enabled)
+                return result
+            
+            elif action == "list_bluetooth_devices":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                result = self.win11_settings.list_bluetooth_devices()
+                return result
+            
+            elif action == "set_bluetooth_discoverable":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_bluetooth_discoverable(enabled)
+                return result
+            
+            # Privacy & Security
+            elif action == "set_camera_access":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                app = parameters.get("app", None)
+                result = self.win11_settings.set_camera_access(enabled, app)
+                return result
+            
+            elif action == "set_microphone_access":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                app = parameters.get("app", None)
+                result = self.win11_settings.set_microphone_access(enabled, app)
+                return result
+            
+            elif action == "set_location_access":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_location_access(enabled)
+                return result
+            
+            elif action == "set_telemetry":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                level = parameters.get("level", "basic")
+                result = self.win11_settings.set_telemetry_level(level)
+                return result
+            
+            elif action == "set_windows_defender":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_windows_defender(enabled)
+                return result
+            
+            elif action == "set_firewall":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                profile = parameters.get("profile", "all")
+                result = self.win11_settings.set_firewall_state(enabled, profile)
+                return result
+            
+            # Personalization
+            elif action == "set_dark_mode":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_dark_mode(enabled)
+                return result
+            
+            elif action == "set_wallpaper":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                image_path = parameters.get("image_path", "")
+                result = self.win11_settings.set_wallpaper(image_path)
+                return result
+            
+            elif action == "set_accent_color":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                color = parameters.get("color", "#0078D4")
+                result = self.win11_settings.set_accent_color(color)
+                return result
+            
+            elif action == "set_transparency":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_transparency_effects(enabled)
+                return result
+            
+            elif action == "set_taskbar_position":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                position = parameters.get("position", "bottom")
+                result = self.win11_settings.set_taskbar_position(position)
+                return result
+            
+            elif action == "set_taskbar_autohide":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_taskbar_auto_hide(enabled)
+                return result
+            
+            elif action == "set_start_layout":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                layout = parameters.get("layout", "default")
+                result = self.win11_settings.set_start_menu_layout(layout)
+                return result
+            
+            # System Settings
+            elif action == "set_notifications":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                app = parameters.get("app", None)
+                result = self.win11_settings.set_notifications(enabled, app)
+                return result
+            
+            elif action == "set_focus_assist":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                mode = parameters.get("mode", "off")
+                result = self.win11_settings.set_focus_assist(mode)
+                return result
+            
+            elif action == "set_clipboard_history":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_clipboard_history(enabled)
+                return result
+            
+            elif action == "set_storage_sense":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_storage_sense(enabled)
+                return result
+            
+            elif action == "set_remote_desktop":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_remote_desktop(enabled)
+                return result
+            
+            elif action == "get_storage_usage":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                result = self.win11_settings.get_storage_usage()
+                return result
+            
+            # Accessibility
+            elif action == "set_narrator":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_narrator(enabled)
+                return result
+            
+            elif action == "set_magnifier":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                zoom = parameters.get("zoom", 200)
+                result = self.win11_settings.set_magnifier(enabled, zoom)
+                return result
+            
+            elif action == "set_high_contrast":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_high_contrast(enabled)
+                return result
+            
+            elif action == "set_sticky_keys":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_sticky_keys(enabled)
+                return result
+            
+            elif action == "set_filter_keys":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_filter_keys(enabled)
+                return result
+            
+            elif action == "set_mouse_pointer_size":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                size = parameters.get("size", 1)
+                result = self.win11_settings.set_mouse_pointer_size(size)
+                return result
+            
+            # Windows Update
+            elif action == "check_updates":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                result = self.win11_settings.check_windows_updates()
+                return result
+            
+            elif action == "install_updates":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                result = self.win11_settings.install_windows_updates()
+                return result
+            
+            elif action == "pause_updates":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                days = parameters.get("days", 7)
+                result = self.win11_settings.pause_windows_updates(days)
+                return result
+            
+            elif action == "resume_updates":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                result = self.win11_settings.resume_windows_updates()
+                return result
+            
+            # App & Startup
+            elif action == "list_startup_apps":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                result = self.win11_settings.list_startup_apps()
+                return result
+            
+            elif action == "disable_startup_app":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                app_name = parameters.get("app_name", "")
+                result = self.win11_settings.disable_startup_app(app_name)
+                return result
+            
+            elif action == "set_default_browser":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                browser = parameters.get("browser", "edge")
+                result = self.win11_settings.set_default_browser(browser)
+                return result
+            
+            # Time & Language
+            elif action == "set_timezone":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                timezone = parameters.get("timezone", "")
+                result = self.win11_settings.set_time_zone(timezone)
+                return result
+            
+            elif action == "list_timezones":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                result = self.win11_settings.list_timezones()
+                return result
+            
+            # Gaming
+            elif action == "set_game_mode":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_game_mode(enabled)
+                return result
+            
+            elif action == "set_game_bar":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                enabled = parameters.get("enabled", True)
+                result = self.win11_settings.set_game_bar(enabled)
+                return result
+            
+            # Power Settings
+            elif action == "set_power_plan":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                plan = parameters.get("plan", "balanced")
+                result = self.win11_settings.set_power_plan(plan)
+                return result
+            
+            elif action == "set_sleep_timeout":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                minutes = parameters.get("minutes", 30)
+                on_battery = parameters.get("on_battery", False)
+                result = self.win11_settings.set_sleep_timeout(minutes, on_battery)
+                return result
+            
+            elif action == "set_screen_timeout":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                minutes = parameters.get("minutes", 10)
+                on_battery = parameters.get("on_battery", False)
+                result = self.win11_settings.set_screen_timeout(minutes, on_battery)
+                return result
+            
+            # Advanced System
+            elif action == "set_virtual_memory":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                drive = parameters.get("drive", "C")
+                initial_mb = parameters.get("initial_mb", 1024)
+                maximum_mb = parameters.get("maximum_mb", 4096)
+                result = self.win11_settings.set_virtual_memory(drive, initial_mb, maximum_mb)
+                return result
+            
+            elif action == "set_performance_options":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                option = parameters.get("option", "best_performance")
+                result = self.win11_settings.set_performance_options(option)
+                return result
+            
+            elif action == "optimize_system":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                result = self.win11_settings.optimize_system_performance()
+                return result
+            
+            elif action == "get_all_settings":
+                if not self.win11_settings:
+                    return {"success": False, "message": "Windows 11 Settings Controller not available"}
+                result = self.win11_settings.get_all_settings_summary()
+                return result
 
             # ==================== DESKTOP RAG ====================
             elif action == "index_desktop_rag":

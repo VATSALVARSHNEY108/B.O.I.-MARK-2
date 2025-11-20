@@ -1,7 +1,7 @@
 # AI Desktop Automation Controller
 
 ## Overview
-The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. The project aims to be a comprehensive productivity powerhouse, offering a unified ecosystem with over 310+ features, including smart Desktop RAG, 9 Smart Automation & AI features, Natural Language Workflow Builder, 8 Communication Enhancement features, 7 new essential utility tools, and a real-time WebSocket dashboard for live monitoring. It integrates advanced AI for code generation, screen analysis, natural language understanding, professional-grade data analysis, various utility modules, and real-time remote monitoring capabilities, including an Intelligent AI Assistant.
+The AI Desktop Automation Controller is an intelligent desktop automation tool powered by Google's Gemini AI. It interprets natural language commands to execute a wide range of tasks on desktop computers. The project aims to be a comprehensive productivity powerhouse, offering a unified ecosystem with over 410+ features, including the new **Comprehensive Windows 11 Settings Controller** with 100+ settings functions, smart Desktop RAG, 9 Smart Automation & AI features, Natural Language Workflow Builder, 8 Communication Enhancement features, 7 essential utility tools, and a real-time WebSocket dashboard for live monitoring. It integrates advanced AI for code generation, screen analysis, natural language understanding, professional-grade data analysis, various utility modules, and real-time remote monitoring capabilities, including an Intelligent AI Assistant.
 
 ## User Preferences
 -   **Interface:** User prefers desktop GUI interfaces only - NO web-based interfaces. Project uses tkinter-based GUIs (gui_app.py, enhanced_gui.py) for local desktop use.
@@ -22,6 +22,7 @@ The system offers desktop GUIs built with `tkinter` featuring a light cream back
 -   **Smart Automation & AI:** 9 AI-powered features for various tasks.
 -   **Visual Chat Monitor:** AI-powered visual email/WhatsApp monitoring via real browser interface control.
 -   **System Control:** Manages system-level automation (lock, shutdown, restart, brightness, volume, disk cleanup, system info, clipboard, power, window management with close all windows/tabs feature, process management).
+-   **Windows 11 Settings Controller:** Comprehensive control over ALL Windows 11 settings with 100+ functions covering Display (resolution, scaling, night light, refresh rate), Sound (spatial audio, device management), Network (WiFi, airplane mode, proxy, DNS, adapters), Bluetooth, Privacy & Security (camera, microphone, location access, Windows Defender, Firewall, telemetry), Personalization (dark mode, wallpaper, accent colors, taskbar, Start menu), System (notifications, focus assist, clipboard history, storage sense, remote desktop), Accessibility (narrator, magnifier, high contrast, sticky keys), Windows Update (check, install, pause/resume), Apps & Startup, Time & Language, Gaming (Game Mode, Xbox Game Bar), Power Plans, and Advanced System Settings (virtual memory, performance optimization). Full PowerShell and Registry integration for native Windows control.
 -   **Voice Assistant with Personality:** An ultra-intelligent, interactive voice commanding system with empathetic responses, wake word detection, context awareness, and adaptive feedback. Includes a PersonaResponseService for conversational AI interactions.
 -   **Face & Gesture Assistant:** Computer vision (OpenCV, MediaPipe) for face detection and hand gesture recognition to activate voice listening.
 -   **Self-Operating Computer:** Autonomous AI desktop control using Gemini Vision for screen analysis and actions.
@@ -42,6 +43,7 @@ The system offers desktop GUIs built with `tkinter` featuring a light cream back
 -   **Contact-Based Calling:** Full contact management system with name-based calling integrated with Phone Link.
 
 ## Recent Updates (November 2025)
+-   **Windows 11 Settings Controller (NEW):** Comprehensive control system for ALL Windows 11 settings with 100+ functions. Voice-controlled settings for Display, Sound, Network, Bluetooth, Privacy & Security, Personalization, System, Accessibility, Windows Update, Apps, Time & Language, Gaming, Power, and Advanced System settings. PowerShell and Registry integration for native Windows control. Full documentation in `docs/WINDOWS11_SETTINGS_GUIDE.md`
 -   **Fixed Shutdown & Restart:** Enhanced error handling with proper return code checking, error messages, and diagnostic testing scripts
 -   **Close All Windows Feature:** New comprehensive window/tab closing with batch file integration, protects system-critical processes and VATSAL itself
 -   **WhatsApp Messaging Fixed:** Integrated WhatsApp automation with command executor, supports sending by contact name or phone number
