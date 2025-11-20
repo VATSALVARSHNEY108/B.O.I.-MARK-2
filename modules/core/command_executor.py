@@ -1218,7 +1218,8 @@ class CommandExecutor:
             elif action == "write_code_to_editor":
                 description = parameters.get("description", "")
                 language = parameters.get("language", None)
-                editor = parameters.get("editor", "notepad")
+                editor = parameters.get("editor", "notepad").lower()
+                fullscreen = parameters.get("fullscreen", True)
 
                 if not description:
                     return {
@@ -1243,8 +1244,35 @@ class CommandExecutor:
                     print(f"  ⚡ Using built-in template (instant!)")
 
                 print(f"\n  ✅ Generated {detected_lang} code ({len(code)} characters)")
+                
+                # Use specialized notepad_writer for notepad, otherwise generic method
+                if "notepad" in editor or "text" in editor:
+                    print(f"  📝 Opening Notepad in fullscreen and writing code...")
+                    
+                    # Import notepad_writer
+                    from modules.utilities.notepad_writer import write_code_to_notepad
+                    
+                    notepad_result = write_code_to_notepad(
+                        code=code,
+                        language=detected_lang,
+                        fullscreen=fullscreen
+                    )
+                    
+                    if notepad_result.get("success"):
+                        return {
+                            "success": True,
+                            "message": f"✅ Generated and wrote {detected_lang} code to Notepad in fullscreen!",
+                            "generated_code": code,
+                            "language": detected_lang,
+                            "chars_written": notepad_result.get("chars_written", len(code))
+                        }
+                    else:
+                        # Fallback to generic method if notepad_writer fails
+                        print(f"  ⚠️  Notepad writer failed: {notepad_result.get('message')}")
+                        print(f"  🔄 Falling back to generic method...")
+                
+                # Generic method for other editors or if notepad_writer failed
                 print(f"  📝 Opening {editor}...")
-
                 self.gui.open_application(editor)
                 time.sleep(2)
 
