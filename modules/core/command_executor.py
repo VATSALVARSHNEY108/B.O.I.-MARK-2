@@ -17,6 +17,7 @@ from modules.communication.phone_dialer import create_phone_dialer
 from modules.communication.phone_link_monitor import create_phone_link_monitor
 from modules.utilities.youtube_automation import create_youtube_automation
 from modules.communication.whatsapp_automation import create_whatsapp_automation
+from scripts.whatsapp_contact_manager import WhatsAppContactManager
 from modules.ai_features.code_generation import generate_code, explain_code, improve_code, debug_code
 from modules.intelligence.conversation_memory import ConversationMemory
 from modules.ai_features.vision_ai import analyze_screenshot, extract_text_from_screenshot, get_screenshot_summary
@@ -93,6 +94,7 @@ class CommandExecutor:
         self.phone_dialer = create_phone_dialer()
         self.phone_link_monitor = create_phone_link_monitor()
         self.whatsapp = create_whatsapp_automation()
+        self.whatsapp_contacts = WhatsAppContactManager()
         self.email_sender = create_email_sender()
         self.comm_enhancements = CommunicationEnhancements()
         
@@ -920,6 +922,91 @@ class CommandExecutor:
                     "message": "\n".join(messages),
                     "data": counts
                 }
+            
+            # ==================== WHATSAPP MESSAGING ====================
+            elif action == "send_whatsapp":
+                phone = parameters.get("phone", "") or parameters.get("phone_number", "") or parameters.get("number", "")
+                contact_name = parameters.get("contact", "") or parameters.get("contact_name", "") or parameters.get("name", "")
+                message = parameters.get("message", "")
+                
+                # If no phone provided, try to look up by contact name
+                if not phone and contact_name:
+                    print(f"  🔍 Looking up contact '{contact_name}'...")
+                    contact = self.whatsapp_contacts.find_contact(contact_name)
+                    if contact:
+                        phone = contact.get('phone', '')
+                        print(f"  ✅ Found contact: {contact['name']} ({phone})")
+                    else:
+                        return {
+                            "success": False,
+                            "message": f"❌ Contact '{contact_name}' not found. Please add them first or use a phone number with country code (e.g., +1234567890)"
+                        }
+                
+                if not phone:
+                    return {
+                        "success": False,
+                        "message": "❌ No phone number or contact name provided. Please specify who to message"
+                    }
+                
+                if not message:
+                    return {
+                        "success": False,
+                        "message": "❌ No message provided. Please specify what message to send"
+                    }
+                
+                print(f"  📱 Sending WhatsApp message to {phone}...")
+                result = self.whatsapp.send_message_instantly(phone, message)
+                return result
+            
+            elif action == "send_whatsapp_scheduled":
+                phone = parameters.get("phone", "") or parameters.get("phone_number", "") or parameters.get("number", "")
+                message = parameters.get("message", "")
+                hour = parameters.get("hour", 12)
+                minute = parameters.get("minute", 0)
+                
+                if not phone or not message:
+                    return {
+                        "success": False,
+                        "message": "❌ Phone number and message are required"
+                    }
+                
+                print(f"  📱 Scheduling WhatsApp message to {phone} for {hour}:{minute:02d}...")
+                result = self.whatsapp.send_message_scheduled(phone, message, hour, minute)
+                return result
+            
+            elif action == "send_whatsapp_group":
+                group_id = parameters.get("group_id", "") or parameters.get("group", "")
+                message = parameters.get("message", "")
+                
+                if not group_id or not message:
+                    return {
+                        "success": False,
+                        "message": "❌ Group ID and message are required"
+                    }
+                
+                print(f"  📱 Sending WhatsApp message to group...")
+                result = self.whatsapp.send_to_group_instantly(group_id, message)
+                return result
+            
+            elif action == "send_whatsapp_image":
+                phone = parameters.get("phone", "") or parameters.get("phone_number", "") or parameters.get("number", "")
+                image_path = parameters.get("image_path", "") or parameters.get("image", "") or parameters.get("path", "")
+                caption = parameters.get("caption", "")
+                
+                if not phone or not image_path:
+                    return {
+                        "success": False,
+                        "message": "❌ Phone number and image path are required"
+                    }
+                
+                print(f"  📱 Sending WhatsApp image to {phone}...")
+                result = self.whatsapp.send_image(phone, image_path, caption)
+                return result
+            
+            elif action == "open_whatsapp":
+                print(f"  📱 Opening WhatsApp Desktop...")
+                result = self.whatsapp.open_whatsapp_desktop()
+                return result
             
             # ==================== SYSTEM MONITORING ====================
             elif action == "system_report":
