@@ -51,7 +51,8 @@ from modules.security.security_dashboard import SecurityDashboard
 from modules.utilities.batch_utilities import get_batch_utilities
 from modules.communication.phone_dialer import create_phone_dialer
 from modules.utilities.contact_manager import ContactManager
-from ai_phone_link_controller import AIPhoneLinkController
+from scripts.ai_phone_link_controller import AIPhoneLinkController
+
 
 load_dotenv()
 
