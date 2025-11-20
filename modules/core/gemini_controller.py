@@ -726,6 +726,13 @@ CLOUD ECOSYSTEM:
 - restore_from_cloud: Restore from cloud backup (parameters: backup_date [optional, default: latest])
 
 IMPORTANT:
+- **CRITICAL**: If user says "open [app]", "launch [app]", "start [app]", "run [app]", use open_app action (NOT type_text)
+- Extract application name from phrases like "open vs code", "launch chrome", "start notepad", "open spotify"
+- Common apps: "notepad", "chrome", "firefox", "vs code", "vscode", "spotify", "discord", "calculator", "explorer"
+- If user says "open vs code", use open_app with app_name="vscode" (NOT type_text with text="vscode")
+- If user says "open notepad", use open_app with app_name="notepad" (NOT type_text with text="notepad")
+- If user says "launch chrome", use open_app with app_name="chrome" (NOT type_text with text="chrome")
+- **DO NOT** use type_text for opening applications - ALWAYS use open_app for "open", "launch", "start", "run" commands
 - For "send to [name]" commands, use contact_name parameter
 - If user says "text John" or "message Sarah", use send_sms
 - If user says "email John" or "send email to Sarah", use send_email
