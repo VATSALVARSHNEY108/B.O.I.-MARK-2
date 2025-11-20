@@ -705,12 +705,12 @@ class CommandExecutor:
                 result = self.spotify.previous_track()
                 return {"success": True, "message": result if isinstance(result, str) else result.get("message", "Previous track")}
             
-            elif action == "spotify_play_track":
-                query = parameters.get("query", "")
+            elif action == "spotify_play_track" or action == "play_song" or action == "play_spotify_song":
+                query = parameters.get("query", "") or parameters.get("song", "") or parameters.get("song_name", "") or parameters.get("track", "")
                 if not query:
-                    return {"success": False, "message": "No song name provided"}
+                    return {"success": False, "message": "No song name provided. Please specify what song to play."}
                 
-                print(f"  🎵 Playing '{query}' on Spotify...")
+                print(f"  🎵 Searching and playing '{query}' on Spotify...")
                 
                 if self.spotify_mode == "api":
                     result = self.spotify.play_track(query)
@@ -718,10 +718,11 @@ class CommandExecutor:
                         return result
                     return {"success": True, "message": result}
                 else:
-                    result = self.spotify.play_track(query)
-                    if isinstance(result, dict):
-                        return result
-                    return {"success": True, "message": result}
+                    # Desktop mode doesn't support search, suggest opening Spotify
+                    return {
+                        "success": False, 
+                        "message": f"Desktop mode can't search for songs. Please open Spotify and search for '{query}' manually, or connect Spotify API for full control."
+                    }
             
             elif action == "spotify_volume":
                 volume = parameters.get("volume", 50)

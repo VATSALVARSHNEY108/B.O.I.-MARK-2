@@ -162,6 +162,11 @@ class SpotifyAutomation:
             }
         return result
     
+    def play_song(self, song_name):
+        """Search for a song and play it"""
+        # Use the existing play_track method which handles this correctly
+        return self.play_track(song_name)
+    
     def search(self, query, search_type='track', limit=5):
         """Search Spotify (track/artist/album/playlist)"""
         from urllib.parse import quote

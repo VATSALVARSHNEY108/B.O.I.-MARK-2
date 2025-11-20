@@ -33,13 +33,19 @@ The system offers desktop GUIs built with `tkinter` featuring a light cream back
 -   **AI-Powered Security Dashboard:** Gemini AI-powered security management with biometric auth, 2FA, encrypted storage, and threat analysis.
 -   **Batch Form Filler System:** Comprehensive form automation for web (Selenium) and desktop (PyAutoGUI) with intelligent field detection.
 -   **Hand Gesture Mouse Controller:** Touchless computer control using webcam and MediaPipe hand tracking.
--   **Batch Utilities System:** Comprehensive Python implementation of 20+ batch file utilities with GUI integration (e.g., volume, power, battery, file management, network tools, maintenance).
+-   **Batch Utilities System:** Comprehensive Python implementation of 20+ batch file utilities with GUI integration (e.g., volume, power, battery, file management, network tools, maintenance, Spotify control, window management).
 -   **AI Phone Link Controller:** Gemini AI-powered Windows Phone Link automation for natural language phone control (interactive chat, quick dialing, command history).
 -   **Utility Modules:** Integrations for Spotify, YouTube, Weather & News, Translation, Calculator, Password Vault, Quick Notes, Calendar Manager, Timer & Stopwatch, Quick Reminders, Habit Tracker, Color Tools, QR Code Tools, Screenshot Annotator, Image Resizer, Batch Form Filler, and Hand Gesture Controller.
 -   **AI Performance Optimizations:** Implemented response caching, model fallback, retry optimization, token limit tuning, and generation config adjustments.
--   **WhatsApp Automation:** Comprehensive batch messaging and individual messaging systems for WhatsApp, including personalized templates, image sending, scheduling, and full contact management system. Features contact CRUD operations (add/edit/rename/delete), search functionality, import/export CSV, create batch CSV from contacts, automatic contact name resolution in batch messaging, seamless integration across all WhatsApp tools. Documentation: `docs/WHATSAPP_CONTACT_MANAGER_GUIDE.md`, `docs/WHATSAPP_BATCH_AUTOMATION_GUIDE.md`.
+-   **WhatsApp Automation:** Comprehensive batch messaging and individual messaging systems for WhatsApp, including personalized templates, image sending, scheduling, and full contact management system. Features contact CRUD operations (add/edit/rename/delete), search functionality, import/export CSV, create batch CSV from contacts, automatic contact name resolution in batch messaging, seamless integration across all WhatsApp tools. Fully integrated with command executor for voice control. Documentation: `docs/WHATSAPP_CONTACT_MANAGER_GUIDE.md`, `docs/WHATSAPP_BATCH_AUTOMATION_GUIDE.md`, `docs/WHATSAPP_COMMANDS_QUICK_GUIDE.md`.
 -   **Phone Link Notification Monitor:** System for monitoring and parsing Windows Action Center notifications from Phone Link.
 -   **Contact-Based Calling:** Full contact management system with name-based calling integrated with Phone Link.
+
+## Recent Updates (November 2025)
+-   **Fixed Shutdown & Restart:** Enhanced error handling with proper return code checking, error messages, and diagnostic testing scripts
+-   **Close All Windows Feature:** New comprehensive window/tab closing with batch file integration, protects system-critical processes and VATSAL itself
+-   **WhatsApp Messaging Fixed:** Integrated WhatsApp automation with command executor, supports sending by contact name or phone number
+-   **Spotify Integration Enhanced:** Added Windows batch files for Spotify control, play song functionality with search, full voice command integration
 
 ## External Dependencies
 -   **google-genai:** For Gemini AI integration.
