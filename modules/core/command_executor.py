@@ -1687,6 +1687,14 @@ class CommandExecutor:
                 result = self.system_control.show_desktop()
                 return {"success": True, "message": result}
 
+            elif action == "close_all_windows":
+                result = self.system_control.close_all_windows()
+                return {"success": True, "message": result}
+
+            elif action == "close_all_tabs":
+                result = self.system_control.close_all_tabs()
+                return {"success": True, "message": result}
+
             elif action == "list_windows":
                 result = self.system_control.list_open_windows()
                 return {"success": True, "message": result}

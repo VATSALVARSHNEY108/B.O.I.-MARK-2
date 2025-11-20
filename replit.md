@@ -21,7 +21,7 @@ The system offers desktop GUIs built with `tkinter` featuring a light cream back
 -   **Desktop RAG System:** Indexes desktop files for semantic search and Q&A.
 -   **Smart Automation & AI:** 9 AI-powered features for various tasks.
 -   **Visual Chat Monitor:** AI-powered visual email/WhatsApp monitoring via real browser interface control.
--   **System Control:** Manages system-level automation (lock, shutdown, restart, brightness, volume, disk cleanup, system info, clipboard, power, window, process management).
+-   **System Control:** Manages system-level automation (lock, shutdown, restart, brightness, volume, disk cleanup, system info, clipboard, power, window management with close all windows/tabs feature, process management).
 -   **Voice Assistant with Personality:** An ultra-intelligent, interactive voice commanding system with empathetic responses, wake word detection, context awareness, and adaptive feedback. Includes a PersonaResponseService for conversational AI interactions.
 -   **Face & Gesture Assistant:** Computer vision (OpenCV, MediaPipe) for face detection and hand gesture recognition to activate voice listening.
 -   **Self-Operating Computer:** Autonomous AI desktop control using Gemini Vision for screen analysis and actions.

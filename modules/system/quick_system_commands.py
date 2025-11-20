@@ -20,6 +20,8 @@ def main():
         print("  restart        - Restart computer (10 sec delay)")
         print("  restart-now    - Restart immediately")
         print("  cancel         - Cancel shutdown/restart")
+        print("  close-all      - Close all windows and tabs")
+        print("  minimize-all   - Minimize all windows")
         print("\nVolume Control:")
         print("  vol-set <0-100>    - Set volume to specific level")
         print("  vol-up [amount]    - Increase volume (default 10)")
@@ -55,6 +57,12 @@ def main():
     
     elif command == "cancel":
         print(controller.cancel_shutdown_restart())
+    
+    elif command == "close-all":
+        print(controller.close_all_windows())
+    
+    elif command == "minimize-all":
+        print(controller.minimize_all_windows())
     
     # Volume commands
     elif command == "vol-set":

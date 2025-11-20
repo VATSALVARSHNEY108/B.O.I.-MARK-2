@@ -1002,6 +1002,82 @@ class SystemController:
         """Show desktop"""
         return self.minimize_all_windows()
     
+    def close_all_windows(self):
+        """Close all open windows and tabs (browsers, applications)"""
+        try:
+            if self.os == "Windows":
+                # Use batch file for comprehensive window closing
+                batch_file = os.path.join(self.batch_files_dir, "close_all_windows.bat")
+                
+                if os.path.exists(batch_file):
+                    print("Using batch file to close all windows...")
+                    result = subprocess.run(
+                        [batch_file],
+                        shell=True,
+                        capture_output=True,
+                        text=True,
+                        timeout=30
+                    )
+                    if result.returncode == 0:
+                        return "✅ All windows and tabs closed successfully"
+                    else:
+                        print(f"Batch file warning: {result.stderr}")
+                
+                # Fallback method using PowerShell
+                print("Using PowerShell fallback to close windows...")
+                
+                # Close browsers first
+                browsers = ['chrome', 'firefox', 'msedge', 'opera', 'brave']
+                for browser in browsers:
+                    subprocess.run(f'taskkill /F /IM {browser}.exe', shell=True, check=False, capture_output=True)
+                
+                # Close other common applications
+                apps = ['notepad', 'Code', 'Discord', 'Spotify', 'Telegram', 'WhatsApp']
+                for app in apps:
+                    subprocess.run(f'taskkill /F /IM {app}.exe', shell=True, check=False, capture_output=True)
+                
+                # Close remaining windows gracefully using PowerShell
+                powershell_cmd = """Get-Process | Where-Object {$_.MainWindowTitle -ne ''} | Where-Object {$_.ProcessName -notin @('explorer','taskmgr','SystemSettings','cmd','powershell','python','pythonw')} | Stop-Process -Force -ErrorAction SilentlyContinue"""
+                subprocess.run(['powershell', '-Command', powershell_cmd], check=False, capture_output=True)
+                
+                return "✅ All windows and tabs closed successfully"
+                
+            elif self.os == "Darwin":
+                # macOS: Close all applications except Finder and System apps
+                script = '''
+                tell application "System Events"
+                    set allApps to name of every process whose background only is false
+                    repeat with appName in allApps
+                        if appName is not in {"Finder", "System Preferences", "Terminal"} then
+                            try
+                                tell application appName to quit
+                            end try
+                        end if
+                    end repeat
+                end tell
+                '''
+                subprocess.run(['osascript', '-e', script], check=False)
+                return "✅ All applications closed (macOS)"
+                
+            elif self.os == "Linux":
+                # Linux: Close all non-system windows
+                try:
+                    # Close browsers
+                    subprocess.run("killall chrome firefox opera brave", shell=True, check=False)
+                    
+                    # Close other windows using wmctrl if available
+                    subprocess.run("wmctrl -l | awk '{print $1}' | xargs -I {} wmctrl -ic {}", shell=True, check=False)
+                    return "✅ All windows closed (Linux)"
+                except:
+                    return "⚠️ Partial close - some windows may remain open"
+            
+        except Exception as e:
+            return f"❌ Failed to close all windows: {str(e)}"
+    
+    def close_all_tabs(self):
+        """Quick close all browser tabs (alias for close_all_windows)"""
+        return self.close_all_windows()
+    
     def list_open_windows(self):
         """List all open windows"""
         try:
