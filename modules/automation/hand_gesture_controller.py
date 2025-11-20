@@ -24,7 +24,8 @@ except ImportError:
 try:
     import pyautogui
     PYAUTOGUI_AVAILABLE = True
-except ImportError:
+except Exception:
+    # Catch all exceptions including Xlib.error.XauthError in headless environments
     PYAUTOGUI_AVAILABLE = False
     pyautogui = None
 

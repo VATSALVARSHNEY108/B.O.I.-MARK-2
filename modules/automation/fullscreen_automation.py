@@ -23,7 +23,8 @@ class FullscreenAutomation:
             import pyautogui
             self.pyautogui = pyautogui
             self.automation_available = True
-        except ImportError:
+        except Exception:
+            # Catch all exceptions including Xlib.error.XauthError in headless environments
             self.pyautogui = None
             self.automation_available = False
             print("⚠️ PyAutoGUI not available - automation features limited")
