@@ -117,7 +117,7 @@ Ready to execute commands...
 
 ```
 ┌──────────────────────────────────────┐ ⚪
-│ ✨ VATSAL  |  Time & Status  ● Online│
+│ ✨ BOI  |  Time & Status  ● Online│
 ├───┬──────────────────────────────────┤ ⚪
 │ S │ Main Content Area                │
 │ I │                                  │

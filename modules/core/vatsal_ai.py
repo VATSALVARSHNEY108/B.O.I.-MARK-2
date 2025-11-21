@@ -33,7 +33,7 @@ class EnhancedGeminiChatbot:
         self.personality = "friendly"
         self.ai_available = True
         
-        self.system_prompt = """You are VATSAL, an intelligent and helpful AI assistant.
+        self.system_prompt = """You are BOI, an intelligent and helpful AI assistant.
 
 Your personality:
 - Friendly, approachable, and knowledgeable
@@ -77,11 +77,11 @@ Guidelines:
             # Format conversation for the prompt
             conversation_text = ""
             for msg in recent_history:
-                role = "User" if msg["role"] == "user" else "VATSAL"
+                role = "User" if msg["role"] == "user" else "BOI"
                 conversation_text += f"{role}: {msg['content']}\n"
             
             # Create the full prompt with context
-            full_prompt = f"{conversation_text}VATSAL:"
+            full_prompt = f"{conversation_text}BOI:"
             
             # Get response from Gemini with optimized config for faster responses
             response = self.client.models.generate_content(
@@ -127,7 +127,7 @@ Guidelines:
         else:
             greeting = "Hello there! 🌙"
         
-        return f"{greeting} I'm VATSAL, your AI assistant. I'm here to help with anything you need - from answering questions to having a friendly chat. What would you like to talk about?"
+        return f"{greeting} I'm BOI, your AI assistant. I'm here to help with anything you need - from answering questions to having a friendly chat. What would you like to talk about?"
     
     def reset(self):
         """Clear conversation history and start fresh"""
@@ -229,7 +229,7 @@ Guidelines:
             return f"Error generating summary: {str(e)}"
 
 
-def create_vatsal_ai(api_key=None):
+def create_boi_ai(api_key=None):
     """Create chatbot instance (for compatibility with GUI app)"""
     try:
         return EnhancedGeminiChatbot(api_key)
@@ -276,7 +276,7 @@ def create_vatsal_ai(api_key=None):
 def print_header():
     """Display chatbot header"""
     print("\n" + "="*75)
-    print("🤖 VATSAL - Enhanced AI Chatbot (Powered by Google Gemini)")
+    print("🤖 BOI - Enhanced AI Chatbot (Powered by Google Gemini)")
     print("="*75)
     print("✨ Features:")
     print("   • 💬 Natural conversation with context awareness")
@@ -336,7 +336,7 @@ def main():
         print()
     
     # Initial greeting
-    print(f"🤖 VATSAL: {chatbot.initiate_conversation()}\n")
+    print(f"🤖 BOI: {chatbot.initiate_conversation()}\n")
     
     # Main conversation loop
     while True:
@@ -350,7 +350,7 @@ def main():
             
             # Handle exit commands
             if user_input.lower() in ['quit', 'exit', 'bye', 'goodbye']:
-                print("\n🤖 VATSAL: It was great chatting with you! Goodbye! 👋✨\n")
+                print("\n🤖 BOI: It was great chatting with you! Goodbye! 👋✨\n")
                 break
             
             # Handle reset command
@@ -390,12 +390,12 @@ def main():
                 continue
             
             # Get AI response
-            print("\n🤖 VATSAL: ", end="", flush=True)
+            print("\n🤖 BOI: ", end="", flush=True)
             response = chatbot.chat(user_input)
             print(f"{response}\n")
         
         except KeyboardInterrupt:
-            print("\n\n🤖 VATSAL: Goodbye! Take care! 👋\n")
+            print("\n\n🤖 BOI: Goodbye! Take care! 👋\n")
             break
         
         except Exception as e:

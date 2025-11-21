@@ -39,7 +39,7 @@ Comprehensive window and tab closing functionality with batch file integration.
 - Closes common applications (VS Code, Discord, Spotify, Telegram, WhatsApp, Notepad)
 - Uses PowerShell to gracefully close remaining windows
 - Protects system-critical processes (Explorer, Task Manager, etc.)
-- Protects VATSAL AI itself from being closed
+- Protects BOI AI itself from being closed
 
 **Files Created:**
 1. `scripts/windows_controls/close_all_windows.bat` - Main batch file with confirmation
@@ -99,7 +99,7 @@ Comprehensive window and tab closing functionality with batch file integration.
 - taskmgr.exe (Task Manager)
 - SystemSettings.exe
 - cmd.exe, powershell.exe
-- python.exe, pythonw.exe (VATSAL AI)
+- python.exe, pythonw.exe (BOI AI)
 
 **Safety Features:**
 - 5-second countdown in batch file version

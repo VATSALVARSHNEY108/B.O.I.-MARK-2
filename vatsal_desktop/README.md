@@ -1,4 +1,4 @@
-# VATSAL Desktop Automator
+# BOI (Barely Obeys Instructions) Desktop Automator
 
 Intelligent desktop automation with local execution and AI understanding.
 

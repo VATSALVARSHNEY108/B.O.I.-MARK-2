@@ -87,7 +87,7 @@ Every element has crisp white borders:
 ```
 ┌─────────────────────────────────────────────┐
 │   Top Bar (White Border)                    │
-│   ✨ VATSAL | Time & Status                 │
+│   ✨ BOI | Time & Status                 │
 ├────┬────────────────────────────────────────┤
 │    │  Main Content (White Border)           │
 │ S  │                                        │

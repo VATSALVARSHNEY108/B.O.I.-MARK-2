@@ -1,7 +1,7 @@
-# 🎉 VATSAL AI - New Features Implemented
+# 🎉 BOI (Barely Obeys Instructions) - New Features Implemented
 
 ## Overview
-Two major features have been added to your VATSAL AI Assistant:
+Two major features have been added to your BOI (Barely Obeys Instructions) Assistant:
 1. **Intelligent Letter Writing System** (13 letter types)
 2. **Full Screen Notepad Writer** (automatic maximization)
 
@@ -203,7 +203,7 @@ gemini_code_generator/scripts/simple_gemini_notepad.py
 ```
 You: "Write a letter to principal for 2 days holiday"
 
-VATSAL:
+BOI:
 📝 Opening Notepad...
 🖥️ Maximizing to full screen...
 ⌨️ Writing to Notepad...
@@ -216,7 +216,7 @@ VATSAL:
 ```
 You: "Write a letter to manager for 3 days sick leave"
 
-VATSAL:
+BOI:
 🤖 Generating content...
 ✅ Generated: Leave Application Letter
 📝 Opening Notepad in full screen...
@@ -229,7 +229,7 @@ VATSAL:
 ```
 You: "Write code for checking palindrome"
 
-VATSAL:
+BOI:
 🤖 Generating code...
 ✅ Generated python code
 📝 Writing to Notepad in full screen...
@@ -340,7 +340,7 @@ You now have:
    - Voice compatible
    - No extra steps
 
-**Just speak naturally, and VATSAL handles the rest!** 🎉
+**Just speak naturally, and BOI handles the rest!** 🎉
 
 ---
 

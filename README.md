@@ -1,4 +1,4 @@
-# 🤖 VATSAL AI - Advanced Desktop Automation System
+# 🤖 BOI (Barely Obeys Instructions) - Advanced Desktop Automation System
 
 > **Intelligent AI-powered desktop automation with 300+ features**
 
@@ -28,7 +28,7 @@
 ## 🗂️ Project Structure
 
 ```
-VATSAL-AI/
+BOI-AI/
 ├── modules/           # All Python code (organized by category)
 ├── tests/             # All test files (31 tests)
 ├── docs/              # All documentation (98 docs)
@@ -54,7 +54,7 @@ pip install -r docs/requirements.txt
 export GEMINI_API_KEY='your-api-key-here'
 ```
 
-### 3. Run VATSAL AI
+### 3. Run BOI AI
 ```bash
 # GUI Mode
 python vnc_web_viewer.py

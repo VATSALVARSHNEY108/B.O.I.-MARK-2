@@ -1,8 +1,8 @@
-# 🧠 Emotional Intelligence Features in VATSAL AI
+# 🧠 Emotional Intelligence Features in BOI (Barely Obeys Instructions)
 
 ## What's New?
 
-Your VATSAL AI assistant now has **emotional intelligence**! It can:
+Your BOI (Barely Obeys Instructions) assistant now has **emotional intelligence**! It can:
 
 ### 1. **Detect Your Emotions** 😊😢😤😰
 - Analyzes your messages to understand how you're feeling
@@ -33,20 +33,20 @@ When you're:
 **Example Interactions:**
 
 #### You say: "Ugh, this code isn't working and I've been stuck for hours 😤"
-**VATSAL detects:** Frustrated (75% intensity)
-**VATSAL responds:** "I understand your frustration. Let's tackle this together - one step at a time. Show me the error and I'll help you debug it."
+**BOI detects:** Frustrated (75% intensity)
+**BOI responds:** "I understand your frustration. Let's tackle this together - one step at a time. Show me the error and I'll help you debug it."
 
 #### You say: "I'm so excited about this new project! 🎉"
-**VATSAL detects:** Happy/Excited (90% intensity)  
-**VATSAL responds:** "That's wonderful! I love the energy! 🚀 Tell me all about it - what are we building?"
+**BOI detects:** Happy/Excited (90% intensity)  
+**BOI responds:** "That's wonderful! I love the energy! 🚀 Tell me all about it - what are we building?"
 
 #### You say: "Thanks so much for your help!"
-**VATSAL detects:** Grateful (80% intensity)
-**VATSAL responds:** "You're very welcome! Happy to help! 😊 That's what I'm here for, Sir!"
+**BOI detects:** Grateful (80% intensity)
+**BOI responds:** "You're very welcome! Happy to help! 😊 That's what I'm here for, Sir!"
 
 #### You say: "I'm worried I won't finish this on time"
-**VATSAL detects:** Anxious (70% intensity)
-**VATSAL responds:** "Let's work through this together. I'm here to help make things easier. What's the deadline and what do we need to accomplish?"
+**BOI detects:** Anxious (70% intensity)
+**BOI responds:** "Let's work through this together. I'm here to help make things easier. What's the deadline and what do we need to accomplish?"
 
 ### 6. **Personalized Greetings**
 Based on your mood trend:
@@ -77,13 +77,13 @@ Based on your mood trend:
 
 ## Try It Out!
 
-Talk to VATSAL naturally:
+Talk to BOI naturally:
 - "I'm feeling overwhelmed with all this work"
 - "Just finished a major feature! Feeling great!"
 - "Can you help? I'm confused about this error"
 - "Thanks for being such a good assistant"
 
-VATSAL will understand and respond with emotional intelligence! 🧠💙
+BOI will understand and respond with emotional intelligence! 🧠💙
 
 ---
 

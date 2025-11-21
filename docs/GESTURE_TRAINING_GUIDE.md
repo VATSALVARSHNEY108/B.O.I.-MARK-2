@@ -1,4 +1,4 @@
-# 🎓 Hand Gesture Training Guide for VATSAL AI
+# 🎓 Hand Gesture Training Guide for BOI (Barely Obeys Instructions)
 
 ## Problem Solved ✅
 

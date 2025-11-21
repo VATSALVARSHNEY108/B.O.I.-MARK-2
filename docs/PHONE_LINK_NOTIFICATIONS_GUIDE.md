@@ -1,7 +1,7 @@
 # 📱 Phone Link Notification Monitor
 
 ## Overview
-Access and monitor your Phone Link notifications (SMS, calls, etc.) from VATSAL AI, batch files, or Python scripts!
+Access and monitor your Phone Link notifications (SMS, calls, etc.) from BOI (Barely Obeys Instructions), batch files, or Python scripts!
 
 ---
 
@@ -10,12 +10,12 @@ Access and monitor your Phone Link notifications (SMS, calls, etc.) from VATSAL 
 ✅ **Read Phone Link Notifications** - Access SMS, calls, and missed call notifications  
 ✅ **Background Monitoring** - Automatically monitor for new notifications  
 ✅ **Command Line Access** - Use batch files to check notifications  
-✅ **VATSAL Integration** - Ask VATSAL to read your messages  
+✅ **BOI Integration** - Ask BOI to read your messages  
 ✅ **Python API** - Full programmatic access to Phone Link notifications
 
 ---
 
-## 🗣️ Voice Commands for VATSAL
+## 🗣️ Voice Commands for BOI
 
 Just say:
 
@@ -155,7 +155,7 @@ new_sms = monitor.check_new_notifications()
 
 for sms in new_sms:
     if sms['type'] == 'sms' and 'urgent' in sms['message'].lower():
-        # Trigger auto-reply via VATSAL
+        # Trigger auto-reply via BOI
         print(f"📱 Urgent message from {sms['sender']}")
 ```
 
@@ -197,7 +197,7 @@ schedule.every(10).minutes.do(check_messages)
    batch_scripts\automation\phone_link_notifications.bat recent
    ```
 
-3. **Ask VATSAL:**
+3. **Ask BOI:**
    ```
    "Check my phone notifications"
    ```
@@ -234,4 +234,4 @@ schedule.every(10).minutes.do(check_messages)
 
 ## 🎉 Enjoy!
 
-You can now monitor your phone notifications directly from your desktop using VATSAL, batch files, or Python!
+You can now monitor your phone notifications directly from your desktop using BOI, batch files, or Python!

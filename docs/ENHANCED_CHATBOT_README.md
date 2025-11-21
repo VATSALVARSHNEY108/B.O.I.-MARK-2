@@ -1,4 +1,4 @@
-# 🤖 Enhanced VATSAL AI Chatbot - Complete Guide
+# 🤖 Enhanced BOI (Barely Obeys Instructions) Chatbot - Complete Guide
 
 ## ✅ What I've Created
 
@@ -83,7 +83,7 @@ The chatbot needs a Gemini API key to work:
 ### 2. Using the Chatbot
 
 #### In the GUI Application
-- Open the **VATSAL Chatbot** tab
+- Open the **BOI Chatbot** tab
 - Type your message and press Send
 - The enhanced chatbot will respond with context awareness
 

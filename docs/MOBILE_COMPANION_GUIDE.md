@@ -1,11 +1,11 @@
-# 📱 VATSAL Mobile Companion - Complete Guide
+# 📱 BOI Mobile Companion - Complete Guide
 
-Control your VATSAL AI Desktop Automation system from your phone!
+Control your BOI (Barely Obeys Instructions) Desktop Automation system from your phone!
 
 ## ✨ Features
 
 ### 🎮 Remote Control
-- Execute any VATSAL command from your mobile device
+- Execute any BOI command from your mobile device
 - Voice commands via mobile (text-based or audio)
 - Real-time command execution feedback
 - Command history and activity tracking
@@ -337,7 +337,7 @@ const socket = io('http://your-url');
 
 // Connection events
 socket.on('connect', () => {
-  console.log('Connected to VATSAL');
+  console.log('Connected to BOI');
 });
 
 // System stats (every 2 seconds)
@@ -361,7 +361,7 @@ socket.on('notification', (data) => {
 
 ---
 
-## 🎯 Integration with VATSAL
+## 🎯 Integration with BOI
 
 ### From Command Executor
 
@@ -545,7 +545,7 @@ Coming soon:
 
 For issues or questions:
 - Check the main README.md
-- Review VATSAL documentation
+- Review BOI documentation
 - Check console logs for errors
 - Monitor activity feed for failures
 
@@ -553,8 +553,8 @@ For issues or questions:
 
 ## 🎉 Enjoy Your Mobile Companion!
 
-Your VATSAL AI Desktop Automation is now in your pocket. Control your computer from anywhere, anytime!
+Your BOI (Barely Obeys Instructions) Desktop Automation is now in your pocket. Control your computer from anywhere, anytime!
 
 **Creator**: Vatsal Varshney
-**GitHub**: https://github.com/VATSALVARSHNEY108
-**Project**: VATSAL AI Desktop Automation Controller
+**GitHub**: https://github.com/BOIVARSHNEY108
+**Project**: BOI (Barely Obeys Instructions) Desktop Automation Controller

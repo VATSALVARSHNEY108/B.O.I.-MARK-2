@@ -123,7 +123,7 @@ systemctl hibernate
    - Quick app launchers
    - Timer and alarm
 
-4. **Use natural language commands** in VATSAL:
+4. **Use natural language commands** in BOI:
    - "What's my CPU usage?"
    - "Set a 5 minute timer"
    - "Open calculator"

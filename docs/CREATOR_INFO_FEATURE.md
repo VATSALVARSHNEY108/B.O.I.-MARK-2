@@ -1,18 +1,18 @@
 # 🤖 Creator Information Feature - Implementation Summary
 
 ## Overview
-Successfully integrated creator information into VATSAL AI chatbot system. When anyone asks about the creator, developer, or maker, the chatbot will proudly introduce **Vatsal Varshney** with complete contact information.
+Successfully integrated creator information into BOI (Barely Obeys Instructions) chatbot system. When anyone asks about the creator, developer, or maker, the chatbot will proudly introduce **Vatsal Varshney** with complete contact information.
 
 ## Implementation Details
 
-### 1. VATSAL Assistant (`vatsal_assistant.py`)
+### 1. BOI Assistant (`vatsal_assistant.py`)
 ✅ Added comprehensive creator information to system prompt:
 - Name: Vatsal Varshney
 - Role: AI/ML Engineer, Full-Stack Developer, Automation Specialist
-- GitHub: https://github.com/VATSALVARSHNEY108
+- GitHub: https://github.com/BOIVARSHNEY108
 - LinkedIn: https://www.linkedin.com/in/vatsal-varshney108/
 - Expertise: AI, ML, Desktop Automation, Python, Full-Stack Development
-- Notable Projects: VATSAL AI Desktop Automation Controller, Advanced RAG systems
+- Notable Projects: BOI (Barely Obeys Instructions) Desktop Automation Controller, Advanced RAG systems
 
 ### 2. Simple Chatbot (`simple_chatbot.py`)
 ✅ Enhanced chatbot with creator information:
@@ -39,9 +39,9 @@ The test script (`test_creator_info.py`) demonstrates that the chatbot successfu
 ```
 Test: "Who is your creator?"
 
-VATSAL: Certainly, Sir! I'm glad you asked.
+BOI: Certainly, Sir! I'm glad you asked.
 
-My creator, the brilliant mind behind VATSAL, the AI Desktop Automation Controller 
+My creator, the brilliant mind behind BOI, the AI Desktop Automation Controller 
 you're interacting with, is **Vatsal Varshney**.
 
 He's a highly skilled AI/ML Engineer and Full-Stack Developer, known for his work 
@@ -49,10 +49,10 @@ in Artificial Intelligence, Machine Learning, and automation. He's the one who
 envisioned and built me to help users like you with desktop automation and much more!
 
 You can explore his impressive work and connect with him here:
-*   GitHub: https://github.com/VATSALVARSHNEY108
+*   GitHub: https://github.com/BOIVARSHNEY108
 *   LinkedIn: https://www.linkedin.com/in/vatsal-varshney108/
 
-He's done some truly innovative work, including over 100 AI features in VATSAL, 
+He's done some truly innovative work, including over 100 AI features in BOI, 
 advanced RAG systems, and smart automation tools. I'm very proud to be his creation!
 ```
 
@@ -63,7 +63,7 @@ The chatbot recognizes various ways of asking about the creator:
 - Direct questions: "Who created you?"
 - Indirect questions: "Who made this?"
 - Developer queries: "Tell me about your developer"
-- Builder queries: "Who built VATSAL?"
+- Builder queries: "Who built BOI?"
 
 ### ✅ Comprehensive Responses
 Responses include:
@@ -75,8 +75,8 @@ Responses include:
 
 ### ✅ Multi-Chatbot Support
 Creator information works across all chatbot interfaces:
-- Simple VATSAL Chatbot (command-line)
-- VATSAL Assistant (sophisticated personality)
+- Simple BOI Chatbot (command-line)
+- BOI Assistant (sophisticated personality)
 - GUI Chatbot interface
 
 ## Files Modified
@@ -90,9 +90,9 @@ Creator information works across all chatbot interfaces:
 
 ### In GUI Application
 1. Open the GUI App
-2. Navigate to "💬 VATSAL Chat" tab
+2. Navigate to "💬 BOI Chat" tab
 3. Ask: "Who created you?" or any creator-related question
-4. VATSAL will proudly introduce Vatsal Varshney
+4. BOI will proudly introduce Vatsal Varshney
 
 ### In Command-Line Chatbot
 1. Run: `python simple_chatbot.py`
@@ -105,7 +105,7 @@ Run automated tests: `python test_creator_info.py`
 ## Contact Information Provided
 
 **Vatsal Varshney**
-- 🌐 GitHub: [https://github.com/VATSALVARSHNEY108](https://github.com/VATSALVARSHNEY108)
+- 🌐 GitHub: [https://github.com/BOIVARSHNEY108](https://github.com/BOIVARSHNEY108)
 - 💼 LinkedIn: [https://www.linkedin.com/in/vatsal-varshney108/](https://www.linkedin.com/in/vatsal-varshney108/)
 - 🎯 Role: AI/ML Engineer & Full-Stack Developer
 - 💡 Expertise: AI, ML, Automation, Python, Computer Vision, NLP

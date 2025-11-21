@@ -8,11 +8,11 @@ The chatbot files have been organized into separate folders for better project s
 📁 Project Root
 │
 ├── 📁 simple_chatbot/
-│   ├── simple_chatbot.py          # Enhanced VATSAL Chatbot with commands
+│   ├── simple_chatbot.py          # Enhanced BOI Chatbot with commands
 │   └── README.md
 │
 ├── 📁 vatsal_chatbot/
-│   ├── vatsal_chatbot.py          # VATSAL AI CLI Chatbot
+│   ├── vatsal_chatbot.py          # BOI (Barely Obeys Instructions) CLI Chatbot
 │   └── README.md
 │
 ├── 📁 vatsal_desktop/
@@ -34,7 +34,7 @@ The chatbot files have been organized into separate folders for better project s
 ## How to Use
 
 ### Launch the Main GUI Application
-To open the full VATSAL AI Desktop Automation GUI with all features:
+To open the full BOI (Barely Obeys Instructions) Desktop Automation GUI with all features:
 
 ```bash
 python launch_gui.py
@@ -54,7 +54,7 @@ cd simple_chatbot
 python simple_chatbot.py
 ```
 
-**VATSAL Chatbot:**
+**BOI Chatbot:**
 ```bash
 cd vatsal_chatbot
 python vatsal_chatbot.py
@@ -74,7 +74,7 @@ python vatsal_desktop_automator.py
 - Open apps, folders, and files
 - System control and monitoring
 
-### 💬 VATSAL Chatbot
+### 💬 BOI Chatbot
 - Intelligent conversation AI
 - Context-aware responses
 - Session management

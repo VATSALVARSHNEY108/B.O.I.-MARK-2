@@ -17,9 +17,9 @@
   - **About Dialog**: 
     - Title: "ℹ️ About Vatsal"
     - Header: "🤖 Vatsal - AI Desktop Assistant"
-    - Version: "Version 2.1.0 - Vatsal Edition (Powered by VATSAL)"
+    - Version: "Version 2.1.0 - Vatsal Edition (Powered by BOI)"
     - Description: Updated to highlight Vatsal branding with wake word features
-  - **Greeting Messages**: Updated to show "🤖 Vatsal AI Assistant (Powered by VATSAL)"
+  - **Greeting Messages**: Updated to show "🤖 Vatsal AI Assistant (Powered by BOI)"
   - **Chat Greeting**: Changed to "Hello! I'm Vatsal, your AI assistant..."
 
 ### 3. **Documentation Updated**
@@ -37,9 +37,9 @@
 4. **"Watson"** - AI assistant style (IBM Watson inspired)
 5. **"Hey Watson"** - Natural, conversational
 6. **"OK Watson"** - Assistant-style
-7. **"VATSAL"** - Legacy wake word still supported
-8. **"Hey VATSAL"** - Natural, conversational
-9. **"OK VATSAL"** - Assistant-style
+7. **"BOI"** - Legacy wake word still supported
+8. **"Hey BOI"** - Natural, conversational
+9. **"OK BOI"** - Assistant-style
 10. **"Computer"** - Classic sci-fi style
 11. **"Hey Computer"** - Star Trek style
 12. **"Bhiaya"** - Hindi/Urdu: Brother
@@ -94,7 +94,7 @@ You can also use: watson, hey watson, ok watson
 **Vatsal** is now the primary assistant name with these benefits:
 - **Short & Memorable** - Easy to say and remember
 - **Modern** - Fresh, contemporary branding
-- **Respectful** - Maintains VATSAL framework credit
+- **Respectful** - Maintains BOI framework credit
 - **Flexible** - Multiple wake word variations available
 
 The system maintains backward compatibility with all existing wake words while promoting "Vatsal" as the primary identity.
@@ -107,7 +107,7 @@ The system maintains backward compatibility with all existing wake words while p
 self.wake_words = [
     "vatsal", "hey vatsal", "ok vatsal",  # Primary wake words
     "watson", "hey watson", "ok watson",  # AI assistant style
-    "VATSAL", "hey VATSAL", "ok VATSAL",  # Legacy support
+    "BOI", "hey BOI", "ok BOI",  # Legacy support
     "bhai", "computer", "hey computer", 
     "bhiaya", "bhaisahb"
 ]

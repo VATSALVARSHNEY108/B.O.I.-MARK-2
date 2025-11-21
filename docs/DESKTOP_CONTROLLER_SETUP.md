@@ -70,7 +70,7 @@ result = controller.search_files("report")
 ### 3. **GUI App Integration** 🖥️
 **File:** `gui_app.py` (Modified)
 
-The Desktop File Controller is now fully integrated into your VATSAL GUI application!
+The Desktop File Controller is now fully integrated into your BOI GUI application!
 
 **Location:** 🖥️ **Desktop Tab**
 

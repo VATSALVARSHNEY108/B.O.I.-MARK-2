@@ -1,13 +1,13 @@
-# 🎯 Common Sense Reasoning Features in VATSAL AI
+# 🎯 Common Sense Reasoning Features in BOI (Barely Obeys Instructions)
 
 ## What's New?
 
-Your VATSAL AI now has **common sense reasoning**! It thinks before acting and makes smarter decisions.
+Your BOI (Barely Obeys Instructions) now has **common sense reasoning**! It thinks before acting and makes smarter decisions.
 
 ## 🧠 Key Features
 
 ### 1. **Safety Validation** 🛡️
-Before executing any command, VATSAL checks:
+Before executing any command, BOI checks:
 - **Is it safe?** No accidental data loss or privacy issues
 - **Is it reversible?** Warns about destructive actions
 - **Is it the right time?** Won't send emails at 3 AM
@@ -15,7 +15,7 @@ Before executing any command, VATSAL checks:
 **Example:**
 ```
 You: "Delete all my files"
-VATSAL: ⚠️ Safety Warning: This action is destructive and cannot be undone
+BOI: ⚠️ Safety Warning: This action is destructive and cannot be undone
 💡 Suggestion: Consider backing up or moving to trash instead
 ```
 
@@ -25,8 +25,8 @@ Understands what you *really* mean, not just what you say:
 **Example:**
 ```
 You: "I'm tired of manually organizing these files"
-VATSAL infers: User wants file automation
-VATSAL suggests: "Would you like me to set up automatic file organization?"
+BOI infers: User wants file automation
+BOI suggests: "Would you like me to set up automatic file organization?"
 ```
 
 ### 3. **Logical Consistency** 🔍
@@ -37,7 +37,7 @@ Detects contradictions and illogical requests:
 You: "Open Chrome"
 [2 seconds later]
 You: "Open Chrome"
-VATSAL: 🤔 You just opened Chrome. Did you mean to open a different browser or website?
+BOI: 🤔 You just opened Chrome. Did you mean to open a different browser or website?
 ```
 
 ### 4. **Time Awareness** ⏰
@@ -55,7 +55,7 @@ Asks for clarification when needed:
 **Example:**
 ```
 You: "Send an email"
-VATSAL: I need a bit more information: Who should I send the email to? What should it say?
+BOI: I need a bit more information: Who should I send the email to? What should it say?
 ```
 
 ### 6. **Smarter Suggestions** 💡
@@ -64,7 +64,7 @@ Proposes better ways to do things:
 **Example:**
 ```
 You: "Manually move 100 files one by one"
-VATSAL: 💡 I can automate that! Let me create a script to move all files at once.
+BOI: 💡 I can automate that! Let me create a script to move all files at once.
         Time saved: ~15 minutes
 ```
 
@@ -79,7 +79,7 @@ Recent context:
   ❌ Failed to run code (missing dependency)
   
 You: "I can't figure this out"
-VATSAL: I see you're having trouble with the Python dependency. Let me install it for you.
+BOI: I see you're having trouble with the Python dependency. Let me install it for you.
 ```
 
 ### 8. **World Knowledge Application** 🌍
@@ -93,7 +93,7 @@ Uses real-world knowledge:
 
 ## 🛡️ Safety Levels
 
-VATSAL categorizes actions into three safety levels:
+BOI categorizes actions into three safety levels:
 
 ### ✅ **Safe** (Green)
 - Normal operations
@@ -131,7 +131,7 @@ VATSAL categorizes actions into three safety levels:
 ### Preventing Mistakes
 ```
 You: "Delete my project folder"
-VATSAL: ⚠️ This action is destructive and cannot be undone
+BOI: ⚠️ This action is destructive and cannot be undone
         Are you absolutely sure? This folder might contain important work.
         💡 Consider making a backup first or moving to trash.
 ```
@@ -139,7 +139,7 @@ VATSAL: ⚠️ This action is destructive and cannot be undone
 ### Understanding Intent
 ```
 You: "This code keeps breaking"
-VATSAL: (infers you need debugging help)
+BOI: (infers you need debugging help)
         "I understand you're having code issues. Can you show me the error message? 
          I'll help you debug it step by step."
 ```
@@ -147,14 +147,14 @@ VATSAL: (infers you need debugging help)
 ### Time-Appropriate Actions
 ```
 You: "Schedule a meeting with the team"
-VATSAL: What time works best?
+BOI: What time works best?
         💡 Based on your schedule, 2 PM tomorrow is typically good for meetings.
 ```
 
 ### Smarter Approaches
 ```
 You: "I need to rename 50 files"
-VATSAL: Instead of manual renaming, I can:
+BOI: Instead of manual renaming, I can:
         1. Batch rename all at once
         2. Use a pattern/template
         3. Preview changes before applying
@@ -162,7 +162,7 @@ VATSAL: Instead of manual renaming, I can:
         Which approach do you prefer?
 ```
 
-## 🎓 What VATSAL Learns
+## 🎓 What BOI Learns
 
 ### From Your Patterns:
 - Preferred work hours

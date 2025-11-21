@@ -1,4 +1,4 @@
-# 🤖 Simple VATSAL Chatbot - User Guide
+# 🤖 Simple BOI Chatbot - User Guide
 
 ## ✨ What You Have Now
 
@@ -25,13 +25,13 @@ You have 3 ways to run the chatbot:
 
 ---
 
-## 💬 Chatting with VATSAL
+## 💬 Chatting with BOI
 
 Once the chatbot starts, you'll see:
 
 ```
 ============================================================
-🤖 VATSAL - Simple AI Chatbot
+🤖 BOI - Simple AI Chatbot
 ============================================================
 
 💬 Commands:
@@ -40,7 +40,7 @@ Once the chatbot starts, you'll see:
    • 'quit' or 'exit' - End chat
 ============================================================
 
-🤖 VATSAL: Good afternoon! I'm VATSAL, your AI assistant. How can I help you today?
+🤖 BOI: Good afternoon! I'm BOI, your AI assistant. How can I help you today?
 
 👤 You: _
 ```
@@ -50,7 +50,7 @@ Once the chatbot starts, you'll see:
 ```
 👤 You: Hello! What can you do?
 
-🤖 VATSAL: Hi! I'm VATSAL, your friendly AI assistant. I can help you with:
+🤖 BOI: Hi! I'm BOI, your friendly AI assistant. I can help you with:
 - Answering questions on any topic
 - Helping with coding and technical problems
 - Writing and creative tasks
@@ -61,12 +61,12 @@ What would you like help with today?
 
 👤 You: Tell me a joke
 
-🤖 VATSAL: Sure! Why don't programmers like nature? 
+🤖 BOI: Sure! Why don't programmers like nature? 
 It has too many bugs! 🐛😄
 
 👤 You: That's funny! Thanks!
 
-🤖 VATSAL: You're welcome! Glad I could make you smile. 
+🤖 BOI: You're welcome! Glad I could make you smile. 
 Anything else you'd like to chat about?
 ```
 
@@ -76,7 +76,7 @@ Anything else you'd like to chat about?
 
 ✅ **Natural Conversation** - Chat naturally like you're talking to a person  
 ✅ **Memory** - Remembers your last 10 messages for context  
-✅ **Friendly Personality** - VATSAL is helpful and warm  
+✅ **Friendly Personality** - BOI is helpful and warm  
 ✅ **Easy to Use** - Simple commands, no complexity  
 
 ---
@@ -85,13 +85,13 @@ Anything else you'd like to chat about?
 
 | Command | What it does |
 |---------|-------------|
-| Just type your message | Chat with VATSAL |
+| Just type your message | Chat with BOI |
 | `reset` | Start a fresh conversation |
 | `quit` or `exit` | End the chat session |
 
 ---
 
-## 📝 What VATSAL Can Help With
+## 📝 What BOI Can Help With
 
 - **General Questions**: "What's the capital of France?"
 - **Coding Help**: "How do I create a list in Python?"
@@ -117,4 +117,4 @@ Anything else you'd like to chat about?
 
 Your chatbot is ready to use. Just run it and start chatting!
 
-**Need help?** Just ask VATSAL - it's there to assist you! 😊
+**Need help?** Just ask BOI - it's there to assist you! 😊

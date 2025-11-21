@@ -67,7 +67,7 @@ After scanning, you get 6 options:
 
 ### From Command Prompt/PowerShell:
 ```bash
-cd C:\Users\VATSAL VARSHNEY\PycharmProjects\DesktopAutomator2
+cd C:\Users\BOI VARSHNEY\PycharmProjects\DesktopAutomator2
 python desktop_sync_manager.py
 ```
 

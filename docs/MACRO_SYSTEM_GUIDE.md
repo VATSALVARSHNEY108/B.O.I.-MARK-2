@@ -2,7 +2,7 @@
 
 ## Overview
 
-VATSAL's Macro Recording System lets you **record your mouse and keyboard actions** and **replay them automatically**. It's perfect for repetitive tasks, testing, data entry, and automation workflows!
+BOI's Macro Recording System lets you **record your mouse and keyboard actions** and **replay them automatically**. It's perfect for repetitive tasks, testing, data entry, and automation workflows!
 
 ### ✨ Key Features
 
@@ -33,7 +33,7 @@ python macro_recorder.py
 
 You'll see:
 ```
-🎬 VATSAL Macro Recorder
+🎬 BOI Macro Recorder
 ==================================================
 pynput available: True
 PyAutoGUI available: True
@@ -153,7 +153,7 @@ print(f"Loaded {len(events)} events")
 
 ## 🎯 Pre-Built Templates
 
-VATSAL includes ready-made templates for common automation tasks:
+BOI includes ready-made templates for common automation tasks:
 
 ### 1. Multi-Click Sequence
 
@@ -418,14 +418,14 @@ pip install pyautogui
 
 ---
 
-## 🚀 Integration with VATSAL
+## 🚀 Integration with BOI
 
-### Using in VATSAL Commands:
+### Using in BOI Commands:
 
 ```python
 from macro_recorder import macro_recorder
 
-# In your VATSAL integration
+# In your BOI integration
 def execute_macro_command(macro_name):
     result = macro_recorder.play_macro(macro_name=macro_name)
     return result
@@ -434,8 +434,8 @@ def execute_macro_command(macro_name):
 ### Voice Command Integration:
 
 ```python
-# Example VATSAL voice command
-"VATSAL, play the form filler macro 5 times"
+# Example BOI voice command
+"BOI, play the form filler macro 5 times"
 # → macro_recorder.play_macro("form_filler", repeat=5)
 ```
 
@@ -526,7 +526,7 @@ macro_recorder.play_macro()
 
 ## 💡 Pro Tips
 
-1. **Combine with AI**: Use VATSAL's AI to generate custom templates
+1. **Combine with AI**: Use BOI's AI to generate custom templates
 2. **Error Recovery**: Add `try/except` blocks when integrating
 3. **Batch Processing**: Use repeat parameter instead of separate macros
 4. **Modular Macros**: Record small reusable pieces, combine them programmatically

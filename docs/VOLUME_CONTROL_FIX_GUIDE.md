@@ -40,7 +40,7 @@ This fix was applied to ALL volume control functions:
 
 ### From Your GUI App
 
-Just say these commands to VATSAL:
+Just say these commands to BOI:
 - "mute" - Mutes the volume
 - "unmute" - Unmutes the volume
 - "set volume to 75" - Sets volume to 75%
@@ -66,7 +66,7 @@ python scripts/volume_brightness_controller.py volume get
 
 ## Try It Now!
 
-1. **In your VATSAL GUI app**, just type: `mute`
+1. **In your BOI GUI app**, just type: `mute`
 2. It should now work without any errors!
 3. Type `unmute` to restore volume
 
@@ -82,7 +82,7 @@ This fix uses the **pycaw** library which:
 
 Make sure you're running the latest version of the code. If the error persists:
 
-1. Restart your VATSAL GUI application
+1. Restart your BOI GUI application
 2. Try the command again
 3. Check that `pycaw` is installed: `pip show pycaw`
 

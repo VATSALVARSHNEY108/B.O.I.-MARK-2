@@ -1,8 +1,8 @@
-# ✨ Enhanced Modern GUI for VATSAL AI
+# ✨ Enhanced Modern GUI for BOI (Barely Obeys Instructions)
 
 ## 🎨 Beautiful. Modern. Powerful.
 
-A completely redesigned GUI interface for VATSAL AI Desktop Automation featuring modern design, stunning visuals, and intuitive user experience.
+A completely redesigned GUI interface for BOI (Barely Obeys Instructions) Desktop Automation featuring modern design, stunning visuals, and intuitive user experience.
 
 ![Status](https://img.shields.io/badge/status-ready-success)
 ![Version](https://img.shields.io/badge/version-2.0-blue)
@@ -263,7 +263,7 @@ If you have questions or issues:
 
 ## 🎊 Conclusion
 
-The Enhanced Modern GUI transforms VATSAL AI into a beautiful, professional application that's a joy to use every day. Launch it now and experience the difference!
+The Enhanced Modern GUI transforms BOI (Barely Obeys Instructions) into a beautiful, professional application that's a joy to use every day. Launch it now and experience the difference!
 
 ```bash
 python launch_enhanced_gui.py

@@ -112,7 +112,7 @@ The system automatically cleans the number before dialing!
 
 ## 🎨 Example Usage in GUI
 
-When you use the VATSAL GUI, you can simply type:
+When you use the BOI GUI, you can simply type:
 ```
 Dial +1234567890 using phone link
 ```

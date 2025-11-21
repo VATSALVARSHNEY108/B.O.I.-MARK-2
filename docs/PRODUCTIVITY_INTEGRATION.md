@@ -127,7 +127,7 @@ productivity_data/
 ### Step 1: Download Files
 Download these files from Replit to your Windows PC:
 ```
-C:\Users\VATSAL VARSHNEY\PycharmProjects\DesktopAutomator2
+C:\Users\BOI VARSHNEY\PycharmProjects\DesktopAutomator2
 ```
 
 Required files:
@@ -299,7 +299,7 @@ You now have:
 
 ### Quick Start:
 ```bash
-cd C:\Users\VATSAL VARSHNEY\PycharmProjects\DesktopAutomator2
+cd C:\Users\BOI VARSHNEY\PycharmProjects\DesktopAutomator2
 python pomodoro_ai_coach.py
 ```
 

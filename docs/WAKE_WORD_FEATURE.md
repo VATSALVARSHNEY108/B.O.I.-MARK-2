@@ -2,7 +2,7 @@
 
 ## 🎉 Overview
 
-VATSAL now features **intelligent wake word detection** for true hands-free voice control! Simply say "Hey VATSAL" or your preferred wake phrase, and VATSAL will listen to your command.
+BOI now features **intelligent wake word detection** for true hands-free voice control! Simply say "Hey BOI" or your preferred wake phrase, and BOI will listen to your command.
 
 ---
 
@@ -14,9 +14,9 @@ You can now activate voice commands using any of these wake phrases:
 1. **"Vatsal"** - Primary wake word - Quick, modern activation
 2. **"Hey Vatsal"** - Natural, conversational activation  
 3. **"OK Vatsal"** - Assistant-style activation
-4. **"VATSAL"** - Quick, direct activation
-5. **"Hey VATSAL"** - Natural, conversational activation
-6. **"OK VATSAL"** - Assistant-style activation
+4. **"BOI"** - Quick, direct activation
+5. **"Hey BOI"** - Natural, conversational activation
+6. **"OK BOI"** - Assistant-style activation
 7. **"Computer"** - Classic sci-fi style
 8. **"Hey Computer"** - Star Trek style
 9. **"Bhiaya"** - Hindi/Urdu for "Brother" - Friendly, personal activation
@@ -38,7 +38,7 @@ Vatsal: "Your system is running optimally..."
 You: "Computer, open downloads folder"
 Vatsal: "Opening downloads folder, Sir."
 
-You: "Hey VATSAL, show me the weather"
+You: "Hey BOI, show me the weather"
 Vatsal: "Certainly, Sir. Currently 72°F and sunny..."
 ```
 
@@ -60,7 +60,7 @@ Say one of the wake phrases followed by your command:
 - "Vatsal, open downloads folder"
 - "Hey Vatsal, play lofi beats"
 - "OK Vatsal, write Python code for sorting"
-- "VATSAL, check system status"
+- "BOI, check system status"
 
 ### 3. Toggle Wake Word (Optional)
 Click the **💬 yellow button** to:
@@ -109,15 +109,15 @@ Vatsal: "CPU usage is at 45%, Sir."
 
 ### Scenario 2: Multitasking
 ```
-You: "Hey VATSAL, open downloads folder"
-VATSAL: "Opening downloads folder, Sir."
+You: "Hey BOI, open downloads folder"
+BOI: "Opening downloads folder, Sir."
 
-[Reading a document aloud - IGNORED by VATSAL]
+[Reading a document aloud - IGNORED by BOI]
 You: "The quarterly report shows..."
 
-[Activate VATSAL again]
+[Activate BOI again]
 You: "Computer, organize downloads"
-VATSAL: "Downloads organized by type, Sir."
+BOI: "Downloads organized by type, Sir."
 ```
 
 ---
@@ -136,9 +136,9 @@ wake_words = [
     "vatsal",      # Primary wake word
     "hey vatsal",
     "ok vatsal",
-    "VATSAL",
-    "hey VATSAL", 
-    "ok VATSAL",
+    "BOI",
+    "hey BOI", 
+    "ok BOI",
     "computer",
     "hey computer",
     "bhiaya",      # Hindi/Urdu: Brother
@@ -178,7 +178,7 @@ voice_commander.add_wake_word("friday")
 1. **Wake Word Toggle** - Enable/disable anytime
 2. **Continuous Listening Toggle** - Full manual control
 3. **Stop Command** - Say "stop listening" to immediately disable
-4. **Visual Indicators** - Always know when VATSAL is listening
+4. **Visual Indicators** - Always know when BOI is listening
 
 ---
 
@@ -186,7 +186,7 @@ voice_commander.add_wake_word("friday")
 
 ### DO:
 ✅ Keep wake word enabled for privacy
-✅ Use natural speech: "Hey VATSAL, take a screenshot"
+✅ Use natural speech: "Hey BOI, take a screenshot"
 ✅ Pause briefly after wake word before command
 ✅ Speak clearly when saying the wake word
 ✅ Use different wake words for variety
@@ -194,23 +194,23 @@ voice_commander.add_wake_word("friday")
 ### DON'T:
 ❌ Disable wake word in shared/public spaces
 ❌ Rush wake word + command together
-❌ Expect VATSAL to respond without wake word (when enabled)
+❌ Expect BOI to respond without wake word (when enabled)
 ❌ Use wake words in unrelated sentences
 
 ---
 
 ## 🐛 Troubleshooting
 
-### "VATSAL isn't responding to my commands"
+### "BOI isn't responding to my commands"
 
 **Cause:** Wake word not detected
 **Fix:**
 1. Check if wake word is enabled (💬 button green)
-2. Say wake word clearly: "Hey VATSAL"
+2. Say wake word clearly: "Hey BOI"
 3. Pause briefly after wake word
 4. Then speak your command
 
-### "VATSAL responds to background noise"
+### "BOI responds to background noise"
 
 **Cause:** Wake word disabled
 **Fix:**
@@ -245,9 +245,9 @@ voice_commander.add_wake_word("friday")
 
 ### Multiple Wake Word Support
 ```
-"Hey VATSAL, what time is it?"
-"VATSAL, check email"
-"OK VATSAL, take screenshot"
+"Hey BOI, what time is it?"
+"BOI, check email"
+"OK BOI, take screenshot"
 "Computer, show system info"
 "Hey Computer, play music"
 "Bhiaya, organize downloads"
@@ -259,10 +259,10 @@ All wake words work interchangeably - use your preferred style!
 ### Context-Aware Processing
 Wake words are intelligently removed from commands:
 ```
-Input: "Hey VATSAL, what's the weather?"
+Input: "Hey BOI, what's the weather?"
 Processed: "what's the weather?"
 
-Input: "OK VATSAL, take a screenshot"
+Input: "OK BOI, take a screenshot"
 Processed: "take a screenshot"
 ```
 
@@ -278,13 +278,13 @@ Processed: "take a screenshot"
 
 ### Morning Routine
 ```
-"Hey VATSAL, good morning"
+"Hey BOI, good morning"
 → Morning briefing with weather, calendar, news
 
-"VATSAL, check my calendar"
+"BOI, check my calendar"
 → Today's schedule
 
-"OK VATSAL, play focus music"
+"OK BOI, play focus music"
 → Starts productivity playlist
 ```
 
@@ -293,22 +293,22 @@ Processed: "take a screenshot"
 "Computer, what's my CPU usage?"
 → System performance report
 
-"VATSAL, take a screenshot"
+"BOI, take a screenshot"
 → Captures current screen
 
-"Hey VATSAL, search Google for Python best practices"
+"Hey BOI, search Google for Python best practices"
 → Opens browser with search results
 ```
 
 ### End of Day
 ```
-"Hey VATSAL, organize my downloads"
+"Hey BOI, organize my downloads"
 → Files sorted by type
 
-"VATSAL, show productivity summary"
+"BOI, show productivity summary"
 → Day's activity report
 
-"OK VATSAL, good night"
+"OK BOI, good night"
 → Evening summary and shutdown options
 ```
 
@@ -317,10 +317,10 @@ Processed: "take a screenshot"
 ## 🚀 Getting Started
 
 ### Quick Setup
-1. **Start VATSAL** - Run `python gui_app.py`
+1. **Start BOI** - Run `python gui_app.py`
 2. **Enable Voice** - Click 🔊 button (turns green)
 3. **Check Wake Word** - 💬 button should be green
-4. **Test It** - Say "Hey VATSAL, what time is it?"
+4. **Test It** - Say "Hey BOI, what time is it?"
 
 ### First Commands to Try
 ```
@@ -328,7 +328,7 @@ Processed: "take a screenshot"
 "Hey Vatsal, what can you do?"
 "OK Vatsal, take a screenshot"
 "Computer, check system information"
-"VATSAL, what time is it?"
+"BOI, what time is it?"
 "Bhiaya, show me the weather"
 ```
 
@@ -365,11 +365,11 @@ A: Click the 💬 yellow button - it will turn yellow when disabled
 
 ---
 
-**Wake word detection makes VATSAL smarter, safer, and more convenient to use!**
+**Wake word detection makes BOI smarter, safer, and more convenient to use!**
 
-Say "Hey VATSAL" and experience true hands-free AI assistance! 🎤🤖✨
+Say "Hey BOI" and experience true hands-free AI assistance! 🎤🤖✨
 
 ---
 
 *Last Updated: October 28, 2025*
-*VATSAL AI Desktop Automation Controller v2.1+*
+*BOI (Barely Obeys Instructions) Desktop Automation Controller v2.1+*

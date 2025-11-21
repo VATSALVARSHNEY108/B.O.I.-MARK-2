@@ -4,11 +4,11 @@
 The "lock the screen" command was giving error: **"Unknown action: lock_screen"** in the GUI app.
 
 ## Root Cause
-The VATSAL automator's Gemini AI prompt didn't include `lock_screen` in its list of known actions, so Gemini couldn't generate the correct command.
+The BOI automator's Gemini AI prompt didn't include `lock_screen` in its list of known actions, so Gemini couldn't generate the correct command.
 
 ## What Was Fixed
 
-### 1. **Added System Control Actions to VATSAL Automator** (`vatsal_desktop_automator.py`)
+### 1. **Added System Control Actions to BOI Automator** (`vatsal_desktop_automator.py`)
    - ✅ Added `lock_screen` action handler
    - ✅ Added `shutdown_system` action handler  
    - ✅ Added `restart_system` action handler

@@ -78,7 +78,7 @@ Double-click the downloaded file → Menu appears with 13 options!
    - **➕ Create New Folder** → Add a folder
    - **🔍 Search Desktop Files** → Search for "coding"
 
-### Option 2: Use VATSAL Chatbot
+### Option 2: Use BOI Chatbot
 
 In the chatbot, type:
 ```
@@ -140,7 +140,7 @@ python gui_app.py
 ### 3. Test on Replit (Demo Mode):
 - Go to Desktop tab
 - Click buttons
-- Try VATSAL commands
+- Try BOI commands
 
 ### 4. Download for Windows (Real Mode):
 - Right-click `desktop_file_controller.bat` → Download
@@ -205,7 +205,7 @@ Folders: 6
 | **Desktop Folders** | ✅ Created | 6 test folders |
 | **Batch File Ready** | ✅ Yes | Download anytime |
 | **GUI Integration** | ✅ Complete | 5 buttons in Desktop tab |
-| **VATSAL Commands** | ✅ Working | "open coding folder" works |
+| **BOI Commands** | ✅ Working | "open coding folder" works |
 | **Download Instructions** | ✅ Generated | See downloads_ready.txt |
 
 ---

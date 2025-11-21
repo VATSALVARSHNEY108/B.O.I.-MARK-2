@@ -240,7 +240,7 @@ vlm.learn_workflow("Open GitHub", workflow_steps)
 
 ### New Tab: "🧠 Learning AI"
 
-Located as Tab #3 in the VATSAL GUI application.
+Located as Tab #3 in the BOI GUI application.
 
 #### Layout
 
@@ -501,7 +501,7 @@ python gui_app.py
 ## 📝 Example Session
 
 ```
-User: Opens VATSAL GUI → Clicks "🧠 Learning AI" tab
+User: Opens BOI GUI → Clicks "🧠 Learning AI" tab
 
 User: Clicks "👁️ Observe Screen"
 VLM:  📸 Screenshot captured

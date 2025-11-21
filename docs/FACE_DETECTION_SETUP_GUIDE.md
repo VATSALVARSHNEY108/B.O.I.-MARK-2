@@ -1,7 +1,7 @@
 # 🔐 Face Detection Security - Step-by-Step Setup Guide
 
 ## Overview
-Your VATSAL system includes **professional-grade biometric face authentication** using OpenCV and machine learning. This guide will walk you through setting it up.
+Your BOI system includes **professional-grade biometric face authentication** using OpenCV and machine learning. This guide will walk you through setting it up.
 
 ---
 
@@ -10,12 +10,12 @@ Your VATSAL system includes **professional-grade biometric face authentication**
 ### What You Need:
 1. ✅ **Webcam/Camera** - Built-in laptop camera or USB webcam
 2. ✅ **Good Lighting** - Natural or artificial light on your face
-3. ✅ **Python Environment** - Already set up in your VATSAL system
+3. ✅ **Python Environment** - Already set up in your BOI system
 4. ✅ **OpenCV** - Already installed with opencv-contrib-python
 
 ### Important Notes:
 - 🚫 **Replit Limitation**: This feature requires a physical webcam and display. It works **perfectly on local installations** (Windows/Mac/Linux) but has limited functionality in cloud environments like Replit.
-- 💻 **Best Experience**: Run VATSAL locally on your computer for full face detection capabilities.
+- 💻 **Best Experience**: Run BOI locally on your computer for full face detection capabilities.
 
 ---
 
@@ -30,7 +30,7 @@ python demo_face_security.py
 
 You'll see this menu:
 ```
-🔐 VATSAL FACE DETECTION SECURITY SYSTEM
+🔐 BOI FACE DETECTION SECURITY SYSTEM
 ================================================
 
 📋 MENU:
@@ -153,7 +153,7 @@ else:
 
 ## 🎯 Use Cases
 
-### **1. Secure Login to VATSAL**
+### **1. Secure Login to BOI**
 Replace password login with face recognition:
 ```python
 # At startup
@@ -161,7 +161,7 @@ bio_auth = BiometricAuthenticationSystem()
 auth = bio_auth.authenticate_face()
 
 if auth["success"]:
-    # Start VATSAL with full permissions
+    # Start BOI with full permissions
     start_vatsal_assistant()
 else:
     print("Authentication required!")
@@ -294,7 +294,7 @@ biometric_data/
 
 ### **Problem: "Works on desktop but not Replit"**
 **Cause:** Replit is a cloud environment without webcam access
-**Solution:** Run VATSAL locally on your computer
+**Solution:** Run BOI locally on your computer
 
 ---
 
@@ -327,12 +327,12 @@ biometric_data/
 
 ## 🚀 Integration Examples
 
-### **With VATSAL GUI:**
+### **With BOI GUI:**
 ```python
 # In modules/core/gui_app.py
 from security.enhanced_biometric_auth import BiometricAuthenticationSystem
 
-class VATSALApp:
+class BOIApp:
     def __init__(self):
         self.bio_auth = BiometricAuthenticationSystem()
         self.authenticated = False
@@ -415,6 +415,6 @@ Your face detection security system is now ready to use!
 - Check Troubleshooting section above
 - Review authentication logs (Option 4 in demo)
 - Adjust security settings (Option 5 in demo)
-- Contact VATSAL support
+- Contact BOI support
 
 **Security First! 🔐**

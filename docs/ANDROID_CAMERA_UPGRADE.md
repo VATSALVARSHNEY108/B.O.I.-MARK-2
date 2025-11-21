@@ -122,7 +122,7 @@ activator.run()
 
 ## 🎮 Controls
 
-- **Two V Signs (✌️✌️)** - Get VATSAL greeting
+- **Two V Signs (✌️✌️)** - Get BOI greeting
 - **One V Sign (1 sec)** - Activate voice listening
 - **Press 'q'** - Quit
 

@@ -1,5 +1,5 @@
 ================================================================================
-                    VATSAL AI - ALL TASK WORKING COMMANDS
+                    BOI AI - ALL TASK WORKING COMMANDS
                          Complete Command Reference
 ================================================================================
 
@@ -599,7 +599,7 @@ ADVANCED PROMPT PATTERNS:
 3. MULTI-STEP TASKS: Describe your workflow
    ✅ "Open notepad, type my notes, and save as todo.txt"
 
-4. ASK QUESTIONS: VATSAL can explain and help
+4. ASK QUESTIONS: BOI can explain and help
    ✅ "What can you do?"
    ✅ "How do I analyze data?"
    ✅ "Explain this feature"
@@ -615,7 +615,7 @@ Try these to get started:
  3. "Take a screenshot"
  4. "What's on my screen?"
  5. "Get weather update"
- 6. "Create file hello.txt with content Hello VATSAL"
+ 6. "Create file hello.txt with content Hello BOI"
  7. "Play music on Spotify"
  8. "Check CPU usage"
  9. "Give me a compliment"
@@ -633,7 +633,7 @@ ALARM FORMAT:
 
 NATURAL LANGUAGE:
   - Most commands understand variations
-  - You can ask naturally - VATSAL understands context
+  - You can ask naturally - BOI understands context
   - Powered by Google's Gemini AI
 
 COMPLEXITY LEVELS:
@@ -677,6 +677,6 @@ Categories:
 For more detailed help on specific features, type "help" or use the help
 button in the GUI.
 
-Your VATSAL AI Assistant is always ready to help!
+Your BOI AI Assistant is always ready to help!
 
 ================================================================================

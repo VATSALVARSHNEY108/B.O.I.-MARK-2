@@ -2,7 +2,7 @@
 
 ## Overview
 
-VATSAL AI Assistant now includes a comprehensive security suite with multiple layers of protection:
+BOI (Barely Obeys Instructions) Assistant now includes a comprehensive security suite with multiple layers of protection:
 
 1. **Biometric Authentication** 🔐
 2. **Two-Factor Authentication (2FA)** 🔑
@@ -62,7 +62,7 @@ if auth_result["success"]:
 ```python
 from two_factor_authentication import TwoFactorAuthentication
 
-tfa = TwoFactorAuthentication(app_name="VATSAL AI")
+tfa = TwoFactorAuthentication(app_name="BOI (Barely Obeys Instructions)")
 
 # Enable 2FA for a user
 result = tfa.enable_2fa("user123", "user@example.com")
@@ -237,7 +237,7 @@ sandbox.end_sandbox(keep_session=False)
 ```python
 from security_dashboard import SecurityDashboard
 
-dashboard = SecurityDashboard(app_name="VATSAL AI")
+dashboard = SecurityDashboard(app_name="BOI (Barely Obeys Instructions)")
 
 # Enroll user with all security features
 enrollment = dashboard.enroll_user(
@@ -272,7 +272,7 @@ status = dashboard.get_comprehensive_security_status()
 ║          🛡️  SECURITY DASHBOARD REPORT                       ║
 ╚══════════════════════════════════════════════════════════════╝
 
-📋 Application: VATSAL AI Assistant
+📋 Application: BOI (Barely Obeys Instructions) Assistant
 🔒 Security Level: MAXIMUM
 👤 Current User: user123
 ✓ Authenticated: True
@@ -448,7 +448,7 @@ status = dashboard.get_comprehensive_security_status()
 
 ## License
 
-These security features are part of the VATSAL AI Assistant project.
+These security features are part of the BOI (Barely Obeys Instructions) Assistant project.
 
 ## Support
 

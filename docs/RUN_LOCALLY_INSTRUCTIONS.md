@@ -1,4 +1,4 @@
-# How to Run VATSAL GUI with Voice Commands Locally
+# How to Run BOI GUI with Voice Commands Locally
 
 Voice commands **cannot work in Replit cloud** because the code needs direct access to your computer's microphone.
 

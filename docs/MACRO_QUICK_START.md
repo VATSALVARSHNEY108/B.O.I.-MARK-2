@@ -2,7 +2,7 @@
 
 ## What Is This?
 
-The VATSAL Macro Recording System lets you **record your mouse and keyboard actions** and **replay them automatically**. Perfect for automating repetitive tasks!
+The BOI Macro Recording System lets you **record your mouse and keyboard actions** and **replay them automatically**. Perfect for automating repetitive tasks!
 
 ---
 

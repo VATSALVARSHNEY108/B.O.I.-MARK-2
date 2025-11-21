@@ -103,7 +103,7 @@ Only essential files remain:
 ## 📁 Current Project Structure
 
 ```
-VATSAL/
+BOI/
 ├── README.md                    # Project overview
 ├── replit.md                    # Project memory
 ├── vatsal.py                    # Main launcher

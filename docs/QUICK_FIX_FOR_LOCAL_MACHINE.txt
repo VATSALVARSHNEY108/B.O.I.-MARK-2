@@ -3,7 +3,7 @@
 ═══════════════════════════════════════════════════════════════
 
 You need to edit this file on your Windows computer:
-C:\Users\VATSAL VARSHNEY\PycharmProjects\V.A.T.S.A.L.23242\modules\system\system_control.py
+C:\Users\BOI VARSHNEY\PycharmProjects\V.A.T.S.A.L.23242\modules\system\system_control.py
 
 
 WHAT TO CHANGE:
@@ -26,7 +26,7 @@ DETAILED INSTRUCTIONS:
 ───────────────────────────────────────────────────────────────
 
 Step 1: Open the file in Notepad or your Python editor
-File: C:\Users\VATSAL VARSHNEY\PycharmProjects\V.A.T.S.A.L.23242\modules\system\system_control.py
+File: C:\Users\BOI VARSHNEY\PycharmProjects\V.A.T.S.A.L.23242\modules\system\system_control.py
 
 Step 2: Use Find & Replace (Ctrl+H in most editors)
 
@@ -46,7 +46,7 @@ Change them to remove "cast, POINTER" - just delete that part
 
 Step 4: Save the file (Ctrl+S)
 
-Step 5: Restart your VATSAL GUI application
+Step 5: Restart your BOI GUI application
 
 
 EXAMPLE OF THE CHANGE:
@@ -86,7 +86,7 @@ FUNCTIONS TO UPDATE (all have the same fix):
 AFTER THE FIX:
 ───────────────────────────────────────────────────────────────
 1. Save the file
-2. Close and restart your VATSAL application
+2. Close and restart your BOI application
 3. Try typing "mute" again
 4. It should work perfectly!
 

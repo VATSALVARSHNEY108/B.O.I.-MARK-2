@@ -185,7 +185,7 @@ Store and retrieve context information:
 ```python
 # Store context
 voice_commander.set_context("last_file", "report.pdf")
-voice_commander.set_context("current_project", "VATSAL")
+voice_commander.set_context("current_project", "BOI")
 
 # Retrieve context
 file = voice_commander.get_context("last_file")

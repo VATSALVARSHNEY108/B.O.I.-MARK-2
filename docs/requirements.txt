@@ -1,4 +1,4 @@
-# Python 3.11+ Requirements for VATSAL AI Desktop Automation
+# Python 3.11+ Requirements for BOI AI Desktop Automation
 #
 # NOTE FOR WINDOWS USERS:
 # - MediaPipe requires Python 3.10 or 3.11 on Windows (not 3.12 or 3.13)

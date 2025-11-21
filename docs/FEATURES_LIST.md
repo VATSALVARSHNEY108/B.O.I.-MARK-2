@@ -1,4 +1,4 @@
-# VATSAL AI Desktop Automation - Complete Features List
+# BOI (Barely Obeys Instructions) Desktop Automation - Complete Features List
 
 ## 🎨 Main GUI Interface
 - **Modern Dark-Themed UI** with gradient effects
@@ -10,13 +10,13 @@
 
 ## 🤖 Core AI Features
 
-### 1. 💬 VATSAL Chat (Simple Chatbot)
+### 1. 💬 BOI Chat (Simple Chatbot)
 - Quick Q&A with AI
 - Natural conversation
 - Fast responses
 - Personality-driven interactions
 
-### 2. ⚡ VATSAL Auto (Intelligent Automation)
+### 2. ⚡ BOI Auto (Intelligent Automation)
 - AI-powered command understanding
 - Local execution of commands
 - Confirmation for risky actions
@@ -262,7 +262,7 @@ Pre-built code templates for:
 
 ## 🎨 Mode Controls
 
-### VATSAL Mode Toggle
+### BOI Mode Toggle
 - **ON**: Personality-driven, conversational responses
 - **OFF**: Direct, concise responses
 
@@ -275,7 +275,7 @@ Pre-built code templates for:
 ### Voice Features
 - 🎤 Microphone - Single command
 - 🔊 Continuous Listening - Always on
-- 💬 Wake Word Detection - "Hey VATSAL"
+- 💬 Wake Word Detection - "Hey BOI"
 - 🔊 Sound Effects - Audio feedback
 
 ## 📦 Integration Features
@@ -319,7 +319,7 @@ Pre-built code templates for:
 - **30+ Major Systems**
 - **100+ Quick Actions**
 - **10+ AI Models** integrated
-- **Multiple Chatbots** (Simple, VATSAL, Desktop Automator)
+- **Multiple Chatbots** (Simple, BOI, Desktop Automator)
 
 ## 🚀 How to Access
 
@@ -343,5 +343,5 @@ cd vnc_tools && ./start_gui_with_vnc.sh
 ---
 
 **Created by Vatsal Varshney**
-- GitHub: https://github.com/VATSALVARSHNEY108
+- GitHub: https://github.com/BOIVARSHNEY108
 - LinkedIn: https://www.linkedin.com/in/vatsal-varshney108/

@@ -1,7 +1,7 @@
 # Full Screen Notepad Feature
 
 ## Overview
-The VATSAL AI Assistant now automatically opens Notepad in **FULL SCREEN** mode before writing any content. This provides better visibility and a more professional experience when viewing generated letters, code, or any text content.
+The BOI (Barely Obeys Instructions) Assistant now automatically opens Notepad in **FULL SCREEN** mode before writing any content. This provides better visibility and a more professional experience when viewing generated letters, code, or any text content.
 
 ## How It Works
 

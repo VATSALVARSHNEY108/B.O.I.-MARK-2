@@ -1,4 +1,4 @@
-# 🤖 VATSAL AI - Unified All-in-One System Upgrade
+# 🤖 BOI (Barely Obeys Instructions) - Unified All-in-One System Upgrade
 
 ## ✅ What Was Fixed
 
@@ -34,38 +34,38 @@
 ## 🚀 New Unified AI Features
 
 ### **All-in-One Chatbot System**
-VATSAL AI now intelligently handles BOTH specific commands AND general conversations!
+BOI (Barely Obeys Instructions) now intelligently handles BOTH specific commands AND general conversations!
 
 #### What It Can Do Now:
 
 **1. General Conversations & Questions**
 ```
 You: hi
-VATSAL: Good day, Boss! How may I assist you today?
+BOI: Good day, Boss! How may I assist you today?
 
 You: what is llm
-VATSAL: Certainly, Sir! LLM stands for Large Language Model...
+BOI: Certainly, Sir! LLM stands for Large Language Model...
 
 You: who made you
-VATSAL: I was created by Vatsal Varshney, a talented AI/ML Engineer...
+BOI: I was created by Vatsal Varshney, a talented AI/ML Engineer...
 ```
 
 **2. Specific Task Commands**
 ```
 You: open notepad
-VATSAL: Opening notepad now, Sir.
+BOI: Opening notepad now, Sir.
 
 You: take a screenshot
-VATSAL: Screenshot captured successfully!
+BOI: Screenshot captured successfully!
 
 You: check system report
-VATSAL: Here's your system health report...
+BOI: Here's your system health report...
 ```
 
 **3. Code Generation**
 ```
 You: write code for palindrome checker
-VATSAL: Here's the code for checking palindromes...
+BOI: Here's the code for checking palindromes...
 ```
 
 **4. Smart Fallback**
@@ -124,7 +124,7 @@ Is it a greeting/question?
 
 ## 🎯 Capabilities Summary
 
-VATSAL AI is now a **TRUE all-in-one AI assistant** with:
+BOI (Barely Obeys Instructions) is now a **TRUE all-in-one AI assistant** with:
 
 ### 💬 Conversational AI
 - Answer any question (What is X? How does Y work?)
@@ -176,7 +176,7 @@ You: what is machine learning
 ### Example 2: Greeting
 ```
 You: hi
-🤖 Good day, Boss! VATSAL AI at your service. How may I assist you today?
+🤖 Good day, Boss! BOI (Barely Obeys Instructions) at your service. How may I assist you today?
 ```
 
 ### Example 3: Task Command
@@ -196,7 +196,7 @@ You: write python code to reverse a string
 ```
 You: who made you
 🤖 I was created by Vatsal Varshney, a talented AI/ML Engineer and developer!
-GitHub: https://github.com/VATSALVARSHNEY108
+GitHub: https://github.com/BOIVARSHNEY108
 LinkedIn: https://www.linkedin.com/in/vatsal-varshney108/
 ```
 
@@ -234,7 +234,7 @@ LinkedIn: https://www.linkedin.com/in/vatsal-varshney108/
 ## 📝 Developer Notes
 
 **Creator:** Vatsal Varshney  
-**GitHub:** https://github.com/VATSALVARSHNEY108  
+**GitHub:** https://github.com/BOIVARSHNEY108  
 **LinkedIn:** https://www.linkedin.com/in/vatsal-varshney108/
 
 **Upgrade Date:** November 12, 2025  

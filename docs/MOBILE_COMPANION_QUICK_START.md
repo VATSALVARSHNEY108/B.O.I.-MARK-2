@@ -1,6 +1,6 @@
 # 📱 Mobile Companion - Quick Start
 
-Get started with VATSAL Mobile Companion in 60 seconds!
+Get started with BOI Mobile Companion in 60 seconds!
 
 ## 🚀 Start the Server
 
@@ -55,7 +55,7 @@ Type any command at the bottom:
 - "show me the weather"
 - "open spotify"
 - "lock screen"
-- Any VATSAL command!
+- Any BOI command!
 
 ### 📸 View Your Screen
 - Tap "Refresh Screenshot" to capture your desktop
@@ -142,7 +142,7 @@ The mobile interface updates in real-time via WebSocket:
 
 **Commands not working?**
 - Authentication may have expired (reload page)
-- Check that VATSAL is running (GUI App workflow)
+- Check that BOI is running (GUI App workflow)
 - Commands execute on desktop, not mobile
 
 **No system stats?**
@@ -157,7 +157,7 @@ The mobile interface updates in real-time via WebSocket:
 
 ## 🎉 That's It!
 
-You're now controlling your VATSAL desktop automation from your phone! 
+You're now controlling your BOI desktop automation from your phone! 
 
 For more details, see [MOBILE_COMPANION_GUIDE.md](MOBILE_COMPANION_GUIDE.md)
 

@@ -2,7 +2,7 @@
 
 ## ✅ Integration Complete!
 
-The WAV sound effects have been successfully integrated with your VATSAL GUI application!
+The WAV sound effects have been successfully integrated with your BOI GUI application!
 
 ---
 
@@ -262,7 +262,7 @@ User clicks "Done"
 ✅ **Seamless Integration** - Works automatically with existing voice commanding
 ✅ **Easy Controls** - One-click toggle, right-click settings
 ✅ **Visual Feedback** - Button colors show status
-✅ **Professional UI** - Matches VATSAL's design language
+✅ **Professional UI** - Matches BOI's design language
 ✅ **Non-Intrusive** - Can be easily disabled
 ✅ **Customizable** - Full volume control and sound replacement
 ✅ **User-Friendly** - Intuitive controls, clear feedback

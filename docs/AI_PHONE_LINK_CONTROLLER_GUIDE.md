@@ -152,12 +152,12 @@ history = controller.get_history(limit=5)
 
 ---
 
-## 🔧 Integration with VATSAL AI
+## 🔧 Integration with BOI (Barely Obeys Instructions)
 
-This controller integrates seamlessly with your VATSAL AI system:
+This controller integrates seamlessly with your BOI (Barely Obeys Instructions) system:
 
 ```python
-# In your VATSAL modules
+# In your BOI modules
 from ai_phone_link_controller import AIPhoneLinkController
 
 # Initialize
@@ -222,7 +222,7 @@ def handle_voice_command(text):
 ## 🎯 Use Cases
 
 ### 1. Voice Assistant Integration
-Add to VATSAL voice assistant for hands-free calling
+Add to BOI voice assistant for hands-free calling
 
 ### 2. Emergency Calling
 Quick dial emergency contacts with one click
@@ -373,10 +373,10 @@ def call_customer(customer_id):
 For issues or questions:
 1. Check `PHONE_LINK_DIAL_GUIDE.md`
 2. Run test files: `test_phone_link_simple.py`
-3. Check VATSAL AI documentation
+3. Check BOI (Barely Obeys Instructions) documentation
 
 ---
 
-**Made with ❤️ for VATSAL AI System**
+**Made with ❤️ for BOI (Barely Obeys Instructions) System**
 
 Enjoy AI-powered phone control! 🚀📱

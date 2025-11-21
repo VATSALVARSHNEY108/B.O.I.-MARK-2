@@ -1,4 +1,4 @@
-# Windows Setup Guide for VATSAL AI Desktop Automation
+# Windows Setup Guide for BOI (Barely Obeys Instructions) Desktop Automation
 
 ## Python Version Compatibility
 
@@ -28,7 +28,7 @@ To enable hand gesture recognition:
 2. **Create a new virtual environment:**
    ```bash
    # Navigate to your project directory
-   cd "C:\Users\VATSAL VARSHNEY\PycharmProjects\VATSAL NL"
+   cd "C:\Users\BOI VARSHNEY\PycharmProjects\BOI NL"
    
    # Create virtual environment with Python 3.11
    py -3.11 -m venv venv311

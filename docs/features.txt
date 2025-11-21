@@ -417,7 +417,7 @@ INTERFACE OPTIONS
 
 260. GUI Application (Modern dark theme with enhanced visuals)
 261. CLI Interface (Command-line interface)
-262. VATSAL AI Assistant Personality
+262. BOI AI Assistant Personality
 
 
 ADVANCED CAPABILITIES

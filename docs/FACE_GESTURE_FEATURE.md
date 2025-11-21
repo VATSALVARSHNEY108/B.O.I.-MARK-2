@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Face & Gesture Assistant is an advanced computer vision feature for VATSAL that uses OpenCV and MediaPipe to:
+The Face & Gesture Assistant is an advanced computer vision feature for BOI that uses OpenCV and MediaPipe to:
 - Detect your face and greet you by name ("Vatsal" or "Yes sir")
 - Recognize hand gestures to activate voice listening mode
 - Provide a hands-free, natural interaction experience
@@ -19,7 +19,7 @@ The Face & Gesture Assistant is an advanced computer vision feature for VATSAL t
 - **Technology**: Google MediaPipe Hands
 - **Gestures**: Detects OPEN PALM gesture (all fingers extended)
 - **Action**: Triggers voice listening mode when you show an open palm
-- **Integration**: Fully integrated with VATSAL's voice command system
+- **Integration**: Fully integrated with BOI's voice command system
 
 ### 3. Voice Integration
 - Greetings are spoken using Text-to-Speech
@@ -43,7 +43,7 @@ The Face & Gesture Assistant is an advanced computer vision feature for VATSAL t
 3. **Interact with the System**
    - Position your face in front of the camera
    - You'll see a green rectangle around your face with "Vatsal" label
-   - VATSAL will greet you ("Yes sir", "Hello Vatsal", etc.)
+   - BOI will greet you ("Yes sir", "Hello Vatsal", etc.)
    - Show an OPEN PALM gesture to activate voice listening
    - Speak your command after the system says "I'm listening"
 
@@ -276,7 +276,7 @@ except KeyboardInterrupt:
 
 ## Conclusion
 
-The Face & Gesture Assistant brings natural, hands-free interaction to VATSAL. With computer vision-powered face detection and gesture recognition, you can now interact with your AI assistant more intuitively than ever before!
+The Face & Gesture Assistant brings natural, hands-free interaction to BOI. With computer vision-powered face detection and gesture recognition, you can now interact with your AI assistant more intuitively than ever before!
 
 ---
 

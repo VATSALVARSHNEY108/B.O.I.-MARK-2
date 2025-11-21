@@ -1,8 +1,8 @@
-# VATSAL Desktop Automator Guide
+# BOI Desktop Automator Guide
 
 ## Overview
 
-**VATSAL** is an intelligent desktop automator that combines local automation scripts with minimal Gemini API support. Unlike other automation tools, VATSAL uses AI **only** for natural language understanding and task decomposition - all execution happens locally via Python modules.
+**BOI** is an intelligent desktop automator that combines local automation scripts with minimal Gemini API support. Unlike other automation tools, BOI uses AI **only** for natural language understanding and task decomposition - all execution happens locally via Python modules.
 
 ## Purpose
 
@@ -85,7 +85,7 @@ python vatsal_desktop_automator.py
 ### GUI Mode
 
 1. Launch the GUI app: `python gui_app.py`
-2. Navigate to the **⚡ VATSAL Auto** tab
+2. Navigate to the **⚡ BOI Auto** tab
 3. Enter commands in natural language
 4. Use quick action buttons for common tasks
 
@@ -101,7 +101,7 @@ python vatsal_desktop_automator.py
 ### Example 1: Simple Task
 **User:** "Open notepad and type Hello"
 
-**VATSAL Process:**
+**BOI Process:**
 1. 🧠 Gemini understands: Open app + type text
 2. ⚡ Local execution:
    - Launch notepad.exe via subprocess
@@ -112,7 +112,7 @@ python vatsal_desktop_automator.py
 ### Example 2: System Optimization
 **User:** "Optimize my workspace and show system info"
 
-**VATSAL Process:**
+**BOI Process:**
 1. 🧠 Gemini decomposes: Multiple tasks
 2. ⚡ Local execution:
    - Get system information (CPU, RAM, disk)
@@ -124,7 +124,7 @@ python vatsal_desktop_automator.py
 ### Example 3: Destructive Action (with confirmation)
 **User:** "Delete the old_files folder"
 
-**VATSAL Process:**
+**BOI Process:**
 1. 🧠 Gemini identifies: Destructive action
 2. ⚠️ Confirmation prompt: "This action is destructive: Delete folder with files. Continue? (yes/no)"
 3. 👤 User approves or cancels
@@ -133,7 +133,7 @@ python vatsal_desktop_automator.py
 
 ## Key Differentiators
 
-| Feature | VATSAL | Traditional Automation |
+| Feature | BOI | Traditional Automation |
 |---------|--------|----------------------|
 | Command Input | Natural language | Scripted commands |
 | AI Role | Understanding only | Often both understanding AND execution |
@@ -249,4 +249,4 @@ For issues or questions:
 
 ---
 
-**VATSAL** - Intelligent desktop automation, thoughtfully designed with AI understanding and local execution.
+**BOI** - Intelligent desktop automation, thoughtfully designed with AI understanding and local execution.

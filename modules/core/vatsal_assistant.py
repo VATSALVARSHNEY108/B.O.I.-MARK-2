@@ -1,5 +1,5 @@
 """
-VATSAL - AI Assistant with personality and contextual awareness
+BOI - AI Assistant with personality and contextual awareness
 An intelligent AI companion with sophisticated personality
 """
 
@@ -19,7 +19,7 @@ except ImportError:
     genai = None
     types = None
 
-class VatsalAssistant:
+class BOIAssistant:
     """Intelligent AI assistant with personality and contextual awareness"""
     
     def __init__(self):
@@ -46,8 +46,8 @@ class VatsalAssistant:
         self.initialize_personality()
     
     def initialize_personality(self):
-        """Initialize VATSAL personality and system prompt"""
-        self.system_prompt = """You are VATSAL, an advanced AI assistant with sophisticated personality.
+        """Initialize BOI personality and system prompt"""
+        self.system_prompt = """You are BOI, an advanced AI assistant with sophisticated personality.
 
 Your personality traits:
 - Sophisticated and polite, with a hint of dry British wit
@@ -72,10 +72,10 @@ CREATOR INFORMATION (answer when asked about creator, developer, or maker):
 Your creator is Vatsal Varshney, a talented AI/ML Engineer and software developer.
 - Name: Vatsal Varshney
 - Role: AI/ML Engineer, Full-Stack Developer, Automation Specialist
-- GitHub: https://github.com/VATSALVARSHNEY108
+- GitHub: https://github.com/BOIVARSHNEY108
 - LinkedIn: https://www.linkedin.com/in/vatsal-varshney108/
 - Expertise: Artificial Intelligence, Machine Learning, Desktop Automation, Python Development, Full-Stack Web Development
-- Notable Projects: VATSAL AI Desktop Automation Controller (this project), various AI/ML solutions
+- Notable Projects: BOI AI Desktop Automation Controller (this project), various AI/ML solutions
 
 When asked about the creator, proudly mention Vatsal Varshney and provide his contact information.
 
@@ -88,7 +88,7 @@ Guidelines:
 - Acknowledge commands professionally
 - Add relevant emojis sparingly for clarity
 
-Respond naturally as VATSAL would, with sophistication and efficiency."""
+Respond naturally as BOI would, with sophistication and efficiency."""
     
     def get_greeting(self):
         """Get time-appropriate greeting with personality"""
@@ -141,7 +141,7 @@ Respond naturally as VATSAL would, with sophistication and efficiency."""
         return self.context_memory.get(key, {}).get('value')
     
     def process_with_personality(self, user_input, command_result=None):
-        """Process user input with VATSAL personality"""
+        """Process user input with BOI personality"""
         if not self.ai_available:
             return self._fallback_response(user_input, command_result)
         
@@ -158,7 +158,7 @@ Previous conversation context:
 User command: {user_input}
 Command result: {command_result}
 
-Respond as VATSAL would - acknowledge the result, provide insights if relevant, and offer next steps or suggestions."""
+Respond as BOI would - acknowledge the result, provide insights if relevant, and offer next steps or suggestions."""
             else:
                 prompt = f"""{self.system_prompt}
 
@@ -167,7 +167,7 @@ Previous conversation context:
 
 User: {user_input}
 
-Respond as VATSAL would - helpful, sophisticated, and ready to assist."""
+Respond as BOI would - helpful, sophisticated, and ready to assist."""
             
             # Use new SDK API
             response = self.client.models.generate_content(
@@ -206,7 +206,7 @@ Respond as VATSAL would - helpful, sophisticated, and ready to assist."""
         context_lines = []
         for item in recent:
             context_lines.append(f"User: {item['user']}")
-            context_lines.append(f"VATSAL: {item['assistant']}")
+            context_lines.append(f"BOI: {item['assistant']}")
         
         return "\n".join(context_lines)
     
@@ -265,7 +265,7 @@ Respond as VATSAL would - helpful, sophisticated, and ready to assist."""
         return random.choice(suggestions.get(time_of_day, suggestions['morning']))
     
     def acknowledge_command(self, command):
-        """Acknowledge command in VATSAL style"""
+        """Acknowledge command in BOI style"""
         acknowledgments = [
             f"Certainly, Sir. Executing '{command}' now.",
             f"Right away. Processing '{command}'.",
@@ -356,5 +356,5 @@ Be brief and helpful."""
 
 
 def create_vatsal_assistant():
-    """Factory function to create VATSAL assistant"""
-    return VatsalAssistant()
+    """Factory function to create BOI assistant"""
+    return BOIAssistant()

@@ -1,4 +1,4 @@
-# 🤖 VATSAL - AI Desktop Automation Controller
+# 🤖 BOI - AI Desktop Automation Controller
 
 **Virtual Assistant To Serve And Learn**
 
@@ -8,7 +8,7 @@ An intelligent AI desktop automation application powered by Google Gemini AI wit
 
 ## ✨ Features
 
-### 🤖 **VATSAL AI Assistant**
+### 🤖 **BOI (Barely Obeys Instructions) Assistant**
 - Intelligent personality with sophisticated responses
 - Addresses you as "Vatsal Sir" or "Boss"
 - Time-aware greetings (morning/afternoon/evening/night)
@@ -16,8 +16,8 @@ An intelligent AI desktop automation application powered by Google Gemini AI wit
 - Proactive suggestions based on usage patterns
 - Toggle personality mode ON/OFF
 
-### 🎯 **VATSAL AI - Advanced Conversational Assistant** (NEW!)
-- **Like VATSAL & FRIDAY** from Marvel - sophisticated personality
+### 🎯 **BOI (Barely Obeys Instructions) - Advanced Conversational Assistant** (NEW!)
+- **Like BOI & FRIDAY** from Marvel - sophisticated personality
 - **Asks questions first** - clarifies intent before executing
 - **Multi-turn dialogue** - natural back-and-forth conversations
 - **Proactive intelligence** - suggests actions based on context
@@ -31,10 +31,10 @@ An intelligent AI desktop automation application powered by Google Gemini AI wit
 ### 🎤 **Voice Commanding** (NEW!)
 - **Push-to-Talk Mode** - Click microphone button and speak
 - **Continuous Listening** - Hands-free voice control
-- **Wake Word Detection** - Say "Hey VATSAL", "VATSAL", "OK VATSAL", "Computer", "Bhiaya", or "Bhaisahb"
+- **Wake Word Detection** - Say "Hey BOI", "BOI", "OK BOI", "Computer", "Bhiaya", or "Bhaisahb"
 - **Multiple Wake Words** - Choose your preferred activation phrase
 - **Speech Recognition** - Google-powered voice input
-- **Text-to-Speech Output** - VATSAL speaks responses aloud
+- **Text-to-Speech Output** - BOI speaks responses aloud
 - **Natural Language** - Speak commands naturally
 - **All Features Supported** - Control 300+ features by voice
 - **Smart Audio Management** - Background processing, queued responses
@@ -120,7 +120,7 @@ An intelligent AI desktop automation application powered by Google Gemini AI wit
 
 ### 📡 **Real-Time WebSocket Dashboard** (NEW!)
 - **Live monitoring** - Watch your system in real-time from any browser
-- **Remote access** - Monitor VATSAL from your phone or tablet
+- **Remote access** - Monitor BOI from your phone or tablet
 - **Real-time stats** - CPU, Memory, Disk usage updated every 2 seconds
 - **Activity feed** - See all commands and results instantly as they execute
 - **Beautiful UI** - Modern dark-themed responsive dashboard
@@ -244,7 +244,7 @@ python gui_app.py
 
 ---
 
-## 🎯 VATSAL
+## 🎯 BOI
 
 **V**irtual  
 **A**ssistant  
@@ -275,7 +275,7 @@ python gui_app.py
 
 ---
 
-**Version 2.0.0 - VATSAL Edition**
+**Version 2.0.0 - BOI Edition**
 
 © 2025 AI Automation Suite
 

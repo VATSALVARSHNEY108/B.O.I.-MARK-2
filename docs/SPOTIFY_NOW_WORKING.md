@@ -112,13 +112,13 @@ repeat off
 **Before:**
 ```
 You: play kalastar on spotify
-VATSAL: ❌ Command "spotify_play_track" not recognized
+BOI: ❌ Command "spotify_play_track" not recognized
 ```
 
 **Now:**
 ```
 You: play kalastar on spotify
-VATSAL: 🎵 Playing 'kalastar' on Spotify...
+BOI: 🎵 Playing 'kalastar' on Spotify...
 Result: ✅ Playing: Kalastar - [Artist Name]
 ```
 

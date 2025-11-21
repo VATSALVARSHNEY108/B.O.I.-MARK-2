@@ -2,7 +2,7 @@
 
 ## Overview
 
-VATSAL AI now includes an **enhanced hand gesture and face detection system** using pure OpenCV that works everywhere - no MediaPipe required!
+BOI (Barely Obeys Instructions) now includes an **enhanced hand gesture and face detection system** using pure OpenCV that works everywhere - no MediaPipe required!
 
 ## Features
 
@@ -24,7 +24,7 @@ VATSAL AI now includes an **enhanced hand gesture and face detection system** us
 
 3. **Voice Integration**
    - Automatic voice activation with open palm gesture
-   - Works seamlessly with VATSAL voice commander
+   - Works seamlessly with BOI voice commander
    - Visual and audio feedback
 
 4. **Statistics Tracking**
@@ -77,7 +77,7 @@ This will:
 
 ### Method 2: Use in Main GUI
 
-The OpenCV detector is automatically integrated into the main VATSAL GUI:
+The OpenCV detector is automatically integrated into the main BOI GUI:
 
 ```bash
 streamlit run vatsal.py --server.port=5000 --server.address=0.0.0.0 --server.headless=true
@@ -121,7 +121,7 @@ if result['success']:
     print(stats)
 ```
 
-## Integration with VATSAL Voice Commander
+## Integration with BOI Voice Commander
 
 When integrated with the voice commander, the detector provides a hands-free experience:
 
@@ -133,11 +133,11 @@ When integrated with the voice commander, the detector provides a hands-free exp
 Example workflow:
 ```
 You: [Face appears on camera]
-VATSAL: "Hello Vatsal"
+BOI: "Hello Vatsal"
 You: [Show open palm]
-VATSAL: "I'm listening"
+BOI: "I'm listening"
 You: "Open Chrome browser"
-VATSAL: [Opens Chrome and confirms]
+BOI: [Opens Chrome and confirms]
 ```
 
 ## Configuration
@@ -298,4 +298,4 @@ For issues or questions:
 
 ## License
 
-Part of VATSAL AI Desktop Automation System
+Part of BOI (Barely Obeys Instructions) Desktop Automation System

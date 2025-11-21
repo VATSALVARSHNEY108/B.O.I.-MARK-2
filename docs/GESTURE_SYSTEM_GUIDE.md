@@ -1,4 +1,4 @@
-# 🎯 VATSAL AI Gesture Recognition System - Complete Guide
+# 🎯 BOI (Barely Obeys Instructions) Gesture Recognition System - Complete Guide
 
 ## ✅ Current Status
 
@@ -160,7 +160,7 @@ If you want to train with pre-existing data:
 
 ## ✨ Summary
 
-Your VATSAL AI gesture system is **fully configured and ready to use** on a local machine with a webcam!
+Your BOI (Barely Obeys Instructions) gesture system is **fully configured and ready to use** on a local machine with a webcam!
 
 **Cloud Environment (Replit):**
 - ✅ Code is configured correctly

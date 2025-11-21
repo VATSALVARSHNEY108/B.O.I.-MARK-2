@@ -1,8 +1,8 @@
-# 🎉 What's New in VATSAL - Essential Features Update
+# 🎉 What's New in BOI - Essential Features Update
 
 ## Quick Summary
 
-Added **24 essential features** to make VATSAL your ultimate Windows desktop assistant!
+Added **24 essential features** to make BOI your ultimate Windows desktop assistant!
 
 ---
 
@@ -86,7 +86,7 @@ Added **24 essential features** to make VATSAL your ultimate Windows desktop ass
 
 2. **Replace** your local file:
    ```
-   C:\Users\VATSAL VARSHNEY\PycharmProjects\V.A.T.S.A.L.23242\modules\system\system_control.py
+   C:\Users\BOI VARSHNEY\PycharmProjects\V.A.T.S.A.L.23242\modules\system\system_control.py
    ```
 
 3. **Install dependencies** (if not already installed):
@@ -94,7 +94,7 @@ Added **24 essential features** to make VATSAL your ultimate Windows desktop ass
    pip install pywin32 plyer
    ```
 
-4. **Restart** your VATSAL GUI application
+4. **Restart** your BOI GUI application
 
 5. **Try it out**:
    ```
@@ -163,44 +163,44 @@ Some features work best/only on Windows:
 ### Example 1: Before Important Presentation
 ```
 You: "What's my CPU usage?"
-VATSAL: 💻 CPU Usage: 15%, 📊 CPU Cores: 8
+BOI: 💻 CPU Usage: 15%, 📊 CPU Cores: 8
 
 You: "What's my RAM usage?"
-VATSAL: 🧠 RAM Usage: 45%, Used: 7.2 GB / 16 GB
+BOI: 🧠 RAM Usage: 45%, Used: 7.2 GB / 16 GB
 
 You: "Check battery"
-VATSAL: 🔋 Battery: 85%, ⏱️ 3h 45m remaining
+BOI: 🔋 Battery: 85%, ⏱️ 3h 45m remaining
 ```
 
 ### Example 2: Productivity Timer
 ```
 You: "Set timer 1500"
-VATSAL: ⏱️ Timer set for 25m 0s
+BOI: ⏱️ Timer set for 25m 0s
 (25 minutes later: notification pops up)
 ```
 
 ### Example 3: Find Resource Hog
 ```
 You: "What's using my CPU?"
-VATSAL: ⚙️ Top 10 Processes:
+BOI: ⚙️ Top 10 Processes:
 1. chrome (PID: 1234) - CPU: 45% | RAM: 12%
 2. python (PID: 5678) - CPU: 12% | RAM: 8%
 ...
 
 You: "Kill chrome"
-VATSAL: ✅ Terminated processes: chrome (PID: 1234)
+BOI: ✅ Terminated processes: chrome (PID: 1234)
 ```
 
 ### Example 4: Quick App Access
 ```
 You: "Calculator"
-VATSAL: 🧮 Opening Calculator...
+BOI: 🧮 Opening Calculator...
 
 You: "Notepad"
-VATSAL: 📝 Opening Notepad...
+BOI: 📝 Opening Notepad...
 
 You: "Task manager"
-VATSAL: 📊 Opening Task Manager...
+BOI: 📊 Opening Task Manager...
 ```
 
 ---
@@ -217,7 +217,7 @@ VATSAL: 📊 Opening Task Manager...
 **How to Use**:
 1. Download updated `system_control.py`
 2. Install optional dependencies (pywin32, plyer)
-3. Restart VATSAL
+3. Restart BOI
 4. Start using natural language commands!
 
 **Where to Learn More**:
@@ -227,7 +227,7 @@ VATSAL: 📊 Opening Task Manager...
 
 ---
 
-**Enjoy your enhanced VATSAL! 🚀**
+**Enjoy your enhanced BOI! 🚀**
 
 Type natural commands like:
 - "How's my computer doing?"
@@ -236,4 +236,4 @@ Type natural commands like:
 - "What processes are running?"
 - "Show desktop"
 
-VATSAL will understand and execute them instantly!
+BOI will understand and execute them instantly!

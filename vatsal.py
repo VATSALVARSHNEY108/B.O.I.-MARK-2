@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-VATSAL AI Desktop Automation - Startup Script
+BOI (Barely Obeys Instructions) Desktop Automation - Startup Script
 Properly configures Python paths and launches the GUI
 """
 
@@ -36,7 +36,7 @@ sys.path.insert(0, os.path.join(modules_dir, 'misc'))
 
 def main():
     """Launch the GUI application"""
-    print("🚀 Starting VATSAL AI Desktop Automation...")
+    print("🚀 Starting BOI (Barely Obeys Instructions) Desktop Automation...")
     print("=" * 60)
     
     try:

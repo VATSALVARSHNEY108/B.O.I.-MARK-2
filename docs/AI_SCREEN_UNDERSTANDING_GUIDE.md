@@ -229,7 +229,7 @@ python -c "from modules.ai_features.live_screen_analyzer import understand_scree
 
 ## 📱 Integration with Your Project
 
-This AI screen understanding is **already integrated** into your VATSAL AI system!
+This AI screen understanding is **already integrated** into your BOI (Barely Obeys Instructions) system!
 
 You can use it through:
 - ✅ Command executor: `{"action": "analyze_screen"}`

@@ -12,7 +12,7 @@ Two major enhancements have been successfully implemented:
 ## 1. Enhanced Modern GUI ✨
 
 ### Overview
-A **completely new, beautiful GUI** that transforms the VATSAL AI experience with modern design, stunning visuals, and intuitive user experience.
+A **completely new, beautiful GUI** that transforms the BOI (Barely Obeys Instructions) experience with modern design, stunning visuals, and intuitive user experience.
 
 ### Key Features
 - 🏠 **Dashboard** with live statistics cards
@@ -233,7 +233,7 @@ Beautiful Experience ✨
 ## File Structure
 
 ```
-VATSAL AI Desktop Automation/
+BOI (Barely Obeys Instructions) Desktop Automation/
 ├── modules/core/
 │   ├── gui_app.py                  (Original GUI)
 │   └── enhanced_gui.py             (New Enhanced GUI) ✨
@@ -327,4 +327,4 @@ All features are documented with:
 - ✅ Troubleshooting tips
 - ✅ Customization instructions
 
-Enjoy your enhanced VATSAL AI experience! 🎉✨
+Enjoy your enhanced BOI (Barely Obeys Instructions) experience! 🎉✨

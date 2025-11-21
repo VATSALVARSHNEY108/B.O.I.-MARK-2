@@ -1,14 +1,14 @@
-# 📞 Phone Link in VATSAL GUI
+# 📞 Phone Link in BOI GUI
 
 ## ✨ What's New
 
-The VATSAL GUI now includes full **Phone Link Control** with contact management! Access Windows Phone Link directly from the GUI.
+The BOI GUI now includes full **Phone Link Control** with contact management! Access Windows Phone Link directly from the GUI.
 
 ---
 
 ## 🚀 How to Access
 
-1. **Launch VATSAL GUI:**
+1. **Launch BOI GUI:**
    ```bash
    python modules/core/gui_app.py
    ```

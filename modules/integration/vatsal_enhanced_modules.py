@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-VATSAL Enhanced Local Modules
+BOI Enhanced Local Modules
 Additional automation capabilities - all executed locally
 """
 
@@ -361,7 +361,7 @@ class AutomationWorkflows:
 
 
 if __name__ == "__main__":
-    print("VATSAL Enhanced Modules - Local Automation Library")
+    print("BOI Enhanced Modules - Local Automation Library")
     print("\nAvailable modules:")
     print("  • ScreenMonitor: Screen capture and analysis")
     print("  • AdvancedFileManager: File search and organization")

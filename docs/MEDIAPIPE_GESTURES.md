@@ -2,7 +2,7 @@
 
 ## Overview
 
-Your VATSAL system now includes **Google MediaPipe's pretrained gesture recognition** - 7 gestures work instantly with NO training required!
+Your BOI system now includes **Google MediaPipe's pretrained gesture recognition** - 7 gestures work instantly with NO training required!
 
 ## ✅ Available Gestures (No Training Needed)
 
@@ -76,7 +76,7 @@ Google's pretrained model - production-ready!
 modules/automation/mediapipe_gesture_recognizer.py
 ```
 
-Clean wrapper around MediaPipe API with VATSAL integration.
+Clean wrapper around MediaPipe API with BOI integration.
 
 ### 3. Updated Detector
 ```
@@ -108,7 +108,7 @@ MediaPipe gestures work automatically - no setup needed!
 # Install MediaPipe (one-time)
 pip install mediapipe
 
-# Run VATSAL
+# Run BOI
 python vatsal.py
 ```
 

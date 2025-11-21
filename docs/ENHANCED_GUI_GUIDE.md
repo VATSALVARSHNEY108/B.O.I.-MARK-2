@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Enhanced Modern GUI is a completely redesigned, beautiful interface for VATSAL AI Desktop Automation with:
+The Enhanced Modern GUI is a completely redesigned, beautiful interface for BOI (Barely Obeys Instructions) Desktop Automation with:
 
 ✨ **Modern Design** - Sleek, professional appearance  
 🎨 **Stunning Colors** - Beautiful gradient color palette  
@@ -28,7 +28,7 @@ The Enhanced Modern GUI is a completely redesigned, beautiful interface for VATS
 ### 💬 AI Chat Assistant
 - **Clean Chat Interface**: Modern chat layout with scrollable history
 - **Real-time Messaging**: Send commands via chat interface
-- **AI Responses**: Get intelligent responses from VATSAL AI
+- **AI Responses**: Get intelligent responses from BOI (Barely Obeys Instructions)
 - **Keyboard Shortcuts**: Press Enter to send messages quickly
 
 ### 🤖 Automation Center
@@ -307,4 +307,4 @@ For issues or questions:
 
 ## Conclusion
 
-The Enhanced Modern GUI transforms the VATSAL AI experience with a beautiful, professional interface that makes automation a joy to use. Enjoy the improved design and user experience! ✨
+The Enhanced Modern GUI transforms the BOI (Barely Obeys Instructions) experience with a beautiful, professional interface that makes automation a joy to use. Enjoy the improved design and user experience! ✨

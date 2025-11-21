@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-VATSAL - Intelligent Desktop Automator
+BOI - Intelligent Desktop Automator
 Combines local automation scripts with minimal Gemini API support.
 
 Purpose:
@@ -43,7 +43,7 @@ except ImportError:
 load_dotenv()
 
 
-class VATSALAutomator:
+class BOIAutomator:
     """Intelligent desktop automator with local execution and AI understanding"""
     
     def __init__(self, api_key: Optional[str] = None):
@@ -63,7 +63,7 @@ class VATSALAutomator:
     def understand_command(self, user_input: str) -> Dict:
         """Use Gemini ONLY for understanding intent and task decomposition"""
         
-        system_prompt = """You are VATSAL's command interpreter. Parse commands into structured actions for LOCAL execution only.
+        system_prompt = """You are BOI's command interpreter. Parse commands into structured actions for LOCAL execution only.
 
 Your ONLY job: Understand intent and decompose complex tasks into simple steps.
 
@@ -619,10 +619,10 @@ Battery: {report['battery'].get('percent', 'N/A')}%"""
 
 
 def main():
-    """CLI for VATSAL Desktop Automator"""
+    """CLI for BOI Desktop Automator"""
     
     print("=" * 70)
-    print("  VATSAL — Intelligent Desktop Automator")
+    print("  BOI — Intelligent Desktop Automator")
     print("  Local execution • AI understanding")
     print("=" * 70)
     print("\n💡 Examples:")
@@ -638,8 +638,8 @@ def main():
         sys.exit(1)
     
     try:
-        vatsal = VATSALAutomator()
-        print("\n✅ VATSAL ready\n")
+        vatsal = BOIAutomator()
+        print("\n✅ BOI ready\n")
     except Exception as e:
         print(f"\n❌ Error: {e}")
         sys.exit(1)

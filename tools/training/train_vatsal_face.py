@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Train VATSAL AI to Recognize Your Face
+Train BOI AI to Recognize Your Face
 Uses your photos to create a personalized face recognition model
 """
 
@@ -15,7 +15,7 @@ from modules.automation.face_trainer import FaceTrainer
 
 def main():
     print("=" * 70)
-    print("VATSAL AI - Personal Face Recognition Training")
+    print("BOI AI - Personal Face Recognition Training")
     print("=" * 70)
     print()
     print("This will train the system to recognize YOUR face!")
@@ -47,7 +47,7 @@ def main():
         print()
         print("🎯 The system will now:")
         print("  1. Detect your face in real-time")
-        print("  2. Recognize you as 'VATSAL'")
+        print("  2. Recognize you as 'BOI'")
         print("  3. Greet you by name when you appear")
         print()
         print("=" * 70)

@@ -1,4 +1,4 @@
-# 🌈 Optimistic Weather System for VATSAL AI
+# 🌈 Optimistic Weather System for BOI (Barely Obeys Instructions)
 
 ## Overview
 The Optimistic Weather System presents weather information in a **positive, upbeat, and motivating way**, turning any weather condition into an opportunity for joy and inspiration!
@@ -281,4 +281,4 @@ Let the Optimistic Weather System brighten your day, no matter what Mother Natur
 
 ---
 
-*Part of the VATSAL AI ecosystem - bringing positivity to desktop automation!*
+*Part of the BOI (Barely Obeys Instructions) ecosystem - bringing positivity to desktop automation!*

@@ -1,7 +1,7 @@
 # AI Optimization Summary
 
 ## Overview
-This document outlines all optimizations made to the VATSAL AI system to improve response speed and reduce thinking time.
+This document outlines all optimizations made to the BOI (Barely Obeys Instructions) system to improve response speed and reduce thinking time.
 
 ## 1. Gemini Controller Optimizations (`modules/core/gemini_controller.py`)
 
@@ -45,7 +45,7 @@ This document outlines all optimizations made to the VATSAL AI system to improve
 - **Faster Inference**: Lower temperatures = faster token selection
 - **Consistent Quality**: Optimized parameters for each use case
 
-## 3. VATSAL AI Chatbot Optimizations (`modules/core/vatsal_ai.py`)
+## 3. BOI (Barely Obeys Instructions) Chatbot Optimizations (`modules/core/vatsal_ai.py`)
 
 ### Conversation History Optimization
 - **Before**: Last 15 messages in context

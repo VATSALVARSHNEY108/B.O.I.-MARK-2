@@ -2,7 +2,7 @@
 
 ## Overview
 
-The **Close All Windows** feature allows VATSAL AI to instantly close all open windows, tabs, and applications on your computer. This is useful for:
+The **Close All Windows** feature allows BOI (Barely Obeys Instructions) to instantly close all open windows, tabs, and applications on your computer. This is useful for:
 - Quickly cleaning up your workspace
 - Preparing for a presentation
 - Closing many browser tabs at once
@@ -19,7 +19,7 @@ The **Close All Windows** feature allows VATSAL AI to instantly close all open w
 ✅ **Smart Protection:**
 - Never closes system-critical processes
 - Protects: Explorer, Task Manager, System Settings
-- Protects: Python processes (so VATSAL keeps running!)
+- Protects: Python processes (so BOI keeps running!)
 - Protects: CMD and PowerShell windows
 
 ✅ **Multi-Platform Support:**
@@ -77,8 +77,8 @@ scripts\close_all_tabs.bat
 ### 5. GUI Integration
 
 The feature is automatically available in:
-- VATSAL GUI voice commands
-- VATSAL Desktop Automator
+- BOI GUI voice commands
+- BOI Desktop Automator
 - Web GUI controls
 
 ## How It Works
@@ -103,7 +103,7 @@ The feature is automatically available in:
    - SystemSettings.exe (Windows Settings)
    - cmd.exe (Command Prompt)
    - powershell.exe (PowerShell)
-   - python.exe / pythonw.exe (VATSAL itself)
+   - python.exe / pythonw.exe (BOI itself)
    ```
 
 ### macOS Implementation
@@ -124,7 +124,7 @@ Uses command-line tools:
 
 🛡️ **System Protection:**
 - Critical system processes are never closed
-- VATSAL AI itself continues running
+- BOI (Barely Obeys Instructions) itself continues running
 - File explorers remain open for navigation
 
 ⏱️ **Countdown Timer:**
@@ -195,7 +195,7 @@ def end_workday():
 
 ### Voice Command Chains
 
-Configure VATSAL to recognize complex commands:
+Configure BOI to recognize complex commands:
 - "Clean up and shutdown" → Close all + Shutdown
 - "Privacy mode" → Close all + Lock screen
 - "Reset workspace" → Close all + Minimize all
@@ -238,7 +238,7 @@ Stop-Process -Force -ErrorAction SilentlyContinue"""
 - Run the script/command as Administrator
 - Some processes require elevated privileges
 
-### Issue: VATSAL closes itself
+### Issue: BOI closes itself
 
 **Solution:**
 - This shouldn't happen - Python processes are protected
@@ -310,7 +310,7 @@ Planned improvements:
 
 For issues or questions:
 1. Check the troubleshooting section above
-2. Review the main VATSAL AI documentation
+2. Review the main BOI (Barely Obeys Instructions) documentation
 3. Check system logs for error messages
 4. Test with the diagnostic script
 

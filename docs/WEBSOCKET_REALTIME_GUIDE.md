@@ -2,7 +2,7 @@
 
 ## Overview
 
-VATSAL now includes **real-time WebSocket connections** for live monitoring and remote control! Watch your automation system work in real-time from any web browser.
+BOI now includes **real-time WebSocket connections** for live monitoring and remote control! Watch your automation system work in real-time from any web browser.
 
 ## ✨ Features
 
@@ -36,7 +36,7 @@ The WebSocket server runs automatically when you start your project. It serves:
 
 1. **Start the WebSocket Server workflow** (if not already running)
 2. **Open your browser** to http://localhost:5000
-3. **Watch real-time updates** as you use VATSAL
+3. **Watch real-time updates** as you use BOI
 
 ### Using the Dashboard
 
@@ -152,7 +152,7 @@ Multiple people can monitor the same system:
 - Coordinate automation tasks
 
 ### 4. Mobile Monitoring
-Monitor VATSAL from your phone:
+Monitor BOI from your phone:
 - Watch commands execute in real-time
 - Check system status
 - See activity feed from anywhere
@@ -160,7 +160,7 @@ Monitor VATSAL from your phone:
 
 ## 📊 Example Workflow
 
-1. **Start VATSAL GUI** on your computer
+1. **Start BOI GUI** on your computer
 2. **Open dashboard** in your browser (or phone)
 3. **Execute command** from GUI or dashboard
 4. **Watch real-time updates** flow through:

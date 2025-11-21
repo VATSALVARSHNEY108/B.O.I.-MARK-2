@@ -1,4 +1,4 @@
-# 🤖 VATSAL AI - Complete Feature Guide
+# 🤖 BOI (Barely Obeys Instructions) - Complete Feature Guide
 ### All 275+ Features You Can Use with Example Prompts
 
 ---
@@ -450,7 +450,7 @@ You can combine multiple actions in one sentence:
 3. **Multi-Step Tasks:** Describe your workflow
    - ✅ "Open notepad, type my notes, and save as todo.txt"
 
-4. **Ask Questions:** VATSAL can explain and help
+4. **Ask Questions:** BOI can explain and help
    - ✅ "What can you do?"
    - ✅ "How do I analyze data?"
    - ✅ "Explain this feature"
@@ -466,7 +466,7 @@ Try these to get started:
 3. "Take a screenshot"
 4. "What's on my screen?"
 5. "Get weather update"
-6. "Create file hello.txt with content Hello VATSAL"
+6. "Create file hello.txt with content Hello BOI"
 7. "Play music on Spotify"
 8. "Check CPU usage"
 9. "Give me a compliment"
@@ -476,6 +476,6 @@ Try these to get started:
 
 **Total Available Features: 275+**
 
-Your VATSAL AI Assistant is powered by Google's Gemini AI and can understand natural language commands. Just type what you want to do, and VATSAL will figure out how to help you!
+Your BOI (Barely Obeys Instructions) Assistant is powered by Google's Gemini AI and can understand natural language commands. Just type what you want to do, and BOI will figure out how to help you!
 
 For more detailed help on specific features, type "help" or click the ❓ Full Help button in the GUI.

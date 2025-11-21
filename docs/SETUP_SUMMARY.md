@@ -1,4 +1,4 @@
-# VATSAL AI Desktop Automation - Setup Complete ✅
+# BOI (Barely Obeys Instructions) Desktop Automation - Setup Complete ✅
 
 ## 📋 What Was Done
 
@@ -9,11 +9,11 @@ All files have been organized into clean, logical folders:
 📁 Project Root
 │
 ├── 📁 simple_chatbot/
-│   ├── simple_chatbot.py          # Enhanced VATSAL Chatbot
+│   ├── simple_chatbot.py          # Enhanced BOI Chatbot
 │   └── README.md
 │
 ├── 📁 vatsal_chatbot/
-│   ├── vatsal_chatbot.py          # VATSAL AI CLI
+│   ├── vatsal_chatbot.py          # BOI (Barely Obeys Instructions) CLI
 │   └── README.md
 │
 ├── 📁 vatsal_desktop/
@@ -42,8 +42,8 @@ All files have been organized into clean, logical folders:
 ## 🎯 Available Features
 
 ### Main Systems (32+)
-1. ✅ VATSAL Chat - Simple AI chatbot
-2. ✅ VATSAL Auto - Intelligent automation
+1. ✅ BOI Chat - Simple AI chatbot
+2. ✅ BOI Auto - Intelligent automation
 3. ✅ Self-Operating Computer - Autonomous control
 4. ✅ Smart Control - 3-phase automation
 5. ✅ Learning AI - Virtual language model
@@ -77,7 +77,7 @@ All files have been organized into clean, logical folders:
 
 ### Individual Chatbots (3)
 1. **Simple Chatbot** - Enhanced with command execution
-2. **VATSAL Chatbot** - CLI with conversation tracking
+2. **BOI Chatbot** - CLI with conversation tracking
 3. **Desktop Automator** - System automation tool
 
 ## 🚀 How to Use
@@ -87,7 +87,7 @@ All files have been organized into clean, logical folders:
 python launch_gui.py
 ```
 
-This launches the full VATSAL AI interface with all 300+ features.
+This launches the full BOI (Barely Obeys Instructions) interface with all 300+ features.
 
 ### Option 2: Individual Chatbots
 
@@ -97,7 +97,7 @@ cd simple_chatbot
 python simple_chatbot.py
 ```
 
-**VATSAL Chatbot:**
+**BOI Chatbot:**
 ```bash
 cd vatsal_chatbot
 python vatsal_chatbot.py
@@ -182,13 +182,13 @@ cd vnc_tools
 ## 🎨 GUI Features
 
 ### Mode Toggles
-- **VATSAL Mode** - Personality ON/OFF
+- **BOI Mode** - Personality ON/OFF
 - **Self-Operating Mode** - Autonomous control ON/OFF
 
 ### Voice Controls
 - 🎤 Microphone - Single command
 - 🔊 Continuous - Always listening
-- 💬 Wake Word - "Hey VATSAL"
+- 💬 Wake Word - "Hey BOI"
 - 🔊 Sound Effects - Audio feedback
 
 ### Quick Actions (100+)
@@ -229,7 +229,7 @@ cd vnc_tools
 
 2. **Try Individual Chatbots:**
    - Simple chatbot for quick automation
-   - VATSAL chatbot for conversations
+   - BOI chatbot for conversations
    - Desktop automator for system control
 
 3. **Explore Features:**
@@ -250,14 +250,14 @@ cd vnc_tools
 | FEATURES_LIST.md | All 300+ features documented |
 | SETUP_SUMMARY.md | This summary |
 | simple_chatbot/README.md | Simple chatbot guide |
-| vatsal_chatbot/README.md | VATSAL chatbot guide |
+| vatsal_chatbot/README.md | BOI chatbot guide |
 | vatsal_desktop/README.md | Desktop automator guide |
 | vnc_tools/README.md | VNC tools guide |
 | test_data/README.md | Test data info |
 
 ## 🎉 Summary
 
-Your VATSAL AI Desktop Automation project is now:
+Your BOI (Barely Obeys Instructions) Desktop Automation project is now:
 - ✅ Fully organized
 - ✅ Well documented
 - ✅ Easy to navigate
@@ -269,5 +269,5 @@ Your VATSAL AI Desktop Automation project is now:
 ---
 
 **Created by Vatsal Varshney**
-- GitHub: https://github.com/VATSALVARSHNEY108
+- GitHub: https://github.com/BOIVARSHNEY108
 - LinkedIn: https://www.linkedin.com/in/vatsal-varshney108/

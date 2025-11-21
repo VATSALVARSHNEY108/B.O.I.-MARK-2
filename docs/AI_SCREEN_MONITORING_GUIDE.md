@@ -2,7 +2,7 @@
 
 ## 🚀 Next-Generation Screen Intelligence
 
-The AI Screen Monitoring System is the most advanced screen analysis feature in VATSAL, providing real-time intelligent monitoring with AI-powered insights, automated actions, and comprehensive analytics.
+The AI Screen Monitoring System is the most advanced screen analysis feature in BOI, providing real-time intelligent monitoring with AI-powered insights, automated actions, and comprehensive analytics.
 
 ---
 
@@ -111,7 +111,7 @@ The AI Screen Monitoring System is the most advanced screen analysis feature in 
 
 ### **Quick Start - Instant Analysis**
 
-1. **Open VATSAL GUI**
+1. **Open BOI GUI**
 2. **Go to: 🤖 AI Features tab**
 3. **Choose an analysis mode:**
    - 📊 Productivity Analysis (Instant)
@@ -535,7 +535,7 @@ Based on 30 days of data:
 
 ### **"Screenshot not available in cloud environment"**
 
-**Solution:** Screen monitoring requires running VATSAL locally on your desktop (Windows/Mac/Linux). It cannot work in cloud/browser environments due to security restrictions.
+**Solution:** Screen monitoring requires running BOI locally on your desktop (Windows/Mac/Linux). It cannot work in cloud/browser environments due to security restrictions.
 
 ### **Too many API calls / slow performance**
 
@@ -698,7 +698,7 @@ All data stored locally on your machine:
 ## 🎉 **Getting Started Checklist**
 
 ✅ **Day 1: Try Instant Analysis**
-- [ ] Open VATSAL GUI
+- [ ] Open BOI GUI
 - [ ] Go to AI Features tab
 - [ ] Try each instant analysis mode
 - [ ] Review results

@@ -1,8 +1,8 @@
-# 🎤 Voice Commanding Guide for VATSAL
+# 🎤 Voice Commanding Guide for BOI
 
 ## Overview
 
-VATSAL now supports **comprehensive voice commanding** - speak your commands and hear VATSAL's responses! Control all 300+ features using your voice with advanced speech recognition and text-to-speech capabilities.
+BOI now supports **comprehensive voice commanding** - speak your commands and hear BOI's responses! Control all 300+ features using your voice with advanced speech recognition and text-to-speech capabilities.
 
 ---
 
@@ -28,9 +28,9 @@ VATSAL now supports **comprehensive voice commanding** - speak your commands and
 3. **Wake Word Detection** 💬 (NEW!)
    - **Enabled by default** in continuous mode
    - Multiple wake words supported:
-     - "Hey VATSAL"
-     - "VATSAL"
-     - "OK VATSAL"
+     - "Hey BOI"
+     - "BOI"
+     - "OK BOI"
      - "Computer"
      - "Hey Computer"
      - "Bhiaya" (Hindi/Urdu: Brother)
@@ -41,7 +41,7 @@ VATSAL now supports **comprehensive voice commanding** - speak your commands and
 
 ### 🔊 **Voice Output**
 
-- **VATSAL Speaks Back**: When VATSAL Mode is ON, all responses are spoken aloud
+- **BOI Speaks Back**: When BOI Mode is ON, all responses are spoken aloud
 - **Natural Voice**: Human-like text-to-speech with personality
 - **Smart Queueing**: Responses are queued and spoken in order
 - **Background Processing**: Speech doesn't block other operations
@@ -59,14 +59,14 @@ VATSAL now supports **comprehensive voice commanding** - speak your commands and
 
 2. **Continuous Listening**:
    ```
-   Click 🔊 button → Say "Hey VATSAL" → Then your command → Say "stop listening" to disable
+   Click 🔊 button → Say "Hey BOI" → Then your command → Say "stop listening" to disable
    ```
 
 3. **Wake Word Examples**:
    ```
-   "Hey VATSAL, what time is it?"
-   "VATSAL, take a screenshot"
-   "OK VATSAL, check system information"
+   "Hey BOI, what time is it?"
+   "BOI, take a screenshot"
+   "OK BOI, check system information"
    "Computer, play lofi beats"
    "Bhiaya, open downloads folder"
    "Bhaisahb, show system report"
@@ -74,7 +74,7 @@ VATSAL now supports **comprehensive voice commanding** - speak your commands and
 
 ### Example Commands
 
-You can speak **any command** that VATSAL understands:
+You can speak **any command** that BOI understands:
 
 **System Control:**
 - "Take a screenshot"
@@ -147,7 +147,7 @@ Located next to the Execute button in the command input area:
 4. **Output Console**:
    - Shows "🎤 Listening for voice command..."
    - Displays recognized speech
-   - Shows VATSAL's response
+   - Shows BOI's response
 
 ---
 
@@ -189,7 +189,7 @@ Located next to the Execute button in the command input area:
 
 ✅ **Do:**
 - Speak clearly and at normal pace
-- Use natural language (VATSAL understands context)
+- Use natural language (BOI understands context)
 - Wait for the "listening" indicator
 - Minimize background noise
 - Position microphone properly
@@ -203,9 +203,9 @@ Located next to the Execute button in the command input area:
 ### For Voice Output
 
 ✅ **Do:**
-- Enable VATSAL Mode for personality responses
+- Enable BOI Mode for personality responses
 - Adjust system volume to comfortable level
-- Let VATSAL finish speaking before next command
+- Let BOI finish speaking before next command
 
 ❌ **Avoid:**
 - Interrupting speech output (may cause issues)
@@ -256,7 +256,7 @@ Located next to the Execute button in the command input area:
 1. Check speaker/headphone connection
 2. Verify system volume not muted
 3. Restart application
-4. Check VATSAL Mode is ON
+4. Check BOI Mode is ON
 
 ---
 
@@ -277,14 +277,14 @@ Located next to the Execute button in the command input area:
 
 ### Multi-Step Commands
 
-VATSAL can handle complex requests:
+BOI can handle complex requests:
 - "Search for Python files and organize them by date"
 - "Check system information and take a screenshot"
 - "Create a calendar event for tomorrow at 2 PM called team meeting"
 
 ### Natural Language
 
-VATSAL understands context:
+BOI understands context:
 - "What time is it?" → Shows current time
 - "How's my system doing?" → System report
 - "Play some music" → Opens YouTube/Spotify
@@ -306,7 +306,7 @@ VATSAL understands context:
 
 ### Wake Word (AVAILABLE NOW!)
 - **Active Feature**: Wake word detection enabled
-- **Multiple Wake Words**: "Hey VATSAL", "VATSAL", "OK VATSAL", "Computer", "Hey Computer"
+- **Multiple Wake Words**: "Hey BOI", "BOI", "OK BOI", "Computer", "Hey Computer"
 - **True Hands-Free**: Say wake word before command in continuous mode
 - **Toggle Control**: Use 💬 button to enable/disable
 - **Privacy Friendly**: Only processes speech when wake word detected (when enabled)
@@ -385,7 +385,7 @@ VATSAL understands context:
 3. **Experiment**:
    - Try different command types
    - Use natural language
-   - Combine with VATSAL personality
+   - Combine with BOI personality
 
 4. **Customize**:
    - Adjust system volume
@@ -404,9 +404,9 @@ If you encounter issues:
 
 ---
 
-**Voice commanding makes VATSAL even more powerful and accessible. Speak your mind, and VATSAL will respond!** 🎤🤖
+**Voice commanding makes BOI even more powerful and accessible. Speak your mind, and BOI will respond!** 🎤🤖
 
 ---
 
 *Last Updated: October 28, 2025*
-*Compatible with: VATSAL AI Desktop Automation Controller v2.0+*
+*Compatible with: BOI (Barely Obeys Instructions) Desktop Automation Controller v2.0+*

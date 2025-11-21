@@ -17,40 +17,40 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "VATSAL AI CLI"
+args = "BOI AI CLI"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "VATSAL GUI (VNC)"
+args = "BOI GUI (VNC)"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "VATSAL Desktop Mode"
+args = "BOI Desktop Mode"
 
 [[workflows.workflow]]
-name = "VATSAL AI CLI"
+name = "BOI AI CLI"
 author = "agent"
-
-[workflows.workflow.metadata]
-outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python launchers/launch_cli.py"
 
-[[workflows.workflow]]
-name = "VATSAL GUI (VNC)"
-author = "agent"
-
 [workflows.workflow.metadata]
-outputType = "vnc"
+outputType = "console"
+
+[[workflows.workflow]]
+name = "BOI GUI (VNC)"
+author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "xvfb-run -a python launchers/launch_gui.py"
 
+[workflows.workflow.metadata]
+outputType = "vnc"
+
 [[workflows.workflow]]
-name = "VATSAL Desktop Mode"
+name = "BOI Desktop Mode"
 author = "agent"
 
 [[workflows.workflow.tasks]]

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-VATSAL AI Chatbot - Simple CLI Interface
+BOI AI Chatbot - Simple CLI Interface
 An intelligent chatbot that can answer any type of question using Google Gemini AI
 """
 
@@ -13,16 +13,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 try:
-    from vatsal_ai import create_vatsal_ai
+    from vatsal_ai import create_boi_ai
 except ImportError:
-    print("Error: Cannot import VatsalAI. Make sure vatsal_ai.py is in the same directory.")
+    print("Error: Cannot import BOIAI. Make sure vatsal_ai.py is in the same directory.")
     sys.exit(1)
 
 
 def print_header():
     """Display chatbot header"""
     print("\n" + "=" * 70)
-    print("🤖 VATSAL AI - Intelligent Chatbot")
+    print("🤖 BOI AI - Intelligent Chatbot")
     print("=" * 70)
     print("💡 Ask me anything! I can help with:")
     print("   • General knowledge questions")
@@ -46,9 +46,9 @@ async def run_chatbot():
         sys.exit(1)
 
     # Create chatbot instance
-    print("🔧 Initializing VATSAL AI chatbot...")
+    print("🔧 Initializing BOI AI chatbot...")
     try:
-        vatsal = create_vatsal_ai()
+        vatsal = create_boi_ai()
         print("✅ Chatbot ready!\n")
     except Exception as e:
         print(f"❌ Error initializing chatbot: {e}")
@@ -59,7 +59,7 @@ async def run_chatbot():
 
     # Initial greeting
     greeting = vatsal.initiate_conversation()
-    print(f"🤖 VATSAL: {greeting}\n")
+    print(f"🤖 BOI: {greeting}\n")
 
     # Conversation loop
     conversation_active = True
@@ -75,7 +75,7 @@ async def run_chatbot():
 
             # Handle special commands
             if user_input.lower() in ['quit', 'exit', 'bye', 'goodbye']:
-                print("\n🤖 VATSAL: Goodbye! It was nice talking with you. Your conversation has been saved!")
+                print("\n🤖 BOI: Goodbye! It was nice talking with you. Your conversation has been saved!")
                 vatsal.end_conversation()
                 conversation_active = False
                 break
@@ -100,16 +100,16 @@ async def run_chatbot():
                 print("\n🔄 Starting a new conversation...")
                 vatsal.reset_conversation()
                 greeting = vatsal.initiate_conversation()
-                print(f"🤖 VATSAL: {greeting}\n")
+                print(f"🤖 BOI: {greeting}\n")
                 continue
 
             # Process the message with AI
-            print("🤖 VATSAL: ", end="", flush=True)
+            print("🤖 BOI: ", end="", flush=True)
             response = await vatsal.process_message(user_input)
             print(f"{response}\n")
 
         except KeyboardInterrupt:
-            print("\n\n🤖 VATSAL: Conversation interrupted. Saving your chat...")
+            print("\n\n🤖 BOI: Conversation interrupted. Saving your chat...")
             vatsal.end_conversation()
             conversation_active = False
             break
@@ -119,7 +119,7 @@ async def run_chatbot():
             print("Please try again or type 'quit' to exit.\n")
 
     print("\n" + "=" * 70)
-    print("Thank you for using VATSAL AI! 👋")
+    print("Thank you for using BOI AI! 👋")
     print("=" * 70 + "\n")
 
 

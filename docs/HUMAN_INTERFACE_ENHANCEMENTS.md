@@ -1,7 +1,7 @@
 # 🎯 Human-Like Interface Enhancements
 
 ## Overview
-Enhanced the VATSAL voice assistant with human-like personality, natural conversation flow, and dynamic response variations to create a more engaging and natural user experience.
+Enhanced the BOI voice assistant with human-like personality, natural conversation flow, and dynamic response variations to create a more engaging and natural user experience.
 
 ---
 
@@ -212,4 +212,4 @@ The voice assistant now provides:
 - 🎚️ **High sensitivity** for better detection
 - 💬 **Natural conversation flow**
 
-This creates a truly human-like interface that adapts to the user's time, preference, and conversational style, making the VATSAL assistant feel more like a helpful companion than a tool.
+This creates a truly human-like interface that adapts to the user's time, preference, and conversational style, making the BOI assistant feel more like a helpful companion than a tool.

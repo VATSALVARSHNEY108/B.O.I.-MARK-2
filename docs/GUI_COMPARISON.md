@@ -5,7 +5,7 @@
 ### Original GUI
 ```
 ┌─────────────────────────────────────┐
-│  VATSAL - AI Desktop Automation     │
+│  BOI - AI Desktop Automation     │
 │  [Basic header, standard colors]    │
 ├─────────────────────────────────────┤
 │                                     │
@@ -255,7 +255,7 @@ Choose which one you prefer!
 
 ## Conclusion
 
-The Enhanced Modern GUI is a **complete transformation** that makes VATSAL AI:
+The Enhanced Modern GUI is a **complete transformation** that makes BOI (Barely Obeys Instructions):
 
 ✨ More professional  
 ✨ More organized  

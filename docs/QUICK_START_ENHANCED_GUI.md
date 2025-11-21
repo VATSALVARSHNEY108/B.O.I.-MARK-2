@@ -22,7 +22,7 @@ When the GUI opens, you'll see:
 Left side has navigation icons:
 - 🏠 **Dashboard** - Overview and quick access
 - 🎯 **Quick Actions** - All available actions
-- 💬 **AI Chat** - Chat with VATSAL AI
+- 💬 **AI Chat** - Chat with BOI (Barely Obeys Instructions)
 - 🤖 **Automation** - Advanced automation tools
 - 📊 **Analytics** - Usage statistics
 - ⚙️ **Settings** - Customize your experience

@@ -1,8 +1,8 @@
-# 🎉 VATSAL Chatbot Integration - Complete Guide
+# 🎉 BOI Chatbot Integration - Complete Guide
 
 ## ✨ What's New
 
-All three VATSAL chatbot systems are now integrated into the GUI app! You can now access **three different AI chatbots** from a single unified interface.
+All three BOI chatbot systems are now integrated into the GUI app! You can now access **three different AI chatbots** from a single unified interface.
 
 ---
 
@@ -18,7 +18,7 @@ All three VATSAL chatbot systems are now integrated into the GUI app! You can no
   - Fast and responsive
   - Perfect for general questions
 
-### 2. 🧠 VATSAL AI (Advanced Learning)
+### 2. 🧠 BOI (Barely Obeys Instructions) (Advanced Learning)
 - **File**: `vatsal_ai.py`
 - **Best For**: Deep conversations, learning your preferences
 - **Features**:
@@ -29,7 +29,7 @@ All three VATSAL chatbot systems are now integrated into the GUI app! You can no
   - Save/load conversation history
   - Long-term memory
 
-### 3. 🤖 VATSAL Assistant (Sophisticated Personality)
+### 3. 🤖 BOI Assistant (Sophisticated Personality)
 - **File**: `vatsal_assistant.py`
 - **Best For**: Professional interactions, automation tasks
 - **Features**:
@@ -49,11 +49,11 @@ All three VATSAL chatbot systems are now integrated into the GUI app! You can no
 2. Run: `python gui_app.py`
 
 ### Using the Chatbot Suite
-1. **Open the 💬 VATSAL Chat tab** in the GUI
+1. **Open the 💬 BOI Chat tab** in the GUI
 2. **Choose Your Chatbot** using the buttons at the top:
    - Click "🚀 Simple Chat" for straightforward conversations
-   - Click "🧠 VATSAL AI" for learning-based interactions
-   - Click "🤖 VATSAL Assistant" for sophisticated responses
+   - Click "🧠 BOI (Barely Obeys Instructions)" for learning-based interactions
+   - Click "🤖 BOI Assistant" for sophisticated responses
 
 3. **Start Chatting**:
    - Click "▶️ Start Conversation" to get a greeting
@@ -81,14 +81,14 @@ All three VATSAL chatbot systems are now integrated into the GUI app! You can no
 - Get coding help
 - No complexity needed
 
-### Use **VATSAL AI** when you want:
+### Use **BOI (Barely Obeys Instructions)** when you want:
 - Deep, meaningful conversations
 - The chatbot to remember your preferences
 - Context from previous chats
 - Session analytics and insights
 - Save important conversations
 
-### Use **VATSAL Assistant** when you want:
+### Use **BOI Assistant** when you want:
 - Professional, sophisticated responses
 - Time-aware greetings (morning/evening)
 - Proactive suggestions based on time
@@ -102,34 +102,34 @@ All three VATSAL chatbot systems are now integrated into the GUI app! You can no
 ### Simple Chat Example
 ```
 You: What's the weather like in programming?
-VATSAL: Programming has its own kind of weather! Sometimes it's sunny 
+BOI: Programming has its own kind of weather! Sometimes it's sunny 
 (code works perfectly), sometimes cloudy (bugs appear), and sometimes 
 there's a storm (debugging session). But that's what makes it interesting! 
 How can I help you with programming today?
 ```
 
-### VATSAL AI Example
+### BOI (Barely Obeys Instructions) Example
 ```
 You: I'm learning Python. Can you help?
-VATSAL: Absolutely! I'd be happy to help you learn Python. Python is a 
+BOI: Absolutely! I'd be happy to help you learn Python. Python is a 
 great language for beginners. What would you like to start with? Basics 
 like variables and loops, or do you have a specific project in mind?
 
 [Later in the conversation...]
 You: What were we talking about?
-VATSAL: We were discussing Python! You mentioned you're learning it, 
+BOI: We were discussing Python! You mentioned you're learning it, 
 and I asked if you wanted to start with basics or had a specific project 
 in mind. Where would you like to begin?
 ```
 
-### VATSAL Assistant Example
+### BOI Assistant Example
 ```
 You: Hello
-VATSAL: Good afternoon, Sir. All systems are operational and ready for 
+BOI: Good afternoon, Sir. All systems are operational and ready for 
 your commands. How may I be of assistance today?
 
 You: What can you do?
-VATSAL: Certainly, Sir. I'm at your disposal for a wide range of tasks - 
+BOI: Certainly, Sir. I'm at your disposal for a wide range of tasks - 
 from desktop automation and code generation to system monitoring and 
 productivity assistance. Would you like me to elaborate on any specific 
 capability, or shall we proceed with a particular task?
@@ -159,7 +159,7 @@ Click **"📊 View Stats"** to see information about the active chatbot:
 - Memory capacity
 - Status
 
-### VATSAL AI Stats
+### BOI (Barely Obeys Instructions) Stats
 - User name
 - Total messages
 - Conversation count
@@ -167,7 +167,7 @@ Click **"📊 View Stats"** to see information about the active chatbot:
 - Top topics
 - Session duration
 
-### VATSAL Assistant Stats
+### BOI Assistant Stats
 - Conversation history
 - Personality type
 - Context memory items
@@ -185,7 +185,7 @@ Click **"📊 View Stats"** to see information about the active chatbot:
 
 ### Color-Coded Messages
 - **Green text**: Your messages
-- **Blue text**: VATSAL's responses
+- **Blue text**: BOI's responses
 - **Gray text**: Timestamps
 - **System messages**: Special notifications
 
@@ -195,15 +195,15 @@ Click **"📊 View Stats"** to see information about the active chatbot:
 
 **For First-Time Users:**
 1. Open the GUI App
-2. Go to the "💬 VATSAL Chat" tab
+2. Go to the "💬 BOI Chat" tab
 3. Start with **"🚀 Simple Chat"** (easiest)
 4. Click **"▶️ Start Conversation"**
 5. Type your first message!
 
 **For Advanced Users:**
-1. Try **"🧠 VATSAL AI"** for learning-based interactions
+1. Try **"🧠 BOI (Barely Obeys Instructions)"** for learning-based interactions
 2. Check out **"📊 View Stats"** to see analytics
-3. Switch to **"🤖 VATSAL Assistant"** for sophisticated responses
+3. Switch to **"🤖 BOI Assistant"** for sophisticated responses
 4. Explore all three to find your favorite!
 
 ---
@@ -215,7 +215,7 @@ Click **"📊 View Stats"** to see information about the active chatbot:
 3. **Use Stats**: Check stats to see how much you've chatted
 4. **Clear When Needed**: Use Clear Chat to start fresh conversations
 5. **Press Enter**: Just press Enter to send messages quickly
-6. **Be Natural**: Talk to VATSAL like you would a human!
+6. **Be Natural**: Talk to BOI like you would a human!
 
 ---
 
@@ -230,13 +230,13 @@ All three chatbots use:
 ### Files Involved
 - `gui_app.py` - Main GUI with integrated chatbots
 - `simple_chatbot.py` - Simple Chat implementation
-- `vatsal_ai.py` - VATSAL AI implementation
-- `vatsal_assistant.py` - VATSAL Assistant implementation
+- `vatsal_ai.py` - BOI (Barely Obeys Instructions) implementation
+- `vatsal_assistant.py` - BOI Assistant implementation
 
 ---
 
 ## 🎉 You're All Set!
 
-Your VATSAL Chatbot Suite is ready to use. Open the GUI App, go to the VATSAL Chat tab, and start chatting!
+Your BOI Chatbot Suite is ready to use. Open the GUI App, go to the BOI Chat tab, and start chatting!
 
-**Enjoy your conversations with VATSAL!** 🤖✨
+**Enjoy your conversations with BOI!** 🤖✨

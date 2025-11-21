@@ -1,7 +1,7 @@
 # 📱 WhatsApp Messenger Control
 
 ## Overview
-Send WhatsApp messages directly from command line using batch files, Python scripts, or VATSAL voice commands!
+Send WhatsApp messages directly from command line using batch files, Python scripts, or BOI voice commands!
 
 ---
 
@@ -13,11 +13,11 @@ Send WhatsApp messages directly from command line using batch files, Python scri
 ✅ **Group Messaging** - Send to WhatsApp groups  
 ✅ **Contact Integration** - Use contact names instead of phone numbers  
 ✅ **Interactive Menu** - User-friendly batch file interface  
-✅ **VATSAL Integration** - Voice command support  
+✅ **BOI Integration** - Voice command support  
 
 ---
 
-## 🗣️ Voice Commands for VATSAL
+## 🗣️ Voice Commands for BOI
 
 Just say:
 
@@ -335,6 +335,6 @@ whatsapp_cli.py help
 You can now send WhatsApp messages from:
 - 📝 **Batch file menu** (interactive)
 - 🐍 **Python CLI** (command line)
-- 🗣️ **VATSAL voice** (natural language)
+- 🗣️ **BOI voice** (natural language)
 
 Happy messaging! 📱✨

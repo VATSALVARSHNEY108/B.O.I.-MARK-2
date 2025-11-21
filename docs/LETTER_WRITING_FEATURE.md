@@ -1,7 +1,7 @@
 # Letter Writing Feature
 
 ## Overview
-The VATSAL AI Assistant now includes an intelligent letter writing feature that can generate various types of formal and informal letters based on natural language commands.
+The BOI (Barely Obeys Instructions) Assistant now includes an intelligent letter writing feature that can generate various types of formal and informal letters based on natural language commands.
 
 ## Features
 
@@ -25,7 +25,7 @@ The VATSAL AI Assistant now includes an intelligent letter writing feature that 
 
 ### Voice Commands
 
-Simply say any of these commands to your VATSAL assistant:
+Simply say any of these commands to your BOI assistant:
 
 ```
 "Write a letter to principal for 2 days holiday"
@@ -115,7 +115,7 @@ Each letter type has specific variables that can be customized:
 
 (See letter_templates.py for complete list of variables for each letter type)
 
-## Integration with VATSAL
+## Integration with BOI
 
 The letter writing feature is fully integrated with:
 - **Voice commands** - Say what you want

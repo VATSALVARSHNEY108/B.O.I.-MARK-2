@@ -78,7 +78,7 @@ When you run `python gui_app.py`, the system **automatically**:
 - **📁 Organize Desktop** → Auto-sort files by type
 - **🔍 Search Desktop Files** → Find files/folders
 
-**VATSAL Chatbot Commands:**
+**BOI Chatbot Commands:**
 ```
 open coding folder on desktop
 list desktop files
@@ -182,6 +182,6 @@ def auto_desktop_sync(self):
 | Batch File Ready | ✅ Download available |
 | GUI Integration | ✅ Complete |
 | Desktop Controller | ✅ 5 buttons in Desktop tab |
-| VATSAL Commands | ✅ Folder commands work |
+| BOI Commands | ✅ Folder commands work |
 
 **Everything is automated! Just run the GUI and follow the download instructions.** 🎉

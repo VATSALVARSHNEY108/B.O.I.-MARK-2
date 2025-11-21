@@ -337,7 +337,7 @@ For questions or issues:
 
 ## 🎊 Conclusion
 
-Your VATSAL voice commanding system now has:
+Your BOI voice commanding system now has:
 
 ✅ **Male voice** for all speech output
 ✅ **Dynamic WAV sound effects** for engaging feedback

@@ -1,8 +1,8 @@
-# 🤖 VATSAL AI - Complete All-in-One AI Suite
+# 🤖 BOI (Barely Obeys Instructions) - Complete All-in-One AI Suite
 
 ## 🎉 Every Type of AI in One Unified System!
 
-VATSAL AI is now a **comprehensive AI powerhouse** with EVERY type of AI capability integrated into one seamless system!
+BOI (Barely Obeys Instructions) is now a **comprehensive AI powerhouse** with EVERY type of AI capability integrated into one seamless system!
 
 ---
 
@@ -196,16 +196,16 @@ Just type naturally - the system automatically routes to the right AI:
 
 ```
 You: hi
-VATSAL: Good day, Boss! How may I assist you today?
+BOI: Good day, Boss! How may I assist you today?
 
 You: what is machine learning
-VATSAL: [Detailed AI explanation]
+BOI: [Detailed AI explanation]
 
 You: write a story about space
-VATSAL: [Creative story generation]
+BOI: [Creative story generation]
 
 You: translate to French: thank you
-VATSAL: [Translation: merci]
+BOI: [Translation: merci]
 ```
 
 ### Specific Commands
@@ -391,7 +391,7 @@ JARVIS-like personality with expert knowledge
    - `"translate to French: hello"` - Translate
    - `"help"` - See all features
 
-3. **Let VATSAL AI handle the rest!**
+3. **Let BOI (Barely Obeys Instructions) handle the rest!**
 
 ---
 
@@ -435,7 +435,7 @@ JARVIS-like personality with expert knowledge
 - Professional personality
 - Always helpful responses
 
-**Your VATSAL AI is now the ULTIMATE all-in-one AI assistant!**
+**Your BOI (Barely Obeys Instructions) is now the ULTIMATE all-in-one AI assistant!**
 
 ---
 
@@ -455,7 +455,7 @@ JARVIS-like personality with expert knowledge
 ---
 
 **Creator:** Vatsal Varshney  
-**GitHub:** https://github.com/VATSALVARSHNEY108  
+**GitHub:** https://github.com/BOIVARSHNEY108  
 **LinkedIn:** https://www.linkedin.com/in/vatsal-varshney108/
 
 **Made with ❤️ - The Most Complete AI System Ever Built!**
@@ -464,4 +464,4 @@ JARVIS-like personality with expert knowledge
 
 **Status:** 🚀 **READY FOR ANYTHING!**
 
-Type any command, ask any question, request any content - VATSAL AI handles it all! 🎯
+Type any command, ask any question, request any content - BOI (Barely Obeys Instructions) handles it all! 🎯

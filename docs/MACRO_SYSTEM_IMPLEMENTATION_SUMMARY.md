@@ -2,7 +2,7 @@
 
 ## ✅ What Was Built
 
-I've successfully implemented a complete **Automation Recording & Macro System** for VATSAL that allows users to record mouse and keyboard actions and replay them automatically.
+I've successfully implemented a complete **Automation Recording & Macro System** for BOI that allows users to record mouse and keyboard actions and replay them automatically.
 
 ---
 
@@ -244,7 +244,7 @@ pip install pyautogui   # For cross-platform automation (already installed)
 
 These features are planned but not yet implemented:
 
-1. **GUI Integration**: Tab in VATSAL GUI app for visual recording/playback
+1. **GUI Integration**: Tab in BOI GUI app for visual recording/playback
 2. **Visual Workflow Builder**: Drag-and-drop macro creation
 3. **Parameter Validation**: Input validation for speed/repeat parameters
 4. **Advanced Error Handling**: Better handling of corrupted macro files

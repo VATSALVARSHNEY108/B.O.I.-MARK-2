@@ -21,7 +21,7 @@ The Self-Operating Computer is an AI agent that:
 
 ### Option 1: GUI Interface (Recommended)
 
-1. **Open VATSAL GUI App**
+1. **Open BOI GUI App**
    ```bash
    python gui_app.py
    ```
@@ -299,13 +299,13 @@ Format: `screen_YYYYMMDD_HHMMSS_microseconds.png`
 
 ## 📖 Comparison with Original
 
-| Feature | OthersideAI Original | VATSAL Edition |
+| Feature | OthersideAI Original | BOI Edition |
 |---------|---------------------|----------------|
 | Vision AI | GPT-4o, Claude, Gemini | Gemini Vision |
 | Interface | CLI only | GUI + CLI |
 | Voice Input | ✅ Supported | ✅ Supported |
 | Platform | Mac, Windows, Linux | Mac, Windows, Linux |
-| Integration | Standalone | Part of VATSAL ecosystem |
+| Integration | Standalone | Part of BOI ecosystem |
 | Real-time Output | Terminal only | Rich GUI display |
 | Screenshot Management | Basic | Organized folder view |
 
@@ -397,7 +397,7 @@ else:
 ## 📚 Resources
 
 ### Related Documentation
-- [VATSAL AI Guide](VATSAL_GUIDE.md)
+- [BOI (Barely Obeys Instructions) Guide](BOI_GUIDE.md)
 - [Comprehensive Desktop Controller](DESKTOP_CONTROL_COMPLETE.md)
 - [Virtual Language Model](VIRTUAL_LANGUAGE_MODEL_COMPLETE.md)
 
@@ -438,7 +438,7 @@ else:
 
 ## 🆚 When to Use Each Automation Type
 
-VATSAL has multiple automation systems. Here's when to use each:
+BOI has multiple automation systems. Here's when to use each:
 
 ### 🎮 Self-Operating Computer
 **Best for:**
@@ -447,7 +447,7 @@ VATSAL has multiple automation systems. Here's when to use each:
 - When you want AI to "figure it out"
 - Learning from screen content
 
-### ⚡ VATSAL Automator
+### ⚡ BOI Automator
 **Best for:**
 - Quick system commands
 - File operations
@@ -474,5 +474,5 @@ VATSAL has multiple automation systems. Here's when to use each:
 
 ---
 
-*Powered by Google Gemini Vision • Built with ❤️ for VATSAL*
+*Powered by Google Gemini Vision • Built with ❤️ for BOI*
 *Based on OthersideAI's self-operating-computer framework*

@@ -1,4 +1,4 @@
-# ✅ VATSAL Simple Chatbot - Final Setup Complete
+# ✅ BOI Simple Chatbot - Final Setup Complete
 
 ## 🎉 What's Been Done
 
@@ -8,7 +8,7 @@ I've successfully created a **clean, simple chatbot** integrated into your GUI a
 
 ## ✨ What You Have Now
 
-### **One Simple Chatbot** - VATSAL Simple Chat
+### **One Simple Chatbot** - BOI Simple Chat
 - ✅ **File**: `simple_chatbot.py`
 - ✅ **Powered by**: Gemini 2.5 Flash (Latest AI Model)
 - ✅ **Features**:
@@ -18,8 +18,8 @@ I've successfully created a **clean, simple chatbot** integrated into your GUI a
   - Perfect for any questions!
 
 ### **What Was Removed**
-- ❌ VATSAL AI (advanced learning version) - Removed
-- ❌ VATSAL Assistant (sophisticated personality) - Removed
+- ❌ BOI (Barely Obeys Instructions) (advanced learning version) - Removed
+- ❌ BOI Assistant (sophisticated personality) - Removed
 - ✅ Now just **ONE simple chatbot** - easy and straightforward!
 
 ---
@@ -32,7 +32,7 @@ I've successfully created a **clean, simple chatbot** integrated into your GUI a
 
 ### **Step 2: Go to the Chat Tab**
 - Look at the top of the window
-- Click on the tab that says **"💬 VATSAL Chat"**
+- Click on the tab that says **"💬 BOI Chat"**
 
 ### **Step 3: Find the Input Box**
 The input box is now **VERY VISIBLE** with:
@@ -45,7 +45,7 @@ The input box is now **VERY VISIBLE** with:
 Three ways to start:
 
 **Option 1:** Click the **"▶️ Start Conversation"** button
-- VATSAL will greet you first
+- BOI will greet you first
 - Then you can type your response
 
 **Option 2:** Just start typing!
@@ -55,7 +55,7 @@ Three ways to start:
 
 **Option 3:** Get a suggestion
 - Click **"💡 Help Me Start"**
-- VATSAL will suggest what to ask
+- BOI will suggest what to ask
 
 ---
 
@@ -63,13 +63,13 @@ Three ways to start:
 
 ```
 ┌─────────────────────────────────────┐
-│   💬 VATSAL Chat (Tab)              │
+│   💬 BOI Chat (Tab)              │
 ├─────────────────────────────────────┤
 │                                     │
 │   [Chat messages appear here]       │
 │                                     │
 │   YOU: Hello                        │
-│   VATSAL: Hi! How can I help?       │
+│   BOI: Hi! How can I help?       │
 │                                     │
 ├─────────────────────────────────────┤
 │   💬 Type your message:  ← LABEL    │
@@ -94,10 +94,10 @@ The input box has:
 
 ```
 1. Open GUI App
-2. Click "💬 VATSAL Chat" tab
+2. Click "💬 BOI Chat" tab
 3. Click "▶️ Start Conversation"
 
-   VATSAL: Good afternoon! I'm VATSAL, your AI assistant. 
+   BOI: Good afternoon! I'm BOI, your AI assistant. 
            How can I help you today?
 
 4. Look for the input box at the bottom
@@ -107,7 +107,7 @@ The input box has:
 
 6. Press Enter or click "➤ Send"
 
-   VATSAL: 2 + 2 equals 4!
+   BOI: 2 + 2 equals 4!
 
 7. Keep chatting!
 ```
@@ -120,7 +120,7 @@ Located below the input box:
 
 | Button | What It Does |
 |--------|-------------|
-| **▶️ Start Conversation** | Get a greeting from VATSAL |
+| **▶️ Start Conversation** | Get a greeting from BOI |
 | **💡 Help Me Start** | Get conversation suggestions |
 | **🗑️ Clear Chat** | Clear the conversation and start fresh |
 | **📊 View Stats** | See how many messages you've sent |
@@ -133,13 +133,13 @@ Located below the input box:
 
 1. Click **"GUI App"** workflow
 2. Wait for the window to open
-3. Click the **"💬 VATSAL Chat"** tab
+3. Click the **"💬 BOI Chat"** tab
 4. Look at the **bottom** of the window
 5. You'll see **"💬 Type your message:"** label
 6. Click in the gray box below it
 7. Type: "Hello"
 8. Press **Enter**
-9. VATSAL will respond!
+9. BOI will respond!
 
 ---
 
@@ -160,7 +160,7 @@ Located below the input box:
 
 ---
 
-## 📝 What You Can Ask VATSAL
+## 📝 What You Can Ask BOI
 
 - **General Questions**: "What's the capital of France?"
 - **Math**: "What's 15 × 7?"
@@ -169,19 +169,19 @@ Located below the input box:
 - **Fun**: "Tell me a joke"
 - **Learning**: "Teach me about loops"
 - **Advice**: "How can I learn programming?"
-- **Anything!**: VATSAL is here to help!
+- **Anything!**: BOI is here to help!
 
 ---
 
 ## 🎉 You're All Set!
 
-Your simple VATSAL chatbot is:
+Your simple BOI chatbot is:
 - ✅ **Installed** and working
 - ✅ **Integrated** into the GUI
 - ✅ **Ready** to chat
 - ✅ **Easy** to find (look for the label!)
 
-**The input box IS there** - just look for the label that says **"💬 Type your message:"** at the bottom of the VATSAL Chat tab!
+**The input box IS there** - just look for the label that says **"💬 Type your message:"** at the bottom of the BOI Chat tab!
 
 ---
 
@@ -191,10 +191,10 @@ Your simple VATSAL chatbot is:
 - **Memory**: Last 10 conversation exchanges
 - **Speed**: Very fast responses
 - **File**: `simple_chatbot.py`
-- **GUI**: `gui_app.py` (VATSAL Chat tab)
+- **GUI**: `gui_app.py` (BOI Chat tab)
 
 ---
 
-**Start chatting with VATSAL today!** 🤖✨
+**Start chatting with BOI today!** 🤖✨
 
 Just remember: Look for the **"💬 Type your message:"** label at the bottom of the chat window!

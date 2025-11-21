@@ -3,7 +3,7 @@
 
 ## ✅ Spotify Integration is Ready!
 
-Your VATSAL AI has full Spotify integration with batch files and song playing!
+Your BOI AI has full Spotify integration with batch files and song playing!
 
 ## Quick Commands
 

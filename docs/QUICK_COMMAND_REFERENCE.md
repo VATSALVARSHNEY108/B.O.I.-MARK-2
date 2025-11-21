@@ -1,4 +1,4 @@
-# 🚀 VATSAL Quick Command Reference
+# 🚀 BOI Quick Command Reference
 
 ## 📊 System Info
 | What you want | Say this |

@@ -41,7 +41,7 @@ Type these in the prompt bar at the bottom:
 ### Top Bar
 ```
 ┌─────────────────────────────────┐
-│ ✨ VATSAL  |  Time  |  ● Online │  ⚪ White border
+│ ✨ BOI  |  Time  |  ● Online │  ⚪ White border
 └─────────────────────────────────┘
 ```
 

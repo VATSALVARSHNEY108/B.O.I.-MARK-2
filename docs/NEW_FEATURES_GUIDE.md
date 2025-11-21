@@ -1,7 +1,7 @@
-# 🎉 VATSAL - New Essential Features Added!
+# 🎉 BOI - New Essential Features Added!
 
 ## Overview
-We've added **50+ new essential features** to make VATSAL even more powerful and useful for your daily tasks!
+We've added **50+ new essential features** to make BOI even more powerful and useful for your daily tasks!
 
 ---
 
@@ -234,7 +234,7 @@ Sets an alarm for a specific time with custom message.
 ### Example 1: Check System Health
 ```
 User: "How's my computer doing?"
-VATSAL executes:
+BOI executes:
 - get_cpu_usage()
 - get_ram_usage()
 - get_disk_usage()
@@ -243,28 +243,28 @@ VATSAL executes:
 ### Example 2: Quick Break Timer
 ```
 User: "Set a 5 minute timer"
-VATSAL: ⏱️ Timer set for 5m 0s
+BOI: ⏱️ Timer set for 5m 0s
 (After 5 minutes, shows notification)
 ```
 
 ### Example 3: Find Resource-Heavy Process
 ```
 User: "What's using my CPU?"
-VATSAL: Shows top 10 processes by CPU usage
+BOI: Shows top 10 processes by CPU usage
 User: "Kill chrome"
-VATSAL: Kills all Chrome processes
+BOI: Kills all Chrome processes
 ```
 
 ### Example 4: Quick App Launch
 ```
 User: "Open calculator"
-VATSAL: 🧮 Opening Calculator...
+BOI: 🧮 Opening Calculator...
 ```
 
 ### Example 5: Morning Alarm
 ```
 User: "Set alarm for 7:00 AM"
-VATSAL: ⏰ Alarm set for 07:00
+BOI: ⏰ Alarm set for 07:00
 (Notification appears at 7:00 AM)
 ```
 
@@ -351,7 +351,7 @@ VATSAL: ⏰ Alarm set for 07:00
 
 ## 🎊 What's Next?
 
-These features integrate seamlessly with your existing VATSAL commands. Just ask naturally:
+These features integrate seamlessly with your existing BOI commands. Just ask naturally:
 
 - "How much RAM am I using?"
 - "Open calculator"
@@ -360,7 +360,7 @@ These features integrate seamlessly with your existing VATSAL commands. Just ask
 - "Show desktop"
 - "Copy hello world to clipboard"
 
-VATSAL will understand and execute the appropriate feature!
+BOI will understand and execute the appropriate feature!
 
 ---
 

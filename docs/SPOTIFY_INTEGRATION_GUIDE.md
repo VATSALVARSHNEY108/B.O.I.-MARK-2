@@ -2,7 +2,7 @@
 
 ## Overview
 
-VATSAL AI offers comprehensive Spotify control through multiple methods:
+BOI (Barely Obeys Instructions) offers comprehensive Spotify control through multiple methods:
 1. **Spotify Web API** (Recommended) - Full control including song search and play
 2. **Desktop Automation** - Keyboard shortcuts for local Spotify app
 3. **Windows Batch Files** - Quick command-line control
@@ -203,7 +203,7 @@ The Spotify functionality is fully integrated with the command executor. Availab
 ```
 
 **What happens:**
-1. VATSAL searches Spotify for "Wonderwall"
+1. BOI searches Spotify for "Wonderwall"
 2. Finds the first matching track
 3. Plays it immediately
 4. Returns: "🎵 Playing: Wonderwall - Oasis"
@@ -291,7 +291,7 @@ Album: A Night at the Opera
 
 1. **Keep Spotify open** - Ensures fast response
 2. **Be specific** - "Play Despacito by Luis Fonsi" works better than just "Play Despacito"
-3. **Use natural language** - VATSAL understands various phrasings
+3. **Use natural language** - BOI understands various phrasings
 4. **Check device status** - Make sure Spotify is active on a device
 5. **Use API mode** - For full control and song selection
 

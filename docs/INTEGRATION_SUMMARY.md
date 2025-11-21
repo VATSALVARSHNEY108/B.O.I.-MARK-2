@@ -68,7 +68,7 @@ The GUI app now seamlessly works with the enhanced chatbot because I added all t
 
 ## 📊 Chatbot Features Available in GUI
 
-### In the **VATSAL Chatbot Tab**:
+### In the **BOI Chatbot Tab**:
 
 1. **Start Conversation**
    - Click to begin chat with greeting
@@ -108,7 +108,7 @@ self.vatsal_ai = create_vatsal_ai()
 ```python
 # GUI calls this when user clicks "Start Conversation"
 greeting = self.vatsal_ai.initiate_conversation()
-# Returns: "Good morning! 🌅 I'm VATSAL, your AI assistant..."
+# Returns: "Good morning! 🌅 I'm BOI, your AI assistant..."
 ```
 
 ### Sending Messages:
@@ -167,7 +167,7 @@ All modules initialized
 AI Screen Monitoring System: ✓
 Advanced Smart Screen Monitor: ✓
 Desktop RAG: ✓
-VATSAL Chatbot: ✓ (with fallback)
+BOI Chatbot: ✓ (with fallback)
 ```
 
 ---
@@ -199,11 +199,11 @@ The chatbot is **integrated and working**, but needs an API key for full functio
    - GUI App is already running
    - Open in your environment
 
-2. **Go to VATSAL Chatbot Tab**
+2. **Go to BOI Chatbot Tab**
    - Find the tab in the interface
    - Click "Start Conversation"
 
-3. **Chat with VATSAL**
+3. **Chat with BOI**
    - Type your message
    - Press Send or Enter
    - Get AI responses

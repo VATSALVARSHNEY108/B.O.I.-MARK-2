@@ -18,7 +18,7 @@ OPTION 1: DOWNLOAD THE FIXED FILE (EASIEST)
 2. Click the three dots (...) next to the file name
 3. Select "Download"
 4. Replace your local file at:
-   C:\Users\VATSAL VARSHNEY\PycharmProjects\DesktopAutomator2\virtual_language_model.py
+   C:\Users\BOI VARSHNEY\PycharmProjects\DesktopAutomator2\virtual_language_model.py
 5. Run: python gui_app.py
 
 ==========================================

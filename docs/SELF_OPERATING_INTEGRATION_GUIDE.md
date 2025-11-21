@@ -2,7 +2,7 @@
 
 ## 🎯 Overview
 
-The self-operating computer is now **fully integrated** into the VATSAL ecosystem! This means AI can autonomously control your computer using vision, seamlessly working with all other VATSAL modules.
+The self-operating computer is now **fully integrated** into the BOI ecosystem! This means AI can autonomously control your computer using vision, seamlessly working with all other BOI modules.
 
 ## ✨ What's New
 
@@ -15,7 +15,7 @@ The self-operating computer is now **fully integrated** into the VATSAL ecosyste
 - 🛡️ Enhanced error recovery and fallback strategies
 
 ### 2. **Integration Hub** (`self_operating_integrations.py`)
-- 🌉 Bridges self-operating computer with all VATSAL modules
+- 🌉 Bridges self-operating computer with all BOI modules
 - 🧭 Smart task routing based on complexity analysis
 - 🔀 Hybrid execution (vision + traditional + learning)
 - 📊 Progress tracking across modules
@@ -254,7 +254,7 @@ A: Keep `auto_self_operating = False` (default)
 
 ## 🎉 Success!
 
-The self-operating computer is now fully integrated into VATSAL! Every component works together seamlessly, giving you the most powerful desktop automation system possible.
+The self-operating computer is now fully integrated into BOI! Every component works together seamlessly, giving you the most powerful desktop automation system possible.
 
 **Ready to use:**
 1. 🎮 GUI Self-Operating Tab

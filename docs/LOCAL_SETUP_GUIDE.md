@@ -59,9 +59,9 @@ No Python needed for the batch file! ✅
 
 ---
 
-## 🔧 Accessing Your Real Desktop from VATSAL Chatbot
+## 🔧 Accessing Your Real Desktop from BOI Chatbot
 
-Once running locally, VATSAL commands like:
+Once running locally, BOI commands like:
 - "open coding folder on desktop" ✅ Will work!
 - "organize desktop" ✅ Will organize YOUR desktop!
 - "list desktop files" ✅ Will show YOUR files!
@@ -84,7 +84,7 @@ Once running locally, VATSAL commands like:
 
 ## ⚡ Quick Test
 
-Try this in the VATSAL chatbot NOW (on Replit):
+Try this in the BOI chatbot NOW (on Replit):
 
 ```
 list desktop files

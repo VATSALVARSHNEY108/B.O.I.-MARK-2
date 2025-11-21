@@ -1,4 +1,4 @@
-# Pre-trained Hand Gesture Models for VATSAL AI
+# Pre-trained Hand Gesture Models for BOI (Barely Obeys Instructions)
 
 ## Quick Start - No Training Required!
 

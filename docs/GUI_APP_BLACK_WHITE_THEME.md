@@ -51,7 +51,7 @@ The original `gui_app.py` has been transformed with a sleek black background, cr
 - ⚡ **Subtitle**: "⚡ Vastly Advanced Technological System Above Limitations ⚡" (Georgia Italic)
 
 ### Toggle Buttons (Header)
-- 🤖 **VATSAL Mode**: Cyan blue (#00d4ff) with white border
+- 🤖 **BOI Mode**: Cyan blue (#00d4ff) with white border
 - 🎮 **Self-Operating**: Purple (#b19cd9) with white border
 - ⚙️ **User Settings**: Neon green (#00ff88) with white border
 
@@ -167,7 +167,7 @@ The original `gui_app.py` has been transformed with a sleek black background, cr
 
 **🔵 Cyan Blue (#00d4ff)**
 - Primary actions
-- VATSAL mode button
+- BOI mode button
 - Section headers
 - Wake word button
 - Hover effects
@@ -277,7 +277,7 @@ Every element has a crisp 2px white border:
 ### Neon Hover Effects
 Buttons change to neon colors on hover:
 - Execute: Green → Cyan
-- VATSAL: Cyan → Green
+- BOI: Cyan → Green
 - Self-Operating: Purple → Pink
 - Settings: Green → Cyan
 - Clear: Pink → Purple

@@ -348,9 +348,9 @@ The command-line interface provides:
 - `quit` - Exit the program
 - Any natural language command for automation
 
-## 🤝 Integration with VATSAL GUI
+## 🤝 Integration with BOI GUI
 
-The intelligent automation is integrated into the VATSAL Desktop Automation Controller:
+The intelligent automation is integrated into the BOI Desktop Automation Controller:
 
 1. Open GUI: `python gui_app.py`
 2. Navigate to appropriate tab
@@ -392,7 +392,7 @@ The intelligent automation is integrated into the VATSAL Desktop Automation Cont
 
 - **Gemini API Docs**: https://ai.google.dev/
 - **PyAutoGUI Guide**: https://pyautogui.readthedocs.io/
-- **VATSAL Project**: See README.md for complete system
+- **BOI Project**: See README.md for complete system
 
 ---
 

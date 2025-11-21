@@ -1,15 +1,15 @@
-# 🤖 VATSAL AI Assistant Guide
+# 🤖 BOI (Barely Obeys Instructions) Assistant Guide
 
 ## Vatsal - Advanced Intelligent System
 
-VATSAL is your intelligent AI assistant inspired by Tony Stark's AI companions from the Iron Man universe. It brings personality, context awareness, and proactive assistance to your desktop automation experience.
+BOI is your intelligent AI assistant inspired by Tony Stark's AI companions from the Iron Man universe. It brings personality, context awareness, and proactive assistance to your desktop automation experience.
 
 ---
 
 ## 🌟 Key Features
 
 ### 1. **Sophisticated Personality**
-VATSAL communicates with a refined, British-inspired personality featuring:
+BOI communicates with a refined, British-inspired personality featuring:
 - Polite and professional tone
 - Dry wit and charm
 - Addresses you as "Sir" or "Boss"
@@ -17,21 +17,21 @@ VATSAL communicates with a refined, British-inspired personality featuring:
 - Professional acknowledgments: "Processing...", "On it"
 
 ### 2. **Contextual Awareness**
-VATSAL remembers your interactions and provides context-aware responses:
+BOI remembers your interactions and provides context-aware responses:
 - Maintains conversation history
 - Remembers recent commands and preferences
 - Provides relevant follow-up suggestions
 - Understands the flow of your work
 
 ### 3. **Proactive Assistance**
-VATSAL doesn't just wait for commands - it actively helps you:
+BOI doesn't just wait for commands - it actively helps you:
 - Time-based suggestions (morning briefings, evening summaries)
 - Context-aware recommendations
 - Productivity insights
 - Workflow optimization tips
 
 ### 4. **Natural Conversation**
-Talk to VATSAL like you would a human assistant:
+Talk to BOI like you would a human assistant:
 - Natural language understanding
 - Conversational responses
 - Follow-up questions and clarifications
@@ -39,17 +39,17 @@ Talk to VATSAL like you would a human assistant:
 
 ---
 
-## 🎯 How to Use VATSAL
+## 🎯 How to Use BOI
 
-### Activating VATSAL Mode
+### Activating BOI Mode
 
-1. **Toggle Button**: Click the "🤖 VATSAL Mode: ON/OFF" button in the header
-2. **Default State**: VATSAL mode is ON by default
-3. **Switch Anytime**: Toggle between VATSAL and Standard modes at any time
+1. **Toggle Button**: Click the "🤖 BOI Mode: ON/OFF" button in the header
+2. **Default State**: BOI mode is ON by default
+3. **Switch Anytime**: Toggle between BOI and Standard modes at any time
 
-### VATSAL vs Standard Mode
+### BOI vs Standard Mode
 
-| Feature | VATSAL Mode | Standard Mode |
+| Feature | BOI Mode | Standard Mode |
 |---------|------------|---------------|
 | Responses | Conversational with personality | Direct and technical |
 | Acknowledgments | "Certainly, Sir. Executing..." | Simple status updates |
@@ -63,7 +63,7 @@ Talk to VATSAL like you would a human assistant:
 
 ### Morning Greeting
 ```
-🤖 VATSAL AI Assistant
+🤖 BOI (Barely Obeys Instructions) Assistant
 ============================================================
 Good morning, Sir. All systems are operational and ready for your commands.
 
@@ -75,9 +75,9 @@ Weather, news, and calendar overview?
 ```
 📝 You: Take a screenshot
 
-🤖 VATSAL: Certainly, Sir. Executing 'Take a screenshot' now.
+🤖 BOI: Certainly, Sir. Executing 'Take a screenshot' now.
 
-🤖 VATSAL:
+🤖 BOI:
 Screenshot captured successfully, Sir. I've saved it to your screenshots 
 folder with a timestamp. Would you like me to open it for review or 
 analyze its contents?
@@ -90,7 +90,7 @@ Screenshot saved to: screenshots/screenshot_2025-10-25_10-30-45.png
 ```
 📝 You: Open blahblah app
 
-🤖 VATSAL: Apologies, Sir. I encountered an issue locating that application.
+🤖 BOI: Apologies, Sir. I encountered an issue locating that application.
 It appears 'blahblah' isn't recognized in your system. 
 
 Might I suggest checking:
@@ -102,7 +102,7 @@ Would you like me to show you a list of available applications?
 ```
 
 ### Proactive Suggestions
-After certain commands, VATSAL may offer helpful suggestions:
+After certain commands, BOI may offer helpful suggestions:
 ```
 💡 Suggestion: Perhaps time for a productivity check? I can show 
 your screen time and suggest breaks.
@@ -110,10 +110,10 @@ your screen time and suggest breaks.
 
 ---
 
-## ⚙️ VATSAL Features in Action
+## ⚙️ BOI Features in Action
 
 ### Time-Aware Greetings
-VATSAL greets you differently based on the time of day:
+BOI greets you differently based on the time of day:
 - **Morning (5 AM - 12 PM)**: "Good morning, Sir. All systems are operational..."
 - **Afternoon (12 PM - 5 PM)**: "Good afternoon, Sir. How may I be of assistance?"
 - **Evening (5 PM - 10 PM)**: "Good evening, Sir. Hope your day was productive..."
@@ -142,14 +142,14 @@ VATSAL greets you differently based on the time of day:
 - Task assistance
 
 ### Command Acknowledgments
-VATSAL acknowledges every command professionally:
+BOI acknowledges every command professionally:
 - "Certainly, Sir. Executing 'get weather' now."
 - "Right away. Processing 'send email'."
 - "On it. 'Take screenshot' initiated."
 - "Understood. Running 'system report' for you."
 
 ### Conversational Memory
-VATSAL remembers recent interactions:
+BOI remembers recent interactions:
 - Last 10 command exchanges
 - User preferences
 - Context from previous commands
@@ -165,9 +165,9 @@ Click the **"💡 Suggestion"** button in the bottom toolbar anytime to get:
 - Context-aware recommendations
 - Productivity tips
 
-### VATSAL Responses Include:
+### BOI Responses Include:
 1. **Acknowledgment**: Confirms understanding of your command
-2. **VATSAL Response**: Conversational, personality-filled response
+2. **BOI Response**: Conversational, personality-filled response
 3. **Technical Details**: Complete technical output (when needed)
 4. **Proactive Suggestion**: Optional follow-up recommendations (30% of commands)
 
@@ -196,17 +196,17 @@ Click the **"💡 Suggestion"** button in the bottom toolbar anytime to get:
 
 1. **Natural Language**: Speak naturally - "Show me the weather" works as well as "Get weather forecast"
 
-2. **Context Matters**: VATSAL remembers your recent commands, so follow-up questions work well
+2. **Context Matters**: BOI remembers your recent commands, so follow-up questions work well
 
 3. **Toggle as Needed**: 
-   - Use VATSAL Mode for conversational, pleasant interactions
+   - Use BOI Mode for conversational, pleasant interactions
    - Switch to Standard Mode for quick, technical-only responses
 
 4. **Ask for Suggestions**: Click "💡 Suggestion" when you need ideas or aren't sure what to do next
 
-5. **Time-Based Features**: VATSAL adapts to the time of day automatically
+5. **Time-Based Features**: BOI adapts to the time of day automatically
 
-6. **Enjoy the Personality**: VATSAL is designed to make automation fun and engaging!
+6. **Enjoy the Personality**: BOI is designed to make automation fun and engaging!
 
 ---
 
@@ -214,27 +214,27 @@ Click the **"💡 Suggestion"** button in the bottom toolbar anytime to get:
 
 ### Starting Your Day
 ```
-You: Good morning VATSAL, what's on my schedule?
-VATSAL: Good morning, Sir. Let me pull up your calendar...
+You: Good morning BOI, what's on my schedule?
+BOI: Good morning, Sir. Let me pull up your calendar...
 [Shows schedule]
-VATSAL: Shall I also provide the weather forecast and news headlines?
+BOI: Shall I also provide the weather forecast and news headlines?
 ```
 
 ### Getting Work Done
 ```
 You: Generate a Python function for sorting
-VATSAL: Certainly. Working on that sorting function for you...
+BOI: Certainly. Working on that sorting function for you...
 [Generates code]
-VATSAL: I've prepared a bubble sort implementation with documentation.
+BOI: I've prepared a bubble sort implementation with documentation.
 Would you like me to explain how it works or generate unit tests as well?
 ```
 
 ### System Management
 ```
 You: Check my system performance
-VATSAL: Right away. Analyzing your system metrics...
+BOI: Right away. Analyzing your system metrics...
 [Shows system info]
-VATSAL: CPU running at 45%, memory usage is nominal. All systems healthy.
+BOI: CPU running at 45%, memory usage is nominal. All systems healthy.
 Tip: I notice your downloads folder could use organization. Shall I handle that?
 ```
 
@@ -248,7 +248,7 @@ Tip: I notice your downloads folder could use organization. Shall I handle that?
 - All standard automation dependencies
 
 ### Fallback Behavior
-If Gemini AI is unavailable, VATSAL will:
+If Gemini AI is unavailable, BOI will:
 - Still provide basic acknowledgments
 - Use pre-defined responses
 - Maintain professional tone
@@ -264,7 +264,7 @@ If Gemini AI is unavailable, VATSAL will:
 
 ## 🎯 Command Examples
 
-Try these commands with VATSAL:
+Try these commands with BOI:
 
 **Desktop Control:**
 - "Take a screenshot and analyze it"
@@ -290,13 +290,13 @@ Try these commands with VATSAL:
 
 ## 🎓 Philosophy
 
-VATSAL is designed to make your automation experience:
+BOI is designed to make your automation experience:
 - **More Human**: Natural conversation instead of rigid commands
 - **More Intelligent**: Context-aware and proactive
 - **More Enjoyable**: Personality makes work more pleasant
 - **More Productive**: Helpful suggestions keep you on track
 
-Just like Tony Stark's AI assistant, VATSAL is here to make you more effective while keeping things professional and enjoyable.
+Just like Tony Stark's AI assistant, BOI is here to make you more effective while keeping things professional and enjoyable.
 
 ---
 
@@ -304,5 +304,5 @@ Just like Tony Stark's AI assistant, VATSAL is here to make you more effective w
 
 ---
 
-*VATSAL - Vatsal - Advanced Intelligent System*  
+*BOI - Vatsal - Advanced Intelligent System*  
 *Version 2.0.0 - Making automation sophisticated since 2025*
