@@ -159,8 +159,19 @@ If no design work: "No design detected" """
             return ""
         
         try:
+            # Validate save_path
+            if not save_path or save_path.strip() == "":
+                print("❌ Error taking screenshot: No file path provided")
+                return ""
+            
+            # Ensure the path has .png extension
+            if not save_path.lower().endswith('.png'):
+                save_path = save_path + '.png'
+            
             # Create screenshots directory if it doesn't exist
-            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            dir_path = os.path.dirname(save_path)
+            if dir_path:
+                os.makedirs(dir_path, exist_ok=True)
             
             # Take screenshot
             screenshot = pyautogui.screenshot()
