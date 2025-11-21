@@ -257,6 +257,73 @@ class FileManager:
                 return "ℹ️ No backups found"
         except Exception as e:
             return f"❌ Failed to list backups: {str(e)}"
+    
+    def create_file(self, file_path, content=""):
+        """
+        Create a new file with optional content
+        
+        Args:
+            file_path: Path to the file to create
+            content: Content to write to the file (default: empty)
+        
+        Returns:
+            Success message or error message
+        """
+        try:
+            file_path = Path(file_path)
+            
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(content)
+            
+            size = os.path.getsize(file_path)
+            return f"✅ File created: {file_path} ({size} bytes)"
+        except Exception as e:
+            return f"❌ Failed to create file: {str(e)}"
+    
+    def write_to_file(self, file_path, content, mode="w"):
+        """
+        Write content to a file
+        
+        Args:
+            file_path: Path to the file
+            content: Content to write
+            mode: Write mode ('w' = overwrite, 'a' = append)
+        
+        Returns:
+            Success message or error message
+        """
+        try:
+            file_path = Path(file_path)
+            
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(file_path, mode, encoding='utf-8') as f:
+                f.write(content)
+            
+            size = os.path.getsize(file_path)
+            action = "appended to" if mode == "a" else "written to"
+            return f"✅ Content {action} file: {file_path} ({size} bytes)"
+        except Exception as e:
+            return f"❌ Failed to write to file: {str(e)}"
+    
+    def read_file(self, file_path):
+        """
+        Read content from a file
+        
+        Args:
+            file_path: Path to the file
+        
+        Returns:
+            File content or error message
+        """
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            return content
+        except Exception as e:
+            return f"❌ Failed to read file: {str(e)}"
 
 if __name__ == "__main__":
     manager = FileManager()

@@ -1104,6 +1104,72 @@ class CommandExecutor:
                     "message": msg,
                     "data": size_info
                 }
+            
+            elif action == "create_file":
+                file_path = parameters.get("file_path", "")
+                content = parameters.get("content", "")
+                
+                if not file_path:
+                    return {
+                        "success": False,
+                        "message": "File path is required"
+                    }
+                
+                print(f"  📝 Creating file: {file_path}")
+                result = self.file_manager.create_file(file_path, content)
+                
+                print(f"  {result}")
+                
+                return {
+                    "success": "✅" in result,
+                    "message": result
+                }
+            
+            elif action == "write_file":
+                file_path = parameters.get("file_path", "")
+                content = parameters.get("content", "")
+                mode = parameters.get("mode", "w")
+                
+                if not file_path or not content:
+                    return {
+                        "success": False,
+                        "message": "File path and content are required"
+                    }
+                
+                print(f"  📝 Writing to file: {file_path}")
+                result = self.file_manager.write_to_file(file_path, content, mode)
+                
+                print(f"  {result}")
+                
+                return {
+                    "success": "✅" in result,
+                    "message": result
+                }
+            
+            elif action == "read_file":
+                file_path = parameters.get("file_path", "")
+                
+                if not file_path:
+                    return {
+                        "success": False,
+                        "message": "File path is required"
+                    }
+                
+                print(f"  📖 Reading file: {file_path}")
+                content = self.file_manager.read_file(file_path)
+                
+                if "❌" in content:
+                    return {
+                        "success": False,
+                        "message": content
+                    }
+                else:
+                    print(f"  ✅ File read successfully ({len(content)} characters)")
+                    return {
+                        "success": True,
+                        "message": f"File read: {len(content)} characters",
+                        "content": content
+                    }
 
             # ==================== WORKFLOWS ====================
             elif action == "save_workflow":
