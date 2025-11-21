@@ -8,6 +8,8 @@ import shutil
 import hashlib
 import gzip
 import json
+import subprocess
+import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
 import re
@@ -258,9 +260,66 @@ class FileManager:
         except Exception as e:
             return f"❌ Failed to list backups: {str(e)}"
     
+    def _create_file_via_batch(self, file_path, content=""):
+        """
+        Create file using Windows batch file for better reliability
+        
+        Args:
+            file_path: Full path to the file
+            content: Content to write
+        
+        Returns:
+            Success message or error message
+        """
+        try:
+            # Ensure directory exists first
+            file_path = Path(file_path)
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Create temporary batch file
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.bat', delete=False, encoding='utf-8') as bat_file:
+                bat_path = bat_file.name
+                
+                # Escape special characters in content
+                safe_content = content.replace('^', '^^').replace('&', '^&').replace('|', '^|').replace('<', '^<').replace('>', '^>')
+                
+                # Write batch commands
+                bat_file.write('@echo off\n')
+                bat_file.write(f'echo Creating file: {file_path}\n')
+                
+                if content:
+                    # Use echo to write content
+                    bat_file.write(f'echo {safe_content}> "{file_path}"\n')
+                else:
+                    # Create empty file
+                    bat_file.write(f'type nul > "{file_path}"\n')
+                
+                bat_file.write('echo File created successfully!\n')
+                bat_file.write('exit /b 0\n')
+            
+            # Execute batch file
+            result = subprocess.run([bat_path], capture_output=True, text=True, shell=True)
+            
+            # Clean up batch file
+            try:
+                os.unlink(bat_path)
+            except:
+                pass
+            
+            # Check if file was created
+            if file_path.exists():
+                size = os.path.getsize(file_path)
+                return f"✅ File created via batch: {file_path} ({size} bytes)"
+            else:
+                return f"❌ Batch file executed but file not found: {file_path}"
+                
+        except Exception as e:
+            return f"❌ Failed to create file via batch: {str(e)}"
+    
     def create_file(self, file_path, content=""):
         """
         Create a new file with optional content
+        Uses batch file method on Windows for better reliability
         
         Args:
             file_path: Path to the file to create
@@ -270,6 +329,11 @@ class FileManager:
             Success message or error message
         """
         try:
+            # Try batch method on Windows first
+            if os.name == 'nt':
+                return self._create_file_via_batch(file_path, content)
+            
+            # Fallback to Python method on non-Windows or if batch fails
             file_path = Path(file_path)
             
             file_path.parent.mkdir(parents=True, exist_ok=True)
@@ -282,9 +346,68 @@ class FileManager:
         except Exception as e:
             return f"❌ Failed to create file: {str(e)}"
     
+    def _write_file_via_batch(self, file_path, content, mode="w"):
+        """
+        Write to file using Windows batch file for better reliability
+        
+        Args:
+            file_path: Full path to the file
+            content: Content to write
+            mode: Write mode ('w' = overwrite, 'a' = append)
+        
+        Returns:
+            Success message or error message
+        """
+        try:
+            # Ensure directory exists first
+            file_path = Path(file_path)
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+            
+            # Create temporary batch file
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.bat', delete=False, encoding='utf-8') as bat_file:
+                bat_path = bat_file.name
+                
+                # Escape special characters in content
+                safe_content = content.replace('^', '^^').replace('&', '^&').replace('|', '^|').replace('<', '^<').replace('>', '^>')
+                
+                # Write batch commands
+                bat_file.write('@echo off\n')
+                bat_file.write(f'echo Writing to file: {file_path}\n')
+                
+                if mode == 'a':
+                    # Append mode
+                    bat_file.write(f'echo {safe_content}>> "{file_path}"\n')
+                else:
+                    # Overwrite mode
+                    bat_file.write(f'echo {safe_content}> "{file_path}"\n')
+                
+                bat_file.write('echo Write completed!\n')
+                bat_file.write('exit /b 0\n')
+            
+            # Execute batch file
+            result = subprocess.run([bat_path], capture_output=True, text=True, shell=True)
+            
+            # Clean up batch file
+            try:
+                os.unlink(bat_path)
+            except:
+                pass
+            
+            # Check if file exists
+            if file_path.exists():
+                size = os.path.getsize(file_path)
+                action = "appended to" if mode == "a" else "written to"
+                return f"✅ Content {action} file via batch: {file_path} ({size} bytes)"
+            else:
+                return f"❌ Batch file executed but file not found: {file_path}"
+                
+        except Exception as e:
+            return f"❌ Failed to write file via batch: {str(e)}"
+    
     def write_to_file(self, file_path, content, mode="w"):
         """
         Write content to a file
+        Uses batch file method on Windows for better reliability
         
         Args:
             file_path: Path to the file
@@ -295,6 +418,11 @@ class FileManager:
             Success message or error message
         """
         try:
+            # Try batch method on Windows first
+            if os.name == 'nt':
+                return self._write_file_via_batch(file_path, content, mode)
+            
+            # Fallback to Python method
             file_path = Path(file_path)
             
             file_path.parent.mkdir(parents=True, exist_ok=True)
