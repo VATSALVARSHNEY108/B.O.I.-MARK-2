@@ -231,6 +231,52 @@ class CommandExecutor:
             "original_result": result
         }
     
+    def _expand_path_shortcuts(self, file_path: str) -> str:
+        """
+        Expand common path shortcuts to full paths
+        Supports: Desktop, Downloads, Documents, Home, etc.
+        """
+        from pathlib import Path
+        import re
+        
+        # Remove any quotes
+        file_path = file_path.strip('"').strip("'")
+        
+        # Get common user directories
+        home = Path.home()
+        desktop = home / "Desktop"
+        downloads = home / "Downloads"
+        documents = home / "Documents"
+        pictures = home / "Pictures"
+        
+        # Case-insensitive replacement patterns
+        replacements = {
+            r'^desktop[/\\]': str(desktop) + os.sep,
+            r'^downloads[/\\]': str(downloads) + os.sep,
+            r'^documents[/\\]': str(documents) + os.sep,
+            r'^pictures[/\\]': str(pictures) + os.sep,
+            r'^home[/\\]': str(home) + os.sep,
+            r'^~[/\\]': str(home) + os.sep,
+        }
+        
+        # Check each pattern
+        file_path_lower = file_path.lower()
+        for pattern, replacement in replacements.items():
+            if re.match(pattern, file_path_lower):
+                # Preserve the original case of the filename
+                file_path = re.sub(pattern, replacement, file_path, flags=re.IGNORECASE)
+                break
+        
+        # Handle special case: just "desktop" or "Desktop" -> Desktop/filename.txt
+        if file_path_lower == "desktop":
+            file_path = str(desktop)
+        elif file_path_lower == "downloads":
+            file_path = str(downloads)
+        elif file_path_lower == "documents":
+            file_path = str(documents)
+        
+        return file_path
+    
     def execute(self, command_dict: dict) -> dict:
         """
         Execute a command dictionary returned by Gemini.
@@ -1115,6 +1161,9 @@ class CommandExecutor:
                         "message": "File path is required"
                     }
                 
+                # Expand common path shortcuts
+                file_path = self._expand_path_shortcuts(file_path)
+                
                 print(f"  📝 Creating file: {file_path}")
                 result = self.file_manager.create_file(file_path, content)
                 
@@ -1136,6 +1185,9 @@ class CommandExecutor:
                         "message": "File path and content are required"
                     }
                 
+                # Expand common path shortcuts
+                file_path = self._expand_path_shortcuts(file_path)
+                
                 print(f"  📝 Writing to file: {file_path}")
                 result = self.file_manager.write_to_file(file_path, content, mode)
                 
@@ -1154,6 +1206,9 @@ class CommandExecutor:
                         "success": False,
                         "message": "File path is required"
                     }
+                
+                # Expand common path shortcuts
+                file_path = self._expand_path_shortcuts(file_path)
                 
                 print(f"  📖 Reading file: {file_path}")
                 content = self.file_manager.read_file(file_path)

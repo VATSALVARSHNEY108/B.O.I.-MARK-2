@@ -240,7 +240,9 @@ DESKTOP AUTOMATION:
 - play_youtube_video: Search YouTube and auto-play first video (parameters: query)
 - play_first_result: Play the first video from current YouTube search page (parameters: none)
 - search_and_play: Search YouTube and play first result (parameters: query) - Alternative to play_youtube_video
-- create_file: Create a file (parameters: filename, content)
+- create_file: Create a file with content (parameters: file_path [use full path or shortcuts like "Desktop/file.txt", "Downloads/file.txt"], content [file contents, can be empty string ""])
+- write_file: Write or append content to file (parameters: file_path, content, mode [optional: 'w' for write (default), 'a' for append])
+- read_file: Read file contents (parameters: file_path)
 - wait: Wait for seconds (parameters: seconds)
 
 QUICK INFORMATION (INSTANT RESPONSES - NO WEB SEARCH):
