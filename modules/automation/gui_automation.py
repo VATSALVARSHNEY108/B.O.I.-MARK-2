@@ -255,6 +255,20 @@ class GUIAutomation:
                 self._log_demo(f"Would take screenshot and save as: {filename}")
                 return None
             
+            # Validate filename
+            if not filename or filename.strip() == "":
+                filename = "screenshot.png"
+            
+            # Ensure the filename has .png extension
+            if not filename.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp')):
+                filename = filename + '.png'
+            
+            # Create directory if needed
+            import os
+            dir_path = os.path.dirname(filename)
+            if dir_path:
+                os.makedirs(dir_path, exist_ok=True)
+            
             screenshot = pyautogui.screenshot()
             screenshot.save(filename)
             print(f"Screenshot saved as {filename}")
