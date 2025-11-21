@@ -50,7 +50,7 @@ class VisualChatMonitor:
         if not screenshot_path:
             return {
                 "success": False,
-                "message": "❌ Screenshot feature not available in cloud environment. This feature requires running VATSAL locally on your desktop."
+                "message": "❌ Screenshot feature not available in cloud environment. This feature requires running BOI locally on your desktop."
             }
         
         print("   🤖 Analyzing screenshot with AI Vision...")
@@ -333,7 +333,7 @@ Generate ONLY the reply text that should be typed, no additional commentary."""
         if not screenshot_path:
             return {
                 "success": False,
-                "message": "❌ Screenshot feature not available in cloud environment. This feature requires running VATSAL locally on your desktop."
+                "message": "❌ Screenshot feature not available in cloud environment. This feature requires running BOI locally on your desktop."
             }
         
         print("   🤖 Analyzing WhatsApp with AI Vision...")

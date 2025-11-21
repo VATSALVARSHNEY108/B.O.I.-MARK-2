@@ -1,6 +1,6 @@
 """
 Smart Automation & AI Module
-Advanced intelligent automation features for VATSAL
+Advanced intelligent automation features for BOI
 
 Features:
 1. Auto-Bug Fixer - AI analyzes error logs and suggests/applies fixes

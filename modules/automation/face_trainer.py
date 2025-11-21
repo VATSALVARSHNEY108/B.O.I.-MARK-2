@@ -1,5 +1,5 @@
 """
-Face Recognition Training System for VATSAL AI
+Face Recognition Training System for BOI (Barely Obeys Instructions)
 Train the system to recognize specific people from their photos
 """
 

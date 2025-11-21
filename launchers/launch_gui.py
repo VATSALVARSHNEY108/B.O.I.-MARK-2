@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-VATSAL AI Desktop Automation - GUI Launcher
+BOI AI Desktop Automation - GUI Launcher
 Launch the main GUI application with all features
 """
 
@@ -43,9 +43,9 @@ sys.path.insert(0, os.path.join(modules_dir, 'smart_features'))
 sys.path.insert(0, os.path.join(modules_dir, 'misc'))
 
 def main():
-    """Launch the VATSAL AI GUI Application"""
+    """Launch the BOI AI GUI Application"""
     try:
-        print("🚀 Starting VATSAL AI Desktop Automation GUI...")
+        print("🚀 Starting BOI AI Desktop Automation GUI...")
         print("=" * 60)
         
         # Import and run the GUI app

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Authentication and Security for VATSAL Mobile Companion
+Authentication and Security for BOI Mobile Companion
 """
 
 import os
@@ -234,7 +234,7 @@ def get_client_ip():
 
 if __name__ == '__main__':
     auth = MobileAuth()
-    print('🔐 VATSAL Mobile Authentication System')
+    print('🔐 BOI Mobile Authentication System')
     print('=' * 50)
     print(f'Master PIN: {auth.master_pin}')
     print('\nTo authenticate:')

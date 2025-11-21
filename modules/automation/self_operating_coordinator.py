@@ -1,6 +1,6 @@
 """
 Self-Operating Coordinator
-Orchestrates complex multi-step tasks across all VATSAL modules
+Orchestrates complex multi-step tasks across all BOI modules
 Provides intelligent task planning, execution, and monitoring
 """
 
@@ -25,7 +25,7 @@ except ImportError:
 
 class TaskCoordinator:
     """
-    Coordinates complex tasks across multiple VATSAL modules
+    Coordinates complex tasks across multiple BOI modules
     
     Features:
     - AI-powered task decomposition

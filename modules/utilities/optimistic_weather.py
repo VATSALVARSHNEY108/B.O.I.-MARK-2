@@ -1,5 +1,5 @@
 """
-Optimistic Weather System for VATSAL AI
+Optimistic Weather System for BOI (Barely Obeys Instructions)
 Presents weather information in a positive, upbeat, and motivating way
 """
 

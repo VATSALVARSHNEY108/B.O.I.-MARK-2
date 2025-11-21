@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Enhanced VATSAL Chatbot - Powered by Google Gemini AI
+Enhanced BOI Chatbot - Powered by Google Gemini AI
 A conversational AI that can both chat AND execute actual automation commands
 """
 
@@ -59,7 +59,7 @@ class SimpleChatbot:
         print("🎯 Initializing common sense reasoning...")
         self.common_sense = CommonSenseReasoning()
         
-        self.system_prompt = """You are VATSAL, a sophisticated AI assistant with a friendly personality.
+        self.system_prompt = """You are BOI, a sophisticated AI assistant with a friendly personality.
 
 Your personality:
 - Friendly, approachable, and knowledgeable
@@ -82,10 +82,10 @@ CREATOR INFORMATION (answer when asked about creator, developer, maker, who made
 Your creator is Vatsal Varshney, a talented AI/ML Engineer and software developer.
 - Name: Vatsal Varshney
 - Role: AI/ML Engineer, Full-Stack Developer, Automation Expert
-- GitHub: https://github.com/VATSALVARSHNEY108
+- GitHub: https://github.com/BOIVARSHNEY108
 - LinkedIn: https://www.linkedin.com/in/vatsal-varshney108/
 - Expertise: Artificial Intelligence, Machine Learning, Desktop Automation, Python Development, Computer Vision, Natural Language Processing
-- Notable Work: VATSAL AI Desktop Automation Controller (100+ AI features), Advanced RAG systems, Smart automation tools
+- Notable Work: BOI (Barely Obeys Instructions) Desktop Automation Controller (100+ AI features), Advanced RAG systems, Smart automation tools
 
 When someone asks about your creator or who made you, proudly introduce Vatsal Varshney with his GitHub and LinkedIn profiles.
 
@@ -157,7 +157,7 @@ Guidelines:
                     
                     # If it's a valid command (not an error), execute it
                     if command_dict.get("action") != "error":
-                        print(f"\n🤖 VATSAL: Certainly, Sir. Executing '{user_message}' now.\n")
+                        print(f"\n🤖 BOI: Certainly, Sir. Executing '{user_message}' now.\n")
                         
                         # Execute the command
                         result = self.executor.execute(command_dict)
@@ -184,7 +184,7 @@ Guidelines:
                             )
                         )
                         
-                        ai_response = f"{execution_result}\n\n🤖 VATSAL: {response.text.strip()}"
+                        ai_response = f"{execution_result}\n\n🤖 BOI: {response.text.strip()}"
                         
                         self.conversation_history.append({
                             "role": "assistant",
@@ -219,10 +219,10 @@ Guidelines:
             
             conversation_text = ""
             for msg in self.conversation_history[-10:]:
-                role = "User" if msg["role"] == "user" else "VATSAL"
+                role = "User" if msg["role"] == "user" else "BOI"
                 conversation_text += f"{role}: {msg['content']}\n"
             
-            conversation_text += "VATSAL:"
+            conversation_text += "BOI:"
             
             # Enhance system prompt with emotional intelligence AND common sense
             enhanced_prompt = self.emotional_intelligence.enhance_system_prompt(
@@ -277,7 +277,7 @@ def main():
     """Run the enhanced chatbot"""
     
     print("\n" + "="*60)
-    print("🤖 VATSAL AI Assistant")
+    print("🤖 BOI (Barely Obeys Instructions) Assistant")
     print("="*60)
     print("\n✨ Enhanced Features:")
     print("   • Chat naturally with AI")
@@ -296,7 +296,7 @@ def main():
         print(f"\n✅ Gemini AI is ready!")
         print(f"Type a command or click a Quick Action button to get started.\n")
         print("="*60)
-        print(f"🤖 VATSAL: {chatbot.greeting()}")
+        print(f"🤖 BOI: {chatbot.greeting()}")
         print("="*60 + "\n")
     except Exception as e:
         print(f"❌ Error: {e}")
@@ -311,7 +311,7 @@ def main():
                 continue
             
             if user_input.lower() in ['quit', 'exit', 'bye']:
-                print("\n🤖 VATSAL: Goodbye, Sir! Have a great day! 👋\n")
+                print("\n🤖 BOI: Goodbye, Sir! Have a great day! 👋\n")
                 break
             
             if user_input.lower() == 'reset':
@@ -326,12 +326,12 @@ def main():
             response = chatbot.chat(user_input)
             
             if not response.startswith("✅") and not response.startswith("⚠️"):
-                print(f"🤖 VATSAL: {response}\n")
+                print(f"🤖 BOI: {response}\n")
             else:
                 print(f"{response}\n")
         
         except KeyboardInterrupt:
-            print("\n\n🤖 VATSAL: Goodbye, Sir! 👋\n")
+            print("\n\n🤖 BOI: Goodbye, Sir! 👋\n")
             break
         
         except Exception as e:

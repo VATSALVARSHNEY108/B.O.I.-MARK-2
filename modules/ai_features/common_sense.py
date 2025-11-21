@@ -1,5 +1,5 @@
 """
-Common Sense Reasoning Module for VATSAL AI
+Common Sense Reasoning Module for BOI (Barely Obeys Instructions)
 Provides logical reasoning, context awareness, and practical knowledge
 """
 

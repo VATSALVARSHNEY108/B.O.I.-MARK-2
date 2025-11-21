@@ -175,10 +175,10 @@ class OpenCVHandGestureDetector:
         print("👋 Show your OPEN PALM to activate listening")
         print("✊ Make a FIST to stop listening")
         print("👍 Show THUMBS UP for approval")
-        print("✌️✌️  Show TWO PEACE SIGNS (both hands) for VATSAL greeting")
+        print("✌️✌️  Show TWO PEACE SIGNS (both hands) for BOI greeting")
         
         # Create window and set it to a specific size and position
-        window_name = 'VATSAL - Hand Gesture'
+        window_name = 'BOI - Hand Gesture'
         cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
         cv2.resizeWindow(window_name, 320, 240)  # Small size: 320x240
         cv2.moveWindow(window_name, 0, 0)  # Top-left corner position
@@ -199,7 +199,7 @@ class OpenCVHandGestureDetector:
                 # Count peace signs in current frame
                 peace_sign_count = sum(1 for g in gestures if g['gesture'] == "PEACE_SIGN")
                 
-                # Check for VATSAL greeting (two peace signs simultaneously)
+                # Check for BOI greeting (two peace signs simultaneously)
                 if peace_sign_count >= 2 and self.vatsal_greeting_cooldown == 0:
                     self._greet_vatsal()
                     for gesture_info in gestures:
@@ -208,7 +208,7 @@ class OpenCVHandGestureDetector:
                     
                     cv2.putText(
                         frame,
-                        "VATSAL DETECTED!",
+                        "BOI DETECTED!",
                         (10, 60),
                         cv2.FONT_HERSHEY_SIMPLEX,
                         1.5,
@@ -275,7 +275,7 @@ class OpenCVHandGestureDetector:
                             self.stats['peace_sign_detected'] += 1
                             cv2.putText(
                                 frame,
-                                f"PEACE SIGN ({peace_sign_count}/2 for VATSAL)",
+                                f"PEACE SIGN ({peace_sign_count}/2 for BOI)",
                                 (10, 60),
                                 cv2.FONT_HERSHEY_SIMPLEX,
                                 0.7,
@@ -313,7 +313,7 @@ class OpenCVHandGestureDetector:
                            (0, 255, 0) if self.hand_detected else (0, 0, 255), 2)
                 
                 # Display help
-                cv2.putText(frame, "Press 'q' to quit | Show 2 peace signs for VATSAL", 
+                cv2.putText(frame, "Press 'q' to quit | Show 2 peace signs for BOI", 
                            (10, frame.shape[0] - 20),
                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                 
@@ -556,10 +556,10 @@ class OpenCVHandGestureDetector:
             return "NONE", None
     
     def _greet_vatsal(self):
-        """Greet VATSAL when two peace signs are detected"""
+        """Greet BOI when two peace signs are detected"""
         print("\n" + "=" * 70)
-        print("👋 VATSAL DETECTED! Two peace signs shown!")
-        print("🎉 Hello VATSAL! Welcome!")
+        print("👋 BOI DETECTED! Two peace signs shown!")
+        print("🎉 Hello BOI! Welcome!")
         print("=" * 70 + "\n")
         
         if self.voice_commander:

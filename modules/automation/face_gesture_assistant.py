@@ -1,5 +1,5 @@
 """
-Face Detection & Gesture Recognition Assistant for VATSAL
+Face Detection & Gesture Recognition Assistant for BOI
 Detects user's face, greets them, and recognizes hand signs to activate voice listening
 """
 
@@ -214,7 +214,7 @@ class FaceGestureAssistant:
                     2
                 )
                 
-                cv2.imshow('VATSAL - Face & Gesture Detection', frame)
+                cv2.imshow('BOI - Face & Gesture Detection', frame)
                 
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     self.running = False

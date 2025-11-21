@@ -858,7 +858,7 @@ Respond with JSON:
         if not screenshot_path:
             return {
                 "success": False,
-                "message": "❌ Screenshot not available in cloud environment. Run VATSAL locally to use this feature."
+                "message": "❌ Screenshot not available in cloud environment. Run BOI locally to use this feature."
             }
         
         print(f"   🤖 AI analyzing...")

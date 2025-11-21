@@ -52,7 +52,7 @@ class WebToolsLauncher:
             if not os.path.exists("app.py"):
                 return {
                     "success": False,
-                    "message": "❌ Web tools app not found.\n💡 Clone the In-One-Box repository to this directory:\n   git clone https://github.com/VATSALVARSHNEY108/In-One-Box-.git\n   Then move the files to the current directory."
+                    "message": "❌ Web tools app not found.\n💡 Clone the In-One-Box repository to this directory:\n   git clone https://github.com/BOIVARSHNEY108/In-One-Box-.git\n   Then move the files to the current directory."
                 }
             
             # Launch Streamlit app in background

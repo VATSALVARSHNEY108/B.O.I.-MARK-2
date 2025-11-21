@@ -1,6 +1,6 @@
 """
 Self-Operating Computer - Gemini Vision Edition (Enhanced)
-Fully integrated autonomous computer controller with OCR, element detection, and VATSAL ecosystem integration
+Fully integrated autonomous computer controller with OCR, element detection, and BOI ecosystem integration
 Inspired by OthersideAI's self-operating-computer but powered by Google Gemini Vision
 """
 
@@ -42,7 +42,7 @@ class SelfOperatingComputer:
     - Element detection and clicking
     - Mouse and keyboard automation
     - Multi-step task execution
-    - Integration with VATSAL ecosystem
+    - Integration with BOI ecosystem
     """
     
     def __init__(self, api_key: Optional[str] = None, verbose: bool = False, log_callback: Optional[Callable] = None):

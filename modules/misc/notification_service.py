@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Push Notification Service for VATSAL Mobile Companion
+Push Notification Service for BOI Mobile Companion
 Supports SMS (Twilio), Email, and Webhook notifications
 """
 
@@ -91,15 +91,15 @@ class NotificationService:
             msg = MIMEMultipart()
             msg['From'] = from_email
             msg['To'] = to_email
-            msg['Subject'] = f'[VATSAL] {subject}'
+            msg['Subject'] = f'[BOI] {subject}'
             
             body = f"""
-VATSAL Desktop Automation Alert
+BOI Desktop Automation Alert
 
 {message}
 
 ---
-Sent from VATSAL Mobile Companion
+Sent from BOI Mobile Companion
 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 """
             
@@ -135,7 +135,7 @@ Sent from VATSAL Mobile Companion
         try:
             payload = {
                 'timestamp': datetime.now().isoformat(),
-                'source': 'VATSAL Desktop Automation',
+                'source': 'BOI Desktop Automation',
                 'data': data
             }
             
@@ -229,7 +229,7 @@ Sent from VATSAL Mobile Companion
         }
         
         if event_type not in event_messages:
-            title = 'VATSAL Notification'
+            title = 'BOI Notification'
             message = str(details)
         else:
             title, message = event_messages[event_type](details)
@@ -277,7 +277,7 @@ notification_service = NotificationService()
 
 if __name__ == '__main__':
     service = NotificationService()
-    print('📱 VATSAL Notification Service')
+    print('📱 BOI Notification Service')
     print('=' * 50)
     status = service.get_status()
     print(f"SMS (Twilio): {'✅ Configured' if status['configured_channels']['sms'] else '❌ Not configured'}")

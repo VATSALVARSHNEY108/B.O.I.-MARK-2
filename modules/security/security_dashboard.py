@@ -29,7 +29,7 @@ class SecurityDashboard:
     - Sandbox Mode
     """
     
-    def __init__(self, app_name: str = "VATSAL AI Assistant"):
+    def __init__(self, app_name: str = "BOI (Barely Obeys Instructions) Assistant"):
         self.app_name = app_name
         self.dashboard_dir = "security_dashboard"
         self.config_file = os.path.join(self.dashboard_dir, "dashboard_config.json")

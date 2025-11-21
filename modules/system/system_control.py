@@ -375,7 +375,7 @@ class SystemController:
                     time.sleep(seconds_until_sleep)
                     result = self.sleep_mode()
                     self._show_notification(
-                        "💤 VATSAL Sleep Mode",
+                        "💤 BOI Sleep Mode",
                         f"Entering sleep mode as scheduled at {time_str}"
                     )
                     print(f"[SCHEDULED SLEEP] {result}")
@@ -607,7 +607,7 @@ class SystemController:
                     try:
                         # Try systemctl first
                         result = subprocess.run(
-                            f'sudo systemctl poweroff --message="Shutdown scheduled via VATSAL" --no-wall',
+                            f'sudo systemctl poweroff --message="Shutdown scheduled via BOI" --no-wall',
                             shell=True,
                             capture_output=True,
                             text=True,
@@ -1300,7 +1300,7 @@ class SystemController:
                     plyer_notify.notify(
                         title=title,
                         message=message,
-                        app_name="VATSAL",
+                        app_name="BOI",
                         timeout=10
                     )
                     notification_sent = True
@@ -1341,7 +1341,7 @@ class SystemController:
             
             try:
                 import logging
-                logging.warning(f"VATSAL ALERT - {title}: {message}")
+                logging.warning(f"BOI ALERT - {title}: {message}")
             except:
                 pass
 

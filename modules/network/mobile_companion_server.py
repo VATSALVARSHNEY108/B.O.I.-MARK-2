@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-VATSAL Mobile Companion - Integrated Server
+BOI Mobile Companion - Integrated Server
 Combines WebSocket Server, Mobile API, and Notification Service
 """
 
@@ -58,7 +58,7 @@ def handle_connect():
     
     socketio.emit('connection_response', {
         'status': 'connected',
-        'message': 'Successfully connected to VATSAL Mobile Companion',
+        'message': 'Successfully connected to BOI Mobile Companion',
         'server_time': datetime.now().isoformat(),
         'client_id': request.sid
     }, room=request.sid)
@@ -473,7 +473,7 @@ def initialize_mobile_api(command_executor):
 
 
 if __name__ == '__main__':
-    print('🚀 Starting VATSAL Mobile Companion Server...')
+    print('🚀 Starting BOI Mobile Companion Server...')
     print('=' * 60)
     print('📱 Mobile Interface: http://0.0.0.0:5000/mobile')
     print('💻 Desktop Dashboard: http://0.0.0.0:5000')

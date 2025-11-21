@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Mobile Companion API for VATSAL
+Mobile Companion API for BOI
 Provides REST API endpoints for mobile control
 """
 
@@ -360,13 +360,13 @@ class MobileAPI:
             return False
     
     def get_app_info(self):
-        """Get VATSAL app information"""
+        """Get BOI app information"""
         return {
             'success': True,
             'app': {
-                'name': 'VATSAL Mobile Companion',
+                'name': 'BOI Mobile Companion',
                 'version': '1.0.0',
-                'desktop_app': 'VATSAL AI Desktop Automation',
+                'desktop_app': 'BOI (Barely Obeys Instructions) Desktop Automation',
                 'features': [
                     'Remote command execution',
                     'Live screenshot viewing',
@@ -462,6 +462,6 @@ def create_mobile_app(command_executor=None):
 
 if __name__ == '__main__':
     app, api = create_mobile_app()
-    print('🚀 Starting VATSAL Mobile API...')
+    print('🚀 Starting BOI Mobile API...')
     print('📱 Mobile API available at http://0.0.0.0:5001')
     app.run(host='0.0.0.0', port=5001, debug=False)

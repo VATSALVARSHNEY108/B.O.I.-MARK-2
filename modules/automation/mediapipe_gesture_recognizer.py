@@ -49,7 +49,7 @@ class MediaPipeGestureRecognizer:
         self.recognizer = None
         self.available = False
         
-        # Gesture mapping: MediaPipe name → VATSAL gesture name
+        # Gesture mapping: MediaPipe name → BOI gesture name
         self.gesture_mapping = {
             "Closed_Fist": "FIST",
             "Open_Palm": "OPEN_PALM",
@@ -126,7 +126,7 @@ class MediaPipeGestureRecognizer:
                 gesture = result.gestures[0][0]
                 
                 if gesture.score >= self.min_confidence:
-                    # Map MediaPipe gesture to VATSAL gesture
+                    # Map MediaPipe gesture to BOI gesture
                     mediapipe_name = gesture.category_name
                     vatsal_name = self.gesture_mapping.get(mediapipe_name, mediapipe_name)
                     

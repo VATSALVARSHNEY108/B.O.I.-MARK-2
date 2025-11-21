@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Launch Enhanced Modern GUI for VATSAL AI
+Launch Enhanced Modern GUI for BOI AI
 Beautiful, modern interface with animations and better UX
 """
 
@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.join(modules_dir, 'core'))
 def main():
     """Launch the enhanced GUI"""
     try:
-        print("✨ Starting Enhanced VATSAL AI GUI...")
+        print("✨ Starting Enhanced BOI AI GUI...")
         print("=" * 60)
         print("🎨 Modern Design | 🚀 Fast Performance | 💎 Beautiful UX")
         print("=" * 60)

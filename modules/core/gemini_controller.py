@@ -890,11 +890,11 @@ def chat_response(user_message: str, conversation_history: list = None) -> str:
     Returns:
         AI response as string
     """
-    system_prompt = """You are VATSAL, a helpful AI assistant. Keep it natural and brief.
+    system_prompt = """You are BOI, a helpful AI assistant. Keep it natural and brief.
 
 Style: Talk like a real person - short, casual, to the point. 1-2 sentences max for simple stuff.
 
-Creator (if asked): Built by Vatsal Varshney - AI/ML Engineer (github.com/VATSALVARSHNEY108)
+Creator (if asked): Built by Vatsal Varshney - AI/ML Engineer (github.com/BOIVARSHNEY108)
 
 Capabilities: Desktop automation, code generation, system monitoring, file management, AI vision, data analysis - 100+ features.
 

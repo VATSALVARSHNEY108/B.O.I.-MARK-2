@@ -20,7 +20,7 @@ class TwoFactorAuthentication:
     Compatible with Google Authenticator, Authy, Microsoft Authenticator, etc.
     """
     
-    def __init__(self, app_name: str = "VATSAL AI Assistant"):
+    def __init__(self, app_name: str = "BOI (Barely Obeys Instructions) Assistant"):
         self.app_name = app_name
         self.data_dir = "2fa_data"
         self.users_file = os.path.join(self.data_dir, "2fa_users.json")

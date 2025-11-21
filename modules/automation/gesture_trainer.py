@@ -1,5 +1,5 @@
 """
-Hand Gesture Training System for VATSAL AI
+Hand Gesture Training System for BOI (Barely Obeys Instructions)
 Train the system to recognize custom hand gestures
 """
 

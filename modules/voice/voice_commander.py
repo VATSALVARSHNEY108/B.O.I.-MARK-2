@@ -1,6 +1,6 @@
 """
-Enhanced Voice Commander for VATSAL
-Provides voice input and speech output for all VATSAL commands with human-like personality
+Enhanced Voice Commander for BOI (Barely Obeys Instructions)
+Provides voice input and speech output for all BOI commands with human-like personality
 """
 
 import speech_recognition as sr
@@ -53,9 +53,9 @@ class VoiceCommander:
         self.is_speaking = False
         
         # Wake word detection - support multiple wake phrases
-        self.wake_words = ["vatsal", "hey vatsal", "ok vatsal", "watson", "hey watson", "ok watson", "VATSAL", "hey VATSAL", "ok VATSAL", "bhai", "computer", "hey computer", "bhiaya", "bhaisahb"]
+        self.wake_words = ["boi", "hey boi", "ok boi", "watson", "hey watson", "ok watson", "BOI", "hey BOI", "ok BOI", "bhai", "computer", "hey computer", "bhiaya", "bhaisahb"]
         self.wake_word_enabled = True  # Enabled by default
-        self.wake_word = "vatsal"  # Primary wake word for display
+        self.wake_word = "boi"  # Primary wake word for display
         
         # Human-like response variations
         self._init_response_variations()
@@ -821,7 +821,7 @@ if __name__ == "__main__":
         commander.speak(f"You said: {result['command']}")
     
     print("\n2. Testing text-to-speech:")
-    commander.speak("Hello, I am VATSAL, your AI desktop automation assistant")
+    commander.speak("Hello, I am BOI, your AI desktop automation assistant")
     
     time.sleep(3)
     

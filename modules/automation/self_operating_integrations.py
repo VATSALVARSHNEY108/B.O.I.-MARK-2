@@ -1,6 +1,6 @@
 """
 Self-Operating Computer Integrations
-Bridges self-operating computer with all VATSAL modules for seamless ecosystem integration
+Bridges self-operating computer with all BOI modules for seamless ecosystem integration
 """
 
 import os
@@ -33,7 +33,7 @@ except ImportError:
 
 class SelfOperatingIntegrationHub:
     """
-    Integration hub connecting self-operating computer with VATSAL ecosystem
+    Integration hub connecting self-operating computer with BOI ecosystem
     
     Features:
     - Unified task execution across modules

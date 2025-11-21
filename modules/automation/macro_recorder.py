@@ -1,7 +1,7 @@
 """
 🎬 Automation Recording & Macro System
 ======================================
-Record, replay, and manage desktop automation macros for VATSAL.
+Record, replay, and manage desktop automation macros for BOI.
 
 Features:
 - Record mouse clicks, movements, and keyboard actions
@@ -590,7 +590,7 @@ macro_templates = MacroTemplates()
 
 
 if __name__ == '__main__':
-    print("🎬 VATSAL Macro Recorder")
+    print("🎬 BOI Macro Recorder")
     print("=" * 50)
     print(f"pynput available: {PYNPUT_AVAILABLE}")
     print(f"PyAutoGUI available: {PYAUTOGUI_AVAILABLE}")

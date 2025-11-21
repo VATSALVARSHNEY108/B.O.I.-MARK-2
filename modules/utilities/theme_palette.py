@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Theme Palette for VATSAL AI Desktop Automation
+Theme Palette for BOI (Barely Obeys Instructions) Desktop Automation
 Provides modern, eye-comforting color schemes with cyber aesthetic
 """
 

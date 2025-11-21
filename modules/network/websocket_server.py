@@ -48,7 +48,7 @@ def handle_connect():
     
     emit('connection_response', {
         'status': 'connected',
-        'message': 'Successfully connected to VATSAL WebSocket Server',
+        'message': 'Successfully connected to BOI WebSocket Server',
         'server_time': datetime.now().isoformat(),
         'client_id': request.sid
     })
@@ -237,7 +237,7 @@ broadcaster = WebSocketBroadcaster()
 
 
 if __name__ == '__main__':
-    print('🚀 Starting VATSAL WebSocket Server...')
+    print('🚀 Starting BOI WebSocket Server...')
     print('📡 WebSocket enabled with real-time updates')
     print('🌐 Server will be available at http://0.0.0.0:5000')
     print('💡 Connect clients to see live updates!')

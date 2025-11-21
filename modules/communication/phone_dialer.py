@@ -1,5 +1,5 @@
 """
-Phone Call Dialer for VATSAL
+Phone Call Dialer for BOI
 Make voice calls using Twilio integration or Phone Link
 """
 
@@ -57,7 +57,7 @@ class PhoneDialer:
         
         # Default message if none provided
         if not message:
-            message = "This is an automated call from VATSAL AI Assistant. This is a test call. Thank you."
+            message = "This is an automated call from BOI (Barely Obeys Instructions) Assistant. This is a test call. Thank you."
         
         # Log the call attempt
         call_record = {

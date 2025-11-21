@@ -1,5 +1,5 @@
 """
-Emotional Intelligence Module for VATSAL AI
+Emotional Intelligence Module for BOI (Barely Obeys Instructions)
 Detects emotions, tracks mood, and provides empathetic responses
 """
 

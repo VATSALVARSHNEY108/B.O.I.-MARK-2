@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-VATSAL AI Desktop Automation Controller - CLI Launcher
+BOI AI Desktop Automation Controller - CLI Launcher
 ======================================================
 
-This is the main entry point for running VATSAL AI in command-line mode.
+This is the main entry point for running BOI AI in command-line mode.
 Perfect for cloud environments like Replit where GUI display is not available.
 
 For GUI desktop interfaces, run locally with:
@@ -23,6 +23,6 @@ sys.path.insert(0, str(project_root))
 from modules.core.main import main
 
 if __name__ == "__main__":
-    print("🚀 Launching VATSAL AI Desktop Automation Controller (CLI Mode)")
+    print("🚀 Launching BOI AI Desktop Automation Controller (CLI Mode)")
     print("=" * 70)
     main()

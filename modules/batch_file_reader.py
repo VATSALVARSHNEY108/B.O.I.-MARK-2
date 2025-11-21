@@ -1,5 +1,5 @@
 """
-Batch File Reader Module for VATSAL AI
+Batch File Reader Module for BOI (Barely Obeys Instructions)
 Reads time/date and reminders from desktop batch file outputs
 """
 

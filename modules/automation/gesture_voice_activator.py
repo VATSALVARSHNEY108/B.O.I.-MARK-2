@@ -1,6 +1,6 @@
 """
-VATSAL AI - Gesture-Activated Voice Listener
-Detects TWO V signs (both hands) to trigger VATSAL greeting
+BOI (Barely Obeys Instructions) - Gesture-Activated Voice Listener
+Detects TWO V signs (both hands) to trigger BOI greeting
 UPGRADED: Smart DroidCam prioritization + brightness-based detection
 """
 
@@ -163,8 +163,8 @@ class GestureVoiceActivator:
     def trigger_vatsal_greeting(self):
         """Display greeting when both hands are detected"""
         print("\n" + "=" * 70)
-        print("👋 VATSAL DETECTED! Both hands showing V sign!")
-        print("🎉 Hello VATSAL! Welcome!")
+        print("👋 BOI DETECTED! Both hands showing V sign!")
+        print("🎉 Hello BOI! Welcome!")
         print("=" * 70 + "\n")
         self.greeting_cooldown = 100
 
@@ -212,7 +212,7 @@ class GestureVoiceActivator:
     def run(self):
         """Main loop for hand and voice gesture detection"""
         print("=" * 70)
-        print("🎯 VATSAL AI - Gesture-Activated Voice Listener (SMART CAMERA PRIORITY)")
+        print("🎯 BOI (Barely Obeys Instructions) - Gesture-Activated Voice Listener (SMART CAMERA PRIORITY)")
         print("=" * 70)
 
         self.hands = self.mp_hands.Hands(
@@ -233,11 +233,11 @@ class GestureVoiceActivator:
             print("❌ Camera initialization failed!")
             return
 
-        print("🎯 Show TWO V signs for VATSAL greeting")
+        print("🎯 Show TWO V signs for BOI greeting")
         print("🎯 Show ONE V sign to start voice listening\n")
 
         # Create window and set it to a specific size and position
-        window_name = 'VATSAL - Gesture Listener'
+        window_name = 'BOI - Gesture Listener'
         cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
         cv2.resizeWindow(window_name, 320, 240)  # Small size: 320x240
         cv2.moveWindow(window_name, 0, 0)  # Top-left corner position
@@ -267,7 +267,7 @@ class GestureVoiceActivator:
                             v_sign_count += 1
 
                 if v_sign_count == 2:
-                    cv2.putText(frame, "VATSAL DETECTED!", (50, 100),
+                    cv2.putText(frame, "BOI DETECTED!", (50, 100),
                                 cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 3)
                     if self.greeting_cooldown == 0:
                         self.trigger_vatsal_greeting()
