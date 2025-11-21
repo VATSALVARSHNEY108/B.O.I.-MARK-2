@@ -1,0 +1,91 @@
+✅ Gemini AI is ready!
+
+🤖 VATSAL: Morning, Boss. Your AI assistant is online and ready to serve.
+
+Type a command or click a button to get started.
+
+============================================================
+📝 You: take a screen shot
+============================================================
+
+🤖 VATSAL: Understood. Running 'take a screen shot' for you.
+
+🤖 VATSAL:
+Right away, Boss. Screenshot saved as "screenshot.png".
+
+Perhaps you'd like me to automatically upload that to your cloud storage, or perhaps annotate it with some notes? Just say the word, and I'll handle it. At your service.
+
+📊 Technical Details:
+Done. Screenshot saved as screenshot
+
+============================================================
+📝 You: open calculator
+============================================================
+
+🤖 VATSAL: Copy that. Executing 'open calculator'.
+
+🤖 VATSAL:
+Calculator is open, Boss.
+
+Is there anything I can calculate for you today? Perhaps converting units, solving an equation, or calculating a tip? Just let me know what you need.
+
+📊 Technical Details:
+Done. Opened calculator
+
+============================================================
+📝 You: open vsccode
+============================================================
+
+🤖 VATSAL: At your service. 'open vsccode' in progress.
+
+🤖 VATSAL:
+VS Code is open, Vatsal Sir.
+
+Perhaps you'd like me to open a specific project, run a particular script, or install some extensions for you? I can also monitor CPU/Memory usage while you are coding if that would be helpful. Just say the word, and I'll handle it. At your service.
+
+📊 Technical Details:
+Done. Opened vscode
+
+💡 Tip: I can help organize your workspace. Shall I check for system updates or clean up temporary files?
+
+============================================================
+📝 You: write a code of selection sort in cpp in notepad
+============================================================
+
+🤖 VATSAL: Right away. Processing 'write a code of selection sort in cpp in notepad'.
+
+🤖 VATSAL:
+Certainly, Vatsal Sir. The C++ code for Selection Sort has been written to Notepad and set to fullscreen as requested.
+
+Selection Sort, as you know, is quite efficient for smaller datasets due to its minimal memory usage. However, for larger datasets, algorithms like Merge Sort or Quick Sort might offer better performance.
+
+Would you like me to:
+
+*   Save the file with a particular name?
+*   Compile and run the code?
+*   Analyze the code's time complexity?
+*   Perhaps compare its performance against other sorting algorithms using some test data?
+
+Just let me know what you'd like to do next. At your service.
+
+📊 Technical Details:
+Done. ✅ Generated and wrote cpp code to Notepad in fullscreen!
+
+============================================================
+📝 You: Create file test.txt with content Hello
+============================================================
+
+🤖 VATSAL: At your service. 'Create file test.txt with content Hello' in progress.
+
+🤖 VATSAL: My apologies, Vatsal Sir. It seems I've encountered a slight hiccup. The "create\_file" action wasn't properly executed. I'll have my engineers (read: Vatsal Varshney) look into that particular function.
+
+In the meantime, might I suggest an alternative?
+
+I can certainly:
+
+*   Open Notepad and write "Hello" into it, then allow you to save it as "test.txt".
+*   Create the file using a Python script (which I can write for you right away) and then add "Hello" to it.
+*   Use the command line to create the file.
+
+Which of these options would you prefer, Boss? Or, if you have another idea, I'm all ears. At your service.
+
