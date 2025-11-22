@@ -240,9 +240,9 @@ DESKTOP AUTOMATION:
 - play_youtube_video: Search YouTube and auto-play first video (parameters: query)
 - play_first_result: Play the first video from current YouTube search page (parameters: none)
 - search_and_play: Search YouTube and play first result (parameters: query) - Alternative to play_youtube_video
-- create_file: Create a file with content (parameters: file_path [use full path or shortcuts like "Desktop/file.txt", "Downloads/file.txt"], content [file contents, can be empty string ""])
-- write_file: Write or append content to file (parameters: file_path, content, mode [optional: 'w' for write (default), 'a' for append])
-- read_file: Read file contents (parameters: file_path)
+- create_file: Create a file with content (parameters: file_path [CRITICAL: ALWAYS use forward slashes /, NEVER backslashes \\ - use shortcuts like "Desktop/file.txt", "Downloads/file.txt", or "Documents/notes.txt". Examples: "Desktop/meeting_notes.txt", "Downloads/file.txt"], content [file contents, can be empty string ""])
+- write_file: Write or append content to file (parameters: file_path [ALWAYS use forward slashes /], content, mode [optional: 'w' for write (default), 'a' for append])
+- read_file: Read file contents (parameters: file_path [ALWAYS use forward slashes /])
 - wait: Wait for seconds (parameters: seconds)
 
 QUICK INFORMATION (INSTANT RESPONSES - NO WEB SEARCH):
@@ -810,10 +810,17 @@ IMPORTANT:
 - **IMPORTANT**: For "create quick note", "take a note", "note this", "quick note about", use quick_note action (NOT create_file)
 - If user says "create quick note about meeting", use quick_note with content="meeting" or more detailed content based on context
 - If user says "create file on Desktop called notes.txt", use create_file with file_path="Desktop/notes.txt"
+- If user says "create file on Desktop" without specifying a filename, use create_file with file_path="Desktop/new_file.txt"
 - Use quick_note for informal, quick notes that don't need a specific filename (auto-managed)
 - Use create_file when user specifies a specific filename or location
 - Examples for quick_note: "create quick note about meeting", "take a note to buy milk", "note this idea"
-- Examples for create_file: "create file called todo.txt on Desktop", "make a file named notes.txt in Documents"
+- Examples for create_file: "create file called todo.txt on Desktop" → file_path="Desktop/todo.txt", "make a file named notes.txt in Documents" → file_path="Documents/notes.txt"
+
+**CRITICAL FILE PATH RULES:**
+- ALWAYS use forward slashes (/) in file paths, NEVER backslashes (\\)
+- Good examples: "Desktop/file.txt", "Documents/notes.txt", "Downloads/data.csv"
+- BAD examples: "Desktop\\file.txt", "C:\\Users\\Desktop\\file.txt" (NEVER use these!)
+- Even on Windows, use forward slashes: "Desktop/file.txt" will work correctly
 
 For multi-step tasks, return steps as a list. Each step should have action and parameters.
 
