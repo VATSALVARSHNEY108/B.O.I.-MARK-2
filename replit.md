@@ -8,6 +8,7 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 -   **Chat Monitoring:** User prefers visual/screen-based chat monitoring where AI controls the real Gmail/WhatsApp interface on screen, rather than background API calls. This allows them to watch the AI work in real-time.
 -   **File Structure:** Well-organized modular architecture with modules/ directory containing core, voice, automation, ai_features, utilities, etc.
 -   **Desktop Path:** User's Desktop is located at `C:/Users/VATSAL VARSHNEY/OneDrive/Desktop` (configured in config/desktop_structure.json). System uses forward slashes for cross-platform compatibility and to avoid Windows path escape character issues.
+-   **Direct Access:** User prefers having direct batch file access to individual features for instant control without going through menus or the main application.
 
 ## System Architecture
 The AI Desktop Automation Controller is built with Python 3.11 and utilizes a modular architecture.
@@ -23,7 +24,8 @@ The system offers desktop GUIs built with `tkinter` featuring a light cream back
 -   **Smart Automation & AI:** 9 AI-powered features.
 -   **Visual Chat Monitor:** AI-powered visual email/WhatsApp monitoring via real browser interface control.
 -   **System Control:** Manages system-level automation (lock, shutdown, restart, brightness, volume, disk cleanup, system info, clipboard, power, window management, process management).
--   **Windows 11 Settings Controller:** Comprehensive control over all Windows 11 settings with 100+ functions covering Display, Sound, Network, Bluetooth, Privacy & Security, Personalization, System, Accessibility, Windows Update, Apps & Startup, Time & Language, Gaming, Power Plans, and Advanced System Settings. Integrates PowerShell and Registry.
+-   **Windows 11 Settings Controller:** Comprehensive control over all Windows 11 settings with 100+ functions covering Display, Sound, Network, Bluetooth, Privacy & Security, Personalization, System, Accessibility, Windows Update, Apps & Startup, Time & Language, Gaming, Power Plans, and Advanced System Settings. Integrates PowerShell and Registry. Bluetooth control uses Windows Runtime Radio API for reliable operation.
+-   **Quick Access Batch Files:** 44 individual batch files in `batch_scripts/quick_access/` for direct feature access including Bluetooth (on/off/status), WiFi (on/off/status), Volume controls (up/down/mute/presets), Brightness controls (up/down/presets), Power options (shutdown/restart/sleep/hibernate/lock with confirmations), System monitoring (CPU/RAM/disk/battery/network), and Quick app launchers. Includes master menu (QUICK_ACCESS_MENU.bat) and comprehensive README documentation.
 -   **Voice Assistant with Personality:** Interactive voice commanding system with empathetic responses, wake word detection, context awareness, and adaptive feedback via a PersonaResponseService.
 -   **Face & Gesture Assistant:** Computer vision (OpenCV, MediaPipe) for face and hand gesture recognition to activate voice listening.
 -   **Self-Operating Computer:** Autonomous AI desktop control using Gemini Vision for screen analysis and actions.

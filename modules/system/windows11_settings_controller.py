@@ -1322,20 +1322,35 @@ class Windows11SettingsController:
         """Execute PowerShell command and return output"""
         try:
             result = subprocess.run(
-                ["powershell", "-Command", command],
+                ["powershell", "-ExecutionPolicy", "Bypass", "-Command", command],
                 capture_output=True,
                 text=True,
                 timeout=30
             )
             
-            if result.returncode != 0 and result.stderr:
-                raise Exception(result.stderr)
+            # Return both stdout and stderr for better debugging
+            output = result.stdout.strip()
+            errors = result.stderr.strip()
             
-            return result.stdout.strip()
+            # If there's output, return it (even if there were errors)
+            if output:
+                return output
+            
+            # If no output but errors, raise exception with error details
+            if errors:
+                raise Exception(errors)
+            
+            # If neither output nor errors and non-zero return code
+            if result.returncode != 0:
+                raise Exception(f"PowerShell command failed with return code {result.returncode}")
+            
+            return ""
         except subprocess.TimeoutExpired:
-            raise Exception("PowerShell command timed out")
+            raise Exception("PowerShell command timed out after 30 seconds")
         except Exception as e:
-            raise Exception(f"PowerShell execution failed: {str(e)}")
+            if "PowerShell" not in str(e):
+                raise Exception(f"PowerShell execution failed: {str(e)}")
+            raise
     
     def _read_registry(self, path: str, key: str) -> Any:
         """Read Windows Registry value"""
