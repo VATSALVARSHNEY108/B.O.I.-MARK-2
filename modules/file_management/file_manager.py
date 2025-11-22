@@ -18,6 +18,10 @@ class FileManager:
     def __init__(self):
         self.backup_config_file = "backup_config.json"
         self.load_backup_config()
+        
+        # Get path to the file operations batch script
+        script_dir = Path(__file__).parent.parent.parent
+        self.batch_script = script_dir / "batch_scripts" / "file_operations.bat"
     
     def load_backup_config(self):
         """Load backup configuration"""
@@ -260,6 +264,57 @@ class FileManager:
         except Exception as e:
             return f"❌ Failed to list backups: {str(e)}"
     
+    def _call_batch_script(self, operation, file_path, content=""):
+        """
+        Call the centralized file operations batch script
+        
+        Args:
+            operation: Operation to perform (create, delete, edit, append, read)
+            file_path: Full path to the file (accepts forward slashes)
+            content: Content for create/edit/append operations
+        
+        Returns:
+            Tuple of (success: bool, message: str)
+        """
+        try:
+            # Check if batch script exists
+            if not self.batch_script.exists():
+                return False, f"Batch script not found: {self.batch_script}"
+            
+            # Convert forward slashes to backslashes for Windows batch
+            windows_path = file_path.replace('/', '\\')
+            
+            # Build command
+            if content:
+                # Escape special characters in content for batch
+                safe_content = content.replace('"', '""')
+                cmd = [str(self.batch_script), operation, windows_path, safe_content]
+            else:
+                cmd = [str(self.batch_script), operation, windows_path]
+            
+            # Execute batch script
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                shell=True,
+                cwd=str(self.batch_script.parent)
+            )
+            
+            # Parse output
+            output = result.stdout.strip()
+            success = "SUCCESS:" in output
+            
+            if success:
+                message = output.split("SUCCESS:")[1].strip()
+                return True, f"✅ {message}"
+            else:
+                error = output.split("ERROR:")[1].strip() if "ERROR:" in output else output
+                return False, f"❌ {error}"
+                
+        except Exception as e:
+            return False, f"❌ Failed to execute batch script: {str(e)}"
+    
     def _create_file_via_batch(self, file_path, content=""):
         """
         Create file using Windows batch file for better reliability
@@ -323,19 +378,22 @@ class FileManager:
     def create_file(self, file_path, content=""):
         """
         Create a new file with optional content
-        Uses batch file method on Windows for better reliability
+        Uses centralized batch script on Windows for better reliability
         
         Args:
-            file_path: Path to the file to create
+            file_path: Path to the file to create (accepts forward slashes)
             content: Content to write to the file (default: empty)
         
         Returns:
             Success message or error message
         """
         try:
-            # Try batch method on Windows first
-            if os.name == 'nt':
-                return self._create_file_via_batch(file_path, content)
+            # Try centralized batch script on Windows first
+            if os.name == 'nt' and self.batch_script.exists():
+                success, message = self._call_batch_script('create', file_path, content)
+                if success:
+                    return message
+                # If batch fails, fall through to Python method
             
             # Fallback to Python method on non-Windows or if batch fails
             file_path = Path(file_path)
@@ -349,6 +407,35 @@ class FileManager:
             return f"✅ File created: {file_path} ({size} bytes)"
         except Exception as e:
             return f"❌ Failed to create file: {str(e)}"
+    
+    def delete_file(self, file_path):
+        """
+        Delete a file
+        Uses centralized batch script on Windows for better reliability
+        
+        Args:
+            file_path: Path to the file to delete (accepts forward slashes)
+        
+        Returns:
+            Success message or error message
+        """
+        try:
+            # Try centralized batch script on Windows first
+            if os.name == 'nt' and self.batch_script.exists():
+                success, message = self._call_batch_script('delete', file_path)
+                if success:
+                    return message
+            
+            # Fallback to Python method
+            file_path = Path(file_path)
+            
+            if not file_path.exists():
+                return f"❌ File does not exist: {file_path}"
+            
+            file_path.unlink()
+            return f"✅ File deleted: {file_path}"
+        except Exception as e:
+            return f"❌ Failed to delete file: {str(e)}"
     
     def _write_file_via_batch(self, file_path, content, mode="w"):
         """
@@ -415,10 +502,10 @@ class FileManager:
     def write_to_file(self, file_path, content, mode="w"):
         """
         Write content to a file
-        Uses batch file method on Windows for better reliability
+        Uses centralized batch script on Windows for better reliability
         
         Args:
-            file_path: Path to the file
+            file_path: Path to the file (accepts forward slashes)
             content: Content to write
             mode: Write mode ('w' = overwrite, 'a' = append)
         
@@ -426,9 +513,12 @@ class FileManager:
             Success message or error message
         """
         try:
-            # Try batch method on Windows first
-            if os.name == 'nt':
-                return self._write_file_via_batch(file_path, content, mode)
+            # Try centralized batch script on Windows first
+            if os.name == 'nt' and self.batch_script.exists():
+                operation = 'append' if mode == 'a' else 'edit'
+                success, message = self._call_batch_script(operation, file_path, content)
+                if success:
+                    return message
             
             # Fallback to Python method
             file_path = Path(file_path)

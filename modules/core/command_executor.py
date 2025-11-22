@@ -1259,6 +1259,28 @@ class CommandExecutor:
                         "content": content
                     }
             
+            elif action == "delete_file":
+                file_path = parameters.get("file_path", "")
+                
+                if not file_path:
+                    return {
+                        "success": False,
+                        "message": "File path is required"
+                    }
+                
+                # Expand common path shortcuts
+                file_path = self._expand_path_shortcuts(file_path)
+                
+                print(f"  🗑️ Deleting file: {file_path}")
+                result = self.file_manager.delete_file(file_path)
+                
+                print(f"  {result}")
+                
+                return {
+                    "success": "✅" in result,
+                    "message": result
+                }
+            
             # ==================== QUICK NOTES ====================
             elif action == "quick_note":
                 content = parameters.get("content", "")

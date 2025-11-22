@@ -243,6 +243,7 @@ DESKTOP AUTOMATION:
 - create_file: Create a file with content (parameters: file_path [CRITICAL: ALWAYS use forward slashes /, NEVER backslashes \\ - use shortcuts like "Desktop/file.txt", "Downloads/file.txt", or "Documents/notes.txt". Examples: "Desktop/meeting_notes.txt", "Downloads/file.txt"], content [file contents, can be empty string ""])
 - write_file: Write or append content to file (parameters: file_path [ALWAYS use forward slashes /], content, mode [optional: 'w' for write (default), 'a' for append])
 - read_file: Read file contents (parameters: file_path [ALWAYS use forward slashes /])
+- delete_file: Delete a file (parameters: file_path [ALWAYS use forward slashes /])
 - wait: Wait for seconds (parameters: seconds)
 
 QUICK INFORMATION (INSTANT RESPONSES - NO WEB SEARCH):
