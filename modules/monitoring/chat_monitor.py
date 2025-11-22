@@ -454,7 +454,7 @@ Generate a concise, appropriate reply."""
             from messaging_service import MessagingService
             from contact_manager import ContactManager
             
-            contact_mgr = ContactManager()
+            contact_mgr = ContactManager("data/contacts.json")
             msg_service = MessagingService(contact_mgr)
             
             result = msg_service.send_sms(

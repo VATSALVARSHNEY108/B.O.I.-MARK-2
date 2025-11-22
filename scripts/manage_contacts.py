@@ -13,7 +13,7 @@ class ContactCLI:
     """Command-line interface for contact management"""
     
     def __init__(self):
-        self.contact_manager = ContactManager()
+        self.contact_manager = ContactManager("data/contacts.json")
         self.phone_dialer = create_phone_dialer()
     
     def show_menu(self):

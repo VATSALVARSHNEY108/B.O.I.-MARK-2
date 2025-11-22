@@ -306,7 +306,7 @@ class ModernBOIGUI:
             # Phone Link & Contact Management
             try:
                 self.phone_dialer = create_phone_dialer()
-                self.contact_manager = ContactManager()
+                self.contact_manager = ContactManager("data/contacts.json")
                 self.ai_phone_controller = AIPhoneLinkController()
                 print("✅ Phone Link Controller initialized")
             except Exception as e:

@@ -91,7 +91,7 @@ class CommandExecutor:
         self.media_control = MediaControlHelper()
         
         # Communication
-        self.contact_manager = ContactManager()
+        self.contact_manager = ContactManager("data/contacts.json")
         self.messaging = MessagingService(self.contact_manager)
         self.phone_dialer = create_phone_dialer()
         self.phone_link_monitor = create_phone_link_monitor()
