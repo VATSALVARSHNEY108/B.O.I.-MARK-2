@@ -1226,6 +1226,79 @@ class CommandExecutor:
                         "message": f"File read: {len(content)} characters",
                         "content": content
                     }
+            
+            # ==================== QUICK NOTES ====================
+            elif action == "quick_note":
+                content = parameters.get("content", "")
+                category = parameters.get("category", "general")
+                tags = parameters.get("tags", [])
+                
+                if not content:
+                    return {
+                        "success": False,
+                        "message": "Note content is required"
+                    }
+                
+                print(f"  📝 Creating quick note...")
+                result = self.notes.add_note(content, category, tags)
+                print(result)
+                
+                return {
+                    "success": True,
+                    "message": "Quick note created successfully",
+                    "details": result
+                }
+            
+            elif action == "list_notes":
+                category = parameters.get("category", None)
+                limit = parameters.get("limit", 20)
+                
+                print(f"  📋 Listing notes...")
+                result = self.notes.list_notes(category, limit)
+                print(result)
+                
+                return {
+                    "success": True,
+                    "message": "Notes listed",
+                    "details": result
+                }
+            
+            elif action == "search_notes":
+                query = parameters.get("query", "")
+                
+                if not query:
+                    return {
+                        "success": False,
+                        "message": "Search query is required"
+                    }
+                
+                print(f"  🔍 Searching notes for: {query}")
+                result = self.notes.search_notes(query)
+                print(result)
+                
+                return {
+                    "success": True,
+                    "message": f"Search results for '{query}'",
+                    "details": result
+                }
+            
+            elif action == "get_note":
+                note_id = parameters.get("note_id", 0)
+                
+                if not note_id:
+                    return {
+                        "success": False,
+                        "message": "Note ID is required"
+                    }
+                
+                print(f"  📄 Getting note #{note_id}...")
+                result = self.notes.get_note(note_id)
+                print(result)
+                
+                return {
+                    "success": "⚠️" not in result,
+                    "message": result
+                }
 
             # ==================== WORKFLOWS ====================
             elif action == "save_workflow":

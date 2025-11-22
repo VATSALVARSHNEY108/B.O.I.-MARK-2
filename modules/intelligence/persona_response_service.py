@@ -5,20 +5,20 @@ Transforms cold technical responses into warm, engaging, conversational interact
 
 import random
 from datetime import datetime
-from modules.core.vatsal_assistant import VatsalAssistant
+from modules.core.vatsal_assistant import BOIAssistant
 
 
 class PersonaResponseService:
     """Service that adds personality and empathy to all AI responses"""
-    
+
     def __init__(self):
-        self.vatsal = VatsalAssistant()
+        self.vatsal = BOIAssistant()
         self.user_mood = "neutral"
         self.consecutive_errors = 0
         self.last_interaction_time = None
         self.interaction_count = 0
         self.brief_mode = True
-        
+
         # Emotional intelligence phrases
         self.empathy_phrases = {
             'success': [
@@ -57,7 +57,7 @@ class PersonaResponseService:
                 "This is frustrating for both of us, I know. ",
             ]
         }
-        
+
         # Encouraging follow-ups
         self.encouragements = [
             "You're doing great!",
@@ -69,7 +69,7 @@ class PersonaResponseService:
             "We make a good team!",
             "Let's keep the momentum going!",
         ]
-        
+
         # Humor and personality
         self.humor_phrases = [
             "Time to work some magic! ✨",
@@ -81,7 +81,7 @@ class PersonaResponseService:
             "Easy peasy! 🎯",
             "Watch this! 👀",
         ]
-        
+
         # Proactive suggestions based on context
         self.context_suggestions = {
             'morning': [
@@ -115,7 +115,7 @@ class PersonaResponseService:
                 "Need help troubleshooting?",
             ]
         }
-        
+
         # Contextual mood responses
         self.mood_responses = {
             'happy': {
@@ -139,7 +139,7 @@ class PersonaResponseService:
                 'farewell': ""
             }
         }
-        
+
         # Small talk and ice breakers
         self.small_talk = {
             'morning': [
@@ -163,17 +163,17 @@ class PersonaResponseService:
                 "Night owl mode activated!",
             ]
         }
-    
+
     def humanize_response(self, action: str, result: dict, context: dict = None) -> str:
         """Transform technical response into humanized, empathetic message"""
         context = context or {}
         success = result.get("success", False)
         message = result.get("message", "")
-        
+
         # Track interaction patterns
         self.interaction_count += 1
         self.last_interaction_time = datetime.now()
-        
+
         if self.brief_mode:
             base_text = message.strip() or "No additional details provided."
             if success:
@@ -182,10 +182,10 @@ class PersonaResponseService:
             else:
                 self.consecutive_errors += 1
                 return f"Sorry, that didn't work. {base_text}" if base_text else "Sorry, that didn't work."
-        
+
         # Build humanized response
         response_parts = []
-        
+
         # Add empathetic prefix
         if success:
             if self.consecutive_errors > 0:
@@ -201,27 +201,27 @@ class PersonaResponseService:
                 response_parts.append(random.choice(self.empathy_phrases['repeated_error']))
             else:
                 response_parts.append(random.choice(self.empathy_phrases['error']))
-        
+
         # Add main message with personality
         enhanced_message = self._enhance_message(message, action, success)
         response_parts.append(enhanced_message)
-        
+
         # Add contextual follow-up
         follow_up = self._get_contextual_follow_up(action, success, context)
         if follow_up:
             response_parts.append(f"\n\n{follow_up}")
-        
+
         # Add encouragement periodically
         if self.interaction_count % 5 == 0 and success:
             response_parts.append(f" {random.choice(self.encouragements)}")
-        
+
         return "".join(response_parts)
-    
+
     def _enhance_message(self, message: str, action: str, success: bool) -> str:
         """Add personality to the core message"""
         if not message:
             return "Task processed."
-        
+
         # Make messages more conversational
         enhancements = {
             'Opened': 'I opened',
@@ -239,19 +239,19 @@ class PersonaResponseService:
             'Task completed': 'All done! Task completed',
             'Workflow completed': 'All steps finished! Workflow completed',
         }
-        
+
         enhanced = message
         for old, new in enhancements.items():
             if message.startswith(old):
                 enhanced = message.replace(old, new, 1)
                 break
-        
+
         return enhanced
-    
+
     def _get_contextual_follow_up(self, action: str, success: bool, context: dict) -> str:
         """Generate contextual follow-up suggestions"""
         hour = datetime.now().hour
-        
+
         # Time-based suggestions
         if 5 <= hour < 12:
             time_period = 'morning'
@@ -261,7 +261,7 @@ class PersonaResponseService:
             time_period = 'evening'
         else:
             time_period = 'night'
-        
+
         # Context-based suggestions
         if success and action in ['open_app', 'search_web']:
             return random.choice(self.context_suggestions['after_success'])
@@ -269,13 +269,13 @@ class PersonaResponseService:
             return random.choice(self.context_suggestions['after_error'])
         elif self.interaction_count == 1:
             return random.choice(self.context_suggestions.get(time_period, []))
-        
+
         return ""
-    
+
     def get_greeting(self, include_small_talk: bool = True) -> str:
         """Generate warm, personalized greeting"""
         greeting = self.vatsal.get_greeting()
-        
+
         if include_small_talk:
             hour = datetime.now().hour
             if 5 <= hour < 12:
@@ -286,12 +286,12 @@ class PersonaResponseService:
                 period = 'evening'
             else:
                 period = 'night'
-            
+
             small_talk_phrase = random.choice(self.small_talk.get(period, []))
             greeting += f" {small_talk_phrase}"
-        
+
         return greeting
-    
+
     def acknowledge_listening(self) -> str:
         """Warm acknowledgment when starting to listen"""
         phrases = [
@@ -305,7 +305,7 @@ class PersonaResponseService:
             "Speak away! 🎤",
         ]
         return random.choice(phrases)
-    
+
     def acknowledge_wake_word(self) -> str:
         """Friendly wake word acknowledgment"""
         phrases = [
@@ -321,7 +321,7 @@ class PersonaResponseService:
             "At your command! ⚡",
         ]
         return random.choice(phrases)
-    
+
     def handle_misunderstanding(self) -> str:
         """Empathetic response when not understanding"""
         phrases = [
@@ -335,7 +335,7 @@ class PersonaResponseService:
             "Pardon? Didn't quite catch that. 👂",
         ]
         return random.choice(phrases)
-    
+
     def handle_processing(self) -> str:
         """Engaging processing messages"""
         phrases = [
@@ -349,41 +349,41 @@ class PersonaResponseService:
             "Getting that done... 🎯",
         ]
         return random.choice(phrases)
-    
+
     def detect_user_mood(self, command_text: str) -> str:
         """Detect user mood from command patterns"""
         command_lower = command_text.lower()
-        
+
         # Frustration indicators
         frustration_words = ['again', 'still', 'why', 'fix', 'broken', 'not working', 'error']
         if any(word in command_lower for word in frustration_words):
             self.user_mood = 'frustrated'
             return 'frustrated'
-        
+
         # Positive indicators
         positive_words = ['thanks', 'thank', 'great', 'awesome', 'perfect', 'love']
         if any(word in command_lower for word in positive_words):
             self.user_mood = 'happy'
             return 'happy'
-        
+
         # Busy indicators
         busy_words = ['quick', 'fast', 'hurry', 'urgent', 'asap', 'now']
         if any(word in command_lower for word in busy_words):
             self.user_mood = 'busy'
             return 'busy'
-        
+
         self.user_mood = 'neutral'
         return 'neutral'
-    
+
     def get_mood_appropriate_response(self, base_response: str) -> str:
         """Adjust response based on detected user mood"""
         mood_greeting = self.mood_responses.get(self.user_mood, {}).get('greeting', '')
-        
+
         if mood_greeting:
             return f"{mood_greeting}{base_response}"
-        
+
         return base_response
-    
+
     def celebrate_milestone(self, count: int, action_type: str) -> str:
         """Celebrate usage milestones"""
         milestones = {
@@ -393,9 +393,9 @@ class PersonaResponseService:
             100: "🏆 100 commands! You're a power user!",
             250: "💎 250 commands! Legendary status!",
         }
-        
+
         return milestones.get(count, "")
-    
+
     def provide_helpful_tip(self) -> str:
         """Provide random helpful tips"""
         tips = [
@@ -409,7 +409,7 @@ class PersonaResponseService:
             "💡 Tip: Try 'create reminder' to never forget important tasks!",
         ]
         return random.choice(tips)
-    
+
     def get_farewell(self) -> str:
         """Warm farewell message"""
         farewells = [
@@ -422,14 +422,14 @@ class PersonaResponseService:
             "Bye! It's been a pleasure assisting you! 🎯",
             "Talk soon! I'm here whenever you need! 💙",
         ]
-        
+
         farewell = random.choice(farewells)
-        
+
         # Add mood-appropriate farewell
         mood_farewell = self.mood_responses.get(self.user_mood, {}).get('farewell', '')
         if mood_farewell:
             farewell = f"{mood_farewell}{farewell}"
-        
+
         return farewell
 
 

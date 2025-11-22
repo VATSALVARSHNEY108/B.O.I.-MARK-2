@@ -285,6 +285,12 @@ FILE MANAGEMENT:
 - find_large_files: Find large files (parameters: directory [optional], min_size_mb [optional])
 - directory_size: Get folder size (parameters: directory)
 
+QUICK NOTES:
+- quick_note: Create a quick note with automatic file naming (parameters: content, category [optional, default: general], tags [optional, list])
+- list_notes: List all quick notes (parameters: category [optional], limit [optional, default: 20])
+- search_notes: Search through notes (parameters: query)
+- get_note: Get a specific note by ID (parameters: note_id)
+
 WORKFLOW TEMPLATES:
 - save_workflow: Save workflow template (parameters: name, steps, description)
 - load_workflow: Run saved workflow (parameters: name)
@@ -801,6 +807,13 @@ IMPORTANT:
 - Examples for web tools: "generate QR code" → parse_web_tool_command with query="generate QR code"
 - Examples for web tools: "convert image to PNG" → parse_web_tool_command with query="convert image to PNG"
 - Examples for web tools: "open text tools" → open_web_tool with category="Text Tools"
+- **IMPORTANT**: For "create quick note", "take a note", "note this", "quick note about", use quick_note action (NOT create_file)
+- If user says "create quick note about meeting", use quick_note with content="meeting" or more detailed content based on context
+- If user says "create file on Desktop called notes.txt", use create_file with file_path="Desktop/notes.txt"
+- Use quick_note for informal, quick notes that don't need a specific filename (auto-managed)
+- Use create_file when user specifies a specific filename or location
+- Examples for quick_note: "create quick note about meeting", "take a note to buy milk", "note this idea"
+- Examples for create_file: "create file called todo.txt on Desktop", "make a file named notes.txt in Documents"
 
 For multi-step tasks, return steps as a list. Each step should have action and parameters.
 
