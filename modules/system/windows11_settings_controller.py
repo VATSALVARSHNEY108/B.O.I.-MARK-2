@@ -529,20 +529,63 @@ class Windows11SettingsController:
     # ==================== BLUETOOTH SETTINGS ====================
     
     def set_bluetooth_state(self, enabled: bool) -> Dict[str, str]:
-        """Enable/disable Bluetooth"""
+        """Enable/disable Bluetooth using Windows Runtime Radio API"""
         try:
-            action = "Enable" if enabled else "Disable"
+            state = "On" if enabled else "Off"
             cmd = f"""
-            $bluetooth = Get-PnpDevice | Where-Object {{$_.Class -eq "Bluetooth" -and $_.FriendlyName -like "*Bluetooth*"}}
-            if ($bluetooth) {{
-                {action}-PnpDevice -InstanceId $bluetooth.InstanceId -Confirm:$false
+            try {{
+                # Start Bluetooth service first
+                Get-Service bthserv | Start-Service -ErrorAction Stop
+                Start-Sleep -Seconds 1
+                
+                # Use Windows Runtime API for reliable control
+                Add-Type -AssemblyName System.Runtime.WindowsRuntime
+                
+                # Load required Windows Runtime types
+                [Windows.Devices.Radios.Radio,Windows.Devices.Radios,ContentType=WindowsRuntime] | Out-Null
+                [Windows.Devices.Radios.RadioAccessStatus,Windows.Devices.Radios,ContentType=WindowsRuntime] | Out-Null
+                
+                # Get all radios asynchronously
+                $radiosAsync = [Windows.Devices.Radios.Radio]::GetRadiosAsync()
+                $radiosTask = [System.WindowsRuntimeSystemExtensions]::AsTask($radiosAsync)
+                $radios = $radiosTask.GetAwaiter().GetResult()
+                
+                # Find Bluetooth radio
+                $bluetooth = $radios | Where-Object {{ $_.Kind -eq 'Bluetooth' }} | Select-Object -First 1
+                
+                if ($bluetooth) {{
+                    # Set Bluetooth state asynchronously
+                    $setStateAsync = $bluetooth.SetStateAsync('{state}')
+                    $setStateTask = [System.WindowsRuntimeSystemExtensions]::AsTask($setStateAsync)
+                    $accessStatus = $setStateTask.GetAwaiter().GetResult()
+                    
+                    # Check the access status
+                    if ($accessStatus -eq [Windows.Devices.Radios.RadioAccessStatus]::Allowed) {{
+                        Write-Output "SUCCESS"
+                    }} else {{
+                        Write-Output "ERROR: Access denied - Status: $accessStatus"
+                    }}
+                }} else {{
+                    Write-Output "ERROR: No Bluetooth radio found"
+                }}
+            }} catch {{
+                Write-Output "ERROR: $($_.Exception.Message)"
             }}
             """
-            self._run_powershell(cmd)
-            status = "enabled" if enabled else "disabled"
-            return {"success": True, "message": f"Bluetooth {status}"}
+            result = self._run_powershell(cmd)
+            
+            if "SUCCESS" in result:
+                status = "enabled" if enabled else "disabled"
+                return {"success": True, "message": f"Bluetooth {status} successfully"}
+            elif "No Bluetooth radio found" in result:
+                return {"success": False, "error": "No Bluetooth hardware detected on this system"}
+            elif "Access denied" in result:
+                return {"success": False, "error": f"Bluetooth access denied. {result.split('ERROR:')[1].strip() if 'ERROR:' in result else 'Administrator rights may be required.'}"}
+            else:
+                error_msg = result.split('ERROR:')[1].strip() if 'ERROR:' in result else result
+                return {"success": False, "error": f"Failed to control Bluetooth: {error_msg}"}
         except Exception as e:
-            return {"success": False, "error": str(e)}
+            return {"success": False, "error": f"Bluetooth control error: {str(e)}"}
     
     def list_bluetooth_devices(self) -> Dict[str, Any]:
         """List paired Bluetooth devices"""
