@@ -29,7 +29,7 @@ class QuickSettingsController:
         # Quick Settings button is typically in bottom-right corner
         # Usually around (width - 100, height - 30) on Windows 11
         # Adjusted to click more to the left on the system tray area
-        self.quick_settings_position = (self.screen_width - 160, self.screen_height - 35)
+        self.quick_settings_position = (self.screen_width - 200, self.screen_height - 35)
     
     def open_quick_settings(self) -> bool:
         """Open the Quick Settings panel by clicking the system tray icons area"""
