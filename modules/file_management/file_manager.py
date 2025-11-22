@@ -276,6 +276,9 @@ class FileManager:
             file_path = Path(file_path)
             file_path.parent.mkdir(parents=True, exist_ok=True)
             
+            # Convert path to string for safe use in f-strings
+            file_path_str = str(file_path)
+            
             # Create temporary batch file
             with tempfile.NamedTemporaryFile(mode='w', suffix='.bat', delete=False, encoding='utf-8') as bat_file:
                 bat_path = bat_file.name
@@ -285,14 +288,14 @@ class FileManager:
                 
                 # Write batch commands
                 bat_file.write('@echo off\n')
-                bat_file.write(f'echo Creating file: {file_path}\n')
+                bat_file.write('echo Creating file: ' + file_path_str + '\n')
                 
                 if content:
                     # Use echo to write content
-                    bat_file.write(f'echo {safe_content}> "{file_path}"\n')
+                    bat_file.write('echo ' + safe_content + '> "' + file_path_str + '"\n')
                 else:
                     # Create empty file
-                    bat_file.write(f'type nul > "{file_path}"\n')
+                    bat_file.write('type nul > "' + file_path_str + '"\n')
                 
                 bat_file.write('echo File created successfully!\n')
                 bat_file.write('exit /b 0\n')
@@ -363,6 +366,9 @@ class FileManager:
             file_path = Path(file_path)
             file_path.parent.mkdir(parents=True, exist_ok=True)
             
+            # Convert path to string for safe use in batch commands
+            file_path_str = str(file_path)
+            
             # Create temporary batch file
             with tempfile.NamedTemporaryFile(mode='w', suffix='.bat', delete=False, encoding='utf-8') as bat_file:
                 bat_path = bat_file.name
@@ -372,14 +378,14 @@ class FileManager:
                 
                 # Write batch commands
                 bat_file.write('@echo off\n')
-                bat_file.write(f'echo Writing to file: {file_path}\n')
+                bat_file.write('echo Writing to file: ' + file_path_str + '\n')
                 
                 if mode == 'a':
                     # Append mode
-                    bat_file.write(f'echo {safe_content}>> "{file_path}"\n')
+                    bat_file.write('echo ' + safe_content + '>> "' + file_path_str + '"\n')
                 else:
                     # Overwrite mode
-                    bat_file.write(f'echo {safe_content}> "{file_path}"\n')
+                    bat_file.write('echo ' + safe_content + '> "' + file_path_str + '"\n')
                 
                 bat_file.write('echo Write completed!\n')
                 bat_file.write('exit /b 0\n')
