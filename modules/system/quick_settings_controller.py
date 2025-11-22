@@ -63,12 +63,12 @@ class QuickSettingsController:
         """
         # Return estimated positions based on typical Windows 11 layout
         # These are positions when Quick Settings panel is OPEN
-        # Toggles are in a grid: WiFi, Bluetooth, Airplane mode (top row)
+        # Adjusted based on actual click results
         toggle_positions = {
-            'wifi': (self.screen_width - 280, self.screen_height - 380),
+            'night_light': (self.screen_width - 280, self.screen_height - 380),  # This is where it actually clicked
             'bluetooth': (self.screen_width - 170, self.screen_height - 380),
-            'airplane': (self.screen_width - 280, self.screen_height - 280),
-            'night_light': (self.screen_width - 170, self.screen_height - 280),
+            'wifi': (self.screen_width - 280, self.screen_height - 280),  # Moving WiFi here
+            'airplane': (self.screen_width - 170, self.screen_height - 280),
             'mobile_hotspot': (self.screen_width - 280, self.screen_height - 180),
         }
         
