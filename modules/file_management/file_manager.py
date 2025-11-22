@@ -265,19 +265,20 @@ class FileManager:
         Create file using Windows batch file for better reliability
         
         Args:
-            file_path: Full path to the file
+            file_path: Full path to the file (accepts forward slashes)
             content: Content to write
         
         Returns:
             Success message or error message
         """
         try:
-            # Ensure directory exists first
-            file_path = Path(file_path)
-            file_path.parent.mkdir(parents=True, exist_ok=True)
+            # Keep original file_path as string with forward slashes
+            # Convert to Path object for directory operations only
+            file_path_obj = Path(file_path)
+            file_path_obj.parent.mkdir(parents=True, exist_ok=True)
             
-            # Convert path to string for safe use in f-strings
-            file_path_str = str(file_path)
+            # Use original path string (preserves forward slashes)
+            file_path_str = file_path
             
             # Create temporary batch file
             with tempfile.NamedTemporaryFile(mode='w', suffix='.bat', delete=False, encoding='utf-8') as bat_file:
@@ -310,8 +311,8 @@ class FileManager:
                 pass
             
             # Check if file was created
-            if file_path.exists():
-                size = os.path.getsize(file_path)
+            if file_path_obj.exists():
+                size = os.path.getsize(file_path_obj)
                 return f"✅ File created via batch: {file_path} ({size} bytes)"
             else:
                 return f"❌ Batch file executed but file not found: {file_path}"
@@ -354,7 +355,7 @@ class FileManager:
         Write to file using Windows batch file for better reliability
         
         Args:
-            file_path: Full path to the file
+            file_path: Full path to the file (accepts forward slashes)
             content: Content to write
             mode: Write mode ('w' = overwrite, 'a' = append)
         
@@ -362,12 +363,13 @@ class FileManager:
             Success message or error message
         """
         try:
-            # Ensure directory exists first
-            file_path = Path(file_path)
-            file_path.parent.mkdir(parents=True, exist_ok=True)
+            # Keep original file_path as string with forward slashes
+            # Convert to Path object for directory operations only
+            file_path_obj = Path(file_path)
+            file_path_obj.parent.mkdir(parents=True, exist_ok=True)
             
-            # Convert path to string for safe use in batch commands
-            file_path_str = str(file_path)
+            # Use original path string (preserves forward slashes)
+            file_path_str = file_path
             
             # Create temporary batch file
             with tempfile.NamedTemporaryFile(mode='w', suffix='.bat', delete=False, encoding='utf-8') as bat_file:

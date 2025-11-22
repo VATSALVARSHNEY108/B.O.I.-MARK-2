@@ -237,6 +237,7 @@ class CommandExecutor:
         Expand common path shortcuts to full paths
         Supports: Desktop, Downloads, Documents, Home, etc.
         Handles OneDrive synced folders
+        IMPORTANT: Always returns paths with forward slashes to avoid escape character issues
         """
         from pathlib import Path
         import re
@@ -271,14 +272,21 @@ class CommandExecutor:
         else:
             pictures = home / "Pictures"
         
-        # Case-insensitive replacement patterns
+        # Convert paths to strings with forward slashes (avoid escape character issues)
+        desktop_str = str(desktop).replace('\\', '/')
+        documents_str = str(documents).replace('\\', '/')
+        downloads_str = str(downloads).replace('\\', '/')
+        pictures_str = str(pictures).replace('\\', '/')
+        home_str = str(home).replace('\\', '/')
+        
+        # Case-insensitive replacement patterns (use forward slashes)
         replacements = {
-            r'^desktop[/\\]': str(desktop) + os.sep,
-            r'^downloads[/\\]': str(downloads) + os.sep,
-            r'^documents[/\\]': str(documents) + os.sep,
-            r'^pictures[/\\]': str(pictures) + os.sep,
-            r'^home[/\\]': str(home) + os.sep,
-            r'^~[/\\]': str(home) + os.sep,
+            r'^desktop[/\\]': desktop_str + '/',
+            r'^downloads[/\\]': downloads_str + '/',
+            r'^documents[/\\]': documents_str + '/',
+            r'^pictures[/\\]': pictures_str + '/',
+            r'^home[/\\]': home_str + '/',
+            r'^~[/\\]': home_str + '/',
         }
         
         # Check each pattern
@@ -289,13 +297,16 @@ class CommandExecutor:
                 file_path = re.sub(pattern, replacement, file_path, flags=re.IGNORECASE)
                 break
         
-        # Handle special case: just "desktop" or "Desktop" -> Desktop/filename.txt
+        # Handle special case: just "desktop" or "Desktop" -> Desktop path
         if file_path_lower == "desktop":
-            file_path = str(desktop)
+            file_path = desktop_str
         elif file_path_lower == "downloads":
-            file_path = str(downloads)
+            file_path = downloads_str
         elif file_path_lower == "documents":
-            file_path = str(documents)
+            file_path = documents_str
+        
+        # Ensure all backslashes are converted to forward slashes
+        file_path = file_path.replace('\\', '/')
         
         return file_path
     
