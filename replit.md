@@ -7,6 +7,7 @@ The AI Desktop Automation Controller is an intelligent desktop automation tool p
 -   **Interface:** User prefers desktop GUI interfaces only - NO web-based interfaces. Project uses tkinter-based GUIs (gui_app.py, enhanced_gui.py) for local desktop use.
 -   **Chat Monitoring:** User prefers visual/screen-based chat monitoring where AI controls the real Gmail/WhatsApp interface on screen, rather than background API calls. This allows them to watch the AI work in real-time.
 -   **File Structure:** Well-organized modular architecture with modules/ directory containing core, voice, automation, ai_features, utilities, etc.
+-   **Desktop Path:** User's Desktop is located at `C:/Users/VATSAL VARSHNEY/OneDrive/Desktop` (configured in config/desktop_structure.json). System uses forward slashes for cross-platform compatibility and to avoid Windows path escape character issues.
 
 ## System Architecture
 The AI Desktop Automation Controller is built with Python 3.11 and utilizes a modular architecture.
