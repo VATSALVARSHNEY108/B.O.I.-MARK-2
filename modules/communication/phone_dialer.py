@@ -20,7 +20,7 @@ class PhoneDialer:
         self.demo_mode = True
         self.call_history = []
         self.is_windows = platform.system() == "Windows"
-        self.contact_manager = ContactManager()
+        self.contact_manager = ContactManager("data/contacts.json")
         
         self._check_twilio()
     
@@ -331,7 +331,7 @@ class PhoneDialer:
         
         # Get full contact info for better logging
         contact = self.contact_manager.get_contact(name)
-        contact_name = contact.get('name', name)
+        contact_name = contact.get('name', name) if contact else name
         
         print(f"📇 Calling {contact_name} at {phone_number}")
         
