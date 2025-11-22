@@ -605,8 +605,8 @@ Format as Markdown."""
             docs_path = os.path.join(self.docs_output_dir, docs_filename)
             
             with open(docs_path, 'w', encoding='utf-8') as f:
-                f.write(f"# Documentation for {file_path}\n\n")
-                f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+                f.write("# Documentation for " + str(file_path) + "\n\n")
+                f.write("Generated: " + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + "\n\n")
                 f.write(docs)
             
             return {

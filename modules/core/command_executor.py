@@ -236,6 +236,7 @@ class CommandExecutor:
         """
         Expand common path shortcuts to full paths
         Supports: Desktop, Downloads, Documents, Home, etc.
+        Handles OneDrive synced folders
         """
         from pathlib import Path
         import re
@@ -245,10 +246,30 @@ class CommandExecutor:
         
         # Get common user directories
         home = Path.home()
-        desktop = home / "Desktop"
+        
+        # Check for OneDrive Desktop first (common on Windows)
+        onedrive_desktop = home / "OneDrive" / "Desktop"
+        if onedrive_desktop.exists():
+            desktop = onedrive_desktop
+        else:
+            desktop = home / "Desktop"
+        
+        # Check for OneDrive Documents
+        onedrive_documents = home / "OneDrive" / "Documents"
+        if onedrive_documents.exists():
+            documents = onedrive_documents
+        else:
+            documents = home / "Documents"
+        
+        # Downloads is typically not synced by OneDrive
         downloads = home / "Downloads"
-        documents = home / "Documents"
-        pictures = home / "Pictures"
+        
+        # Pictures might be in OneDrive
+        onedrive_pictures = home / "OneDrive" / "Pictures"
+        if onedrive_pictures.exists():
+            pictures = onedrive_pictures
+        else:
+            pictures = home / "Pictures"
         
         # Case-insensitive replacement patterns
         replacements = {

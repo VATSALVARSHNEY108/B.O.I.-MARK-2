@@ -192,10 +192,18 @@ class GUIAutomation:
         try:
             # Get user directories
             home = Path.home()
-            desktop = home / "Desktop"
-            documents = home / "Documents"
+            
+            # Check for OneDrive synced folders
+            onedrive_desktop = home / "OneDrive" / "Desktop"
+            desktop = onedrive_desktop if onedrive_desktop.exists() else home / "Desktop"
+            
+            onedrive_documents = home / "OneDrive" / "Documents"
+            documents = onedrive_documents if onedrive_documents.exists() else home / "Documents"
+            
             downloads = home / "Downloads"
-            pictures = home / "Pictures"
+            
+            onedrive_pictures = home / "OneDrive" / "Pictures"
+            pictures = onedrive_pictures if onedrive_pictures.exists() else home / "Pictures"
             
             # If folder_path is provided, use it directly
             if folder_path:
@@ -246,7 +254,10 @@ class GUIAutomation:
     def open_desktop_folder(self, folder_name=None):
         """Open Desktop or a folder on Desktop"""
         try:
-            desktop = Path.home() / "Desktop"
+            home = Path.home()
+            # Check for OneDrive Desktop
+            onedrive_desktop = home / "OneDrive" / "Desktop"
+            desktop = onedrive_desktop if onedrive_desktop.exists() else home / "Desktop"
             
             # If no folder name, open Desktop itself
             if not folder_name:
@@ -282,13 +293,20 @@ class GUIAutomation:
         try:
             home = Path.home()
             
+            # Check for OneDrive folders
+            onedrive_desktop = home / "OneDrive" / "Desktop"
+            desktop = onedrive_desktop if onedrive_desktop.exists() else home / "Desktop"
+            
+            onedrive_documents = home / "OneDrive" / "Documents"
+            documents = onedrive_documents if onedrive_documents.exists() else home / "Documents"
+            
             # Define search locations
             if desktop_only:
-                search_locations = [home / "Desktop"]
+                search_locations = [desktop]
             else:
                 search_locations = [
-                    home / "Desktop",
-                    home / "Documents",
+                    desktop,
+                    documents,
                     home / "Downloads",
                     home
                 ]
