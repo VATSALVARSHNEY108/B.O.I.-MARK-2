@@ -9,6 +9,7 @@ import platform
 import webbrowser
 import time
 import urllib.parse
+from datetime import datetime
 from modules.automation.gui_automation import GUIAutomation
 from modules.automation.media_control_helper import MediaControlHelper
 from modules.utilities.contact_manager import ContactManager
@@ -2729,6 +2730,40 @@ class CommandExecutor:
                     return {"success": True, "message": f"✍️ Content:\n\n{response}"}
                 except Exception as e:
                     return {"success": False, "message": f"Error: {str(e)}"}
+            
+            # ==================== ACCESS CONTROL & SECURITY ====================
+            elif action == "enable_smart_access":
+                method = parameters.get("method", "facial_recognition")
+                return self.security_enhancements.enable_smart_access_control(method)
+            
+            elif action == "get_access_control_status":
+                status = self.security_enhancements.get_access_control_status()
+                return {"success": True, "message": status}
+            
+            elif action == "add_trusted_device":
+                device_name = parameters.get("device_name", "Unknown Device")
+                device_id = parameters.get("device_id", f"device_{datetime.now().strftime('%Y%m%d%H%M%S')}")
+                return self.security_enhancements.add_trusted_device(device_name, device_id)
+            
+            elif action == "list_trusted_devices":
+                devices = self.security_enhancements.list_trusted_devices()
+                return {"success": True, "message": devices}
+            
+            elif action == "detect_security_threats":
+                return self.security_enhancements.detect_threats()
+            
+            elif action == "enable_auto_vpn":
+                network_name = parameters.get("network_name", None)
+                return self.security_enhancements.enable_auto_vpn(network_name)
+            
+            elif action == "schedule_data_wipe":
+                interval = parameters.get("interval", "weekly")
+                target = parameters.get("target", "temp_files")
+                return self.security_enhancements.schedule_data_wipe(interval, target)
+            
+            elif action == "get_threat_log":
+                log = self.security_enhancements.get_threat_log()
+                return {"success": True, "message": log}
 
             # ==================== DEFAULT ====================
             else:
