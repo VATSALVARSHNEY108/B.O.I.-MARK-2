@@ -10,21 +10,40 @@ class ContactManager:
         self.contacts = self._load_contacts()
     
     def _load_contacts(self) -> Dict[str, Dict]:
-        """Load contacts from JSON file"""
+        """Load contacts from JSON file and convert to case-insensitive dict"""
         if os.path.exists(self.contacts_file):
             try:
                 with open(self.contacts_file, 'r') as f:
-                    return json.load(f)
+                    data = json.load(f)
+                    
+                    # Handle list format (from data/contacts.json)
+                    if isinstance(data, list):
+                        contacts_dict = {}
+                        for contact in data:
+                            if 'name' in contact:
+                                # Use lowercase name as key for case-insensitive lookup
+                                name_lower = contact['name'].lower()
+                                contacts_dict[name_lower] = contact
+                        return contacts_dict
+                    
+                    # Handle dict format (already in correct format)
+                    elif isinstance(data, dict):
+                        return data
+                    
+                    return {}
             except Exception as e:
                 print(f"Error loading contacts: {e}")
                 return {}
         return {}
     
     def _save_contacts(self) -> bool:
-        """Save contacts to JSON file"""
+        """Save contacts to JSON file in list format"""
         try:
+            # Convert dict to list format for consistency with data/contacts.json
+            contacts_list = list(self.contacts.values())
+            
             with open(self.contacts_file, 'w') as f:
-                json.dump(self.contacts, f, indent=2)
+                json.dump(contacts_list, f, indent=2)
             return True
         except Exception as e:
             print(f"Error saving contacts: {e}")
