@@ -817,6 +817,72 @@ IMPORTANT:
 - Examples for quick_note: "create quick note about meeting", "take a note to buy milk", "note this idea"
 - Examples for create_file: "create file called todo.txt on Desktop" → file_path="Desktop/todo.txt", "make a file named notes.txt in Documents" → file_path="Documents/notes.txt"
 
+WINDOWS 11 SETTINGS CONTROL (100+ Settings):
+- set_wifi: Turn WiFi on/off (parameters: enabled [true/false])
+- set_airplane_mode: Turn airplane mode on/off (parameters: enabled [true/false])
+- set_bluetooth: Turn Bluetooth on/off (parameters: enabled [true/false])
+- list_bluetooth_devices: List paired Bluetooth devices (parameters: none)
+- set_bluetooth_discoverable: Make Bluetooth discoverable (parameters: enabled [true/false])
+- get_network_adapters: List network adapters (parameters: none)
+- set_mobile_hotspot: Enable/disable mobile hotspot (parameters: enabled, ssid [optional], password [optional])
+- set_proxy: Configure proxy settings (parameters: enabled, server [optional], port [optional])
+- flush_dns_cache: Clear DNS cache (parameters: none)
+- reset_network_adapter: Reset network adapter (parameters: adapter [optional])
+- get_display_info: Get display information (parameters: none)
+- set_display_resolution: Set screen resolution (parameters: width, height)
+- set_display_scaling: Set display scaling/DPI (parameters: scale [100-200])
+- set_night_light: Enable/disable night light (parameters: enabled, temperature [optional, 1200-6500])
+- set_refresh_rate: Set display refresh rate (parameters: rate)
+- list_audio_devices: List audio devices (parameters: device_type [playback/recording, default: playback])
+- set_default_audio_device: Set default audio device (parameters: device_name, device_type [playback/recording])
+- set_spatial_sound: Enable/disable spatial sound (parameters: enabled, format_type [optional])
+- set_camera_access: Control camera privacy (parameters: enabled, app [optional])
+- set_microphone_access: Control microphone privacy (parameters: enabled, app [optional])
+- set_location_access: Control location services (parameters: enabled)
+- set_windows_defender: Enable/disable Windows Defender (parameters: enabled)
+- set_firewall_state: Configure Windows Firewall (parameters: enabled, profile [domain/private/public, optional])
+- set_telemetry_level: Set telemetry data collection (parameters: level [off/basic/enhanced/full])
+- set_dark_mode: Enable/disable dark mode (parameters: enabled)
+- set_wallpaper: Set desktop wallpaper (parameters: image_path)
+- set_accent_color: Set accent color (parameters: color [hex color code])
+- set_transparency_effects: Enable/disable transparency (parameters: enabled)
+- set_taskbar_alignment: Set taskbar alignment (parameters: alignment [left/center])
+- set_taskbar_autohide: Auto-hide taskbar (parameters: enabled)
+- set_notifications: Enable/disable notifications (parameters: enabled)
+- set_focus_assist: Set focus assist mode (parameters: mode [off/priority/alarm])
+- set_clipboard_history: Enable/disable clipboard history (parameters: enabled)
+- set_storage_sense: Enable/disable Storage Sense (parameters: enabled)
+- set_remote_desktop: Enable/disable Remote Desktop (parameters: enabled)
+- check_windows_updates: Check for Windows updates (parameters: none)
+- install_windows_updates: Install available updates (parameters: none)
+- pause_windows_updates: Pause Windows updates (parameters: days [1-35])
+- resume_windows_updates: Resume Windows updates (parameters: none)
+- list_startup_apps: List startup applications (parameters: none)
+- disable_startup_app: Disable startup application (parameters: app_name)
+- set_narrator: Enable/disable Narrator (parameters: enabled)
+- set_magnifier: Enable/disable Magnifier (parameters: enabled, zoom [optional, 100-1600])
+- set_high_contrast: Enable/disable high contrast (parameters: enabled)
+- set_sticky_keys: Enable/disable Sticky Keys (parameters: enabled)
+- set_filter_keys: Enable/disable Filter Keys (parameters: enabled)
+- set_game_mode: Enable/disable Game Mode (parameters: enabled)
+- set_game_bar: Enable/disable Xbox Game Bar (parameters: enabled)
+- set_power_plan: Set power plan (parameters: plan [balanced/high_performance/power_saver])
+- set_sleep_timeout: Set sleep timeout (parameters: minutes, on_battery [optional, default: false])
+- set_screen_timeout: Set screen timeout (parameters: minutes, on_battery [optional, default: false])
+
+**Windows 11 Settings Command Examples:**
+- If user says "turn Bluetooth on", "enable Bluetooth", "activate Bluetooth", use set_bluetooth with enabled=true
+- If user says "turn Bluetooth off", "disable Bluetooth", "deactivate Bluetooth", use set_bluetooth with enabled=false
+- If user says "turn WiFi on", "enable WiFi", "connect WiFi", use set_wifi with enabled=true
+- If user says "turn WiFi off", "disable WiFi", "disconnect WiFi", use set_wifi with enabled=false
+- If user says "airplane mode on", "enable airplane mode", use set_airplane_mode with enabled=true
+- If user says "dark mode on", "enable dark mode", "switch to dark theme", use set_dark_mode with enabled=true
+- If user says "light mode", "disable dark mode", "switch to light theme", use set_dark_mode with enabled=false
+- If user says "list Bluetooth devices", "show Bluetooth devices", "paired devices", use list_bluetooth_devices
+- If user says "enable focus assist", "do not disturb", "silence notifications", use set_focus_assist with mode="priority"
+- If user says "check for updates", "Windows update", use check_windows_updates
+- If user says "night light on", "enable night light", "blue light filter", use set_night_light with enabled=true
+
 **CRITICAL FILE PATH RULES:**
 - ALWAYS use forward slashes (/) in file paths, NEVER backslashes (\\)
 - Good examples: "Desktop/file.txt", "Documents/notes.txt", "Downloads/data.csv"
