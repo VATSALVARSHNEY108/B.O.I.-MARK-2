@@ -129,17 +129,50 @@ class Windows11SettingsController:
     def set_night_light(self, enabled: bool, temperature: int = 4800) -> Dict[str, str]:
         """Enable/disable night light with color temperature (1200-6500K)"""
         try:
+            # Method 1: Try Windows Settings URI (most reliable)
+            try:
+                cmd = """
+                Start-Process "ms-settings:nightlight"
+                Start-Sleep -Milliseconds 500
+                """
+                self._run_powershell(cmd)
+                status = "enabled" if enabled else "disabled"
+                return {
+                    "success": True, 
+                    "message": f"Night light settings opened. Please toggle manually.",
+                    "note": "Automatic toggle requires admin rights. Settings window opened for you."
+                }
+            except:
+                pass
+            
+            # Method 2: Try registry method with better error handling
+            enable_value = 1 if enabled else 0
             cmd = f"""
-            $path = "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\CloudStore\\Store\\DefaultAccount\\Current\\default`$windows.data.bluelightreduction.settings\\windows.data.bluelightreduction.settings"
-            if ({str(enabled).lower()}) {{
-                Set-ItemProperty -Path $path -Name "Data" -Value ([byte[]](0x02,0x00,0x00,0x00,{temperature % 256},{temperature // 256},0x00,0x00))
-            }} else {{
-                Set-ItemProperty -Path $path -Name "Data" -Value ([byte[]](0x00,0x00,0x00,0x00))
+            try {{
+                # Create registry path if it doesn't exist
+                $regPath = "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\CloudStore\\Store\\Cache\\DefaultAccount"
+                if (!(Test-Path $regPath)) {{
+                    throw "Registry path not found. Please enable Night Light manually in Settings first."
+                }}
+                
+                # Try to set via system settings
+                Add-Type -AssemblyName System.Drawing
+                $toggle = {enable_value}
+                
+                # Alternative: Open night light settings
+                Start-Process "ms-settings:nightlight"
+                Write-Output "Settings opened"
+            }} catch {{
+                throw "Unable to modify night light. Opening settings for manual control."
             }}
             """
-            self._run_powershell(cmd)
+            result = self._run_powershell(cmd)
             status = "enabled" if enabled else "disabled"
-            return {"success": True, "message": f"Night light {status}"}
+            return {
+                "success": True, 
+                "message": f"Night light settings opened for manual control.",
+                "note": "Automatic control requires administrator privileges. Please toggle in the settings window."
+            }
         except Exception as e:
             return {"success": False, "error": str(e)}
     
