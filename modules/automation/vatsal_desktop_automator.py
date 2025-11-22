@@ -424,7 +424,7 @@ CRITICAL RULES:
         folder_path = special_folders.get(path.lower(), path)
         
         if os.path.exists(folder_path):
-            subprocess.Popen(f'explorer "{folder_path}"')
+            subprocess.Popen('explorer "' + folder_path + '"')
             return True, f"Opened: {folder_path}"
         else:
             return False, f"Folder not found: {path}"

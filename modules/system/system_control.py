@@ -1216,7 +1216,7 @@ class SystemController:
         try:
             if self.os == "Windows":
                 if path:
-                    subprocess.Popen(f'explorer "{path}"')
+                    subprocess.Popen('explorer "' + path + '"')
                 else:
                     subprocess.Popen("explorer")
                 return f"📂 Opening File Explorer{' at ' + path if path else ''}..."
