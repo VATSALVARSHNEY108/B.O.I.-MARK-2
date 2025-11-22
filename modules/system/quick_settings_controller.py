@@ -58,41 +58,21 @@ class QuickSettingsController:
     
     def find_toggle_button(self, toggle_name: str) -> Optional[Tuple[int, int]]:
         """
-        Find a toggle button by scanning for text on screen
+        Find a toggle button by returning estimated positions
         Returns (x, y) coordinates if found, None otherwise
         """
-        try:
-            # Take screenshot of the Quick Settings area (right side of screen)
-            screenshot_area = (
-                self.screen_width - 400,  # Start 400px from right
-                self.screen_height - 600,  # Start 600px from bottom
-                self.screen_width,         # End at right edge
-                self.screen_height - 50    # End 50px from bottom
-            )
-            
-            # Try to locate the button using image recognition
-            # Note: This requires the toggle to be visible on screen
-            button_location = pyautogui.locateOnScreen(
-                None,  # We'll use text-based approach instead
-                region=screenshot_area,
-                confidence=0.8
-            )
-            
-            # For now, return estimated positions based on typical Windows 11 layout
-            # These are approximate positions when Quick Settings is open
-            # Adjusted to click more to the left
-            toggle_positions = {
-                'wifi': (self.screen_width - 310, self.screen_height - 450),
-                'bluetooth': (self.screen_width - 180, self.screen_height - 450),
-                'airplane': (self.screen_width - 310, self.screen_height - 350),
-                'night_light': (self.screen_width - 180, self.screen_height - 350),
-                'mobile_hotspot': (self.screen_width - 310, self.screen_height - 250),
-            }
-            
-            return toggle_positions.get(toggle_name.lower())
-        except Exception as e:
-            print(f"Error finding toggle: {e}")
-            return None
+        # Return estimated positions based on typical Windows 11 layout
+        # These are approximate positions when Quick Settings is open
+        # Adjusted to click more to the left
+        toggle_positions = {
+            'wifi': (self.screen_width - 310, self.screen_height - 450),
+            'bluetooth': (self.screen_width - 180, self.screen_height - 450),
+            'airplane': (self.screen_width - 310, self.screen_height - 350),
+            'night_light': (self.screen_width - 180, self.screen_height - 350),
+            'mobile_hotspot': (self.screen_width - 310, self.screen_height - 250),
+        }
+        
+        return toggle_positions.get(toggle_name.lower())
     
     def toggle_wifi(self, enable: Optional[bool] = None) -> Dict[str, any]:
         """
