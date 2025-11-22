@@ -62,14 +62,14 @@ class QuickSettingsController:
         Returns (x, y) coordinates if found, None otherwise
         """
         # Return estimated positions based on typical Windows 11 layout
-        # These are approximate positions when Quick Settings is open
-        # Adjusted to click more to the left
+        # These are positions when Quick Settings panel is OPEN
+        # Toggles are in a grid: WiFi, Bluetooth, Airplane mode (top row)
         toggle_positions = {
-            'wifi': (self.screen_width - 310, self.screen_height - 450),
-            'bluetooth': (self.screen_width - 180, self.screen_height - 450),
-            'airplane': (self.screen_width - 310, self.screen_height - 350),
-            'night_light': (self.screen_width - 180, self.screen_height - 350),
-            'mobile_hotspot': (self.screen_width - 310, self.screen_height - 250),
+            'wifi': (self.screen_width - 280, self.screen_height - 380),
+            'bluetooth': (self.screen_width - 170, self.screen_height - 380),
+            'airplane': (self.screen_width - 280, self.screen_height - 280),
+            'night_light': (self.screen_width - 170, self.screen_height - 280),
+            'mobile_hotspot': (self.screen_width - 280, self.screen_height - 180),
         }
         
         return toggle_positions.get(toggle_name.lower())
