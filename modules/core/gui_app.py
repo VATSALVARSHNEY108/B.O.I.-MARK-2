@@ -491,7 +491,7 @@ class ModernBOIGUI:
                 self.speaking_btn = btn
 
     def _create_output_section_for_tab(self, parent):
-        """Create block-wise output console section"""
+        """Create output console section for tab"""
         # Modern clean section with beautiful shadow
         section_shadow, section = self.create_shadowed_frame(parent)
         section_shadow.pack(fill="both", expand=True, padx=10, pady=(0, 10))
@@ -513,71 +513,61 @@ class ModernBOIGUI:
         
         tk.Label(
             title_frame,
-            text="Output Console - Block View",
+            text="Output Console",
             font=("Segoe UI", 16, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left")
         
-        # Buttons frame
-        buttons_frame = tk.Frame(header, bg=self.BG_SECONDARY)
-        buttons_frame.pack(side="right")
-        
-        # Clear button
-        def clear_all():
-            for msg_box in self.message_boxes:
-                msg_box.destroy()
-            self.message_boxes.clear()
-            self.update_output("✨ Output cleared", "success")
-        
-        btn_shadow, btn = self.create_shadowed_button(
-            buttons_frame,
-            text="🗑️ Clear",
-            command=clear_all,
-            font=("Segoe UI", 10, "bold")
-        )
-        btn_shadow.pack(side="left", padx=5)
-        
-        # Speak button
+        # Speak Output Button
         def speak_output():
             if hasattr(self, 'feature_speaker') and self.feature_speaker:
                 try:
-                    all_msgs = " ".join([box.get("text", "") for box in self.message_boxes])
-                    if all_msgs.strip():
-                        self.feature_speaker.speak_text(all_msgs)
-                        self.update_output("🔊 Speaking output...", "success")
+                    output_text = self.output_area.get("1.0", "end-1c").strip()
+                    if output_text:
+                        self.feature_speaker.speak_text(output_text)
+                        self.print_output("🔊 Speaking output...", "success")
                     else:
-                        self.update_output("No messages to speak", "warning")
+                        self.print_output("No text to speak in output area", "warning")
                 except Exception as e:
-                    self.update_output(f"Error: {e}", "error")
+                    self.print_output(f"Error speaking: {e}", "error")
+            else:
+                self.print_output("Feature Speaker not available", "error")
         
-        btn_shadow2, btn2 = self.create_shadowed_button(
-            buttons_frame,
+        btn_shadow, btn = self.create_shadowed_button(
+            header,
             text="🔊 Speak",
             command=speak_output,
             font=("Segoe UI", 10, "bold")
         )
-        btn_shadow2.pack(side="left", padx=5)
+        btn_shadow.pack(side="right", padx=(10, 0))
 
-        # Block-wise output canvas with scrollbar
+        # Output console with better styling
         console_frame = tk.Frame(section, bg=self.BG_SECONDARY)
         console_frame.pack(fill="both", expand=True, padx=20, pady=(0, 35))
 
-        # Canvas + scrollbar for block messages
-        canvas = tk.Canvas(console_frame, bg="white", highlightthickness=0, relief="solid", borderwidth=1)
-        scrollbar = ttk.Scrollbar(console_frame, orient="vertical", command=canvas.yview)
-        scrollable_frame = tk.Frame(canvas, bg="white")
-        
-        scrollable_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-        canvas.configure(yscrollcommand=scrollbar.set)
-        
-        canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
-        
-        self.output_blocks = scrollable_frame
-        self.output_canvas = canvas
-        self.message_boxes = []
+        self.output_area = scrolledtext.ScrolledText(
+            console_frame,
+            bg="white",
+            fg=self.TEXT_PRIMARY,
+            font=("Consolas", 10, "bold"),
+            relief="solid",
+            borderwidth=1,
+            highlightbackground=self.BORDER_PRIMARY,
+            highlightthickness=1,
+            padx=20,
+            pady=20,
+            wrap="word",
+            insertbackground=self.TEXT_PRIMARY
+        )
+        self.output_area.pack(fill="both", expand=True)
+        self.output_area.config(state="disabled")
+
+        # Configure text tags for better output formatting
+        self.output_area.tag_config("info", foreground="#2196F3")
+        self.output_area.tag_config("success", foreground=self.ACTIVE_GREEN, font=("Consolas", 10, "bold"))
+        self.output_area.tag_config("error", foreground="#D32F2F", font=("Consolas", 10, "bold"))
+        self.output_area.tag_config("warning", foreground="#FF9800")
 
     def create_rounded_rectangle(self, width, height, radius, color):
         """Create a rounded rectangle image using PIL"""
@@ -1519,53 +1509,29 @@ class ModernBOIGUI:
             self.root.after(0, lambda: self.execute_btn.config(state="normal", text="▶ Execute"))
 
     def update_output(self, message, msg_type="info"):
-        """Update output with block-wise display"""
-        if not hasattr(self, 'output_blocks') or self.output_blocks is None:
-            return
-        
-        colors = {
-            "command": {"bg": "#E3F2FD", "border": "#2196F3", "text": "#1976D2", "icon": "📝"},
-            "success": {"bg": "#E8F5E9", "border": "#4CAF50", "text": "#2E7D32", "icon": "✅"},
-            "error": {"bg": "#FFEBEE", "border": "#F44336", "text": "#C62828", "icon": "❌"},
-            "warning": {"bg": "#FFF3E0", "border": "#FF9800", "text": "#E65100", "icon": "⚠️"},
-            "info": {"bg": "#F3E5F5", "border": "#9C27B0", "text": "#6A1B9A", "icon": "ℹ️"}
-        }
-        
-        style = colors.get(msg_type, colors["info"])
-        
-        # Create message block with shadow
-        box_outer = tk.Frame(self.output_blocks, bg="#C0C0C0", bd=0)
-        box_outer.pack(fill="x", padx=10, pady=(8, 0))
-        
-        box_mid = tk.Frame(box_outer, bg="#D0D0D0", bd=0)
-        box_mid.pack(fill="x", padx=(0, 2), pady=(0, 2))
-        
-        box_inner = tk.Frame(box_mid, bg="#E0E0E0", bd=0)
-        box_inner.pack(fill="x", padx=(0, 1), pady=(0, 1))
-        
-        # Main message block
-        msg_box = tk.Frame(box_inner, bg=style["bg"], relief="solid", borderwidth=2, highlightbackground=style["border"], highlightthickness=1)
-        msg_box.pack(fill="x", padx=0, pady=0)
-        msg_box.text = message
-        
-        # Content frame
-        content = tk.Frame(msg_box, bg=style["bg"])
-        content.pack(fill="x", padx=15, pady=12)
-        
-        # Message with icon
-        msg_text = tk.Label(content, text=f"{style['icon']} {message}", bg=style["bg"], fg=style["text"], font=("Segoe UI", 10), justify="left", wraplength=600)
-        msg_text.pack(anchor="w")
-        
-        self.message_boxes.append(msg_box)
-        self.output_canvas.after(50, lambda: self.output_canvas.yview_moveto(1.0))
+        """Update output console"""
+        self.output_area.config(state="normal")
+
+        # Add message with color coding
+        if msg_type == "command":
+            self.output_area.insert(tk.END, message)
+        elif msg_type == "success":
+            self.output_area.insert(tk.END, message)
+        elif msg_type == "error":
+            self.output_area.insert(tk.END, message)
+        elif msg_type == "warning":
+            self.output_area.insert(tk.END, message)
+        else:
+            self.output_area.insert(tk.END, message)
+
+        self.output_area.see(tk.END)
+        self.output_area.config(state="disabled")
 
     def clear_output(self):
-        """Clear all output blocks"""
-        if hasattr(self, 'output_blocks') and self.output_blocks:
-            for box in self.message_boxes:
-                box.destroy()
-            self.message_boxes.clear()
-            self.update_output("✨ Output cleared", "info")
+        """Clear output console"""
+        self.output_area.config(state="normal")
+        self.output_area.delete(1.0, tk.END)
+        self.output_area.config(state="disabled")
 
     # ========== TOGGLE FUNCTIONS ==========
 
