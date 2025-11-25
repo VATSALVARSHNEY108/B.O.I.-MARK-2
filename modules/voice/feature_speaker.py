@@ -5,6 +5,7 @@ Speaks the main key features and capabilities of BOI when speaking mode is activ
 
 import pyttsx3
 import threading
+from modules.core.gemini_controller import get_ai_response
 
 
 class FeatureSpeaker:
@@ -17,8 +18,31 @@ class FeatureSpeaker:
         self.is_speaking = False
         self.speaking_lock = threading.Lock()
     
+    def extract_main_points(self, text):
+        """Extract main points from text using AI"""
+        try:
+            prompt = f"""Analyze this text and extract ONLY the main key points (3-5 bullet points max). 
+Make it concise and speaking-friendly (short sentences, no technical jargon).
+Don't include verbose explanations.
+
+Text to analyze:
+{text}
+
+Return ONLY the main points, one per line, prefixed with a bullet point or number.
+Make it sound natural for speaking aloud."""
+            
+            response = get_ai_response(prompt)
+            return response.strip() if response else text[:200]
+        except Exception as e:
+            print(f"⚠️ AI extraction failed: {e}")
+            return text[:300]  # Fallback to first 300 chars
+    
     def speak_text(self, text):
-        """Speak text in non-blocking mode"""
+        """Speak text in non-blocking mode - extracts main points if text is long"""
+        # If text is short, speak it directly. If long, extract main points
+        if len(text) > 200:
+            text = self.extract_main_points(text)
+        
         def speak_thread():
             with self.speaking_lock:
                 self.is_speaking = True
@@ -133,9 +157,15 @@ class FeatureSpeaker:
         return {"success": True, "message": "Speaking quick start suggestions..."}
     
     def speak_custom(self, text):
-        """Speak custom text"""
-        self.speak_text(text)
-        return {"success": True, "message": "Speaking custom message..."}
+        """Speak custom text - intelligently extracts main points"""
+        # Extract main points if text is long
+        if len(text) > 200:
+            main_points = self.extract_main_points(text)
+            self.speak_text(main_points)
+            return {"success": True, "message": "Speaking main points...", "points": main_points}
+        else:
+            self.speak_text(text)
+            return {"success": True, "message": "Speaking text..."}
 
 
 def create_feature_speaker():
