@@ -46,6 +46,12 @@ The system offers desktop GUIs built with `tkinter` featuring a light cream back
 -   **Phone Link Notification Monitor:** System for monitoring and parsing Windows Action Center notifications from Phone Link.
 -   **Contact-Based Calling:** Full contact management system with name-based calling integrated with Phone Link.
 
+## Recent Changes (November 25, 2025)
+-   **Major Cleanup:** Removed 18 redundant directories (web_gui, simple_chatbot, vatsal_chatbot, vatsal_desktop, vnc_tools, gemini_code_generator, notebooks, sandbox_environment, encrypted_storage, security_dashboard, smart_templates, auto_generated_docs, 2fa_data, activity_monitoring, macros, screenshots, static, templates) and 100+ unnecessary markdown files.
+-   **Weather Service Enhancement:** Fixed weather timeout issues by increasing timeout from 5s to 15s, adding 3-attempt retry logic with delays, specific error handling for timeout/connection errors, and formatted error messages. Weather service now much more reliable.
+-   **YouTube Integration:** Added Selenium-based YouTube video playing in GUI with search functionality and quick action buttons, replacing unreliable screen coordinate clicking.
+-   **WebDriver Management:** Installed webdriver-manager for automatic ChromeDriver management (Selenium features require Google Chrome).
+
 ## External Dependencies
 -   **google-genai:** For Gemini AI integration.
 -   **PyAutoGUI:** For GUI automation.
@@ -60,10 +66,10 @@ The system offers desktop GUIs built with `tkinter` featuring a light cream back
 -   **cryptography:** For encryption.
 -   **requests:** For HTTP API calls.
 -   **Replit Spotify Connector:** For Spotify API integration.
--   **wttr.in API:** For weather data.
+-   **wttr.in API:** For weather data (with 15s timeout and 3-attempt retry logic).
 -   **Google Translate API:** For language translation.
 -   **opencv-python:** For screen monitoring, image analysis, and webcam capture.
 -   **MediaPipe:** For hand tracking and gesture recognition.
 -   **Data Science Libraries:** pandas, numpy, scikit-learn, matplotlib, seaborn, statsmodels, nltk, openpyxl.
 -   **Image Processing:** Pillow (PIL), qrcode, pyzbar.
--   **Selenium:** For web automation and intelligent form filling.
+-   **Selenium & webdriver-manager:** For web automation, intelligent form filling, and YouTube integration.

@@ -6,6 +6,7 @@ Provides real-time weather information and news headlines
 import requests
 import json
 from datetime import datetime
+import time
 
 class WeatherNewsService:
     def __init__(self):
@@ -13,60 +14,92 @@ class WeatherNewsService:
         self.news_cache = {}
         
     def get_weather(self, city="New York"):
-        """Get current weather for a city using free API"""
-        try:
-            url = f"https://wttr.in/{city}?format=j1"
-            response = requests.get(url, timeout=5)
-            
-            if response.status_code == 200:
-                data = response.json()
-                current = data['current_condition'][0]
+        """Get current weather for a city using free API with retry logic"""
+        for attempt in range(3):
+            try:
+                url = f"https://wttr.in/{city}?format=j1"
+                response = requests.get(url, timeout=15)
                 
-                weather_info = {
-                    'city': city,
-                    'temperature': f"{current['temp_C']}°C / {current['temp_F']}°F",
-                    'condition': current['weatherDesc'][0]['value'],
-                    'humidity': f"{current['humidity']}%",
-                    'wind': f"{current['windspeedKmph']} km/h",
-                    'feels_like': f"{current['FeelsLikeC']}°C / {current['FeelsLikeF']}°F",
-                    'uv_index': current.get('uvIndex', 'N/A')
-                }
-                
-                return self._format_weather(weather_info)
-            else:
-                return f"Could not fetch weather for {city}. Please check the city name."
-                
-        except Exception as e:
-            return f"Weather service error: {str(e)}"
+                if response.status_code == 200:
+                    data = response.json()
+                    current = data['current_condition'][0]
+                    
+                    weather_info = {
+                        'city': city,
+                        'temperature': f"{current['temp_C']}°C / {current['temp_F']}°F",
+                        'condition': current['weatherDesc'][0]['value'],
+                        'humidity': f"{current['humidity']}%",
+                        'wind': f"{current['windspeedKmph']} km/h",
+                        'feels_like': f"{current['FeelsLikeC']}°C / {current['FeelsLikeF']}°F",
+                        'uv_index': current.get('uvIndex', 'N/A')
+                    }
+                    
+                    return self._format_weather(weather_info)
+                else:
+                    return f"Could not fetch weather for {city}. Please check the city name."
+                    
+            except requests.exceptions.Timeout:
+                if attempt < 2:
+                    time.sleep(1)
+                    continue
+                return self._format_weather_error(city, "The weather service is taking too long to respond. Please try again in a moment.")
+            except requests.exceptions.ConnectionError:
+                if attempt < 2:
+                    time.sleep(1)
+                    continue
+                return self._format_weather_error(city, "Unable to connect to the weather service. Please check your internet connection.")
+            except Exception as e:
+                if attempt < 2:
+                    time.sleep(1)
+                    continue
+                return self._format_weather_error(city, f"Weather service error: {str(e)}")
+        
+        return self._format_weather_error(city, "Weather service is currently unavailable after multiple attempts.")
     
     def get_forecast(self, city="New York", days=3):
-        """Get weather forecast for upcoming days"""
-        try:
-            url = f"https://wttr.in/{city}?format=j1"
-            response = requests.get(url, timeout=5)
-            
-            if response.status_code == 200:
-                data = response.json()
-                forecast_data = data['weather'][:days]
+        """Get weather forecast for upcoming days with retry logic"""
+        for attempt in range(3):
+            try:
+                url = f"https://wttr.in/{city}?format=j1"
+                response = requests.get(url, timeout=15)
                 
-                forecast = f"📅 {days}-Day Forecast for {city}:\n\n"
-                
-                for day in forecast_data:
-                    date = day['date']
-                    max_temp = day['maxtempC']
-                    min_temp = day['mintempC']
-                    condition = day['hourly'][0]['weatherDesc'][0]['value']
+                if response.status_code == 200:
+                    data = response.json()
+                    forecast_data = data['weather'][:days]
                     
-                    forecast += f"📆 {date}:\n"
-                    forecast += f"   🌡️ High: {max_temp}°C, Low: {min_temp}°C\n"
-                    forecast += f"   ☁️ {condition}\n\n"
-                
-                return forecast
-            else:
-                return f"Could not fetch forecast for {city}."
-                
-        except Exception as e:
-            return f"Forecast service error: {str(e)}"
+                    forecast = f"📅 {days}-Day Forecast for {city}:\n\n"
+                    
+                    for day in forecast_data:
+                        date = day['date']
+                        max_temp = day['maxtempC']
+                        min_temp = day['mintempC']
+                        condition = day['hourly'][0]['weatherDesc'][0]['value']
+                        
+                        forecast += f"📆 {date}:\n"
+                        forecast += f"   🌡️ High: {max_temp}°C, Low: {min_temp}°C\n"
+                        forecast += f"   ☁️ {condition}\n\n"
+                    
+                    return forecast
+                else:
+                    return f"Could not fetch forecast for {city}."
+                    
+            except requests.exceptions.Timeout:
+                if attempt < 2:
+                    time.sleep(1)
+                    continue
+                return f"⚠️ Forecast service timeout. Please try again later."
+            except requests.exceptions.ConnectionError:
+                if attempt < 2:
+                    time.sleep(1)
+                    continue
+                return f"⚠️ Unable to connect to forecast service. Please check your internet connection."
+            except Exception as e:
+                if attempt < 2:
+                    time.sleep(1)
+                    continue
+                return f"⚠️ Forecast service error: {str(e)}"
+        
+        return f"⚠️ Forecast service is currently unavailable for {city}."
     
     def get_news_headlines(self, category="general", count=5):
         """Get latest news headlines - requires NEWS_API_KEY environment variable"""
@@ -116,6 +149,21 @@ class WeatherNewsService:
         output += f"💧 Humidity: {weather['humidity']}\n"
         output += f"💨 Wind Speed: {weather['wind']}\n"
         output += f"☀️  UV Index: {weather['uv_index']}\n"
+        output += f"{'='*50}\n"
+        
+        return output
+    
+    def _format_weather_error(self, city, error_message):
+        """Format weather error message"""
+        output = f"\n{'='*50}\n"
+        output += f"⚠️  WEATHER SERVICE ERROR\n"
+        output += f"{'='*50}\n\n"
+        output += f"📍 City: {city}\n"
+        output += f"❌ Error: {error_message}\n\n"
+        output += f"💡 Tips:\n"
+        output += f"   • Check your internet connection\n"
+        output += f"   • Try again in a few moments\n"
+        output += f"   • Verify the city name spelling\n"
         output += f"{'='*50}\n"
         
         return output
