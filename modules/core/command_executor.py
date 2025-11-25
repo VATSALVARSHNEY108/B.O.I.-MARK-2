@@ -72,6 +72,14 @@ from modules.batch_file_reader import batch_reader
 from modules.utilities.optimistic_weather import optimistic_weather
 from modules.intelligence.persona_response_service import create_persona_service
 
+# Future-Tech Core
+try:
+    from modules.core.future_tech_core import create_future_tech_core
+    FUTURE_TECH_AVAILABLE = True
+except ImportError:
+    FUTURE_TECH_AVAILABLE = False
+    print("⚠️ Future-Tech Core not available")
+
 
 class CommandExecutor:
     """
@@ -198,6 +206,17 @@ class CommandExecutor:
             self.weather_news,
             self.password_vault
         )
+        
+        # Future-Tech Core (Ultra-Advanced AI System)
+        if FUTURE_TECH_AVAILABLE:
+            try:
+                self.future_tech = create_future_tech_core()
+                print("🌟 Future-Tech Core: ACTIVE")
+            except Exception as e:
+                self.future_tech = None
+                print(f"⚠️ Future-Tech Core initialization failed: {e}")
+        else:
+            self.future_tech = None
         
         # Tracking for persona
         self.command_count = 0
@@ -2904,6 +2923,40 @@ class CommandExecutor:
             elif action == "get_threat_log":
                 log = self.security_enhancements.get_threat_log()
                 return {"success": True, "message": log}
+            
+            # ==================== FUTURE-TECH CORE ====================
+            elif action == "future_tech_process" or action == "ultra_intelligent_command":
+                if not self.future_tech:
+                    return {"success": False, "message": "Future-Tech Core not available. Install required modules."}
+                
+                command = parameters.get("command", "")
+                screenshot = parameters.get("screenshot_path")
+                
+                result = self.future_tech.process_ultra_intelligent_command(command, screenshot)
+                
+                msg = f"🌟 FUTURE-TECH PROCESSING\n\n✅ Command: {command}\n\n"
+                
+                if result.get("emotion_state"):
+                    state = result["emotion_state"]
+                    msg += f"🎭 State: {state.get('emotion')} (Stress: {state.get('stress_level', 0):.0%})\n\n"
+                
+                if result.get("predictions"):
+                    msg += "🔮 Predictions:\n" + "\n".join([f"  • {p.get('action', p)}" for p in result["predictions"][:3]]) + "\n\n"
+                
+                if result.get("suggestions"):
+                    msg += "💡 Suggestions:\n" + "\n".join([f"  • {s}" for s in result["suggestions"][:3]])
+                
+                return {"success": True, "message": msg, "full_result": result}
+            
+            elif action == "future_tech_status":
+                if not self.future_tech:
+                    return {"success": False, "message": "Future-Tech Core not available"}
+                
+                status = self.future_tech.get_status_report()
+                msg = f"🌟 FUTURE-TECH STATUS\n\nMemory: {status['memory_size']:,} | Productivity: {status['productivity_score']:.1%}\n"
+                msg += f"State: {status['emotion_state'].get('emotion')} | Monitoring: {'✅' if status['monitoring'] else '⏸️'}"
+                
+                return {"success": True, "message": msg}
 
             # ==================== DEFAULT ====================
             else:
