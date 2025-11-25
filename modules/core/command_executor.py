@@ -2970,3 +2970,127 @@ class CommandExecutor:
                 "success": False,
                 "message": f"Error executing action '{action}': {str(e)}"
             }
+
+
+# ============================================================
+# FACTORY FUNCTION - Creates properly initialized CommandExecutor
+# ============================================================
+
+def create_command_executor(enable_future_tech=True, auto_start_monitoring=False):
+    """
+    Factory function to create a fully initialized CommandExecutor instance
+    
+    Args:
+        enable_future_tech (bool): Enable Future-Tech Core if available
+        auto_start_monitoring (bool): Start background monitoring automatically
+    
+    Returns:
+        CommandExecutor: Fully initialized and ready-to-use executor
+    
+    Example:
+        executor = create_command_executor()
+        result = executor.execute_single_action("send_email", {
+            "to": "user@example.com",
+            "subject": "Hello",
+            "body": "Test message"
+        })
+    """
+    print("\n" + "="*70)
+    print("🤖 INITIALIZING COMMAND EXECUTOR")
+    print("="*70)
+    
+    try:
+        # Create executor instance
+        executor = CommandExecutor()
+        print("✅ CommandExecutor initialized")
+        
+        # Initialize Future-Tech Core if available and enabled
+        if enable_future_tech and FUTURE_TECH_AVAILABLE:
+            print("🌟 Initializing Future-Tech Core...")
+            try:
+                executor.future_tech = create_future_tech_core()
+                print("✅ Future-Tech Core ready")
+                
+                # Start monitoring if requested
+                if auto_start_monitoring:
+                    executor.future_tech.start_continuous_monitoring()
+                    print("✅ Background monitoring started")
+            except Exception as e:
+                print(f"⚠️ Future-Tech Core initialization failed: {e}")
+                executor.future_tech = None
+        else:
+            executor.future_tech = None
+        
+        # Verify all core systems
+        systems_status = {
+            "GUI Automation": "✅" if executor.gui else "❌",
+            "Email": "✅" if executor.email_sender else "❌",
+            "Phone Dialer": "✅" if executor.phone_dialer else "❌",
+            "WhatsApp": "✅" if executor.whatsapp else "❌",
+            "System Control": "✅" if executor.system_controller else "❌",
+            "Persona Service": "✅" if executor.persona_service else "❌",
+            "Desktop RAG": "✅" if executor.desktop_rag else "❌",
+            "Future-Tech": "✅" if executor.future_tech else "⏸️",
+        }
+        
+        print("\n📊 SYSTEM STATUS:")
+        for system, status in systems_status.items():
+            print(f"  {status} {system}")
+        
+        print("\n" + "="*70)
+        print("🚀 CommandExecutor Ready!")
+        print("="*70 + "\n")
+        
+        return executor
+        
+    except Exception as e:
+        print(f"\n❌ FATAL ERROR initializing CommandExecutor: {e}")
+        print("="*70 + "\n")
+        import traceback
+        traceback.print_exc()
+        raise
+
+
+def create_command_executor_minimal():
+    """
+    Create a minimal CommandExecutor with only core features
+    Useful for testing or low-resource environments
+    
+    Returns:
+        CommandExecutor: Basic executor without heavy features
+    """
+    print("Creating minimal CommandExecutor...")
+    executor = CommandExecutor()
+    executor.future_tech = None  # Don't load Future-Tech
+    print("✅ Minimal CommandExecutor created")
+    return executor
+
+
+def get_command_executor():
+    """
+    Get or create the global CommandExecutor instance
+    Uses lazy loading for performance
+    
+    Returns:
+        CommandExecutor: Global executor instance
+    """
+    global _GLOBAL_EXECUTOR
+    if '_GLOBAL_EXECUTOR' not in globals() or _GLOBAL_EXECUTOR is None:
+        _GLOBAL_EXECUTOR = create_command_executor()
+    return _GLOBAL_EXECUTOR
+
+
+# Module-level executor instance (lazy loaded)
+_GLOBAL_EXECUTOR = None
+
+
+if __name__ == "__main__":
+    # Example usage when running directly
+    executor = create_command_executor()
+    
+    # Test a simple action
+    print("\n📝 Testing basic action...")
+    result = executor.execute_single_action("get_quick_weather", {})
+    print(f"Weather: {result.get('message')}")
+    
+    print("\n✅ CommandExecutor working correctly!")
