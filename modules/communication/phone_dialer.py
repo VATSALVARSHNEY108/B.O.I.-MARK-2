@@ -454,7 +454,7 @@ class PhoneDialer:
                         except Exception as ocr_error:
                             print(f"ℹ️ OCR detection not available: {ocr_error}")
                         
-                        # Strategy 3: Direct screen coordinate clicking
+                        # Strategy 3: Click the call button at bottom of screen
                         print("📞 Attempting to click Call button...")
                         
                         # Check if we have a calibrated position
@@ -473,28 +473,33 @@ class PhoneDialer:
                                     calibrated = True
                                     print("✅ Clicked at calibrated position!")
                         except FileNotFoundError:
-                            print("   No calibration found. Using estimated positions...")
+                            print("   No calibration found. Using Phone Link layout positions...")
                         except Exception as e:
                             print(f"   Calibration error: {e}")
                         
-                        # If no calibration, try typical positions
+                        # If no calibration, try Phone Link's actual button positions
                         if not calibrated:
                             # Get screen size
                             screen_width, screen_height = pyautogui.size()
                             
-                            # Phone Link Call button is usually in the center or slightly right
-                            # Try clicking at several likely positions
+                            # Based on Phone Link UI: Call button is at the BOTTOM
+                            # Usually at bottom-center or bottom-right of the Phone Link window
+                            # Phone Link window is typically on the right side of screen
+                            
                             click_positions = [
-                                (screen_width // 2, screen_height // 2),  # Center
-                                (screen_width // 2 + 100, screen_height // 2),  # Center-right
-                                (screen_width // 2, screen_height // 2 + 50),  # Center-bottom
-                                (screen_width // 2 + 150, screen_height // 2 + 100),  # Bottom-right of center
+                                # Bottom center-right (most likely for call button)
+                                (int(screen_width * 0.85), int(screen_height * 0.92)),  # Bottom right area
+                                (int(screen_width * 0.5), int(screen_height * 0.95)),   # Bottom center
+                                (int(screen_width * 0.75), int(screen_height * 0.90)),  # Bottom center-right
+                                (int(screen_width * 0.85), int(screen_height * 0.85)),  # Right side, lower
+                                # Also try dial pad area (right side of screen)
+                                (int(screen_width * 0.88), int(screen_height * 0.70)),  # Dial pad area
                             ]
                             
                             for i, (x, y) in enumerate(click_positions):
-                                print(f"   Trying position {i+1}/4: ({x}, {y})")
+                                print(f"   Trying position {i+1}/5: ({x}, {y})")
                                 pyautogui.click(x, y)
-                                time.sleep(0.4)
+                                time.sleep(0.5)
                             
                             print("✅ Click commands sent!")
                             print()

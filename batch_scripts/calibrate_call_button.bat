@@ -2,9 +2,9 @@
 REM Calibrate Phone Link Call Button Position
 REM Finds the exact position of the Call button on your screen
 
-echo ========================================
+echo ==================================
 echo   PHONE LINK CALL BUTTON CALIBRATION
-echo ========================================
+echo ==============================================
 echo.
 echo This tool will help you find the exact
 echo position of the Call button so auto-
