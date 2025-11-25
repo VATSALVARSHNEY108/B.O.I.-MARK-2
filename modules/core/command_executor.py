@@ -71,6 +71,7 @@ from modules.communication.communication_enhancements import CommunicationEnhanc
 from modules.batch_file_reader import batch_reader
 from modules.utilities.optimistic_weather import optimistic_weather
 from modules.intelligence.persona_response_service import create_persona_service
+from modules.voice.feature_speaker import create_feature_speaker
 
 # Future-Tech Core
 try:
