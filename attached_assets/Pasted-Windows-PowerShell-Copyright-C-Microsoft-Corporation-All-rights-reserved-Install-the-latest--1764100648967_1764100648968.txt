@@ -1,0 +1,308 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+(.venv1) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4> python vatsal.py
+🚀 Starting BOI (Barely Obeys Instructions) Desktop Automation...
+============================================================
+2025-11-26 01:16:33.142 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:33.143 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.144 
+  Warning: to view this Streamlit app on a browser, run it with the following
+  command:
+
+    streamlit run vatsal.py [ARGUMENTS]
+2025-11-26 01:16:34.144 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.144 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.145 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.145 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.145 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.146 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.149 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.149 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.150 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.150 Session state does not function when running a script without `streamlit run`
+2025-11-26 01:16:34.150 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.151 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.151 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.151 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.151 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.152 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.153 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.153 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.153 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-26 01:16:34.154 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+pygame 2.6.1 (SDL 2.28.4, Python 3.10.11)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+2025-11-26 01:16:38.856767: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-11-26 01:16:41.713128: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+✅ Window icon loaded from: C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4\assets\vatsal_icon.png
+📱 Phone Link Monitor initialized
+📱 WhatsApp automation ready
+📧 Email Sender (DEMO MODE - credentials not configured)
+💬 Communication Enhancements initialized
+   ✅ 8 advanced features ready
+🎵 Spotify API mode enabled
+⚙️ Windows 11 Settings Controller: Active
+🧠 Advanced Desktop RAG initialized
+   📊 Indexed files: 0
+   🏷️  Tagged files: 0
+   🔗 File relationships: 0
+🤖 AI Screen Suggester ready!
+📱 Chat Monitor initialized
+   ⚠️  Gmail credentials not configured
+   ⚠️  Twilio credentials not configured
+📱 Visual Chat Monitor initialized
+   ✅ Will control real Gmail/WhatsApp on your screen
+👁️ Smart Screen Monitor initialized
+🔊 Feature Speaker: ACTIVE
+
+======================================================================
+🌟 INITIALIZING FUTURE-TECH CORE 🌟
+======================================================================
+🧠 Loading Multi-Modal AI...
+🧠 Multi-Modal AI System initialized
+📊 Loading Behavioral Learning...
+🔮 Loading Predictive Actions...
+🔮 Predictive Actions Engine initialized
+💾 Loading Enhanced Memory...
+🧠 Enhanced Contextual Memory initialized
+👁️ Loading Screen Monitoring...
+🚀 AI Screen Monitoring System initialized
+   ✨ 8 AI analysis modes available
+   📊 Analytics tracking enabled
+   🧠 Pattern learning active
+✅ Future-Tech Core Initialized!
+======================================================================
+
+🌟 Future-Tech Core: ACTIVE
+⚙️ Command Executor initialized with full automation suite
+   🤖 Persona Service: Active
+   🧠 Desktop RAG: Active
+   💬 Communication Enhancements: Active
+   🎮 GUI Automation: Active
+   📊 40+ Modules Loaded
+✅ Self-Operating Computer initialized
+✅ Comprehensive Desktop Controller initialized
+✅ Command Parser initialized
+🎯 Task Coordinator initialized
+✅ Enhanced Command Executor initialized with self-operating support
+✅ Enhanced Command Executor initialized
+🚀 Advanced Smart Screen Monitor initialized
+   ✨ Enhanced with multi-modal AI intelligence
+🚀 AI Screen Monitoring System initialized
+   ✨ 8 AI analysis modes available
+   📊 Analytics tracking enabled
+   🧠 Pattern learning active
+📁 File Automation System initialized
+🔊 Feature Speaker initialized
+🔧 Initializing automation capabilities...
+📱 Phone Link Monitor initialized
+📱 WhatsApp automation ready
+📧 Email Sender (DEMO MODE - credentials not configured)
+💬 Communication Enhancements initialized
+   ✅ 8 advanced features ready
+🎵 Spotify API mode enabled
+⚙️ Windows 11 Settings Controller: Active
+🧠 Advanced Desktop RAG initialized
+   📊 Indexed files: 0
+   🏷️  Tagged files: 0
+   🔗 File relationships: 0
+🤖 AI Screen Suggester ready!
+📱 Chat Monitor initialized
+   ⚠️  Gmail credentials not configured
+   ⚠️  Twilio credentials not configured
+📱 Visual Chat Monitor initialized
+   ✅ Will control real Gmail/WhatsApp on your screen
+👁️ Smart Screen Monitor initialized
+🔊 Feature Speaker: ACTIVE
+
+======================================================================
+🌟 INITIALIZING FUTURE-TECH CORE 🌟
+======================================================================
+🧠 Loading Multi-Modal AI...
+🧠 Multi-Modal AI System initialized
+📊 Loading Behavioral Learning...
+🔮 Loading Predictive Actions...
+🔮 Predictive Actions Engine initialized
+💾 Loading Enhanced Memory...
+🧠 Enhanced Contextual Memory initialized
+👁️ Loading Screen Monitoring...
+🚀 AI Screen Monitoring System initialized
+   ✨ 8 AI analysis modes available
+   📊 Analytics tracking enabled
+   🧠 Pattern learning active
+✅ Future-Tech Core Initialized!
+======================================================================
+
+🌟 Future-Tech Core: ACTIVE
+⚙️ Command Executor initialized with full automation suite
+   🤖 Persona Service: Active
+   🧠 Desktop RAG: Active
+   💬 Communication Enhancements: Active
+   🎮 GUI Automation: Active
+   📊 40+ Modules Loaded
+🧠 Initializing emotional intelligence...
+🎯 Initializing common sense reasoning...
+✅ Self-Operating Computer initialized
+✅ Comprehensive Desktop Controller initialized
+✅ Command Parser initialized
+✅ WebSocket client connected
+✅ Voice sound effects initialized
+✅ Created default sound effects in voice_sounds/
+🔊 Voice sound effects ready!
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1764100009.220322    7160 gesture_recognizer_graph.cc:129] Hand Gesture Recognizer contains CPU only ops. Sets HandGestureRecognizerGraph acceleration to Xnnpack.
+I0000 00:00:1764100009.230780    7160 hand_gesture_recognizer_graph.cc:250] Custom gesture classifier is not defined.
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+✅ MediaPipe gesture recognizer loaded
+   Available gestures: ['FIST', 'OPEN_PALM', 'ONE_FINGER_UP', 'THUMBS_DOWN', 'THUMBS_UP', 'PEACE_SIGN', 'ROCK_SIGN']
+✅ MediaPipe pretrained model loaded
+   Gestures: ['FIST', 'OPEN_PALM', 'ONE_FINGER_UP', 'THUMBS_DOWN', 'THUMBS_UP', 'PEACE_SIGN', 'ROCK_SIGN', 'SPOCK', 'OK_CIRCLE', 'PINCH']
+
+======================================================================
+⚠️  CUSTOM TRAINED GESTURES NOT FOUND
+======================================================================
+   Expected model files at:
+   - biometric_data/hands\models\gesture_model.pkl
+   - biometric_data/hands\models\gesture_scaler.pkl
+   - biometric_data/hands\models\gesture_labels.pkl
+
+   Missing files: gesture_model.pkl, gesture_scaler.pkl, gesture_labels.pkl
+
+   📝 To train custom gestures:
+      1. Run: python train_hand_gestures.py
+      2. Capture samples for each gesture (50+ recommended)
+      3. Train the model
+      4. Restart the gesture detector
+
+   ℹ️  Currently using:
+      ✅ MediaPipe pretrained gestures (7 gestures)
+      ✅ Hardcoded finger-counting gestures
+======================================================================
+
+
+======================================================================
+🎯 GESTURE DETECTION SYSTEM - AVAILABLE GESTURES
+======================================================================
+
+📱 MediaPipe Pretrained Gestures (10 gestures):
+   ✅ NO TRAINING REQUIRED - Works instantly!
+   • FIST
+   • OPEN_PALM
+   • ONE_FINGER_UP
+   • THUMBS_DOWN
+   • THUMBS_UP
+   • PEACE_SIGN
+   • ROCK_SIGN
+   • SPOCK
+   • OK_CIRCLE
+   • PINCH
+
+🎓 Custom Trained Gestures:
+   ❌ NOT CONFIGURED
+   ℹ️  Run 'python train_hand_gestures.py' on local machine to train
+   📝 Recommended: Train 10+ custom gestures for best accuracy
+
+👆 Hardcoded Finger-Counting Gestures (4 gestures):
+   ✅ Always available (fallback method)
+   • OPEN_PALM
+   • FIST
+   • PEACE_SIGN
+   • THUMBS_UP
+
+📊 Total Configured Gestures: 4
+======================================================================
+
+📱 Phone Link Monitor initialized
+📱 WhatsApp automation ready
+📧 Email Sender (DEMO MODE - credentials not configured)
+💬 Communication Enhancements initialized
+   ✅ 8 advanced features ready
+🎵 Spotify API mode enabled
+⚙️ Windows 11 Settings Controller: Active
+🧠 Advanced Desktop RAG initialized
+   📊 Indexed files: 0
+   🏷️  Tagged files: 0
+   🔗 File relationships: 0
+🤖 AI Screen Suggester ready!
+📱 Chat Monitor initialized
+   ⚠️  Gmail credentials not configured
+   ⚠️  Twilio credentials not configured
+📱 Visual Chat Monitor initialized
+   ✅ Will control real Gmail/WhatsApp on your screen
+👁️ Smart Screen Monitor initialized
+🔊 Feature Speaker: ACTIVE
+
+======================================================================
+🌟 INITIALIZING FUTURE-TECH CORE 🌟
+======================================================================
+🧠 Loading Multi-Modal AI...
+🧠 Multi-Modal AI System initialized
+📊 Loading Behavioral Learning...
+🔮 Loading Predictive Actions...
+🔮 Predictive Actions Engine initialized
+💾 Loading Enhanced Memory...
+🧠 Enhanced Contextual Memory initialized
+👁️ Loading Screen Monitoring...
+🚀 AI Screen Monitoring System initialized
+   ✨ 8 AI analysis modes available
+   📊 Analytics tracking enabled
+   🧠 Pattern learning active
+✅ Future-Tech Core Initialized!
+======================================================================
+
+🌟 Future-Tech Core: ACTIVE
+⚙️ Command Executor initialized with full automation suite
+   🤖 Persona Service: Active
+   🧠 Desktop RAG: Active
+   💬 Communication Enhancements: Active
+   🎮 GUI Automation: Active
+   📊 40+ Modules Loaded
+✅ AI Engine Ready (Google Gemini 1.5 Flash)
+✅ Phone Link Controller initialized
+⚠️ Security dashboard unavailable: module 'cv2.face' has no attribute 'LBPHFaceRecognizer_create'
+
+============================================================
+🚀 DESKTOP SYNC MANAGER - AUTO STARTUP
+============================================================
+
+📊 Startup Sequence Results:
+------------------------------------------------------------
+✅ Setup Desktop Structure: SUCCESS
+   Total folders: 6
+❌ Prepare Batch File: FAILED
+   Batch file 'desktop_file_controller.bat' not found!
+      Current directory: C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4
+      Script directory: C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4\modules\file_management
+      Looking for: C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4\modules\file_management\desktop_file_controller.bat
+      💡 Please download 'desktop_file_controller.bat' from Replit
+         and place it in: C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4\modules\file_management
+✅ Create Desktop Structure: SUCCESS
+   Total folders: 7
+
+============================================================
+⚠️  Some steps had issues. Check details above.
+============================================================
+
+⚠️ Automation Orchestrator unavailable: name 'AutomationOrchestrator' is not defined
+✅ Batch Utilities initialized
+⚠️ WebSocket Client connection failed: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /socket.io/?transport=polling&EIO=4&t=1764100009.1749558 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000230E18A8310>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+
+📋 Task: Respond to the user's greeting.
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4\modules\core\gui_app.py", line 528, in speak_output
+    self.print_output("🔊 Speaking output...", "success")
+AttributeError: 'ModernBOIGUI' object has no attribute 'print_output'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4\modules\core\gui_app.py", line 532, in speak_output
+    self.print_output(f"Error speaking: {e}", "error")
+AttributeError: 'ModernBOIGUI' object has no attribute 'print_output'
+(.venv1) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4> 
