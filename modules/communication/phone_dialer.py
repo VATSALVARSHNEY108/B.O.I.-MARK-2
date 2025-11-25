@@ -454,26 +454,71 @@ class PhoneDialer:
                         except Exception as ocr_error:
                             print(f"ℹ️ OCR detection not available: {ocr_error}")
                         
-                        # Strategy 3: Use Tab navigation + Enter (most reliable fallback)
-                        # Phone Link usually focuses on the dial field, Tab moves to Call button
-                        print("📞 Using Tab navigation to reach Call button...")
-                        time.sleep(0.5)
+                        # Strategy 3: Direct screen coordinate clicking
+                        print("📞 Attempting to click Call button...")
                         
-                        # Press Tab to move from dial field to Call button
-                        pyautogui.press('tab')
-                        time.sleep(0.3)
+                        # Check if we have a calibrated position
+                        import json
+                        calibrated = False
+                        try:
+                            with open("config/phone_link_button.json", 'r') as f:
+                                config = json.load(f)
+                                cal_x = config.get("call_button_x")
+                                cal_y = config.get("call_button_y")
+                                
+                                if cal_x and cal_y:
+                                    print(f"   Using calibrated position: ({cal_x}, {cal_y})")
+                                    pyautogui.click(cal_x, cal_y)
+                                    time.sleep(0.5)
+                                    calibrated = True
+                                    print("✅ Clicked at calibrated position!")
+                        except FileNotFoundError:
+                            print("   No calibration found. Using estimated positions...")
+                        except Exception as e:
+                            print(f"   Calibration error: {e}")
                         
-                        # Press Enter to click the Call button
+                        # If no calibration, try typical positions
+                        if not calibrated:
+                            # Get screen size
+                            screen_width, screen_height = pyautogui.size()
+                            
+                            # Phone Link Call button is usually in the center or slightly right
+                            # Try clicking at several likely positions
+                            click_positions = [
+                                (screen_width // 2, screen_height // 2),  # Center
+                                (screen_width // 2 + 100, screen_height // 2),  # Center-right
+                                (screen_width // 2, screen_height // 2 + 50),  # Center-bottom
+                                (screen_width // 2 + 150, screen_height // 2 + 100),  # Bottom-right of center
+                            ]
+                            
+                            for i, (x, y) in enumerate(click_positions):
+                                print(f"   Trying position {i+1}/4: ({x}, {y})")
+                                pyautogui.click(x, y)
+                                time.sleep(0.4)
+                            
+                            print("✅ Click commands sent!")
+                            print()
+                            print("   💡 TIP: Run 'python scripts/calibrate_phone_link_button.py'")
+                            print("      to find the exact Call button position on your screen!")
+                        
+                        # Also try keyboard shortcuts as backup
+                        print("   Backup: Trying keyboard shortcuts...")
                         pyautogui.press('enter')
-                        time.sleep(0.5)
+                        time.sleep(0.2)
+                        pyautogui.press('space')
+                        time.sleep(0.2)
                         
-                        print("✅ Call initiated!")
+                        # Try Tab navigation as final backup
+                        for i in range(2):
+                            pyautogui.press('tab')
+                            time.sleep(0.1)
+                        pyautogui.press('enter')
                         
                         return {
                             "success": True,
-                            "message": f"📱 Calling {phone_number} via Phone Link",
+                            "message": f"📱 Calling {phone_number} via Phone Link (tried multiple click positions)",
                             "phone": phone_number,
-                            "method": "phone_link_auto_tab",
+                            "method": "phone_link_auto_multiclick",
                             "auto_call": True
                         }
                     except ImportError:
