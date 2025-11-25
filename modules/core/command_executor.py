@@ -196,8 +196,14 @@ class CommandExecutor:
         self.human_interaction = create_human_interaction()
         self.cloud_ecosystem = create_cloud_ecosystem()
         
-        # Voice Assistant
+        # Voice Assistant & Feature Speaker
         self.voice_assistant = VoiceAssistant()
+        try:
+            self.feature_speaker = create_feature_speaker()
+            print("🔊 Feature Speaker: ACTIVE")
+        except Exception as e:
+            self.feature_speaker = None
+            print(f"⚠️ Feature Speaker unavailable: {e}")
         
         # Ecosystem Manager
         self.ecosystem = EcosystemManager(
@@ -2924,6 +2930,30 @@ class CommandExecutor:
             elif action == "get_threat_log":
                 log = self.security_enhancements.get_threat_log()
                 return {"success": True, "message": log}
+            
+            # ==================== FEATURE SPEAKER ====================
+            elif action == "speak_main_features":
+                if not self.feature_speaker:
+                    return {"success": False, "message": "Feature Speaker not available"}
+                return self.feature_speaker.speak_main_features()
+            
+            elif action == "speak_brief_features":
+                if not self.feature_speaker:
+                    return {"success": False, "message": "Feature Speaker not available"}
+                return self.feature_speaker.speak_brief_features()
+            
+            elif action == "speak_quick_start":
+                if not self.feature_speaker:
+                    return {"success": False, "message": "Feature Speaker not available"}
+                return self.feature_speaker.speak_quick_start()
+            
+            elif action == "speak_text":
+                if not self.feature_speaker:
+                    return {"success": False, "message": "Feature Speaker not available"}
+                text = parameters.get("text", "")
+                if not text:
+                    return {"success": False, "message": "No text provided to speak"}
+                return self.feature_speaker.speak_custom(text)
             
             # ==================== FUTURE-TECH CORE ====================
             elif action == "future_tech_process" or action == "ultra_intelligent_command":

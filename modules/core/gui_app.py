@@ -52,6 +52,7 @@ from modules.utilities.batch_utilities import get_batch_utilities
 from modules.communication.phone_dialer import create_phone_dialer
 from modules.utilities.contact_manager import ContactManager
 from scripts.ai_phone_link_controller import AIPhoneLinkController
+from modules.voice.feature_speaker import create_feature_speaker
 
 
 load_dotenv()
@@ -165,6 +166,14 @@ class ModernBOIGUI:
             self.clipboard_handler = ClipboardTextHandler()
             self.smart_automation = SmartAutomationManager()
             self.desktop_controller = DesktopFileController()
+            
+            # Feature Speaker (for speaking output)
+            try:
+                self.feature_speaker = create_feature_speaker()
+                print("🔊 Feature Speaker initialized")
+            except Exception as e:
+                self.feature_speaker = None
+                print(f"⚠️ Feature Speaker unavailable: {e}")
 
             # Comprehensive desktop controller
             try:
@@ -499,13 +508,39 @@ class ModernBOIGUI:
             fg=self.TEXT_PRIMARY
         ).pack(side="left", padx=(0, 12))
 
+        title_frame = tk.Frame(header, bg=self.BG_SECONDARY)
+        title_frame.pack(side="left", expand=True)
+        
         tk.Label(
-            header,
+            title_frame,
             text="Output Console",
             font=("Segoe UI", 16, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left")
+        
+        # Speak Output Button
+        def speak_output():
+            if hasattr(self, 'feature_speaker') and self.feature_speaker:
+                try:
+                    output_text = self.output_area.get("1.0", "end-1c").strip()
+                    if output_text:
+                        self.feature_speaker.speak_text(output_text)
+                        self.print_output("🔊 Speaking output...", "success")
+                    else:
+                        self.print_output("No text to speak in output area", "warning")
+                except Exception as e:
+                    self.print_output(f"Error speaking: {e}", "error")
+            else:
+                self.print_output("Feature Speaker not available", "error")
+        
+        btn_shadow, btn = self.create_shadowed_button(
+            header,
+            text="🔊 Speak",
+            command=speak_output,
+            font=("Segoe UI", 10, "bold")
+        )
+        btn_shadow.pack(side="right", padx=(10, 0))
 
         # Output console with better styling
         console_frame = tk.Frame(section, bg=self.BG_SECONDARY)
