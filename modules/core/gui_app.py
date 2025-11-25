@@ -4227,8 +4227,8 @@ personality and advanced automation capabilities.
             ("🌟 GitHub Trending", "open https://github.com/trending"),
             ("💡 Search Google ML", "search google for machine learning"),
             ("🔎 Search StackOverflow", "search stackoverflow for python async"),
-            ("📺 YouTube Python Tutorial", "search youtube for python tutorial"),
-            ("📺 YouTube Coding", "search youtube for coding tutorials"),
+            ("▶️ Play Python Tutorial", "play youtube video python tutorial"),
+            ("▶️ Play Coding Tutorial", "play youtube video coding tutorials"),
         ]
 
         for text, command in quick_actions:
@@ -9442,16 +9442,88 @@ Answered: {result.get('timestamp', 'N/A')}
         self.add_hover_effect(btn, "#313244", "#45475a")
 
     def create_youtube_feature(self, parent, color):
-        """Create YouTube feature UI"""
+        """Create YouTube feature UI with improved video playing"""
         tk.Label(parent, text="🎬 YouTube", bg="#181825", fg=color,
                  font=("Segoe UI", 11, "bold")).pack(pady=(0, 15))
 
-        btn = tk.Button(parent, text="🎬 Open YouTube", bg="#2e3350", fg="#e0e0e0",
+        # Search and Play input
+        input_frame = tk.Frame(parent, bg="#181825")
+        input_frame.pack(fill="x", pady=5)
+        
+        self.youtube_search_entry = tk.Entry(input_frame, bg="#2e3350", fg="#e0e0e0",
+                                             font=("Segoe UI", 10), relief="flat",
+                                             insertbackground="#e0e0e0")
+        self.youtube_search_entry.pack(side="left", fill="x", expand=True, padx=(0, 5))
+        self.youtube_search_entry.insert(0, "Enter video search...")
+        self.youtube_search_entry.bind("<FocusIn>", lambda e: self.youtube_search_entry.delete(0, tk.END) if self.youtube_search_entry.get() == "Enter video search..." else None)
+        self.youtube_search_entry.bind("<Return>", lambda e: self.play_youtube_from_input())
+        
+        play_btn = tk.Button(input_frame, text="▶️", bg="#00d4aa", fg="#0f0f1e",
+                           font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                           command=self.play_youtube_from_input,
+                           padx=12, pady=8)
+        play_btn.pack(side="right")
+        self.add_hover_effect(play_btn, "#a6e3a1", "#f5c2e7")
+        
+        # Quick action buttons
+        btn1 = tk.Button(parent, text="🎬 Open YouTube", bg="#2e3350", fg="#e0e0e0",
                         font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
                         command=lambda: self.load_comprehensive_command("Open YouTube"),
                         padx=20, pady=12)
-        btn.pack(fill="x", pady=5)
-        self.add_hover_effect(btn, "#313244", "#45475a")
+        btn1.pack(fill="x", pady=5)
+        self.add_hover_effect(btn1, "#313244", "#45475a")
+        
+        btn2 = tk.Button(parent, text="🎵 Play Music", bg="#2e3350", fg="#e0e0e0",
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.play_youtube_video("music"),
+                        padx=20, pady=12)
+        btn2.pack(fill="x", pady=5)
+        self.add_hover_effect(btn2, "#313244", "#45475a")
+        
+        btn3 = tk.Button(parent, text="📚 Python Tutorial", bg="#2e3350", fg="#e0e0e0",
+                        font=("Segoe UI", 10, "bold"), relief="flat", cursor="hand2",
+                        command=lambda: self.play_youtube_video("python tutorial"),
+                        padx=20, pady=12)
+        btn3.pack(fill="x", pady=5)
+        self.add_hover_effect(btn3, "#313244", "#45475a")
+    
+    def play_youtube_from_input(self):
+        """Play YouTube video from search input"""
+        query = self.youtube_search_entry.get().strip()
+        if query and query != "Enter video search...":
+            self.play_youtube_video(query)
+            self.youtube_search_entry.delete(0, tk.END)
+            self.youtube_search_entry.insert(0, "Enter video search...")
+    
+    def play_youtube_video(self, query):
+        """Play YouTube video using improved Selenium method"""
+        def execute():
+            try:
+                self.append_comprehensive_output(f"\n🎬 Playing YouTube video: {query}\n", "info")
+                self.append_comprehensive_output("⏳ Starting browser and finding video...\n", "info")
+                
+                # Use the selenium YouTube automation
+                if not hasattr(self, 'selenium_youtube') or self.selenium_youtube is None:
+                    from modules.web.selenium_web_automator import SeleniumWebAutomator
+                    self.selenium_youtube = SeleniumWebAutomator(headless=False)
+                
+                result = self.selenium_youtube.youtube_play_video(query)
+                
+                if result.get("success"):
+                    self.append_comprehensive_output(f"✅ {result.get('message')}\n", "success")
+                else:
+                    self.append_comprehensive_output(f"❌ {result.get('error')}\n", "error")
+                    # Try fallback method
+                    self.append_comprehensive_output("⚠️ Trying fallback method...\n", "info")
+                    self.load_comprehensive_command(f"play youtube video {query}")
+                    
+            except Exception as e:
+                self.append_comprehensive_output(f"❌ Error: {str(e)}\n", "error")
+                self.append_comprehensive_output("⚠️ Using fallback method...\n", "info")
+                self.load_comprehensive_command(f"play youtube video {query}")
+        
+        thread = threading.Thread(target=execute, daemon=True)
+        thread.start()
 
     def create_volume_feature(self, parent, color):
         """Create Volume control feature UI"""

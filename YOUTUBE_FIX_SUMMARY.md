@@ -1,4 +1,4 @@
-# YouTube Video Clicking Fix
+# YouTube Video Clicking Fix - GUI Integration
 
 ## What Was the Problem?
 
@@ -8,6 +8,8 @@ The YouTube video clicking feature wasn't working because it used screen coordin
 2. Browser layouts vary
 3. YouTube's design updates can shift element positions
 4. Different resolutions affect coordinate accuracy
+
+## Solution: Added to GUI Application
 
 ## What Was Fixed?
 
@@ -32,17 +34,45 @@ I've implemented a **robust Selenium-based solution** that:
 - Changed default YouTube playing method from "auto" to "selenium"
 - Added automatic fallback if Selenium fails
 
-### 3. Installed Dependencies
+### 3. **Added to GUI Application** (`modules/core/gui_app.py`)
+- **New YouTube feature section** with:
+  - 🔍 **Search box** - Type any video you want to play
+  - ▶️ **Play button** - Instantly play the video
+  - 🎵 **Quick action: Play Music** - One-click music videos
+  - 📚 **Quick action: Python Tutorial** - One-click tutorials
+  
+- **Updated Web Automation quick actions**:
+  - Changed "Search YouTube" to "▶️ Play YouTube Video"
+  - Now actually clicks and plays the video, not just searches
+
+### 4. Installed Dependencies
 - Added `webdriver-manager` package for automatic Chrome driver management
 
-## How to Use
+## How to Use in GUI
 
-The YouTube commands will now automatically use the better Selenium method:
+### Method 1: YouTube Feature Section
+1. Open your BOI GUI application
+2. Find the "🎬 YouTube" section
+3. Type what you want in the search box (e.g., "python tutorial")
+4. Click the ▶️ button or press Enter
+5. Browser will open and automatically click the first video!
 
+### Method 2: Quick Action Buttons
+In the YouTube section, click:
+- 🎵 **Play Music** - Instantly plays music videos
+- 📚 **Python Tutorial** - Instantly plays Python tutorials
+
+### Method 3: Web Automation Tab
+1. Go to the "🌐 Web" tab
+2. Click "▶️ Play Python Tutorial" or "▶️ Play Coding Tutorial"
+3. Video plays automatically!
+
+### Method 4: Voice/Text Commands
+You can still use voice or text commands:
 ```
 Play python tutorial on YouTube
 Play music on YouTube
-Search for cooking videos on YouTube and play
+Play cooking videos on YouTube
 ```
 
 ## Testing
