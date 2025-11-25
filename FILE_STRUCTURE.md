@@ -158,17 +158,18 @@ BOI/
 
 ```
 
-## Files Moved to Proper Locations
+## Files Organized
 
-| Old Location | New Location | Purpose |
-|---|---|---|
-| `vatsal.py` | `scripts/launch_boi_app.py` | App launcher script |
-| `behavioral_patterns.json` | `config/behavioral_patterns.json` | Configuration file |
-| `behavioral_context.json` | `config/behavioral_context.json` | Configuration file |
+| File Location | Purpose |
+|---|---|
+| `vatsal.py` | **ROOT** - App launcher (user preferred location) |
+| `behavioral_patterns.json` | `config/` - Configuration file |
+| `behavioral_context.json` | `config/` - Configuration file |
 
-## Root Directory Contents (Clean)
+## Root Directory Contents (Organized)
 
 ✅ **Allowed in Root:**
+- `vatsal.py` - Main app launcher (user preference)
 - `.gitignore` - Git configuration
 - `README.md` - Main documentation
 - `replit.md` - Project metadata
@@ -178,12 +179,10 @@ BOI/
 - `INTERCONNECTION_GUIDE.md` - Integration guide
 - `FILE_STRUCTURE.md` - This file
 
-❌ **NOT in Root:**
-- ✅ `vatsal.py` → Moved to `scripts/launch_boi_app.py`
-- ✅ `behavioral_patterns.json` → Moved to `config/`
-- ✅ `behavioral_context.json` → Moved to `config/`
-- ✅ Python code files (all in `modules/` or `scripts/`)
-- ✅ Configuration files (all in `config/`)
+✅ **Organized to Proper Folders:**
+- `behavioral_patterns.json` → `config/`
+- `behavioral_context.json` → `config/`
+- All Python code files → `modules/` or `scripts/`
 
 ## Entry Points
 
