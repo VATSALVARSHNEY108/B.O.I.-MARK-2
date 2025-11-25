@@ -1,0 +1,13 @@
+{
+  "time_based": {
+    "Tuesday_14": [
+      "test command"
+    ]
+  },
+  "sequence_based": {},
+  "context_based": {},
+  "app_usage": {},
+  "command_frequency": {
+    "test command": 1
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "current_activity": "idle",
+  "location": "unknown",
+  "last_command": "test command",
+  "command_history": [
+    "test command"
+  ],
+  "energy_mode": "balanced"
+}

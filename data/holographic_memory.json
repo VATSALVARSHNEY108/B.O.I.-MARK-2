@@ -1,0 +1,55 @@
+[
+  {
+    "timestamp": "2025-11-25T14:40:02.493944",
+    "command": "test command",
+    "result": {
+      "command": "test command",
+      "timestamp": "2025-11-25T14:40:02.330128",
+      "understanding": {
+        "success": false,
+        "message": "Gemini AI not configured. Set GEMINI_API_KEY.",
+        "understanding": {},
+        "actions": []
+      },
+      "predictions": [],
+      "context": {
+        "timestamp": "2025-11-25T14:40:02.330224",
+        "time_of_day": "afternoon",
+        "active_applications": [
+          "sh",
+          "Xvnc",
+          "node",
+          "sandbox",
+          "pid1",
+          "python",
+          "rfbproxy",
+          "fluxbox",
+          "bash",
+          "bin"
+        ],
+        "recent_actions": [],
+        "user_state": {
+          "emotion": "neutral",
+          "stress_level": 0.0,
+          "focus_level": 0.5,
+          "energy_level": 0.5
+        },
+        "productivity_score": 0.5
+      },
+      "actions_taken": [],
+      "emotion_state": {
+        "emotion": "neutral",
+        "stress_level": 0.0,
+        "focus_level": 0.5,
+        "energy_level": 0.5
+      },
+      "suggestions": [],
+      "memory_recall": {
+        "found": 0,
+        "memories": [],
+        "oldest": null
+      }
+    },
+    "type": "interaction"
+  }
+]
