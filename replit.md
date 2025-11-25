@@ -47,6 +47,7 @@ The system offers desktop GUIs built with `tkinter` featuring a light cream back
 -   **Contact-Based Calling:** Full contact management system with name-based calling integrated with Phone Link.
 
 ## Recent Changes (November 25, 2025)
+-   **Phone Link Auto-Call Fix:** Fixed Phone Link call button not being clicked automatically. Implemented three-strategy approach: (1) Visual button detection, (2) OCR text recognition, (3) Tab navigation + Enter (most reliable). Increased wait time from 3s to 4s for Phone Link to load. The Tab navigation method works without additional dependencies using only pyautogui.
 -   **Major Cleanup:** Removed 18 redundant directories (web_gui, simple_chatbot, vatsal_chatbot, vatsal_desktop, vnc_tools, gemini_code_generator, notebooks, sandbox_environment, encrypted_storage, security_dashboard, smart_templates, auto_generated_docs, 2fa_data, activity_monitoring, macros, screenshots, static, templates) and 100+ unnecessary markdown files.
 -   **Weather Service Enhancement:** Fixed weather timeout issues by increasing timeout from 5s to 15s, adding 3-attempt retry logic with delays, specific error handling for timeout/connection errors, and formatted error messages. Weather service now much more reliable.
 -   **YouTube Integration:** Added Selenium-based YouTube video playing in GUI with search functionality and quick action buttons, replacing unreliable screen coordinate clicking.

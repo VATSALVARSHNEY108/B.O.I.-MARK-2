@@ -397,26 +397,83 @@ class PhoneDialer:
                         import time
                         
                         print("⏳ Waiting for Phone Link to open...")
-                        time.sleep(3)  # Wait for Phone Link to fully load
+                        time.sleep(4)  # Increased wait time for Phone Link to fully load
                         
                         # Try to find and click the "Call" button
-                        # Phone Link usually has a green call button
                         print("🔍 Looking for Call button...")
                         
-                        # Option 1: Try to find call button by image (if available)
-                        # Option 2: Use keyboard shortcut - Enter key usually triggers call
-                        print("📞 Pressing Enter to initiate call...")
+                        # Strategy 1: Try to locate "Call" button by text/image
+                        try:
+                            # Look for the green call button on screen
+                            # Phone Link typically has a green call button in the center-right area
+                            call_button = pyautogui.locateOnScreen('call_button.png', confidence=0.7)
+                            if call_button:
+                                # Found the button, click it
+                                button_x, button_y = pyautogui.center(call_button)
+                                pyautogui.click(button_x, button_y)
+                                print("✅ Call button clicked!")
+                                
+                                return {
+                                    "success": True,
+                                    "message": f"📱 Calling {phone_number} via Phone Link",
+                                    "phone": phone_number,
+                                    "method": "phone_link_auto_visual",
+                                    "auto_call": True
+                                }
+                        except Exception as img_error:
+                            print(f"ℹ️ Visual button detection not available: {img_error}")
+                        
+                        # Strategy 2: Try to find "Call" button using OCR
+                        try:
+                            import pytesseract
+                            from PIL import ImageGrab
+                            import numpy as np
+                            
+                            # Take a screenshot to find "Call" button
+                            screenshot = ImageGrab.grab()
+                            
+                            # Use pytesseract to find text on screen
+                            data = pytesseract.image_to_data(screenshot, output_type=pytesseract.Output.DICT)
+                            
+                            # Look for "Call" text
+                            for i, text in enumerate(data['text']):
+                                if text.strip().lower() in ['call', 'dial']:
+                                    # Found the Call button text, click it
+                                    x = data['left'][i] + data['width'][i] // 2
+                                    y = data['top'][i] + data['height'][i] // 2
+                                    pyautogui.click(x, y)
+                                    print("✅ Call button clicked via OCR!")
+                                    
+                                    return {
+                                        "success": True,
+                                        "message": f"📱 Calling {phone_number} via Phone Link",
+                                        "phone": phone_number,
+                                        "method": "phone_link_auto_ocr",
+                                        "auto_call": True
+                                    }
+                        except Exception as ocr_error:
+                            print(f"ℹ️ OCR detection not available: {ocr_error}")
+                        
+                        # Strategy 3: Use Tab navigation + Enter (most reliable fallback)
+                        # Phone Link usually focuses on the dial field, Tab moves to Call button
+                        print("📞 Using Tab navigation to reach Call button...")
+                        time.sleep(0.5)
+                        
+                        # Press Tab to move from dial field to Call button
+                        pyautogui.press('tab')
+                        time.sleep(0.3)
+                        
+                        # Press Enter to click the Call button
                         pyautogui.press('enter')
                         time.sleep(0.5)
                         
-                        # Backup: Try Alt+C (common shortcut for Call)
-                        pyautogui.hotkey('alt', 'c')
+                        print("✅ Call initiated!")
                         
                         return {
                             "success": True,
-                            "message": f"📱 Phone Link opened and calling {phone_number}",
+                            "message": f"📱 Calling {phone_number} via Phone Link",
                             "phone": phone_number,
-                            "method": "phone_link_auto",
+                            "method": "phone_link_auto_tab",
                             "auto_call": True
                         }
                     except ImportError:
