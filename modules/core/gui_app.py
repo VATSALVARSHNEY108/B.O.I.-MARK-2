@@ -1397,15 +1397,14 @@ class ModernBOIGUI:
                 except:
                     pass
 
-            self.update_output(f"\n{'=' * 60}\n", "info")
-            self.update_output(f"📝 You: {command}\n", "command")
-            self.update_output(f"{'=' * 60}\n\n", "info")
+            # Display user command in chat
+            self.add_chat_message(f"👤 {command}", sender="USER", msg_type="command")
 
             # BOI acknowledgment
             if self.vatsal_mode and self.vatsal and hasattr(self.vatsal, 'acknowledge_command'):
                 try:
                     ack = self.vatsal.acknowledge_command(command)
-                    self.update_output(f"🤖 BOI: {ack}\n\n", "info")
+                    self.update_output(f"{ack}", "info")
                 except Exception as e:
                     print(f"BOI acknowledgment error: {e}")
 
@@ -1418,11 +1417,11 @@ class ModernBOIGUI:
                 if self.vatsal_mode and self.vatsal:
                     try:
                         vatsal_response = self.vatsal.process_with_personality(command, f"Error: {error_msg}")
-                        self.update_output(f"🤖 BOI: {vatsal_response}\n", "error")
+                        self.update_output(vatsal_response, "error")
                     except:
-                        self.update_output(f"❌ {error_msg}\n", "error")
+                        self.update_output(error_msg, "error")
                 else:
-                    self.update_output(f"❌ {error_msg}\n", "error")
+                    self.update_output(error_msg, "error")
 
                 return
 
@@ -1445,7 +1444,7 @@ class ModernBOIGUI:
                 if self.vatsal_mode and self.vatsal:
                     try:
                         vatsal_response = self.vatsal.process_with_personality(command, result['message'])
-                        self.update_output(f"🤖 BOI: {vatsal_response}\n", "success")
+                        self.update_output(vatsal_response, "success")
 
                         # Speak response if speaking enabled
                         if self.speaking_enabled and self.voice_commander:
@@ -1454,25 +1453,25 @@ class ModernBOIGUI:
                             except:
                                 pass
                     except:
-                        self.update_output(f"✅ {result['message']}\n", "success")
+                        self.update_output(result['message'], "success")
                 else:
-                    self.update_output(f"✅ {result['message']}\n", "success")
+                    self.update_output(result['message'], "success")
             else:
                 # Handle error
                 if self.vatsal_mode and self.vatsal:
                     try:
                         vatsal_response = self.vatsal.process_with_personality(command, result['message'])
-                        self.update_output(f"🤖 BOI: {vatsal_response}\n", "error")
+                        self.update_output(vatsal_response, "error")
                     except:
-                        self.update_output(f"❌ {result['message']}\n", "error")
+                        self.update_output(result['message'], "error")
                 else:
-                    self.update_output(f"❌ {result['message']}\n", "error")
+                    self.update_output(result['message'], "error")
 
         except Exception as e:
             if self.vatsal_mode and self.vatsal:
-                self.update_output(f"🤖 BOI: Apologies, encountered an error: {str(e)}\n", "error")
+                self.update_output(f"Apologies, encountered an error: {str(e)}", "error")
             else:
-                self.update_output(f"❌ Error: {str(e)}\n", "error")
+                self.update_output(f"Error: {str(e)}", "error")
 
         finally:
             self.processing = False
@@ -1529,7 +1528,7 @@ class ModernBOIGUI:
                 font=("Segoe UI", 9, "bold"),
                 justify="left",
                 padx=15,
-                pady=(10, 0)
+                pady=5
             )
             header_label.pack(anchor="w")
             
@@ -1542,7 +1541,7 @@ class ModernBOIGUI:
                 justify="left",
                 wraplength=400,
                 padx=15,
-                pady=(0, 10)
+                pady=5
             )
             msg_label.pack(anchor="w")
 
@@ -1551,9 +1550,10 @@ class ModernBOIGUI:
 
     def update_output(self, message, msg_type="info"):
         """Add message to chat interface"""
-        # Determine sender based on message type
-        sender = "BOI" if msg_type in ["success", "info"] else "BOI"
-        self.add_chat_message(message, sender=sender, msg_type=msg_type)
+        # Clean up newlines from old format
+        message = message.strip().replace("\n", " ").replace("📝 You: ", "👤 ")
+        if message:
+            self.add_chat_message(message, sender="BOI", msg_type=msg_type)
 
     def clear_output(self):
         """Clear chat messages"""
