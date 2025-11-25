@@ -8,7 +8,6 @@ import os
 import json
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple
-from gui_automation import GUIAutomation
 from modules.core.gemini_controller import get_client
 from google.genai import types
 
@@ -27,7 +26,6 @@ class AdvancedSmartScreenMonitor:
     
     def __init__(self):
         """Initialize advanced smart screen monitor"""
-        self.gui = GUIAutomation()
         self.monitoring = False
         self.last_screenshot = None
         self.activity_log = []
