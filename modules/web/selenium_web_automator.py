@@ -458,6 +458,56 @@ Respond with ONLY valid JSON.
         except Exception as e:
             return {"success": False, "error": str(e)}
     
+    def youtube_play_video(self, query: str) -> Dict[str, Any]:
+        """Search YouTube and play the first video"""
+        if not self.driver:
+            if not self.initialize_browser():
+                return {"success": False, "error": "Failed to initialize browser"}
+        
+        try:
+            print(f"  🔍 Searching YouTube for: {query}")
+            self.driver.get(f"https://www.youtube.com/results?search_query={query.replace(' ', '+')}")
+            time.sleep(3)
+            
+            print(f"  🎯 Finding first video...")
+            
+            video_selectors = [
+                "a#video-title",
+                "ytd-video-renderer a#video-title",
+                "a.yt-simple-endpoint.style-scope.ytd-video-renderer",
+                "//a[@id='video-title']",
+            ]
+            
+            video_element = None
+            for selector in video_selectors:
+                try:
+                    if selector.startswith("//"):
+                        elements = self.driver.find_elements(By.XPATH, selector)
+                    else:
+                        elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
+                    
+                    for elem in elements:
+                        if elem.is_displayed() and elem.get_attribute('href'):
+                            video_element = elem
+                            break
+                    
+                    if video_element:
+                        break
+                except:
+                    continue
+            
+            if video_element:
+                video_title = video_element.get_attribute('title') or 'Unknown'
+                print(f"  ▶️  Clicking video: {video_title[:50]}...")
+                video_element.click()
+                time.sleep(2)
+                return {"success": True, "message": f"✅ Now playing: {video_title}"}
+            else:
+                return {"success": False, "error": "Could not find any videos on the page"}
+            
+        except Exception as e:
+            return {"success": False, "error": f"Error playing video: {str(e)}"}
+    
     def get_page_title(self) -> str:
         """Get current page title"""
         if self.driver:

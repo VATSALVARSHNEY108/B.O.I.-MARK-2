@@ -17,6 +17,7 @@ from modules.communication.messaging_service import MessagingService
 from modules.communication.phone_dialer import create_phone_dialer
 from modules.communication.phone_link_monitor import create_phone_link_monitor
 from modules.utilities.youtube_automation import create_youtube_automation
+from modules.web.selenium_web_automator import SeleniumWebAutomator
 from modules.communication.whatsapp_automation import create_whatsapp_automation
 from scripts.whatsapp_contact_manager import WhatsAppContactManager
 from modules.ai_features.code_generation import generate_code, explain_code, improve_code, debug_code
@@ -102,6 +103,7 @@ class CommandExecutor:
         
         # Media and Entertainment
         self.youtube = create_youtube_automation(self.gui)
+        self.selenium_youtube = None
         
         # Spotify - Try API mode first, fallback to desktop mode
         self.spotify_mode = "desktop"
@@ -714,7 +716,7 @@ class CommandExecutor:
 
             elif action == "play_youtube_video":
                 query = parameters.get("query", "")
-                method = parameters.get("method", "auto")
+                method = parameters.get("method", "selenium")
 
                 if not query:
                     return {
@@ -725,9 +727,20 @@ class CommandExecutor:
                 print(f"  🎬 Smart YouTube Player Activated")
                 print(f"  🔍 Query: {query}")
 
-                result = self.youtube.smart_play_video(query, method)
-
-                return result
+                if method == "selenium":
+                    try:
+                        if not self.selenium_youtube:
+                            self.selenium_youtube = SeleniumWebAutomator(headless=False)
+                        
+                        result = self.selenium_youtube.youtube_play_video(query)
+                        return result
+                    except Exception as e:
+                        print(f"  ⚠️ Selenium method failed, trying fallback: {e}")
+                        result = self.youtube.smart_play_video(query, "auto")
+                        return result
+                else:
+                    result = self.youtube.smart_play_video(query, method)
+                    return result
 
             elif action == "play_first_result":
                 wait_time = parameters.get("wait_time", 3)
