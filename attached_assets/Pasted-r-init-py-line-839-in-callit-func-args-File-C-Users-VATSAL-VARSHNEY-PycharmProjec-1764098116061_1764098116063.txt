@@ -1,0 +1,52 @@
+r\__init__.py", line 839, in callit
+    func(*args)
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4\modules\core\gui_app.py", line 6626, in _update
+    self.output_area.config(state="normal")
+AttributeError: 'NoneType' object has no attribute 'config'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 839, in callit
+    func(*args)
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4\modules\core\gui_app.py", line 6626, in _update
+    self.output_area.config(state="normal")
+AttributeError: 'NoneType' object has no attribute 'config'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 839, in callit
+    func(*args)
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4\modules\core\gui_app.py", line 6626, in _update
+    self.output_area.config(state="normal")
+AttributeError: 'NoneType' object has no attribute 'config'
+
+📋 Task: Chat with the AI chatbot.
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 839, in callit
+    func(*args)
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4\modules\core\gui_app.py", line 6626, in _update
+    self.output_area.config(state="normal")
+AttributeError: 'NoneType' object has no attribute 'config'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 839, in callit
+    func(*args)
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4\modules\core\gui_app.py", line 6626, in _update
+    self.output_area.config(state="normal")
+AttributeError: 'NoneType' object has no attribute 'config'
+Exception in Tkinter callback
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 1921, in __call__
+    return self.func(*args)
+  File "C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 839, in callit
+    func(*args)
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI V 4\modules\core\gui_app.py", line 6626, in _update
+    self.output_area.config(state="normal")
+AttributeError: 'NoneType' object has no attribute 'config'

@@ -1218,26 +1218,8 @@ class ModernBOIGUI:
         clear_btn.bind("<ButtonRelease-1>", clear_release)
         self._add_hover_effect(clear_btn, self.BUTTON_BG, self.BUTTON_HOVER)
 
-        # Output console
-        console_frame = tk.Frame(section, bg=self.BG_SECONDARY)
-        console_frame.pack(fill="both", expand=True, padx=20, pady=(0, 20))
-
-        self.output_area = scrolledtext.ScrolledText(
-            console_frame,
-            bg=self.CONSOLE_BG,
-            fg=self.TEXT_PRIMARY,
-            font=("Segoe UI", 10, "bold"),
-            relief="solid",
-            borderwidth=1,
-            highlightbackground=self.BORDER_PRIMARY,
-            highlightthickness=1,
-            padx=24,
-            pady=24,
-            wrap="word",
-            insertbackground=self.TEXT_PRIMARY
-        )
-        self.output_area.pack(fill="both", expand=True)
-        self.output_area.config(state="disabled")
+        # Output console (Legacy - do not use, use _create_output_section_for_tab instead)
+        pass
 
         # Footer with clear button
         footer = tk.Frame(section, bg=self.BG_SECONDARY)
@@ -6620,24 +6602,69 @@ Based on OthersideAI's self-operating-computer framework
             self.root.after(0, lambda: self.execute_btn.config(state="normal", text="▶ Execute"))
 
     def update_output(self, message, msg_type="info"):
+        """Update output console with boxed messages"""
         def _update():
-            self.output_area.config(state="normal")
-
+            if not hasattr(self, 'output_frame') or self.output_frame is None:
+                return
+            
+            # Color schemes for different message types
             colors = {
-                "info": "#a6adc8",
-                "success": "#a6e3a1",
-                "error": "#f38ba8",
-                "warning": "#f9e2af",
-                "command": "#89b4fa"
+                "command": {"bg": "#E3F2FD", "border": "#2196F3", "text": "#1976D2", "icon": "📝"},
+                "success": {"bg": "#E8F5E9", "border": "#4CAF50", "text": "#2E7D32", "icon": "✅"},
+                "error": {"bg": "#FFEBEE", "border": "#F44336", "text": "#C62828", "icon": "❌"},
+                "warning": {"bg": "#FFF3E0", "border": "#FF9800", "text": "#E65100", "icon": "⚠️"},
+                "info": {"bg": "#F3E5F5", "border": "#9C27B0", "text": "#6A1B9A", "icon": "ℹ️"}
             }
-
-            tag_name = msg_type
-            if tag_name not in self.output_area.tag_names():
-                self.output_area.tag_configure(tag_name, foreground=colors.get(msg_type, "#ffffff"))
-
-            self.output_area.insert(tk.END, message, tag_name)
-            self.output_area.see(tk.END)
-            self.output_area.config(state="disabled")
+            
+            style = colors.get(msg_type, colors["info"])
+            
+            # Create message box frame with shadow effect
+            box_outer = tk.Frame(self.output_frame, bg="#C0C0C0", bd=0)
+            box_outer.pack(fill="x", padx=10, pady=(8, 0))
+            
+            box_mid = tk.Frame(box_outer, bg="#D0D0D0", bd=0)
+            box_mid.pack(fill="x", padx=(0, 2), pady=(0, 2))
+            
+            box_inner = tk.Frame(box_mid, bg="#E0E0E0", bd=0)
+            box_inner.pack(fill="x", padx=(0, 1), pady=(0, 1))
+            
+            # Main message box
+            msg_box = tk.Frame(
+                box_inner,
+                bg=style["bg"],
+                relief="solid",
+                borderwidth=2,
+                highlightbackground=style["border"],
+                highlightthickness=1
+            )
+            msg_box.pack(fill="x", padx=0, pady=0)
+            
+            # Message content
+            content = tk.Frame(msg_box, bg=style["bg"])
+            content.pack(fill="x", padx=15, pady=12)
+            
+            # Icon + Message
+            msg_text = tk.Label(
+                content,
+                text=f"{style['icon']} {message}",
+                bg=style["bg"],
+                fg=style["text"],
+                font=("Segoe UI", 10),
+                justify="left",
+                wraplength=600
+            )
+            msg_text.pack(anchor="w")
+            
+            # Store message reference
+            self.message_boxes.append({
+                "frame": box_outer,
+                "text": message,
+                "type": msg_type,
+                "timestamp": datetime.now().strftime("%H:%M:%S")
+            })
+            
+            # Auto-scroll to bottom
+            self.output_canvas.after(50, lambda: self.output_canvas.yview_moveto(1.0))
 
         self.root.after(0, _update)
 
@@ -6648,10 +6675,12 @@ Based on OthersideAI's self-operating-computer framework
         self.root.after(0, _update)
 
     def clear_output(self):
-        self.output_area.config(state="normal")
-        self.output_area.delete(1.0, tk.END)
-        self.output_area.config(state="disabled")
-        self.update_output("✨ Console cleared!\n\n", "success")
+        """Clear all message boxes"""
+        if hasattr(self, 'output_frame') and self.output_frame:
+            for msg_frame in self.message_boxes:
+                msg_frame["frame"].destroy()
+            self.message_boxes.clear()
+            self.update_output("✨ Console cleared!", "success")
 
     def start_voice_listen(self):
         """Start push-to-talk voice command"""
