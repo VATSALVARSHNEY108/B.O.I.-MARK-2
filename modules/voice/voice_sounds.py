@@ -1,215 +1,828 @@
 """
-Dynamic WAV Sound Effects for Voice Commanding
-Plays sound effects during voice command interactions
+Enhanced Voice Commander for BOI (Barely Obeys Instructions)
+Provides voice input and speech output for all BOI commands with human-like personality
 """
 
-import pygame
+import speech_recognition as sr
+import pyttsx3
 import threading
-import os
-from typing import Optional
+import queue
+import time
+import random
+from typing import Callable, Optional
+from datetime import datetime
+from modules.voice.voice_sounds import create_voice_sound_effects
 
-class VoiceSoundEffects:
-    """Manages sound effects for voice commanding"""
-    
-    def __init__(self, sounds_dir: str = "voice_sounds"):
-        self.sounds_dir = sounds_dir
-        self.enabled = True
-        self.volume = 0.8  # Default volume (0.0 to 1.0)
-        self._initialized = False
-        self._lock = threading.Lock()
-        
-        # Create sounds directory if it doesn't exist
-        os.makedirs(self.sounds_dir, exist_ok=True)
-        
-        # Sound file paths
-        self.sound_files = {
-            'wake_word': os.path.join(self.sounds_dir, 'wake_word.wav'),
-            'listening': os.path.join(self.sounds_dir, 'listening.wav'),
-            'processing': os.path.join(self.sounds_dir, 'processing.wav'),
-            'success': os.path.join(self.sounds_dir, 'success.wav'),
-            'error': os.path.join(self.sounds_dir, 'error.wav'),
-            'thinking': os.path.join(self.sounds_dir, 'thinking.wav')
+class VoiceCommander:
+    """Enhanced voice commanding with speech recognition and text-to-speech"""
+
+    def __init__(self, command_callback: Optional[Callable] = None):
+        self.recognizer = sr.Recognizer()
+        self.tts_engine = pyttsx3.init()
+        self.command_callback = command_callback
+
+        # Speech settings
+        self.tts_engine.setProperty('rate', 165)
+        self.tts_engine.setProperty('volume', 0.95)
+
+        # Set male voice (index 0 is typically male)
+        voices = self.tts_engine.getProperty('voices')
+        if len(voices) > 0:
+            self.tts_engine.setProperty('voice', voices[0].id)
+
+        # Initialize sound effects for voice commanding
+        try:
+            self.sound_effects = create_voice_sound_effects()
+            print("🔊 Voice sound effects ready!")
+        except Exception as e:
+            print(f"⚠️ Sound effects initialization failed: {e}")
+            self.sound_effects = None
+
+        # Recognition settings - HIGH SENSITIVITY for better wake word detection
+        self.recognizer.energy_threshold = 300  # Lower = more sensitive (default is 4000)
+        self.recognizer.dynamic_energy_threshold = True
+        self.recognizer.dynamic_energy_adjustment_damping = 0.15  # Faster adaptation to noise
+        self.recognizer.dynamic_energy_ratio = 1.2  # Lower threshold for speech detection
+        self.recognizer.pause_threshold = 0.5  # Shorter pause (faster response)
+
+        # State management
+        self.continuous_listening = False
+        self.listen_thread = None
+        self.tts_queue = queue.Queue()
+        self.tts_thread = None
+        self.is_speaking = False
+
+        # Wake word detection - support multiple wake phrases
+        self.wake_words = ["boi", "hey boi", "ok boi", "watson", "hey watson", "ok watson", "BOI", "hey BOI", "ok BOI", "bhai", "computer", "hey computer", "bhiaya", "bhaisahb"]
+        self.wake_word_enabled = True  # Enabled by default
+        self.wake_word = "boi"  # Primary wake word for display
+
+        # Human-like response variations
+        self._init_response_variations()
+
+        # Advanced features
+        self.command_history = []  # Track all commands
+        self.max_history = 50  # Keep last 50 commands
+        self.conversation_mode = False  # Multi-turn conversation without wake word
+        self.conversation_timeout = 10  # Seconds before exiting conversation mode
+        self.last_command_time = None
+        self.voice_shortcuts = {}  # Custom voice macros
+        self.context = {}  # Store context between commands
+
+        # Start TTS worker thread
+        self._start_tts_worker()
+
+    def _init_response_variations(self):
+        """Initialize human-like response variations for natural conversation"""
+        self.responses = {
+            'wake_acknowledgment': [
+                "Ji, I am listening",
+                "Yes, how can I help?",
+                "I'm here, what do you need?",
+                "At your service",
+                "Ready, what's on your mind?",
+                "Ji, kaho",
+                "Yes sir, listening",
+                "I'm all ears"
+            ],
+            'wake_with_command': [
+                "Ji",
+                "On it",
+                "Right away",
+                "Got it",
+                "Sure thing",
+                "Okay"
+            ],
+            'activation': [
+                "Voice commanding activated. Ready to assist you",
+                "Hello! Voice assistant is online",
+                "I'm ready to help. Just say my name",
+                "Voice system active. How may I assist?",
+                "All systems online. At your service"
+            ],
+            'deactivation': [
+                "Voice commanding deactivated. See you soon",
+                "Going offline. Call me when you need me",
+                "Signing off. Have a great day",
+                "Voice assistant disabled. Until next time",
+                "Standby mode activated"
+            ],
+            'error': [
+                "Sorry, I didn't catch that",
+                "Could you repeat that please?",
+                "I didn't quite understand",
+                "Pardon me, say that again?",
+                "My apologies, I missed that"
+            ],
+            'greeting_morning': [
+                "Good morning sir. Ready to make today productive",
+                "Morning! Let's get things done today",
+                "Good morning. What shall we accomplish?"
+            ],
+            'greeting_afternoon': [
+                "Good afternoon. How can I assist you?",
+                "Afternoon! Ready when you are",
+                "Good afternoon sir. At your service"
+            ],
+            'greeting_evening': [
+                "Good evening. Hope you had a productive day",
+                "Evening! Still working hard I see",
+                "Good evening sir. What can I do for you?"
+            ],
+            'greeting_night': [
+                "Burning the midnight oil? I'm here to help",
+                "Late night session. Let's get it done",
+                "Good evening. Even at this hour, I'm ready"
+            ]
         }
-        
-        # Initialize pygame mixer
-        self._init_pygame()
-        
-        # Create default beep sounds if WAV files don't exist
-        self._create_default_sounds()
-    
-    def _init_pygame(self):
-        """Initialize pygame mixer for audio playback"""
-        try:
-            with self._lock:
-                if not self._initialized:
-                    pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=512)
-                    self._initialized = True
-                    print("✅ Voice sound effects initialized")
-        except Exception as e:
-            print(f"⚠️ Could not initialize sound effects: {e}")
-            self.enabled = False
-    
-    def _create_default_sounds(self):
-        """Create default beep sounds if custom WAV files don't exist"""
-        try:
-            import numpy as np
-            import wave
-            
-            def create_beep(filename: str, frequency: int, duration: float):
-                """Create a simple beep WAV file"""
-                if os.path.exists(filename):
-                    return  # Don't overwrite existing files
-                
-                sample_rate = 22050
-                t = np.linspace(0, duration, int(sample_rate * duration))
-                
-                # Generate sine wave
-                wave_data = np.sin(2 * np.pi * frequency * t)
-                
-                # Apply fade in/out to avoid clicks
-                fade_len = int(sample_rate * 0.01)  # 10ms fade
-                fade_in = np.linspace(0, 1, fade_len)
-                fade_out = np.linspace(1, 0, fade_len)
-                wave_data[:fade_len] *= fade_in
-                wave_data[-fade_len:] *= fade_out
-                
-                # Convert to 16-bit PCM
-                wave_data = (wave_data * 32767).astype(np.int16)
-                
-                # Write WAV file
-                with wave.open(filename, 'w') as wav_file:
-                    wav_file.setnchannels(1)  # Mono
-                    wav_file.setsampwidth(2)  # 16-bit
-                    wav_file.setframerate(sample_rate)
-                    wav_file.writeframes(wave_data.tobytes())
-            
-            # Create default sounds with different frequencies
-            create_beep(self.sound_files['wake_word'], 800, 0.1)  # High beep
-            create_beep(self.sound_files['listening'], 600, 0.15)  # Mid beep
-            create_beep(self.sound_files['processing'], 700, 0.08)  # Quick beep
-            create_beep(self.sound_files['success'], 1000, 0.12)  # Success tone
-            create_beep(self.sound_files['error'], 400, 0.2)  # Low error tone
-            create_beep(self.sound_files['thinking'], 650, 0.1)  # Thinking tone
-            
-            print(f"✅ Created default sound effects in {self.sounds_dir}/")
-            
-        except ImportError:
-            print("⚠️ numpy not available for creating default sounds. You can add your own WAV files to the voice_sounds/ directory.")
-        except Exception as e:
-            print(f"⚠️ Could not create default sounds: {e}")
-    
-    def play_sound(self, sound_name: str, async_play: bool = True):
+
+    def _get_random_response(self, category: str) -> str:
+        """Get a random response from the specified category"""
+        if category in self.responses:
+            return random.choice(self.responses[category])
+        return "Ready"
+
+    def _get_time_based_greeting(self) -> str:
+        """Get greeting based on current time of day"""
+        hour = datetime.now().hour
+
+        if 5 <= hour < 12:
+            return self._get_random_response('greeting_morning')
+        elif 12 <= hour < 17:
+            return self._get_random_response('greeting_afternoon')
+        elif 17 <= hour < 22:
+            return self._get_random_response('greeting_evening')
+        else:
+            return self._get_random_response('greeting_night')
+
+    def _start_tts_worker(self):
+        """Start background thread for text-to-speech"""
+        def tts_worker():
+            while True:
+                try:
+                    text = self.tts_queue.get()
+                    if text is None:
+                        break
+
+                    self.is_speaking = True
+                    try:
+                        self.tts_engine.say(text)
+                        self.tts_engine.runAndWait()
+                        # Add delay after speaking to prevent microphone from hearing echo
+                        time.sleep(0.8)
+                    except Exception as e:
+                        print(f"❌ TTS Error: {str(e)}")
+                    finally:
+                        self.is_speaking = False
+                        # Additional safety delay after flag is cleared
+                        time.sleep(0.2)
+
+                except Exception as e:
+                    print(f"❌ TTS Worker Error: {str(e)}")
+
+        self.tts_thread = threading.Thread(target=tts_worker, daemon=True)
+        self.tts_thread.start()
+
+    def interrupt_and_listen(self, callback: Optional[Callable[[str], None]] = None):
         """
-        Play a sound effect
-        
-        Args:
-            sound_name: Name of the sound ('wake_word', 'listening', 'processing', 'success', 'error', 'thinking')
-            async_play: Play sound asynchronously (non-blocking)
+        Interrupt current speech and start listening for a new command
+        This is triggered when the listening gesture is shown while AI is speaking
         """
-        if not self.enabled or not self._initialized:
-            return
-        
-        if sound_name not in self.sound_files:
-            print(f"⚠️ Unknown sound: {sound_name}")
-            return
-        
-        sound_file = self.sound_files[sound_name]
-        
-        if not os.path.exists(sound_file):
-            # print(f"⚠️ Sound file not found: {sound_file}")
-            return
-        
+        print("\n🛑 Speech interrupted - Ready for new command!")
+
         try:
-            if async_play:
-                # Play in background thread
-                thread = threading.Thread(target=self._play_sound_sync, args=(sound_file,), daemon=True)
-                thread.start()
+            # Stop the TTS engine immediately
+            if self.is_speaking:
+                self.tts_engine.stop()
+
+            # Clear all pending speech from queue
+            while not self.tts_queue.empty():
+                try:
+                    self.tts_queue.get_nowait()
+                except queue.Empty:
+                    break
+
+            # Reset speaking state
+            self.is_speaking = False
+
+            # Small delay to ensure engine fully stops
+            time.sleep(0.2)
+
+            # Start listening for new command
+            if callback:
+                result = self.listen_once()
+                if result['success']:
+                    callback(result['command'])
             else:
-                self._play_sound_sync(sound_file)
+                return self.listen_once()
+
         except Exception as e:
-            print(f"⚠️ Error playing sound {sound_name}: {e}")
-    
-    def _play_sound_sync(self, sound_file: str):
-        """Play sound synchronously (blocking)"""
-        try:
-            with self._lock:
-                sound = pygame.mixer.Sound(sound_file)
-                sound.set_volume(self.volume)  # Apply current volume to this sound
-                channel = sound.play()
-                # Wait for sound to finish
-                while channel.get_busy():
-                    pygame.time.wait(10)
-        except Exception as e:
-            print(f"⚠️ Sound playback error: {e}")
-    
-    def set_volume(self, volume: float):
-        """Set master volume (0.0 to 1.0)"""
-        try:
-            # Clamp volume to valid range
-            self.volume = max(0.0, min(1.0, volume))
-            # Note: Volume is applied per-sound in _play_sound_sync via Sound.set_volume()
-        except Exception as e:
-            print(f"⚠️ Could not set volume: {e}")
-    
-    def enable(self):
-        """Enable sound effects"""
-        self.enabled = True
-        return "✅ Voice sound effects enabled"
-    
-    def disable(self):
-        """Disable sound effects"""
-        self.enabled = False
-        return "✅ Voice sound effects disabled"
-    
-    def toggle(self):
-        """Toggle sound effects on/off"""
-        self.enabled = not self.enabled
-        status = "enabled" if self.enabled else "disabled"
-        return f"✅ Voice sound effects {status}"
-    
-    def cleanup(self):
-        """Clean up pygame mixer"""
-        try:
-            if self._initialized:
-                pygame.mixer.quit()
-                self._initialized = False
-        except Exception as e:
-            print(f"⚠️ Cleanup error: {e}")
-    
-    def add_custom_sound(self, sound_name: str, wav_file_path: str) -> str:
+            print(f"❌ Interrupt error: {e}")
+            return {"success": False, "message": f"Interrupt failed: {e}"}
+
+    def stop_speaking(self):
         """
-        Add a custom sound effect
-        
-        Args:
-            sound_name: Name for the sound
-            wav_file_path: Path to the WAV file
+        Stop any ongoing speech immediately without listening for a new command.
+        This is triggered by the "next" voice command.
         """
-        if not os.path.exists(wav_file_path):
-            return f"❌ File not found: {wav_file_path}"
-        
-        if not wav_file_path.lower().endswith('.wav'):
-            return "❌ Only WAV files are supported"
-        
-        # Copy to sounds directory
-        import shutil
-        dest_path = os.path.join(self.sounds_dir, f"{sound_name}.wav")
-        shutil.copy(wav_file_path, dest_path)
-        self.sound_files[sound_name] = dest_path
-        
-        return f"✅ Added custom sound '{sound_name}' from {wav_file_path}"
-    
-    def list_sounds(self) -> dict:
-        """List all available sounds and their status"""
-        sounds_status = {}
-        for name, path in self.sound_files.items():
-            sounds_status[name] = {
-                'path': path,
-                'exists': os.path.exists(path),
-                'size': os.path.getsize(path) if os.path.exists(path) else 0
+        print("\n🛑 Stopping speech...")
+
+        try:
+            # Stop the TTS engine immediately
+            if self.is_speaking:
+                self.tts_engine.stop()
+
+            # Clear all pending speech from queue
+            while not self.tts_queue.empty():
+                try:
+                    self.tts_queue.get_nowait()
+                except queue.Empty:
+                    break
+
+            # Reset speaking state
+            self.is_speaking = False
+
+            # Small delay to ensure engine fully stops
+            time.sleep(0.2)
+
+            return {"success": True, "message": "Speech stopped"}
+
+        except Exception as e:
+            print(f"❌ Stop speaking error: {e}")
+            return {"success": False, "message": f"Stop failed: {e}"}
+
+    def speak(self, text: str, interrupt: bool = False):
+        """Queue text for speech output"""
+        if interrupt:
+            # Clear the queue and speak immediately
+            while not self.tts_queue.empty():
+                try:
+                    self.tts_queue.get_nowait()
+                except queue.Empty:
+                    break
+
+        self.tts_queue.put(text)
+
+    def listen_once(self, timeout: int = 5) -> dict:
+        """
+        Listen for a single voice command
+        Returns: dict with 'success', 'command', and 'message'
+        """
+        source = None
+        try:
+            source = sr.Microphone()
+            with source as mic:
+                print("🎤 Listening...")
+                self.recognizer.adjust_for_ambient_noise(mic, duration=0.5)
+
+                audio = self.recognizer.listen(mic, timeout=timeout, phrase_time_limit=10)
+
+                print("🔄 Processing speech...")
+                command = self.recognizer.recognize_google(audio)
+
+                print(f"✅ Heard: {command}")
+                return {
+                    "success": True,
+                    "command": command,
+                    "message": f"Heard: {command}"
+                }
+
+        except sr.WaitTimeoutError:
+            return {
+                "success": False,
+                "command": None,
+                "message": "No speech detected (timeout)"
             }
-        return sounds_status
+        except sr.UnknownValueError:
+            return {
+                "success": False,
+                "command": None,
+                "message": "Could not understand audio"
+            }
+        except sr.RequestError as e:
+            return {
+                "success": False,
+                "command": None,
+                "message": f"Recognition service error: {str(e)}"
+            }
+        except OSError as e:
+            return {
+                "success": False,
+                "command": None,
+                "message": f"Microphone not available: {str(e)}"
+            }
+        except AttributeError as e:
+            return {
+                "success": False,
+                "command": None,
+                "message": f"Audio device error: {str(e)}"
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "command": None,
+                "message": f"Error: {str(e)}"
+            }
+
+    def start_continuous_listening(self, callback: Optional[Callable] = None):
+        """Start continuous voice command listening"""
+        if self.continuous_listening:
+            return {"success": False, "message": "Already listening"}
+
+        if callback:
+            self.command_callback = callback
+
+        if not self.command_callback:
+            return {"success": False, "message": "No command callback provided"}
+
+        self.continuous_listening = True
+
+        def listen_loop():
+            """Continuous listening loop"""
+            waiting_for_wake_word = True
+            mic_source = None
+
+            try:
+                mic_source = sr.Microphone()
+                with mic_source as source:
+                    print("🎤 Continuous listening started")
+                    greeting = self._get_random_response('activation')
+                    self.speak(greeting, interrupt=True)
+
+                    self.recognizer.adjust_for_ambient_noise(source, duration=1)
+
+                    while self.continuous_listening:
+                        try:
+                            # Don't listen while speaking
+                            if self.is_speaking:
+                                time.sleep(0.1)
+                                continue
+
+                            # Small delay to ensure system's voice has finished playing
+                            time.sleep(0.1)
+
+                            audio = self.recognizer.listen(source, timeout=1, phrase_time_limit=10)
+
+                            try:
+                                command = self.recognizer.recognize_google(audio)
+                                print(f"🎤 Heard: {command}")
+
+                                # Check for stop command
+                                if any(phrase in command.lower() for phrase in ["stop listening", "stop voice", "disable voice"]):
+                                    self.stop_continuous_listening()
+                                    break
+
+                                # Check for wake word if enabled
+                                if self.wake_word_enabled:
+                                    if waiting_for_wake_word:
+                                        # We're waiting for a wake word
+                                        command_lower = command.lower().strip()
+                                        wake_word_found = False
+                                        wake_word_used = None
+                                        remaining = ""
+
+                                        # Check if any wake word is at the start
+                                        for wake_word in self.wake_words:
+                                            if command_lower.startswith(wake_word):
+                                                wake_word_found = True
+                                                wake_word_used = wake_word
+                                                # Extract everything after the wake word
+                                                remaining = command_lower[len(wake_word):].strip()
+                                                break
+
+                                        if wake_word_found:
+                                            # Wake word detected! Play sound
+                                            if self.sound_effects:
+                                                self.sound_effects.play_sound('wake_word')
+
+                                            if remaining:
+                                                # There's a command right after the wake word
+                                                print(f"✅ Wake word detected! Executing: {remaining}")
+                                                acknowledgment = self._get_random_response('wake_with_command')
+                                                self.speak(acknowledgment, interrupt=False)
+
+                                                # Play processing sound
+                                                if self.sound_effects:
+                                                    self.sound_effects.play_sound('processing')
+
+                                                # Execute command via callback with advanced features
+                                                self._execute_advanced_command(remaining)
+
+                                                # Play success sound
+                                                if self.sound_effects:
+                                                    self.sound_effects.play_sound('success')
+
+                                                # Reset - wait for wake word again
+                                                waiting_for_wake_word = True
+                                            else:
+                                                # Just the wake word, no command yet - enable conversation mode
+                                                print(f"✅ Wake word detected! Entering conversation mode...")
+
+                                                # Play listening sound
+                                                if self.sound_effects:
+                                                    self.sound_effects.play_sound('listening')
+
+                                                listening_response = self._get_random_response('wake_acknowledgment')
+                                                self.speak(listening_response, interrupt=False)
+                                                waiting_for_wake_word = False
+                                                # Enable conversation mode for easy follow-ups
+                                                self.enable_conversation_mode(timeout=15)
+                                        else:
+                                            # No wake word found
+                                            print(f"⏭️  Skipped (no wake word): {command}")
+                                            continue
+                                    else:
+                                        # Already activated by wake word, this is the command
+                                        print(f"✅ Executing command: {command}")
+
+                                        # Play processing sound
+                                        if self.sound_effects:
+                                            self.sound_effects.play_sound('processing')
+
+                                        # Execute command with advanced features
+                                        self._execute_advanced_command(command.lower().strip())
+
+                                        # Play success sound
+                                        if self.sound_effects:
+                                            self.sound_effects.play_sound('success')
+
+                                        # Check conversation timeout
+                                        if self.check_conversation_timeout():
+                                            print("💬 Conversation mode timed out")
+                                            waiting_for_wake_word = True
+                                        else:
+                                            # Stay in conversation mode if still active
+                                            waiting_for_wake_word = not self.conversation_mode
+                                else:
+                                    # Wake word disabled, process all commands
+                                    print(f"✅ Executing command: {command}")
+                                    if command and command.strip():
+                                        try:
+                                            self.command_callback(command)
+                                            print(f"✅ Command sent to callback successfully")
+                                        except Exception as e:
+                                            print(f"❌ Callback error: {str(e)}")
+
+                            except sr.UnknownValueError:
+                                # Couldn't understand - play error sound
+                                if self.sound_effects and not waiting_for_wake_word:
+                                    self.sound_effects.play_sound('error')
+                                # Reset if we were waiting for a command
+                                if not waiting_for_wake_word:
+                                    waiting_for_wake_word = True
+                                continue
+                            except sr.RequestError as e:
+                                print(f"❌ Recognition error: {str(e)}")
+                                # Play error sound
+                                if self.sound_effects:
+                                    self.sound_effects.play_sound('error')
+                                time.sleep(1)
+                                continue
+
+                        except sr.WaitTimeoutError:
+                            continue
+                        except Exception as e:
+                            print(f"❌ Listen error: {str(e)}")
+                            # Reset state on error
+                            if not waiting_for_wake_word:
+                                waiting_for_wake_word = True
+                            continue
+
+            except OSError as e:
+                print(f"❌ Microphone not available: {str(e)}")
+                self.continuous_listening = False
+                self.speak("Microphone not available in this environment", interrupt=True)
+            except AttributeError as e:
+                print(f"❌ Audio device error: {str(e)}")
+                self.continuous_listening = False
+            except Exception as e:
+                print(f"❌ Microphone error: {str(e)}")
+                self.continuous_listening = False
+
+        self.listen_thread = threading.Thread(target=listen_loop, daemon=True)
+        self.listen_thread.start()
+
+        return {"success": True, "message": "Continuous listening started"}
+
+    def stop_continuous_listening(self):
+        """Stop continuous listening"""
+        if not self.continuous_listening:
+            return {"success": False, "message": "Not currently listening"}
+
+        self.continuous_listening = False
+        farewell = self._get_random_response('deactivation')
+        self.speak(farewell, interrupt=True)
+
+        return {"success": True, "message": "Continuous listening stopped"}
+
+    def toggle_wake_word(self, enabled: bool = None) -> dict:
+        """Toggle wake word detection"""
+        if enabled is None:
+            self.wake_word_enabled = not self.wake_word_enabled
+        else:
+            self.wake_word_enabled = enabled
+
+        status = "enabled" if self.wake_word_enabled else "disabled"
+        return {
+            "success": True,
+            "message": f"Wake word '{self.wake_word}' {status}",
+            "enabled": self.wake_word_enabled
+        }
+
+    def set_wake_word(self, wake_word: str) -> dict:
+        """Set custom wake word"""
+        self.wake_word = wake_word.lower().strip()
+        # Also add to wake words list if not present
+        if self.wake_word not in self.wake_words:
+            self.wake_words.append(self.wake_word)
+        return {
+            "success": True,
+            "message": f"Wake word set to '{self.wake_word}'"
+        }
+
+    def add_wake_word(self, wake_word: str) -> dict:
+        """Add an additional wake word"""
+        wake_word = wake_word.lower().strip()
+        if wake_word not in self.wake_words:
+            self.wake_words.append(wake_word)
+            return {
+                "success": True,
+                "message": f"Added wake word '{wake_word}'"
+            }
+        return {
+            "success": False,
+            "message": f"Wake word '{wake_word}' already exists"
+        }
+
+    def get_wake_words(self) -> list:
+        """Get list of all wake words"""
+        return self.wake_words.copy()
+
+    def get_status(self) -> dict:
+        """Get current voice commander status"""
+        return {
+            "listening": self.continuous_listening,
+            "speaking": self.is_speaking,
+            "wake_word_enabled": self.wake_word_enabled,
+            "wake_word": self.wake_word,
+            "wake_words": self.wake_words,
+            "conversation_mode": self.conversation_mode,
+            "command_history_count": len(self.command_history),
+            "shortcuts_count": len(self.voice_shortcuts)
+        }
+
+    def add_to_history(self, command: str):
+        """Add command to history"""
+        import datetime
+        self.command_history.append({
+            'command': command,
+            'timestamp': datetime.datetime.now().isoformat()
+        })
+        # Keep only last max_history commands
+        if len(self.command_history) > self.max_history:
+            self.command_history.pop(0)
+        self.last_command_time = time.time()
+
+    def get_command_history(self, limit: int = 10) -> list:
+        """Get recent command history"""
+        return self.command_history[-limit:]
+
+    def clear_history(self):
+        """Clear command history"""
+        self.command_history = []
+        return {"success": True, "message": "Command history cleared"}
+
+    def add_voice_shortcut(self, trigger: str, commands: list) -> dict:
+        """
+        Add a voice shortcut/macro
+        trigger: The phrase to trigger the shortcut
+        commands: List of commands to execute
+        """
+        trigger = trigger.lower().strip()
+        self.voice_shortcuts[trigger] = commands
+        return {
+            "success": True,
+            "message": f"Voice shortcut '{trigger}' created with {len(commands)} commands"
+        }
+
+    def remove_voice_shortcut(self, trigger: str) -> dict:
+        """Remove a voice shortcut"""
+        trigger = trigger.lower().strip()
+        if trigger in self.voice_shortcuts:
+            del self.voice_shortcuts[trigger]
+            return {"success": True, "message": f"Shortcut '{trigger}' removed"}
+        return {"success": False, "message": f"Shortcut '{trigger}' not found"}
+
+    def get_voice_shortcuts(self) -> dict:
+        """Get all voice shortcuts"""
+        return self.voice_shortcuts
+
+    def enable_conversation_mode(self, timeout: int = 10):
+        """
+        Enable conversation mode - no wake word needed for follow-up commands
+        timeout: Seconds before automatically exiting conversation mode
+        """
+        self.conversation_mode = True
+        self.conversation_timeout = timeout
+        self.last_command_time = time.time()
+        return {
+            "success": True,
+            "message": f"Conversation mode enabled for {timeout} seconds"
+        }
+
+    def disable_conversation_mode(self):
+        """Disable conversation mode"""
+        self.conversation_mode = False
+        return {"success": True, "message": "Conversation mode disabled"}
+
+    def check_conversation_timeout(self):
+        """Check if conversation mode should timeout"""
+        if self.conversation_mode and self.last_command_time:
+            if time.time() - self.last_command_time > self.conversation_timeout:
+                self.conversation_mode = False
+                return True
+        return False
+
+    def set_context(self, key: str, value):
+        """Store context information"""
+        self.context[key] = value
+
+    def get_context(self, key: str, default=None):
+        """Retrieve context information"""
+        return self.context.get(key, default)
+
+    def clear_context(self):
+        """Clear all context"""
+        self.context = {}
+        return {"success": True, "message": "Context cleared"}
+
+    def process_command_chain(self, command: str) -> list:
+        """
+        Process chained commands (separated by 'and then' or 'and')
+        Returns list of individual commands
+        """
+        # Split by common chain separators
+        separators = [' and then ', ' then ', ' and also ', ' after that ']
+        commands = [command]
+
+        for separator in separators:
+            new_commands = []
+            for cmd in commands:
+                if separator in cmd.lower():
+                    new_commands.extend(cmd.lower().split(separator))
+                else:
+                    new_commands.append(cmd)
+            commands = new_commands
+
+        # Clean up commands
+        return [cmd.strip() for cmd in commands if cmd.strip()]
+
+    def _execute_advanced_command(self, command: str):
+        """
+        Execute command with advanced features:
+        - Check for immediate control commands (next, stop)
+        - Check for voice shortcuts
+        - Process command chains
+        - Add to history
+        - Execute via callback
+        """
+        command = command.strip()
+
+        # Check for "next" command to stop speaking
+        if command.lower() in ["next", "stop talking", "skip", "quiet", "silence", "shut up"]:
+            print("🛑 'Next' command detected - stopping speech")
+            self.stop_speaking()
+            return
+
+        # Add to history
+        self.add_to_history(command)
+
+        # Check if this is a voice shortcut
+        if command in self.voice_shortcuts:
+            print(f"🔗 Voice shortcut detected: '{command}'")
+            commands_to_execute = self.voice_shortcuts[command]
+            self.speak(f"Executing shortcut with {len(commands_to_execute)} commands")
+
+            for cmd in commands_to_execute:
+                print(f"  ▶️ Shortcut command: {cmd}")
+                try:
+                    if self.command_callback:
+                        self.command_callback(cmd)
+                        time.sleep(0.5)  # Brief pause between chained commands
+                except Exception as e:
+                    print(f"❌ Callback error: {str(e)}")
+            return
+
+        # Check for command chaining
+        chained_commands = self.process_command_chain(command)
+
+        if len(chained_commands) > 1:
+            print(f"🔗 Command chain detected: {len(chained_commands)} commands")
+            self.speak(f"Executing {len(chained_commands)} commands")
+
+            for i, cmd in enumerate(chained_commands, 1):
+                print(f"  {i}. {cmd}")
+                try:
+                    if self.command_callback:
+                        self.command_callback(cmd)
+                        if i < len(chained_commands):
+                            time.sleep(1)  # Pause between chained commands
+                except Exception as e:
+                    print(f"❌ Callback error on command {i}: {str(e)}")
+        else:
+            # Single command execution
+            try:
+                if self.command_callback:
+                    self.command_callback(command)
+                    print(f"✅ Command sent to callback successfully")
+            except Exception as e:
+                print(f"❌ Callback error: {str(e)}")
+
+    def toggle_sound_effects(self) -> dict:
+        """Toggle voice sound effects on/off"""
+        if not self.sound_effects:
+            return {"success": False, "message": "Sound effects not available"}
+
+        result = self.sound_effects.toggle()
+        return {"success": True, "message": result}
+
+    def enable_sound_effects(self) -> dict:
+        """Enable voice sound effects"""
+        if not self.sound_effects:
+            return {"success": False, "message": "Sound effects not available"}
+
+        result = self.sound_effects.enable()
+        return {"success": True, "message": result}
+
+    def disable_sound_effects(self) -> dict:
+        """Disable voice sound effects"""
+        if not self.sound_effects:
+            return {"success": False, "message": "Sound effects not available"}
+
+        result = self.sound_effects.disable()
+        return {"success": True, "message": result}
+
+    def set_sound_volume(self, volume: float) -> dict:
+        """Set sound effects volume (0.0 to 1.0)"""
+        if not self.sound_effects:
+            return {"success": False, "message": "Sound effects not available"}
+
+        try:
+            self.sound_effects.set_volume(volume)
+            return {"success": True, "message": f"Sound volume set to {int(volume * 100)}%"}
+        except Exception as e:
+            return {"success": False, "message": f"Error setting volume: {str(e)}"}
+
+    def add_custom_sound(self, sound_name: str, wav_file_path: str) -> dict:
+        """Add a custom sound effect"""
+        if not self.sound_effects:
+            return {"success": False, "message": "Sound effects not available"}
+
+        result = self.sound_effects.add_custom_sound(sound_name, wav_file_path)
+        return {"success": True, "message": result}
+
+    def list_sound_effects(self) -> dict:
+        """List all available sound effects"""
+        if not self.sound_effects:
+            return {"success": False, "message": "Sound effects not available"}
+
+        sounds = self.sound_effects.list_sounds()
+        return {"success": True, "sounds": sounds}
+
+    def cleanup(self):
+        """Clean up resources"""
+        self.stop_continuous_listening()
+        self.tts_queue.put(None)
+        if self.tts_thread:
+            self.tts_thread.join(timeout=2)
+        if self.sound_effects:
+            self.sound_effects.cleanup()
 
 
-def create_voice_sound_effects(sounds_dir: str = "voice_sounds") -> VoiceSoundEffects:
-    """Factory function to create VoiceSoundEffects instance"""
-    return VoiceSoundEffects(sounds_dir)
+def create_voice_commander(command_callback: Optional[Callable] = None) -> VoiceCommander:
+    """Factory function to create a VoiceCommander instance"""
+    return VoiceCommander(command_callback)
+
+
+if __name__ == "__main__":
+    # Test the voice commander
+    print("Testing Voice Commander")
+
+    def test_callback(command):
+        print(f"Executing command: {command}")
+
+    commander = create_voice_commander(test_callback)
+
+    print("\n1. Testing single listen:")
+    result = commander.listen_once()
+    print(f"Result: {result}")
+
+    if result['success']:
+        commander.speak(f"You said: {result['command']}")
+
+    print("\n2. Testing text-to-speech:")
+    commander.speak("Hello, I am BOI, your AI desktop automation assistant")
+
+    time.sleep(3)
+
+    print("\nVoice Commander test complete")

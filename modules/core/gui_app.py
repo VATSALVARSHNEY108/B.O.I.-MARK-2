@@ -1478,74 +1478,35 @@ class ModernBOIGUI:
             self.root.after(0, lambda: self.execute_btn.config(state="normal", text="▶ Execute"))
 
     def add_chat_message(self, message, sender="BOI", msg_type="info"):
-        """Add a chat message bubble - ChatGPT style"""
+        """Add a chat message - simplified text display"""
         if not hasattr(self, 'chat_scrollable') or self.chat_scrollable is None:
             return
 
         # Determine styling
-        is_user = sender == "USER"
         colors = {
-            "info": {"bg": "#D1E7DD", "text": "#0A3622"},
-            "success": {"bg": "#D1E7DD", "text": "#0A3622"},
-            "error": {"bg": "#F8D7DA", "text": "#842029"},
-            "warning": {"bg": "#FFF3CD", "text": "#664D03"}
+            "info": "#2196F3",
+            "success": "#4CAF50",
+            "error": "#D32F2F",
+            "warning": "#FF9800",
+            "command": "#666666"
         }
-        style = colors.get(msg_type, colors["info"])
+        text_color = colors.get(msg_type, colors["info"])
+        
+        # Create simple text label without block containers
+        msg_label = tk.Label(
+            self.chat_scrollable,
+            text=message,
+            bg="#f7f7f7",
+            fg=text_color,
+            font=("Segoe UI", 10),
+            justify="left",
+            wraplength=700,
+            padx=15,
+            pady=5
+        )
+        msg_label.pack(anchor="w", fill="x")
 
-        # Message bubble frame
-        bubble_frame = tk.Frame(self.chat_scrollable, bg="#f7f7f7")
-        bubble_frame.pack(fill="x", padx=15, pady=8)
-
-        # Alignment: user right, BOI left
-        if is_user:
-            # User message - right aligned
-            msg_box = tk.Frame(bubble_frame, bg="#10a37f", relief="flat", borderwidth=0)
-            msg_box.pack(side="right", fill="x", expand=False, padx=(100, 0))
-            
-            msg_label = tk.Label(
-                msg_box,
-                text=message,
-                bg="#10a37f",
-                fg="white",
-                font=("Segoe UI", 10),
-                justify="left",
-                wraplength=400,
-                padx=15,
-                pady=10
-            )
-            msg_label.pack()
-        else:
-            # BOI message - left aligned
-            msg_box = tk.Frame(bubble_frame, bg=style["bg"], relief="flat", borderwidth=0)
-            msg_box.pack(side="left", fill="x", expand=False, padx=(0, 100))
-            
-            # Header with BOI label
-            header_label = tk.Label(
-                msg_box,
-                text="🤖 BOI",
-                bg=style["bg"],
-                fg=style["text"],
-                font=("Segoe UI", 9, "bold"),
-                justify="left",
-                padx=15,
-                pady=5
-            )
-            header_label.pack(anchor="w")
-            
-            msg_label = tk.Label(
-                msg_box,
-                text=message,
-                bg=style["bg"],
-                fg=style["text"],
-                font=("Segoe UI", 10),
-                justify="left",
-                wraplength=400,
-                padx=15,
-                pady=5
-            )
-            msg_label.pack(anchor="w")
-
-        self.chat_messages.append((msg_box, message))
+        self.chat_messages.append((msg_label, message))
         self.chat_canvas.after(50, lambda: self.chat_canvas.yview_moveto(1.0))
 
     def update_output(self, message, msg_type="info"):

@@ -32,18 +32,18 @@ class NaturalLanguageWorkflowBuilder:
     - Save as reusable templates
     - Suggest improvements and optimizations
     """
-    
+
     def __init__(self, workflow_manager: Optional[WorkflowManager] = None, log_callback: Optional[Callable] = None):
         """
         Initialize the Natural Language Workflow Builder
-        
+
         Args:
             workflow_manager: Optional WorkflowManager instance
             log_callback: Optional callback for logging messages
         """
         self.workflow_manager = workflow_manager or WorkflowManager()
         self.log_callback = log_callback
-        
+
         if GEMINI_AVAILABLE:
             api_key = os.environ.get("GEMINI_API_KEY")
             if api_key:
@@ -57,12 +57,12 @@ class NaturalLanguageWorkflowBuilder:
                 self.ai_available = False
         else:
             self.ai_available = False
-        
+
         self.conversation_history_file = "workflow_builder_history.json"
         self.conversation_history = self.load_conversation_history()
         self.current_draft = None
         self.initialize_system_prompt()
-    
+
     def initialize_system_prompt(self):
         """Initialize the AI system prompt for workflow generation"""
         self.system_prompt = """You are an intelligent Workflow Builder AI assistant. You help users create automation workflows from natural language descriptions.
@@ -123,14 +123,14 @@ When the user describes a workflow, respond with a JSON object containing:
 If you need clarification, ask questions naturally. If the description is clear, generate the workflow immediately.
 
 Be conversational, helpful, and proactive in suggesting improvements."""
-    
+
     def _log(self, message: str, level: str = "INFO"):
         """Log a message"""
         if self.log_callback:
             self.log_callback(message, level)
         else:
             print(f"[{level}] {message}")
-    
+
     def load_conversation_history(self) -> List[Dict]:
         """Load conversation history from file"""
         if os.path.exists(self.conversation_history_file):
@@ -140,7 +140,7 @@ Be conversational, helpful, and proactive in suggesting improvements."""
             except:
                 return []
         return []
-    
+
     def save_conversation_history(self):
         """Save conversation history to file"""
         try:
@@ -148,7 +148,7 @@ Be conversational, helpful, and proactive in suggesting improvements."""
                 json.dump(self.conversation_history[-50:], f, indent=2)
         except Exception as e:
             self._log(f"Failed to save conversation history: {e}", "ERROR")
-    
+
     def add_to_conversation(self, role: str, content: str):
         """Add a message to conversation history"""
         self.conversation_history.append({
@@ -157,14 +157,14 @@ Be conversational, helpful, and proactive in suggesting improvements."""
             "timestamp": datetime.now().isoformat()
         })
         self.save_conversation_history()
-    
+
     def describe_workflow(self, description: str) -> Dict:
         """
         Convert a natural language description into a workflow
-        
+
         Args:
             description: Plain English description of the workflow
-            
+
         Returns:
             Dict containing workflow details or conversation response
         """
@@ -173,24 +173,24 @@ Be conversational, helpful, and proactive in suggesting improvements."""
                 "success": False,
                 "error": "AI is not available. Please set GEMINI_API_KEY."
             }
-        
+
         try:
             self._log(f"Processing workflow description: {description}", "INFO")
             self.add_to_conversation("user", description)
-            
+
             messages = [
                 {
                     "role": "user",
                     "parts": [{"text": self.system_prompt}]
                 }
             ]
-            
+
             for msg in self.conversation_history[-10:]:
                 messages.append({
                     "role": "model" if msg["role"] == "assistant" else "user",
                     "parts": [{"text": msg["content"]}]
                 })
-            
+
             response = self.client.models.generate_content(
                 model=self.model,
                 contents=messages,
@@ -199,17 +199,17 @@ Be conversational, helpful, and proactive in suggesting improvements."""
                     max_output_tokens=2048
                 )
             )
-            
+
             response_text = response.text.strip()
             self.add_to_conversation("assistant", response_text)
-            
+
             if response_text.startswith("{") or "```json" in response_text:
                 json_text = response_text
                 if "```json" in json_text:
                     json_text = json_text.split("```json")[1].split("```")[0].strip()
                 elif "```" in json_text:
                     json_text = json_text.split("```")[1].split("```")[0].strip()
-                
+
                 try:
                     workflow_data = json.loads(json_text)
                     if "steps" in workflow_data and len(workflow_data["steps"]) > 0:
@@ -222,57 +222,57 @@ Be conversational, helpful, and proactive in suggesting improvements."""
                         }
                 except json.JSONDecodeError:
                     pass
-            
+
             return {
                 "success": True,
                 "type": "conversation",
                 "message": response_text
             }
-            
+
         except Exception as e:
             self._log(f"Error describing workflow: {e}", "ERROR")
             return {
                 "success": False,
                 "error": str(e)
             }
-    
+
     def refine_workflow(self, feedback: str) -> Dict:
         """
         Refine the current workflow draft based on user feedback
-        
+
         Args:
             feedback: User feedback for refinement
-            
+
         Returns:
             Dict containing refined workflow or conversation response
         """
         if not self.current_draft:
             return self.describe_workflow(feedback)
-        
+
         refinement_prompt = f"""Current workflow draft:
 {json.dumps(self.current_draft, indent=2)}
 
 User feedback: {feedback}
 
 Please refine the workflow based on this feedback and return the updated JSON."""
-        
+
         return self.describe_workflow(refinement_prompt)
-    
+
     def validate_workflow(self, workflow: Dict) -> Dict:
         """
         Validate a workflow structure
-        
+
         Args:
             workflow: Workflow dictionary to validate
-            
+
         Returns:
             Dict with validation results
         """
         issues = []
-        
+
         if "workflow_name" not in workflow or not workflow["workflow_name"]:
             issues.append("Workflow must have a name")
-        
+
         if "steps" not in workflow or not isinstance(workflow["steps"], list):
             issues.append("Workflow must have a steps array")
         elif len(workflow["steps"]) == 0:
@@ -285,31 +285,31 @@ Please refine the workflow based on this feedback and return the updated JSON.""
                     issues.append(f"Step {i+1} must have an action")
                 elif "parameters" not in step:
                     issues.append(f"Step {i+1} must have parameters")
-        
+
         return {
             "valid": len(issues) == 0,
             "issues": issues
         }
-    
+
     def save_workflow(self, workflow: Optional[Dict] = None, name: Optional[str] = None) -> Dict:
         """
         Save a workflow as a reusable template
-        
+
         Args:
             workflow: Workflow to save (uses current_draft if None)
             name: Name for the workflow (overrides workflow_name if provided)
-            
+
         Returns:
             Dict with save results
         """
         workflow_to_save = workflow or self.current_draft
-        
+
         if not workflow_to_save:
             return {
                 "success": False,
                 "error": "No workflow to save"
             }
-        
+
         validation = self.validate_workflow(workflow_to_save)
         if not validation["valid"]:
             return {
@@ -317,13 +317,13 @@ Please refine the workflow based on this feedback and return the updated JSON.""
                 "error": "Workflow validation failed",
                 "issues": validation["issues"]
             }
-        
+
         workflow_name = name or workflow_to_save.get("workflow_name", "unnamed_workflow")
         description = workflow_to_save.get("description", "")
         steps = workflow_to_save["steps"]
-        
+
         success = self.workflow_manager.save_workflow(workflow_name, steps, description)
-        
+
         if success:
             self._log(f"Workflow '{workflow_name}' saved successfully!", "SUCCESS")
             self.current_draft = None
@@ -337,19 +337,19 @@ Please refine the workflow based on this feedback and return the updated JSON.""
                 "success": False,
                 "error": "Failed to save workflow"
             }
-    
+
     def list_templates(self) -> List[Dict]:
         """List all saved workflow templates"""
         return self.workflow_manager.list_workflows()
-    
+
     def load_template(self, name: str) -> Optional[Dict]:
         """Load a saved workflow template"""
         return self.workflow_manager.load_workflow(name)
-    
+
     def delete_template(self, name: str) -> bool:
         """Delete a workflow template"""
         return self.workflow_manager.delete_workflow(name)
-    
+
     def get_examples(self) -> List[Dict]:
         """Get example workflow descriptions"""
         return [
@@ -378,45 +378,45 @@ Please refine the workflow based on this feedback and return the updated JSON.""
                 "description": "Open Zoom app, open Chrome with Google Calendar, open Notepad and create a meeting notes template with timestamp"
             }
         ]
-    
+
     def suggest_improvements(self, workflow: Dict) -> List[str]:
         """
         Suggest improvements for a workflow
-        
+
         Args:
             workflow: Workflow to analyze
-            
+
         Returns:
             List of improvement suggestions
         """
         suggestions = []
-        
+
         if len(workflow.get("steps", [])) > 10:
             suggestions.append("Consider breaking this into smaller workflows")
-        
+
         has_wait = any(step.get("action") == "wait" for step in workflow.get("steps", []))
         if not has_wait and len(workflow.get("steps", [])) > 3:
             suggestions.append("Consider adding wait steps between actions for reliability")
-        
+
         has_screenshot = any(step.get("action") == "screenshot" for step in workflow.get("steps", []))
         if not has_screenshot:
             suggestions.append("Consider adding screenshot steps for verification")
-        
+
         step_count = len(workflow.get("steps", []))
         if step_count < 2:
             suggestions.append("Workflow seems too simple - consider adding more automation")
-        
+
         return suggestions
-    
+
     def clear_draft(self):
         """Clear the current workflow draft"""
         self.current_draft = None
         return {"success": True, "message": "Draft cleared"}
-    
+
     def get_current_draft(self) -> Optional[Dict]:
         """Get the current workflow draft"""
         return self.current_draft
-    
+
     def clear_conversation(self):
         """Clear conversation history"""
         self.conversation_history = []

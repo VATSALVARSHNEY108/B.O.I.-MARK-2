@@ -10,7 +10,7 @@ from typing import Dict, List, Any, Optional
 from datetime import datetime
 from google import genai
 from google.genai import types
-from gui_automation import GUIAutomation
+from modules.automation.gui_automation import (GUIAutomation)
 
 try:
     import pyautogui
@@ -28,25 +28,25 @@ class ComprehensiveDesktopController:
     - Adaptive execution
     - Learning from outcomes
     """
-    
+
     def __init__(self, gemini_api_key: Optional[str] = None):
         self.gui = GUIAutomation()
         self.api_key = gemini_api_key or os.getenv("GEMINI_API_KEY")
-        
+
         if self.api_key:
             self.client = genai.Client(api_key=self.api_key)
         else:
             self.client = None
             print("⚠️  Gemini API key not found. AI features will be limited.")
-        
+
         self.execution_log = []
         self.screen_states = []
         self.learning_database = []
-        
+
     def understand_prompt(self, user_prompt: str) -> Dict[str, Any]:
         """
         PHASE 1: Deep understanding of user intent
-        
+
         Analyzes the prompt to understand:
         - Primary goal and objectives
         - Required applications/websites
@@ -56,7 +56,7 @@ class ComprehensiveDesktopController:
         """
         if not self.client:
             return self._basic_prompt_understanding(user_prompt)
-        
+
         analysis_prompt = f"""
 You are an expert automation assistant. Analyze this user command deeply.
 
@@ -106,28 +106,28 @@ Analysis:
 
 Respond with ONLY valid JSON, no additional text.
 """
-        
+
         try:
             response = self.client.models.generate_content(
                 model="gemini-2.0-flash",
                 contents=analysis_prompt
             )
-            
+
             result_text = self._clean_json_response(response.text)
             understanding = json.loads(result_text)
             understanding["original_prompt"] = user_prompt
             understanding["timestamp"] = datetime.now().isoformat()
-            
+
             return understanding
-            
+
         except Exception as e:
             print(f"⚠️  AI analysis failed: {e}")
             return self._basic_prompt_understanding(user_prompt)
-    
+
     def break_into_steps(self, understanding: Dict[str, Any]) -> Dict[str, Any]:
         """
         PHASE 2: Break task into detailed, executable steps
-        
+
         Creates a comprehensive execution plan with:
         - Sequential steps with dependencies
         - Screen validation checkpoints
@@ -136,7 +136,7 @@ Respond with ONLY valid JSON, no additional text.
         """
         if not self.client:
             return self._basic_step_breakdown(understanding)
-        
+
         breakdown_prompt = f"""
 You are creating a detailed automation execution plan.
 
@@ -309,25 +309,25 @@ EXAMPLE FOR: "Open Chrome and search Google for Python tutorials"
 
 Respond with ONLY valid JSON.
 """
-        
+
         try:
             response = self.client.models.generate_content(
                 model="gemini-2.0-flash",
                 contents=breakdown_prompt
             )
-            
+
             result_text = self._clean_json_response(response.text)
             plan = json.loads(result_text)
             return plan
-            
+
         except Exception as e:
             print(f"⚠️  Step breakdown failed: {e}")
             return self._basic_step_breakdown(understanding)
-    
+
     def monitor_screen_during_execution(self, step: Dict[str, Any], step_number: int) -> Dict[str, Any]:
         """
         PHASE 3: Real-time screen monitoring during execution
-        
+
         Monitors the screen:
         - Before step execution (initial state)
         - During execution (if possible)
@@ -340,7 +340,7 @@ Respond with ONLY valid JSON.
                 "message": "Screen monitoring requires local execution with AI vision",
                 "demo_mode": True
             }
-        
+
         monitoring_results = {
             "step_number": step_number,
             "step_description": step.get("description"),
@@ -348,7 +348,7 @@ Respond with ONLY valid JSON.
             "screenshots": {},
             "analysis": {}
         }
-        
+
         try:
             # BEFORE: Capture initial state
             print(f"\n🔍 [BEFORE STEP {step_number}] Analyzing screen state...")
@@ -356,44 +356,44 @@ Respond with ONLY valid JSON.
             self.gui.screenshot(before_screenshot)
             monitoring_results["screenshots"]["before"] = before_screenshot
             monitoring_results["timestamps"]["before"] = datetime.now().isoformat()
-            
+
             # Analyze initial state
             before_analysis = self._analyze_screenshot(
                 before_screenshot,
                 f"Analyze the current screen state before executing: {step.get('description')}"
             )
             monitoring_results["analysis"]["before"] = before_analysis
-            
+
             print(f"   📊 Current state: {before_analysis.get('current_context', 'Unknown')}")
-            
+
             # DURING: Execute the step
             print(f"\n⚡ [EXECUTING STEP {step_number}] {step.get('description')}")
             execution_result = self._execute_single_step(step)
             monitoring_results["execution_result"] = execution_result
             monitoring_results["timestamps"]["during"] = datetime.now().isoformat()
-            
+
             # Wait for UI to update
             wait_time = float(step.get("wait_time_after", 1))
             if wait_time > 0:
                 print(f"   ⏳ Waiting {wait_time}s for UI to update...")
                 time.sleep(wait_time)
-            
+
             # AFTER: Capture result state
             print(f"\n🔍 [AFTER STEP {step_number}] Verifying outcome...")
             after_screenshot = f"step_{step_number}_after.png"
             self.gui.screenshot(after_screenshot)
             monitoring_results["screenshots"]["after"] = after_screenshot
             monitoring_results["timestamps"]["after"] = datetime.now().isoformat()
-            
+
             # Analyze result state
             after_analysis = self._analyze_screenshot(
                 after_screenshot,
                 f"Analyze the screen after executing: {step.get('description')}. Expected: {step.get('expected_outcome')}"
             )
             monitoring_results["analysis"]["after"] = after_analysis
-            
+
             print(f"   📊 New state: {after_analysis.get('current_context', 'Unknown')}")
-            
+
             # VERIFY: Compare expected vs actual
             print(f"\n✅ [VERIFICATION] Comparing expected vs actual outcome...")
             verification = self._verify_step_outcome(
@@ -403,7 +403,7 @@ Respond with ONLY valid JSON.
                 execution_result
             )
             monitoring_results["verification"] = verification
-            
+
             if verification["success"]:
                 print(f"   ✅ Step completed successfully!")
                 print(f"   {verification.get('message', '')}")
@@ -412,14 +412,14 @@ Respond with ONLY valid JSON.
                 print(f"   {verification.get('message', '')}")
                 if verification.get("suggested_recovery"):
                     print(f"   💡 Suggestion: {verification['suggested_recovery']}")
-            
+
             monitoring_results["success"] = verification["success"]
-            
+
             # Store in history
             self.screen_states.append(monitoring_results)
-            
+
             return monitoring_results
-            
+
         except Exception as e:
             print(f"❌ Monitoring error: {e}")
             return {
@@ -427,12 +427,12 @@ Respond with ONLY valid JSON.
                 "error": str(e),
                 "step_number": step_number
             }
-    
+
     def _analyze_screenshot(self, screenshot_path: str, instruction: str) -> Dict[str, Any]:
         """Analyze a screenshot using Gemini Vision"""
         try:
             uploaded_file = self.client.files.upload(path=screenshot_path)
-            
+
             prompt = f"""
 Analyze this screenshot in detail.
 
@@ -464,7 +464,7 @@ Provide comprehensive analysis in JSON:
 
 Respond with ONLY valid JSON.
 """
-            
+
             response = self.client.models.generate_content(
                 model="gemini-2.0-flash",
                 contents=[
@@ -475,13 +475,13 @@ Respond with ONLY valid JSON.
                     prompt
                 ]
             )
-            
+
             result_text = self._clean_json_response(response.text)
             return json.loads(result_text)
-            
+
         except Exception as e:
             return {"error": str(e), "success": False}
-    
+
     def _verify_step_outcome(
         self,
         step: Dict[str, Any],
@@ -492,7 +492,7 @@ Respond with ONLY valid JSON.
         """Verify if step outcome matches expectation using AI"""
         if not self.client:
             return {"success": True, "message": "Verification skipped (no AI)"}
-        
+
         verification_prompt = f"""
 Verify if an automation step completed successfully.
 
@@ -522,16 +522,16 @@ Analyze and respond in JSON:
 
 Respond with ONLY valid JSON.
 """
-        
+
         try:
             response = self.client.models.generate_content(
                 model="gemini-2.0-flash",
                 contents=verification_prompt
             )
-            
+
             result_text = self._clean_json_response(response.text)
             return json.loads(result_text)
-            
+
         except Exception as e:
             return {
                 "success": True,
@@ -539,13 +539,13 @@ Respond with ONLY valid JSON.
                 "message": f"Verification failed: {e}",
                 "continue_execution": True
             }
-    
+
     def _execute_single_step(self, step: Dict[str, Any]) -> Dict[str, Any]:
         """Execute a single automation step"""
         action_type = step.get("action_type", "").lower()
         target = step.get("target", "")
         input_data = step.get("input_data")
-        
+
         try:
             if action_type == "navigate":
                 if "application" in target.lower():
@@ -558,13 +558,13 @@ Respond with ONLY valid JSON.
                     webbrowser.open(url)
                     result = True
                 return {"success": result, "action": "navigate"}
-            
+
             elif action_type == "type":
                 if input_data:
                     result = self.gui.type_text(str(input_data))
                     return {"success": result, "action": "type", "text": input_data}
                 return {"success": False, "error": "No input data"}
-            
+
             elif action_type == "click":
                 if input_data == "enter" or "enter" in str(target).lower():
                     result = self.gui.press_key("enter")
@@ -573,26 +573,26 @@ Respond with ONLY valid JSON.
                 else:
                     result = self.gui.click()
                 return {"success": result, "action": "click"}
-            
+
             elif action_type == "wait":
                 wait_time = float(input_data or step.get("timeout", 2))
                 time.sleep(wait_time)
                 return {"success": True, "action": "wait", "duration": wait_time}
-            
+
             elif action_type == "screenshot":
                 filename = input_data or f"step_screenshot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
                 result = self.gui.screenshot(filename)
                 return {"success": bool(result), "action": "screenshot", "file": filename}
-            
+
             elif action_type == "verify" or action_type == "analyze":
                 return {"success": True, "action": "verify", "message": "Verification handled by monitoring"}
-            
+
             else:
                 return {"success": False, "error": f"Unknown action type: {action_type}"}
-                
+
         except Exception as e:
             return {"success": False, "error": str(e)}
-    
+
     def execute_with_comprehensive_monitoring(
         self,
         user_prompt: str,
@@ -600,7 +600,7 @@ Respond with ONLY valid JSON.
     ) -> Dict[str, Any]:
         """
         MAIN METHOD: Complete execution with all phases
-        
+
         1. Understand the prompt
         2. Break into detailed steps
         3. Execute with real-time monitoring
@@ -609,18 +609,18 @@ Respond with ONLY valid JSON.
         print("=" * 80)
         print("🤖 COMPREHENSIVE DESKTOP CONTROLLER".center(80))
         print("=" * 80)
-        
+
         # PHASE 1: Understand
         print("\n📋 PHASE 1: UNDERSTANDING PROMPT")
         print("-" * 80)
         understanding = self.understand_prompt(user_prompt)
-        
+
         print(f"\n✅ Prompt Analysis Complete:")
         print(f"   🎯 Goal: {understanding.get('primary_goal', 'Unknown')}")
         print(f"   📊 Complexity: {understanding.get('complexity_level', 'Unknown')}")
         print(f"   ⏱️  Estimated Time: {understanding.get('estimated_duration', 'Unknown')}s")
         print(f"   🔧 Required Apps: {', '.join(understanding.get('required_applications', []))}")
-        
+
         if understanding.get("context_questions"):
             print(f"\n❓ Clarification Questions:")
             for q in understanding["context_questions"]:
@@ -629,70 +629,70 @@ Respond with ONLY valid JSON.
                 print("\nPress Enter to continue or 'q' to quit...")
                 if input().strip().lower() == 'q':
                     return {"success": False, "message": "Cancelled by user"}
-        
+
         # PHASE 2: Break Down
         print("\n📋 PHASE 2: BREAKING INTO STEPS")
         print("-" * 80)
         execution_plan = self.break_into_steps(understanding)
-        
+
         steps = execution_plan.get("execution_plan", {}).get("steps", [])
         checkpoints = execution_plan.get("execution_plan", {}).get("checkpoints", [])
-        
+
         print(f"\n✅ Execution Plan Created:")
         print(f"   Total Steps: {len(steps)}")
         print(f"   Checkpoints: {len(checkpoints)}")
         print(f"   Estimated Time: {execution_plan.get('execution_plan', {}).get('estimated_time', 'Unknown')}s")
-        
+
         print("\n📝 Step Breakdown:")
         for step in steps:
             print(f"   {step['step_number']}. {step['description']}")
             print(f"      → Expected: {step.get('expected_outcome', 'N/A')}")
-        
+
         if interactive and steps:
             print("\n⚠️  Ready to execute with real-time monitoring. Press Enter to continue or 'q' to quit...")
             if input().strip().lower() == 'q':
                 return {"success": False, "message": "Cancelled by user"}
-        
+
         # PHASE 3: Execute with Monitoring
         print("\n📋 PHASE 3: EXECUTING WITH REAL-TIME MONITORING")
         print("-" * 80)
-        
+
         results = []
         for step in steps:
             step_num = step["step_number"]
             print(f"\n{'='*80}")
             print(f"STEP {step_num}/{len(steps)}: {step['description']}")
             print(f"{'='*80}")
-            
+
             # Execute with comprehensive monitoring
             monitoring_result = self.monitor_screen_during_execution(step, step_num)
             results.append(monitoring_result)
-            
+
             # Check if we should continue
             if not monitoring_result.get("success", False):
                 verification = monitoring_result.get("verification", {})
                 if not verification.get("continue_execution", True):
                     print("\n⚠️  Critical failure detected. Stopping execution.")
                     break
-                
+
                 if interactive:
                     print("\n⚠️  Step failed. Continue anyway? (y/n): ", end="")
                     if input().strip().lower() != 'y':
                         break
-        
+
         # Summary
         print("\n" + "=" * 80)
         print("📊 EXECUTION SUMMARY")
         print("=" * 80)
-        
+
         success_count = sum(1 for r in results if r.get("success", False))
         print(f"\n✅ Successful Steps: {success_count}/{len(results)}")
         print(f"❌ Failed Steps: {len(results) - success_count}/{len(results)}")
-        
+
         if self.screen_states:
             print(f"\n📸 Screen Captures: {len(self.screen_states)} state snapshots saved")
             print(f"📁 Screenshots available in current directory")
-        
+
         return {
             "success": success_count > 0,
             "understanding": understanding,
@@ -702,7 +702,7 @@ Respond with ONLY valid JSON.
             "successful_steps": success_count,
             "screen_states": self.screen_states
         }
-    
+
     def _clean_json_response(self, text: str) -> str:
         """Clean JSON from markdown code blocks"""
         text = text.strip()
@@ -713,7 +713,7 @@ Respond with ONLY valid JSON.
         if text.endswith("```"):
             text = text[:-3]
         return text.strip()
-    
+
     def _basic_prompt_understanding(self, prompt: str) -> Dict[str, Any]:
         """Fallback understanding without AI"""
         return {
@@ -725,7 +725,7 @@ Respond with ONLY valid JSON.
             "required_applications": [],
             "success_criteria": ["Task completes without errors"]
         }
-    
+
     def _basic_step_breakdown(self, understanding: Dict[str, Any]) -> Dict[str, Any]:
         """Fallback step breakdown without AI"""
         return {
@@ -749,9 +749,9 @@ def main():
     print("🤖 COMPREHENSIVE DESKTOP CONTROLLER".center(80))
     print("AI-Powered Automation with Real-Time Monitoring".center(80))
     print("=" * 80)
-    
+
     controller = ComprehensiveDesktopController()
-    
+
     print("\n📚 CAPABILITIES:")
     print("   • Deep Prompt Understanding - Analyzes intent, complexity, requirements")
     print("   • Intelligent Task Breakdown - Creates detailed execution plans")
@@ -759,27 +759,27 @@ def main():
     print("   • Outcome Verification - AI compares expected vs actual results")
     print("   • Adaptive Execution - Recovers from errors intelligently")
     print("   • Learning System - Improves from past executions")
-    
+
     print("\n💡 EXAMPLE PROMPTS:")
     print('   • "Open Chrome, navigate to GitHub, find my repositories, and take a screenshot"')
     print('   • "Launch VS Code, create a new Python file, and write a hello world function"')
     print('   • "Search Google for best Python practices and open the first 3 links"')
     print('   • "Open Spotify, search for jazz music, and start playing"')
-    
+
     print("\n" + "=" * 80)
     print("\nType 'quit' to exit, 'help' for more info\n")
-    
+
     while True:
         try:
             prompt = input("🎯 Enter your command: ").strip()
-            
+
             if not prompt:
                 continue
-            
+
             if prompt.lower() in ['quit', 'exit', 'q']:
                 print("\n👋 Goodbye!")
                 break
-            
+
             if prompt.lower() == 'help':
                 print("\n📖 HOW IT WORKS:")
                 print("   1. UNDERSTANDING: AI analyzes your prompt deeply")
@@ -789,20 +789,20 @@ def main():
                 print("   5. LEARNING: System learns from successes and failures")
                 print("\n   Just describe what you want in plain English!")
                 continue
-            
+
             # Execute with comprehensive monitoring
             result = controller.execute_with_comprehensive_monitoring(
                 prompt,
                 interactive=True
             )
-            
+
             if result.get("success"):
                 print(f"\n✅ TASK COMPLETED SUCCESSFULLY!")
             else:
                 print(f"\n⚠️  TASK COMPLETED WITH ISSUES")
-            
+
             print("\n" + "-" * 80 + "\n")
-            
+
         except KeyboardInterrupt:
             print("\n\n👋 Interrupted. Goodbye!")
             break
