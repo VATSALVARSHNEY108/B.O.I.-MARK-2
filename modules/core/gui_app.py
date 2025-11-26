@@ -1353,14 +1353,14 @@ class ModernBOIGUI:
         api_key = os.getenv("GEMINI_API_KEY")
 
         if api_key:
-            self.update_output("✅ Gemini AI is ready!\n", "success")
+            self.update_output("✅ Gemini AI is ready!", "success")
             if self.vatsal and self.vatsal_mode:
                 greeting = self.vatsal.get_greeting()
-                self.update_output(f"\n🤖 BOI: {greeting}\n", "info")
-            self.update_output("\nType a command or click a button to get started.\n", "info")
+                self.update_output(f"🤖 BOI: {greeting}", "info")
+            self.update_output("Type a command or click a button to get started.", "info")
         else:
-            self.update_output("⚠️ WARNING: GEMINI_API_KEY not found!\n", "warning")
-            self.update_output("Please set your Gemini API key to use AI features.\n", "info")
+            self.update_output("⚠️ WARNING: GEMINI_API_KEY not found!", "warning")
+            self.update_output("Please set your Gemini API key to use AI features.", "info")
 
     # ========== COMMAND EXECUTION ==========
 
@@ -1536,14 +1536,14 @@ class ModernBOIGUI:
                 fg=self.ACTIVE_GREEN,
                 bg=self.BG_SECONDARY
             )
-            self.update_output("\n✅ BOI mode enabled\n", "success")
+            self.update_output("✅ BOI mode enabled", "success")
         else:
             self.vatsal_toggle.config(
                 text="● BOI: OFF",
                 fg=self.TEXT_PRIMARY,
                 bg=self.BUTTON_BG
             )
-            self.update_output("\n⚠️ BOI mode disabled\n", "warning")
+            self.update_output("⚠️ BOI mode disabled", "warning")
 
     def toggle_self_operating(self):
         """Toggle self-operating mode"""
@@ -1555,28 +1555,28 @@ class ModernBOIGUI:
                 fg=self.ACTIVE_GREEN,
                 bg=self.BG_SECONDARY
             )
-            self.update_output("\n✅ Self-Operating mode enabled\n", "success")
+            self.update_output("✅ Self-Operating mode enabled", "success")
         else:
             self.soc_toggle.config(
                 text="🔲 Self-Operating: OFF",
                 fg=self.TEXT_PRIMARY,
                 bg=self.BUTTON_BG
             )
-            self.update_output("\n⚠️ Self-Operating mode disabled\n", "warning")
+            self.update_output("⚠️ Self-Operating mode disabled", "warning")
 
     def toggle_voice(self):
         """Toggle voice mode"""
         self.voice_enabled = not self.voice_enabled
 
         if self.voice_enabled:
-            self.update_output("\n🔊 Voice mode enabled\n", "success")
+            self.update_output("🔊 Voice mode enabled", "success")
             if self.voice_commander:
                 try:
                     self.voice_commander.speak("Voice mode activated")
                 except:
                     pass
         else:
-            self.update_output("\n🔇 Voice mode disabled\n", "warning")
+            self.update_output("🔇 Voice mode disabled", "warning")
 
     # ========== MENU FUNCTIONS ==========
 
