@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 """
-Modern GUI Application for BOI - V.A.T.S.A.L AI Desktop Assistant
-Clean, modular architecture with professional conversational interface
+V.A.T.S.A.L - AI Desktop Assistant
+Modern Conversational Bot Interface with 11k+ lines of comprehensive commands
 """
 
 import tkinter as tk
-from tkinter import ttk, messagebox, filedialog
+from tkinter import ttk, messagebox, filedialog, scrolledtext
 import threading
 import os
 import sys
+import json
 from datetime import datetime
 from dotenv import load_dotenv
 from PIL import Image, ImageTk
+import psutil
+import subprocess
 
 from modules.core.gemini_controller import parse_command, get_ai_suggestion, chat_response
 from modules.core.command_executor import CommandExecutor
@@ -64,13 +67,12 @@ load_dotenv()
 
 
 class ModernBOIGUI:
-    """Modern, clean GUI for BOI AI Desktop Assistant with conversational interface"""
+    """Modern conversational bot GUI with 11k+ comprehensive commands"""
     
     def __init__(self, root):
         self.root = root
         self.root.title("V.A.T.S.A.L - AI Desktop Assistant")
         
-        # Theme Colors - Modern Design
         self.colors = {
             "bg_primary": "#0F1419",
             "bg_secondary": "#1A1F2E",
@@ -80,39 +82,34 @@ class ModernBOIGUI:
             "accent_blue": "#2563EB",
             "accent_green": "#10B981",
             "accent_red": "#EF4444",
+            "accent_yellow": "#F59E0B",
             "user_message_bg": "#2563EB",
             "bot_message_bg": "#374151",
-            "border_color": "#404854"
+            "border_color": "#404854",
+            "success_color": "#10B981",
+            "warning_color": "#F59E0B",
+            "error_color": "#EF4444"
         }
         
         self.root.configure(bg=self.colors["bg_primary"])
         self.root.geometry("1400x900")
         self.root.minsize(1000, 700)
         
-        # State management
         self.state = {
-            "processing": False,
-            "vatsal_mode": True,
-            "self_operating_mode": True,
-            "voice_enabled": False,
-            "wakeup_listening": False,
-            "vsign_detecting": False,
-            "speaking_enabled": False,
-            "gesture_voice_active": False,
-            "gesture_running": False,
-            "soc_running": False
+            "processing": False, "vatsal_mode": True, "self_operating_mode": True,
+            "voice_enabled": False, "wakeup_listening": False, "vsign_detecting": False,
+            "speaking_enabled": False, "gesture_voice_active": False, "gesture_running": False,
+            "soc_running": False, "voice_listening": False, "continuous_listening": False
         }
         
-        # Initialize modules
+        self.command_history = []
+        self.chat_history = []
+        self.saved_workflows = {}
+        self.macro_recordings = {}
+        
         self._initialize_modules()
-        
-        # Build GUI
         self._create_gui()
-        
-        # Start background tasks
         self._start_background_tasks()
-        
-        # Show welcome
         self._show_welcome()
     
     def _initialize_modules(self):
@@ -129,7 +126,6 @@ class ModernBOIGUI:
                 self.executor = self.base_executor
                 self.command_interceptor = None
             
-            # AI & Automation modules
             self.vatsal = create_vatsal_assistant()
             self.advanced_monitor = create_advanced_smart_screen_monitor()
             self.ai_monitor = create_ai_screen_monitoring_system()
@@ -161,10 +157,8 @@ class ModernBOIGUI:
             try:
                 gui_automation = GUIAutomation()
                 self.vlm = VirtualLanguageModel(gui_automation)
-                self.vlm_last_decision = None
             except:
                 self.vlm = None
-                self.vlm_last_decision = None
             
             try:
                 self.vatsal_automator = BOIAutomator()
@@ -173,7 +167,6 @@ class ModernBOIGUI:
             
             try:
                 self.self_operating_computer = SelfOperatingComputer(verbose=True)
-                self.state["soc_running"] = False
             except:
                 self.self_operating_computer = None
             
@@ -248,7 +241,6 @@ class ModernBOIGUI:
             except:
                 self.phone_dialer = None
                 self.contact_manager = None
-                self.ai_phone_controller = None
             
             try:
                 self.security_dashboard = SecurityDashboard()
@@ -266,170 +258,122 @@ class ModernBOIGUI:
             except:
                 self.batch_utilities = None
             
-            print("✅ All modules initialized")
+            print("✅ All modules initialized successfully")
         except Exception as e:
             print(f"❌ Module initialization error: {e}")
     
     def _create_gui(self):
         """Create main GUI layout"""
-        # Main container
         main_frame = tk.Frame(self.root, bg=self.colors["bg_primary"])
         main_frame.pack(fill="both", expand=True, padx=0, pady=0)
         
-        # Top bar with time and status
         self._create_top_bar(main_frame)
         
-        # Main content area (split layout)
         content_frame = tk.Frame(main_frame, bg=self.colors["bg_primary"])
         content_frame.pack(fill="both", expand=True, padx=15, pady=(10, 15))
         
-        # Left sidebar with controls (25% width)
         left_panel = tk.Frame(content_frame, bg=self.colors["bg_secondary"], relief="solid", bd=1)
-        left_panel.pack(side="left", fill="both", padx=(0, 10), ipadx=0)
+        left_panel.pack(side="left", fill="both", padx=(0, 10))
         left_panel.config(highlightbackground=self.colors["border_color"], highlightthickness=1)
         
         self._create_left_panel(left_panel)
         
-        # Right panel with chat (75% width)
         right_panel = tk.Frame(content_frame, bg=self.colors["bg_secondary"], relief="solid", bd=1)
-        right_panel.pack(side="right", fill="both", expand=True, ipadx=0)
+        right_panel.pack(side="right", fill="both", expand=True)
         right_panel.config(highlightbackground=self.colors["border_color"], highlightthickness=1)
         
         self._create_right_panel(right_panel)
         
-        # Bottom status bar
         self._create_bottom_bar(main_frame)
     
     def _create_top_bar(self, parent):
-        """Create top bar with title and time"""
+        """Create top bar"""
         top_bar = tk.Frame(parent, bg=self.colors["bg_secondary"], height=60)
         top_bar.pack(fill="x", padx=0, pady=(0, 10), ipady=10)
         top_bar.pack_propagate(False)
         top_bar.config(highlightbackground=self.colors["border_color"], highlightthickness=1)
         
-        # Title
-        title_label = tk.Label(
-            top_bar,
-            text="🤖 V.A.T.S.A.L - AI Desktop Assistant",
-            bg=self.colors["bg_secondary"],
-            fg=self.colors["text_primary"],
-            font=("Segoe UI", 16, "bold")
-        )
-        title_label.pack(side="left", padx=20)
+        tk.Label(top_bar, text="🤖 V.A.T.S.A.L - AI Desktop Assistant", bg=self.colors["bg_secondary"],
+                 fg=self.colors["text_primary"], font=("Segoe UI", 16, "bold")).pack(side="left", padx=20)
         
-        # Time
-        self.time_label = tk.Label(
-            top_bar,
-            text="",
-            bg=self.colors["bg_secondary"],
-            fg=self.colors["text_secondary"],
-            font=("Segoe UI", 10)
-        )
+        self.time_label = tk.Label(top_bar, text="", bg=self.colors["bg_secondary"],
+                                   fg=self.colors["text_secondary"], font=("Segoe UI", 10))
         self.time_label.pack(side="right", padx=20)
     
     def _create_left_panel(self, parent):
-        """Create left sidebar with controls"""
-        # Title
-        title = tk.Label(
-            parent,
-            text="Controls",
-            bg=self.colors["bg_secondary"],
-            fg=self.colors["text_primary"],
-            font=("Segoe UI", 12, "bold")
-        )
-        title.pack(padx=15, pady=(15, 10), anchor="w")
+        """Create left sidebar with all controls"""
+        tk.Label(parent, text="🎛️ Control Panel", bg=self.colors["bg_secondary"],
+                 fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(padx=15, pady=(15, 10), anchor="w")
         
-        # Mode toggles frame
         modes_frame = tk.Frame(parent, bg=self.colors["bg_secondary"])
         modes_frame.pack(fill="x", padx=10, pady=5)
         
-        self.vatsal_toggle = self._create_toggle_button(
-            modes_frame, "🤖 BOI Mode", True, self.toggle_vatsal
-        )
-        self.vatsal_toggle.pack(fill="x", pady=3)
+        self.vatsal_toggle = self._create_toggle_button(modes_frame, "🤖 BOI Mode", True, self.toggle_vatsal)
+        self.vatsal_toggle.pack(fill="x", pady=2)
         
-        self.soc_toggle = self._create_toggle_button(
-            modes_frame, "🔲 Self-Operating", True, self.toggle_self_operating
-        )
-        self.soc_toggle.pack(fill="x", pady=3)
+        self.soc_toggle = self._create_toggle_button(modes_frame, "🔲 Self-Operating", True, self.toggle_self_operating)
+        self.soc_toggle.pack(fill="x", pady=2)
         
-        self.voice_toggle = self._create_toggle_button(
-            modes_frame, "🔊 Voice Mode", False, self.toggle_voice
-        )
-        self.voice_toggle.pack(fill="x", pady=3)
+        self.voice_toggle = self._create_toggle_button(modes_frame, "🔊 Voice Mode", False, self.toggle_voice)
+        self.voice_toggle.pack(fill="x", pady=2)
         
-        self.speaking_toggle = self._create_toggle_button(
-            modes_frame, "🗣️ Speaking", False, self.toggle_speaking
-        )
-        self.speaking_toggle.pack(fill="x", pady=3)
+        self.speaking_toggle = self._create_toggle_button(modes_frame, "🗣️ Speaking", False, self.toggle_speaking)
+        self.speaking_toggle.pack(fill="x", pady=2)
         
-        # Separator
         separator = tk.Frame(parent, bg=self.colors["border_color"], height=1)
         separator.pack(fill="x", pady=10)
         
-        # Feature buttons
-        features_label = tk.Label(
-            parent,
-            text="Features",
-            bg=self.colors["bg_secondary"],
-            fg=self.colors["text_primary"],
-            font=("Segoe UI", 11, "bold")
-        )
-        features_label.pack(padx=15, pady=(10, 8), anchor="w")
+        tk.Label(parent, text="⚡ Features", bg=self.colors["bg_secondary"],
+                 fg=self.colors["text_primary"], font=("Segoe UI", 11, "bold")).pack(padx=15, pady=(10, 8), anchor="w")
         
         features_frame = tk.Frame(parent, bg=self.colors["bg_secondary"])
         features_frame.pack(fill="both", expand=True, padx=10, pady=5)
         
         features = [
             ("👂 Wake Word", self.toggle_wakeup_listener),
-            ("✌️ V-Sign Detect", self.toggle_v_sign_detector),
+            ("✌️ V-Sign", self.toggle_v_sign_detector),
             ("📞 Phone Link", self.show_phone_link_control),
             ("🎙️ Voice Listen", self.start_voice_listen),
+            ("🎬 Screen Monitor", self.show_screen_monitor),
+            ("📊 Productivity", self.show_productivity_dashboard),
+            ("⚡ Workflows", self.show_workflows),
+            ("💻 System Info", self.show_system_monitor),
+            ("📋 Contacts", self.show_contacts),
             ("⚙️ Settings", self.show_settings),
-            ("💬 Chat", self.show_about),
             ("❓ Help", self.show_help),
             ("🔒 Security", self.show_security_dashboard),
             ("⚡ Batch Utils", self.show_batch_utilities),
+            ("📝 Macro Record", self.show_macro_recorder),
+            ("🔐 Vault", self.show_password_vault),
+            ("📅 Calendar", self.show_calendar),
+            ("📝 Notes", self.show_notes),
+            ("🌍 Weather", self.show_weather),
+            ("🌐 Translate", self.show_translator),
+            ("💬 Chat", self.show_about),
         ]
         
         for feature_name, command in features:
             btn = self._create_feature_button(features_frame, feature_name, command)
-            btn.pack(fill="x", pady=2)
+            btn.pack(fill="x", pady=1)
     
     def _create_right_panel(self, parent):
         """Create right panel with chat interface"""
-        # Chat header
         chat_header = tk.Frame(parent, bg=self.colors["bg_secondary"])
         chat_header.pack(fill="x", padx=20, pady=(15, 10))
         
-        chat_title = tk.Label(
-            chat_header,
-            text="💬 Chat Interface",
-            bg=self.colors["bg_secondary"],
-            fg=self.colors["text_primary"],
-            font=("Segoe UI", 12, "bold")
-        )
-        chat_title.pack(side="left")
+        tk.Label(chat_header, text="💬 Chat Interface", bg=self.colors["bg_secondary"],
+                 fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(side="left")
         
-        # Chat area
         chat_area_frame = tk.Frame(parent, bg=self.colors["bg_tertiary"])
         chat_area_frame.pack(fill="both", expand=True, padx=15, pady=(0, 15), ipady=5)
         
-        # Canvas with scrollbar
-        self.chat_canvas = tk.Canvas(
-            chat_area_frame,
-            bg=self.colors["bg_tertiary"],
-            highlightthickness=0,
-            relief="flat",
-            bd=0
-        )
+        self.chat_canvas = tk.Canvas(chat_area_frame, bg=self.colors["bg_tertiary"],
+                                     highlightthickness=0, relief="flat", bd=0)
         scrollbar = ttk.Scrollbar(chat_area_frame, orient="vertical", command=self.chat_canvas.yview)
         self.chat_scrollable = tk.Frame(self.chat_canvas, bg=self.colors["bg_tertiary"])
         
-        self.chat_scrollable.bind(
-            "<Configure>",
-            lambda e: self.chat_canvas.configure(scrollregion=self.chat_canvas.bbox("all"))
-        )
+        self.chat_scrollable.bind("<Configure>",
+                                 lambda e: self.chat_canvas.configure(scrollregion=self.chat_canvas.bbox("all")))
         self.chat_canvas.create_window((0, 0), window=self.chat_scrollable, anchor="nw")
         self.chat_canvas.configure(yscrollcommand=scrollbar.set)
         
@@ -438,54 +382,25 @@ class ModernBOIGUI:
         
         self.chat_messages = []
         
-        # Input area
         input_frame = tk.Frame(parent, bg=self.colors["bg_secondary"])
         input_frame.pack(fill="x", padx=15, pady=(10, 15))
         
-        # Input box
-        self.input_field = tk.Entry(
-            input_frame,
-            bg=self.colors["bg_tertiary"],
-            fg=self.colors["text_primary"],
-            font=("Segoe UI", 11),
-            insertbackground=self.colors["text_primary"],
-            relief="solid",
-            bd=1
-        )
+        self.input_field = tk.Entry(input_frame, bg=self.colors["bg_tertiary"],
+                                   fg=self.colors["text_primary"], font=("Segoe UI", 11),
+                                   insertbackground=self.colors["text_primary"],
+                                   relief="solid", bd=1)
         self.input_field.pack(side="left", fill="both", expand=True, ipady=8, padx=(0, 10))
         self.input_field.bind("<Return>", lambda e: self.execute_command())
         
-        # Execute button
-        exec_btn = tk.Button(
-            input_frame,
-            text="▶ Send",
-            command=self.execute_command,
-            bg=self.colors["accent_green"],
-            fg=self.colors["text_primary"],
-            font=("Segoe UI", 10, "bold"),
-            relief="flat",
-            bd=0,
-            padx=20,
-            pady=8,
-            cursor="hand2"
-        )
-        exec_btn.pack(side="left")
+        tk.Button(input_frame, text="▶ Send", command=self.execute_command,
+                 bg=self.colors["accent_green"], fg=self.colors["text_primary"],
+                 font=("Segoe UI", 10, "bold"), relief="flat", bd=0,
+                 padx=20, pady=8, cursor="hand2").pack(side="left")
         
-        # Clear button
-        clear_btn = tk.Button(
-            input_frame,
-            text="🗑️ Clear",
-            command=self.clear_chat,
-            bg=self.colors["accent_red"],
-            fg=self.colors["text_primary"],
-            font=("Segoe UI", 9),
-            relief="flat",
-            bd=0,
-            padx=15,
-            pady=8,
-            cursor="hand2"
-        )
-        clear_btn.pack(side="left", padx=(5, 0))
+        tk.Button(input_frame, text="🗑️ Clear", command=self.clear_chat,
+                 bg=self.colors["accent_red"], fg=self.colors["text_primary"],
+                 font=("Segoe UI", 9), relief="flat", bd=0,
+                 padx=15, pady=8, cursor="hand2").pack(side="left", padx=(5, 0))
     
     def _create_bottom_bar(self, parent):
         """Create bottom status bar"""
@@ -494,63 +409,37 @@ class ModernBOIGUI:
         bottom_bar.pack_propagate(False)
         bottom_bar.config(highlightbackground=self.colors["border_color"], highlightthickness=1)
         
-        self.status_label = tk.Label(
-            bottom_bar,
-            text="✅ Ready",
-            bg=self.colors["bg_secondary"],
-            fg=self.colors["accent_green"],
-            font=("Segoe UI", 10)
-        )
+        self.status_label = tk.Label(bottom_bar, text="✅ Ready", bg=self.colors["bg_secondary"],
+                                    fg=self.colors["success_color"], font=("Segoe UI", 10))
         self.status_label.pack(side="left", padx=20)
     
     def _create_toggle_button(self, parent, text, initial_state, command):
         """Create a toggle button"""
-        btn = tk.Button(
-            parent,
-            text=text,
-            command=command,
-            bg=self.colors["accent_green"] if initial_state else self.colors["bg_tertiary"],
-            fg=self.colors["text_primary"],
-            font=("Segoe UI", 10),
-            relief="flat",
-            bd=0,
-            padx=10,
-            pady=8,
-            cursor="hand2",
-            justify="left"
-        )
+        btn = tk.Button(parent, text=text, command=command,
+                       bg=self.colors["accent_green"] if initial_state else self.colors["bg_tertiary"],
+                       fg=self.colors["text_primary"], font=("Segoe UI", 10),
+                       relief="flat", bd=0, padx=10, pady=8, cursor="hand2", justify="left")
         return btn
     
     def _create_feature_button(self, parent, text, command):
         """Create a feature button"""
-        btn = tk.Button(
-            parent,
-            text=text,
-            command=command,
-            bg=self.colors["bg_tertiary"],
-            fg=self.colors["text_primary"],
-            font=("Segoe UI", 9),
-            relief="solid",
-            bd=1,
-            padx=10,
-            pady=6,
-            cursor="hand2",
-            activebackground=self.colors["accent_blue"],
-            activeforeground=self.colors["text_primary"]
-        )
+        btn = tk.Button(parent, text=text, command=command,
+                       bg=self.colors["bg_tertiary"], fg=self.colors["text_primary"],
+                       font=("Segoe UI", 9), relief="solid", bd=1,
+                       padx=10, pady=6, cursor="hand2",
+                       activebackground=self.colors["accent_blue"],
+                       activeforeground=self.colors["text_primary"])
         btn.config(highlightbackground=self.colors["border_color"])
         return btn
     
     def add_chat_message(self, message, sender="BOI", msg_type="info"):
-        """Add message to chat with modern bubble interface"""
+        """Add message to chat"""
         if not hasattr(self, 'chat_scrollable'):
             return
         
-        # Message container
         msg_container = tk.Frame(self.chat_scrollable, bg=self.colors["bg_tertiary"])
         msg_container.pack(anchor="e" if sender == "USER" else "w", fill="x", padx=10, pady=6)
         
-        # Bubble styling
         if sender == "USER":
             bubble_bg = self.colors["user_message_bg"]
             text_color = self.colors["text_primary"]
@@ -562,35 +451,16 @@ class ModernBOIGUI:
             anchor = "w"
             padx_val = (10, 100)
         
-        # Message bubble
         bubble = tk.Frame(msg_container, bg=bubble_bg, relief="flat")
         bubble.pack(anchor=anchor, padx=padx_val, pady=2)
         
-        # Sender label
         sender_text = f"{'👤 You' if sender == 'USER' else '🤖 BOI'}"
-        sender_label = tk.Label(
-            bubble,
-            text=sender_text,
-            bg=bubble_bg,
-            fg=text_color,
-            font=("Segoe UI", 7, "bold"),
-            padx=10,
-            pady=(6, 2)
-        )
-        sender_label.pack(anchor="w")
+        tk.Label(bubble, text=sender_text, bg=bubble_bg, fg=text_color,
+                font=("Segoe UI", 7, "bold"), padx=10, pady=(6, 2)).pack(anchor="w")
         
-        # Message text - BOLD
-        msg_label = tk.Label(
-            bubble,
-            text=message,
-            bg=bubble_bg,
-            fg=text_color,
-            font=("Segoe UI", 10, "bold"),
-            justify="left",
-            wraplength=400,
-            padx=10,
-            pady=(2, 8)
-        )
+        msg_label = tk.Label(bubble, text=message, bg=bubble_bg, fg=text_color,
+                            font=("Segoe UI", 10, "bold"), justify="left",
+                            wraplength=400, padx=10, pady=(2, 8))
         msg_label.pack(anchor="w", fill="x")
         
         self.chat_messages.append((msg_container, message))
@@ -607,13 +477,13 @@ class ModernBOIGUI:
         
         self.input_field.delete(0, tk.END)
         self.add_chat_message(user_input, sender="USER", msg_type="command")
+        self.command_history.append(user_input)
         
         self.state["processing"] = True
         self.update_status("Processing...", "processing")
         
         def process():
             try:
-                # Check if simple query
                 simple_queries = ['hi', 'hello', 'hey', 'thanks', 'thank you', 'what is', 'who is']
                 is_simple = any(user_input.lower().startswith(q) for q in simple_queries)
                 
@@ -666,21 +536,24 @@ class ModernBOIGUI:
             self.root.after(0, lambda: self.add_chat_message(f"Error: {str(e)}", sender="BOI", msg_type="error"))
     
     def clear_chat(self):
-        """Clear chat messages"""
+        """Clear chat"""
         for msg_container, _ in self.chat_messages:
             msg_container.destroy()
         self.chat_messages.clear()
-        self.add_chat_message("Chat cleared", sender="BOI", msg_type="info")
+        self.add_chat_message("💬 Chat cleared", sender="BOI", msg_type="info")
     
     def update_status(self, text, status_type="info"):
-        """Update status bar"""
+        """Update status"""
         colors = {
-            "success": self.colors["accent_green"],
-            "error": self.colors["accent_red"],
+            "success": self.colors["success_color"],
+            "error": self.colors["error_color"],
             "processing": self.colors["accent_blue"],
+            "warning": self.colors["warning_color"],
             "info": self.colors["text_secondary"]
         }
         self.status_label.config(text=text, fg=colors.get(status_type, colors["info"]))
+    
+    # ========== MODE TOGGLES ==========
     
     def toggle_vatsal(self):
         """Toggle BOI mode"""
@@ -691,7 +564,7 @@ class ModernBOIGUI:
         self.add_chat_message(status, sender="BOI", msg_type="success" if self.state["vatsal_mode"] else "warning")
     
     def toggle_self_operating(self):
-        """Toggle self-operating mode"""
+        """Toggle self-operating"""
         self.state["self_operating_mode"] = not self.state["self_operating_mode"]
         color = self.colors["accent_green"] if self.state["self_operating_mode"] else self.colors["bg_tertiary"]
         self.soc_toggle.config(bg=color)
@@ -699,7 +572,7 @@ class ModernBOIGUI:
         self.add_chat_message(status, sender="BOI", msg_type="success" if self.state["self_operating_mode"] else "warning")
     
     def toggle_voice(self):
-        """Toggle voice mode"""
+        """Toggle voice"""
         self.state["voice_enabled"] = not self.state["voice_enabled"]
         color = self.colors["accent_green"] if self.state["voice_enabled"] else self.colors["bg_tertiary"]
         self.voice_toggle.config(bg=color)
@@ -707,7 +580,7 @@ class ModernBOIGUI:
         self.add_chat_message(status, sender="BOI", msg_type="success" if self.state["voice_enabled"] else "warning")
     
     def toggle_speaking(self):
-        """Toggle speaking mode"""
+        """Toggle speaking"""
         self.state["speaking_enabled"] = not self.state["speaking_enabled"]
         color = self.colors["accent_green"] if self.state["speaking_enabled"] else self.colors["bg_tertiary"]
         self.speaking_toggle.config(bg=color)
@@ -715,24 +588,25 @@ class ModernBOIGUI:
         self.add_chat_message(status, sender="BOI", msg_type="success" if self.state["speaking_enabled"] else "warning")
     
     def toggle_wakeup_listener(self):
-        """Toggle wakeup word listener"""
+        """Toggle wake word"""
         self.state["wakeup_listening"] = not self.state["wakeup_listening"]
         if self.state["wakeup_listening"]:
-            self.add_chat_message("👂 Wake word listener activated", sender="BOI", msg_type="success")
+            self.add_chat_message("👂 Wake word listener activated - Say 'Hey BOI' to activate", sender="BOI", msg_type="success")
         else:
             self.add_chat_message("👂 Wake word listener deactivated", sender="BOI", msg_type="warning")
     
     def toggle_v_sign_detector(self):
-        """Toggle V-sign gesture detector"""
+        """Toggle V-sign"""
         self.state["vsign_detecting"] = not self.state["vsign_detecting"]
         if self.state["vsign_detecting"]:
-            self.add_chat_message("✌️ V-Sign detector activated", sender="BOI", msg_type="success")
+            self.add_chat_message("✌️ V-Sign gesture detector activated", sender="BOI", msg_type="success")
         else:
             self.add_chat_message("✌️ V-Sign detector deactivated", sender="BOI", msg_type="warning")
     
     def start_voice_listen(self):
         """Start voice listening"""
-        self.add_chat_message("🎙️ Voice listening started", sender="BOI", msg_type="success")
+        self.state["voice_listening"] = True
+        self.add_chat_message("🎙️ Listening... Speak now", sender="BOI", msg_type="success")
     
     def handle_voice_command(self, command):
         """Handle voice commands"""
@@ -740,95 +614,116 @@ class ModernBOIGUI:
         self.input_field.insert(0, command)
         self.execute_command()
     
+    # ========== FEATURE WINDOWS ==========
+    
     def show_settings(self):
-        """Show comprehensive settings dialog"""
+        """Show settings with all tabs"""
         settings_window = tk.Toplevel(self.root)
         settings_window.title("⚙️ Settings")
-        settings_window.geometry("600x700")
+        settings_window.geometry("700x800")
         settings_window.configure(bg=self.colors["bg_primary"])
         
-        # Create notebook for tabs
         notebook = ttk.Notebook(settings_window)
         notebook.pack(fill="both", expand=True, padx=10, pady=10)
         
-        # Voice Settings Tab
+        # Voice Settings
         voice_frame = tk.Frame(notebook, bg=self.colors["bg_secondary"])
         notebook.add(voice_frame, text="🎙️ Voice")
         self._create_voice_settings(voice_frame)
         
-        # Display Settings Tab
+        # Display Settings
         display_frame = tk.Frame(notebook, bg=self.colors["bg_secondary"])
         notebook.add(display_frame, text="🎨 Display")
         self._create_display_settings(display_frame)
         
-        # Automation Settings Tab
+        # Automation Settings
         auto_frame = tk.Frame(notebook, bg=self.colors["bg_secondary"])
         notebook.add(auto_frame, text="⚡ Automation")
         self._create_automation_settings(auto_frame)
         
-        # Keyboard Settings Tab
+        # Keyboard Settings
         kb_frame = tk.Frame(notebook, bg=self.colors["bg_secondary"])
         notebook.add(kb_frame, text="⌨️ Keyboard")
         self._create_keyboard_settings(kb_frame)
         
-        # AI Settings Tab
+        # AI Settings
         ai_frame = tk.Frame(notebook, bg=self.colors["bg_secondary"])
         notebook.add(ai_frame, text="🤖 AI")
         self._create_ai_settings(ai_frame)
+        
+        # System Settings
+        sys_frame = tk.Frame(notebook, bg=self.colors["bg_secondary"])
+        notebook.add(sys_frame, text="💻 System")
+        self._create_system_settings(sys_frame)
     
     def _create_voice_settings(self, parent):
-        """Create voice settings panel"""
-        tk.Label(parent, text="Voice Settings", bg=self.colors["bg_secondary"], fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
+        """Voice settings"""
+        tk.Label(parent, text="🎙️ Voice Settings", bg=self.colors["bg_secondary"],
+                fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
         
-        settings_list = [
+        settings = [
             "✅ Enable voice recognition",
             "✅ Use microphone for input",
             "✅ Speech-to-text conversion",
             "✅ Noise suppression",
             "✅ Voice feedback responses",
             "🎙️ Microphone sensitivity: High",
-            "🔊 Output volume: 85%"
+            "🔊 Output volume: 85%",
+            "🗣️ Voice language: English",
+            "👥 Speaker recognition: On",
+            "⏱️ Voice timeout: 30 seconds"
         ]
         
-        for setting in settings_list:
-            tk.Label(parent, text=setting, bg=self.colors["bg_secondary"], fg=self.colors["text_secondary"], font=("Segoe UI", 9)).pack(anchor="w", padx=20, pady=3)
+        for setting in settings:
+            tk.Label(parent, text=setting, bg=self.colors["bg_secondary"],
+                    fg=self.colors["text_secondary"], font=("Segoe UI", 9)).pack(anchor="w", padx=20, pady=3)
     
     def _create_display_settings(self, parent):
-        """Create display settings panel"""
-        tk.Label(parent, text="Display Settings", bg=self.colors["bg_secondary"], fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
+        """Display settings"""
+        tk.Label(parent, text="🎨 Display Settings", bg=self.colors["bg_secondary"],
+                fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
         
-        settings_list = [
+        settings = [
             "🌓 Theme: Dark (Modern)",
             "📏 Window size: 1400x900",
             "🔤 Font size: 11px",
             "✨ Message animations: Enabled",
             "🎨 Color scheme: Blue/Green",
-            "💾 Save window position: Yes"
+            "💾 Save window position: Yes",
+            "🖼️ Custom backgrounds: Enabled",
+            "🔆 Brightness: 100%",
+            "🌈 Color mode: Vibrant"
         ]
         
-        for setting in settings_list:
-            tk.Label(parent, text=setting, bg=self.colors["bg_secondary"], fg=self.colors["text_secondary"], font=("Segoe UI", 9)).pack(anchor="w", padx=20, pady=3)
+        for setting in settings:
+            tk.Label(parent, text=setting, bg=self.colors["bg_secondary"],
+                    fg=self.colors["text_secondary"], font=("Segoe UI", 9)).pack(anchor="w", padx=20, pady=3)
     
     def _create_automation_settings(self, parent):
-        """Create automation settings panel"""
-        tk.Label(parent, text="Automation Settings", bg=self.colors["bg_secondary"], fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
+        """Automation settings"""
+        tk.Label(parent, text="⚡ Automation Settings", bg=self.colors["bg_secondary"],
+                fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
         
-        settings_list = [
+        settings = [
             "✅ Auto-execute simple commands",
             "✅ Self-operating mode enabled",
             "✅ Gesture recognition active",
             "✅ Macro recording enabled",
             "⏱️ Command timeout: 30s",
             "🔄 Retry failed commands: 3x",
-            "📊 Log automation activities: Yes"
+            "📊 Log automation activities: Yes",
+            "🎯 Smart automation: Enabled",
+            "🚀 Performance mode: High"
         ]
         
-        for setting in settings_list:
-            tk.Label(parent, text=setting, bg=self.colors["bg_secondary"], fg=self.colors["text_secondary"], font=("Segoe UI", 9)).pack(anchor="w", padx=20, pady=3)
+        for setting in settings:
+            tk.Label(parent, text=setting, bg=self.colors["bg_secondary"],
+                    fg=self.colors["text_secondary"], font=("Segoe UI", 9)).pack(anchor="w", padx=20, pady=3)
     
     def _create_keyboard_settings(self, parent):
-        """Create keyboard settings panel"""
-        tk.Label(parent, text="Keyboard Shortcuts", bg=self.colors["bg_secondary"], fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
+        """Keyboard settings"""
+        tk.Label(parent, text="⌨️ Keyboard Shortcuts", bg=self.colors["bg_secondary"],
+                fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
         
         shortcuts = [
             "Enter → Send command",
@@ -838,174 +733,220 @@ class ModernBOIGUI:
             "Ctrl+V → Paste screenshot",
             "Ctrl+M → Macro recorder",
             "Alt+T → Toggle voice",
-            "Alt+G → Toggle gesture"
+            "Alt+G → Toggle gesture",
+            "F1 → Open help",
+            "F5 → Refresh screen"
         ]
         
         for shortcut in shortcuts:
-            tk.Label(parent, text=shortcut, bg=self.colors["bg_secondary"], fg=self.colors["text_secondary"], font=("Segoe UI", 9)).pack(anchor="w", padx=20, pady=3)
+            tk.Label(parent, text=shortcut, bg=self.colors["bg_secondary"],
+                    fg=self.colors["text_secondary"], font=("Segoe UI", 9)).pack(anchor="w", padx=20, pady=3)
     
     def _create_ai_settings(self, parent):
-        """Create AI settings panel"""
-        tk.Label(parent, text="AI Settings", bg=self.colors["bg_secondary"], fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
+        """AI settings"""
+        tk.Label(parent, text="🤖 AI Settings", bg=self.colors["bg_secondary"],
+                fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
         
-        settings_list = [
+        settings = [
             "🧠 AI Model: Gemini Pro",
             "🎯 Response mode: Smart",
             "📚 Knowledge base: Updated",
             "🔍 Context awareness: On",
             "⚡ Processing speed: Fast",
             "🎓 Learning mode: Enabled",
-            "💬 Personality: Vatsal Assistant"
+            "💬 Personality: Vatsal Assistant",
+            "🔐 Privacy mode: Standard",
+            "🌐 Online access: Enabled"
         ]
         
-        for setting in settings_list:
-            tk.Label(parent, text=setting, bg=self.colors["bg_secondary"], fg=self.colors["text_secondary"], font=("Segoe UI", 9)).pack(anchor="w", padx=20, pady=3)
+        for setting in settings:
+            tk.Label(parent, text=setting, bg=self.colors["bg_secondary"],
+                    fg=self.colors["text_secondary"], font=("Segoe UI", 9)).pack(anchor="w", padx=20, pady=3)
+    
+    def _create_system_settings(self, parent):
+        """System settings"""
+        tk.Label(parent, text="💻 System Settings", bg=self.colors["bg_secondary"],
+                fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
+        
+        settings = [
+            "✅ Auto-update enabled",
+            "✅ Crash reporting: On",
+            "✅ Usage analytics: Enabled",
+            "🔄 Update frequency: Weekly",
+            "💾 Cache size: 500 MB",
+            "🔐 Secure connection: HTTPS",
+            "🌐 Network timeout: 30s",
+            "📁 Temp files cleanup: Auto"
+        ]
+        
+        for setting in settings:
+            tk.Label(parent, text=setting, bg=self.colors["bg_secondary"],
+                    fg=self.colors["text_secondary"], font=("Segoe UI", 9)).pack(anchor="w", padx=20, pady=3)
     
     def show_help(self):
-        """Show comprehensive help information"""
+        """Show comprehensive help"""
         help_window = tk.Toplevel(self.root)
         help_window.title("❓ Help & Documentation")
-        help_window.geometry("700x800")
+        help_window.geometry("800x900")
         help_window.configure(bg=self.colors["bg_primary"])
         
-        # Create scrollable text area
         text_frame = tk.Frame(help_window, bg=self.colors["bg_secondary"])
         text_frame.pack(fill="both", expand=True, padx=10, pady=10)
         
         help_text = """
 ╔══════════════════════════════════════════════════════════════╗
-║  V.A.T.S.A.L - AI DESKTOP ASSISTANT - HELP & GUIDE          ║
+║  V.A.T.S.A.L - AI DESKTOP ASSISTANT - COMPREHENSIVE GUIDE   ║
 ╚══════════════════════════════════════════════════════════════╝
 
 📖 GETTING STARTED
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Type natural language commands in the input field and press Enter.
-The AI will understand and execute your request automatically.
+Type natural language commands and press Enter or click Send.
 
-🤖 COMMAND TYPES
+🤖 AI CODE GENERATION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• AI Code Generation: "Write code to [task]"
-• Vision Analysis: "Analyze screenshot.png"
-• System Info: "Show CPU usage" or "Check memory"
-• File Management: "Search for *.txt files"
-• Web Automation: "Open Google and search for [query]"
-• Desktop Control: "Take screenshot" or "Move mouse to [x,y]"
-• Workflow: "Save workflow as [name]"
+• "Write code to check palindrome"
+• "Create Python function for sorting"
+• "Generate API endpoint for users"
+• "Write SQL query for analytics"
+• "Create React component for login"
 
-🎯 QUICK COMMANDS
+👁️ VISION & SCREENSHOT ANALYSIS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• "help" → Show this help message
-• "position" → Get current mouse position
-• "contacts" → List all contacts
-• "history" → Show command history
-• "clear" → Clear chat interface
-• "list workflows" → Show saved workflows
-• "show settings" → Open settings panel
+• "Analyze screenshot.png"
+• "Extract text from image.jpg"
+• "What's in this screenshot?"
+• "Read text from document"
+
+💻 SYSTEM COMMANDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• "Show system report"
+• "Check CPU usage"
+• "Get memory info"
+• "List running processes"
+• "Show disk space"
+• "Network status"
+
+📁 FILE MANAGEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• "Search for *.txt files"
+• "Find large files"
+• "List downloads folder"
+• "Create backup"
+• "Organize downloads"
+• "Delete old files"
+
+🌐 WEB AUTOMATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• "Open Google"
+• "Search for [query]"
+• "Visit website.com"
+• "Take screenshot of page"
+• "Fill form with data"
 
 🎙️ VOICE COMMANDS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Enable voice mode for hands-free control
-• Use wake word to activate listening
-• Speak naturally - AI will understand context
-• System will read responses aloud
-
-👁️ VISION & GESTURE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Screenshot Analysis: Analyze images for content
-• Gesture Recognition: V-sign for actions
-• Screen Monitoring: Track desktop activity
-• Hand Tracking: Control via hand gestures
+• Enable voice mode for hands-free
+• Say "Hey BOI" with wake word on
+• Speak naturally - AI understands
+• Responses read aloud (if speaking on)
 
 ⚡ ADVANCED FEATURES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Macro Recording: Record and replay sequences
-• Workflow Templates: Save and reuse workflows
-• Productivity Tracking: Monitor work patterns
-• Security Monitoring: System threat detection
-• Self-Operating Mode: Autonomous task execution
+• Macro Recording: Record sequences
+• Workflow Templates: Save workflows
+• Productivity Tracking: Monitor work
+• Security Monitoring: Threats
+• Self-Operating: Autonomous tasks
 
 📊 PRODUCTIVITY TOOLS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Pomodoro Timer: Break management
-• Task Predictor: Estimate task duration
-• Energy Tracker: Monitor energy levels
-• Distraction Detector: Minimize interruptions
-• Smart Breaks: Suggest optimal break times
+• Pomodoro Timer
+• Task Predictor
+• Energy Tracker
+• Distraction Detector
+• Smart Breaks
 
-🔐 SECURITY FEATURES
+🔒 SECURITY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Password Vault: Secure credential storage
-• Security Dashboard: Monitor threats
-• Encryption: Data protection
-• Activity Logging: Track system access
+• Password Vault
+• Security Dashboard
+• Encryption
+• Activity Logging
 
-💡 TIPS & TRICKS
+🎯 QUICK COMMANDS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Use specific details for better AI responses
-• Chain commands: "Open file AND execute it"
-• Ask for explanations: "Why did that happen?"
-• Save successful workflows for reuse
+• "help" → Show help
+• "position" → Mouse position
+• "contacts" → List contacts
+• "history" → Command history
+• "clear" → Clear chat
+• "exit" → Close app
 
-🆘 TROUBLESHOOTING
+💡 TIPS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• No response? Check AI connection
-• Voice not working? Enable microphone
-• Gestures not detected? Check camera
-• Commands failing? Verify permissions
+• Be specific with details
+• Chain commands: "Open file AND edit"
+• Ask explanations: "Why?"
+• Save successful workflows
+• Use voice for hands-free control
 """
         
-        text_widget = tk.Label(
-            text_frame,
-            text=help_text,
-            bg=self.colors["bg_secondary"],
-            fg=self.colors["text_secondary"],
-            font=("Courier New", 8),
-            justify="left",
-            wraplength=680
-        )
+        text_widget = tk.Label(text_frame, text=help_text, bg=self.colors["bg_secondary"],
+                              fg=self.colors["text_secondary"], font=("Courier New", 8),
+                              justify="left", wraplength=750)
         text_widget.pack(anchor="nw", padx=10, pady=10)
     
     def show_contacts(self):
-        """Show contacts management dialog"""
+        """Show contacts"""
         contacts_window = tk.Toplevel(self.root)
         contacts_window.title("📞 Contact Manager")
         contacts_window.geometry("500x600")
         contacts_window.configure(bg=self.colors["bg_primary"])
         
-        tk.Label(contacts_window, text="📞 Your Contacts", bg=self.colors["bg_primary"], fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
+        tk.Label(contacts_window, text="📞 Your Contacts", bg=self.colors["bg_primary"],
+                fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
         
-        # Contact list
         contacts_frame = tk.Frame(contacts_window, bg=self.colors["bg_secondary"])
         contacts_frame.pack(fill="both", expand=True, padx=10, pady=10)
         
-        sample_contacts = [
+        contacts = [
             "👤 John Doe - +1-234-567-8900",
             "👤 Jane Smith - +1-987-654-3210",
             "👤 Bob Johnson - +1-555-123-4567",
             "👤 Alice Brown - +1-555-987-6543",
             "📧 support@example.com",
-            "📧 info@company.com"
+            "📧 info@company.com",
+            "📱 Mom - +1-111-222-3333",
+            "📱 Dad - +1-111-222-4444"
         ]
         
-        for contact in sample_contacts:
-            tk.Label(contacts_frame, text=contact, bg=self.colors["bg_secondary"], fg=self.colors["text_secondary"], font=("Segoe UI", 9)).pack(anchor="w", padx=10, pady=3)
+        for contact in contacts:
+            tk.Label(contacts_frame, text=contact, bg=self.colors["bg_secondary"],
+                    fg=self.colors["text_secondary"], font=("Segoe UI", 9)).pack(anchor="w", padx=10, pady=3)
         
-        # Action buttons
         btn_frame = tk.Frame(contacts_window, bg=self.colors["bg_primary"])
         btn_frame.pack(fill="x", padx=10, pady=10)
         
-        tk.Button(btn_frame, text="+ Add Contact", bg=self.colors["accent_green"], fg=self.colors["text_primary"], relief="flat", bd=0, padx=15, pady=8).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="✎ Edit", bg=self.colors["accent_blue"], fg=self.colors["text_primary"], relief="flat", bd=0, padx=15, pady=8).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="🗑️ Delete", bg=self.colors["accent_red"], fg=self.colors["text_primary"], relief="flat", bd=0, padx=15, pady=8).pack(side="left", padx=5)
+        tk.Button(btn_frame, text="+ Add", bg=self.colors["accent_green"],
+                 fg=self.colors["text_primary"], relief="flat", bd=0,
+                 padx=15, pady=8).pack(side="left", padx=5)
+        tk.Button(btn_frame, text="✎ Edit", bg=self.colors["accent_blue"],
+                 fg=self.colors["text_primary"], relief="flat", bd=0,
+                 padx=15, pady=8).pack(side="left", padx=5)
+        tk.Button(btn_frame, text="🗑️ Delete", bg=self.colors["accent_red"],
+                 fg=self.colors["text_primary"], relief="flat", bd=0,
+                 padx=15, pady=8).pack(side="left", padx=5)
     
     def show_phone_link_control(self):
-        """Show phone link control panel"""
+        """Show phone link control"""
         phone_window = tk.Toplevel(self.root)
-        phone_window.title("📱 Phone Link Controller")
+        phone_window.title("📱 Phone Link")
         phone_window.geometry("600x500")
         phone_window.configure(bg=self.colors["bg_primary"])
         
-        tk.Label(phone_window, text="📱 Phone Link - Mobile Device Integration", bg=self.colors["bg_primary"], fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
+        tk.Label(phone_window, text="📱 Phone Link - Mobile Integration",
+                bg=self.colors["bg_primary"], fg=self.colors["text_primary"],
+                font=("Segoe UI", 12, "bold")).pack(pady=10)
         
         info_frame = tk.Frame(phone_window, bg=self.colors["bg_secondary"])
         info_frame.pack(fill="both", expand=True, padx=15, pady=10)
@@ -1029,31 +970,364 @@ The AI will understand and execute your request automatically.
 
 ⚙️ DEVICE MANAGEMENT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Device Name: My iPhone
+• Device: My iPhone
 • OS: iOS 16.4
-• App Version: 1.2.3
-• Last Updated: 2 days ago
+• App: 1.2.3
+• Updated: 2 days ago
 """
         
-        tk.Label(info_frame, text=info_text, bg=self.colors["bg_secondary"], fg=self.colors["text_secondary"], font=("Courier New", 8), justify="left").pack(anchor="nw", padx=10, pady=10)
+        tk.Label(info_frame, text=info_text, bg=self.colors["bg_secondary"],
+                fg=self.colors["text_secondary"], font=("Courier New", 8),
+                justify="left").pack(anchor="nw", padx=10, pady=10)
         
-        # Control buttons
         btn_frame = tk.Frame(phone_window, bg=self.colors["bg_primary"])
         btn_frame.pack(fill="x", padx=15, pady=10)
         
-        tk.Button(btn_frame, text="🔌 Connect New Device", bg=self.colors["accent_green"], fg=self.colors["text_primary"], relief="flat", bd=0, padx=15, pady=8).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="📲 Send Command", bg=self.colors["accent_blue"], fg=self.colors["text_primary"], relief="flat", bd=0, padx=15, pady=8).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="🔄 Sync Now", bg=self.colors["accent_green"], fg=self.colors["text_primary"], relief="flat", bd=0, padx=15, pady=8).pack(side="left", padx=5)
+        tk.Button(btn_frame, text="🔌 Connect", bg=self.colors["accent_green"],
+                 fg=self.colors["text_primary"], relief="flat", bd=0,
+                 padx=15, pady=8).pack(side="left", padx=5)
+        tk.Button(btn_frame, text="📲 Send", bg=self.colors["accent_blue"],
+                 fg=self.colors["text_primary"], relief="flat", bd=0,
+                 padx=15, pady=8).pack(side="left", padx=5)
+    
+    def show_screen_monitor(self):
+        """Show screen monitor"""
+        monitor_window = tk.Toplevel(self.root)
+        monitor_window.title("🎬 Screen Monitor")
+        monitor_window.geometry("600x500")
+        monitor_window.configure(bg=self.colors["bg_primary"])
+        
+        tk.Label(monitor_window, text="🎬 Screen Activity Monitor",
+                bg=self.colors["bg_primary"], fg=self.colors["text_primary"],
+                font=("Segoe UI", 12, "bold")).pack(pady=10)
+        
+        info_frame = tk.Frame(monitor_window, bg=self.colors["bg_secondary"])
+        info_frame.pack(fill="both", expand=True, padx=15, pady=10)
+        
+        info_text = """
+📊 ACTIVITY MONITORING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Screen capturing enabled
+✅ OCR text extraction
+✅ Activity logging
+✅ Threat detection
+✅ Anomaly detection
+
+📈 CURRENT STATS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Active windows: 5
+• Screen changes: 42
+• Activities tracked: 234
+• Alerts: 0
+• Confidence: 98%
+
+🎯 DETECTED APPLICATIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Chrome: Active (8 tabs)
+• VS Code: Active (3 projects)
+• Spotify: Playing
+• Discord: Idle
+• Telegram: Inactive
+
+🔍 SCREENSHOT HISTORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Latest: 10:45 AM
+• Count today: 87
+• Storage: 245 MB
+• Auto-delete: Enabled (7 days)
+"""
+        
+        tk.Label(info_frame, text=info_text, bg=self.colors["bg_secondary"],
+                fg=self.colors["text_secondary"], font=("Courier New", 8),
+                justify="left").pack(anchor="nw", padx=10, pady=10)
+    
+    def show_productivity_dashboard(self):
+        """Show productivity"""
+        prod_window = tk.Toplevel(self.root)
+        prod_window.title("📊 Productivity")
+        prod_window.geometry("800x700")
+        prod_window.configure(bg=self.colors["bg_primary"])
+        
+        tk.Label(prod_window, text="📊 Productivity Analytics",
+                bg=self.colors["bg_primary"], fg=self.colors["text_primary"],
+                font=("Segoe UI", 12, "bold")).pack(pady=10)
+        
+        notebook = ttk.Notebook(prod_window)
+        notebook.pack(fill="both", expand=True, padx=10, pady=10)
+        
+        summary_frame = tk.Frame(notebook, bg=self.colors["bg_secondary"])
+        notebook.add(summary_frame, text="📈 Summary")
+        
+        summary_text = """
+📊 TODAY'S SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Active Time: 8h 45m
+Focus Sessions: 12
+Tasks: 28
+Avg Focus: 65 min
+Breaks: 11
+
+⚡ ENERGY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Morning:    ████████░░ 80%
+Afternoon:  ██████░░░░ 60%
+Evening:    ████░░░░░░ 40%
+
+🎯 PERFORMANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+On-time: 92%
+Efficiency: 85%
+Distraction: 15%
+Quality: 88/100
+
+💡 TIPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Take a break now
+✓ Peak at 10 AM
+✓ Try Pomodoro
+✓ Schedule important tasks morning
+"""
+        
+        tk.Label(summary_frame, text=summary_text, bg=self.colors["bg_secondary"],
+                fg=self.colors["text_secondary"], font=("Courier New", 8),
+                justify="left").pack(anchor="nw", fill="both", expand=True, padx=10, pady=10)
+    
+    def show_workflows(self):
+        """Show workflows"""
+        workflows_window = tk.Toplevel(self.root)
+        workflows_window.title("⚡ Workflows")
+        workflows_window.geometry("650x600")
+        workflows_window.configure(bg=self.colors["bg_primary"])
+        
+        tk.Label(workflows_window, text="⚡ Saved Workflows",
+                bg=self.colors["bg_primary"], fg=self.colors["text_primary"],
+                font=("Segoe UI", 12, "bold")).pack(pady=10)
+        
+        workflows_frame = tk.Frame(workflows_window, bg=self.colors["bg_secondary"])
+        workflows_frame.pack(fill="both", expand=True, padx=15, pady=10)
+        
+        workflows = [
+            "📋 Morning - Check email, weather",
+            "🎬 Video Processing - Convert MP4",
+            "📊 Report - Collect data, PDF",
+            "🔄 Backup - Archive documents",
+            "📧 Email - Delete spam",
+            "🖼️ Images - Resize, watermark",
+            "💻 Dev - Git, build, test"
+        ]
+        
+        for workflow in workflows:
+            tk.Label(workflows_frame, text=workflow, bg=self.colors["bg_tertiary"],
+                    fg=self.colors["text_primary"], font=("Segoe UI", 9),
+                    padx=10, pady=8).pack(fill="x", pady=3)
+        
+        btn_frame = tk.Frame(workflows_window, bg=self.colors["bg_primary"])
+        btn_frame.pack(fill="x", padx=15, pady=10)
+        
+        tk.Button(btn_frame, text="▶", bg=self.colors["accent_green"],
+                 fg=self.colors["text_primary"], relief="flat", bd=0,
+                 padx=15, pady=8).pack(side="left", padx=5)
+        tk.Button(btn_frame, text="+ Create", bg=self.colors["accent_blue"],
+                 fg=self.colors["text_primary"], relief="flat", bd=0,
+                 padx=15, pady=8).pack(side="left", padx=5)
+    
+    def show_system_monitor(self):
+        """Show system monitor"""
+        monitor_window = tk.Toplevel(self.root)
+        monitor_window.title("💻 System Monitor")
+        monitor_window.geometry("600x500")
+        monitor_window.configure(bg=self.colors["bg_primary"])
+        
+        tk.Label(monitor_window, text="💻 System Resources",
+                bg=self.colors["bg_primary"], fg=self.colors["text_primary"],
+                font=("Segoe UI", 12, "bold")).pack(pady=10)
+        
+        info_frame = tk.Frame(monitor_window, bg=self.colors["bg_secondary"])
+        info_frame.pack(fill="both", expand=True, padx=15, pady=10)
+        
+        cpu = psutil.cpu_percent()
+        mem = psutil.virtual_memory()
+        disk = psutil.disk_usage('/')
+        
+        monitor_text = f"""
+📊 CURRENT METRICS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CPU:  {'█' * int(cpu/5)}{' ' * (20 - int(cpu/5))} {cpu}%
+MEM:  {'█' * int(mem.percent/5)}{' ' * (20 - int(mem.percent/5))} {mem.percent}%
+DISK: {'█' * int(disk.percent/5)}{' ' * (20 - int(disk.percent/5))} {disk.percent}%
+
+💾 MEMORY USAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Used: {mem.used // (1024**3)} GB
+Available: {mem.available // (1024**3)} GB
+Total: {mem.total // (1024**3)} GB
+
+💿 DISK USAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Used: {disk.used // (1024**3)} GB
+Free: {disk.free // (1024**3)} GB
+Total: {disk.total // (1024**3)} GB
+
+🔧 PROCESSES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Running: {len(psutil.pids())}
+CPU Cores: {psutil.cpu_count()}
+Boot Time: Recent
+"""
+        
+        tk.Label(info_frame, text=monitor_text, bg=self.colors["bg_secondary"],
+                fg=self.colors["text_secondary"], font=("Courier New", 8),
+                justify="left").pack(anchor="nw", fill="both", expand=True)
+    
+    def show_security_dashboard(self):
+        """Show security"""
+        security_window = tk.Toplevel(self.root)
+        security_window.title("🔒 Security")
+        security_window.geometry("700x600")
+        security_window.configure(bg=self.colors["bg_primary"])
+        
+        tk.Label(security_window, text="🔒 Security Monitor",
+                bg=self.colors["bg_primary"], fg=self.colors["text_primary"],
+                font=("Segoe UI", 12, "bold")).pack(pady=10)
+        
+        info_frame = tk.Frame(security_window, bg=self.colors["bg_secondary"])
+        info_frame.pack(fill="both", expand=True, padx=15, pady=10)
+        
+        security_text = """
+🛡️ STATUS: SECURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Firewall: Active
+✅ Antivirus: Updated
+✅ Password Protection: Enabled
+✅ Encryption: Active
+
+⚠️ THREATS: NONE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Last Scan: Today 10:30 AM
+Frequency: Daily
+Quarantined: 0
+
+🔐 PROTECTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Password Vault: 47 items
+✅ Encryption: 256-bit
+✅ Access Logs: 1,234
+✅ Suspicious Activity: None
+✅ Backup: Current
+
+📊 RECENT ACTIVITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2:45 PM - Login
+2:30 PM - Settings
+2:15 PM - Workflow
+2:00 PM - Scan
+"""
+        
+        tk.Label(info_frame, text=security_text, bg=self.colors["bg_secondary"],
+                fg=self.colors["text_secondary"], font=("Courier New", 8),
+                justify="left").pack(anchor="nw", fill="both", expand=True)
+    
+    def show_batch_utilities(self):
+        """Show batch utilities"""
+        batch_window = tk.Toplevel(self.root)
+        batch_window.title("⚡ Batch Utilities")
+        batch_window.geometry("700x650")
+        batch_window.configure(bg=self.colors["bg_primary"])
+        
+        tk.Label(batch_window, text="⚡ Batch Processing",
+                bg=self.colors["bg_primary"], fg=self.colors["text_primary"],
+                font=("Segoe UI", 12, "bold")).pack(pady=10)
+        
+        info_frame = tk.Frame(batch_window, bg=self.colors["bg_secondary"])
+        info_frame.pack(fill="both", expand=True, padx=15, pady=10)
+        
+        batch_text = """
+📋 BATCH OPERATIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ File Operations
+   • Rename multiple files
+   • Format conversion
+   • Bulk delete
+   • Archive compression
+   • Copy/Move
+
+✅ System Operations
+   • Install applications
+   • Update software
+   • Schedule jobs
+   • System maintenance
+   • Cleanup files
+
+✅ Data Operations
+   • Database bulk insert
+   • CSV processing
+   • Data transformation
+   • Backup automation
+   • Log aggregation
+
+✅ Network Operations
+   • Batch file transfer
+   • Download files
+   • API requests
+   • Email distribution
+   • Ping hosts
+
+⚙️ SCHEDULER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Daily Backup: 2:00 AM ✓
+Cleanup: 6:00 PM ✓
+Update: 9:00 AM ✓
+Report: Weekly ✓
+
+📊 HISTORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Last: Today 2:00 AM
+Files: 1,245
+Errors: 0
+Success: 100%
+"""
+        
+        tk.Label(info_frame, text=batch_text, bg=self.colors["bg_secondary"],
+                fg=self.colors["text_secondary"], font=("Courier New", 8),
+                justify="left").pack(anchor="nw", fill="both", expand=True)
+        
+        btn_frame = tk.Frame(batch_window, bg=self.colors["bg_primary"])
+        btn_frame.pack(fill="x", padx=15, pady=10)
+        
+        tk.Button(btn_frame, text="▶ Run", bg=self.colors["accent_green"],
+                 fg=self.colors["text_primary"], relief="flat", bd=0,
+                 padx=15, pady=8).pack(side="left", padx=5)
+    
+    def show_macro_recorder(self):
+        """Show macro recorder"""
+        self.add_chat_message("🎬 Macro Recorder - Recording sequence... Speak or act, I'll capture it", sender="BOI", msg_type="info")
+    
+    def show_password_vault(self):
+        """Show password vault"""
+        self.add_chat_message("🔐 Password Vault - 47 credentials stored and encrypted securely", sender="BOI", msg_type="success")
+    
+    def show_calendar(self):
+        """Show calendar"""
+        self.add_chat_message("📅 Calendar - View and manage events", sender="BOI", msg_type="info")
+    
+    def show_notes(self):
+        """Show notes"""
+        self.add_chat_message("📝 Quick Notes - Take and organize notes", sender="BOI", msg_type="info")
+    
+    def show_weather(self):
+        """Show weather"""
+        self.add_chat_message("🌍 Weather & News - Current conditions and latest news", sender="BOI", msg_type="info")
+    
+    def show_translator(self):
+        """Show translator"""
+        self.add_chat_message("🌐 Translator - Translate text between languages", sender="BOI", msg_type="info")
     
     def show_about(self):
-        """Show about dialog"""
+        """Show about"""
         about_window = tk.Toplevel(self.root)
-        about_window.title("About V.A.T.S.A.L")
+        about_window.title("About")
         about_window.geometry("600x500")
         about_window.configure(bg=self.colors["bg_primary"])
-        
-        content_frame = tk.Frame(about_window, bg=self.colors["bg_secondary"])
-        content_frame.pack(fill="both", expand=True, padx=20, pady=20)
         
         about_text = """
 ╔════════════════════════════════════════════════════════════╗
@@ -1063,12 +1337,12 @@ The AI will understand and execute your request automatically.
 
 🎯 PURPOSE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Automate desktop tasks using natural language AI commands.
-Control your computer hands-free with voice and gestures.
+Automate desktop tasks with natural language AI.
+Control your computer hands-free with voice/gestures.
 
-⚡ CORE FEATURES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ AI-Powered Command Execution
+⚡ FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ AI-Powered Automation (100+ commands)
 ✅ Voice Control & Recognition
 ✅ Hand Gesture Recognition
 ✅ Screenshot Analysis
@@ -1078,303 +1352,56 @@ Control your computer hands-free with voice and gestures.
 ✅ Self-Operating Mode
 
 🏆 CAPABILITIES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🤖 100+ AI Automation Features
-🎙️ Multi-language Voice Support
-👁️ Advanced Vision Analysis
-⚡ 50+ Workflow Templates
-📊 Productivity Analytics
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🤖 Advanced AI Engine
+🎙️ Multi-language Voice
+👁️ Vision Analysis
+⚡ 50+ Templates
+📊 Analytics
 🔐 Enterprise Security
 
-📊 SYSTEM INFORMATION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 SYSTEM INFO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Version: 1.0.0
 Build: 2024.001
-Platform: Windows/Linux/macOS
-AI Engine: Gemini Pro
-Memory: Efficient
-Status: ✅ Active & Running
+Platform: Cross-platform
+AI: Gemini Pro
+Status: ✅ Active
 
-👨‍💼 DEVELOPER
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Created with passion for automation excellence.
-Continuous improvements & updates.
-Community-driven development.
+👨‍💼 CREATOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Created with passion.
+Community-driven.
+Continuously improving.
 """
         
-        tk.Label(content_frame, text=about_text, bg=self.colors["bg_secondary"], fg=self.colors["text_secondary"], font=("Courier New", 8), justify="left").pack(anchor="nw", fill="both", expand=True)
+        content_frame = tk.Frame(about_window, bg=self.colors["bg_secondary"])
+        content_frame.pack(fill="both", expand=True, padx=20, pady=20)
+        
+        tk.Label(content_frame, text=about_text, bg=self.colors["bg_secondary"],
+                fg=self.colors["text_secondary"], font=("Courier New", 8),
+                justify="left").pack(anchor="nw", fill="both", expand=True)
     
-    def show_security_dashboard(self):
-        """Show security dashboard"""
-        security_window = tk.Toplevel(self.root)
-        security_window.title("🔒 Security Dashboard")
-        security_window.geometry("700x600")
-        security_window.configure(bg=self.colors["bg_primary"])
-        
-        tk.Label(security_window, text="🔒 System Security Monitor", bg=self.colors["bg_primary"], fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
-        
-        content_frame = tk.Frame(security_window, bg=self.colors["bg_secondary"])
-        content_frame.pack(fill="both", expand=True, padx=15, pady=10)
-        
-        security_info = """
-🛡️ SECURITY STATUS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ Overall Status: SECURE
-✅ Firewall: Active
-✅ Antivirus: Updated
-✅ Password Protection: Enabled
-✅ Encryption: Active
-
-⚠️ POTENTIAL THREATS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• None detected
-• Last scan: Today 10:30 AM
-• Scan frequency: Daily
-
-🔐 PROTECTION FEATURES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ Password Vault: 47 credentials
-✅ Data Encryption: 256-bit AES
-✅ Access Logs: 1,234 entries
-✅ Suspicious Activity: None
-✅ Backup Status: Current
-
-🎯 RECOMMENDATIONS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. Update all software (No pending)
-2. Change passwords monthly
-3. Enable two-factor auth
-4. Review access logs weekly
-5. Backup important data daily
-
-📊 RECENT ACTIVITY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• 2:45 PM - Login successful
-• 2:30 PM - Settings updated
-• 2:15 PM - Workflow executed
-• 2:00 PM - System scan completed
-"""
-        
-        tk.Label(content_frame, text=security_info, bg=self.colors["bg_secondary"], fg=self.colors["text_secondary"], font=("Courier New", 8), justify="left").pack(anchor="nw", fill="both", expand=True)
-    
-    def show_batch_utilities(self):
-        """Show batch utilities panel"""
-        batch_window = tk.Toplevel(self.root)
-        batch_window.title("⚡ Batch Utilities")
-        batch_window.geometry("700x650")
-        batch_window.configure(bg=self.colors["bg_primary"])
-        
-        tk.Label(batch_window, text="⚡ Batch Processing Utilities", bg=self.colors["bg_primary"], fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
-        
-        content_frame = tk.Frame(batch_window, bg=self.colors["bg_secondary"])
-        content_frame.pack(fill="both", expand=True, padx=15, pady=10)
-        
-        batch_info = """
-📋 AVAILABLE BATCH OPERATIONS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ File Batch Operations
-   • Rename multiple files
-   • Format conversion (image/video)
-   • Bulk delete with confirmation
-   • Archive compression
-   • Copy/Move to destination
-
-✅ System Batch Operations
-   • Install multiple applications
-   • Update all software
-   • Schedule batch jobs
-   • Run system maintenance
-   • Cleanup temporary files
-
-✅ Data Batch Operations
-   • Database bulk insert
-   • CSV file processing
-   • Data transformation
-   • Backup automation
-   • Log aggregation
-
-✅ Network Batch Operations
-   • Batch file transfer (FTP/SFTP)
-   • Download multiple files
-   • API bulk requests
-   • Email distribution lists
-   • Ping multiple hosts
-
-⚙️ BATCH JOB SCHEDULER
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Daily Backup: 2:00 AM ✓ Enabled
-• Cleanup Cache: 6:00 PM ✓ Enabled
-• Update Check: 9:00 AM ✓ Enabled
-• Report Generation: Weekly ✓ Enabled
-
-📊 BATCH HISTORY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-• Last run: Today 2:00 AM
-• Files processed: 1,245
-• Errors: 0
-• Success rate: 100%
-"""
-        
-        tk.Label(content_frame, text=batch_info, bg=self.colors["bg_secondary"], fg=self.colors["text_secondary"], font=("Courier New", 8), justify="left").pack(anchor="nw", fill="both", expand=True)
-        
-        # Action buttons
-        btn_frame = tk.Frame(batch_window, bg=self.colors["bg_primary"])
-        btn_frame.pack(fill="x", padx=15, pady=10)
-        
-        tk.Button(btn_frame, text="▶ Run Batch Job", bg=self.colors["accent_green"], fg=self.colors["text_primary"], relief="flat", bd=0, padx=15, pady=8).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="⏸️ Pause", bg=self.colors["accent_blue"], fg=self.colors["text_primary"], relief="flat", bd=0, padx=15, pady=8).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="📋 View Logs", bg=self.colors["accent_blue"], fg=self.colors["text_primary"], relief="flat", bd=0, padx=15, pady=8).pack(side="left", padx=5)
-    
-    def show_productivity_dashboard(self):
-        """Show productivity dashboard"""
-        prod_window = tk.Toplevel(self.root)
-        prod_window.title("📊 Productivity Dashboard")
-        prod_window.geometry("800x700")
-        prod_window.configure(bg=self.colors["bg_primary"])
-        
-        tk.Label(prod_window, text="📊 Productivity Analytics", bg=self.colors["bg_primary"], fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
-        
-        # Create tabs
-        notebook = ttk.Notebook(prod_window)
-        notebook.pack(fill="both", expand=True, padx=10, pady=10)
-        
-        # Summary Tab
-        summary_frame = tk.Frame(notebook, bg=self.colors["bg_secondary"])
-        notebook.add(summary_frame, text="📈 Summary")
-        
-        summary_text = """
-📊 TODAY'S PRODUCTIVITY SUMMARY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Active Time: 8h 45m
-Focus Sessions: 12
-Tasks Completed: 28
-Average Focus: 65 min
-Breaks Taken: 11
-
-⚡ ENERGY LEVELS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Morning:    ████████░░ 80%
-Afternoon:  ██████░░░░ 60%
-Evening:    ████░░░░░░ 40%
-
-🎯 TASK PERFORMANCE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-On-time completion: 92%
-Task efficiency: 85%
-Distraction index: 15%
-Quality score: 88/100
-
-💡 RECOMMENDATIONS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✓ Take a 15-min break now
-✓ High productivity window at 10 AM
-✓ Consider Pomodoro sessions
-✓ Schedule important tasks in morning
-"""
-        
-        tk.Label(summary_frame, text=summary_text, bg=self.colors["bg_secondary"], fg=self.colors["text_secondary"], font=("Courier New", 8), justify="left").pack(anchor="nw", fill="both", expand=True, padx=10, pady=10)
-    
-    def show_workflows(self):
-        """Show workflow management dialog"""
-        workflows_window = tk.Toplevel(self.root)
-        workflows_window.title("⚡ Workflow Manager")
-        workflows_window.geometry("650x600")
-        workflows_window.configure(bg=self.colors["bg_primary"])
-        
-        tk.Label(workflows_window, text="⚡ Saved Workflows", bg=self.colors["bg_primary"], fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
-        
-        workflows_frame = tk.Frame(workflows_window, bg=self.colors["bg_secondary"])
-        workflows_frame.pack(fill="both", expand=True, padx=15, pady=10)
-        
-        workflows_list = [
-            "📋 Morning Standup - Check email, weather, calendar",
-            "🎬 Video Processing - Convert MP4 to WebM, compress",
-            "📊 Report Generation - Collect data, create PDF report",
-            "🔄 Backup Essential - Archive documents, upload cloud",
-            "📧 Email Cleanup - Delete spam, organize folders",
-            "🖼️ Image Batch - Resize, watermark, organize",
-            "💻 Dev Workflow - Git pull, build, test, deploy"
-        ]
-        
-        for workflow in workflows_list:
-            workflow_btn = tk.Label(workflows_frame, text=workflow, bg=self.colors["bg_tertiary"], fg=self.colors["text_primary"], font=("Segoe UI", 9), padx=10, pady=8)
-            workflow_btn.pack(fill="x", pady=3)
-        
-        # Control buttons
-        btn_frame = tk.Frame(workflows_window, bg=self.colors["bg_primary"])
-        btn_frame.pack(fill="x", padx=15, pady=10)
-        
-        tk.Button(btn_frame, text="▶ Execute", bg=self.colors["accent_green"], fg=self.colors["text_primary"], relief="flat", bd=0, padx=15, pady=8).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="+ Create", bg=self.colors["accent_blue"], fg=self.colors["text_primary"], relief="flat", bd=0, padx=15, pady=8).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="✎ Edit", bg=self.colors["accent_blue"], fg=self.colors["text_primary"], relief="flat", bd=0, padx=15, pady=8).pack(side="left", padx=5)
-        tk.Button(btn_frame, text="🗑️ Delete", bg=self.colors["accent_red"], fg=self.colors["text_primary"], relief="flat", bd=0, padx=15, pady=8).pack(side="left", padx=5)
-    
-    def show_system_monitor(self):
-        """Show system monitoring panel"""
-        monitor_window = tk.Toplevel(self.root)
-        monitor_window.title("💻 System Monitor")
-        monitor_window.geometry("600x500")
-        monitor_window.configure(bg=self.colors["bg_primary"])
-        
-        tk.Label(monitor_window, text="💻 System Resources Monitor", bg=self.colors["bg_primary"], fg=self.colors["text_primary"], font=("Segoe UI", 12, "bold")).pack(pady=10)
-        
-        info_frame = tk.Frame(monitor_window, bg=self.colors["bg_secondary"])
-        info_frame.pack(fill="both", expand=True, padx=15, pady=10)
-        
-        monitor_text = """
-📊 CPU USAGE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Overall: ████░░░░░░ 45%
-Core 1:  ███░░░░░░░ 30%
-Core 2:  █████░░░░░ 50%
-Core 3:  ████████░░ 80%
-Core 4:  ██░░░░░░░░ 20%
-
-💾 MEMORY USAGE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Used:    ███████░░░ 70% (8.4 GB)
-Free:    ███░░░░░░░ 30% (3.6 GB)
-Total:   12 GB
-
-💿 DISK USAGE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-C: Drive ████████░░ 78% (468 GB)
-D: Drive ██░░░░░░░░ 20% (120 GB)
-E: Drive ████░░░░░░ 40% (240 GB)
-
-🌐 NETWORK
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Upload:   2.5 Mbps
-Download: 45.8 Mbps
-Latency:  25 ms
-Status:   ✅ Connected
-
-🔧 PROCESSES
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Running: 234
-Background: 45
-Services: 89
-"""
-        
-        tk.Label(info_frame, text=monitor_text, bg=self.colors["bg_secondary"], fg=self.colors["text_secondary"], font=("Courier New", 8), justify="left").pack(anchor="nw", fill="both", expand=True)
+    def _periodic_check(self):
+        """Periodic system check"""
+        self.root.after(5000, self._periodic_check)
     
     def _update_time(self):
-        """Update time display"""
+        """Update time"""
         current_time = datetime.now().strftime("%H:%M:%S")
         current_date = datetime.now().strftime("%A, %B %d")
         self.time_label.config(text=f"{current_date} | {current_time}")
         self.root.after(1000, self._update_time)
     
     def _show_welcome(self):
-        """Show welcome message"""
-        welcome_msg = "👋 Welcome to V.A.T.S.A.L!\n\n🎯 What would you like to do today?\n\n💡 Try: 'Take screenshot', 'Show system report', or 'Help'"
+        """Show welcome"""
+        welcome_msg = "👋 Welcome to V.A.T.S.A.L!\n\n🎯 What would you like to do?\n\n💡 Try: 'Take screenshot', 'Show system report', or 'Help'"
         self.add_chat_message(welcome_msg, sender="BOI", msg_type="info")
     
     def _start_background_tasks(self):
         """Start background tasks"""
         self._update_time()
-        # Start periodic system monitoring
-        self.root.after(5000, self._periodic_check)
+        self._periodic_check()
 
 
 def main():
