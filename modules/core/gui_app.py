@@ -1586,31 +1586,31 @@ class ModernBOIGUI:
             # Start listening
             self.wakeup_listening = True
             self.wakeup_btn.config(bg=self.ACTIVE_GREEN, fg="white")
-            self.update_output("\n👂 Wakeup word listener activated\n", "success")
+            self.update_output("👂 Wakeup word listener activated", "success")
 
             # Start voice listening if available
             if self.voice_commander:
                 if self.voice_listening:
-                    self.update_output("⚠️ Voice listener already active\n", "warning")
+                    self.update_output("⚠️ Voice listener already active", "warning")
                     return
                 try:
                     self.voice_listening = True
                     self.voice_commander.start_continuous_listening(callback=self.handle_voice_command)
-                    self.update_output("Listening for wake word...\n", "info")
+                    self.update_output("Listening for wake word...", "info")
                 except Exception as e:
-                    self.update_output(f"⚠️ Could not start listener: {e}\n", "warning")
+                    self.update_output(f"⚠️ Could not start listener: {e}", "warning")
                     self.wakeup_listening = False
                     self.voice_listening = False
                     self.wakeup_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
             else:
-                self.update_output("⚠️ Voice commander not available\n", "warning")
+                self.update_output("⚠️ Voice commander not available", "warning")
                 self.wakeup_listening = False
                 self.wakeup_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
         else:
             # Stop listening
             self.wakeup_listening = False
             self.wakeup_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
-            self.update_output("\n👂 Wakeup word listener deactivated\n", "warning")
+            self.update_output("👂 Wakeup word listener deactivated", "warning")
 
             # Stop voice listening
             if self.voice_commander and self.voice_listening:
@@ -1628,14 +1628,14 @@ class ModernBOIGUI:
             # Starting detector
             self.vsign_detecting = True
             self.vsign_btn.config(bg=self.ACTIVE_GREEN, fg="white")
-            self.update_output("\n✌️ V-sign detector activated\n", "success")
-            self.update_output("Show ONE V-sign for 1 second to start voice listening\n", "info")
-            self.update_output("Show TWO V-signs to trigger BOI greeting\n", "info")
+            self.update_output("✌️ V-sign detector activated", "success")
+            self.update_output("Show ONE V-sign for 1 second to start voice listening", "info")
+            self.update_output("Show TWO V-signs to trigger BOI greeting", "info")
 
             # Start gesture voice activator if available
             if self.gesture_voice_activator:
                 if self.gesture_voice_active:
-                    self.update_output("⚠️ Gesture voice already running\n", "warning")
+                    self.update_output("⚠️ Gesture voice already running", "warning")
                     return
 
                 try:
@@ -1654,21 +1654,21 @@ class ModernBOIGUI:
                             pass
 
                     threading.Thread(target=run_gesture_voice, daemon=True).start()
-                    self.update_output("Camera activated - show V-sign!\n", "success")
+                    self.update_output("Camera activated - show V-sign!", "success")
                 except Exception as e:
-                    self.update_output(f"⚠️ Could not start detector: {e}\n", "warning")
+                    self.update_output(f"⚠️ Could not start detector: {e}", "warning")
                     self.vsign_detecting = False
                     self.gesture_voice_active = False
                     self.vsign_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
             else:
-                self.update_output("⚠️ Gesture voice activator not available\n", "warning")
+                self.update_output("⚠️ Gesture voice activator not available", "warning")
                 self.vsign_detecting = False
                 self.vsign_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
         else:
             # Stopping detector
             self.vsign_detecting = False
             self.vsign_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
-            self.update_output("\n✌️ V-sign detector deactivated\n", "warning")
+            self.update_output("✌️ V-sign detector deactivated", "warning")
 
             # Stop gesture voice activator
             if self.gesture_voice_activator and self.gesture_voice_active:
@@ -1694,18 +1694,18 @@ class ModernBOIGUI:
             # Enable speaking
             self.speaking_enabled = True
             self.speaking_btn.config(bg=self.ACTIVE_GREEN, fg="white")
-            self.update_output("\n🗣️ Speaking mode enabled\n", "success")
+            self.update_output("🗣️ Speaking mode enabled", "success")
 
             # Test speak
             if self.voice_commander:
                 try:
                     self.voice_commander.speak("Speaking mode activated")
                 except Exception as e:
-                    self.update_output(f"⚠️ Could not activate speaking: {e}\n", "warning")
+                    self.update_output(f"⚠️ Could not activate speaking: {e}", "warning")
                     self.speaking_enabled = False
                     self.speaking_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
             else:
-                self.update_output("⚠️ Voice system not available\n", "warning")
+                self.update_output("⚠️ Voice system not available", "warning")
                 self.speaking_enabled = False
                 self.speaking_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY)
         else:
