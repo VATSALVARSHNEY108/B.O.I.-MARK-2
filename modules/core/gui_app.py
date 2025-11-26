@@ -47,7 +47,7 @@ from modules.utilities.quick_notes import QuickNotes
 from modules.utilities.weather_news_service import WeatherNewsService
 from modules.communication.translation_service import TranslationService
 from modules.productivity.smart_break_suggester import SmartBreakSuggester
-from modules.security.security_dashboard import ModernBOIGUI
+from modules.security.security_dashboard import SecurityDashboard
 from modules.utilities.batch_utilities import get_batch_utilities
 from modules.communication.phone_dialer import create_phone_dialer
 from modules.utilities.contact_manager import ContactManager
