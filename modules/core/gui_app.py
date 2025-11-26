@@ -1478,35 +1478,59 @@ class ModernBOIGUI:
             self.root.after(0, lambda: self.execute_btn.config(state="normal", text="▶ Execute"))
 
     def add_chat_message(self, message, sender="BOI", msg_type="info"):
-        """Add a chat message - simplified text display"""
+        """Add a chat message with modern conversational bot interface"""
         if not hasattr(self, 'chat_scrollable') or self.chat_scrollable is None:
             return
 
-        # Determine styling
-        colors = {
-            "info": "#2196F3",
-            "success": "#4CAF50",
-            "error": "#D32F2F",
-            "warning": "#FF9800",
-            "command": "#666666"
-        }
-        text_color = colors.get(msg_type, colors["info"])
-        
-        # Create simple text label without block containers
+        # Message container with padding
+        msg_container = tk.Frame(self.chat_scrollable, bg="#f7f7f7")
+        msg_container.pack(anchor="w" if sender == "USER" else "w", fill="x", padx=10, pady=8)
+
+        # Determine styling based on sender
+        if sender == "USER":
+            # User messages: right-aligned, blue background, bold white text
+            bubble_bg = "#007BFF"
+            text_fg = "white"
+            anchor_pos = "e"
+            padx_val = (200, 20)
+        else:
+            # BOI messages: left-aligned, light gray background, bold dark text
+            bubble_bg = "#E8E8E8"
+            text_fg = "#1a1a1a"
+            anchor_pos = "w"
+            padx_val = (20, 200)
+
+        # Message bubble frame
+        bubble = tk.Frame(msg_container, bg=bubble_bg, relief="flat", bd=0)
+        bubble.pack(anchor=anchor_pos, padx=padx_val, pady=2)
+
+        # Sender label (small, subtle)
+        sender_label = tk.Label(
+            bubble,
+            text=f"{'👤 You' if sender == 'USER' else '🤖 BOI'}",
+            bg=bubble_bg,
+            fg=text_fg,
+            font=("Segoe UI", 8, "bold"),
+            padx=12,
+            pady=(8, 2)
+        )
+        sender_label.pack(anchor="w")
+
+        # Message text - BOLD
         msg_label = tk.Label(
-            self.chat_scrollable,
+            bubble,
             text=message,
-            bg="#f7f7f7",
-            fg=text_color,
-            font=("Segoe UI", 10),
+            bg=bubble_bg,
+            fg=text_fg,
+            font=("Segoe UI", 11, "bold"),
             justify="left",
-            wraplength=700,
-            padx=15,
-            pady=5
+            wraplength=450,
+            padx=12,
+            pady=(2, 10)
         )
         msg_label.pack(anchor="w", fill="x")
 
-        self.chat_messages.append((msg_label, message))
+        self.chat_messages.append((msg_container, message))
         self.chat_canvas.after(50, lambda: self.chat_canvas.yview_moveto(1.0))
 
     def update_output(self, message, msg_type="info"):
