@@ -8,6 +8,37 @@ from modules.core.command_executor import CommandExecutor
 
 load_dotenv()
 
+def print_box(text, emoji=""):
+    """Print text in a beautiful box with bold formatting"""
+    lines = text.split('\n')
+    
+    # Find the longest line for box width
+    max_width = max(len(line) for line in lines) if lines else 20
+    box_width = max_width + 4
+    
+    # ANSI codes for bold text
+    BOLD = '\033[1m'
+    END = '\033[0m'
+    
+    # Box drawing characters
+    top_left = '╔'
+    top_right = '╗'
+    bottom_left = '╚'
+    bottom_right = '╝'
+    horizontal = '═'
+    vertical = '║'
+    
+    # Print top border
+    print(f"{BOLD}{top_left}{horizontal * box_width}{top_right}{END}")
+    
+    # Print content
+    for line in lines:
+        padding = box_width - len(line)
+        print(f"{BOLD}{vertical}{END} {BOLD}{emoji}{line}{END}{' ' * (padding - len(emoji))}{BOLD}{vertical}{END}")
+    
+    # Print bottom border
+    print(f"{BOLD}{bottom_left}{horizontal * box_width}{bottom_right}{END}\n")
+
 class DesktopAutomationCLI:
     """Command-line interface for AI-powered desktop automation"""
     
