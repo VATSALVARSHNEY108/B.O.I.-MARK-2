@@ -298,7 +298,7 @@ class ModernChatGPTGUI:
         
         # Input area
         input_frame = tk.Frame(main_frame, bg=self.colors["bg_primary"])
-        input_frame.pack(fill="x", padx=20, pady=(0, 20))
+        input_frame.pack(fill="x", padx=20, pady=20)
         
         # Input box frame
         input_box_frame = tk.Frame(input_frame, bg=self.colors["input_bg"], relief="solid", bd=1)
@@ -313,7 +313,7 @@ class ModernChatGPTGUI:
         
         # Button area
         button_frame = tk.Frame(main_frame, bg=self.colors["bg_primary"])
-        button_frame.pack(fill="x", padx=20, pady=(0, 20))
+        button_frame.pack(fill="x", padx=20, pady=20)
         
         tk.Button(button_frame, text="▶ Send", command=self.execute_command,
                  bg=self.colors["accent_blue"], fg=self.colors["bg_primary"],
@@ -352,12 +352,12 @@ class ModernChatGPTGUI:
         # Sender label
         tk.Label(bubble_frame, text=label_text, bg=bubble_frame["bg"],
                 fg=self.colors["text_primary"], font=("Segoe UI", 8, "bold"),
-                padx=12, pady=(8, 2)).pack(anchor="w")
+                padx=12, pady=8).pack(anchor="w")
         
         # Message text
         tk.Label(bubble_frame, text=text, bg=bubble_frame["bg"],
                 fg=self.colors["text_primary"], font=("Segoe UI", 10),
-                justify="left", wraplength=400, padx=12, pady=(2, 10)).pack(anchor="w", fill="x")
+                justify="left", wraplength=400, padx=12, pady=10).pack(anchor="w", fill="x")
         
         self.chat_messages.append((msg_frame, text))
         self.chat_canvas.after(50, lambda: self.chat_canvas.yview_moveto(1.0))
