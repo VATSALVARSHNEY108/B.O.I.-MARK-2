@@ -6709,7 +6709,7 @@ Based on OthersideAI's self-operating-computer framework
             self.gesture_voice_btn.config(bg="#00ff88", text="✌️✌️")
             self.update_output("\n" + "=" * 60 + "\n", "info")
             self.update_output("✌️  Gesture Voice & Hand Detection ENABLED\n", "success")
-            self.update_output("=" * 60 + "\n", "info")
+
             self.update_output("📋 Available Gestures:\n", "info")
             self.update_output("  🖖 SPOCK - Activate listening mode\n", "info")
             self.update_output("  🤟 ROCK SIGN - Vatsal identified (ILoveYou)\n", "info")
@@ -7060,7 +7060,7 @@ For more information, visit the documentation or contact support.
     def show_suggestion(self):
         """Show BOI proactive suggestion"""
         suggestion = self.vatsal.get_proactive_suggestion()
-        self.update_output(f"\n{suggestion}\n\n", "command")
+        self.update_output(f"{suggestion}", "command")
 
     def show_about(self):
         about_window = tk.Toplevel(self.root)
@@ -7862,7 +7862,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n📈 Analytics Dashboard\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             summary = self.ai_monitor.get_analytics_summary()
 
@@ -7905,7 +7905,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n📊 Productivity Trends Analysis\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             trends = self.ai_monitor.get_productivity_trends()
 
@@ -7941,7 +7941,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n🚨 Recent Alerts\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             alerts = self.ai_monitor.get_recent_alerts(limit=10)
 
@@ -8058,7 +8058,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n🐛 Auto-Bug Fixer\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             error_text = self.show_input_dialog(
                 "Auto-Bug Fixer",
@@ -8091,7 +8091,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n📅 Meeting Scheduler AI\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             title = self.show_input_dialog("Meeting Title", "Enter meeting title:")
             if not title:
@@ -8134,7 +8134,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n📁 Smart File Recommendations\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             task = self.show_input_dialog(
                 "Current Task",
@@ -8164,7 +8164,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n📝 Auto-Documentation Generator\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             doc_type = self.show_input_dialog(
                 "Documentation Type",
@@ -8198,7 +8198,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n⚡ Intelligent Command Shortcuts\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             action = self.show_input_dialog(
                 "Command Shortcuts",
@@ -8240,7 +8240,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n🔀 Project Context Switcher\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             contexts = self.smart_automation.context_switcher.list_contexts()
 
@@ -8265,7 +8265,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n🎯 Task Auto-Prioritizer\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             self.update_output("Prioritizing tasks with AI...\n", "info")
             prioritized = self.smart_automation.task_prioritizer.prioritize_tasks()
@@ -8295,7 +8295,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n🔧 Workflow Auto-Optimizer\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             self.update_output("Analyzing workflow patterns...\n", "info")
             report = self.smart_automation.workflow_optimizer.get_efficiency_report()
@@ -8335,7 +8335,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n📋 Smart Template Generator\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             template_type = self.show_input_dialog(
                 "Template Type",
@@ -8385,7 +8385,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n📊 Smart Automation Dashboard\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             summary = self.smart_automation.get_dashboard_summary()
 
@@ -8470,7 +8470,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n🗂️ Desktop File Controller\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             result = self.desktop_controller.launch_batch_controller()
 
@@ -8492,7 +8492,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n📋 Desktop Contents\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             result = self.desktop_controller.list_items()
 
@@ -8534,7 +8534,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
             if folder_name:
                 self.update_output("\n➕ Creating Folder...\n", "command")
-                self.update_output("=" * 60 + "\n", "info")
+    
 
                 result = self.desktop_controller.create_folder(folder_name)
 
@@ -8553,7 +8553,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
         def execute():
             self.update_output("\n📁 Organizing Desktop...\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
             self.update_output("Sorting files into folders by type...\n", "info")
             self.update_output("• Documents (txt, pdf, doc, xls, ppt)\n", "info")
             self.update_output("• Images (jpg, png, gif, bmp, svg)\n", "info")
@@ -8583,7 +8583,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
             if search_term:
                 self.update_output(f"\n🔍 Searching Desktop for '{search_term}'...\n", "command")
-                self.update_output("=" * 60 + "\n", "info")
+    
 
                 result = self.desktop_controller.search_files(search_term)
 
@@ -8648,7 +8648,7 @@ Answered: {result.get('timestamp', 'N/A')}
         """View Pomodoro statistics"""
         stats = self.pomodoro_coach.get_statistics()
         self.update_output(f"\n📊 POMODORO STATISTICS\n", "success")
-        self.update_output(f"{'=' * 60}\n", "info")
+
         self.update_output(f"Total Pomodoros: {stats['total_pomodoros']}\n", "info")
         self.update_output(f"Completed Today: {stats['pomodoros_today']}\n", "info")
         self.update_output(f"Total Work Time: {stats['total_work_hours']:.1f} hours\n", "info")
@@ -8688,7 +8688,7 @@ Answered: {result.get('timestamp', 'N/A')}
         """View task time predictions"""
         report = self.task_predictor.get_accuracy_report()
         self.update_output(f"\n📈 TASK PREDICTION REPORT\n", "success")
-        self.update_output(f"{'=' * 60}\n", "info")
+
         self.update_output(f"Total Tasks: {report['total_tasks']}\n", "info")
         self.update_output(f"Average Accuracy: {report['average_accuracy']:.1f}%\n", "success")
         self.update_output(f"Best Category: {report['best_category']}\n", "info")
@@ -8697,7 +8697,7 @@ Answered: {result.get('timestamp', 'N/A')}
         """View task analytics"""
         insights = self.task_predictor.get_insights()
         self.update_output(f"\n📊 TASK ANALYTICS\n", "success")
-        self.update_output(f"{'=' * 60}\n", "info")
+
         for insight in insights:
             self.update_output(f"• {insight}\n", "info")
 
@@ -8705,7 +8705,7 @@ Answered: {result.get('timestamp', 'N/A')}
         """Check current energy level"""
         energy = self.energy_tracker.get_current_energy()
         self.update_output(f"\n🔋 CURRENT ENERGY LEVEL\n", "success")
-        self.update_output(f"{'=' * 60}\n", "info")
+
         self.update_output(f"Level: {energy['level']:.0f}/100 {energy['emoji']}\n", "info")
         self.update_output(f"Status: {energy['category']}\n", "success")
         self.update_output(f"Trend: {energy['trend']}\n", "info")
@@ -8716,7 +8716,7 @@ Answered: {result.get('timestamp', 'N/A')}
         """View energy trends"""
         trends = self.energy_tracker.get_daily_summary()
         self.update_output(f"\n📈 ENERGY TRENDS\n", "success")
-        self.update_output(f"{'=' * 60}\n", "info")
+
         self.update_output(f"Average Energy: {trends['average_energy']:.0f}/100\n", "info")
         self.update_output(f"Peak Time: {trends['peak_hour']}:00\n", "success")
         self.update_output(f"Low Time: {trends['low_hour']}:00\n", "info")
@@ -8725,7 +8725,7 @@ Answered: {result.get('timestamp', 'N/A')}
         """Get AI break suggestion"""
         suggestion = self.break_suggester.should_take_break()
         self.update_output(f"\n🎯 BREAK SUGGESTION\n", "success")
-        self.update_output(f"{'=' * 60}\n", "info")
+
         self.update_output(f"{suggestion['message']}\n", "info")
         if suggestion['should_break']:
             self.update_output(f"\n💡 Suggested break type: {suggestion['break_type']}\n", "command")
@@ -8735,7 +8735,7 @@ Answered: {result.get('timestamp', 'N/A')}
         """Check for distractions"""
         result = self.distraction_detector.detect_distraction()
         self.update_output(f"\n⚠️ DISTRACTION CHECK\n", "success")
-        self.update_output(f"{'=' * 60}\n", "info")
+
         if result['is_distracted']:
             self.update_output(f"Status: Distracted ⚠️\n", "error")
             self.update_output(f"App: {result['app']}\n", "info")
@@ -8747,7 +8747,7 @@ Answered: {result.get('timestamp', 'N/A')}
         """View focus report"""
         report = self.distraction_detector.get_daily_report()
         self.update_output(f"\n📊 FOCUS REPORT\n", "success")
-        self.update_output(f"{'=' * 60}\n", "info")
+
         self.update_output(f"Distractions Today: {report['distractions_today']}\n", "info")
         self.update_output(f"Focus Time: {report['focus_time']} minutes\n", "success")
         self.update_output(f"Distraction Time: {report['distraction_time']} minutes\n", "error")
@@ -8756,7 +8756,7 @@ Answered: {result.get('timestamp', 'N/A')}
         """View complete productivity dashboard"""
         dashboard = self.productivity_dashboard.get_comprehensive_dashboard()
         self.update_output(f"\n📊 PRODUCTIVITY DASHBOARD\n", "success")
-        self.update_output(f"{'=' * 60}\n", "info")
+
         self.update_output(f"Period: {dashboard['period']}\n", "info")
         overview = dashboard['overview']
         self.update_output(f"\nWork Sessions: {overview['total_work_sessions']}\n", "info")
@@ -8767,7 +8767,7 @@ Answered: {result.get('timestamp', 'N/A')}
         """View weekly summary"""
         dashboard = self.productivity_dashboard.get_comprehensive_dashboard(days=7)
         self.update_output(f"\n📅 WEEKLY SUMMARY\n", "success")
-        self.update_output(f"{'=' * 60}\n", "info")
+
         time_analysis = dashboard['time_analysis']
         if not time_analysis.get('no_data'):
             self.update_output(f"Total Work Time: {time_analysis['total_work_minutes']} minutes\n", "info")
@@ -8786,7 +8786,7 @@ Answered: {result.get('timestamp', 'N/A')}
         """Get productivity recommendations"""
         dashboard = self.productivity_dashboard.get_comprehensive_dashboard()
         self.update_output(f"\n🎯 PRODUCTIVITY RECOMMENDATIONS\n", "success")
-        self.update_output(f"{'=' * 60}\n", "info")
+
         for i, rec in enumerate(dashboard['recommendations'], 1):
             self.update_output(f"{i}. {rec}\n", "info")
 
@@ -8928,7 +8928,7 @@ Answered: {result.get('timestamp', 'N/A')}
         try:
             self.update_output("\n" + "=" * 60 + "\n", "info")
             self.update_output("🚀 DESKTOP FILE & FOLDER AUTOMATOR - STARTING\n", "command")
-            self.update_output("=" * 60 + "\n", "info")
+
 
             # Create Desktop Sync Manager instance
             manager = DesktopSyncManager()
@@ -8946,7 +8946,7 @@ Answered: {result.get('timestamp', 'N/A')}
 
             # Step 2: Display summary in GUI
             self.update_output("\n📊 DESKTOP ANALYSIS SUMMARY\n", "success")
-            self.update_output("=" * 60 + "\n", "info")
+
             self.update_output(f"📂 Desktop Location: {scan_data['desktop_path']}\n", "info")
             self.update_output(
                 f"📅 Scanned: {datetime.fromisoformat(scan_data['scan_time']).strftime('%Y-%m-%d %H:%M:%S')}\n\n",
