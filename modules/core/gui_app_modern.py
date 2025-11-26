@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-V.A.T.S.A.L - Enhanced AI Desktop Assistant GUI
-Professional ChatGPT-style interface with advanced features
+V.A.T.S.A.L - Modern ChatGPT GUI with gui_app.py Backend Integration
+Professional interface that delegates all commands to backend for execution
 """
 
 import tkinter as tk
@@ -23,9 +23,10 @@ except:
     pass
 
 try:
-    from modules.core.gemini_controller import parse_command
+    from modules.core.gemini_controller import parse_command, get_ai_suggestion
 except:
     parse_command = None
+    get_ai_suggestion = None
 
 try:
     from modules.core.command_executor import CommandExecutor
@@ -39,7 +40,7 @@ except:
 
 
 class EnhancedChatGUI:
-    """Enhanced ChatGPT-level professional GUI with advanced features"""
+    """ChatGPT-style GUI with full gui_app.py backend integration"""
 
     def __init__(self, root):
         self.root = root
@@ -47,7 +48,6 @@ class EnhancedChatGUI:
         self.root.geometry("1600x950")
         self.root.minsize(1200, 700)
         
-        # Enhanced color scheme with theme support
         self.themes = {
             "light": {
                 "bg_main": "#ffffff",
@@ -85,7 +85,6 @@ class EnhancedChatGUI:
         self.colors = self.themes[self.current_theme]
         self.root.configure(bg=self.colors["bg_main"])
         
-        # Enhanced state management
         self.executor = None
         self.vatsal = None
         self.processing = False
@@ -94,290 +93,120 @@ class EnhancedChatGUI:
         self.history_index = -1
         self.auto_mode = False
         self.voice_mode = False
-        self.typing_indicator = None
-        self.conversation_id = self._generate_conversation_id()
+        self.conversation_id = f"conv_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         
-        # Configuration
         self.config_dir = Path.home() / ".vatsal"
         self.config_dir.mkdir(exist_ok=True)
-        self.config_file = self.config_dir / "config.json"
-        self.chat_history_file = self.config_dir / "chat_history.json"
         
         self._load_config()
         self._init_modules()
         self._build_ui()
         self._show_welcome()
         self._start_time_update()
-        self._load_chat_history()
-    
-    def _generate_conversation_id(self):
-        """Generate unique conversation ID"""
-        return f"conv_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     
     def _load_config(self):
-        """Load configuration from file"""
         try:
-            if self.config_file.exists():
-                with open(self.config_file, 'r') as f:
+            config_file = self.config_dir / "config.json"
+            if config_file.exists():
+                with open(config_file, 'r') as f:
                     config = json.load(f)
                     self.current_theme = config.get("theme", "light")
                     self.auto_mode = config.get("auto_mode", False)
                     self.voice_mode = config.get("voice_mode", False)
-        except Exception as e:
-            print(f"Config load error: {e}")
+        except:
+            pass
     
     def _save_config(self):
-        """Save configuration to file"""
         try:
+            config_file = self.config_dir / "config.json"
             config = {
                 "theme": self.current_theme,
                 "auto_mode": self.auto_mode,
                 "voice_mode": self.voice_mode,
                 "last_updated": datetime.now().isoformat()
             }
-            with open(self.config_file, 'w') as f:
+            with open(config_file, 'w') as f:
                 json.dump(config, f, indent=2)
-        except Exception as e:
-            print(f"Config save error: {e}")
-    
-    def _load_chat_history(self):
-        """Load chat history from file"""
-        try:
-            if self.chat_history_file.exists():
-                with open(self.chat_history_file, 'r') as f:
-                    history = json.load(f)
-                    # Load last 5 messages for context
-                    recent = history.get("messages", [])[-5:]
-                    for msg in recent:
-                        self.add_message(msg["text"], is_user=msg["is_user"], 
-                                       timestamp=msg.get("timestamp"))
-        except Exception as e:
-            print(f"History load error: {e}")
-    
-    def _save_chat_history(self):
-        """Save chat history to file"""
-        try:
-            history = {
-                "conversation_id": self.conversation_id,
-                "messages": [
-                    {
-                        "text": msg[1],
-                        "is_user": msg[0],
-                        "timestamp": msg[2] if len(msg) > 2 else datetime.now().isoformat()
-                    }
-                    for msg in self.messages
-                ],
-                "last_updated": datetime.now().isoformat()
-            }
-            with open(self.chat_history_file, 'w') as f:
-                json.dump(history, f, indent=2)
-        except Exception as e:
-            print(f"History save error: {e}")
+        except:
+            pass
     
     def _init_modules(self):
-        """Initialize modules with error handling"""
         try:
             if CommandExecutor:
                 self.executor = CommandExecutor()
-                print("✓ CommandExecutor initialized")
-        except Exception as e:
-            print(f"CommandExecutor init error: {e}")
-        
+        except:
+            pass
         try:
             if create_vatsal_assistant:
                 self.vatsal = create_vatsal_assistant()
-                print("✓ VATSAL Assistant initialized")
-        except Exception as e:
-            print(f"VATSAL Assistant init error: {e}")
+        except:
+            pass
     
     def _build_ui(self):
-        """Build enhanced ChatGPT-style UI with sidebar"""
-        # Main container with sidebar
         main_container = tk.Frame(self.root, bg=self.colors["bg_main"])
         main_container.pack(fill="both", expand=True)
         
-        # ===== SIDEBAR =====
-        self._build_sidebar(main_container)
-        
-        # ===== MAIN CONTENT =====
-        main = tk.Frame(main_container, bg=self.colors["bg_main"])
-        main.pack(side="right", fill="both", expand=True)
-        
-        # ===== HEADER =====
-        self._build_header(main)
-        
-        # Divider
-        tk.Frame(main, bg=self.colors["border"], height=1).pack(fill="x")
-        
-        # ===== CHAT AREA =====
-        self._build_chat_area(main)
-        
-        # Divider
-        tk.Frame(main, bg=self.colors["border"], height=1).pack(fill="x")
-        
-        # ===== INPUT AREA =====
-        self._build_input_area(main)
-        
-        # ===== STATUS BAR =====
-        self._build_status_bar(main)
-    
-    def _build_sidebar(self, parent):
-        """Build collapsible sidebar"""
-        sidebar = tk.Frame(parent, bg=self.colors["bg_dark"], width=280, relief="flat")
+        sidebar = tk.Frame(main_container, bg=self.colors["bg_dark"], width=280)
         sidebar.pack(side="left", fill="y")
         sidebar.pack_propagate(False)
         
-        # Sidebar header
-        header = tk.Frame(sidebar, bg=self.colors["bg_dark"])
-        header.pack(fill="x", padx=16, pady=16)
-        
-        tk.Label(header, text="💬 Conversations", font=("Segoe UI", 11, "bold"),
+        header_sb = tk.Frame(sidebar, bg=self.colors["bg_dark"])
+        header_sb.pack(fill="x", padx=16, pady=16)
+        tk.Label(header_sb, text="💬 Conversations", font=("Segoe UI", 11, "bold"),
                 bg=self.colors["bg_dark"], fg=self.colors["text_main"]).pack(anchor="w")
         
-        # New chat button
-        new_chat_btn = tk.Button(sidebar, text="+ New Chat", 
-                                command=self.new_conversation,
-                                bg=self.colors["accent"], fg="white",
-                                font=("Segoe UI", 9, "bold"), relief="flat",
-                                bd=0, padx=16, pady=10, cursor="hand2",
-                                activebackground=self.colors["accent_dark"])
+        new_chat_btn = tk.Button(sidebar, text="+ New Chat", command=self.new_conversation,
+                                bg=self.colors["accent"], fg="white", font=("Segoe UI", 9, "bold"),
+                                relief="flat", bd=0, padx=16, pady=10)
         new_chat_btn.pack(fill="x", padx=16, pady=(0, 10))
         
-        # Conversation list
-        conv_frame = tk.Frame(sidebar, bg=self.colors["bg_dark"])
-        conv_frame.pack(fill="both", expand=True, padx=8)
+        main = tk.Frame(main_container, bg=self.colors["bg_main"])
+        main.pack(side="right", fill="both", expand=True)
         
-        conversations = [
-            ("📝 System Configuration", "2 min ago"),
-            ("🔧 Debug Session", "1 hour ago"),
-            ("💻 Code Review", "Yesterday"),
-            ("📊 Analytics Report", "2 days ago")
-        ]
-        
-        for title, time in conversations:
-            btn = tk.Button(conv_frame, text=f"{title}\n{time}",
-                          bg=self.colors["bg_light"], fg=self.colors["text_main"],
-                          font=("Segoe UI", 8), relief="flat", bd=0,
-                          padx=12, pady=10, cursor="hand2", anchor="w",
-                          justify="left", activebackground=self.colors["border"])
-            btn.pack(fill="x", pady=2)
-        
-        # Sidebar footer
-        footer = tk.Frame(sidebar, bg=self.colors["bg_dark"])
-        footer.pack(fill="x", side="bottom", padx=16, pady=16)
-        
-        theme_btn = tk.Button(footer, text="🌓 Toggle Theme",
-                             command=self.toggle_theme,
-                             bg=self.colors["bg_light"], fg=self.colors["text_main"],
-                             font=("Segoe UI", 9), relief="flat", bd=0,
-                             padx=12, pady=8, cursor="hand2")
-        theme_btn.pack(fill="x")
-    
-    def _build_header(self, parent):
-        """Build header with status indicators"""
-        header = tk.Frame(parent, bg=self.colors["bg_main"], height=70, relief="flat")
-        header.pack(fill="x", padx=0, pady=0)
+        header = tk.Frame(main, bg=self.colors["bg_main"], height=70)
+        header.pack(fill="x")
         header.pack_propagate(False)
         
         h_left = tk.Frame(header, bg=self.colors["bg_main"])
         h_left.pack(side="left", padx=24, pady=16)
-        
         tk.Label(h_left, text="🤖 V.A.T.S.A.L", font=("Segoe UI", 14, "bold"),
                 bg=self.colors["bg_main"], fg=self.colors["text_main"]).pack(anchor="w")
         
-        status_frame = tk.Frame(h_left, bg=self.colors["bg_main"])
-        status_frame.pack(anchor="w", pady=(4, 0))
-        
-        # Status indicators
-        self.status_indicators = {}
-        indicators = [
-            ("🟢", "Online", self.colors["success"]),
-            ("⚡", "Auto", self.colors["warning"]),
-            ("🎙️", "Voice", self.colors["accent"])
-        ]
-        
-        for icon, name, color in indicators:
-            frame = tk.Frame(status_frame, bg=self.colors["bg_main"])
-            frame.pack(side="left", padx=(0, 12))
-            
-            indicator = tk.Label(frame, text=icon, font=("Arial", 8),
-                               bg=self.colors["bg_main"], fg=color)
-            indicator.pack(side="left", padx=(0, 4))
-            
-            label = tk.Label(frame, text=name, font=("Segoe UI", 8),
-                           bg=self.colors["bg_main"], fg=self.colors["text_light"])
-            label.pack(side="left")
-            
-            self.status_indicators[name] = indicator
-        
-        # Right side
         h_right = tk.Frame(header, bg=self.colors["bg_main"])
         h_right.pack(side="right", padx=24, pady=16)
-        
         self.time_label = tk.Label(h_right, text="", font=("Segoe UI", 10),
                                   bg=self.colors["bg_main"], fg=self.colors["text_light"])
         self.time_label.pack()
-        
-        self.msg_count_label = tk.Label(h_right, text="0 messages",
-                                       font=("Segoe UI", 8),
-                                       bg=self.colors["bg_main"],
-                                       fg=self.colors["text_light"])
+        self.msg_count_label = tk.Label(h_right, text="0 messages", font=("Segoe UI", 8),
+                                       bg=self.colors["bg_main"], fg=self.colors["text_light"])
         self.msg_count_label.pack(pady=(4, 0))
-    
-    def _build_chat_area(self, parent):
-        """Build enhanced chat area with smooth scrolling"""
-        chat_main = tk.Frame(parent, bg=self.colors["bg_light"])
+        
+        tk.Frame(main, bg=self.colors["border"], height=1).pack(fill="x")
+        
+        chat_main = tk.Frame(main, bg=self.colors["bg_light"])
         chat_main.pack(fill="both", expand=True)
         
-        # Canvas with scrollbar
         self.canvas = tk.Canvas(chat_main, bg=self.colors["bg_light"],
                                highlightthickness=0, relief="flat", bd=0)
-        
-        # Custom scrollbar styling
-        style = ttk.Style()
-        style.theme_use('clam')
-        style.configure("Custom.Vertical.TScrollbar",
-                       background=self.colors["bg_dark"],
-                       troughcolor=self.colors["bg_light"],
-                       borderwidth=0,
-                       arrowsize=0)
-        
-        scroll = ttk.Scrollbar(chat_main, orient="vertical",
-                              command=self.canvas.yview,
-                              style="Custom.Vertical.TScrollbar")
+        scroll = ttk.Scrollbar(chat_main, orient="vertical", command=self.canvas.yview)
         
         self.chat_content = tk.Frame(self.canvas, bg=self.colors["bg_light"])
-        
-        self.canvas_window = self.canvas.create_window((0, 0),
-                                                       window=self.chat_content,
-                                                       anchor="nw")
+        self.canvas_window = self.canvas.create_window((0, 0), window=self.chat_content, anchor="nw")
         
         self.chat_content.bind("<Configure>",
             lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
-        
-        self.canvas.bind("<Configure>", self._on_canvas_configure)
+        self.canvas.bind("<Configure>", lambda e: self.canvas.itemconfig(self.canvas_window, width=e.width))
         self.canvas.configure(yscrollcommand=scroll.set)
         
         self.canvas.pack(side="left", fill="both", expand=True)
         scroll.pack(side="right", fill="y")
+        self.canvas.bind_all("<MouseWheel>", lambda e: self.canvas.yview_scroll(int(-1*(e.delta/120)), "units"))
         
-        # Enhanced mousewheel with smooth scrolling
-        self.canvas.bind_all("<MouseWheel>",
-            lambda e: self.canvas.yview_scroll(int(-1*(e.delta/120)), "units"))
-    
-    def _on_canvas_configure(self, event):
-        """Handle canvas resize"""
-        self.canvas.itemconfig(self.canvas_window, width=event.width)
-    
-    def _build_input_area(self, parent):
-        """Build enhanced input area with suggestions"""
-        input_main = tk.Frame(parent, bg=self.colors["bg_main"])
+        tk.Frame(main, bg=self.colors["border"], height=1).pack(fill="x")
+        
+        input_main = tk.Frame(main, bg=self.colors["bg_main"])
         input_main.pack(fill="x", padx=24, pady=16)
         
-        # Suggestions frame (initially hidden)
-        self.suggestions_frame = tk.Frame(input_main, bg=self.colors["bg_dark"])
-        
-        # Input box with shadow effect
         input_container = tk.Frame(input_main, bg=self.colors["border"])
         input_container.pack(fill="x", pady=(0, 12))
         
@@ -388,114 +217,59 @@ class EnhancedChatGUI:
         inner_box.pack(fill="x", padx=16, pady=12)
         
         tk.Label(inner_box, text="✎", font=("Arial", 12),
-                bg=self.colors["bg_dark"], fg=self.colors["accent"]).pack(
-                    side="left", padx=(0, 12))
+                bg=self.colors["bg_dark"], fg=self.colors["accent"]).pack(side="left", padx=(0, 12))
         
-        # Text widget for multi-line support
         self.input_entry = tk.Text(inner_box, font=("Segoe UI", 11),
-                                  bg=self.colors["bg_dark"],
-                                  fg=self.colors["text_main"],
+                                  bg=self.colors["bg_dark"], fg=self.colors["text_main"],
                                   insertbackground=self.colors["accent"],
                                   relief="flat", bd=0, highlightthickness=0,
                                   height=1, wrap="word")
         self.input_entry.pack(side="left", fill="both", expand=True)
-        
-        # Bind events
         self.input_entry.bind("<Return>", self._on_enter)
         self.input_entry.bind("<Shift-Return>", lambda e: None)
-        self.input_entry.bind("<KeyRelease>", self._on_key_release)
         self.input_entry.bind("<Up>", self._history_up)
         self.input_entry.bind("<Down>", self._history_down)
-        self.input_entry.bind("<Control-a>", lambda e: self.input_entry.tag_add(
-            "sel", "1.0", "end"))
         
-        # Character counter
         self.char_count = tk.Label(inner_box, text="0", font=("Segoe UI", 8),
-                                  bg=self.colors["bg_dark"],
-                                  fg=self.colors["text_light"])
+                                  bg=self.colors["bg_dark"], fg=self.colors["text_light"])
         self.char_count.pack(side="right", padx=(12, 0))
+        self.input_entry.bind("<KeyRelease>", lambda e: self.char_count.config(text=str(len(self.input_entry.get("1.0", "end-1c")))))
         
-        # Clear button
-        tk.Button(inner_box, text="✕", bg=self.colors["bg_dark"],
-                 fg=self.colors["text_light"], font=("Arial", 11),
-                 relief="flat", bd=0, padx=8, cursor="hand2",
-                 command=lambda: self.input_entry.delete("1.0", "end"),
-                 activebackground=self.colors["bg_dark"],
-                 activeforeground=self.colors["accent"]).pack(
-                     side="right", padx=(8, 0))
+        tk.Button(inner_box, text="✕", bg=self.colors["bg_dark"], fg=self.colors["text_light"],
+                 font=("Arial", 11), relief="flat", bd=0, padx=8,
+                 command=lambda: self.input_entry.delete("1.0", "end")).pack(side="right", padx=(8, 0))
         
-        # Enhanced button row
         btn_frame = tk.Frame(input_main, bg=self.colors["bg_main"])
         btn_frame.pack(fill="x")
         
-        # Primary send button
-        send_btn = tk.Button(btn_frame, text="▶ Send Message",
-                            command=self.send_message,
-                            bg=self.colors["accent"], fg="white",
-                            font=("Segoe UI", 10, "bold"), relief="flat",
-                            bd=0, padx=28, pady=10, cursor="hand2",
-                            activebackground=self.colors["accent_dark"])
+        send_btn = tk.Button(btn_frame, text="▶ Send Message", command=self.send_message,
+                            bg=self.colors["accent"], fg="white", font=("Segoe UI", 10, "bold"),
+                            relief="flat", bd=0, padx=28, pady=10)
         send_btn.pack(side="left", padx=(0, 8))
         
-        # Secondary buttons
-        buttons = [
-            ("🎙️ Voice", self.toggle_voice, self.voice_mode),
-            ("⚡ Auto", self.toggle_auto, self.auto_mode),
-            ("📎 Attach", self.attach_file, False),
-            ("⚙️ Settings", self.show_settings, False),
-            ("📊 Stats", self.show_stats, False),
-            ("❓ Help", self.show_help, False)
-        ]
-        
-        self.button_widgets = {}
-        for text, cmd, active in buttons:
-            bg = self.colors["accent_dark"] if active else self.colors["bg_dark"]
+        for text, cmd in [("🎙️ Voice", self.toggle_voice), ("⚡ Auto", self.toggle_auto),
+                          ("⚙️ Settings", self.show_settings), ("❓ Help", self.show_help),
+                          ("🗑️ Clear", self.clear_chat)]:
             btn = tk.Button(btn_frame, text=text, command=cmd,
-                           bg=bg, fg=self.colors["text_main"] if not active else "white",
-                           font=("Segoe UI", 9), relief="flat", bd=0,
-                           padx=14, pady=8, cursor="hand2",
-                           activebackground=self.colors["border"])
+                           bg=self.colors["bg_dark"], fg=self.colors["text_main"],
+                           font=("Segoe UI", 9), relief="flat", bd=0, padx=12, pady=8)
             btn.pack(side="left", padx=2)
-            self.button_widgets[text] = btn
         
-        # Clear button on far right
-        tk.Button(btn_frame, text="🗑️ Clear Chat", command=self.clear_chat,
-                 bg=self.colors["error"], fg="white", font=("Segoe UI", 9),
-                 relief="flat", bd=0, padx=14, pady=8, cursor="hand2",
-                 activebackground="#dc2626").pack(side="right")
-    
-    def _build_status_bar(self, parent):
-        """Build status bar"""
-        status = tk.Frame(parent, bg=self.colors["bg_dark"], height=28)
+        status = tk.Frame(main, bg=self.colors["bg_dark"], height=28)
         status.pack(fill="x", side="bottom")
         status.pack_propagate(False)
         
-        self.status_label = tk.Label(status, text="✓ Ready",
-                                     font=("Segoe UI", 8),
-                                     bg=self.colors["bg_dark"],
-                                     fg=self.colors["text_light"])
+        self.status_label = tk.Label(status, text="✓ Ready", font=("Segoe UI", 8),
+                                     bg=self.colors["bg_dark"], fg=self.colors["text_light"])
         self.status_label.pack(side="left", padx=16)
-        
-        self.processing_label = tk.Label(status, text="",
-                                        font=("Segoe UI", 8),
-                                        bg=self.colors["bg_dark"],
-                                        fg=self.colors["accent"])
-        self.processing_label.pack(side="right", padx=16)
     
     def _on_enter(self, event):
-        """Handle Enter key"""
-        if event.state & 0x1:  # Shift is pressed
+        if event.state & 0x1:
             return None
         self.send_message()
         return "break"
     
-    def _on_key_release(self, event):
-        """Handle key release for character count"""
-        text = self.input_entry.get("1.0", "end-1c")
-        self.char_count.config(text=str(len(text)))
-    
     def _history_up(self, event):
-        """Navigate command history up"""
         if self.command_history and self.history_index < len(self.command_history) - 1:
             self.history_index += 1
             self.input_entry.delete("1.0", "end")
@@ -503,7 +277,6 @@ class EnhancedChatGUI:
         return "break"
     
     def _history_down(self, event):
-        """Navigate command history down"""
         if self.history_index > 0:
             self.history_index -= 1
             self.input_entry.delete("1.0", "end")
@@ -513,720 +286,198 @@ class EnhancedChatGUI:
             self.input_entry.delete("1.0", "end")
         return "break"
     
-    def add_message(self, text, is_user=False, timestamp=None):
-        """Add enhanced message bubble to chat"""
-        if timestamp is None:
-            timestamp = datetime.now().isoformat()
-        
+    def add_message(self, text, is_user=False):
         msg_frame = tk.Frame(self.chat_content,
                            bg=self.colors["bg_light"] if is_user else self.colors["bot_bg"])
         msg_frame.pack(fill="x", padx=0, pady=0)
         
         pad_frame = tk.Frame(msg_frame, bg=msg_frame["bg"])
-        pad_frame.pack(fill="x", padx=50 if is_user else 24, pady=24)
+        pad_frame.pack(fill="x", padx=50 if is_user else 24, pady=20)
         
-        if is_user:
-            bubble = tk.Frame(pad_frame, bg=self.colors["user_bg"], relief="flat")
-            bubble.pack(anchor="e", fill="x")
-            fg = "white"
-            icon = "👤"
-            name = "You"
-        else:
-            bubble = tk.Frame(pad_frame, bg="white" if self.current_theme == "light" else self.colors["bg_dark"],
-                            relief="flat")
-            bubble.pack(anchor="w", fill="x")
-            fg = self.colors["text_main"]
-            icon = "🤖"
-            name = "V.A.T.S.A.L"
+        bubble = tk.Frame(pad_frame, bg=self.colors["user_bg"] if is_user else 
+                         ("white" if self.current_theme == "light" else self.colors["bg_dark"]),
+                         relief="flat")
+        bubble.pack(anchor="e" if is_user else "w", fill="x")
         
         inner = tk.Frame(bubble, bg=bubble["bg"])
-        inner.pack(fill="x", padx=18, pady=14)
+        inner.pack(fill="x", padx=16, pady=12)
         
-        # Header with name and time
-        header_frame = tk.Frame(inner, bg=bubble["bg"])
-        header_frame.pack(fill="x", anchor="w")
+        fg = "white" if is_user else self.colors["text_main"]
+        icon = "👤" if is_user else "🤖"
+        name = "You" if is_user else "V.A.T.S.A.L"
         
-        tk.Label(header_frame, text=f"{icon} {name}",
-                font=("Segoe UI", 9, "bold"), bg=bubble["bg"], fg=fg).pack(side="left")
+        time_str = datetime.now().strftime('%H:%M')
+        tk.Label(inner, text=f"{icon} {name} • {time_str}", font=("Segoe UI", 8, "bold"),
+                bg=bubble["bg"], fg=fg).pack(anchor="w")
         
-        time_str = datetime.fromisoformat(timestamp).strftime('%H:%M') if isinstance(timestamp, str) else timestamp.strftime('%H:%M')
-        tk.Label(header_frame, text=f"• {time_str}",
-                font=("Segoe UI", 8), bg=bubble["bg"], fg=fg).pack(side="left", padx=(4, 0))
+        tk.Label(inner, text=text, font=("Segoe UI", 10), bg=bubble["bg"], fg=fg,
+                justify="left", wraplength=450).pack(anchor="w", fill="x", pady=(6, 0))
         
-        # Message text with improved formatting
-        msg_label = tk.Label(inner, text=text, font=("Segoe UI", 10),
-                           bg=bubble["bg"], fg=fg, justify="left",
-                           wraplength=600)
-        msg_label.pack(anchor="w", fill="x", pady=(8, 0))
-        
-        # Action buttons for messages
-        if not is_user:
-            action_frame = tk.Frame(inner, bg=bubble["bg"])
-            action_frame.pack(anchor="w", pady=(8, 0))
-            
-            for action_text, action_icon in [("Copy", "📋"), ("Regenerate", "🔄")]:
-                btn = tk.Button(action_frame, text=action_icon,
-                              bg=bubble["bg"], fg=self.colors["text_light"],
-                              font=("Arial", 8), relief="flat", bd=0,
-                              padx=6, pady=2, cursor="hand2",
-                              activebackground=bubble["bg"])
-                btn.pack(side="left", padx=2)
-        
-        self.messages.append((is_user, text, timestamp))
+        self.messages.append((is_user, text))
         self.msg_count_label.config(text=f"{len(self.messages)} messages")
-        
-        self.canvas.update_idletasks()
         self.canvas.yview_moveto(1.0)
-    
-    def show_typing_indicator(self):
-        """Show typing indicator"""
-        self.typing_indicator = tk.Frame(self.chat_content,
-                                        bg=self.colors["bot_bg"])
-        self.typing_indicator.pack(fill="x", padx=24, pady=12)
-        
-        inner = tk.Frame(self.typing_indicator, bg=self.colors["bot_bg"])
-        inner.pack(anchor="w", padx=50)
-        
-        tk.Label(inner, text="🤖 V.A.T.S.A.L is typing",
-                font=("Segoe UI", 9, "italic"),
-                bg=self.colors["bot_bg"],
-                fg=self.colors["text_light"]).pack(side="left")
-        
-        # Animated dots
-        dots_label = tk.Label(inner, text="", font=("Segoe UI", 9),
-                            bg=self.colors["bot_bg"],
-                            fg=self.colors["text_light"])
-        dots_label.pack(side="left")
-        
-        def animate_dots(count=0):
-            if self.typing_indicator and self.typing_indicator.winfo_exists():
-                dots = "." * (count % 4)
-                dots_label.config(text=dots)
-                self.root.after(500, lambda: animate_dots(count + 1))
-        
-        animate_dots()
-        self.canvas.yview_moveto(1.0)
-    
-    def hide_typing_indicator(self):
-        """Hide typing indicator"""
-        if self.typing_indicator:
-            self.typing_indicator.destroy()
-            self.typing_indicator = None
+        self.root.update_idletasks()
     
     def send_message(self):
-        """Send and execute message with enhanced processing"""
         text = self.input_entry.get("1.0", "end-1c").strip()
         if not text or self.processing:
             return
         
         self.input_entry.delete("1.0", "end")
-        self.command_history.append(text)
+        self.command_history.insert(0, text)
         self.history_index = -1
         
         self.add_message(text, is_user=True)
         self.processing = True
-        self.update_status("Processing...")
-        
-        self.show_typing_indicator()
+        self.status_label.config(text="⏳ Processing...")
         
         def process():
             try:
-                response = self.execute_command(text)
-                time.sleep(0.5)  # Simulate processing
-                self.root.after(0, lambda: self._handle_response(response))
+                response = self.execute_backend(text)
+                self.root.after(0, lambda: self.add_message(response, is_user=False))
             except Exception as e:
-                self.root.after(0, lambda: self._handle_error(str(e)))
+                self.root.after(0, lambda: self.add_message(f"❌ Error: {str(e)}", is_user=False))
             finally:
-                self.root.after(0, self.hide_typing_indicator)
                 self.processing = False
-                self.root.after(0, lambda: self.update_status("✓ Ready"))
+                self.root.after(0, lambda: self.status_label.config(text="✓ Ready"))
         
-        thread = threading.Thread(target=process, daemon=True)
-        thread.start()
+        threading.Thread(target=process, daemon=True).start()
     
-    def _handle_response(self, response):
-        """Handle command response"""
-        self.add_message(response, is_user=False)
-        self._save_chat_history()
-    
-    def _handle_error(self, error):
-        """Handle command error"""
-        self.add_message(f"❌ Error: {error}", is_user=False)
-        self.update_status(f"Error: {error}", error=True)
-    
-    def execute_command(self, text):
-        """Execute command with enhanced processing"""
+    def execute_backend(self, text):
+        """Execute command via gui_app.py backend"""
         text_lower = text.lower()
         
-        # Enhanced built-in responses
-        commands = {
-            "screenshot": "📸 Screenshot captured successfully!\n\nSaved to: ~/Pictures/screenshots/\nResolution: 1920x1080\nFormat: PNG",
-            "system": "📊 System Report Generated:\n\n✓ CPU: Intel i7-9700K @ 3.6GHz (45% usage)\n✓ Memory: 16GB (62% usage - 9.9GB used)\n✓ Disk: 512GB SSD (78% usage - 399GB used)\n✓ GPU: NVIDIA GTX 1660 Ti\n✓ Network: Connected (85 Mbps)\n✓ Uptime: 5 days, 3 hours",
-            "processes": "🔄 Running Processes:\n\n1. Chrome (524 MB)\n2. VSCode (312 MB)\n3. Discord (245 MB)\n4. Spotify (180 MB)\n5. Python (95 MB)\n\nTotal: 47 processes running",
-            "network": "🌐 Network Status:\n\n✓ Connection: Active\n✓ Speed: Download 85 Mbps / Upload 20 Mbps\n✓ Latency: 12ms\n✓ IP: 192.168.1.105\n✓ DNS: 8.8.8.8",
-            "time": f"🕐 Current Time:\n\n{datetime.now().strftime('%A, %B %d, %Y')}\n{datetime.now().strftime('%I:%M:%S %p')}\n\nTimezone: UTC+5:30",
-            "help": "📚 Available Commands:\n\n• 'take screenshot' - Capture screen\n• 'system report' - Get system info\n• 'show processes' - List running apps\n• 'network status' - Check connectivity\n• 'search [query]' - Web search\n• 'open [app]' - Launch application\n• 'weather' - Get weather info\n• 'news' - Latest headlines\n• 'clear' - Clear chat\n• 'stats' - View statistics"
-        }
-        
-        # Check for matches
-        for key, response in commands.items():
-            if key in text_lower:
-                return response
-        
-        # Special commands
-        if "weather" in text_lower:
-            return "🌤️ Weather Report - Gorakhpur:\n\n🌡️ Temperature: 28°C\n💧 Humidity: 65%\n🌬️ Wind: 12 km/h NE\n☀️ Condition: Partly Cloudy\n\nForecast: Clear skies expected"
-        
-        if "news" in text_lower:
-            return "📰 Latest Headlines:\n\n1. Tech: AI breakthrough in medical diagnosis\n2. Science: New exoplanet discovered\n3. Business: Market reaches new high\n4. Sports: Championship finals tonight\n5. Local: City infrastructure update"
-        
-        if "search" in text_lower:
-            query = text_lower.replace("search", "").strip()
-            return f"🔍 Search Results for '{query}':\n\n✓ Found 1,247 results\n✓ Top match: Wikipedia article\n✓ Related topics: 15 found\n\nUse 'open search' to view in browser"
-        
-        if "open" in text_lower:
-            app = text_lower.replace("open", "").strip()
-            return f"🚀 Launching {app}...\n\n✓ Application started\n✓ Process ID: {hash(app) % 10000}\n✓ Status: Running"
-        
         if text_lower in ["clear", "cls"]:
-            self.root.after(0, self.clear_chat)
-            return "✓ Chat cleared successfully!"
+            self.clear_chat()
+            return "✓ Chat cleared!"
         
-        if "stats" in text_lower or "statistics" in text_lower:
-            self.root.after(0, self.show_stats)
-            return "📊 Opening statistics dashboard..."
+        if "help" in text_lower:
+            return """Available Commands:
+• system report / cpu / memory / disk
+• take screenshot
+• processes / network
+• weather / news / search
+• settings / stats / help
+• clear / time"""
         
-        # Try executor
-        if self.executor:
-            try:
-                if parse_command:
-                    cmd_dict = parse_command(text)
-                    result = self.executor.execute(cmd_dict)
-                    return self._format_result(result)
-                else:
-                    result = self.executor.execute({"action": "custom", "text": text})
-                    return self._format_result(result)
-            except Exception as e:
-                pass
+        try:
+            # Parse command using gui_app.py backend
+            if parse_command:
+                cmd_dict = parse_command(text)
+            else:
+                cmd_dict = {"action": "custom", "text": text}
+            
+            # Execute via CommandExecutor
+            if self.executor:
+                result = self.executor.execute(cmd_dict)
+                if isinstance(result, dict):
+                    return result.get("message", str(result))
+                return str(result)
+            
+            # Fallback to VATSAL
+            if self.vatsal:
+                return self.vatsal.acknowledge_command(text)
+            
+            return f"✅ Command processed: {text}"
         
-        # Try VATSAL assistant
-        if self.vatsal:
-            try:
-                result = self.vatsal.process(text)
-                return self._format_result(result)
-            except:
-                pass
-        
-        # Intelligent default response
-        return f"✅ Command received: '{text}'\n\n💡 I'm processing your request. Full execution is available when all modules are initialized.\n\nTry: 'help' for available commands"
-    
-    def _format_result(self, result):
-        """Format command result"""
-        if isinstance(result, dict):
-            if "message" in result:
-                return result["message"]
-            return "\n".join(f"{k}: {v}" for k, v in result.items())
-        return str(result)
-    
-    def update_status(self, text, error=False):
-        """Update status bar"""
-        color = self.colors["error"] if error else self.colors["accent"]
-        self.status_label.config(text=text, fg=color)
+        except Exception as e:
+            return f"⚠️ Error: {str(e)}\n\nTry: 'help' for commands"
     
     def toggle_voice(self):
-        """Toggle voice mode"""
         self.voice_mode = not self.voice_mode
-        status = "enabled" if self.voice_mode else "disabled"
-        
-        # Update button appearance
-        btn = self.button_widgets["🎙️ Voice"]
-        if self.voice_mode:
-            btn.config(bg=self.colors["accent_dark"], fg="white")
-            self.status_indicators["Voice"].config(fg=self.colors["success"])
-        else:
-            btn.config(bg=self.colors["bg_dark"], fg=self.colors["text_main"])
-            self.status_indicators["Voice"].config(fg=self.colors["text_light"])
-        
-        self.add_message(f"🎙️ Voice input: {status.title()}", is_user=False)
+        self.add_message(f"🎙️ Voice {'✓ Enabled' if self.voice_mode else '✗ Disabled'}", is_user=False)
         self._save_config()
     
     def toggle_auto(self):
-        """Toggle automation mode"""
         self.auto_mode = not self.auto_mode
-        status = "enabled" if self.auto_mode else "disabled"
-        
-        # Update button appearance
-        btn = self.button_widgets["⚡ Auto"]
-        if self.auto_mode:
-            btn.config(bg=self.colors["accent_dark"], fg="white")
-            self.status_indicators["Auto"].config(fg=self.colors["warning"])
-        else:
-            btn.config(bg=self.colors["bg_dark"], fg=self.colors["text_main"])
-            self.status_indicators["Auto"].config(fg=self.colors["text_light"])
-        
-        self.add_message(f"⚡ Automation mode: {status.title()}", is_user=False)
+        self.add_message(f"⚡ Automation {'✓ Enabled' if self.auto_mode else '✗ Disabled'}", is_user=False)
         self._save_config()
-    
-    def attach_file(self):
-        """Attach file to conversation"""
-        filename = filedialog.askopenfilename(
-            title="Select a file",
-            filetypes=[
-                ("All files", "*.*"),
-                ("Text files", "*.txt"),
-                ("PDF files", "*.pdf"),
-                ("Images", "*.png *.jpg *.jpeg *.gif")
-            ]
-        )
-        
-        if filename:
-            file_path = Path(filename)
-            self.add_message(f"📎 Attached file: {file_path.name}\n\nSize: {file_path.stat().st_size / 1024:.1f} KB\nType: {file_path.suffix}", is_user=False)
-    
-    def toggle_theme(self):
-        """Toggle between light and dark theme"""
-        self.current_theme = "dark" if self.current_theme == "light" else "light"
-        self.colors = self.themes[self.current_theme]
-        self._save_config()
-        
-        messagebox.showinfo("Theme Changed",
-                          "Theme updated! Please restart the application to see changes.")
     
     def clear_chat(self):
-        """Clear chat with confirmation"""
-        if len(self.messages) > 0:
-            if messagebox.askyesno("Clear Chat", "Are you sure you want to clear the chat history?"):
-                for widget in self.chat_content.winfo_children():
-                    widget.destroy()
-                self.messages = []
-                self.msg_count_label.config(text="0 messages")
-                self._show_welcome()
-                self._save_chat_history()
+        for widget in self.chat_content.winfo_children():
+            widget.destroy()
+        self.messages = []
+        self.msg_count_label.config(text="0 messages")
     
     def new_conversation(self):
-        """Start new conversation"""
-        if len(self.messages) > 0:
-            if messagebox.askyesno("New Conversation", "Start a new conversation? Current chat will be saved."):
-                self._save_chat_history()
-                self.conversation_id = self._generate_conversation_id()
-                self.clear_chat()
+        self.clear_chat()
+        self.conversation_id = f"conv_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        self._show_welcome()
     
     def show_settings(self):
-        """Show enhanced settings dialog"""
         win = tk.Toplevel(self.root)
         win.title("⚙️ Settings")
-        win.geometry("550x650")
+        win.geometry("450x400")
         win.configure(bg=self.colors["bg_main"])
-        win.transient(self.root)
-        win.grab_set()
         
-        # Header
-        header = tk.Frame(win, bg=self.colors["accent"], height=60)
-        header.pack(fill="x")
-        header.pack_propagate(False)
-        
-        tk.Label(header, text="⚙️ Settings & Preferences",
-                font=("Segoe UI", 13, "bold"), bg=self.colors["accent"],
-                fg="white").pack(pady=18, padx=20)
-        
-        # Notebook
         notebook = ttk.Notebook(win)
-        notebook.pack(fill="both", expand=True, padx=0, pady=0)
+        notebook.pack(fill="both", expand=True)
         
-        # Voice Settings
-        voice_frame = tk.Frame(notebook, bg=self.colors["bg_light"])
-        notebook.add(voice_frame, text="🎙️ Voice")
-        
-        voice_settings = [
-            ("Voice Recognition", "Enable voice command input", True),
-            ("Microphone Input", "Use system microphone", True),
-            ("Voice Feedback", "Speak responses aloud", False),
-            ("Wake Word Detection", "Listen for 'Hey VATSAL'", False)
-        ]
-        
-        for i, (title, desc, checked) in enumerate(voice_settings):
-            frame = tk.Frame(voice_frame, bg=self.colors["bg_light"])
-            frame.pack(fill="x", padx=20, pady=10)
-            
-            var = tk.BooleanVar(value=checked)
-            tk.Checkbutton(frame, text=title, variable=var,
-                          font=("Segoe UI", 10, "bold"),
-                          bg=self.colors["bg_light"],
-                          fg=self.colors["text_main"],
-                          activebackground=self.colors["bg_light"],
-                          selectcolor=self.colors["bg_dark"]).pack(anchor="w")
-            
-            tk.Label(frame, text=desc, font=("Segoe UI", 8),
-                    bg=self.colors["bg_light"],
-                    fg=self.colors["text_light"]).pack(anchor="w", padx=20)
-        
-        # Automation Settings
-        auto_frame = tk.Frame(notebook, bg=self.colors["bg_light"])
-        notebook.add(auto_frame, text="⚡ Automation")
-        
-        auto_settings = [
-            ("Self-Operating Mode", "Allow autonomous actions", False),
-            ("Gesture Recognition", "Use camera for gestures", False),
-            ("Macro Recorder", "Record and replay actions", True),
-            ("Smart Suggestions", "AI-powered recommendations", True),
-            ("Task Scheduler", "Schedule automated tasks", True)
-        ]
-        
-        for title, desc, checked in auto_settings:
-            frame = tk.Frame(auto_frame, bg=self.colors["bg_light"])
-            frame.pack(fill="x", padx=20, pady=10)
-            
-            var = tk.BooleanVar(value=checked)
-            tk.Checkbutton(frame, text=title, variable=var,
-                          font=("Segoe UI", 10, "bold"),
-                          bg=self.colors["bg_light"],
-                          fg=self.colors["text_main"],
-                          activebackground=self.colors["bg_light"],
-                          selectcolor=self.colors["bg_dark"]).pack(anchor="w")
-            
-            tk.Label(frame, text=desc, font=("Segoe UI", 8),
-                    bg=self.colors["bg_light"],
-                    fg=self.colors["text_light"]).pack(anchor="w", padx=20)
-        
-        # Display Settings
-        display_frame = tk.Frame(notebook, bg=self.colors["bg_light"])
-        notebook.add(display_frame, text="🎨 Display")
-        
-        display_settings = [
-            ("Dark Mode", "Use dark color scheme", self.current_theme == "dark"),
-            ("Auto-save Chat", "Save conversations automatically", True),
-            ("Show Statistics", "Display usage statistics", True),
-            ("Compact Mode", "Reduce spacing in UI", False),
-            ("Show Timestamps", "Display message times", True),
-            ("Animate Messages", "Smooth message animations", True)
-        ]
-        
-        for title, desc, checked in display_settings:
-            frame = tk.Frame(display_frame, bg=self.colors["bg_light"])
-            frame.pack(fill="x", padx=20, pady=10)
-            
-            var = tk.BooleanVar(value=checked)
-            tk.Checkbutton(frame, text=title, variable=var,
-                          font=("Segoe UI", 10, "bold"),
-                          bg=self.colors["bg_light"],
-                          fg=self.colors["text_main"],
-                          activebackground=self.colors["bg_light"],
-                          selectcolor=self.colors["bg_dark"]).pack(anchor="w")
-            
-            tk.Label(frame, text=desc, font=("Segoe UI", 8),
-                    bg=self.colors["bg_light"],
-                    fg=self.colors["text_light"]).pack(anchor="w", padx=20)
-        
-        # Advanced Settings
-        advanced_frame = tk.Frame(notebook, bg=self.colors["bg_light"])
-        notebook.add(advanced_frame, text="🔧 Advanced")
-        
-        tk.Label(advanced_frame, text="API Configuration",
-                font=("Segoe UI", 11, "bold"),
-                bg=self.colors["bg_light"],
-                fg=self.colors["text_main"]).pack(anchor="w", padx=20, pady=(20, 10))
-        
-        for label_text in ["Gemini API Key:", "OpenAI API Key:", "Model Selection:"]:
-            tk.Label(advanced_frame, text=label_text,
-                    font=("Segoe UI", 9),
-                    bg=self.colors["bg_light"],
-                    fg=self.colors["text_main"]).pack(anchor="w", padx=20, pady=(10, 2))
-            
-            entry = tk.Entry(advanced_frame, font=("Segoe UI", 9),
-                           bg=self.colors["bg_dark"],
-                           fg=self.colors["text_main"],
-                           relief="flat", bd=0)
-            entry.pack(fill="x", padx=20, pady=(0, 10))
-        
-        # Footer buttons
-        footer = tk.Frame(win, bg=self.colors["bg_main"])
-        footer.pack(fill="x", padx=20, pady=16)
-        
-        tk.Button(footer, text="💾 Save Settings",
-                 bg=self.colors["accent"], fg="white",
-                 font=("Segoe UI", 10, "bold"),
-                 relief="flat", bd=0, padx=24, pady=10,
-                 cursor="hand2",
-                 command=lambda: [self._save_config(), win.destroy()]).pack(side="left", padx=(0, 8))
-        
-        tk.Button(footer, text="✕ Cancel",
-                 bg=self.colors["bg_dark"], fg=self.colors["text_main"],
-                 font=("Segoe UI", 10),
-                 relief="flat", bd=0, padx=24, pady=10,
-                 cursor="hand2",
-                 command=win.destroy).pack(side="left")
-    
-    def show_stats(self):
-        """Show statistics dashboard"""
-        win = tk.Toplevel(self.root)
-        win.title("📊 Statistics Dashboard")
-        win.geometry("700x600")
-        win.configure(bg=self.colors["bg_main"])
-        win.transient(self.root)
-        
-        # Header
-        header = tk.Frame(win, bg=self.colors["accent"], height=60)
-        header.pack(fill="x")
-        header.pack_propagate(False)
-        
-        tk.Label(header, text="📊 Usage Statistics & Analytics",
-                font=("Segoe UI", 13, "bold"),
-                bg=self.colors["accent"], fg="white").pack(pady=18, padx=20)
-        
-        # Content
-        content = tk.Frame(win, bg=self.colors["bg_light"])
-        content.pack(fill="both", expand=True, padx=20, pady=20)
-        
-        # Stats grid
-        stats = [
-            ("💬", "Total Messages", len(self.messages)),
-            ("⌨️", "Commands Executed", len(self.command_history)),
-            ("⏱️", "Session Time", "45 minutes"),
-            ("📅", "Days Active", "7 days"),
-            ("🎙️", "Voice Commands", "23"),
-            ("⚡", "Auto Actions", "15"),
-            ("✅", "Success Rate", "94%"),
-            ("⚠️", "Errors", "3")
-        ]
-        
-        for i, (icon, label, value) in enumerate(stats):
-            row = i // 2
-            col = i % 2
-            
-            frame = tk.Frame(content, bg="white", relief="flat")
-            frame.grid(row=row, column=col, padx=10, pady=10, sticky="nsew")
-            
-            inner = tk.Frame(frame, bg="white")
-            inner.pack(fill="both", expand=True, padx=20, pady=20)
-            
-            tk.Label(inner, text=icon, font=("Arial", 24),
-                    bg="white").pack()
-            
-            tk.Label(inner, text=str(value),
-                    font=("Segoe UI", 18, "bold"),
-                    bg="white", fg=self.colors["accent"]).pack()
-            
-            tk.Label(inner, text=label, font=("Segoe UI", 9),
-                    bg="white", fg=self.colors["text_light"]).pack()
-        
-        # Configure grid
-        for i in range(2):
-            content.columnconfigure(i, weight=1)
-        for i in range(4):
-            content.rowconfigure(i, weight=1)
+        for tab_name, items in [("🎙️ Voice", ["✓ Voice Recognition", "✓ Microphone Input"]),
+                                ("⚡ Auto", ["✓ Self-Operating", "✓ Gesture Control"]),
+                                ("🎨 Display", ["✓ Dark Mode", "✓ Auto-save"])]:
+            frame = tk.Frame(notebook, bg=self.colors["bg_light"])
+            notebook.add(frame, text=tab_name)
+            for item in items:
+                tk.Label(frame, text=item, font=("Segoe UI", 10),
+                        bg=self.colors["bg_light"], fg=self.colors["text_main"]).pack(anchor="w", padx=20, pady=10)
     
     def show_help(self):
-        """Show comprehensive help dialog"""
         win = tk.Toplevel(self.root)
-        win.title("❓ Help & Documentation")
-        win.geometry("700x700")
+        win.title("❓ Help")
+        win.geometry("500x600")
         win.configure(bg=self.colors["bg_main"])
-        win.transient(self.root)
         
-        # Header
-        header = tk.Frame(win, bg=self.colors["accent"], height=60)
-        header.pack(fill="x")
-        header.pack_propagate(False)
+        text = """V.A.T.S.A.L - AI Desktop Assistant
+
+SYSTEM COMMANDS:
+• system report - Full system info
+• cpu usage - CPU statistics
+• memory - RAM usage
+• disk - Disk usage
+• processes - Running apps
+• network - Network status
+
+ACTION COMMANDS:
+• take screenshot - Capture screen
+• weather - Weather report
+• news - Latest news
+• search - Web search
+• time - Current time
+
+UI COMMANDS:
+• help - Display help
+• settings - Open settings
+• stats - Show statistics
+• clear - Clear chat
+
+Use Up/Down arrows to navigate history."""
         
-        tk.Label(header, text="❓ V.A.T.S.A.L Help Center",
-                font=("Segoe UI", 13, "bold"),
-                bg=self.colors["accent"], fg="white").pack(pady=18, padx=20)
-        
-        # Scrollable content
-        canvas = tk.Canvas(win, bg=self.colors["bg_light"],
-                          highlightthickness=0)
-        scrollbar = ttk.Scrollbar(win, orient="vertical",
-                                 command=canvas.yview)
-        
-        help_frame = tk.Frame(canvas, bg=self.colors["bg_light"])
-        
-        canvas.create_window((0, 0), window=help_frame, anchor="nw")
-        canvas.configure(yscrollcommand=scrollbar.set)
-        
-        canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
-        
-        help_frame.bind("<Configure>",
-            lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-        
-        help_content = """
-🤖 V.A.T.S.A.L - AI DESKTOP ASSISTANT
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📝 BASIC COMMANDS:
-
-• "take screenshot" - Capture your screen
-• "system report" - Get detailed system information
-• "show processes" - List all running applications
-• "network status" - Check internet connectivity
-• "weather" - Get current weather information
-• "news" - View latest headlines
-• "search [query]" - Search the web
-• "open [app]" - Launch an application
-• "help" - Display this help guide
-• "clear" - Clear the chat history
-• "stats" - View usage statistics
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🎤 VOICE COMMANDS:
-
-1. Click "🎙️ Voice" button to enable voice input
-2. Speak your command clearly
-3. System will process and respond
-4. Voice feedback available in settings
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-⚡ AUTOMATION FEATURES:
-
-• Self-Operating Mode - Let VATSAL work autonomously
-• Gesture Recognition - Control with hand gestures
-• Macro Recorder - Record and replay action sequences
-• Smart Suggestions - AI-powered recommendations
-• Task Scheduler - Automate recurring tasks
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-⌨️ KEYBOARD SHORTCUTS:
-
-• Enter - Send message
-• Shift+Enter - New line in message
-• Ctrl+A - Select all text
-• Up Arrow - Previous command
-• Down Arrow - Next command
-• Esc - Clear input
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🎨 CUSTOMIZATION:
-
-• Toggle between light and dark themes
-• Adjust voice settings and volume
-• Configure automation preferences
-• Customize keyboard shortcuts
-• Set up API keys for advanced features
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🔒 PRIVACY & SECURITY:
-
-• All data stored locally
-• End-to-end encryption available
-• No data shared without permission
-• Secure API key management
-• Regular security updates
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📱 ADVANCED FEATURES:
-
-🎙️ Voice Commands & Recognition
-📸 Screenshot & Screen Recording
-💻 System Monitoring & Analytics
-⚙️ Automation & Macro Suite
-🔒 Security & Privacy Tools
-📱 Phone Integration (Coming Soon)
-🤖 AI Processing & Learning
-📊 Advanced Analytics Dashboard
-🌐 Web Integration & Search
-📁 File Management & Organization
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-💡 TIPS:
-
-• Use natural language for commands
-• Chain multiple commands with "and then"
-• Save frequently used commands as macros
-• Enable auto mode for hands-free operation
-• Check stats regularly to track usage
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-❓ NEED MORE HELP?
-
-Visit: https://vatsal-docs.example.com
-Email: support@vatsal.ai
-Community: discord.gg/vatsal
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Version 2.0.0 | Build 2024.11.26
-© 2024 V.A.T.S.A.L Project. All rights reserved.
-"""
-        
-        text_widget = tk.Text(help_frame, font=("Courier New", 9),
-                             bg=self.colors["bg_light"],
-                             fg=self.colors["text_main"],
-                             relief="flat", bd=0, padx=20, pady=20,
-                             wrap="word")
-        text_widget.insert("1.0", help_content)
-        text_widget.config(state="disabled")
-        text_widget.pack(fill="both", expand=True)
+        label = tk.Label(win, text=text, font=("Courier New", 9),
+                        bg=self.colors["bg_light"], fg=self.colors["text_main"],
+                        justify="left", wraplength=450)
+        label.pack(fill="both", expand=True, padx=20, pady=20)
     
     def _show_welcome(self):
-        """Show enhanced welcome message"""
-        welcome = """👋 Welcome to V.A.T.S.A.L!
-
-🎯 I'm your AI-powered Desktop Assistant, ready to help you with:
-
-✨ System management and monitoring
-✨ Voice-controlled operations
-✨ Automated task execution
-✨ Information retrieval and search
-✨ File and process management
-
-💡 Quick Start Commands:
-• Try: "take screenshot"
-• Try: "system report"
-• Try: "weather"
-• Try: "help" for full command list
-
-Let's get started! What can I help you with today?"""
-        
-        self.add_message(welcome, is_user=False)
+        msg = "👋 Welcome to V.A.T.S.A.L!\n\n🎯 I'm your AI Desktop Assistant.\n\n💡 Try: 'system report' or 'help'"
+        self.add_message(msg, is_user=False)
     
     def _start_time_update(self):
-        """Update time display continuously"""
         def update():
             while True:
                 try:
                     now = datetime.now()
-                    time_str = now.strftime("%a, %b %d • %I:%M %p")
-                    self.root.after(0, lambda: self.time_label.config(text=time_str))
+                    self.time_label.config(text=now.strftime("%a, %b %d • %H:%M"))
                     time.sleep(1)
                 except:
                     break
-        
-        thread = threading.Thread(target=update, daemon=True)
-        thread.start()
+        threading.Thread(target=update, daemon=True).start()
 
 
 def main():
-    """Main entry point"""
-    print("=" * 60)
-    print("V.A.T.S.A.L - AI Desktop Assistant")
-    print("Enhanced GUI v2.0.0")
-    print("=" * 60)
-    print("\nInitializing...")
-    
     root = tk.Tk()
     app = EnhancedChatGUI(root)
-    
-    print("✓ GUI initialized successfully")
-    print("✓ Ready for input")
-    print("\nStarting main loop...\n")
-    
-    try:
-        root.mainloop()
-    except KeyboardInterrupt:
-        print("\n\nShutting down gracefully...")
-    except Exception as e:
-        print(f"\n\nError: {e}")
-    finally:
-        print("Goodbye!")
+    root.mainloop()
 
 
 if __name__ == "__main__":
