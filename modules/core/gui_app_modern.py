@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-V.A.T.S.A.L - Modern ChatGPT GUI with gui_app.py Backend Integration
-Professional interface that delegates all commands to backend for execution
+V.A.T.S.A.L - Modern ChatGPT GUI with BOI Wake Word + Voice Integration
+Professional interface with wake word listening and voice command execution
 """
 
 import tkinter as tk
@@ -38,13 +38,18 @@ try:
 except:
     create_vatsal_assistant = None
 
+try:
+    from modules.voice.voice_commander import VoiceCommander
+except:
+    VoiceCommander = None
+
 
 class EnhancedChatGUI:
-    """ChatGPT-style GUI with full gui_app.py backend integration"""
+    """ChatGPT-style GUI with BOI wake word + voice command integration"""
 
     def __init__(self, root):
         self.root = root
-        self.root.title("V.A.T.S.A.L - AI Desktop Assistant")
+        self.root.title("V.A.T.S.A.L - AI Desktop Assistant (BOI Wake Word Active)")
         self.root.geometry("1600x950")
         self.root.minsize(1200, 700)
         
@@ -87,12 +92,14 @@ class EnhancedChatGUI:
         
         self.executor = None
         self.vatsal = None
+        self.voice_commander = None
         self.processing = False
+        self.voice_active = False
         self.messages = []
         self.command_history = []
         self.history_index = -1
         self.auto_mode = False
-        self.voice_mode = False
+        self.voice_mode = True  # Voice listening enabled by default
         self.conversation_id = f"conv_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         
         self.config_dir = Path.home() / ".vatsal"
@@ -103,6 +110,7 @@ class EnhancedChatGUI:
         self._build_ui()
         self._show_welcome()
         self._start_time_update()
+        self._start_wake_word_listener()
     
     def _load_config(self):
         try:
@@ -112,7 +120,7 @@ class EnhancedChatGUI:
                     config = json.load(f)
                     self.current_theme = config.get("theme", "light")
                     self.auto_mode = config.get("auto_mode", False)
-                    self.voice_mode = config.get("voice_mode", False)
+                    self.voice_mode = config.get("voice_mode", True)
         except:
             pass
     
@@ -141,6 +149,12 @@ class EnhancedChatGUI:
                 self.vatsal = create_vatsal_assistant()
         except:
             pass
+        try:
+            if VoiceCommander:
+                self.voice_commander = VoiceCommander()
+                self.add_message("🎤 Voice system initialized. Say 'BOI' to wake me up!", is_user=False)
+        except Exception as e:
+            self.add_message(f"⚠️ Voice not available: {str(e)}", is_user=False)
     
     def _build_ui(self):
         main_container = tk.Frame(self.root, bg=self.colors["bg_main"])
@@ -160,6 +174,11 @@ class EnhancedChatGUI:
                                 relief="flat", bd=0, padx=16, pady=10)
         new_chat_btn.pack(fill="x", padx=16, pady=(0, 10))
         
+        self.voice_status = tk.Label(sidebar, text="🎤 Listening for BOI...", 
+                                    font=("Segoe UI", 9, "bold"),
+                                    bg=self.colors["bg_dark"], fg=self.colors["success"])
+        self.voice_status.pack(fill="x", padx=16, pady=10)
+        
         main = tk.Frame(main_container, bg=self.colors["bg_main"])
         main.pack(side="right", fill="both", expand=True)
         
@@ -169,7 +188,7 @@ class EnhancedChatGUI:
         
         h_left = tk.Frame(header, bg=self.colors["bg_main"])
         h_left.pack(side="left", padx=24, pady=16)
-        tk.Label(h_left, text="🤖 V.A.T.S.A.L", font=("Segoe UI", 14, "bold"),
+        tk.Label(h_left, text="🤖 V.A.T.S.A.L (BOI Wake Word Active)", font=("Segoe UI", 14, "bold"),
                 bg=self.colors["bg_main"], fg=self.colors["text_main"]).pack(anchor="w")
         
         h_right = tk.Frame(header, bg=self.colors["bg_main"])
@@ -247,9 +266,13 @@ class EnhancedChatGUI:
                             relief="flat", bd=0, padx=28, pady=10)
         send_btn.pack(side="left", padx=(0, 8))
         
-        for text, cmd in [("🎙️ Voice", self.toggle_voice), ("⚡ Auto", self.toggle_auto),
-                          ("⚙️ Settings", self.show_settings), ("❓ Help", self.show_help),
-                          ("🗑️ Clear", self.clear_chat)]:
+        self.voice_btn = tk.Button(btn_frame, text="🎤 Voice Record", command=self.manual_voice_record,
+                                  bg=self.colors["bg_dark"], fg=self.colors["text_main"],
+                                  font=("Segoe UI", 9), relief="flat", bd=0, padx=12, pady=8)
+        self.voice_btn.pack(side="left", padx=2)
+        
+        for text, cmd in [("⚡ Auto", self.toggle_auto), ("⚙️ Settings", self.show_settings),
+                          ("❓ Help", self.show_help), ("🗑️ Clear", self.clear_chat)]:
             btn = tk.Button(btn_frame, text=text, command=cmd,
                            bg=self.colors["bg_dark"], fg=self.colors["text_main"],
                            font=("Segoe UI", 9), relief="flat", bd=0, padx=12, pady=8)
@@ -259,9 +282,107 @@ class EnhancedChatGUI:
         status.pack(fill="x", side="bottom")
         status.pack_propagate(False)
         
-        self.status_label = tk.Label(status, text="✓ Ready", font=("Segoe UI", 8),
+        self.status_label = tk.Label(status, text="✓ Ready | 🎤 Wake word listening...", font=("Segoe UI", 8),
                                      bg=self.colors["bg_dark"], fg=self.colors["text_light"])
         self.status_label.pack(side="left", padx=16)
+    
+    def _start_wake_word_listener(self):
+        """Start continuous BOI wake word listening in background"""
+        if not self.voice_commander or not self.voice_mode:
+            return
+        
+        def listen_for_wake_word():
+            import speech_recognition as sr
+            recognizer = sr.Recognizer()
+            recognizer.energy_threshold = 300
+            mic = sr.Microphone()
+            
+            while self.voice_mode:
+                try:
+                    with mic as source:
+                        recognizer.adjust_for_ambient_noise(source, duration=0.1)
+                        audio = recognizer.listen(source, timeout=1.0, phrase_time_limit=2.0)
+                    
+                    text = recognizer.recognize_google(audio).lower()
+                    
+                    if "boi" in text or text == "boi":
+                        self.root.after(0, lambda: self._on_wake_word_detected(text))
+                        time.sleep(0.5)
+                
+                except sr.UnknownValueError:
+                    pass
+                except sr.RequestError:
+                    pass
+                except:
+                    pass
+                
+                time.sleep(0.1)
+        
+        if VoiceCommander:
+            threading.Thread(target=listen_for_wake_word, daemon=True).start()
+    
+    def _on_wake_word_detected(self, detected_text):
+        """Called when BOI wake word is detected"""
+        self.voice_active = True
+        self.voice_status.config(text="🎤 BOI ACTIVATED!", fg=self.colors["warning"])
+        self.status_label.config(text="🎤 Listening to command...")
+        self.add_message("👂 BOI is listening... Please say your command!", is_user=False)
+        
+        def listen_for_command():
+            try:
+                import speech_recognition as sr
+                recognizer = sr.Recognizer()
+                recognizer.energy_threshold = 300
+                mic = sr.Microphone()
+                
+                with mic as source:
+                    recognizer.adjust_for_ambient_noise(source, duration=0.2)
+                    audio = recognizer.listen(source, timeout=10.0, phrase_time_limit=8.0)
+                
+                command = recognizer.recognize_google(audio)
+                self.root.after(0, lambda: self._process_voice_command(command))
+            
+            except Exception as e:
+                self.root.after(0, lambda: self.add_message(f"❌ Voice recognition failed: {str(e)}", is_user=False))
+            finally:
+                self.voice_active = False
+                self.root.after(0, lambda: self._reset_voice_status())
+        
+        threading.Thread(target=listen_for_command, daemon=True).start()
+    
+    def _process_voice_command(self, command):
+        """Process voice command through backend"""
+        self.add_message(f"🎤 You said: {command}", is_user=True)
+        
+        self.processing = True
+        self.status_label.config(text="⏳ Processing voice command...")
+        
+        def process():
+            try:
+                response = self.execute_backend(command)
+                self.root.after(0, lambda: self.add_message(response, is_user=False))
+            except Exception as e:
+                self.root.after(0, lambda: self.add_message(f"❌ Error: {str(e)}", is_user=False))
+            finally:
+                self.processing = False
+                self.root.after(0, lambda: self._reset_voice_status())
+        
+        threading.Thread(target=process, daemon=True).start()
+    
+    def _reset_voice_status(self):
+        """Reset voice status after command"""
+        self.voice_active = False
+        self.voice_status.config(text="🎤 Listening for BOI...", fg=self.colors["success"])
+        self.status_label.config(text="✓ Ready | 🎤 Wake word listening...")
+    
+    def manual_voice_record(self):
+        """Manually record voice command"""
+        if self.voice_active or self.processing:
+            messagebox.showwarning("Busy", "Please wait for current operation")
+            return
+        
+        self.add_message("🎤 Recording... (Speak now!)", is_user=False)
+        self._on_wake_word_detected("manual")
     
     def _on_enter(self, event):
         if event.state & 0x1:
@@ -361,20 +482,17 @@ class EnhancedChatGUI:
 • clear / time"""
         
         try:
-            # Parse command using gui_app.py backend
             if parse_command:
                 cmd_dict = parse_command(text)
             else:
                 cmd_dict = {"action": "custom", "text": text}
             
-            # Execute via CommandExecutor
             if self.executor:
                 result = self.executor.execute(cmd_dict)
                 if isinstance(result, dict):
                     return result.get("message", str(result))
                 return str(result)
             
-            # Fallback to VATSAL
             if self.vatsal:
                 return self.vatsal.acknowledge_command(text)
             
@@ -382,11 +500,6 @@ class EnhancedChatGUI:
         
         except Exception as e:
             return f"⚠️ Error: {str(e)}\n\nTry: 'help' for commands"
-    
-    def toggle_voice(self):
-        self.voice_mode = not self.voice_mode
-        self.add_message(f"🎙️ Voice {'✓ Enabled' if self.voice_mode else '✗ Disabled'}", is_user=False)
-        self._save_config()
     
     def toggle_auto(self):
         self.auto_mode = not self.auto_mode
@@ -413,7 +526,7 @@ class EnhancedChatGUI:
         notebook = ttk.Notebook(win)
         notebook.pack(fill="both", expand=True)
         
-        for tab_name, items in [("🎙️ Voice", ["✓ Voice Recognition", "✓ Microphone Input"]),
+        for tab_name, items in [("🎤 Voice", ["✓ Wake word: BOI", "✓ Microphone Active", "✓ Google Speech API"]),
                                 ("⚡ Auto", ["✓ Self-Operating", "✓ Gesture Control"]),
                                 ("🎨 Display", ["✓ Dark Mode", "✓ Auto-save"])]:
             frame = tk.Frame(notebook, bg=self.colors["bg_light"])
@@ -424,11 +537,17 @@ class EnhancedChatGUI:
     
     def show_help(self):
         win = tk.Toplevel(self.root)
-        win.title("❓ Help")
+        win.title("❓ Help - BOI Wake Word")
         win.geometry("500x600")
         win.configure(bg=self.colors["bg_main"])
         
-        text = """V.A.T.S.A.L - AI Desktop Assistant
+        text = """V.A.T.S.A.L - BOI Wake Word System
+
+🎤 VOICE ACTIVATION:
+• Say "BOI" to wake me up
+• I'll start listening for your command
+• Speak your command naturally
+• Results appear instantly
 
 SYSTEM COMMANDS:
 • system report - Full system info
@@ -448,10 +567,9 @@ ACTION COMMANDS:
 UI COMMANDS:
 • help - Display help
 • settings - Open settings
-• stats - Show statistics
 • clear - Clear chat
 
-Use Up/Down arrows to navigate history."""
+Use arrow keys to navigate history."""
         
         label = tk.Label(win, text=text, font=("Courier New", 9),
                         bg=self.colors["bg_light"], fg=self.colors["text_main"],
@@ -459,7 +577,7 @@ Use Up/Down arrows to navigate history."""
         label.pack(fill="both", expand=True, padx=20, pady=20)
     
     def _show_welcome(self):
-        msg = "👋 Welcome to V.A.T.S.A.L!\n\n🎯 I'm your AI Desktop Assistant.\n\n💡 Try: 'system report' or 'help'"
+        msg = "👋 Welcome to V.A.T.S.A.L with BOI Wake Word!\n\n🎤 Say 'BOI' to activate voice commands\n💡 Or type manually below\n⚠️ Make sure microphone is enabled"
         self.add_message(msg, is_user=False)
     
     def _start_time_update(self):
