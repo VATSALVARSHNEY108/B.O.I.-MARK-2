@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-V.A.T.S.A.L - Modern ChatGPT GUI with BOI Wake Word + Voice Integration
-Professional interface with wake word listening and voice command execution
+V.A.T.S.A.L - Modern ChatGPT GUI with BOI Wake Word + Enhanced Console
+Professional interface with beautiful visual output formatting
 """
 
 import tkinter as tk
-from tkinter import ttk, messagebox, filedialog
+from tkinter import ttk, messagebox, filedialog, font as tkfont
 import threading
 import os
 import sys
@@ -45,7 +45,7 @@ except:
 
 
 class EnhancedChatGUI:
-    """ChatGPT-style GUI with BOI wake word + voice command integration"""
+    """ChatGPT-style GUI with BOI wake word + attractive console output"""
 
     def __init__(self, root):
         self.root = root
@@ -67,7 +67,9 @@ class EnhancedChatGUI:
                 "bot_bg": "#ececf1",
                 "error": "#ef4444",
                 "warning": "#f59e0b",
-                "success": "#10b981"
+                "success": "#10b981",
+                "info": "#3b82f6",
+                "secondary": "#8b5cf6"
             },
             "dark": {
                 "bg_main": "#1a1a1a",
@@ -82,7 +84,9 @@ class EnhancedChatGUI:
                 "bot_bg": "#2d2d2d",
                 "error": "#ef4444",
                 "warning": "#f59e0b",
-                "success": "#10b981"
+                "success": "#10b981",
+                "info": "#3b82f6",
+                "secondary": "#8b5cf6"
             }
         }
         
@@ -99,7 +103,7 @@ class EnhancedChatGUI:
         self.command_history = []
         self.history_index = -1
         self.auto_mode = False
-        self.voice_mode = True  # Voice listening enabled by default
+        self.voice_mode = True
         self.conversation_id = f"conv_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         
         self.config_dir = Path.home() / ".vatsal"
@@ -152,9 +156,9 @@ class EnhancedChatGUI:
         try:
             if VoiceCommander:
                 self.voice_commander = VoiceCommander()
-                self.add_message("🎤 Voice system initialized. Say 'BOI' to wake me up!", is_user=False)
+                self.add_system_message("✅ Voice system initialized - Say 'BOI' to activate!")
         except Exception as e:
-            self.add_message(f"⚠️ Voice not available: {str(e)}", is_user=False)
+            self.add_error_message(f"⚠️ Voice not available: {str(e)}")
     
     def _build_ui(self):
         main_container = tk.Frame(self.root, bg=self.colors["bg_main"])
@@ -188,7 +192,7 @@ class EnhancedChatGUI:
         
         h_left = tk.Frame(header, bg=self.colors["bg_main"])
         h_left.pack(side="left", padx=24, pady=16)
-        tk.Label(h_left, text="🤖 V.A.T.S.A.L (BOI Wake Word Active)", font=("Segoe UI", 14, "bold"),
+        tk.Label(h_left, text="🤖 V.A.T.S.A.L", font=("Segoe UI", 14, "bold"),
                 bg=self.colors["bg_main"], fg=self.colors["text_main"]).pack(anchor="w")
         
         h_right = tk.Frame(header, bg=self.colors["bg_main"])
@@ -286,8 +290,53 @@ class EnhancedChatGUI:
                                      bg=self.colors["bg_dark"], fg=self.colors["text_light"])
         self.status_label.pack(side="left", padx=16)
     
+    def add_message(self, text, is_user=False, msg_type="normal"):
+        """Add attractive formatted message to chat"""
+        msg_frame = tk.Frame(self.chat_content,
+                           bg=self.colors["bg_light"] if is_user else self.colors["bot_bg"])
+        msg_frame.pack(fill="x", padx=0, pady=0)
+        
+        pad_frame = tk.Frame(msg_frame, bg=msg_frame["bg"])
+        pad_frame.pack(fill="x", padx=50 if is_user else 24, pady=16)
+        
+        bubble = tk.Frame(pad_frame, bg=self.colors["user_bg"] if is_user else 
+                         ("white" if self.current_theme == "light" else self.colors["bg_dark"]),
+                         relief="flat")
+        bubble.pack(anchor="e" if is_user else "w", fill="x")
+        
+        inner = tk.Frame(bubble, bg=bubble["bg"])
+        inner.pack(fill="x", padx=16, pady=12)
+        
+        fg = "white" if is_user else self.colors["text_main"]
+        icon = "👤" if is_user else "🤖"
+        name = "You" if is_user else "V.A.T.S.A.L"
+        time_str = datetime.now().strftime('%H:%M')
+        
+        tk.Label(inner, text=f"{icon} {name} • {time_str}", font=("Segoe UI", 8, "bold"),
+                bg=bubble["bg"], fg=fg).pack(anchor="w")
+        
+        tk.Label(inner, text=text, font=("Segoe UI", 10), bg=bubble["bg"], fg=fg,
+                justify="left", wraplength=450).pack(anchor="w", fill="x", pady=(6, 0))
+        
+        self.messages.append((is_user, text))
+        self.msg_count_label.config(text=f"{len(self.messages)} messages")
+        self.canvas.yview_moveto(1.0)
+        self.root.update_idletasks()
+    
+    def add_system_message(self, text):
+        """Add attractive system message with separator"""
+        self.add_message(f"╔═══════════════════════════════════╗\n✓ {text}\n╚═══════════════════════════════════╝", is_user=False)
+    
+    def add_error_message(self, text):
+        """Add attractive error message"""
+        self.add_message(f"╔═══════════════════════════════════╗\n❌ {text}\n╚═══════════════════════════════════╝", is_user=False)
+    
+    def add_info_message(self, text):
+        """Add attractive info message"""
+        self.add_message(f"ℹ️ {text}", is_user=False)
+    
     def _start_wake_word_listener(self):
-        """Start continuous BOI wake word listening in background"""
+        """Start continuous BOI wake word listening"""
         if not self.voice_commander or not self.voice_mode:
             return
         
@@ -309,10 +358,6 @@ class EnhancedChatGUI:
                         self.root.after(0, lambda: self._on_wake_word_detected(text))
                         time.sleep(0.5)
                 
-                except sr.UnknownValueError:
-                    pass
-                except sr.RequestError:
-                    pass
                 except:
                     pass
                 
@@ -322,11 +367,10 @@ class EnhancedChatGUI:
             threading.Thread(target=listen_for_wake_word, daemon=True).start()
     
     def _on_wake_word_detected(self, detected_text):
-        """Called when BOI wake word is detected"""
+        """Handle BOI wake word detection"""
         self.voice_active = True
         self.voice_status.config(text="🎤 BOI ACTIVATED!", fg=self.colors["warning"])
-        self.status_label.config(text="🎤 Listening to command...")
-        self.add_message("👂 BOI is listening... Please say your command!", is_user=False)
+        self.add_system_message("BOI is listening to your command!")
         
         def listen_for_command():
             try:
@@ -343,7 +387,7 @@ class EnhancedChatGUI:
                 self.root.after(0, lambda: self._process_voice_command(command))
             
             except Exception as e:
-                self.root.after(0, lambda: self.add_message(f"❌ Voice recognition failed: {str(e)}", is_user=False))
+                self.root.after(0, lambda: self.add_error_message(f"Voice recognition failed"))
             finally:
                 self.voice_active = False
                 self.root.after(0, lambda: self._reset_voice_status())
@@ -351,9 +395,8 @@ class EnhancedChatGUI:
         threading.Thread(target=listen_for_command, daemon=True).start()
     
     def _process_voice_command(self, command):
-        """Process voice command through backend"""
+        """Process voice command with attractive formatting"""
         self.add_message(f"🎤 You said: {command}", is_user=True)
-        
         self.processing = True
         self.status_label.config(text="⏳ Processing voice command...")
         
@@ -362,7 +405,7 @@ class EnhancedChatGUI:
                 response = self.execute_backend(command)
                 self.root.after(0, lambda: self.add_message(response, is_user=False))
             except Exception as e:
-                self.root.after(0, lambda: self.add_message(f"❌ Error: {str(e)}", is_user=False))
+                self.root.after(0, lambda: self.add_error_message(str(e)))
             finally:
                 self.processing = False
                 self.root.after(0, lambda: self._reset_voice_status())
@@ -370,18 +413,18 @@ class EnhancedChatGUI:
         threading.Thread(target=process, daemon=True).start()
     
     def _reset_voice_status(self):
-        """Reset voice status after command"""
+        """Reset voice status"""
         self.voice_active = False
         self.voice_status.config(text="🎤 Listening for BOI...", fg=self.colors["success"])
         self.status_label.config(text="✓ Ready | 🎤 Wake word listening...")
     
     def manual_voice_record(self):
-        """Manually record voice command"""
+        """Manually trigger voice recording"""
         if self.voice_active or self.processing:
             messagebox.showwarning("Busy", "Please wait for current operation")
             return
         
-        self.add_message("🎤 Recording... (Speak now!)", is_user=False)
+        self.add_system_message("Recording... Speak now!")
         self._on_wake_word_detected("manual")
     
     def _on_enter(self, event):
@@ -407,38 +450,6 @@ class EnhancedChatGUI:
             self.input_entry.delete("1.0", "end")
         return "break"
     
-    def add_message(self, text, is_user=False):
-        msg_frame = tk.Frame(self.chat_content,
-                           bg=self.colors["bg_light"] if is_user else self.colors["bot_bg"])
-        msg_frame.pack(fill="x", padx=0, pady=0)
-        
-        pad_frame = tk.Frame(msg_frame, bg=msg_frame["bg"])
-        pad_frame.pack(fill="x", padx=50 if is_user else 24, pady=20)
-        
-        bubble = tk.Frame(pad_frame, bg=self.colors["user_bg"] if is_user else 
-                         ("white" if self.current_theme == "light" else self.colors["bg_dark"]),
-                         relief="flat")
-        bubble.pack(anchor="e" if is_user else "w", fill="x")
-        
-        inner = tk.Frame(bubble, bg=bubble["bg"])
-        inner.pack(fill="x", padx=16, pady=12)
-        
-        fg = "white" if is_user else self.colors["text_main"]
-        icon = "👤" if is_user else "🤖"
-        name = "You" if is_user else "V.A.T.S.A.L"
-        
-        time_str = datetime.now().strftime('%H:%M')
-        tk.Label(inner, text=f"{icon} {name} • {time_str}", font=("Segoe UI", 8, "bold"),
-                bg=bubble["bg"], fg=fg).pack(anchor="w")
-        
-        tk.Label(inner, text=text, font=("Segoe UI", 10), bg=bubble["bg"], fg=fg,
-                justify="left", wraplength=450).pack(anchor="w", fill="x", pady=(6, 0))
-        
-        self.messages.append((is_user, text))
-        self.msg_count_label.config(text=f"{len(self.messages)} messages")
-        self.canvas.yview_moveto(1.0)
-        self.root.update_idletasks()
-    
     def send_message(self):
         text = self.input_entry.get("1.0", "end-1c").strip()
         if not text or self.processing:
@@ -457,7 +468,7 @@ class EnhancedChatGUI:
                 response = self.execute_backend(text)
                 self.root.after(0, lambda: self.add_message(response, is_user=False))
             except Exception as e:
-                self.root.after(0, lambda: self.add_message(f"❌ Error: {str(e)}", is_user=False))
+                self.root.after(0, lambda: self.add_error_message(str(e)))
             finally:
                 self.processing = False
                 self.root.after(0, lambda: self.status_label.config(text="✓ Ready"))
@@ -465,7 +476,7 @@ class EnhancedChatGUI:
         threading.Thread(target=process, daemon=True).start()
     
     def execute_backend(self, text):
-        """Execute command via gui_app.py backend"""
+        """Execute command with formatted output"""
         text_lower = text.lower()
         
         if text_lower in ["clear", "cls"]:
@@ -473,13 +484,20 @@ class EnhancedChatGUI:
             return "✓ Chat cleared!"
         
         if "help" in text_lower:
-            return """Available Commands:
-• system report / cpu / memory / disk
-• take screenshot
-• processes / network
-• weather / news / search
-• settings / stats / help
-• clear / time"""
+            return """━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 AVAILABLE COMMANDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🖥️  SYSTEM:
+  • system report / cpu / memory / disk
+  • processes / network / time
+
+📷 ACTIONS:
+  • take screenshot
+  • weather / news / search
+
+⚙️  UI:
+  • settings / stats / help / clear"""
         
         try:
             if parse_command:
@@ -489,21 +507,27 @@ class EnhancedChatGUI:
             
             if self.executor:
                 result = self.executor.execute(cmd_dict)
-                if isinstance(result, dict):
-                    return result.get("message", str(result))
-                return str(result)
+                message = result.get("message", str(result)) if isinstance(result, dict) else str(result)
+                
+                formatted = f"""━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ EXECUTION RESULT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+{message}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"""
+                return formatted
             
             if self.vatsal:
-                return self.vatsal.acknowledge_command(text)
+                return f"✅ {self.vatsal.acknowledge_command(text)}"
             
-            return f"✅ Command processed: {text}"
+            return f"✅ Command queued: {text}"
         
         except Exception as e:
-            return f"⚠️ Error: {str(e)}\n\nTry: 'help' for commands"
+            return f"❌ Error: {str(e)}"
     
     def toggle_auto(self):
         self.auto_mode = not self.auto_mode
-        self.add_message(f"⚡ Automation {'✓ Enabled' if self.auto_mode else '✗ Disabled'}", is_user=False)
+        status = "✅ ENABLED" if self.auto_mode else "❌ DISABLED"
+        self.add_system_message(f"Automation Mode: {status}")
         self._save_config()
     
     def clear_chat(self):
@@ -541,35 +565,28 @@ class EnhancedChatGUI:
         win.geometry("500x600")
         win.configure(bg=self.colors["bg_main"])
         
-        text = """V.A.T.S.A.L - BOI Wake Word System
+        text = """━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📖 V.A.T.S.A.L - BOI ASSISTANT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🎤 VOICE ACTIVATION:
-• Say "BOI" to wake me up
-• I'll start listening for your command
-• Speak your command naturally
-• Results appear instantly
+Say "BOI" → I activate → Speak command
 
-SYSTEM COMMANDS:
-• system report - Full system info
-• cpu usage - CPU statistics
-• memory - RAM usage
-• disk - Disk usage
-• processes - Running apps
-• network - Network status
+🖥️  SYSTEM COMMANDS:
+  system report | cpu | memory | disk
+  processes | network | time
 
-ACTION COMMANDS:
-• take screenshot - Capture screen
-• weather - Weather report
-• news - Latest news
-• search - Web search
-• time - Current time
+📷 ACTION COMMANDS:
+  take screenshot | weather
+  news | search | settings | help
 
-UI COMMANDS:
-• help - Display help
-• settings - Open settings
-• clear - Clear chat
+⌨️  KEYBOARD SHORTCUTS:
+  ↑↓ Navigate history
+  Enter Send message
+  Shift+Enter New line
 
-Use arrow keys to navigate history."""
+📊 UI COMMANDS:
+  help | settings | stats | clear"""
         
         label = tk.Label(win, text=text, font=("Courier New", 9),
                         bg=self.colors["bg_light"], fg=self.colors["text_main"],
@@ -577,7 +594,13 @@ Use arrow keys to navigate history."""
         label.pack(fill="both", expand=True, padx=20, pady=20)
     
     def _show_welcome(self):
-        msg = "👋 Welcome to V.A.T.S.A.L with BOI Wake Word!\n\n🎤 Say 'BOI' to activate voice commands\n💡 Or type manually below\n⚠️ Make sure microphone is enabled"
+        msg = """━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👋 Welcome to V.A.T.S.A.L
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎤 Say "BOI" to activate voice
+💬 Or type your command below
+✅ All systems ready!"""
         self.add_message(msg, is_user=False)
     
     def _start_time_update(self):
