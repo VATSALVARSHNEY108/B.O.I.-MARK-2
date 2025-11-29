@@ -201,47 +201,16 @@ class PhoneDialer:
             except Exception as ocr_error:
                 print(f"ℹ️ OCR detection not available: {ocr_error}")
 
-            print("  📞 Step 4: Clicking Call button...")
-
-            calibrated = False
-            try:
-                config_path = workspace / "config" / "phone_link_button.json"
-                with open(config_path, 'r') as f:
-                    config = json.load(f)
-                    cal_x = config.get("call_button_x")
-                    cal_y = config.get("call_button_y")
-
-                    if cal_x and cal_y:
-                        print(f"   Using calibrated position: ({cal_x}, {cal_y})")
-                        pyautogui.click(cal_x, cal_y)
-                        time.sleep(0.3)
-                        pyautogui.click(cal_x, cal_y)
-                        calibrated = True
-                        print("   ✅ Clicked at calibrated position!")
-            except FileNotFoundError:
-                print("   No calibration found. Using default positions...")
-            except Exception as e:
-                print(f"   Calibration error: {e}")
-
-            if not calibrated:
-                call_button_positions = [
-                    (int(screen_width * 0.15), int(screen_height * 0.85)),
-                    (int(screen_width * 0.12), int(screen_height * 0.88)),
-                    (int(screen_width * 0.18), int(screen_height * 0.82)),
-                    (int(screen_width * 0.15), int(screen_height * 0.80)),
-                    (int(screen_width * 0.10), int(screen_height * 0.90)),
-                ]
-
-                for i, (x, y) in enumerate(call_button_positions):
-                    print(f"   Trying position {i+1}/5: ({x}, {y})")
-                    pyautogui.click(x, y)
-                    time.sleep(0.4)
-
-                print("   ✅ Click commands sent!")
-
-            print("   Step 5: Pressing Enter as backup...")
-            pyautogui.press('enter')
-            time.sleep(0.2)
+            print("  📞 Step 2: Clicking Call button...")
+            
+            click_x = screen_width - 1970
+            click_y = 975
+            
+            print(f"   Clicking at position: ({click_x}, {click_y})")
+            pyautogui.click(click_x, click_y)
+            time.sleep(0.3)
+            pyautogui.click(click_x, click_y)
+            print("   ✅ Call button clicked!")
 
             # Try Tab navigation as final backup
             for i in range(2):

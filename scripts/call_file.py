@@ -109,21 +109,14 @@ def dial_number(phone_number):
     
     print("Step 2: Clicking Call button...")
     
-    calibrated_pos = get_calibrated_button_position()
+    screen_width, screen_height = pyautogui.size()
+    click_x = screen_width - 1970
+    click_y = 975
     
-    if calibrated_pos:
-        x, y = calibrated_pos
-        print(f"Using calibrated position: ({x}, {y})")
-        pyautogui.click(x, y)
-        time.sleep(0.3)
-        pyautogui.click(x, y)
-    else:
-        print("No calibration found. Please run: python scripts/calibrate_phone_link_button.py")
-        print("Trying Enter key as backup...")
-    
-    print("Step 3: Pressing Enter as backup...")
-    pyautogui.press('enter')
-    time.sleep(0.2)
+    print(f"Clicking at position: ({click_x}, {click_y})")
+    pyautogui.click(click_x, click_y)
+    time.sleep(0.3)
+    pyautogui.click(click_x, click_y)
     
     print("Call initiated!")
     return True
