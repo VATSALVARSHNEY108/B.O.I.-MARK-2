@@ -1,0 +1,34 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+(.venv) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6> python vatsal.py
+🚀 Starting BOI (Barely Obeys Instructions) Desktop Automation...
+============================================================
+❌ Error: unterminated string literal (detected at line 29) (spotify_local.py, line 29)
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6\vatsal.py", line 44, in main
+    from modules.core.gui_app import main as gui_main
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6\modules\core\gui_app.py", line 11, in <module>
+    from modules.core.command_executor import CommandExecutor
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6\modules\core\command_executor.py", line 43, in <module>
+    from modules.utilities.spotify_local import SpotifyLocal
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6\modules\utilities\spotify_local.py", line 29
+    auth_url = f'https://accounts.spotify.com/authorize?{urlencode({
+               ^
+SyntaxError: unterminated string literal (detected at line 29)
+(.venv) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6> python vatsal.py
+🚀 Starting BOI (Barely Obeys Instructions) Desktop Automation...
+============================================================
+❌ Error: cannot import name 'get_ai_response' from 'modules.core.gemini_controller' (C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6\modules\core\gemini_controller.py)
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6\vatsal.py", line 44, in main
+    from modules.core.gui_app import main as gui_main
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6\modules\core\gui_app.py", line 11, in <module>
+    from modules.core.command_executor import CommandExecutor
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6\modules\core\command_executor.py", line 74, in <module>
+    from modules.voice.feature_speaker import create_feature_speaker
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6\modules\voice\feature_speaker.py", line 8, in <module>
+    from modules.core.gemini_controller import get_ai_response
+ImportError: cannot import name 'get_ai_response' from 'modules.core.gemini_controller' (C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6\modules\core\gemini_controller.py)

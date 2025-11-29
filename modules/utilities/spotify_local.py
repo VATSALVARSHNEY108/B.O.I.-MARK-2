@@ -26,12 +26,13 @@ class SpotifyLocal:
         """Authenticate with Spotify"""
         scope = 'user-read-playback-state user-modify-playback-state user-read-currently-playing playlist-read-private user-library-read'
         
-        auth_url = f'https://accounts.spotify.com/authorize?{urlencode({
+        params = {
             "client_id": self.client_id,
             "response_type": "code",
             "redirect_uri": self.redirect_uri,
             "scope": scope
-        })}'
+        }
+        auth_url = f'https://accounts.spotify.com/authorize?{urlencode(params)}'
         
         print("\n🎵 Spotify Authentication")
         print("=" * 60)

@@ -5,7 +5,7 @@ Speaks the main key features and capabilities of BOI when speaking mode is activ
 
 import pyttsx3
 import threading
-from modules.core.gemini_controller import get_ai_response
+from modules.core.gemini_controller import parse_command
 
 
 class FeatureSpeaker:
@@ -21,17 +21,14 @@ class FeatureSpeaker:
     def extract_main_points(self, text):
         """Extract main points from text using AI"""
         try:
-            prompt = f"""Analyze this text and extract ONLY the main key points (3-5 bullet points max). 
-Make it concise and speaking-friendly (short sentences, no technical jargon).
-Don't include verbose explanations.
+            prompt = f"""Summarize this in 3-5 key points for speaking aloud (keep it brief):
 
-Text to analyze:
 {text}
 
-Return ONLY the main points, one per line, prefixed with a bullet point or number.
-Make it sound natural for speaking aloud."""
+Return only the main points, one per line."""
             
-            response = get_ai_response(prompt)
+            result = parse_command(prompt)
+            response = result.get("response", "") if isinstance(result, dict) else str(result)
             return response.strip() if response else text[:200]
         except Exception as e:
             print(f"⚠️ AI extraction failed: {e}")
