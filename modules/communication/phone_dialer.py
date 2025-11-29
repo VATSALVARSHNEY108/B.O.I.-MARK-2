@@ -121,24 +121,9 @@ class PhoneDialer:
             import pyautogui
             
             screen_width, screen_height = pyautogui.size()
-
-            print("  🔲 Maximizing Phone Link window...")
-            pyautogui.hotkey('win', 'up')
+            
+            print(f"  ⌨️ Step 1: Typing number {clean_number}...")
             time.sleep(1)
-            
-            print("  📞 Step 1: Navigating to Calls tab...")
-            calls_tab_x = int(screen_width * 0.08)
-            calls_tab_y = int(screen_height * 0.35)
-            pyautogui.click(calls_tab_x, calls_tab_y)
-            time.sleep(1)
-            
-            print("  🔢 Step 2: Opening dialer keypad...")
-            dialer_x = int(screen_width * 0.15)
-            dialer_y = int(screen_height * 0.92)
-            pyautogui.click(dialer_x, dialer_y)
-            time.sleep(0.5)
-            
-            print(f"  ⌨️ Step 3: Typing number {clean_number}...")
             pyautogui.typewrite(clean_number.replace('+', ''), interval=0.08)
             time.sleep(0.5)
 

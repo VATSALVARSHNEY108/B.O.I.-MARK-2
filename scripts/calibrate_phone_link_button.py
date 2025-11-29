@@ -4,7 +4,7 @@ Phone Link Call Button Calibration Tool
 Helps you find the exact position of the Call button on your screen
 """
 
-import pyautogui
+import pyautogui 
 import time
 import json
 import os
@@ -45,10 +45,6 @@ if not opened:
 
 print("⏳ Waiting 4 seconds for Phone Link to open...")
 time.sleep(4)
-
-print("Maximizing window...")
-pyautogui.hotkey('win', 'up')
-time.sleep(1)
 
 print()
 print("=" * 70)
