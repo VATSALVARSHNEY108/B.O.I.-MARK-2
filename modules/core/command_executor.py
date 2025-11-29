@@ -749,20 +749,9 @@ class CommandExecutor:
                         "message": "No search query provided"
                     }
 
-                print(f"  🎬 YouTube Player Activated")
-                print(f"  🔍 Query: {query}")
-
-                # PRIMARY: Try direct browser launch in Brave with automation
-                try:
-                    print(f"  🎯 Launching in Brave browser...")
-                    result = self.youtube.smart_play_video(query, "auto")
-                    return result
-                except Exception as e:
-                    print(f"  ⚠️ Direct method error: {e}")
-                    return {
-                        "success": False,
-                        "message": f"Error opening YouTube: {str(e)}"
-                    }
+                # Search YouTube and play first video in Brave
+                result = self.youtube.search_and_play(query)
+                return result
 
             elif action == "play_first_result":
                 wait_time = parameters.get("wait_time", 3)
