@@ -31,3 +31,8 @@ esac
 
 # Note: Also supports:
 # python modules/core/gui_app_advanced_agi.py    # B.O.I Advanced AGI
+
+        4)
+            echo "🌐 Launching Interconnection Dashboard..."
+            python modules/core/gui_interconnect_dashboard.py
+            ;;
