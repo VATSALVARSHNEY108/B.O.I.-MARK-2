@@ -271,6 +271,41 @@ class PhoneDialer:
                 "error": str(e)
             }
 
+    def quick_dial(self, name_or_number: str, message: str = None):
+        """
+        Quick dial a contact by name or phone number.
+        If message is provided, send it after the call.
+        
+        Args:
+            name_or_number: Contact name or phone number
+            message: Optional message to send after call
+            
+        Returns:
+            dict with success status
+        """
+        # Check if it's a phone number (digits and common phone chars)
+        is_phone = any(c.isdigit() for c in name_or_number)
+        
+        if is_phone:
+            # It's a phone number, dial directly
+            return self.dial_number(name_or_number)
+        else:
+            # It's likely a contact name, try to resolve it
+            try:
+                # Try to get contact from contact manager if available
+                from modules.utilities.contact_manager import ContactManager
+                contact_mgr = ContactManager("data/contacts.json")
+                contact = contact_mgr.get_contact(name_or_number)
+                
+                if contact and contact.get("phone"):
+                    return self.dial_number(contact["phone"])
+                else:
+                    # Contact not found, try as direct number
+                    return self.dial_number(name_or_number)
+            except:
+                # If contact lookup fails, just try as direct number
+                return self.dial_number(name_or_number)
+    
     def hangup(self):
         """Hang up the current call"""
         try:
