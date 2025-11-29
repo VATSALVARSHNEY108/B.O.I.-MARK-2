@@ -68,7 +68,6 @@ class VoiceAssistant:
             "funny": {"index": 1, "rate": 200, "pitch": 1.5}
         }
         
-        # ==================== INTELLIGENT FEATURES ====================
         # Conversation context and memory
         self.conversation_history = []
         self.last_command = None
@@ -499,7 +498,6 @@ class VoiceAssistant:
         except:
             return "❌ Invalid volume value"
     
-    # ==================== INTELLIGENT NLP METHODS ====================
     
     def extract_numbers(self, text):
         """Extract numbers from text (both digits and words)"""
@@ -734,7 +732,6 @@ class VoiceAssistant:
         original_command = command
         command = command.lower().strip()
         
-        # ==================== INTELLIGENT PRE-PROCESSING ====================
         # Try intelligent parsing first
         intelligent_result = self.intelligent_parse(command)
         if intelligent_result:
@@ -742,7 +739,6 @@ class VoiceAssistant:
             self.learn_from_command(original_command, intelligent_result.split('|')[0])
             return intelligent_result
         
-        # ==================== PRODUCTIVITY (check first to avoid conflicts) ====================
         if "timer" in command:
             if "start" in command or "set" in command:
                 return "start_timer"
@@ -761,7 +757,6 @@ class VoiceAssistant:
             else:
                 return "focus_mode_off"
         
-        # ==================== TIME & DATE ====================
         elif any(word in command for word in ["time", "clock"]) and "timer" not in command:
             return "get_time"
         
@@ -771,7 +766,6 @@ class VoiceAssistant:
         elif "day" in command and "is" in command:
             return "get_day"
         
-        # ==================== WEATHER ====================
         elif "weather" in command:
             if "forecast" in command or "tomorrow" in command:
                 return "weather_forecast"
@@ -779,7 +773,6 @@ class VoiceAssistant:
                 city = command.replace("weather", "").replace("in", "").strip()
                 return f"weather|{city}" if city else "weather"
         
-        # ==================== CALCULATOR ====================
         elif "calculate" in command or "compute" in command:
             expr = command.replace("calculate", "").replace("compute", "").strip()
             return f"calculate|{expr}"
@@ -787,7 +780,6 @@ class VoiceAssistant:
         elif "plus" in command or "minus" in command or "times" in command or "divided by" in command:
             return f"calculate|{command}"
         
-        # ==================== NOTES & REMINDERS ====================
         elif "note" in command or "write this" in command:
             if "create" in command or "add" in command or "make" in command:
                 note_text = command.replace("create", "").replace("add", "").replace("make", "").replace("note", "").strip()
@@ -801,7 +793,6 @@ class VoiceAssistant:
             reminder_text = command.replace("remind me", "").replace("reminder", "").replace("set alarm", "").strip()
             return f"create_reminder|{reminder_text}"
         
-        # ==================== CLIPBOARD ====================
         elif "copy" in command and "clipboard" in command:
             text = command.replace("copy", "").replace("clipboard", "").strip()
             return f"copy_to_clipboard|{text}"
@@ -809,7 +800,6 @@ class VoiceAssistant:
         elif "paste" in command or "clipboard" in command:
             return "paste_from_clipboard"
         
-        # ==================== INTELLIGENT FEATURES (PRIORITY - check before clipboard) ====================
         # Check clear history first (before clipboard clear)
         elif "clear history" in command or ("forget" in command and "history" in command):
             # Clear the history
@@ -822,7 +812,6 @@ class VoiceAssistant:
         elif "clear clipboard" in command:
             return "clear_clipboard"
         
-        # ==================== SEARCH ====================
         elif any(keyword in command for keyword in ["search", "google", "find information", "look for", "lookup"]) and not "open" in command:
             query = command.strip()
             # Remove search keywords intelligently
@@ -832,7 +821,6 @@ class VoiceAssistant:
             query = query.strip()
             return f"web_search|{query}" if query else "web_search"
         
-        # ==================== APPS & PROGRAMS ====================
         elif "open" in command:
             if "project folder" in command or "folder" in command:
                 return "open_folder|."
@@ -875,7 +863,6 @@ class VoiceAssistant:
             if "window" in command or "app" in command or "this" in command:
                 return "close_window"
         
-        # ==================== MUSIC & MEDIA ====================
         elif "play" in command:
             if "spotify" in command:
                 song = command.replace("play", "").replace("spotify", "").replace("on", "").strip()
@@ -908,7 +895,6 @@ class VoiceAssistant:
         elif "previous song" in command or "previous track" in command:
             return "previous_track"
         
-        # ==================== COMMUNICATION ====================
         elif "send email" in command or "email" in command:
             return "send_email|" + command
         
@@ -916,7 +902,6 @@ class VoiceAssistant:
             if "send" in command:
                 return "send_whatsapp|" + command
         
-        # ==================== SYSTEM CONTROL ====================
         elif "screenshot" in command or "take a picture" in command or "capture screen" in command:
             return "screenshot"
         
@@ -960,7 +945,6 @@ class VoiceAssistant:
         elif "log out" in command or "logout" in command or "sign out" in command:
             return "logout"
         
-        # ==================== WINDOW MANAGEMENT ====================
         elif "minimize" in command:
             if "all" in command:
                 return "minimize_all"
@@ -976,7 +960,6 @@ class VoiceAssistant:
         elif "show desktop" in command:
             return "show_desktop"
         
-        # ==================== FILE OPERATIONS ====================
         elif "organize" in command and "downloads" in command:
             return "organize_downloads"
         
@@ -995,7 +978,6 @@ class VoiceAssistant:
             return "check_disk_space"
         
         
-        # ==================== INFORMATION ====================
         elif "system" in command:
             if "report" in command or "info" in command or "information" in command:
                 return "system_report"
@@ -1011,7 +993,6 @@ class VoiceAssistant:
             else:
                 return "network_status"
         
-        # ==================== FUN FEATURES (check before IP to avoid conflicts) ====================
         elif ("flip" in command and "coin" in command) or "coin flip" in command:
             return "flip_coin"
         
@@ -1030,11 +1011,9 @@ class VoiceAssistant:
         elif "random number" in command:
             return "random_number"
         
-        # ==================== TRANSLATION ====================
         elif "translate" in command:
             return "translate|" + command
         
-        # ==================== NEWS ====================
         elif "news" in command:
             if "tech" in command or "technology" in command:
                 return "news|technology"
@@ -1045,7 +1024,6 @@ class VoiceAssistant:
             else:
                 return "news|general"
         
-        # ==================== VOICE CONTROL ====================
         elif "change voice" in command or "switch voice" in command:
             if "male" in command:
                 return "change_voice|male"
@@ -1084,7 +1062,6 @@ class VoiceAssistant:
         elif "current voice" in command or "voice info" in command:
             return "current_voice"
         
-        # ==================== INTELLIGENT FEATURES ====================
         # Check repeat commands before history (to avoid conflict)
         elif ("repeat" in command or "do it again" in command) and not "context_repeat" in command:
             if "last" in command or "that" in command or "again" in command:
@@ -1096,7 +1073,6 @@ class VoiceAssistant:
         elif "history" in command or "conversation history" in command or "what did i say" in command:
             return "show_history"
         
-        # ==================== HELP ====================
         elif "help" in command or "commands" in command or "what can you do" in command:
             return "show_help"
         

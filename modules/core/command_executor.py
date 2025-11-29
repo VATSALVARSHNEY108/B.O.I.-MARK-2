@@ -429,7 +429,6 @@ class CommandExecutor:
         parameters = parameters or {}
         
         try:
-            # ==================== GUI AUTOMATION ====================
             if action == "open_app":
                 app_name = parameters.get("app_name", "")
                 success = self.gui.open_application(app_name)
@@ -516,7 +515,6 @@ class CommandExecutor:
                     "message": f"Waited {seconds} seconds" if success else "Failed to wait"
                 }
 
-            # ==================== QUICK INFORMATION ====================
             elif action == "get_time":
                 result = self.quick_info.get_current_time()
                 return {
@@ -600,7 +598,6 @@ class CommandExecutor:
                     "message": result.get("message")
                 }
 
-            # ==================== WEATHER ====================
             elif action == "get_quick_weather":
                 city = parameters.get("city", "New York")
                 result = self.weather_news.get_weather(city)
@@ -645,7 +642,6 @@ class CommandExecutor:
                     "message": result
                 }
 
-            # ==================== WEB BROWSING ====================
             elif action == "search_web":
                 query = parameters.get("query", "")
                 url = f"https://www.google.com/search?q={query.replace(' ', '+')}"
@@ -655,7 +651,6 @@ class CommandExecutor:
                     "message": f"Opened web search for: {query}"
                 }
 
-            # ==================== FOLDER OPERATIONS ====================
             elif action == "open_folder":
                 folder_path = parameters.get("folder_path")
                 folder_name = parameters.get("folder_name")
@@ -710,7 +705,6 @@ class CommandExecutor:
                     "message": "Opened Desktop" if success else "Failed to open Desktop"
                 }
 
-            # ==================== YOUTUBE ====================
             elif action == "open_youtube":
                 video_url = parameters.get("video_url", "")
                 video_id = parameters.get("video_id", "")
@@ -778,7 +772,6 @@ class CommandExecutor:
 
                 return result
             
-            # ==================== MEDIA CONTROL ====================
             elif action == "stop_media":
                 print(f"  ⏹️  Stopping media playback...")
                 return self.media_control.stop()
@@ -799,7 +792,6 @@ class CommandExecutor:
                 print(f"  ▶️  Playing media...")
                 return self.media_control.play()
             
-            # ==================== SPOTIFY CONTROL ====================
             elif action == "spotify_play":
                 print(f"  ▶️  Playing Spotify...")
                 result = self.spotify.play()
@@ -921,7 +913,6 @@ class CommandExecutor:
                 result = self.spotify.open_spotify()
                 return {"success": True, "message": result}
             
-            # ==================== PHONE CALLS ====================
             elif action == "dial_call" or action == "make_call" or action == "call_contact":
                 name_or_number = (parameters.get("contact", "") or 
                                  parameters.get("contact_name", "") or 
@@ -958,7 +949,6 @@ class CommandExecutor:
                 result = self.phone_dialer.open_phone_link()
                 return result
             
-            # ==================== PHONE LINK NOTIFICATIONS ====================
             elif action == "check_phone_notifications" or action == "read_phone_notifications":
                 print(f"  📱 Checking Phone Link notifications...")
                 new_notifs = self.phone_link_monitor.check_new_notifications()
@@ -1039,7 +1029,6 @@ class CommandExecutor:
                     "data": counts
                 }
             
-            # ==================== WHATSAPP MESSAGING ====================
             elif action == "send_whatsapp":
                 phone = parameters.get("phone", "") or parameters.get("phone_number", "") or parameters.get("number", "")
                 contact_name = parameters.get("contact", "") or parameters.get("contact_name", "") or parameters.get("name", "")
@@ -1124,7 +1113,6 @@ class CommandExecutor:
                 result = self.whatsapp.open_whatsapp_desktop()
                 return result
             
-            # ==================== SYSTEM MONITORING ====================
             elif action == "system_report":
                 print(f"  📊 Generating system report...")
                 report = get_full_system_report()
@@ -1155,7 +1143,6 @@ class CommandExecutor:
                 print(f"  {msg}")
                 return {"success": True, "message": msg, "data": disk}
 
-            # ==================== FILE OPERATIONS ====================
             elif action == "search_files":
                 pattern = parameters.get("pattern", "*")
                 directory = parameters.get("directory", ".")
@@ -1305,7 +1292,6 @@ class CommandExecutor:
                     "message": result
                 }
             
-            # ==================== QUICK NOTES ====================
             elif action == "quick_note":
                 content = parameters.get("content", "")
                 category = parameters.get("category", "general")
@@ -1378,7 +1364,6 @@ class CommandExecutor:
                     "message": result
                 }
 
-            # ==================== WORKFLOWS ====================
             elif action == "save_workflow":
                 name = parameters.get("name", "")
                 steps = parameters.get("steps", [])
@@ -1421,7 +1406,6 @@ class CommandExecutor:
                     "workflows": workflows
                 }
 
-            # ==================== CONVERSATION MEMORY ====================
             elif action == "show_history":
                 history = self.memory.get_recent_history(10)
 
@@ -1448,7 +1432,6 @@ class CommandExecutor:
                     "statistics": stats
                 }
 
-            # ==================== CODE GENERATION AND ANALYSIS ====================
             elif action == "generate_code":
                 description = parameters.get("description", "")
                 language = parameters.get("language", None)
@@ -1700,7 +1683,6 @@ class CommandExecutor:
                         "message": f"Execution failed: {result['error']}"
                     }
 
-            # ==================== VISION AI ====================
             elif action == "analyze_screenshot":
                 image_path = parameters.get("image_path", "screenshot.png")
                 query = parameters.get("query", "Describe what you see")
@@ -1774,7 +1756,6 @@ class CommandExecutor:
                     "analysis": result
                 }
 
-            # ==================== SMART SCREEN ANALYSIS ====================
             elif action == "smart_analyze_screen":
                 focus = parameters.get("focus", "general")
                 
@@ -1863,7 +1844,6 @@ class CommandExecutor:
                 else:
                     return result
 
-            # ==================== SCREEN MONITORING ====================
             elif action == "monitor_screen":
                 query = parameters.get("query", "What's happening on my screen?")
 
@@ -1882,7 +1862,6 @@ class CommandExecutor:
                     }
                 return result
 
-            # ==================== CONTACTS ====================
             elif action == "add_contact":
                 name = parameters.get("name", "")
                 phone = parameters.get("phone")
@@ -1924,7 +1903,6 @@ class CommandExecutor:
                         "message": f"Contact not found: {name}"
                     }
 
-            # ==================== SYSTEM CONTROL ====================
             elif action == "mute_mic":
                 result = self.system_control.mute_microphone()
                 return {"success": True, "message": result}
@@ -2160,7 +2138,6 @@ class CommandExecutor:
                 result = self.system_control.open_volume_brightness_menu()
                 return {"success": True, "message": result}
 
-            # ==================== WINDOWS 11 SETTINGS ====================
             # Display Settings
             elif action == "get_display_info":
                 if not self.win11_settings:
@@ -2607,7 +2584,6 @@ class CommandExecutor:
                 result = self.win11_settings.get_all_settings_summary()
                 return result
 
-            # ==================== DESKTOP RAG ====================
             elif action == "index_desktop_rag":
                 folder_path = parameters.get("folder_path", ".")
                 result = self.desktop_rag.index_folder(folder_path)
@@ -2681,7 +2657,6 @@ class CommandExecutor:
                     msg += "\nNo files indexed yet. Try 'Index my desktop files' first."
                 return {"success": True, "message": msg}
 
-            # ==================== COMMUNICATION ENHANCEMENTS ====================
             elif action == "transcribe_voice":
                 audio_file = parameters.get("audio_file")
                 audio_url = parameters.get("audio_url")
@@ -2794,7 +2769,6 @@ class CommandExecutor:
                 summary = self.comm_enhancements.get_feature_summary()
                 return {"success": True, "message": summary}
 
-            # ==================== CHATBOT / AI CHAT ====================
             elif action == "chatbot" or action == "chat" or action == "ask":
                 from modules.core.gemini_controller import chat_response
                 message = parameters.get("message", "")
@@ -2855,7 +2829,6 @@ class CommandExecutor:
                 except Exception as e:
                     return {"success": False, "message": f"Error: {str(e)}"}
             
-            # ==================== TEXT GENERATION AI ====================
             elif action == "story_writer":
                 from modules.core.gemini_controller import chat_response
                 prompt_text = parameters.get("prompt", "")
@@ -2882,7 +2855,6 @@ class CommandExecutor:
                 except Exception as e:
                     return {"success": False, "message": f"Error: {str(e)}"}
             
-            # ==================== ACCESS CONTROL & SECURITY ====================
             elif action == "enable_smart_access":
                 method = parameters.get("method", "facial_recognition")
                 return self.security_enhancements.enable_smart_access_control(method)
@@ -2916,7 +2888,6 @@ class CommandExecutor:
                 log = self.security_enhancements.get_threat_log()
                 return {"success": True, "message": log}
             
-            # ==================== FEATURE SPEAKER ====================
             elif action == "speak_main_features":
                 if not self.feature_speaker:
                     return {"success": False, "message": "Feature Speaker not available"}
@@ -2940,7 +2911,6 @@ class CommandExecutor:
                     return {"success": False, "message": "No text provided to speak"}
                 return self.feature_speaker.speak_custom(text)
             
-            # ==================== FUTURE-TECH CORE ====================
             elif action == "future_tech_process" or action == "ultra_intelligent_command":
                 if not self.future_tech:
                     return {"success": False, "message": "Future-Tech Core not available. Install required modules."}
@@ -2974,7 +2944,6 @@ class CommandExecutor:
                 
                 return {"success": True, "message": msg}
 
-            # ==================== DEFAULT ====================
             else:
                 return {
                     "success": False,
@@ -2988,9 +2957,7 @@ class CommandExecutor:
             }
 
 
-# ============================================================
 # FACTORY FUNCTION - Creates properly initialized CommandExecutor
-# ============================================================
 
 def create_command_executor(enable_future_tech=True, auto_start_monitoring=False):
     """

@@ -35,7 +35,6 @@ class Windows11SettingsController:
             "system": r"System\CurrentControlSet\Control",
         }
     
-    # ==================== DISPLAY SETTINGS ====================
     
     def get_display_info(self) -> Dict[str, Any]:
         """Get comprehensive display information"""
@@ -348,7 +347,6 @@ class Windows11SettingsController:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== SOUND SETTINGS ====================
     
     def list_audio_devices(self, device_type: str = "playback") -> Dict[str, Any]:
         """List audio devices (playback or recording) using native WMI"""
@@ -404,7 +402,6 @@ class Windows11SettingsController:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== NETWORK SETTINGS ====================
     
     def get_network_adapters(self) -> Dict[str, Any]:
         """Get all network adapters and their status"""
@@ -526,7 +523,6 @@ class Windows11SettingsController:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== BLUETOOTH SETTINGS ====================
     
     def set_bluetooth_state(self, enabled: bool) -> Dict[str, str]:
         """Enable/disable Bluetooth using Windows Runtime Radio API"""
@@ -613,7 +609,6 @@ class Windows11SettingsController:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== PRIVACY & SECURITY SETTINGS ====================
     
     def set_camera_access(self, enabled: bool, app_specific: Optional[str] = None) -> Dict[str, str]:
         """Enable/disable camera access globally or for specific app"""
@@ -713,7 +708,6 @@ class Windows11SettingsController:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== PERSONALIZATION SETTINGS ====================
     
     def set_dark_mode(self, enabled: bool) -> Dict[str, str]:
         """Enable/disable dark mode"""
@@ -830,7 +824,6 @@ class Windows11SettingsController:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== SYSTEM SETTINGS ====================
     
     def set_notifications(self, enabled: bool, app_specific: Optional[str] = None) -> Dict[str, str]:
         """Enable/disable notifications globally or for specific app"""
@@ -924,7 +917,6 @@ class Windows11SettingsController:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== ACCESSIBILITY SETTINGS ====================
     
     def set_narrator(self, enabled: bool) -> Dict[str, str]:
         """Enable/disable Narrator"""
@@ -1010,7 +1002,6 @@ class Windows11SettingsController:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== WINDOWS UPDATE SETTINGS ====================
     
     def check_windows_updates(self) -> Dict[str, Any]:
         """Check for Windows updates"""
@@ -1075,7 +1066,6 @@ class Windows11SettingsController:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== APP & STARTUP SETTINGS ====================
     
     def list_startup_apps(self) -> Dict[str, Any]:
         """List all startup applications"""
@@ -1124,7 +1114,6 @@ class Windows11SettingsController:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== TIME & LANGUAGE SETTINGS ====================
     
     def set_time_zone(self, timezone: str) -> Dict[str, str]:
         """Set system timezone (e.g., 'Pacific Standard Time', 'Eastern Standard Time')"""
@@ -1166,7 +1155,6 @@ class Windows11SettingsController:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== GAMING SETTINGS ====================
     
     def set_game_mode(self, enabled: bool) -> Dict[str, str]:
         """Enable/disable Game Mode"""
@@ -1196,7 +1184,6 @@ class Windows11SettingsController:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== POWER SETTINGS ====================
     
     def set_power_plan(self, plan: str) -> Dict[str, str]:
         """Set power plan (balanced, high_performance, power_saver)"""
@@ -1250,7 +1237,6 @@ class Windows11SettingsController:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== ADVANCED SYSTEM SETTINGS ====================
     
     def set_virtual_memory(self, drive: str, initial_mb: int, maximum_mb: int) -> Dict[str, str]:
         """Configure virtual memory (page file)"""
@@ -1316,7 +1302,6 @@ class Windows11SettingsController:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== UTILITY METHODS ====================
     
     def _run_powershell(self, command: str) -> str:
         """Execute PowerShell command and return output"""

@@ -26,7 +26,6 @@ class BatchUtilities:
         self.pictures = self.home / "Pictures"
         self.is_windows = platform.system() == "Windows"
 
-    # ==================== SYSTEM CONTROL ====================
 
     def get_system_info(self):
         """Get comprehensive system information"""
@@ -316,7 +315,6 @@ class BatchUtilities:
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    # ==================== FILE MANAGEMENT ====================
 
     def organize_downloads(self):
         """Organize downloads folder by file type"""
@@ -480,7 +478,6 @@ class BatchUtilities:
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    # ==================== NETWORK ====================
 
     def get_network_info(self):
         """Get network information"""
@@ -551,7 +548,6 @@ class BatchUtilities:
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    # ==================== MAINTENANCE ====================
 
     def disk_cleanup(self):
         """Clean temporary files"""

@@ -47,7 +47,6 @@ class AdvancedDesktopController:
         except:
             pass
     
-    # ===== WINDOW MANAGEMENT =====
     
     def list_windows(self):
         """List all open windows and applications"""
@@ -216,7 +215,6 @@ class AdvancedDesktopController:
         except Exception as e:
             return f"Error: {str(e)}"
     
-    # ===== DISPLAY CONTROL =====
     
     def get_screen_info(self):
         """Get information about displays/monitors"""
@@ -246,7 +244,6 @@ class AdvancedDesktopController:
         
         return output
     
-    # ===== MACRO RECORDING =====
     
     def record_macro(self, macro_name, duration=10):
         """Record mouse and keyboard actions as a macro"""
@@ -323,7 +320,6 @@ class AdvancedDesktopController:
         
         return output
     
-    #===== ADVANCED AUTOMATION =====
     
     def create_global_shortcut(self, shortcut_name, keys, action):
         """Create a system-wide keyboard shortcut (requires elevated permissions)"""

@@ -37,7 +37,6 @@ class SettingsAutomator:
             'battery_saver': (self.screen_width - 170, self.screen_height - 180),
         }
     
-    # ==================== CORE FUNCTIONS ====================
     
     def open_quick_settings(self) -> bool:
         """Open the Quick Settings panel"""
@@ -85,7 +84,6 @@ class SettingsAutomator:
             self.close_quick_settings()
             return {"success": False, "error": str(e)}
     
-    # ==================== NETWORK CONTROLS ====================
     
     def toggle_wifi(self) -> Dict[str, any]:
         """Toggle WiFi on/off"""
@@ -103,19 +101,16 @@ class SettingsAutomator:
         """Toggle Mobile hotspot on/off"""
         return self.click_toggle('mobile_hotspot')
     
-    # ==================== DISPLAY CONTROLS ====================
     
     def toggle_night_light(self) -> Dict[str, any]:
         """Toggle Night light on/off"""
         return self.click_toggle('night_light')
     
-    # ==================== POWER CONTROLS ====================
     
     def toggle_battery_saver(self) -> Dict[str, any]:
         """Toggle Battery saver on/off"""
         return self.click_toggle('battery_saver')
     
-    # ==================== VOLUME CONTROLS ====================
     
     def set_volume(self, level: int) -> Dict[str, any]:
         """Set system volume (0-100)"""
@@ -162,7 +157,6 @@ class SettingsAutomator:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== BRIGHTNESS CONTROLS ====================
     
     def brightness_up(self, steps: int = 1) -> Dict[str, any]:
         """Increase brightness"""
@@ -182,7 +176,6 @@ class SettingsAutomator:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==================== UTILITY FUNCTIONS ====================
     
     def get_available_toggles(self) -> Dict[str, any]:
         """Get list of available toggles"""

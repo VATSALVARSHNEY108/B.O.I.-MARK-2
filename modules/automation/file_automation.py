@@ -25,9 +25,7 @@ class FileAutomation:
         self.observers = {}
         print("📁 File Automation System initialized")
     
-    # ==========================================
     # FEATURE 1: Automatic File Renaming
-    # ==========================================
     
     def rename_files_by_pattern(self, directory: str, pattern_type: str = "date", 
                                 file_extension: str = "*", prefix: str = "", 
@@ -186,9 +184,7 @@ class FileAutomation:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==========================================
     # FEATURE 2: Real-time Folder Monitoring
-    # ==========================================
     
     class FolderEventHandler(FileSystemEventHandler):
         """Handler for folder monitoring events"""
@@ -320,9 +316,7 @@ class FileAutomation:
         except Exception as e:
             return {"success": False, "error": str(e)}
     
-    # ==========================================
     # FEATURE 3: Compression/Decompression
-    # ==========================================
     
     def compress_folder(self, folder_path: str, output_zip: str = None,
                        compression_level: int = 9) -> Dict:

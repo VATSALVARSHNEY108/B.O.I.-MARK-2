@@ -6408,7 +6408,6 @@ Answered: {result.get('timestamp', 'N/A')}
 
         threading.Thread(target=execute, daemon=True).start()
 
-    # ===== PRODUCTIVITY HUB METHODS =====
 
     def start_pomodoro_session(self):
         """Start a new Pomodoro session"""
@@ -6591,7 +6590,6 @@ Answered: {result.get('timestamp', 'N/A')}
         for i, rec in enumerate(dashboard['recommendations'], 1):
             self.update_output(f"{i}. {rec}\n", "info")
 
-    # ===== TOOLS & UTILITIES METHODS =====
 
     def add_password_dialog(self):
         """Add new password to vault"""
@@ -6811,7 +6809,6 @@ Answered: {result.get('timestamp', 'N/A')}
             self.update_output(f"Details: {traceback.format_exc()}\n", "error")
 
 
-    # ==================== Comprehensive Controller Methods ====================
 
     def load_comprehensive_command(self, command):
         """Load a predefined command into the input"""
@@ -7471,7 +7468,6 @@ For full functionality, download and run locally!
 """
         messagebox.showinfo("Comprehensive Controller Guide", guide_text)
 
-    # ==================== Virtual Language Model Methods ====================
 
     def vlm_append_output(self, text, tag=None):
         """Append text to VLM output display"""

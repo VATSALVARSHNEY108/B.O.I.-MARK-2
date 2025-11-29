@@ -87,7 +87,6 @@ class UserProfileManager:
         except Exception as e:
             print(f"Error saving profile: {e}")
     
-    # ============= User Info Methods =============
     
     def get_user_name(self) -> str:
         """Get user's name"""
@@ -121,7 +120,6 @@ class UserProfileManager:
         self._save_profile()
         print(f"✅ User info updated")
     
-    # ============= Preferences Methods =============
     
     def get_preference(self, key: str, default: Any = None) -> Any:
         """Get a specific preference"""
@@ -154,7 +152,6 @@ class UserProfileManager:
         self._save_profile()
         print(f"✅ Updated {len(kwargs)} preferences")
     
-    # ============= Custom Settings Methods =============
     
     def get_custom_setting(self, key: str, default: Any = None) -> Any:
         """Get a custom user-defined setting"""
@@ -187,7 +184,6 @@ class UserProfileManager:
             self._save_profile()
             print(f"✅ Custom setting '{key}' removed")
     
-    # ============= Things to Change Methods =============
     
     def add_thing_to_change(self, item: str, category: str = "general", priority: str = "medium"):
         """Add something user wants to change/remember"""
@@ -234,7 +230,6 @@ class UserProfileManager:
             self._save_profile()
             print(f"✅ Removed: {removed['item']}")
     
-    # ============= Habits Methods =============
     
     def learn_habit(self, habit_key: str, habit_value: Any):
         """Learn and remember a user habit"""
@@ -258,7 +253,6 @@ class UserProfileManager:
             self._save_profile()
         return self.profile["habits"]
     
-    # ============= Interaction Stats Methods =============
     
     def record_interaction(self, command: Optional[str] = None):
         """Record an interaction"""
@@ -303,7 +297,6 @@ class UserProfileManager:
         sorted_commands = sorted(fav_commands.items(), key=lambda x: x[1], reverse=True)
         return sorted_commands[:top_n]
     
-    # ============= Utility Methods =============
     
     def get_greeting(self) -> str:
         """Get personalized greeting"""

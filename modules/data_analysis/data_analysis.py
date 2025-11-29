@@ -90,7 +90,6 @@ class DataAnalysisSuite:
             return df
         return None
     
-    # ==================== DATA IMPORT/EXPORT ====================
     
     def import_csv(self, filepath: str, name: str = "data") -> Dict[str, Any]:
         """Import data from CSV file"""
@@ -224,7 +223,6 @@ class DataAnalysisSuite:
         except Exception as e:
             return {"success": False, "message": f"❌ Error converting: {str(e)}"}
     
-    # ==================== DATA CLEANING ====================
     
     def handle_missing_values(self, name: str, strategy: str = "drop", column: str = None) -> Dict[str, Any]:
         """Handle missing values - drop, fill with mean/median/mode, or forward fill"""
@@ -406,7 +404,6 @@ class DataAnalysisSuite:
         except Exception as e:
             return {"success": False, "message": f"❌ Error detecting outliers: {str(e)}"}
     
-    # ==================== DATA ANALYSIS ====================
     
     def statistical_summary(self, name: str) -> Dict[str, Any]:
         """Generate comprehensive statistical summary"""
@@ -598,7 +595,6 @@ class DataAnalysisSuite:
         except Exception as e:
             return {"success": False, "message": f"❌ Error in trend analysis: {str(e)}"}
     
-    # ==================== DATA VISUALIZATION ====================
     
     def create_chart(self, name: str, chart_type: str, x_column: str, y_column: str = None, title: str = None) -> Dict[str, Any]:
         """Create various types of charts"""
@@ -749,7 +745,6 @@ class DataAnalysisSuite:
         except Exception as e:
             return {"success": False, "message": f"❌ Error creating dashboard: {str(e)}"}
     
-    # ==================== DATA TRANSFORMATION ====================
     
     def create_pivot_table(self, name: str, index: str, columns: str, values: str, agg_func: str = "mean") -> Dict[str, Any]:
         """Create pivot table"""
@@ -872,7 +867,6 @@ class DataAnalysisSuite:
         except Exception as e:
             return {"success": False, "message": f"❌ Error splitting column: {str(e)}"}
     
-    # ==================== MACHINE LEARNING ====================
     
     def linear_regression(self, name: str, target_column: str, feature_columns: List[str]) -> Dict[str, Any]:
         """Perform linear regression"""
@@ -1152,7 +1146,6 @@ class DataAnalysisSuite:
         except Exception as e:
             return {"success": False, "message": f"❌ Error in cross-validation: {str(e)}"}
     
-    # ==================== TEXT ANALYTICS ====================
     
     def text_mining(self, text: str) -> Dict[str, Any]:
         """Extract insights from text"""
@@ -1256,7 +1249,6 @@ class DataAnalysisSuite:
         except Exception as e:
             return {"success": False, "message": f"❌ Error in word frequency: {str(e)}"}
     
-    # ==================== TIME SERIES ====================
     
     def trend_decomposition(self, name: str, time_column: str, value_column: str, period: int = 12) -> Dict[str, Any]:
         """Decompose time series into trend, seasonal, and residual components"""
@@ -1374,7 +1366,6 @@ class DataAnalysisSuite:
         except Exception as e:
             return {"success": False, "message": f"❌ Error calculating moving averages: {str(e)}"}
     
-    # ==================== STATISTICAL TESTS ====================
     
     def t_test(self, name: str, column1: str, column2: str) -> Dict[str, Any]:
         """Perform independent t-test"""
@@ -1512,7 +1503,6 @@ class DataAnalysisSuite:
         except Exception as e:
             return {"success": False, "message": f"❌ Error in normality test: {str(e)}"}
     
-    # ==================== DATA QUALITY ====================
     
     def quality_assessment(self, name: str) -> Dict[str, Any]:
         """Comprehensive data quality assessment"""

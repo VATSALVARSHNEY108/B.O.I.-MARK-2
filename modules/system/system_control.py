@@ -170,7 +170,6 @@ class SystemController:
         except Exception as e:
             return f"❌ Auto-brightness failed: {str(e)}"
     
-    # ==================== VOLUME CONTROL ====================
     
     def set_volume(self, level):
         """Set system volume (0-100)"""
@@ -703,7 +702,6 @@ class SystemController:
         except Exception as e:
             return f"❌ Failed to cancel: {str(e)}"
     
-    # ==================== BATCH FILE INTEGRATION ====================
     
     def use_batch_volume_control(self, command, value=None):
         """
@@ -787,7 +785,6 @@ class SystemController:
         except Exception as e:
             return f"❌ Failed to open menu: {str(e)}"
     
-    # ==================== SYSTEM INFORMATION ====================
     
     def get_cpu_usage(self):
         """Get current CPU usage percentage"""
@@ -916,7 +913,6 @@ class SystemController:
         except Exception as e:
             return f"❌ Failed to get system info: {str(e)}"
     
-    # ==================== CLIPBOARD MANAGEMENT ====================
     
     def copy_to_clipboard(self, text):
         """Copy text to clipboard"""
@@ -947,7 +943,6 @@ class SystemController:
         except Exception as e:
             return f"❌ Failed to clear clipboard: {str(e)}"
     
-    # ==================== POWER MANAGEMENT ====================
     
     def sleep_mode(self):
         """Put system to sleep"""
@@ -980,7 +975,6 @@ class SystemController:
         except Exception as e:
             return f"❌ Failed to hibernate: {str(e)}"
     
-    # ==================== WINDOW MANAGEMENT ====================
     
     def minimize_all_windows(self):
         """Minimize all windows (show desktop)"""
@@ -1102,7 +1096,6 @@ class SystemController:
         except Exception as e:
             return f"❌ Failed to list windows: {str(e)}"
     
-    # ==================== PROCESS MANAGEMENT ====================
     
     def list_running_processes(self, limit=10):
         """List top running processes by CPU usage"""
@@ -1164,7 +1157,6 @@ class SystemController:
         except Exception as e:
             return f"❌ Failed to terminate process: {str(e)}"
     
-    # ==================== QUICK APP LAUNCHERS ====================
     
     def open_calculator(self):
         """Open calculator application"""
@@ -1250,7 +1242,6 @@ class SystemController:
         except Exception as e:
             return f"❌ Failed to open command prompt: {str(e)}"
     
-    # ==================== TIMER AND ALARM ====================
     
     def set_timer(self, seconds, message="Timer finished!"):
         """Set a countdown timer"""

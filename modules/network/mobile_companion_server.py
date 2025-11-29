@@ -46,9 +46,7 @@ MAX_HISTORY = 100
 mobile_api = None
 
 
-# ============================================================================
 # WebSocket Handlers
-# ============================================================================
 
 @socketio.on('connect')
 def handle_connect():
@@ -134,9 +132,7 @@ def handle_system_event(data):
     broadcast_system_event(event_type, event_data)
 
 
-# ============================================================================
 # Web Routes - Dashboard & Mobile Interface
-# ============================================================================
 
 @app.route('/')
 def index():
@@ -165,9 +161,7 @@ def health():
     })
 
 
-# ============================================================================
 # Mobile API Routes (Authentication Required)
-# ============================================================================
 
 @app.route('/api/mobile/auth', methods=['POST'])
 def authenticate():
@@ -309,9 +303,7 @@ def mobile_activity():
     return jsonify(mobile_api.get_recent_activity(limit))
 
 
-# ============================================================================
 # Notification API Routes
-# ============================================================================
 
 @app.route('/api/notifications/send', methods=['POST'])
 @require_auth
@@ -342,9 +334,7 @@ def notification_history():
     return jsonify(notification_service.get_notification_history(limit))
 
 
-# ============================================================================
 # Broadcasting Functions
-# ============================================================================
 
 def broadcast_command_execution(command, status, result='', metadata=None):
     """Broadcast command execution update"""
@@ -427,9 +417,7 @@ def start_background_tasks():
     stats_thread.start()
 
 
-# ============================================================================
 # Broadcaster Class (for external use)
-# ============================================================================
 
 class WebSocketBroadcaster:
     """WebSocket broadcaster for external modules"""
