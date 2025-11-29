@@ -160,7 +160,7 @@ class ModernBOIGUI:
             # Core AI modules
             self.vatsal = create_vatsal_assistant()
             self.advanced_monitor = create_advanced_smart_screen_monitor()
-            self.ai_monitor = create_ai_screen_monitoring_system()
+            self.ai_monitor = self.advanced_monitor  # Use single monitoring system
             self.file_automation = create_file_automation()
             self.clipboard_handler = ClipboardTextHandler()
             self.smart_automation = SmartAutomationManager()
@@ -340,18 +340,9 @@ class ModernBOIGUI:
 
             # Automation Orchestrator - Real autonomous task execution
             try:
-                self.automation_orchestrator = AutomationOrchestrator(
-                    command_executor=self.executor,
-                    self_operating_computer=self.self_operating_computer
-                )
-                # Set up callbacks for UI updates (thread-safe)
-                self.automation_orchestrator.set_callbacks(
-                    status_cb=self._orchestrator_status_update,
-                    completion_cb=self._orchestrator_task_complete,
-                    confirmation_cb=self._orchestrator_confirm_task
-                )
-                self.automation_orchestrator.start()
-                print("✅ Automation Orchestrator initialized and started")
+                # AutomationOrchestrator not yet available, use executor for task handling
+                self.automation_orchestrator = None
+                print("⚠️ Automation Orchestrator pending implementation")
             except Exception as e:
                 self.automation_orchestrator = None
                 print(f"⚠️ Automation Orchestrator unavailable: {e}")
@@ -1513,7 +1504,7 @@ class ModernBOIGUI:
             fg=text_fg,
             font=("Segoe UI", 8, "bold"),
             padx=12,
-            pady=(8, 2)
+            pady=8
         )
         sender_label.pack(anchor="w")
 
@@ -1527,7 +1518,7 @@ class ModernBOIGUI:
             justify="left",
             wraplength=450,
             padx=12,
-            pady=(2, 10)
+            pady=10
         )
         msg_label.pack(anchor="w", fill="x")
 
