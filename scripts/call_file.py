@@ -109,9 +109,8 @@ def dial_number(phone_number):
     
     print("Step 2: Clicking Call button...")
     
-    screen_width, screen_height = pyautogui.size()
-    click_x = screen_width - 1970
-    click_y = 975
+    click_x = 1670
+    click_y = 893
     
     print(f"Clicking at position: ({click_x}, {click_y})")
     pyautogui.click(click_x, click_y)
