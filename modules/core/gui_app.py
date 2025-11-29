@@ -1354,7 +1354,6 @@ class ModernBOIGUI:
             self.update_output("⚠️ WARNING: GEMINI_API_KEY not found!", "warning")
             self.update_output("Please set your Gemini API key to use AI features.", "info")
 
-    # ========== COMMAND EXECUTION ==========
 
     def execute_command(self):
         """Execute user command"""
@@ -1540,7 +1539,6 @@ class ModernBOIGUI:
             self.chat_messages.clear()
         self.add_chat_message("✨ Chat cleared", sender="BOI", msg_type="info")
 
-    # ========== TOGGLE FUNCTIONS ==========
 
     def toggle_vatsal(self):
         """Toggle BOI mode"""
@@ -1594,7 +1592,6 @@ class ModernBOIGUI:
         else:
             self.update_output("🔇 Voice mode disabled", "warning")
 
-    # ========== MENU FUNCTIONS ==========
 
     def toggle_wakeup_listener(self):
         """Toggle wakeup word listener"""
@@ -1917,7 +1914,6 @@ class ModernBOIGUI:
         close_btn.pack(pady=20, padx=2)
         self._add_hover_effect(close_btn, self.BUTTON_BG, self.BUTTON_HOVER)
 
-    # ========== VOICE AND SOUND METHODS ==========
 
     def start_voice_listen(self):
         """Start push-to-talk voice command"""
@@ -2069,7 +2065,6 @@ class ModernBOIGUI:
 
         self.root.after(0, _update)
 
-    # ========== DIALOG METHODS ==========
 
     def show_help(self):
         """Show help dialog"""
@@ -8624,7 +8619,6 @@ Answered: {result.get('timestamp', 'N/A')}
 
         threading.Thread(target=execute, daemon=True).start()
 
-    # ===== PRODUCTIVITY HUB METHODS =====
 
     def start_pomodoro_session(self):
         """Start a new Pomodoro session"""
@@ -8807,7 +8801,6 @@ Answered: {result.get('timestamp', 'N/A')}
         for i, rec in enumerate(dashboard['recommendations'], 1):
             self.update_output(f"{i}. {rec}\n", "info")
 
-    # ===== TOOLS & UTILITIES METHODS =====
 
     def add_password_dialog(self):
         """Add new password to vault"""
@@ -9025,7 +9018,6 @@ Answered: {result.get('timestamp', 'N/A')}
             import traceback
             self.update_output(f"Details: {traceback.format_exc()}\n", "error")
 
-    # ==================== Comprehensive Controller Methods ====================
 
     def load_comprehensive_command(self, command):
         """Load a predefined command into the input"""
@@ -9767,7 +9759,6 @@ For full functionality, download and run locally!
 """
         messagebox.showinfo("Comprehensive Controller Guide", guide_text)
 
-    # ==================== Virtual Language Model Methods ====================
 
     def vlm_append_output(self, text, tag=None):
         """Append text to VLM output display"""
