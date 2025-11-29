@@ -3413,6 +3413,22 @@ personality and advanced automation capabilities.
         stop_btn.pack(side="left", expand=True, fill="x", padx=(2, 5))
         self.add_hover_effect(stop_btn, "#f38ba8", "#eba0ac")
 
+        gesture_controls_frame = tk.Frame(left_column, bg="#1a1d2e")
+        gesture_controls_frame.pack(fill="x", pady=5)
+
+        self.gesture_voice_btn = tk.Button(gesture_controls_frame,
+                                           text="✌️ Gesture Voice",
+                                           bg="#ffd700",
+                                           fg="#0f0f1e",
+                                           font=("Segoe UI", 10, "bold"),
+                                           relief="flat",
+                                           cursor="hand2",
+                                           command=self.toggle_gesture_voice,
+                                           padx=20,
+                                           pady=10)
+        self.gesture_voice_btn.pack(side="left", expand=True, fill="x", padx=5)
+        self.add_hover_effect(self.gesture_voice_btn, "#ffd700", "#ffed4e")
+
         toggle_frame = tk.Frame(left_column, bg="#1a1d2e")
         toggle_frame.pack(fill="x", pady=10)
 
