@@ -1,0 +1,71 @@
+# B.O.I - Advanced AI Desktop Automation Assistant
+# Python 3.10+ Requirements
+# Install with: pip install -r requirements.txt
+
+# Core AI & LLM
+google-genai>=0.3.0
+google-api-python-client>=2.100.0
+
+# Web Framework & Real-time Communication
+Flask>=3.0.0
+Flask-CORS>=4.0.0
+Flask-SocketIO>=5.3.0
+python-socketio>=5.9.0
+python-engineio>=4.7.0
+
+# Desktop Automation & GUI
+PyAutoGUI>=0.9.53
+tkinter  # Usually included with Python
+pygame>=2.5.0
+PyperClip>=1.8.2
+
+# System & Process Management
+psutil>=5.9.0
+watchdog>=3.0.0
+
+# Voice & Audio
+SpeechRecognition>=3.10.0
+pyttsx3>=2.90
+
+# Computer Vision & Image Processing
+opencv-python>=4.8.0
+MediaPipe>=0.10.0
+Pillow>=10.0.0
+numpy>=1.24.0
+scikit-image>=0.22.0
+
+# Data Processing & Analysis
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+statsmodels>=0.14.0
+openpyxl>=3.1.0
+
+# Web Scraping & Automation
+selenium>=4.13.0
+webdriver-manager>=4.0.0
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Utilities & Tools
+python-dotenv>=1.0.0
+cryptography>=41.0.0
+qrcode>=7.4.0
+pyzbar>=0.1.9
+pywhatkit>=5.4
+
+# NLP & Text Processing
+nltk>=3.8.0
+textblob>=0.17.0
+
+# Streaming & Web Services
+streamlit>=1.28.0
+
+# Additional Stack
+sift-stack-py>=0.1.0
+
+# Optional: Package management
+pip-tools>=7.3.0
