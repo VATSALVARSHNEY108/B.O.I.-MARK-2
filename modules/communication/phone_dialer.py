@@ -104,14 +104,13 @@ class PhoneDialer:
         if not phone_number:
             return {"success": False, "message": "❌ No phone number provided"}
 
-        # Format phone number
         phone_number = str(phone_number).strip()
+        clean_number = ''.join(c for c in phone_number if c.isdigit() or c == '+')
         self.last_call = phone_number
 
         print(f"\n  📱 Dialing: {phone_number}")
         print(f"  ⏳ Opening Phone Link app...")
 
-        # First, open Phone Link if not already open
         open_result = self.open_phone_link()
         if not open_result.get("success"):
             print(f"  ⚠️ Warning: {open_result.get('message')}")
@@ -120,10 +119,27 @@ class PhoneDialer:
 
         try:
             import pyautogui
+            
+            screen_width, screen_height = pyautogui.size()
 
-            # Type the phone number in Phone Link
+            print("  🔲 Maximizing Phone Link window...")
+            pyautogui.hotkey('win', 'up')
             time.sleep(1)
-            pyautogui.typewrite(phone_number, interval=0.05)
+            
+            print("  📞 Step 1: Navigating to Calls tab...")
+            calls_tab_x = int(screen_width * 0.08)
+            calls_tab_y = int(screen_height * 0.35)
+            pyautogui.click(calls_tab_x, calls_tab_y)
+            time.sleep(1)
+            
+            print("  🔢 Step 2: Opening dialer keypad...")
+            dialer_x = int(screen_width * 0.15)
+            dialer_y = int(screen_height * 0.92)
+            pyautogui.click(dialer_x, dialer_y)
+            time.sleep(0.5)
+            
+            print(f"  ⌨️ Step 3: Typing number {clean_number}...")
+            pyautogui.typewrite(clean_number.replace('+', ''), interval=0.08)
             time.sleep(0.5)
 
             # Strategy 1: Try visual button detection
@@ -200,10 +216,8 @@ class PhoneDialer:
             except Exception as ocr_error:
                 print(f"ℹ️ OCR detection not available: {ocr_error}")
 
-            # Strategy 3: Click the call button at bottom of screen
-            print("📞 Attempting to click Call button...")
+            print("  📞 Step 4: Clicking Call button...")
 
-            # Check if we have a calibrated position
             calibrated = False
             try:
                 config_path = workspace / "config" / "phone_link_button.json"
@@ -213,60 +227,35 @@ class PhoneDialer:
                     cal_y = config.get("call_button_y")
 
                     if cal_x and cal_y:
-                        print(
-                            f"   Using calibrated position: ({cal_x}, {cal_y})"
-                        )
+                        print(f"   Using calibrated position: ({cal_x}, {cal_y})")
                         pyautogui.click(cal_x, cal_y)
-                        time.sleep(0.5)
+                        time.sleep(0.3)
+                        pyautogui.click(cal_x, cal_y)
                         calibrated = True
-                        print("✅ Clicked at calibrated position!")
+                        print("   ✅ Clicked at calibrated position!")
             except FileNotFoundError:
-                print(
-                    "   No calibration found. Using Phone Link layout positions..."
-                )
+                print("   No calibration found. Using default positions...")
             except Exception as e:
                 print(f"   Calibration error: {e}")
 
-            # If no calibration, try Phone Link's actual button positions
             if not calibrated:
-                # Get screen size
-                screen_width, screen_height = pyautogui.size()
-
-                # Based on Phone Link UI: Call button is at the BOTTOM
-                # Usually at bottom-center or bottom-right of the Phone Link window
-                click_positions = [
-                    # Bottom center-right (most likely for call button)
-                    (int(screen_width * 0.85), int(screen_height * 0.92)
-                     ),  # Bottom right area
-                    (int(screen_width * 0.5),
-                     int(screen_height * 0.95)),  # Bottom center
-                    (int(screen_width * 0.75),
-                     int(screen_height * 0.90)),  # Bottom center-right
-                    (int(screen_width * 0.85),
-                     int(screen_height * 0.85)),  # Right side, lower
-                    (int(screen_width * 0.88),
-                     int(screen_height * 0.70)),  # Dial pad area
+                call_button_positions = [
+                    (int(screen_width * 0.15), int(screen_height * 0.85)),
+                    (int(screen_width * 0.12), int(screen_height * 0.88)),
+                    (int(screen_width * 0.18), int(screen_height * 0.82)),
+                    (int(screen_width * 0.15), int(screen_height * 0.80)),
+                    (int(screen_width * 0.10), int(screen_height * 0.90)),
                 ]
 
-                for i, (x, y) in enumerate(click_positions):
+                for i, (x, y) in enumerate(call_button_positions):
                     print(f"   Trying position {i+1}/5: ({x}, {y})")
                     pyautogui.click(x, y)
-                    time.sleep(0.5)
+                    time.sleep(0.4)
 
-                print("✅ Click commands sent!")
-                print()
-                print(
-                    "   💡 TIP: Run 'python scripts/calibrate_phone_link_button.py'"
-                )
-                print(
-                    "      to find the exact Call button position on your screen!"
-                )
+                print("   ✅ Click commands sent!")
 
-            # Also try keyboard shortcuts as backup
-            print("   Backup: Trying keyboard shortcuts...")
+            print("   Step 5: Pressing Enter as backup...")
             pyautogui.press('enter')
-            time.sleep(0.2)
-            pyautogui.press('space')
             time.sleep(0.2)
 
             # Try Tab navigation as final backup

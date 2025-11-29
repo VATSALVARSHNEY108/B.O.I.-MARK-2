@@ -52,7 +52,7 @@ def find_contact_number(name):
 
 
 def open_phone_link():
-    """Open Windows Phone Link desktop application directly"""
+    """Open Windows Phone Link desktop application directly and maximize it"""
     print("Opening Phone Link app...")
     
     methods = [
@@ -66,6 +66,15 @@ def open_phone_link():
             subprocess.Popen(cmd, shell=use_shell)
             print(f"Phone Link opened via {description}")
             time.sleep(3)
+            
+            try:
+                import pyautogui
+                print("Maximizing and focusing Phone Link window...")
+                pyautogui.hotkey('win', 'up')
+                time.sleep(0.5)
+            except:
+                pass
+            
             return True
         except Exception as e:
             print(f"Method '{description}' failed: {e}")
@@ -103,10 +112,25 @@ def dial_number(phone_number):
     
     print(f"Dialing: {clean_number}")
     
+    screen_width, screen_height = pyautogui.size()
+    
+    print("Step 1: Navigating to Calls tab...")
+    calls_tab_x = int(screen_width * 0.08)
+    calls_tab_y = int(screen_height * 0.35)
+    pyautogui.click(calls_tab_x, calls_tab_y)
     time.sleep(1)
     
-    pyautogui.typewrite(clean_number.replace('+', ''), interval=0.05)
+    print("Step 2: Clicking on dialer/keypad...")
+    dialer_x = int(screen_width * 0.15)
+    dialer_y = int(screen_height * 0.92)
+    pyautogui.click(dialer_x, dialer_y)
     time.sleep(0.5)
+    
+    print("Step 3: Typing phone number...")
+    pyautogui.typewrite(clean_number.replace('+', ''), interval=0.08)
+    time.sleep(0.5)
+    
+    print("Step 4: Clicking Call button...")
     
     calibrated_pos = get_calibrated_button_position()
     
@@ -114,25 +138,24 @@ def dial_number(phone_number):
         x, y = calibrated_pos
         print(f"Using calibrated position: ({x}, {y})")
         pyautogui.click(x, y)
-        time.sleep(0.5)
+        time.sleep(0.3)
+        pyautogui.click(x, y)
     else:
-        screen_width, screen_height = pyautogui.size()
-        
-        click_positions = [
-            (int(screen_width * 0.85), int(screen_height * 0.92)),
-            (int(screen_width * 0.5), int(screen_height * 0.95)),
-            (int(screen_width * 0.75), int(screen_height * 0.90)),
-            (int(screen_width * 0.85), int(screen_height * 0.85)),
+        call_button_positions = [
+            (int(screen_width * 0.15), int(screen_height * 0.85)),
+            (int(screen_width * 0.12), int(screen_height * 0.88)),
+            (int(screen_width * 0.18), int(screen_height * 0.82)),
+            (int(screen_width * 0.15), int(screen_height * 0.80)),
         ]
         
-        for i, (x, y) in enumerate(click_positions):
-            print(f"Trying click position {i+1}: ({x}, {y})")
+        for i, (x, y) in enumerate(call_button_positions):
+            print(f"Trying call button position {i+1}: ({x}, {y})")
             pyautogui.click(x, y)
-            time.sleep(0.3)
+            time.sleep(0.4)
     
+    print("Step 5: Pressing Enter as backup...")
     pyautogui.press('enter')
     time.sleep(0.2)
-    pyautogui.press('space')
     
     print("Call initiated!")
     return True

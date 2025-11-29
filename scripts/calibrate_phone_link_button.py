@@ -19,20 +19,36 @@ print()
 print("=" * 70)
 print()
 
-# Step 1: Open Phone Link with a test number
-print("STEP 1: Opening Phone Link with test number...")
+# Step 1: Open Phone Link
+print("STEP 1: Opening Phone Link desktop app...")
 print()
 
-from modules.communication.phone_dialer import create_phone_dialer
+import subprocess
 
-dialer = create_phone_dialer()
+methods = [
+    (["explorer.exe", "shell:AppsFolder\\Microsoft.YourPhone_8wekyb3d8bbwe!App"], False, "Phone Link app"),
+    (["powershell", "-Command", "Start-Process 'shell:AppsFolder\\Microsoft.YourPhone_8wekyb3d8bbwe!App'"], False, "PowerShell"),
+]
 
-# Open Phone Link with a test number (won't actually call)
-import webbrowser
-webbrowser.open("tel:1234567890")
+opened = False
+for cmd, use_shell, description in methods:
+    try:
+        subprocess.Popen(cmd, shell=use_shell)
+        print(f"Phone Link opened via {description}")
+        opened = True
+        break
+    except Exception as e:
+        print(f"Method '{description}' failed: {e}")
+
+if not opened:
+    print("Please open Phone Link manually!")
 
 print("⏳ Waiting 4 seconds for Phone Link to open...")
 time.sleep(4)
+
+print("Maximizing window...")
+pyautogui.hotkey('win', 'up')
+time.sleep(1)
 
 print()
 print("=" * 70)
