@@ -1,0 +1,70 @@
+
+============================================================
+🚀 DESKTOP SYNC MANAGER - AUTO STARTUP
+============================================================
+
+📊 Startup Sequence Results:
+------------------------------------------------------------
+✅ Setup Desktop Structure: SUCCESS
+   Total folders: 6
+❌ Prepare Batch File: FAILED
+   Batch file 'desktop_file_controller.bat' not found!
+      Current directory: C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6
+      Script directory: C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6\modules\file_management
+      Looking for: C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6\modules\file_management\desktop_file_controller.bat
+      💡 Please download 'desktop_file_controller.bat' from Replit
+         and place it in: C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 6\modules\file_management
+✅ Create Desktop Structure: SUCCESS
+   Total folders: 7
+
+============================================================
+⚠️  Some steps had issues. Check details above.
+============================================================
+
+⚠️ Automation Orchestrator pending implementation
+✅ Batch Utilities initialized
+⚠️ WebSocket Client connection failed: HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /socket.io/?transport=polling&EIO=4&t=1764402678.6434639 (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000027DED0C50C0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+======================================================================
+🎯 BOI (Barely Obeys Instructions) - Gesture-Activated Voice Listener (SMART CAMERA PRIORITY)
+======================================================================
+🔎 Detecting available cameras (brightness test, prioritizing DroidCam 2–4)...
+📱 DroidCam detected via USB connection
+✅ Using DroidCam camera 2 (brightness 142.7)
+🎥 Using camera index: 2
+📹 Opening camera 2...
+⏳ Warming up camera (4s for Android/DroidCam)...
+🔄 Checking frames...
+   Frame 1: Brightness=142.7
+   Frame 2: Brightness=142.7
+   Frame 3: Brightness=142.7
+   Frame 4: Brightness=142.7
+   Frame 5: Brightness=142.7
+   Frame 6: Brightness=142.7
+   Frame 7: Brightness=142.7
+   Frame 8: Brightness=142.7
+   Frame 9: Brightness=142.7
+   Frame 10: Brightness=142.7
+✅ Camera initialization complete!
+
+🎯 Show TWO V signs for BOI greeting
+🎯 Show ONE V sign to start voice listening
+
+
+📋 Task: Chat with the AI chatbot.
+
+📋 Task: Chat with the AI chatbot.
+
+📋 Task: Play kuley kuley on YouTube.
+  🎬 Smart YouTube Player Activated
+  🔍 Query: kuley kuley
+✅ Found Chrome at: C:\Program Files\Google\Chrome\Application\chrome.exe
+
+DevTools listening on ws://127.0.0.1:61407/devtools/browser/755a7267-d67a-41f9-84b8-77f321d1f66d
+✅ Browser initialized successfully
+  🔍 Searching YouTube for: kuley kuley
+[10388:25876:1129/132212.235:ERROR:gpu\command_buffer\service\gles2_cmd_decoder_passthrough.cc:1091] [GroupMarkerNotSet(crbug.com/242999)!:A8E04802845F0000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag to opt in to lower security guarantees for trusted content.
+  🎯 Finding first video...
+  ▶️  Clicking video: Kuley Kuley | Honey 3.0 | Yo Yo Honey Singh & Apac...
+[10388:25876:1129/132219.105:ERROR:gpu\command_buffer\service\gles2_cmd_decoder_passthrough.cc:1091] [GroupMarkerNotSet(crbug.com/242999)!:A8104902845F0000]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader (about:flags#enable-unsafe-swiftshader) flag to opt in to lower security guarantees for trusted content.
+❌ Failed to read from camera
+Gesture voice error: 'ModernBOIGUI' object has no attribute 'gesture_voice_btn'

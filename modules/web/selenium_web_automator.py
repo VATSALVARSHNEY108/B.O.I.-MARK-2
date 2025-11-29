@@ -43,8 +43,39 @@ class SeleniumWebAutomator:
         
         self.execution_log = []
         
+    def _find_brave_executable(self) -> Optional[str]:
+        """Find Brave browser executable path on Windows/Linux/Mac (PRIMARY)"""
+        import platform
+        import os
+        
+        system = platform.system()
+        
+        if system == "Windows":
+            # Common Windows Brave paths
+            brave_paths = [
+                r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe",
+                r"C:\Program Files (x86)\BraveSoftware\Brave-Browser\Application\brave.exe",
+                os.path.expandvars(r"%LOCALAPPDATA%\BraveSoftware\Brave-Browser\Application\brave.exe"),
+                os.path.expandvars(r"%PROGRAMFILES%\BraveSoftware\Brave-Browser\Application\brave.exe"),
+            ]
+        elif system == "Darwin":  # macOS
+            brave_paths = [
+                "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
+            ]
+        else:  # Linux
+            brave_paths = [
+                "/usr/bin/brave-browser",
+                "/usr/bin/brave",
+            ]
+        
+        for path in brave_paths:
+            if os.path.exists(path):
+                return path
+        
+        return None
+    
     def _find_chrome_executable(self) -> Optional[str]:
-        """Find Chrome executable path on Windows/Linux/Mac"""
+        """Find Chrome executable path on Windows/Linux/Mac (FALLBACK)"""
         import platform
         import os
         
@@ -77,22 +108,29 @@ class SeleniumWebAutomator:
         return None
     
     def initialize_browser(self) -> bool:
-        """Initialize Chrome browser with Selenium"""
+        """Initialize Brave browser (primary) or Chrome (fallback) with Selenium"""
         try:
             from selenium.webdriver.chrome.service import Service
             from webdriver_manager.chrome import ChromeDriverManager
             
             chrome_options = Options()
             
-            # Find Chrome executable
-            chrome_path = self._find_chrome_executable()
-            if chrome_path:
-                chrome_options.binary_location = chrome_path
-                print(f"✅ Found Chrome at: {chrome_path}")
+            # Try Brave FIRST
+            browser_path = self._find_brave_executable()
+            browser_name = "Brave"
+            
+            if not browser_path:
+                # Fallback to Chrome
+                browser_path = self._find_chrome_executable()
+                browser_name = "Chrome"
+            
+            if browser_path:
+                chrome_options.binary_location = browser_path
+                print(f"✅ Found {browser_name} at: {browser_path}")
             else:
-                print("⚠️ Chrome executable not found")
-                print("📥 Please install Google Chrome from: https://www.google.com/chrome/")
-                raise FileNotFoundError("Chrome browser not installed. Please install Chrome to use YouTube automation features.")
+                print("⚠️ Neither Brave nor Chrome executable found")
+                print("📥 Please install Brave from: https://brave.com/ or Chrome from: https://www.google.com/chrome/")
+                raise FileNotFoundError("No supported browser found. Please install Brave or Chrome to use YouTube automation features.")
             
             if self.headless:
                 chrome_options.add_argument('--headless=new')
