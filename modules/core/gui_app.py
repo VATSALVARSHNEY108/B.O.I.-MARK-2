@@ -10,7 +10,7 @@ from PIL import Image, ImageTk, ImageDraw
 from modules.core.gemini_controller import parse_command, get_ai_suggestion
 from modules.core.command_executor import CommandExecutor
 from modules.core.vatsal_assistant import create_vatsal_assistant
-from modules.monitoring.advanced_smart_screen_monitor import AIScreenMonitoringSystem
+from modules.monitoring.advanced_smart_screen_monitor import AIScreenMonitoringSystem, create_advanced_smart_screen_monitor
 from modules.monitoring.ai_screen_monitoring_system import create_ai_screen_monitoring_system
 from modules.ai_features.chatbots import SimpleChatbot
 from modules.automation.file_automation import create_file_automation
@@ -1493,13 +1493,13 @@ class ModernBOIGUI:
             bubble_bg = "#007BFF"
             text_fg = "white"
             anchor_pos = "e"
-            padx_val = (200, 20)
+            padx_val = 20
         else:
             # BOI messages: left-aligned, light gray background, bold dark text
             bubble_bg = "#E8E8E8"
             text_fg = "#1a1a1a"
             anchor_pos = "w"
-            padx_val = (20, 200)
+            padx_val = 20
 
         # Message bubble frame
         bubble = tk.Frame(msg_container, bg=bubble_bg, relief="flat", bd=0)
