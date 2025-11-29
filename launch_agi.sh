@@ -28,3 +28,6 @@ case $choice in
         echo "Invalid choice"
         ;;
 esac
+
+# Note: Also supports:
+# python modules/core/gui_app_advanced_agi.py    # B.O.I Advanced AGI
