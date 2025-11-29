@@ -1,8 +1,8 @@
-# V.A.T.S.A.L AGI - Advanced General Intelligence System
+# B.O.I AGI - Advanced General Intelligence System
 
 ## 🧠 What is AGI Mode?
 
-V.A.T.S.A.L now includes an **Advanced General Intelligence (AGI) Engine** that gives the assistant reasoning capabilities beyond simple command execution.
+B.O.I now includes an **Advanced General Intelligence (AGI) Engine** that gives the assistant reasoning capabilities beyond simple command execution.
 
 ## ⭐ Key AGI Features
 
@@ -151,4 +151,4 @@ Possible AGI improvements:
 
 ---
 
-**V.A.T.S.A.L AGI: Where desktop assistance meets artificial intelligence** 🚀
+**B.O.I AGI: Where desktop assistance meets artificial intelligence** 🚀

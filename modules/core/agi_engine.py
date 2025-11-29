@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-V.A.T.S.A.L AGI Engine - Advanced General Intelligence System
+B.O.I AGI Engine - Advanced General Intelligence System
 Provides contextual reasoning, learning, and multi-domain problem solving
 """
 

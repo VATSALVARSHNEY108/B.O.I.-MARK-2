@@ -1,7 +1,7 @@
 #!/bin/bash
-# V.A.T.S.A.L AGI Desktop Assistant Launcher
+# B.O.I AGI Desktop Assistant Launcher
 
-echo "🤖 V.A.T.S.A.L - AGI Desktop Assistant"
+echo "🤖 B.O.I - AGI Desktop Assistant"
 echo "════════════════════════════════════════"
 echo ""
 echo "Choose mode:"

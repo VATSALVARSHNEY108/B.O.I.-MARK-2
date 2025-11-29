@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-V.A.T.S.A.L AGI ENHANCED - Advanced General Intelligence with ChatGPT GUI
+B.O.I AGI ENHANCED - Advanced General Intelligence with ChatGPT GUI
 Full AGI reasoning with visual thinking display and adaptive learning
 """
 
@@ -48,7 +48,7 @@ class AGIEnhancedChatGUI:
 
     def __init__(self, root):
         self.root = root
-        self.root.title("V.A.T.S.A.L - AGI Desktop Assistant (BOI Wake Word Active)")
+        self.root.title("B.O.I - AGI Desktop Assistant (BOI Wake Word Active)")
         self.root.geometry("1800x1050")
         self.root.minsize(1400, 800)
         
@@ -165,7 +165,7 @@ class AGIEnhancedChatGUI:
         
         h_left = tk.Frame(header, bg=self.colors["bg_main"])
         h_left.pack(side="left", padx=24, pady=16)
-        tk.Label(h_left, text="🧠 V.A.T.S.A.L AGI", font=("Segoe UI", 14, "bold"),
+        tk.Label(h_left, text="🧠 B.O.I AGI", font=("Segoe UI", 14, "bold"),
                 bg=self.colors["bg_main"], fg=self.colors["text_main"]).pack(anchor="w")
         tk.Label(h_left, text="Advanced General Intelligence Mode", font=("Segoe UI", 9),
                 bg=self.colors["bg_main"], fg=self.colors["text_light"]).pack(anchor="w")
@@ -362,7 +362,7 @@ class AGIEnhancedChatGUI:
             self.confidence.config(text=f"{min(100, conf)}%")
     
     def show_help(self):
-        help_text = """🧠 V.A.T.S.A.L AGI MODE
+        help_text = """🧠 B.O.I AGI MODE
 
 FEATURES:
   • Advanced Reasoning - Multi-step problem solving
@@ -438,7 +438,7 @@ COMMANDS:
         self.add_system_message("🎤 BOI ACTIVATED - Listening to your command!")
     
     def _show_welcome(self):
-        msg = """🧠 WELCOME TO V.A.T.S.A.L AGI
+        msg = """🧠 WELCOME TO B.O.I AGI
 
 Advanced General Intelligence System
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

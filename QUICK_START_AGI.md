@@ -1,4 +1,4 @@
-# 🚀 Quick Start - V.A.T.S.A.L AGI Mode
+# 🚀 Quick Start - B.O.I AGI Mode
 
 ## Installation Complete! ✅
 

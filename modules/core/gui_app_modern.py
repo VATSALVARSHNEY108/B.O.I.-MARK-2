@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-V.A.T.S.A.L - Modern ChatGPT GUI with BOI Wake Word + Enhanced Console
+B.O.I - Modern ChatGPT GUI with BOI Wake Word + Enhanced Console
 Professional interface with beautiful visual output formatting
 """
 
@@ -49,7 +49,7 @@ class EnhancedChatGUI:
 
     def __init__(self, root):
         self.root = root
-        self.root.title("V.A.T.S.A.L - AI Desktop Assistant (BOI Wake Word Active)")
+        self.root.title("B.O.I - AI Desktop Assistant (BOI Wake Word Active)")
         self.root.geometry("1600x950")
         self.root.minsize(1200, 700)
         
@@ -192,7 +192,7 @@ class EnhancedChatGUI:
         
         h_left = tk.Frame(header, bg=self.colors["bg_main"])
         h_left.pack(side="left", padx=24, pady=16)
-        tk.Label(h_left, text="🤖 V.A.T.S.A.L", font=("Segoe UI", 14, "bold"),
+        tk.Label(h_left, text="🤖 B.O.I", font=("Segoe UI", 14, "bold"),
                 bg=self.colors["bg_main"], fg=self.colors["text_main"]).pack(anchor="w")
         
         h_right = tk.Frame(header, bg=self.colors["bg_main"])
@@ -309,7 +309,7 @@ class EnhancedChatGUI:
         
         fg = "white" if is_user else self.colors["text_main"]
         icon = "👤" if is_user else "🤖"
-        name = "You" if is_user else "V.A.T.S.A.L"
+        name = "You" if is_user else "B.O.I"
         time_str = datetime.now().strftime('%H:%M')
         
         tk.Label(inner, text=f"{icon} {name} • {time_str}", font=("Segoe UI", 8, "bold"),
@@ -566,7 +566,7 @@ class EnhancedChatGUI:
         win.configure(bg=self.colors["bg_main"])
         
         text = """━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📖 V.A.T.S.A.L - BOI ASSISTANT
+📖 B.O.I - BOI ASSISTANT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🎤 VOICE ACTIVATION:
@@ -595,7 +595,7 @@ Say "BOI" → I activate → Speak command
     
     def _show_welcome(self):
         msg = """━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-👋 Welcome to V.A.T.S.A.L
+👋 Welcome to B.O.I
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🎤 Say "BOI" to activate voice
