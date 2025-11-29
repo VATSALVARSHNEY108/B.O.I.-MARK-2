@@ -11,9 +11,8 @@ import time
 import random
 from typing import Callable, Optional
 from datetime import datetime
-from modules.voice.voice_sounds import create_voice_sound_effects
 
-class VoiceCommander:
+class VoiceSounds:
     """Enhanced voice commanding with speech recognition and text-to-speech"""
 
     def __init__(self, command_callback: Optional[Callable] = None):
@@ -799,9 +798,53 @@ class VoiceCommander:
             self.sound_effects.cleanup()
 
 
-def create_voice_commander(command_callback: Optional[Callable] = None) -> VoiceCommander:
-    """Factory function to create a VoiceCommander instance"""
-    return VoiceCommander(command_callback)
+class VoiceSoundEffects:
+    """Sound effects for voice commanding"""
+    
+    def __init__(self):
+        self.enabled = True
+        self.volume = 0.7
+        self.custom_sounds = {}
+    
+    def play_sound(self, sound_type: str):
+        """Play sound effect - silent implementation"""
+        if self.enabled:
+            pass  # Actual sound playing would go here
+    
+    def toggle(self) -> str:
+        self.enabled = not self.enabled
+        return f"Sound effects {'enabled' if self.enabled else 'disabled'}"
+    
+    def enable(self) -> str:
+        self.enabled = True
+        return "Sound effects enabled"
+    
+    def disable(self) -> str:
+        self.enabled = False
+        return "Sound effects disabled"
+    
+    def set_volume(self, volume: float):
+        self.volume = max(0.0, min(1.0, volume))
+    
+    def add_custom_sound(self, sound_name: str, wav_file_path: str) -> str:
+        self.custom_sounds[sound_name] = wav_file_path
+        return f"Custom sound '{sound_name}' added"
+    
+    def list_sounds(self) -> list:
+        return list(self.custom_sounds.keys())
+    
+    def cleanup(self):
+        pass
+
+
+def create_voice_sound_effects() -> VoiceSoundEffects:
+    """Factory function to create voice sound effects"""
+    return VoiceSoundEffects()
+
+
+def create_voice_commander(command_callback: Optional[Callable] = None) -> VoiceSounds:
+    """Factory function to create a VoiceSounds instance"""
+    return VoiceSounds(command_callback)
 
 
 if __name__ == "__main__":

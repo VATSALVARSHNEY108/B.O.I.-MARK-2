@@ -1,0 +1,111 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+(.venv) PS C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 5> python vatsal.py
+🚀 Starting BOI (Barely Obeys Instructions) Desktop Automation...
+============================================================
+2025-11-29 10:49:28.371 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.372 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.974 
+  Warning: to view this Streamlit app on a browser, run it with the following
+  command:
+
+    streamlit run vatsal.py [ARGUMENTS]
+2025-11-29 10:49:28.975 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.975 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.975 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.976 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.976 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.976 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.976 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.976 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.977 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.977 Session state does not function when running a script without `streamlit run`
+2025-11-29 10:49:28.977 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.977 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.977 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.977 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.978 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.978 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.978 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.978 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.978 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+2025-11-29 10:49:28.978 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+pygame 2.6.1 (SDL 2.28.4, Python 3.10.11)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+2025-11-29 10:49:31.359088: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-11-29 10:49:32.293813: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+✅ Window icon loaded from: C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 5\assets\vatsal_icon.png
+📱 Phone Link Monitor initialized
+📱 WhatsApp automation ready
+📧 Email Sender (DEMO MODE - credentials not configured)
+💬 Communication Enhancements initialized
+   ✅ 8 advanced features ready
+🎵 Spotify API mode enabled
+⚙️ Windows 11 Settings Controller: Active
+🧠 Advanced Desktop RAG initialized
+   📊 Indexed files: 0
+   🏷️  Tagged files: 0
+   🔗 File relationships: 0
+🤖 AI Screen Suggester ready!
+📱 Chat Monitor initialized
+   ⚠️  Gmail credentials not configured
+   ⚠️  Twilio credentials not configured
+📱 Visual Chat Monitor initialized
+   ✅ Will control real Gmail/WhatsApp on your screen
+👁️ Smart Screen Monitor initialized
+🔊 Feature Speaker: ACTIVE
+
+======================================================================
+🌟 INITIALIZING FUTURE-TECH CORE 🌟
+======================================================================
+🧠 Loading Multi-Modal AI...
+🧠 Multi-Modal AI System initialized
+📊 Loading Behavioral Learning...
+🔮 Loading Predictive Actions...
+🔮 Predictive Actions Engine initialized
+💾 Loading Enhanced Memory...
+🧠 Enhanced Contextual Memory initialized
+👁️ Loading Screen Monitoring...
+🚀 AI Screen Monitoring System initialized
+   ✨ 8 AI analysis modes available
+   📊 Analytics tracking enabled
+   🧠 Pattern learning active
+✅ Future-Tech Core Initialized!
+======================================================================
+
+🌟 Future-Tech Core: ACTIVE
+⚙️ Command Executor initialized with full automation suite
+   🤖 Persona Service: Active
+   🧠 Desktop RAG: Active
+   💬 Communication Enhancements: Active
+   🎮 GUI Automation: Active
+   📊 40+ Modules Loaded
+✅ Self-Operating Computer initialized
+✅ Comprehensive Desktop Controller initialized
+✅ Command Parser initialized
+🎯 Task Coordinator initialized
+✅ Enhanced Command Executor initialized with self-operating support
+✅ Enhanced Command Executor initialized
+❌ Error initializing modules: name 'create_advanced_smart_screen_monitor' is not defined
+❌ Error: bad screen distance "8 2"
+Traceback (most recent call last):
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 5\vatsal.py", line 45, in main
+    gui_main()
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 5\modules\core\gui_app.py", line 11213, in main
+    app = ModernBOIGUI(root)
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 5\modules\core\gui_app.py", line 106, in __init__
+    self._show_welcome()
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 5\modules\core\gui_app.py", line 1357, in _show_welcome
+    self.update_output("✅ Gemini AI is ready!", "success")
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 5\modules\core\gui_app.py", line 1542, in update_output
+    self.add_chat_message(message, sender="BOI", msg_type=msg_type)
+  File "C:\Users\VATSAL VARSHNEY\PycharmProjects\BOI 5\modules\core\gui_app.py", line 1509, in add_chat_message
+    sender_label = tk.Label(
+  File "C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 3187, in __init__
+    Widget.__init__(self, master, 'label', cnf, kw)
+  File "C:\Users\VATSAL VARSHNEY\AppData\Local\Programs\Python\Python310\lib\tkinter\__init__.py", line 2601, in __init__
+    self.tk.call(
+_tkinter.TclError: bad screen distance "8 2"

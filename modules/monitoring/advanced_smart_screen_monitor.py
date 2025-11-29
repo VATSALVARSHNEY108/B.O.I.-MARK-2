@@ -36,6 +36,11 @@ except ImportError:
     PIL_AVAILABLE = False
 
 
+def create_advanced_smart_screen_monitor(config_path: str = "screen_monitor_config.json"):
+    """Factory function to create AI Screen Monitoring System"""
+    return AIScreenMonitoringSystem(config_path)
+
+
 class AIScreenMonitoringSystem:
     """
     Next-generation AI screen monitoring system with advanced intelligence
