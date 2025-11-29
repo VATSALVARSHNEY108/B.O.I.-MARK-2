@@ -85,18 +85,24 @@ class YouTubeAutomator:
             print(f"  ⏳ Waiting for YouTube to load...")
             time.sleep(5)  # Give YouTube time to load and render
             
-            # Step 4: Click first video using keyboard navigation
-            print(f"  ▶️  Clicking first video...")
+            # Step 4: Click first video using mouse control
+            print(f"  ▶️  Clicking first video with mouse...")
             try:
-                # Tab to first video result
-                pyautogui.press('tab')
+                # YouTube search results - first video is typically around coordinates
+                # Standard position for first video in YouTube search results
+                x, y = 300, 300  # Approximate position of first result
+                
+                print(f"  🖱️  Moving mouse to first video position...")
+                pyautogui.moveTo(x, y, duration=0.5)
                 time.sleep(0.3)
-                # Press Enter to click/open it
-                pyautogui.press('enter')
-                time.sleep(2)
+                
+                print(f"  🖱️  Clicking first video...")
+                pyautogui.click()
+                time.sleep(3)
+                
                 print(f"  ✅ Video opened and playing!")
             except Exception as e:
-                print(f"  ⚠️  Keyboard automation failed: {e}")
+                print(f"  ⚠️  Mouse click failed: {e}")
                 print(f"  ℹ️  Please click the first video manually")
             
             return {
