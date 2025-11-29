@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
-Phone Link Automator - Call Vatsal
-Reads Vatsal's mobile number from contacts.json and dials via Phone Link app
+Phone Link Automator - Call Any Contact
+Reads mobile number from contacts.json and dials via Phone Link app
+Usage: python call_vatsal.py <contact_name>
+Example: python call_vatsal.py vatsal
 """
 
 import os
@@ -29,20 +31,24 @@ def load_contacts():
         return []
 
 
-def find_vatsal_number():
-    """Find Vatsal's mobile number from contacts"""
+def find_contact_number(name):
+    """Find contact's mobile number from contacts by name"""
     contacts = load_contacts()
+    search_name = name.lower().strip()
     
     for contact in contacts:
-        name = contact.get("name", "").lower()
-        if name == "vatsal":
+        contact_name = contact.get("name", "").lower()
+        if contact_name == search_name or search_name in contact_name:
             phone = contact.get("phone", "")
             if phone:
-                print(f"Found Vatsal's number: {phone}")
-                return phone
+                print(f"Found {contact.get('name')}'s number: {phone}")
+                return phone, contact.get('name')
     
-    print("Error: Vatsal's contact not found in contacts.json")
-    return None
+    print(f"Error: Contact '{name}' not found in contacts.json")
+    print("\nAvailable contacts:")
+    for contact in contacts:
+        print(f"  - {contact.get('name')}: {contact.get('phone', 'No number')}")
+    return None, None
 
 
 def open_phone_link():
@@ -132,14 +138,14 @@ def dial_number(phone_number):
     return True
 
 
-def call_vatsal():
-    """Main function to call Vatsal"""
+def call_contact(contact_name):
+    """Main function to call a contact by name"""
     print("=" * 50)
-    print("  PHONE LINK AUTOMATOR - CALL VATSAL")
+    print(f"  PHONE LINK AUTOMATOR - CALL {contact_name.upper()}")
     print("=" * 50)
     print()
     
-    phone_number = find_vatsal_number()
+    phone_number, actual_name = find_contact_number(contact_name)
     if not phone_number:
         return False
     
@@ -153,13 +159,40 @@ def call_vatsal():
     if dial_number(phone_number):
         print()
         print("=" * 50)
-        print(f"  Calling Vatsal at {phone_number}")
+        print(f"  Calling {actual_name} at {phone_number}")
         print("=" * 50)
         return True
     
     return False
 
 
+def show_usage():
+    """Show usage information"""
+    print("=" * 50)
+    print("  PHONE LINK AUTOMATOR")
+    print("=" * 50)
+    print()
+    print("Usage: python call_vatsal.py <contact_name>")
+    print()
+    print("Examples:")
+    print("  python call_vatsal.py vatsal")
+    print("  python call_vatsal.py mata")
+    print("  python call_vatsal.py pita")
+    print()
+    
+    contacts = load_contacts()
+    if contacts:
+        print("Available contacts:")
+        for contact in contacts:
+            print(f"  - {contact.get('name')}: {contact.get('phone', 'No number')}")
+    print()
+
+
 if __name__ == "__main__":
-    success = call_vatsal()
+    if len(sys.argv) < 2:
+        show_usage()
+        sys.exit(1)
+    
+    contact_name = " ".join(sys.argv[1:])
+    success = call_contact(contact_name)
     sys.exit(0 if success else 1)
