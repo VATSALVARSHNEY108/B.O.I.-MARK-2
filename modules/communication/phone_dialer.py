@@ -203,8 +203,8 @@ class PhoneDialer:
 
             print("  📞 Step 2: Clicking Call button...")
             
-            click_x = 1670
-            click_y = 975
+            click_x = 893
+            click_y = 473
             
             print(f"   Clicking at position: ({click_x}, {click_y})")
             pyautogui.click(click_x, click_y)
