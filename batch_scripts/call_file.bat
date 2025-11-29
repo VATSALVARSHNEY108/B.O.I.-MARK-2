@@ -59,7 +59,7 @@ echo.
 REM Run the Python script with contact name
 echo Starting Phone Link automation...
 echo.
-python scripts/call_vatsal.py %CONTACT_NAME%
+python scripts/call_file.py %CONTACT_NAME%
 
 echo.
 echo ----------------------------------------
