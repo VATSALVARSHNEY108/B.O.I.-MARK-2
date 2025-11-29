@@ -328,6 +328,68 @@ class PhoneDialer:
                 "error": str(e)
             }
 
+    def call_contact(self, contact_name: str):
+        """
+        Call a contact by name - looks up number from contacts.json
+        
+        Args:
+            contact_name: Name of the contact to call
+            
+        Returns:
+            dict with success status and details
+        """
+        if not contact_name:
+            return {"success": False, "message": "❌ No contact name provided"}
+        
+        try:
+            contacts_path = workspace / "data" / "contacts.json"
+            with open(contacts_path, 'r', encoding='utf-8') as f:
+                contacts = json.load(f)
+            
+            search_name = contact_name.lower().strip()
+            
+            for contact in contacts:
+                name = contact.get("name", "").lower()
+                if name == search_name or search_name in name:
+                    phone = contact.get("phone", "")
+                    if phone:
+                        print(f"📱 Found {contact.get('name')}'s number: {phone}")
+                        return self.dial_number(phone)
+                    else:
+                        return {
+                            "success": False,
+                            "message": f"❌ Contact '{contact.get('name')}' has no phone number"
+                        }
+            
+            available = [c.get('name') for c in contacts]
+            return {
+                "success": False,
+                "message": f"❌ Contact '{contact_name}' not found. Available: {', '.join(available)}"
+            }
+            
+        except FileNotFoundError:
+            return {
+                "success": False,
+                "message": "❌ Contacts file not found (data/contacts.json)"
+            }
+        except Exception as e:
+            return {
+                "success": False,
+                "message": f"❌ Error looking up contact: {e}"
+            }
+    
+    def dial_with_phone_link(self, phone_number: str):
+        """
+        Dial a phone number using Phone Link (alias for dial_number)
+        
+        Args:
+            phone_number: Phone number to dial
+            
+        Returns:
+            dict with success status and details
+        """
+        return self.dial_number(phone_number)
+    
     def quick_dial(self, name_or_number: str, message: str = None):
         """
         Quick dial a contact by name or phone number.
@@ -340,28 +402,12 @@ class PhoneDialer:
         Returns:
             dict with success status
         """
-        # Check if it's a phone number (digits and common phone chars)
         is_phone = any(c.isdigit() for c in name_or_number)
         
         if is_phone:
-            # It's a phone number, dial directly
             return self.dial_number(name_or_number)
         else:
-            # It's likely a contact name, try to resolve it
-            try:
-                # Try to get contact from contact manager if available
-                from modules.utilities.contact_manager import ContactManager
-                contact_mgr = ContactManager("data/contacts.json")
-                contact = contact_mgr.get_contact(name_or_number)
-                
-                if contact and contact.get("phone"):
-                    return self.dial_number(contact["phone"])
-                else:
-                    # Contact not found, try as direct number
-                    return self.dial_number(name_or_number)
-            except:
-                # If contact lookup fails, just try as direct number
-                return self.dial_number(name_or_number)
+            return self.call_contact(name_or_number)
     
     def hangup(self):
         """Hang up the current call"""
