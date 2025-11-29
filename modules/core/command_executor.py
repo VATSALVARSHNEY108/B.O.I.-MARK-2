@@ -16,7 +16,7 @@ from modules.utilities.contact_manager import ContactManager
 from modules.communication.messaging_service import MessagingService
 from modules.communication.phone_dialer import create_phone_dialer
 from modules.communication.phone_link_monitor import create_phone_link_monitor
-from modules.utilities.youtube_automation import create_youtube_automation
+from modules.utilities.youtube_automation import YouTubeAutomator
 from modules.web.selenium_web_automator import SeleniumWebAutomator
 from modules.communication.whatsapp_automation import create_whatsapp_automation
 from scripts.whatsapp_contact_manager import WhatsAppContactManager
@@ -111,7 +111,7 @@ class CommandExecutor:
         self.comm_enhancements = CommunicationEnhancements()
         
         # Media and Entertainment
-        self.youtube = create_youtube_automation(self.gui)
+        self.youtube = YouTubeAutomator()
         self.selenium_youtube = None
         
         # Spotify - Try API mode first, fallback to desktop mode
