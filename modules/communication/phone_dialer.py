@@ -34,17 +34,18 @@ class PhoneDialer:
         }
 
     def open_phone_link(self):
-        """Open Windows Phone Link application"""
+        """Open Windows Phone Link desktop application directly"""
         try:
-            # Try multiple methods to open Phone Link
-            
-            # Method 1: Use Windows "start" command with app name
-            print("  🔄 Attempting to open Phone Link (Method 1: Start command)...")
+            # Method 1: Use explorer.exe with correct app folder (Microsoft.YourPhone)
+            print("  🔄 Attempting to open Phone Link (Method 1: Explorer)...")
             try:
-                subprocess.Popen(["start", "ms-phone-link://"], shell=True)
+                subprocess.Popen([
+                    "explorer.exe",
+                    "shell:AppsFolder\\Microsoft.YourPhone_8wekyb3d8bbwe!App"
+                ])
                 self.phone_link_active = True
                 time.sleep(2)
-                print("  ✅ Phone Link opened via ms-phone-link protocol")
+                print("  ✅ Phone Link desktop app opened")
                 return {
                     "success": True,
                     "message": "📱 Phone Link opened successfully"
@@ -52,41 +53,10 @@ class PhoneDialer:
             except Exception as e1:
                 print(f"  ⚠️ Method 1 failed: {e1}")
             
-            # Method 2: Use explorer.exe with app folder
-            print("  🔄 Attempting to open Phone Link (Method 2: Explorer app folder)...")
+            # Method 2: Use PowerShell Start-Process
+            print("  🔄 Attempting to open Phone Link (Method 2: PowerShell)...")
             try:
-                subprocess.Popen([
-                    "explorer.exe",
-                    "shell:appsFolder\\MicrosoftCorporationII.WindowsPhoneLink_8wekyb3d8bbwe!App"
-                ])
-                self.phone_link_active = True
-                time.sleep(2)
-                print("  ✅ Phone Link opened via explorer")
-                return {
-                    "success": True,
-                    "message": "📱 Phone Link opened successfully"
-                }
-            except Exception as e2:
-                print(f"  ⚠️ Method 2 failed: {e2}")
-            
-            # Method 3: Use Windows Run dialog
-            print("  🔄 Attempting to open Phone Link (Method 3: Windows Run)...")
-            try:
-                subprocess.Popen(["cmd", "/c", "start phonelink:"], shell=False)
-                self.phone_link_active = True
-                time.sleep(2)
-                print("  ✅ Phone Link opened via phonelink protocol")
-                return {
-                    "success": True,
-                    "message": "📱 Phone Link opened successfully"
-                }
-            except Exception as e3:
-                print(f"  ⚠️ Method 3 failed: {e3}")
-            
-            # Method 4: Direct app launch via PowerShell
-            print("  🔄 Attempting to open Phone Link (Method 4: PowerShell)...")
-            try:
-                ps_cmd = 'Start-Process -FilePath "phonelink://"'
+                ps_cmd = "Start-Process 'shell:AppsFolder\\Microsoft.YourPhone_8wekyb3d8bbwe!App'"
                 subprocess.Popen(["powershell", "-Command", ps_cmd])
                 self.phone_link_active = True
                 time.sleep(2)
@@ -95,8 +65,22 @@ class PhoneDialer:
                     "success": True,
                     "message": "📱 Phone Link opened successfully"
                 }
-            except Exception as e4:
-                print(f"  ⚠️ Method 4 failed: {e4}")
+            except Exception as e2:
+                print(f"  ⚠️ Method 2 failed: {e2}")
+            
+            # Method 3: Use CMD with shell:AppsFolder
+            print("  🔄 Attempting to open Phone Link (Method 3: CMD)...")
+            try:
+                subprocess.Popen(["cmd", "/c", "start shell:AppsFolder\\Microsoft.YourPhone_8wekyb3d8bbwe!App"], shell=False)
+                self.phone_link_active = True
+                time.sleep(2)
+                print("  ✅ Phone Link opened via CMD")
+                return {
+                    "success": True,
+                    "message": "📱 Phone Link opened successfully"
+                }
+            except Exception as e3:
+                print(f"  ⚠️ Method 3 failed: {e3}")
                 
             raise Exception("All Phone Link opening methods failed")
                 

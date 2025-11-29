@@ -52,13 +52,13 @@ def find_contact_number(name):
 
 
 def open_phone_link():
-    """Open Windows Phone Link application"""
+    """Open Windows Phone Link desktop application directly"""
     print("Opening Phone Link app...")
     
     methods = [
-        (["start", "ms-phone-link://"], True, "ms-phone-link protocol"),
-        (["explorer.exe", "shell:appsFolder\\MicrosoftCorporationII.WindowsPhoneLink_8wekyb3d8bbwe!App"], False, "Explorer app folder"),
-        (["cmd", "/c", "start phonelink:"], False, "phonelink protocol"),
+        (["explorer.exe", "shell:AppsFolder\\Microsoft.YourPhone_8wekyb3d8bbwe!App"], False, "Phone Link desktop app"),
+        (["powershell", "-Command", "Start-Process 'shell:AppsFolder\\Microsoft.YourPhone_8wekyb3d8bbwe!App'"], False, "PowerShell"),
+        (["cmd", "/c", "start shell:AppsFolder\\Microsoft.YourPhone_8wekyb3d8bbwe!App"], False, "CMD shell"),
     ]
     
     for cmd, use_shell, description in methods:
