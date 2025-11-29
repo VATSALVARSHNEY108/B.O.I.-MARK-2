@@ -47,30 +47,53 @@ class SeleniumWebAutomator:
         """Find Brave browser executable path on Windows/Linux/Mac (PRIMARY)"""
         import platform
         import os
+        import subprocess
         
         system = platform.system()
         
         if system == "Windows":
-            # Common Windows Brave paths
+            # Try multiple Brave path variants
             brave_paths = [
                 r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe",
                 r"C:\Program Files (x86)\BraveSoftware\Brave-Browser\Application\brave.exe",
                 os.path.expandvars(r"%LOCALAPPDATA%\BraveSoftware\Brave-Browser\Application\brave.exe"),
                 os.path.expandvars(r"%PROGRAMFILES%\BraveSoftware\Brave-Browser\Application\brave.exe"),
+                os.path.expandvars(r"%PROGRAMFILES(X86)%\BraveSoftware\Brave-Browser\Application\brave.exe"),
+                os.path.expandvars(r"%USERPROFILE%\AppData\Local\BraveSoftware\Brave-Browser\Application\brave.exe"),
             ]
+            
+            # Check each path
+            for path in brave_paths:
+                if os.path.exists(path):
+                    return path
+            
+            # Try to find via Windows registry
+            try:
+                import winreg
+                with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\BraveSoftware\Brave-Browser") as key:
+                    install_path = winreg.QueryValueEx(key, "InstallLocation")[0]
+                    exe_path = os.path.join(install_path, "Application", "brave.exe")
+                    if os.path.exists(exe_path):
+                        return exe_path
+            except:
+                pass
+            
         elif system == "Darwin":  # macOS
             brave_paths = [
                 "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
             ]
+            for path in brave_paths:
+                if os.path.exists(path):
+                    return path
+                    
         else:  # Linux
             brave_paths = [
                 "/usr/bin/brave-browser",
                 "/usr/bin/brave",
             ]
-        
-        for path in brave_paths:
-            if os.path.exists(path):
-                return path
+            for path in brave_paths:
+                if os.path.exists(path):
+                    return path
         
         return None
     
@@ -115,18 +138,21 @@ class SeleniumWebAutomator:
             
             chrome_options = Options()
             
-            # Try Brave FIRST
+            # Try Brave FIRST (check if exists and log properly)
             browser_path = self._find_brave_executable()
             browser_name = "Brave"
             
-            if not browser_path:
-                # Fallback to Chrome
+            if browser_path:
+                print(f"🎯 Brave detected, using Brave browser")
+            else:
+                print(f"⚠️ Brave not found, checking for Chrome...")
                 browser_path = self._find_chrome_executable()
                 browser_name = "Chrome"
             
             if browser_path:
                 chrome_options.binary_location = browser_path
-                print(f"✅ Found {browser_name} at: {browser_path}")
+                print(f"✅ Browser: {browser_name}")
+                print(f"   Path: {browser_path}")
             else:
                 print("⚠️ Neither Brave nor Chrome executable found")
                 print("📥 Please install Brave from: https://brave.com/ or Chrome from: https://www.google.com/chrome/")
