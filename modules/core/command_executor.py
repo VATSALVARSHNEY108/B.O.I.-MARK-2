@@ -742,7 +742,6 @@ class CommandExecutor:
 
             elif action == "play_youtube_video":
                 query = parameters.get("query", "")
-                method = parameters.get("method", "auto")
 
                 if not query:
                     return {
@@ -750,39 +749,20 @@ class CommandExecutor:
                         "message": "No search query provided"
                     }
 
-                print(f"  🎬 Smart YouTube Player Activated")
+                print(f"  🎬 YouTube Player Activated")
                 print(f"  🔍 Query: {query}")
 
-                # TRY NON-SELENIUM METHOD FIRST (uses subprocess Popen for Brave directly)
+                # PRIMARY: Try direct browser launch in Brave with automation
                 try:
-                    print(f"  🎯 Attempting Brave browser launch...")
+                    print(f"  🎯 Launching in Brave browser...")
                     result = self.youtube.smart_play_video(query, "auto")
-                    if result.get("success"):
-                        return result
-                    else:
-                        print(f"  ⚠️ Non-Selenium method failed, trying Selenium...")
+                    return result
                 except Exception as e:
-                    print(f"  ⚠️ Non-Selenium method error: {e}")
-
-                # FALLBACK TO SELENIUM IF NEEDED
-                if method == "selenium" or True:  # Try selenium as final fallback
-                    try:
-                        if not self.selenium_youtube:
-                            self.selenium_youtube = SeleniumWebAutomator(headless=False)
-                        
-                        result = self.selenium_youtube.youtube_play_video(query)
-                        return result
-                    except Exception as e:
-                        print(f"  ❌ All methods failed: {e}")
-                        return {
-                            "success": False,
-                            "message": f"Failed to play YouTube video: {str(e)}"
-                        }
-                
-                return {
-                    "success": False,
-                    "message": "Could not play video"
-                }
+                    print(f"  ⚠️ Direct method error: {e}")
+                    return {
+                        "success": False,
+                        "message": f"Error opening YouTube: {str(e)}"
+                    }
 
             elif action == "play_first_result":
                 wait_time = parameters.get("wait_time", 3)

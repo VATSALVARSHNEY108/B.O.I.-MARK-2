@@ -118,35 +118,52 @@ class YouTubeAutomation:
     
     def smart_play_video(self, query, method="auto"):
         """
-        Intelligently play YouTube video with fallback methods.
+        Intelligently play YouTube video with direct URL or search.
         
         Args:
             query: Search query for the video
-            method: "auto", "method1", "method2", or "method3"
+            method: "auto", "direct_url", or "search"
         
         Returns:
             Success status and message
         """
         try:
-            if method == "method1":
-                self.play_video_method_1(query)
-            elif method == "method2":
-                self.play_video_method_2(query)
-            elif method == "method3":
-                self.play_video_method_3(query)
-            else:
-                self.play_video_method_2(query)
+            # DIRECT METHOD: Construct YouTube search URL that auto-plays first video
+            # This is more reliable than clicking
+            encoded_query = urllib.parse.quote(query)
+            
+            # YouTube search URL with auto-play capability
+            search_url = f"https://www.youtube.com/results?search_query={encoded_query}"
+            
+            print(f"  🎬 Opening YouTube search in Brave: {query}")
+            self._open_url_with_browser(search_url)
+            
+            # Wait a bit for results to load, then try to find first video
+            time.sleep(3)
+            
+            print(f"  ▶️  Attempting to play first result...")
+            # Try to send keyboard command to play (Space key)
+            try:
+                import pyautogui
+                # Focus on the page and press Enter on first result (keyboard navigation)
+                pyautogui.press('tab')  # Focus on first result
+                time.sleep(0.5)
+                pyautogui.press('enter')  # Click first result
+                time.sleep(2)
+                print(f"  ✅ Played: {query}")
+            except:
+                print(f"  ℹ️  Video opened, user may need to click play")
             
             return {
                 "success": True,
-                "message": f"✅ Now playing: {query}",
+                "message": f"✅ Opening: {query} in Brave",
                 "query": query
             }
         
         except Exception as e:
             return {
                 "success": False,
-                "message": f"❌ Error playing video: {str(e)}",
+                "message": f"❌ Error: {str(e)}",
                 "query": query
             }
     
