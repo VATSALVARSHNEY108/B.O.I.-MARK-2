@@ -36,22 +36,75 @@ class PhoneDialer:
     def open_phone_link(self):
         """Open Windows Phone Link application"""
         try:
-            # Try to open Phone Link via Windows app
-            subprocess.Popen([
-                "explorer.exe",
-                "shell:appsFolder\\MicrosoftCorporationII.WindowsPhoneLink_8wekyb3d8bbwe!App"
-            ])
-            self.phone_link_active = True
-            time.sleep(2)
-            return {
-                "success": True,
-                "message": "📱 Phone Link opened successfully"
-            }
+            # Try multiple methods to open Phone Link
+            
+            # Method 1: Use Windows "start" command with app name
+            print("  🔄 Attempting to open Phone Link (Method 1: Start command)...")
+            try:
+                subprocess.Popen(["start", "ms-phone-link://"], shell=True)
+                self.phone_link_active = True
+                time.sleep(2)
+                print("  ✅ Phone Link opened via ms-phone-link protocol")
+                return {
+                    "success": True,
+                    "message": "📱 Phone Link opened successfully"
+                }
+            except Exception as e1:
+                print(f"  ⚠️ Method 1 failed: {e1}")
+            
+            # Method 2: Use explorer.exe with app folder
+            print("  🔄 Attempting to open Phone Link (Method 2: Explorer app folder)...")
+            try:
+                subprocess.Popen([
+                    "explorer.exe",
+                    "shell:appsFolder\\MicrosoftCorporationII.WindowsPhoneLink_8wekyb3d8bbwe!App"
+                ])
+                self.phone_link_active = True
+                time.sleep(2)
+                print("  ✅ Phone Link opened via explorer")
+                return {
+                    "success": True,
+                    "message": "📱 Phone Link opened successfully"
+                }
+            except Exception as e2:
+                print(f"  ⚠️ Method 2 failed: {e2}")
+            
+            # Method 3: Use Windows Run dialog
+            print("  🔄 Attempting to open Phone Link (Method 3: Windows Run)...")
+            try:
+                subprocess.Popen(["cmd", "/c", "start phonelink:"], shell=False)
+                self.phone_link_active = True
+                time.sleep(2)
+                print("  ✅ Phone Link opened via phonelink protocol")
+                return {
+                    "success": True,
+                    "message": "📱 Phone Link opened successfully"
+                }
+            except Exception as e3:
+                print(f"  ⚠️ Method 3 failed: {e3}")
+            
+            # Method 4: Direct app launch via PowerShell
+            print("  🔄 Attempting to open Phone Link (Method 4: PowerShell)...")
+            try:
+                ps_cmd = 'Start-Process -FilePath "phonelink://"'
+                subprocess.Popen(["powershell", "-Command", ps_cmd])
+                self.phone_link_active = True
+                time.sleep(2)
+                print("  ✅ Phone Link opened via PowerShell")
+                return {
+                    "success": True,
+                    "message": "📱 Phone Link opened successfully"
+                }
+            except Exception as e4:
+                print(f"  ⚠️ Method 4 failed: {e4}")
+                
+            raise Exception("All Phone Link opening methods failed")
+                
         except Exception as e:
-            print(f"⚠️ Failed to open Phone Link: {e}")
+            print(f"  ❌ Failed to open Phone Link: {e}")
             return {
                 "success": False,
-                "message": f"Failed to open Phone Link: {e}"
+                "message": f"Failed to open Phone Link. Please open it manually. Error: {e}"
             }
 
     def dial_number(self, phone_number: str):
@@ -71,11 +124,15 @@ class PhoneDialer:
         phone_number = str(phone_number).strip()
         self.last_call = phone_number
 
-        print(f"📱 Dialing: {phone_number}")
+        print(f"\n  📱 Dialing: {phone_number}")
+        print(f"  ⏳ Opening Phone Link app...")
 
         # First, open Phone Link if not already open
-        if not self.phone_link_active:
-            self.open_phone_link()
+        open_result = self.open_phone_link()
+        if not open_result.get("success"):
+            print(f"  ⚠️ Warning: {open_result.get('message')}")
+        
+        self.phone_link_active = True
 
         try:
             import pyautogui
