@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 BOI AI Desktop Automation Controller - CLI Launcher
-======================================================
 
 This is the main entry point for running BOI AI in command-line mode.
 Perfect for cloud environments like Replit where GUI display is not available.

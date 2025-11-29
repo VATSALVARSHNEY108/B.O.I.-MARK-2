@@ -1,6 +1,5 @@
 """
 🎬 Automation Recording & Macro System
-======================================
 Record, replay, and manage desktop automation macros for BOI.
 
 Features:
