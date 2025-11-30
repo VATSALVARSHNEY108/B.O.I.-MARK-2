@@ -1,246 +1,171 @@
-count']} steps)")
+import tkinter as tk
+from tkinter import ttk, messagebox
+import threading
+import os
+from datetime import datetime
+from dotenv import load_dotenv
 
-        def run_saved_workflow():
-            selection = saved_list.curselection()
-            if not selection:
-                return
+from modules.core.command_executor import CommandExecutor
+from modules.core.gemini_controller import parse_command
+from modules.voice.feature_speaker import create_feature_speaker
 
-            workflows = self.nl_workflow_builder.list_templates()
-            workflow = workflows[selection[0]]
-            command = f"run workflow: {workflow['name']}"
-            self.workflow_log(f"Executing workflow: {workflow['name']}", "INFO")
-            self.command_input.delete(0, tk.END)
-            self.command_input.insert(0, command)
-            self.execute_command()
+load_dotenv()
 
-        refresh_btn = tk.Button(saved_frame,
-                                text="🔄 Refresh List",
-                                bg="#3d4466",
-                                fg="#e0e0e0",
-                                font=("Segoe UI", 9),
-                                relief="flat",
-                                cursor="hand2",
-                                command=refresh_saved_list,
-                                pady=6)
-        refresh_btn.pack(side="left", fill="x", expand=True, padx=(10, 5), pady=(0, 10))
 
-        run_btn = tk.Button(saved_frame,
-                            text="▶️ Run Selected",
-                            bg="#00ff88",
-                            fg="#0f0f1e",
-                            font=("Segoe UI", 9, "bold"),
-                            relief="flat",
-                            cursor="hand2",
-                            command=run_saved_workflow,
-                            pady=6)
-        run_btn.pack(side="right", fill="x", expand=True, padx=(5, 10), pady=(0, 10))
+class ModernBOIGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("V.A.T.S.A.L - AI Desktop Assistant")
+        self.root.geometry("630x900")
+        self.root.configure(bg="#F5F1E8")
 
-        log_frame = tk.Frame(builder_window, bg="#252941")
-        log_frame.pack(fill="x", padx=20, pady=(0, 15))
+        # Colors
+        self.BG_PRIMARY = "#F5F1E8"
+        self.BG_SECONDARY = "#FAF8F3"
+        self.TEXT_PRIMARY = "#1a1a1a"
+        self.ACTIVE_GREEN = "#007B55"
+        self.CHAT_BG = "#ffffff"
 
-        log_label = tk.Label(log_frame,
-                             text="📊 Activity Log",
-                             bg="#252941",
-                             fg="#f9e2af",
-                             font=("Segoe UI", 9, "bold"))
-        log_label.pack(anchor="w", padx=10, pady=(10, 5))
+        # State
+        self.processing = False
+        self.chat_messages = []
 
-        self.workflow_output_text = tk.Text(log_frame,
-                                            bg="#16182a",
-                                            fg="#e0e0e0",
-                                            font=("Consolas", 9),
-                                            height=6,
-                                            state='disabled',
-                                            relief="flat",
-                                            padx=10,
-                                            pady=10)
-        self.workflow_output_text.pack(fill="x", padx=10, pady=(0, 10))
+        # Initialize modules
+        self.executor = CommandExecutor()
+        self.speaker = create_feature_speaker() if os.getenv("GEMINI_API_KEY") else None
 
-        self.workflow_output_text.tag_config("timestamp", foreground="#6c7086")
-        self.workflow_output_text.tag_config("info", foreground="#89b4fa")
-        self.workflow_output_text.tag_config("success", foreground="#a6e3a1")
-        self.workflow_output_text.tag_config("error", foreground="#f38ba8")
-        self.workflow_output_text.tag_config("warning", foreground="#f9e2af")
+        # Build GUI
+        self._create_gui()
+        self._show_welcome()
 
-        refresh_saved_list()
-        self.workflow_log("Workflow Builder ready!", "SUCCESS")
+    def _create_gui(self):
+        """Create main GUI"""
+        main = tk.Frame(self.root, bg=self.BG_PRIMARY)
+        main.pack(fill="both", expand=True, padx=8, pady=8)
 
-    # Phone Link & Contact Management Methods
+        # Header
+        header = tk.Frame(main, bg=self.BG_SECONDARY)
+        header.pack(fill="x", padx=10, pady=(0, 10))
+        tk.Label(header, text="💬 BOI Chat", font=("Segoe UI", 14, "bold"), bg=self.BG_SECONDARY, fg=self.TEXT_PRIMARY).pack(side="left", padx=10, pady=8)
 
-    def make_phone_call(self):
-        """Make a phone call using Phone Link"""
-        name = self.phone_name_input.get().strip()
-        number = self.phone_number_input.get().strip()
+        # Input section
+        input_frame = tk.Frame(main, bg=self.BG_SECONDARY, relief="solid", bd=1)
+        input_frame.pack(fill="x", padx=5, pady=(0, 8))
 
-        if not name and not number:
-            messagebox.showwarning("Input Required", "Please enter a contact name or phone number")
+        input_row = tk.Frame(input_frame, bg=self.BG_SECONDARY)
+        input_row.pack(fill="x", padx=10, pady=10)
+
+        self.input_field = tk.Entry(input_row, font=("Segoe UI", 10), bg="white", fg=self.TEXT_PRIMARY, relief="solid", bd=1)
+        self.input_field.pack(side="left", fill="both", expand=True)
+        self.input_field.bind("<Return>", lambda e: self.execute_command())
+
+        btn_frame = tk.Frame(input_frame, bg=self.BG_SECONDARY)
+        btn_frame.pack(fill="x", padx=10, pady=(0, 10))
+
+        tk.Button(btn_frame, text="Send", command=self.execute_command, bg=self.ACTIVE_GREEN, fg="white", font=("Segoe UI", 10, "bold"), padx=15, pady=5).pack(side="left", padx=(0, 5))
+        tk.Button(btn_frame, text="Clear Chat", command=self.clear_chat, bg="#E74C3C", fg="white", font=("Segoe UI", 10, "bold"), padx=15, pady=5).pack(side="left")
+
+        # Chat area
+        chat_frame = tk.Frame(main, bg=self.CHAT_BG, relief="solid", bd=1)
+        chat_frame.pack(fill="both", expand=True, padx=5)
+
+        self.chat_canvas = tk.Canvas(chat_frame, bg=self.CHAT_BG, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(chat_frame, orient="vertical", command=self.chat_canvas.yview)
+        self.chat_scrollable = tk.Frame(self.chat_canvas, bg=self.CHAT_BG)
+
+        self.chat_scrollable.bind("<Configure>", lambda e: self.chat_canvas.configure(scrollregion=self.chat_canvas.bbox("all")))
+        self.chat_canvas.create_window((0, 0), window=self.chat_scrollable, anchor="nw")
+        self.chat_canvas.configure(yscrollcommand=scrollbar.set)
+
+        self.chat_canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        self.chat_canvas.bind_all("<MouseWheel>", lambda e: self.chat_canvas.yview_scroll(int(-1 * (e.delta / 120)), "units"))
+
+    def add_message(self, text, sender="BOI"):
+        """Add message to chat with clear distinction"""
+        row = tk.Frame(self.chat_scrollable, bg=self.CHAT_BG)
+        row.pack(fill="x", padx=5, pady=5)
+
+        if sender == "USER":
+            # User message - RIGHT side, BLUE
+            spacer = tk.Frame(row, bg=self.CHAT_BG)
+            spacer.pack(side="left", fill="x", expand=True)
+
+            bubble = tk.Frame(row, bg="#2196F3", relief="flat", bd=0)
+            bubble.pack(side="right", padx=(0, 5))
+
+            label = tk.Label(bubble, text="👤 YOU", bg="#2196F3", fg="white", font=("Segoe UI", 8, "bold"), padx=8, pady=3)
+            label.pack(anchor="w")
+
+            msg = tk.Label(bubble, text=text, bg="#2196F3", fg="white", font=("Segoe UI", 10, "bold"), justify="left", wraplength=250, padx=8, pady=6)
+            msg.pack(anchor="w", fill="x")
+        else:
+            # BOI message - LEFT side, GREEN
+            bubble = tk.Frame(row, bg="#4CAF50", relief="flat", bd=0)
+            bubble.pack(side="left", padx=(5, 0))
+
+            label = tk.Label(bubble, text="🤖 BOI", bg="#4CAF50", fg="white", font=("Segoe UI", 8, "bold"), padx=8, pady=3)
+            label.pack(anchor="w")
+
+            msg = tk.Label(bubble, text=text, bg="#4CAF50", fg="white", font=("Segoe UI", 10, "bold"), justify="left", wraplength=250, padx=8, pady=6)
+            msg.pack(anchor="w", fill="x")
+
+            spacer = tk.Frame(row, bg=self.CHAT_BG)
+            spacer.pack(side="left", fill="x", expand=True)
+
+        self.chat_messages.append(row)
+        self.root.after(50, lambda: self.chat_canvas.yview_moveto(1.0))
+
+    def clear_chat(self):
+        """Clear all chat messages"""
+        for msg in self.chat_messages:
+            msg.destroy()
+        self.chat_messages.clear()
+        self.add_message("✨ Chat cleared", sender="BOI")
+
+    def execute_command(self):
+        """Execute user command"""
+        cmd = self.input_field.get().strip()
+        if not cmd:
             return
 
+        if self.processing:
+            messagebox.showwarning("Busy", "Processing current command...")
+            return
+
+        self.input_field.delete(0, "end")
+        self.add_message(cmd, sender="USER")
+
+        self.processing = True
+        thread = threading.Thread(target=self._execute_thread, args=(cmd,))
+        thread.daemon = True
+        thread.start()
+
+    def _execute_thread(self, cmd):
+        """Execute in thread"""
         try:
-            if name:
-                # Call by name
-                result = self.phone_dialer.call_contact(name)
-            else:
-                # Call by number
-                result = self.phone_dialer.dial_with_phone_link(number)
-
-            # Show result
-            if result['success']:
-                message = result['message']
-                self.phone_history_text.insert("1.0", f"✅ {message}\n")
-                self.phone_name_input.delete(0, tk.END)
-                self.phone_number_input.delete(0, tk.END)
-                messagebox.showinfo("Call Initiated", message)
-            else:
-                message = result['message']
-                self.phone_history_text.insert("1.0", f"❌ {message}\n")
-                messagebox.showerror("Call Failed", message)
+            parsed = parse_command(cmd)
+            result = self.executor.execute(parsed)
+            response = result.get("message", "Command executed")
+            self.add_message(response, sender="BOI")
         except Exception as e:
-            messagebox.showerror("Error", f"Failed to make call: {str(e)}")
+            self.add_message(f"Error: {str(e)}", sender="BOI")
+        finally:
+            self.processing = False
 
-    def refresh_contacts(self):
-        """Refresh the contacts list"""
-        self.contacts_listbox.delete(0, tk.END)
-
-        try:
-            contacts = self.contact_manager.list_contacts()
-            for contact in sorted(contacts, key=lambda x: x['name']):
-                display = f"{contact['name']}: {contact.get('phone', 'No phone')}"
-                self.contacts_listbox.insert(tk.END, display)
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to load contacts: {str(e)}")
-
-    def search_contacts(self):
-        """Search and filter contacts"""
-        query = self.contact_search_input.get().strip()
-        self.contacts_listbox.delete(0, tk.END)
-
-        try:
-            if query:
-                contacts = self.contact_manager.search_contacts(query)
-            else:
-                contacts = self.contact_manager.list_contacts()
-
-            for contact in sorted(contacts, key=lambda x: x['name']):
-                display = f"{contact['name']}: {contact.get('phone', 'No phone')}"
-                self.contacts_listbox.insert(tk.END, display)
-        except Exception as e:
-            pass
-
-    def call_selected_contact(self, event):
-        """Call the selected contact (double-click handler)"""
-        selection = self.contacts_listbox.curselection()
-        if not selection:
-            return
-
-        selected_text = self.contacts_listbox.get(selection[0])
-        contact_name = selected_text.split(':')[0].strip()
-
-        try:
-            result = self.phone_dialer.call_contact(contact_name)
-
-            if result['success']:
-                message = result['message']
-                self.phone_history_text.insert("1.0", f"✅ {message}\n")
-                messagebox.showinfo("Call Initiated", message)
-            else:
-                message = result['message']
-                self.phone_history_text.insert("1.0", f"❌ {message}\n")
-                messagebox.showerror("Call Failed", message)
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to call contact: {str(e)}")
-
-    def add_contact(self):
-        """Add a new contact"""
-        from tkinter import simpledialog
-
-        name = simpledialog.askstring("Add Contact", "Enter contact name:")
-        if not name:
-            return
-
-        phone = simpledialog.askstring("Add Contact", "Enter phone number\n(with country code, e.g., +1234567890):")
-        if not phone:
-            return
-
-        email = simpledialog.askstring("Add Contact", "Enter email (optional):", initialvalue="")
-
-        try:
-            if self.contact_manager.add_contact(name, phone, email or None):
-                messagebox.showinfo("Success", f"Contact '{name}' added successfully!")
-                self.refresh_contacts()
-            else:
-                messagebox.showerror("Error", "Failed to add contact")
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to add contact: {str(e)}")
-
-    def edit_contact(self):
-        """Edit the selected contact"""
-        from tkinter import simpledialog
-
-        selection = self.contacts_listbox.curselection()
-        if not selection:
-            messagebox.showwarning("No Selection", "Please select a contact to edit")
-            return
-
-        selected_text = self.contacts_listbox.get(selection[0])
-        contact_name = selected_text.split(':')[0].strip()
-
-        contact = self.contact_manager.get_contact(contact_name)
-        if not contact:
-            messagebox.showerror("Error", "Contact not found")
-            return
-
-        phone = simpledialog.askstring("Edit Contact",
-                                       f"Enter new phone number for '{contact['name']}':",
-                                       initialvalue=contact.get('phone', ''))
-        if phone is None:
-            return
-
-        email = simpledialog.askstring("Edit Contact",
-                                       f"Enter new email for '{contact['name']}':",
-                                       initialvalue=contact.get('email', ''))
-
-        try:
-            if self.contact_manager.update_contact(contact_name, phone=phone or None, email=email or None):
-                messagebox.showinfo("Success", f"Contact '{contact['name']}' updated!")
-                self.refresh_contacts()
-            else:
-                messagebox.showerror("Error", "Failed to update contact")
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to update contact: {str(e)}")
-
-    def delete_contact(self):
-        """Delete the selected contact"""
-        selection = self.contacts_listbox.curselection()
-        if not selection:
-            messagebox.showwarning("No Selection", "Please select a contact to delete")
-            return
-
-        selected_text = self.contacts_listbox.get(selection[0])
-        contact_name = selected_text.split(':')[0].strip()
-
-        if not messagebox.askyesno("Confirm Delete", f"Delete contact '{contact_name}'?"):
-            return
-
-        try:
-            if self.contact_manager.delete_contact(contact_name):
-                messagebox.showinfo("Success", f"Contact '{contact_name}' deleted!")
-                self.refresh_contacts()
-            else:
-                messagebox.showerror("Error", "Failed to delete contact")
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to delete contact: {str(e)}")
-
-    def run(self):
-        """Start the GUI"""
-        self.root.mainloop()
+    def _show_welcome(self):
+        """Show welcome message"""
+        if os.getenv("GEMINI_API_KEY"):
+            self.add_message("✅ BOI Ready! Type commands to get started.", sender="BOI")
+        else:
+            self.add_message("⚠️ GEMINI_API_KEY not set!", sender="BOI")
 
 
 def main():
-    """Main entry point"""
     root = tk.Tk()
     app = ModernBOIGUI(root)
-    app.run()
+    root.mainloop()
 
 
 if __name__ == "__main__":
