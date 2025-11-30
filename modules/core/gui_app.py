@@ -5,7 +5,7 @@ import os
 import sys
 from datetime import datetime
 from dotenv import load_dotenv
-from PIL import Imag   e, ImageTk, ImageDraw
+from PIL import Image, ImageTk, ImageDraw
 
 from modules.core.gemini_controller import parse_command, get_ai_suggestion
 from modules.core.command_executor import CommandExecutor
@@ -62,7 +62,7 @@ class ModernBOIGUI:
 
     def __init__(self, root):
         self.root = root
-        self.root.title("V.A.T.S.A.L - AI Desktop Assistant")
+        self.root.title("B.O.I. - no your friend")
 
         # Initialize theme colors (exact match to web GUI CSS)
         self.BG_PRIMARY = "#F5F1E8"  # var(--bg-primary)
@@ -807,7 +807,7 @@ class ModernBOIGUI:
 
         tk.Label(
             title_text,
-            text="V.A.T.S.A.L.",
+            text="B.O.I.",
             font=("Segoe UI", 18, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
@@ -815,7 +815,7 @@ class ModernBOIGUI:
 
         tk.Label(
             title_text,
-            text="Vastly Advanced Technological System Above Limitations",
+            text="Barely Obey Instructions",
             font=("Segoe UI", 9, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_SECONDARY
