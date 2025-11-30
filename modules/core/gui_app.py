@@ -5,7 +5,7 @@ import os
 import sys
 from datetime import datetime
 from dotenv import load_dotenv
-from PIL import Image, ImageTk, ImageDraw
+from PIL import Imag   e, ImageTk, ImageDraw
 
 from modules.core.gemini_controller import parse_command, get_ai_suggestion
 from modules.core.command_executor import CommandExecutor
@@ -21,7 +21,7 @@ from modules.automation.comprehensive_desktop_controller import ComprehensiveDes
 from modules.ai_features.vision_ai import VirtualLanguageModel
 from modules.automation.gui_automation import GUIAutomation
 from modules.web.selenium_web_automator import SeleniumWebAutomator
-from modules.automation.boi_desktop_automator import BOIAutomator
+from modules.automation.vatsal_desktop_automator import BOIAutomator
 from modules.automation.self_operating_computer import SelfOperatingComputer
 from modules.automation.self_operating_integrations import SelfOperatingIntegrationHub, SmartTaskRouter
 from modules.integration.command_executor_integration import EnhancedCommandExecutor, CommandInterceptor

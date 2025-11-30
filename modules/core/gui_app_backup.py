@@ -35,7 +35,7 @@ from modules.utilities.weather_news_service import WeatherNewsService
 from modules.communication.translation_service import TranslationService
 from modules.productivity.smart_break_suggester import SmartBreakSuggester
 from modules.web.selenium_web_automator import SeleniumWebAutomator
-from modules.automation.boi_desktop_automator import BOIAutomator
+from modules.automation.vatsal_desktop_automator import BOIAutomator
 from modules.automation.self_operating_computer import SelfOperatingComputer
 from modules.automation.self_operating_integrations import SelfOperatingIntegrationHub, SmartTaskRouter
 from modules.integration.command_executor_integration import EnhancedCommandExecutor, CommandInterceptor
