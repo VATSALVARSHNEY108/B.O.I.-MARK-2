@@ -11176,12 +11176,12 @@ keyboard, and screen access:
             if self.contact_manager.delete_contact(contact_name):
                 messagebox.showinfo("Success", f"Contact '{contact_name}' deleted!")
                 self.refresh_contacts()
-                  messagebox.showerror("Error", "Failed to delete contact")
+            else:
+                messagebox.showerror("Error", "Failed to delete contact")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to delete contact: {str(e)}")
 
-    def       else:
-    run(self):
+    def run(self):
         """Start the GUI"""
         self.root.mainloop()
 
