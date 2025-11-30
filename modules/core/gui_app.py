@@ -79,7 +79,7 @@ class ModernBOIGUI:
 
         # Configure root window
         self.root.configure(bg=self.BG_PRIMARY)
-        self.root.geometry("1200x900")
+        self.root.geometry("630x900")
 
         # Set window icon
         self._set_window_icon()
@@ -363,7 +363,7 @@ class ModernBOIGUI:
         """Create the main GUI layout"""
         # Main container with padding
         main_container = tk.Frame(self.root, bg=self.BG_PRIMARY)
-        main_container.pack(fill="both", expand=True, padx=20, pady=20)
+        main_container.pack(fill="both", expand=True, padx=8, pady=8)
 
         # Header section
         self._create_header(main_container)
@@ -390,42 +390,42 @@ class ModernBOIGUI:
         """Create command input section for tab"""
         # Modern clean section with beautiful shadow
         section_shadow, section = self.create_shadowed_frame(parent)
-        section_shadow.pack(fill="x", pady=(15, 20), padx=15)
+        section_shadow.pack(fill="x", pady=(8, 10), padx=8)
 
         # Section header
         header = tk.Frame(section, bg=self.BG_SECONDARY)
-        header.pack(fill="x", padx=30, pady=(20, 15))
+        header.pack(fill="x", padx=15, pady=(10, 8))
 
         tk.Label(
             header,
             text="💬",
-            font=("Segoe UI", 18),
+            font=("Segoe UI", 12),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
-        ).pack(side="left", padx=(0, 12))
+        ).pack(side="left", padx=(0, 8))
 
         tk.Label(
             header,
             text="Command Input",
-            font=("Segoe UI", 16, "bold"),
+            font=("Segoe UI", 11, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left")
 
         # Input area with better layout
         input_area = tk.Frame(section, bg=self.BG_SECONDARY)
-        input_area.pack(fill="x", padx=30, pady=(0, 25))
+        input_area.pack(fill="x", padx=15, pady=(0, 12))
 
         # Input row
         input_row = tk.Frame(input_area, bg=self.BG_SECONDARY)
-        input_row.pack(fill="x", pady=(0, 15))
+        input_row.pack(fill="x", pady=(0, 8))
 
         # Command input with better styling
         self.command_input = tk.Entry(
             input_row,
             bg="white",
             fg=self.TEXT_PRIMARY,
-            font=("Segoe UI", 12, "bold"),
+            font=("Segoe UI", 10, "bold"),
             insertbackground=self.TEXT_PRIMARY,
             relief="solid",
             borderwidth=1,
@@ -433,7 +433,7 @@ class ModernBOIGUI:
             highlightcolor=self.ACTIVE_GREEN,
             highlightthickness=1
         )
-        self.command_input.pack(side="left", fill="both", expand=True, ipady=12)
+        self.command_input.pack(side="left", fill="both", expand=True, ipady=8)
         self.command_input.bind("<Return>", lambda e: self.execute_command())
 
         # Buttons row - separated for better organization
@@ -443,21 +443,21 @@ class ModernBOIGUI:
         # Execute button - larger and more prominent with shadow
         execute_shadow, self.execute_btn = self.create_shadowed_button(
             buttons_row,
-            text="▶  Execute",
+            text="▶ Exec",
             command=self.execute_command,
             bg_color=self.ACTIVE_GREEN,
             fg_color="white",
-            font=("Segoe UI", 13, "bold"),
-            padx=40,
-            pady=12
+            font=("Segoe UI", 10, "bold"),
+            padx=20,
+            pady=8
         )
-        execute_shadow.pack(side="left", padx=(0, 15))
+        execute_shadow.pack(side="left", padx=(0, 8))
 
         # Icon buttons with labels - more intuitive with shadows
         icon_buttons = [
-            ("👂", "Wake Word", self.toggle_wakeup_listener),
-            ("✌️", "V-Sign", self.toggle_v_sign_detector),
-            ("🗣️", "Speaking", self.toggle_speaking)
+            ("👂", "Wake", self.toggle_wakeup_listener),
+            ("✌️", "Sign", self.toggle_v_sign_detector),
+            ("🗣️", "Speak", self.toggle_speaking)
         ]
 
         for icon, label, command in icon_buttons:
@@ -466,11 +466,11 @@ class ModernBOIGUI:
                 buttons_row,
                 text=f"{icon}\n{label}",
                 command=command,
-                font=("Segoe UI", 11, "bold"),
-                padx=18,
-                pady=8
+                font=("Segoe UI", 8, "bold"),
+                padx=10,
+                pady=5
             )
-            btn_shadow.pack(side="left", padx=5)
+            btn_shadow.pack(side="left", padx=2)
 
             # Store button references
             if icon == "👂":
@@ -484,31 +484,31 @@ class ModernBOIGUI:
         """Create ChatGPT-like chat interface"""
         # Main container
         section_shadow, section = self.create_shadowed_frame(parent)
-        section_shadow.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+        section_shadow.pack(fill="both", expand=True, padx=5, pady=(0, 5))
 
         # Header with title
         header = tk.Frame(section, bg=self.BG_SECONDARY)
-        header.pack(fill="x", padx=20, pady=(15, 10))
+        header.pack(fill="x", padx=12, pady=(8, 6))
 
         tk.Label(
             header,
             text="💬",
-            font=("Segoe UI", 18),
+            font=("Segoe UI", 12),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
-        ).pack(side="left", padx=(0, 12))
+        ).pack(side="left", padx=(0, 8))
 
         tk.Label(
             header,
-            text="BOI Chat Interface",
-            font=("Segoe UI", 16, "bold"),
+            text="BOI Chat",
+            font=("Segoe UI", 11, "bold"),
             bg=self.BG_SECONDARY,
             fg=self.TEXT_PRIMARY
         ).pack(side="left")
 
         # Chat area frame
         chat_frame = tk.Frame(section, bg="#f7f7f7", relief="solid", borderwidth=1)
-        chat_frame.pack(fill="both", expand=True, padx=20, pady=(10, 15))
+        chat_frame.pack(fill="both", expand=True, padx=12, pady=(8, 10))
 
         # Canvas with scrollbar for chat messages (ChatGPT-style)
         self.chat_canvas = tk.Canvas(chat_frame, bg="#f7f7f7", highlightthickness=0, relief="flat", borderwidth=0)
@@ -1491,7 +1491,7 @@ class ModernBOIGUI:
             header_text = tk.Label(bubble, text="👤 YOU", bg="#2196F3", fg="white", font=("Segoe UI", 9, "bold"), padx=10, pady=4)
             header_text.pack(anchor="w")
 
-            msg_text = tk.Label(bubble, text=message, bg="#2196F3", fg="white", font=("Segoe UI", 11, "bold"), justify="left", wraplength=350, padx=10, pady=8)
+            msg_text = tk.Label(bubble, text=message, bg="#2196F3", fg="white", font=("Segoe UI", 10, "bold"), justify="left", wraplength=280, padx=8, pady=6)
             msg_text.pack(anchor="w", fill="x")
         else:
             # BOI REPLY - Left side, light green (#4CAF50)
@@ -1501,7 +1501,7 @@ class ModernBOIGUI:
             header_text = tk.Label(bubble, text="🤖 BOI", bg="#4CAF50", fg="white", font=("Segoe UI", 9, "bold"), padx=10, pady=4)
             header_text.pack(anchor="w")
 
-            msg_text = tk.Label(bubble, text=message, bg="#4CAF50", fg="white", font=("Segoe UI", 11, "bold"), justify="left", wraplength=350, padx=10, pady=8)
+            msg_text = tk.Label(bubble, text=message, bg="#4CAF50", fg="white", font=("Segoe UI", 10, "bold"), justify="left", wraplength=280, padx=8, pady=6)
             msg_text.pack(anchor="w", fill="x")
 
             spacer_right = tk.Frame(row, bg="#ffffff")
