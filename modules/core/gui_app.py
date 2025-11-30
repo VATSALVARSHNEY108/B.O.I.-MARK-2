@@ -1481,24 +1481,24 @@ class ModernBOIGUI:
         is_user = (sender.strip().upper() == "USER")
 
         if is_user:
-            # USER PROMPT - Blue background, left-aligned
-            bubble = tk.Frame(row, bg="#2196F3", relief="flat", bd=0)
-            bubble.pack(fill="x", padx=0)
+            # USER PROMPT - Blue background with italic text, distinct styling
+            bubble = tk.Frame(row, bg="#1E88E5", relief="solid", bd=2)
+            bubble.pack(fill="x", padx=2, pady=2)
 
-            header_text = tk.Label(bubble, text="👤 USER", bg="#2196F3", fg="white", font=("Segoe UI", 9, "bold"), padx=10, pady=4)
+            header_text = tk.Label(bubble, text="👤 USER", bg="#1E88E5", fg="#FFFFFF", font=("Segoe UI", 10, "bold"), padx=12, pady=5)
             header_text.pack(anchor="w")
 
-            msg_text = tk.Label(bubble, text=message, bg="#2196F3", fg="white", font=("Segoe UI", 11, "bold"), justify="left", wraplength=300, padx=10, pady=8)
+            msg_text = tk.Label(bubble, text=message, bg="#1E88E5", fg="#FFFFFF", font=("Segoe UI", 10, "italic"), justify="left", wraplength=280, padx=12, pady=6)
             msg_text.pack(anchor="w", fill="x")
         else:
-            # BOI REPLY - Green background, left-aligned
-            bubble = tk.Frame(row, bg="#4CAF50", relief="flat", bd=0)
-            bubble.pack(fill="x", padx=0)
+            # BOI REPLY - Green background with regular text, different style
+            bubble = tk.Frame(row, bg="#43A047", relief="solid", bd=2)
+            bubble.pack(fill="x", padx=2, pady=2)
 
-            header_text = tk.Label(bubble, text="🤖 BOI", bg="#4CAF50", fg="white", font=("Segoe UI", 9, "bold"), padx=10, pady=4)
+            header_text = tk.Label(bubble, text="🤖 BOI", bg="#43A047", fg="#FFFFFF", font=("Segoe UI", 10, "bold"), padx=12, pady=5)
             header_text.pack(anchor="w")
 
-            msg_text = tk.Label(bubble, text=message, bg="#4CAF50", fg="white", font=("Segoe UI", 11, "bold"), justify="left", wraplength=300, padx=10, pady=8)
+            msg_text = tk.Label(bubble, text=message, bg="#43A047", fg="#E8F5E9", font=("Segoe UI", 10), justify="left", wraplength=280, padx=12, pady=6)
             msg_text.pack(anchor="w", fill="x")
 
         self.chat_messages.append((row, message))
