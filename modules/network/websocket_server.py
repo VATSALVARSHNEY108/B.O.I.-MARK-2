@@ -15,7 +15,7 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'vatsal-secret-key-2024')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'boi-secret-key-2024')
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
 
 connected_clients = 0

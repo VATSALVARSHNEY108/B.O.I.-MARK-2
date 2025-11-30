@@ -9,8 +9,8 @@ from pathlib import Path
 # Define the organized folder structure
 FOLDER_STRUCTURE = {
     "core": [
-        "vatsal_ai.py",
-        "vatsal_assistant.py",
+        "boi_ai.py",
+        "boi_assistant.py",
         "main.py",
         "gui_app.py",
         "command_executor.py",
@@ -148,7 +148,7 @@ FOLDER_STRUCTURE = {
     "integration": [
         "command_executor_integration.py",
         "desktop_controller_integration.py",
-        "vatsal_enhanced_modules.py",
+        "boi_enhanced_modules.py",
         "cloud_ecosystem.py",
         "ecosystem_manager.py",
         "human_interaction.py",
@@ -175,8 +175,8 @@ FOLDER_STRUCTURE = {
 
 # Files to keep in root
 ROOT_FILES = [
-    "vatsal_desktop_automator.py",
-    "vatsal_chatbot.py",
+    "boi_desktop_automator.py",
+    "boi_chatbot.py",
     "simple_chatbot.py",
     "vnc_web_viewer.py",
     "start_gui_with_vnc.sh",

@@ -21,7 +21,7 @@ class MemorySystem:
     """Persistent memory with learning capabilities"""
     
     def __init__(self):
-        self.memory_dir = Path.home() / ".vatsal" / "memory"
+        self.memory_dir = Path.home() / ".boi" / "memory"
         self.memory_dir.mkdir(parents=True, exist_ok=True)
         self.short_term = {}
         self.long_term = {}

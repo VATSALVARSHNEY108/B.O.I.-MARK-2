@@ -12,7 +12,7 @@ class UserProfileManager:
     Remembers user name, preferences, and custom settings
     """
     
-    def __init__(self, profile_path: str = "config/vatsal_user_profile.json"):
+    def __init__(self, profile_path: str = "config/boi_user_profile.json"):
         self.profile_path = Path(profile_path)
         self.profile_path.parent.mkdir(parents=True, exist_ok=True)
         self.profile = self._load_profile()

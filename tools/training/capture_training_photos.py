@@ -12,7 +12,7 @@ from datetime import datetime
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 
-def capture_training_photos(person_name: str = "vatsal", num_photos: int = 20):
+def capture_training_photos(person_name: str = "boi", num_photos: int = 20):
     """
     Capture training photos from camera with live preview
     
@@ -144,7 +144,7 @@ def capture_training_photos(person_name: str = "vatsal", num_photos: int = 20):
         print(f"📂 Saved to: {save_folder}")
         print()
         print("✅ Next Steps:")
-        print("  1. Run: python train_vatsal_face.py")
+        print("  1. Run: python train_boi_face.py")
         print("  2. Then test: python test_face_recognition.py")
     else:
         print("❌ No photos captured")
@@ -153,7 +153,7 @@ def capture_training_photos(person_name: str = "vatsal", num_photos: int = 20):
 
 if __name__ == "__main__":
     # Get person name from command line or use default
-    person_name = sys.argv[1] if len(sys.argv) > 1 else "vatsal"
+    person_name = sys.argv[1] if len(sys.argv) > 1 else "boi"
     num_photos = int(sys.argv[2]) if len(sys.argv) > 2 else 20
     
     capture_training_photos(person_name, num_photos)

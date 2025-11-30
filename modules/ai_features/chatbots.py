@@ -83,7 +83,7 @@ Your creator is Vatsal Varshney, a talented AI/ML Engineer and software develope
 - Name: Vatsal Varshney
 - Role: AI/ML Engineer, Full-Stack Developer, Automation Expert
 - GitHub: https://github.com/BOIVARSHNEY108
-- LinkedIn: https://www.linkedin.com/in/vatsal-varshney108/
+- LinkedIn: https://www.linkedin.com/in/boi-varshney108/
 - Expertise: Artificial Intelligence, Machine Learning, Desktop Automation, Python Development, Computer Vision, Natural Language Processing
 - Notable Work: BOI (Barely Obeys Instructions) Desktop Automation Controller (100+ AI features), Advanced RAG systems, Smart automation tools
 

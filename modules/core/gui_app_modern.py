@@ -34,9 +34,9 @@ except:
     CommandExecutor = None
 
 try:
-    from modules.core.vatsal_assistant import create_vatsal_assistant
+    from modules.core.boi_assistant import create_boi_assistant
 except:
-    create_vatsal_assistant = None
+    create_boi_assistant = None
 
 try:
     from modules.voice.voice_commander import VoiceCommander
@@ -95,7 +95,7 @@ class EnhancedChatGUI:
         self.root.configure(bg=self.colors["bg_main"])
         
         self.executor = None
-        self.vatsal = None
+        self.boi = None
         self.voice_commander = None
         self.processing = False
         self.voice_active = False
@@ -106,7 +106,7 @@ class EnhancedChatGUI:
         self.voice_mode = True
         self.conversation_id = f"conv_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         
-        self.config_dir = Path.home() / ".vatsal"
+        self.config_dir = Path.home() / ".boi"
         self.config_dir.mkdir(exist_ok=True)
         
         self._load_config()
@@ -149,8 +149,8 @@ class EnhancedChatGUI:
         except:
             pass
         try:
-            if create_vatsal_assistant:
-                self.vatsal = create_vatsal_assistant()
+            if create_boi_assistant:
+                self.boi = create_boi_assistant()
         except:
             pass
         try:
@@ -516,8 +516,8 @@ class EnhancedChatGUI:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"""
                 return formatted
             
-            if self.vatsal:
-                return f"✅ {self.vatsal.acknowledge_command(text)}"
+            if self.boi:
+                return f"✅ {self.boi.acknowledge_command(text)}"
             
             return f"✅ Command queued: {text}"
         

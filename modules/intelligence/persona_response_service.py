@@ -5,14 +5,14 @@ Transforms cold technical responses into warm, engaging, conversational interact
 
 import random
 from datetime import datetime
-from modules.core.vatsal_assistant import BOIAssistant
+from modules.core.boi_assistant import BOIAssistant
 
 
 class PersonaResponseService:
     """Service that adds personality and empathy to all AI responses"""
 
     def __init__(self):
-        self.vatsal = BOIAssistant()
+        self.boi = BOIAssistant()
         self.user_mood = "neutral"
         self.consecutive_errors = 0
         self.last_interaction_time = None
@@ -274,7 +274,7 @@ class PersonaResponseService:
 
     def get_greeting(self, include_small_talk: bool = True) -> str:
         """Generate warm, personalized greeting"""
-        greeting = self.vatsal.get_greeting()
+        greeting = self.boi.get_greeting()
 
         if include_small_talk:
             hour = datetime.now().hour

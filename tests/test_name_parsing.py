@@ -18,7 +18,7 @@ print()
 
 # Test cases
 test_cases = [
-    "Call vatsal",
+    "Call boi",
     "Call Mom",
     "Call John Smith",
     "Dial my dad",
@@ -49,7 +49,7 @@ print("✅ PARSING TEST COMPLETE")
 print("=" * 70)
 print()
 print("Key fixes:")
-print("  ✅ 'vatsal' is NOT mangled to 'vsal'")
+print("  ✅ 'boi' is NOT mangled to 'vsal'")
 print("  ✅ Names with 'at', 'on', etc. are preserved")
 print("  ✅ Word boundary matching prevents substring removal")
 print()

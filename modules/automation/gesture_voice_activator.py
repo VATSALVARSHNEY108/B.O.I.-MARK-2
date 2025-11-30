@@ -160,7 +160,7 @@ class GestureVoiceActivator:
             thread = threading.Thread(target=self.listen_audio, daemon=True)
             thread.start()
 
-    def trigger_vatsal_greeting(self):
+    def trigger_boi_greeting(self):
         """Display greeting when both hands are detected"""
         print("\n" + "=" * 70)
         print("👋 BOI DETECTED! Both hands showing V sign!")
@@ -270,7 +270,7 @@ class GestureVoiceActivator:
                     cv2.putText(frame, "BOI DETECTED!", (50, 100),
                                 cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 3)
                     if self.greeting_cooldown == 0:
-                        self.trigger_vatsal_greeting()
+                        self.trigger_boi_greeting()
 
                 elif v_sign_count == 1:
                     cv2.putText(frame, "One V Sign Detected", (50, 100),

@@ -128,9 +128,9 @@ class MediaPipeGestureRecognizer:
                 if gesture.score >= self.min_confidence:
                     # Map MediaPipe gesture to BOI gesture
                     mediapipe_name = gesture.category_name
-                    vatsal_name = self.gesture_mapping.get(mediapipe_name, mediapipe_name)
+                    boi_name = self.gesture_mapping.get(mediapipe_name, mediapipe_name)
                     
-                    return vatsal_name, gesture.score
+                    return boi_name, gesture.score
             
             # 2. If no MediaPipe gesture, try custom gesture detection
             if result.hand_landmarks and len(result.hand_landmarks) > 0:

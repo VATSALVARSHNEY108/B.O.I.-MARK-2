@@ -74,12 +74,12 @@ def main():
     print("  To test with actual voice commands:")
     print("  1. Uncomment the code below")
     print("  2. Run this script")
-    print("  3. Say a wake word like 'bhai' or 'vatsal'")
+    print("  3. Say a wake word like 'bhai' or 'boi'")
     print("  4. Listen for the sound effects as you speak")
     
     # Uncomment to test with actual voice recognition:
     # print("\n  Starting voice listening...")
-    # print("  Say: 'bhai hello' or 'vatsal test'")
+    # print("  Say: 'bhai hello' or 'boi test'")
     # commander.start_continuous_listening()
     # try:
     #     time.sleep(30)  # Listen for 30 seconds

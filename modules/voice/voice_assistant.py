@@ -20,7 +20,7 @@ class VoiceAssistant:
         self.is_speaking = False
         self.speaking_lock = threading.Lock()
         # Simple and easy wake words for quick activation
-        self.wake_words = ["vatsal", "hey vatsal", "ok vatsal", "watson", "hey watson", "ok watson", "hello", "open", "search", "oye", "bhai", "bhaiya", "bhaisahb"]
+        self.wake_words = ["boi", "hey boi", "ok boi", "watson", "hey watson", "ok watson", "hello", "open", "search", "oye", "bhai", "bhaiya", "bhaisahb"]
         # Action verbs that should be kept in the command
         self.action_wake_words = ["open", "search"]
         

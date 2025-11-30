@@ -163,7 +163,7 @@ def main():
         print()
         print("=" * 70)
         print("✅ All gestures are now ready to use!")
-        print("Run 'streamlit run vatsal.py' to test them")
+        print("Run 'streamlit run boi.py' to test them")
         print("=" * 70)
         print()
     else:

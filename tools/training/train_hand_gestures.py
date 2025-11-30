@@ -158,7 +158,7 @@ def main():
     print("=" * 70)
     print()
     print("Next steps:")
-    print("  1. Run 'python vatsal.py' to test your trained gestures")
+    print("  1. Run 'python boi.py' to test your trained gestures")
     print("  2. The detector will automatically load your trained model")
     print("  3. Show your custom gestures to the camera to test them!")
     print()

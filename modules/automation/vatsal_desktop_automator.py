@@ -32,7 +32,7 @@ except Exception:
     pyautogui = None
 
 try:
-    from vatsal_enhanced_modules import (ScreenMonitor, AdvancedFileManager,
+    from boi_enhanced_modules import (ScreenMonitor, AdvancedFileManager,
                                          SystemController, WindowController,
                                          ClipboardManager, AutomationWorkflows)
     ENHANCED_MODULES_AVAILABLE = True
@@ -656,7 +656,7 @@ def main():
         sys.exit(1)
 
     try:
-        vatsal = BOIAutomator()
+        boi = BOIAutomator()
         print("\n✅ BOI ready\n")
     except Exception as e:
         print(f"\n❌ Error: {e}")
@@ -673,7 +673,7 @@ def main():
                 print("\n👋 Goodbye")
                 break
 
-            result = vatsal.execute_command(command)
+            result = boi.execute_command(command)
             print(f"\n{result}")
 
         except KeyboardInterrupt:

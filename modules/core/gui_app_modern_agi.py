@@ -88,7 +88,7 @@ class AGIEnhancedChatGUI:
         self.command_history = []
         self.history_index = -1
         
-        self.config_dir = Path.home() / ".vatsal"
+        self.config_dir = Path.home() / ".boi"
         self.config_dir.mkdir(exist_ok=True)
         
         self._init_modules()

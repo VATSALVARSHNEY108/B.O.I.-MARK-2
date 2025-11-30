@@ -21,7 +21,7 @@ def main():
     print("This will train the system to recognize YOUR face!")
     print()
     print("📂 Training Data Location:")
-    print("  biometric_data/faces/vatsal/training/")
+    print("  biometric_data/faces/boi/training/")
     print()
     print("📸 Your Photos:")
     print("  ✅ 7 photos copied from attached_assets/")
@@ -53,14 +53,14 @@ def main():
         print("=" * 70)
         print("\n✅ Next Steps:")
         print("  1. Run: python test_face_recognition.py")
-        print("  2. Or use in main app: streamlit run vatsal.py")
+        print("  2. Or use in main app: streamlit run boi.py")
         print()
         print("The system is now personalized for you! 🚀")
         
     else:
         print(f"\n❌ Training failed: {result['message']}")
         print("\n💡 Make sure photos are in:")
-        print("  biometric_data/faces/vatsal/training/")
+        print("  biometric_data/faces/boi/training/")
 
 
 if __name__ == "__main__":

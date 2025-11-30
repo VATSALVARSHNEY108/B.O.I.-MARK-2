@@ -35,7 +35,7 @@ class OpenCVHandGestureDetector:
         self.hand_detected = False
         self.last_gesture_time = 0
         self.gesture_cooldown = 2
-        self.vatsal_greeting_cooldown = 0
+        self.boi_greeting_cooldown = 0
         
         # Callbacks
         self.on_gesture_detected_callback = None
@@ -43,7 +43,7 @@ class OpenCVHandGestureDetector:
         # Statistics
         self.stats = {
             'gestures_detected': 0,
-            'vatsal_detected': 0,
+            'boi_detected': 0,
             'open_palm_detected': 0,
             'fist_detected': 0,
             'thumbs_up_detected': 0,
@@ -200,8 +200,8 @@ class OpenCVHandGestureDetector:
                 peace_sign_count = sum(1 for g in gestures if g['gesture'] == "PEACE_SIGN")
                 
                 # Check for BOI greeting (two peace signs simultaneously)
-                if peace_sign_count >= 2 and self.vatsal_greeting_cooldown == 0:
-                    self._greet_vatsal()
+                if peace_sign_count >= 2 and self.boi_greeting_cooldown == 0:
+                    self._greet_boi()
                     for gesture_info in gestures:
                         if gesture_info['contour'] is not None:
                             cv2.drawContours(frame, [gesture_info['contour']], 0, (0, 255, 0), 3)
@@ -302,8 +302,8 @@ class OpenCVHandGestureDetector:
                     self.hand_detected = False
                 
                 # Decrement cooldown
-                if self.vatsal_greeting_cooldown > 0:
-                    self.vatsal_greeting_cooldown -= 1
+                if self.boi_greeting_cooldown > 0:
+                    self.boi_greeting_cooldown -= 1
                 
                 # Display status
                 hand_status = "Hand: Detected" if self.hand_detected else "Hand: Not Detected"
@@ -555,7 +555,7 @@ class OpenCVHandGestureDetector:
             print(f"❌ Gesture detection error: {str(e)}")
             return "NONE", None
     
-    def _greet_vatsal(self):
+    def _greet_boi(self):
         """Greet BOI when two peace signs are detected"""
         print("\n" + "=" * 70)
         print("👋 BOI DETECTED! Two peace signs shown!")
@@ -596,8 +596,8 @@ class OpenCVHandGestureDetector:
             
             self.voice_commander.speak(greeting)
         
-        self.stats['vatsal_detected'] += 1
-        self.vatsal_greeting_cooldown = 100
+        self.stats['boi_detected'] += 1
+        self.boi_greeting_cooldown = 100
     
     def _handle_listening_gesture(self):
         """Handle the listening activation gesture"""

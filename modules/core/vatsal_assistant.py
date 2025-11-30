@@ -73,7 +73,7 @@ Your creator is Vatsal Varshney, a talented AI/ML Engineer and software develope
 - Name: Vatsal Varshney
 - Role: AI/ML Engineer, Full-Stack Developer, Automation Specialist
 - GitHub: https://github.com/BOIVARSHNEY108
-- LinkedIn: https://www.linkedin.com/in/vatsal-varshney108/
+- LinkedIn: https://www.linkedin.com/in/boi-varshney108/
 - Expertise: Artificial Intelligence, Machine Learning, Desktop Automation, Python Development, Full-Stack Web Development
 - Notable Projects: BOI AI Desktop Automation Controller (this project), various AI/ML solutions
 
@@ -328,7 +328,7 @@ Be brief and helpful."""
         except:
             return None
     
-    def save_preferences(self, filepath="vatsal_memory.json"):
+    def save_preferences(self, filepath="boi_memory.json"):
         """Save conversation history and preferences"""
         data = {
             'conversation_history': self.conversation_history,
@@ -342,7 +342,7 @@ Be brief and helpful."""
         except Exception as e:
             print(f"Could not save memory: {e}")
     
-    def load_preferences(self, filepath="vatsal_memory.json"):
+    def load_preferences(self, filepath="boi_memory.json"):
         """Load conversation history and preferences"""
         try:
             if os.path.exists(filepath):
@@ -355,6 +355,6 @@ Be brief and helpful."""
             print(f"Could not load memory: {e}")
 
 
-def create_vatsal_assistant():
+def create_boi_assistant():
     """Factory function to create BOI assistant"""
     return BOIAssistant()

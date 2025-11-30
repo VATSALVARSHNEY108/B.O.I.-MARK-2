@@ -124,7 +124,7 @@ class MobileAuth:
     
     def generate_api_key(self, name, description=''):
         """Generate API key"""
-        api_key = f"vatsal_{secrets.token_urlsafe(32)}"
+        api_key = f"boi_{secrets.token_urlsafe(32)}"
         
         self.api_keys[api_key] = {
             'name': name,

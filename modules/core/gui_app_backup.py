@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 from modules.core.gemini_controller import parse_command, get_ai_suggestion
 from modules.core.command_executor import CommandExecutor
-from modules.core.vatsal_assistant import create_vatsal_assistant
+from modules.core.boi_assistant import create_boi_assistant
 from modules.monitoring.advanced_smart_screen_monitor import create_advanced_smart_screen_monitor
 from modules.monitoring.ai_screen_monitoring_system import create_ai_screen_monitoring_system
 from modules.ai_features.chatbots import SimpleChatbot
@@ -35,7 +35,7 @@ from modules.utilities.weather_news_service import WeatherNewsService
 from modules.communication.translation_service import TranslationService
 from modules.productivity.smart_break_suggester import SmartBreakSuggester
 from modules.web.selenium_web_automator import SeleniumWebAutomator
-from modules.automation.vatsal_desktop_automator import BOIAutomator
+from modules.automation.boi_desktop_automator import BOIAutomator
 from modules.automation.self_operating_computer import SelfOperatingComputer
 from modules.automation.self_operating_integrations import SelfOperatingIntegrationHub, SmartTaskRouter
 from modules.integration.command_executor_integration import EnhancedCommandExecutor, CommandInterceptor
@@ -132,7 +132,7 @@ class AutomationControllerGUI:
             self.command_interceptor = None
             print(f"⚠️ Using base executor (enhanced integration unavailable): {e}")
 
-        self.vatsal = create_vatsal_assistant()
+        self.boi = create_boi_assistant()
         self.advanced_monitor = create_advanced_smart_screen_monitor()
         self.ai_monitor = create_ai_screen_monitoring_system()
         self.file_automation = create_file_automation()
@@ -182,9 +182,9 @@ class AutomationControllerGUI:
             print(f"Virtual Language Model initialization failed: {e}")
 
         try:
-            self.vatsal_automator = BOIAutomator()
+            self.boi_automator = BOIAutomator()
         except Exception as e:
-            self.vatsal_automator = None
+            self.boi_automator = None
             print(f"BOI Automator initialization failed: {e}")
 
         try:
@@ -207,11 +207,11 @@ class AutomationControllerGUI:
             self.task_router = None
             print(f"Integration Hub initialization failed: {e}")
 
-        self.vatsal_mode = True
+        self.boi_mode = True
         self.self_operating_mode = True
         self.processing = False
         self.hover_colors = {}
-        self.vatsal_conversation_active = False
+        self.boi_conversation_active = False
         self.active_chatbot = "simple"
 
         # Initialize WebSocket client for real-time updates
@@ -309,7 +309,7 @@ class AutomationControllerGUI:
             self.web_integration = None
             print(f"⚠️ Web GUI Integration unavailable: {e}")
 
-        self.show_vatsal_greeting()
+        self.show_boi_greeting()
 
     def setup_ui(self):
         style = ttk.Style()
@@ -399,7 +399,7 @@ class AutomationControllerGUI:
         separator2 = tk.Label(stats_frame, text="•", bg=self.BG_CARD, fg=self.TEXT_PRIMARY, font=("Arial", 10))
         separator2.pack(side="left", padx=5)
 
-        self.vatsal_toggle_btn = tk.Button(stats_frame,
+        self.boi_toggle_btn = tk.Button(stats_frame,
                                            text="• BOI: ON",
                                            bg=self.BG_SECONDARY,
                                            fg=self.SUCCESS_COLOR,
@@ -407,12 +407,12 @@ class AutomationControllerGUI:
                                            relief="solid",
                                            borderwidth=2,
                                            cursor="hand2",
-                                           command=self.toggle_vatsal_mode,
+                                           command=self.toggle_boi_mode,
                                            padx=15,
                                            pady=5,
                                            highlightbackground=self.BORDER_PRIMARY,
                                            highlightthickness=2)
-        self.vatsal_toggle_btn.pack(side="left", padx=5)
+        self.boi_toggle_btn.pack(side="left", padx=5)
 
         separator3 = tk.Label(stats_frame, text="•", bg=self.BG_CARD, fg=self.TEXT_PRIMARY, font=("Arial", 10))
         separator3.pack(side="left", padx=5)
@@ -907,7 +907,7 @@ class AutomationControllerGUI:
                         font=("Segoe UI", 9, "italic"))
         info.pack(pady=(0, 12))
 
-        self.vatsal_conversation_display = scrolledtext.ScrolledText(
+        self.boi_conversation_display = scrolledtext.ScrolledText(
             tab,
             bg=self.BG_BASE,
             fg=self.TEXT_TERTIARY,
@@ -919,11 +919,11 @@ class AutomationControllerGUI:
             padx=10,
             pady=10
         )
-        self.vatsal_conversation_display.pack(fill="both", expand=False, padx=10, pady=(10, 5))
+        self.boi_conversation_display.pack(fill="both", expand=False, padx=10, pady=(10, 5))
 
-        self.vatsal_conversation_display.tag_config("vatsal", foreground="#89b4fa", font=("Consolas", 10, "bold"))
-        self.vatsal_conversation_display.tag_config("user", foreground="#a6e3a1", font=("Consolas", 10, "bold"))
-        self.vatsal_conversation_display.tag_config("timestamp", foreground="#6c7086", font=("Consolas", 8))
+        self.boi_conversation_display.tag_config("boi", foreground="#89b4fa", font=("Consolas", 10, "bold"))
+        self.boi_conversation_display.tag_config("user", foreground="#a6e3a1", font=("Consolas", 10, "bold"))
+        self.boi_conversation_display.tag_config("timestamp", foreground="#6c7086", font=("Consolas", 8))
 
         input_frame = tk.Frame(tab, bg=self.BG_SECONDARY)
         input_frame.pack(fill="x", padx=10, pady=5)
@@ -938,15 +938,15 @@ class AutomationControllerGUI:
         input_box_frame = tk.Frame(input_frame, bg=self.BG_SECONDARY)
         input_box_frame.pack(fill="x", padx=5, pady=(0, 5))
 
-        self.vatsal_input = tk.Entry(input_box_frame,
+        self.boi_input = tk.Entry(input_box_frame,
                                      bg=self.BG_TERTIARY,
                                      fg=self.TEXT_PRIMARY,
                                      font=("Segoe UI", 12),
                                      relief="solid",
                                      bd=2,
                                      insertbackground="#89b4fa")
-        self.vatsal_input.pack(side="left", fill="x", expand=True, ipady=10)
-        self.vatsal_input.bind("<Return>", lambda e: self.send_to_vatsal_ai())
+        self.boi_input.pack(side="left", fill="x", expand=True, ipady=10)
+        self.boi_input.bind("<Return>", lambda e: self.send_to_boi_ai())
 
         send_btn = tk.Button(input_box_frame,
                              text="➤ Send",
@@ -955,7 +955,7 @@ class AutomationControllerGUI:
                              font=("Segoe UI", 11, "bold"),
                              relief="flat",
                              cursor="hand2",
-                             command=self.send_to_vatsal_ai,
+                             command=self.send_to_boi_ai,
                              padx=25,
                              pady=10)
         send_btn.pack(side="right", padx=(5, 0))
@@ -971,7 +971,7 @@ class AutomationControllerGUI:
                               font=("Segoe UI", 9, "bold"),
                               relief="flat",
                               cursor="hand2",
-                              command=self.start_vatsal_ai_conversation,
+                              command=self.start_boi_ai_conversation,
                               padx=15,
                               pady=8)
         start_btn.pack(side="left", padx=5)
@@ -984,7 +984,7 @@ class AutomationControllerGUI:
                                 font=("Segoe UI", 9, "bold"),
                                 relief="flat",
                                 cursor="hand2",
-                                command=self.vatsal_ai_get_suggestion,
+                                command=self.boi_ai_get_suggestion,
                                 padx=15,
                                 pady=8)
         suggest_btn.pack(side="left", padx=5)
@@ -997,7 +997,7 @@ class AutomationControllerGUI:
                               font=("Segoe UI", 9, "bold"),
                               relief="flat",
                               cursor="hand2",
-                              command=self.clear_vatsal_ai_conversation,
+                              command=self.clear_boi_ai_conversation,
                               padx=15,
                               pady=8)
         clear_btn.pack(side="left", padx=5)
@@ -1010,13 +1010,13 @@ class AutomationControllerGUI:
                               font=("Segoe UI", 9, "bold"),
                               relief="flat",
                               cursor="hand2",
-                              command=self.show_vatsal_ai_stats,
+                              command=self.show_boi_ai_stats,
                               padx=15,
                               pady=8)
         stats_btn.pack(side="left", padx=5)
         self.add_hover_effect(stats_btn, "#313244", "#45475a")
 
-    def create_vatsal_automator_tab(self, notebook):
+    def create_boi_automator_tab(self, notebook):
         """BOI Intelligent Desktop Automator - Local execution with AI understanding"""
         tab = tk.Frame(notebook, bg=self.BG_SECONDARY)
         notebook.add(tab, text="⚡ BOI Auto")
@@ -1049,7 +1049,7 @@ class AutomationControllerGUI:
                             justify="left")
         desc_text.pack(anchor="w", padx=10, pady=5)
 
-        self.vatsal_automator_output = scrolledtext.ScrolledText(
+        self.boi_automator_output = scrolledtext.ScrolledText(
             tab,
             bg=self.BG_BASE,
             fg=self.TEXT_TERTIARY,
@@ -1061,12 +1061,12 @@ class AutomationControllerGUI:
             padx=10,
             pady=10
         )
-        self.vatsal_automator_output.pack(fill="both", expand=True, padx=10, pady=(10, 5))
+        self.boi_automator_output.pack(fill="both", expand=True, padx=10, pady=(10, 5))
 
-        self.vatsal_automator_output.tag_config("success", foreground="#a6e3a1")
-        self.vatsal_automator_output.tag_config("error", foreground="#f38ba8")
-        self.vatsal_automator_output.tag_config("warning", foreground="#f9e2af")
-        self.vatsal_automator_output.tag_config("info", foreground="#89b4fa")
+        self.boi_automator_output.tag_config("success", foreground="#a6e3a1")
+        self.boi_automator_output.tag_config("error", foreground="#f38ba8")
+        self.boi_automator_output.tag_config("warning", foreground="#f9e2af")
+        self.boi_automator_output.tag_config("info", foreground="#89b4fa")
 
         input_frame = tk.Frame(tab, bg=self.BG_SECONDARY)
         input_frame.pack(fill="x", padx=10, pady=5)
@@ -1081,15 +1081,15 @@ class AutomationControllerGUI:
         input_box_frame = tk.Frame(input_frame, bg=self.BG_SECONDARY)
         input_box_frame.pack(fill="x", padx=5, pady=(0, 5))
 
-        self.vatsal_automator_input = tk.Entry(input_box_frame,
+        self.boi_automator_input = tk.Entry(input_box_frame,
                                                 bg=self.BG_TERTIARY,
                                                 fg=self.TEXT_PRIMARY,
                                                 font=("Segoe UI", 12),
                                                 relief="solid",
                                                 bd=2,
                                                 insertbackground="#89b4fa")
-        self.vatsal_automator_input.pack(side="left", fill="x", expand=True, ipady=10)
-        self.vatsal_automator_input.bind("<Return>", lambda e: self.execute_vatsal_automator_command())
+        self.boi_automator_input.pack(side="left", fill="x", expand=True, ipady=10)
+        self.boi_automator_input.bind("<Return>", lambda e: self.execute_boi_automator_command())
 
         execute_btn = tk.Button(input_box_frame,
                                 text="▶️ Execute",
@@ -1098,7 +1098,7 @@ class AutomationControllerGUI:
                                 font=("Segoe UI", 11, "bold"),
                                 relief="flat",
                                 cursor="hand2",
-                                command=self.execute_vatsal_automator_command,
+                                command=self.execute_boi_automator_command,
                                 padx=25,
                                 pady=10)
         execute_btn.pack(side="right", padx=(5, 0))
@@ -1133,7 +1133,7 @@ class AutomationControllerGUI:
                            font=("Segoe UI", 9, "bold"),
                            relief="flat",
                            cursor="hand2",
-                           command=lambda cmd=command: self.vatsal_quick_action(cmd),
+                           command=lambda cmd=command: self.boi_quick_action(cmd),
                            padx=12,
                            pady=8)
             btn.pack(side="left", padx=3)
@@ -3492,17 +3492,17 @@ class AutomationControllerGUI:
             btn.pack(fill="x", padx=8, pady=3)
             self.add_hover_effect(btn, "#313244", "#45475a")
 
-    def toggle_vatsal_mode(self):
+    def toggle_boi_mode(self):
         """Toggle BOI personality mode"""
-        self.vatsal_mode = not self.vatsal_mode
-        if self.vatsal_mode:
-            self.vatsal_toggle_btn.config(text="🤖 BOI Mode: ON", bg=self.ACCENT_TERTIARY)
+        self.boi_mode = not self.boi_mode
+        if self.boi_mode:
+            self.boi_toggle_btn.config(text="🤖 BOI Mode: ON", bg=self.ACCENT_TERTIARY)
             self.update_output("\n" + "=" * 60 + "\n", "info")
             self.update_output("🤖 BOI Mode Activated\n", "success")
-            self.update_output(self.vatsal.get_status_update('ready') + "\n", "info")
+            self.update_output(self.boi.get_status_update('ready') + "\n", "info")
             self.update_output("=" * 60 + "\n\n", "info")
         else:
-            self.vatsal_toggle_btn.config(text="🤖 BOI Mode: OFF", bg=self.BORDER_PRIMARY)
+            self.boi_toggle_btn.config(text="🤖 BOI Mode: OFF", bg=self.BORDER_PRIMARY)
             self.update_output("\n" + "=" * 60 + "\n", "info")
             self.update_output("Standard Mode Activated\n", "warning")
             self.update_output("=" * 60 + "\n\n", "info")
@@ -3531,11 +3531,11 @@ class AutomationControllerGUI:
         except Exception as e:
             self.update_output(f"❌ Error opening user settings: {e}\n", "error")
 
-    def show_vatsal_greeting(self):
+    def show_boi_greeting(self):
         """Show BOI greeting message"""
         # Use personalized greeting from user profile
         personalized_greeting = self.user_profile.get_greeting()
-        greeting = self.vatsal.get_greeting()
+        greeting = self.boi.get_greeting()
 
         self.update_output("\n" + "=" * 60 + "\n", "info")
         self.update_output("🤖 Vatsal AI Assistant (Powered by BOI)\n", "success")
@@ -3544,41 +3544,41 @@ class AutomationControllerGUI:
         self.update_output(f"{greeting}\n\n", "info")
 
         # Show proactive suggestion
-        suggestion = self.vatsal.get_proactive_suggestion()
+        suggestion = self.boi.get_proactive_suggestion()
         self.update_output(f"{suggestion}\n\n", "command")
 
         # Record interaction
         self.user_profile.record_interaction()
 
-    def get_vatsal_response(self, user_input, command_result=None):
+    def get_boi_response(self, user_input, command_result=None):
         """Get BOI personality response"""
-        if self.vatsal_mode and self.vatsal.ai_available:
-            return self.vatsal.process_with_personality(user_input, command_result)
+        if self.boi_mode and self.boi.ai_available:
+            return self.boi.process_with_personality(user_input, command_result)
         return command_result
 
-    def start_vatsal_ai_conversation(self):
+    def start_boi_ai_conversation(self):
         """Start conversation with Simple Chat"""
         if self.simple_chatbot:
             greeting = self.simple_chatbot.greeting()
         else:
             greeting = "Hello! I'm Vatsal, your AI assistant. How can I help you today?"
 
-        self._add_vatsal_ai_message("Vatsal", greeting)
-        self.vatsal_conversation_active = True
+        self._add_boi_ai_message("Vatsal", greeting)
+        self.boi_conversation_active = True
 
-    def send_to_vatsal_ai(self):
+    def send_to_boi_ai(self):
         """Send message to BOI"""
-        user_message = self.vatsal_input.get().strip()
+        user_message = self.boi_input.get().strip()
         if not user_message:
             return
 
-        self.vatsal_input.delete(0, tk.END)
-        self._add_vatsal_ai_message("YOU", user_message)
+        self.boi_input.delete(0, tk.END)
+        self._add_boi_ai_message("YOU", user_message)
 
-        thread = threading.Thread(target=self._process_vatsal_ai_message, args=(user_message,))
+        thread = threading.Thread(target=self._process_boi_ai_message, args=(user_message,))
         thread.start()
 
-    def _process_vatsal_ai_message(self, user_message):
+    def _process_boi_ai_message(self, user_message):
         """Process message with Simple Chat in background"""
         try:
             if self.simple_chatbot:
@@ -3586,29 +3586,29 @@ class AutomationControllerGUI:
             else:
                 response = "Chatbot not available. Please check your Gemini API key configuration."
 
-            self._add_vatsal_ai_message("BOI", response)
+            self._add_boi_ai_message("BOI", response)
         except Exception as e:
-            self._add_vatsal_ai_message("BOI", f"Sorry, I encountered an error: {str(e)}")
+            self._add_boi_ai_message("BOI", f"Sorry, I encountered an error: {str(e)}")
 
-    def _add_vatsal_ai_message(self, sender, message):
+    def _add_boi_ai_message(self, sender, message):
         """Add message to BOI conversation display"""
-        self.vatsal_conversation_display.config(state='normal')
+        self.boi_conversation_display.config(state='normal')
 
         timestamp = datetime.now().strftime("%I:%M:%S %p")
 
         if sender == "BOI":
-            self.vatsal_conversation_display.insert(tk.END, f"\n🤖 BOI", "vatsal")
-            self.vatsal_conversation_display.insert(tk.END, f" ({timestamp})\n", "timestamp")
-            self.vatsal_conversation_display.insert(tk.END, f"{message}\n", "")
+            self.boi_conversation_display.insert(tk.END, f"\n🤖 BOI", "boi")
+            self.boi_conversation_display.insert(tk.END, f" ({timestamp})\n", "timestamp")
+            self.boi_conversation_display.insert(tk.END, f"{message}\n", "")
         else:
-            self.vatsal_conversation_display.insert(tk.END, f"\n👤 {sender}", "user")
-            self.vatsal_conversation_display.insert(tk.END, f" ({timestamp})\n", "timestamp")
-            self.vatsal_conversation_display.insert(tk.END, f"{message}\n", "")
+            self.boi_conversation_display.insert(tk.END, f"\n👤 {sender}", "user")
+            self.boi_conversation_display.insert(tk.END, f" ({timestamp})\n", "timestamp")
+            self.boi_conversation_display.insert(tk.END, f"{message}\n", "")
 
-        self.vatsal_conversation_display.config(state='disabled')
-        self.vatsal_conversation_display.see(tk.END)
+        self.boi_conversation_display.config(state='disabled')
+        self.boi_conversation_display.see(tk.END)
 
-    def vatsal_ai_get_suggestion(self):
+    def boi_ai_get_suggestion(self):
         """Get a friendly prompt from BOI"""
         suggestions = [
             "💡 Try asking me: 'What's the weather like in programming?'",
@@ -3618,20 +3618,20 @@ class AutomationControllerGUI:
             "💡 I'm here to chat! Ask me about any topic you're curious about."
         ]
         import random
-        self._add_vatsal_ai_message("BOI", random.choice(suggestions))
+        self._add_boi_ai_message("BOI", random.choice(suggestions))
 
-    def clear_vatsal_ai_conversation(self):
+    def clear_boi_ai_conversation(self):
         """Clear conversation history"""
         if self.simple_chatbot:
             self.simple_chatbot.reset()
 
-        self.vatsal_conversation_display.config(state='normal')
-        self.vatsal_conversation_display.delete(1.0, tk.END)
-        self.vatsal_conversation_display.config(state='disabled')
-        self.vatsal_conversation_active = False
+        self.boi_conversation_display.config(state='normal')
+        self.boi_conversation_display.delete(1.0, tk.END)
+        self.boi_conversation_display.config(state='disabled')
+        self.boi_conversation_active = False
         messagebox.showinfo("Cleared", "Chat cleared! Ready for a fresh conversation.")
 
-    def show_vatsal_ai_stats(self):
+    def show_boi_ai_stats(self):
         """Show chatbot statistics"""
         if self.simple_chatbot:
             conv_count = len(self.simple_chatbot.conversation_history)
@@ -3651,23 +3651,23 @@ class AutomationControllerGUI:
 
         messagebox.showinfo(title, stats_message)
 
-    def execute_vatsal_automator_command(self):
+    def execute_boi_automator_command(self):
         """Execute command using BOI automator"""
-        if not self.vatsal_automator:
-            self._update_vatsal_automator_output("❌ BOI Automator not available. Check Gemini API key.\n", "error")
+        if not self.boi_automator:
+            self._update_boi_automator_output("❌ BOI Automator not available. Check Gemini API key.\n", "error")
             return
 
-        command = self.vatsal_automator_input.get().strip()
+        command = self.boi_automator_input.get().strip()
         if not command:
             return
 
-        self.vatsal_automator_input.delete(0, tk.END)
-        self._update_vatsal_automator_output(f"\n🎯 Command: {command}\n", "info")
+        self.boi_automator_input.delete(0, tk.END)
+        self._update_boi_automator_output(f"\n🎯 Command: {command}\n", "info")
 
-        thread = threading.Thread(target=self._process_vatsal_automator_command, args=(command,))
+        thread = threading.Thread(target=self._process_boi_automator_command, args=(command,))
         thread.start()
 
-    def _vatsal_confirmation_callback(self, intent, risk_level):
+    def _boi_confirmation_callback(self, intent, risk_level):
         """Confirmation callback for destructive BOI actions"""
         result = messagebox.askyesno(
             "⚠️ Confirmation Required",
@@ -3676,42 +3676,42 @@ class AutomationControllerGUI:
         )
         return result
 
-    def _process_vatsal_automator_command(self, command):
+    def _process_boi_automator_command(self, command):
         """Process BOI automator command in background"""
         try:
-            self._update_vatsal_automator_output("🤔 Understanding command...\n", "info")
-            result = self.vatsal_automator.execute_command(command, confirmation_callback=self._vatsal_confirmation_callback)
+            self._update_boi_automator_output("🤔 Understanding command...\n", "info")
+            result = self.boi_automator.execute_command(command, confirmation_callback=self._boi_confirmation_callback)
 
             if "✓" in result:
-                self._update_vatsal_automator_output(f"\n{result}\n", "success")
+                self._update_boi_automator_output(f"\n{result}\n", "success")
             elif "✗" in result or "❌" in result:
-                self._update_vatsal_automator_output(f"\n{result}\n", "error")
+                self._update_boi_automator_output(f"\n{result}\n", "error")
             elif "⚠️" in result:
-                self._update_vatsal_automator_output(f"\n{result}\n", "warning")
+                self._update_boi_automator_output(f"\n{result}\n", "warning")
             else:
-                self._update_vatsal_automator_output(f"\n{result}\n", "info")
+                self._update_boi_automator_output(f"\n{result}\n", "info")
 
         except Exception as e:
-            self._update_vatsal_automator_output(f"\n❌ Error: {str(e)}\n", "error")
+            self._update_boi_automator_output(f"\n❌ Error: {str(e)}\n", "error")
 
-    def _update_vatsal_automator_output(self, message, tag=""):
+    def _update_boi_automator_output(self, message, tag=""):
         """Update BOI automator output display"""
-        self.vatsal_automator_output.config(state='normal')
-        self.vatsal_automator_output.insert(tk.END, message, tag)
-        self.vatsal_automator_output.config(state='disabled')
-        self.vatsal_automator_output.see(tk.END)
+        self.boi_automator_output.config(state='normal')
+        self.boi_automator_output.insert(tk.END, message, tag)
+        self.boi_automator_output.config(state='disabled')
+        self.boi_automator_output.see(tk.END)
 
-    def vatsal_quick_action(self, command):
+    def boi_quick_action(self, command):
         """Execute quick action or clear output"""
         if command is None:
-            self.vatsal_automator_output.config(state='normal')
-            self.vatsal_automator_output.delete(1.0, tk.END)
-            self.vatsal_automator_output.config(state='disabled')
+            self.boi_automator_output.config(state='normal')
+            self.boi_automator_output.delete(1.0, tk.END)
+            self.boi_automator_output.config(state='disabled')
             return
 
-        self.vatsal_automator_input.delete(0, tk.END)
-        self.vatsal_automator_input.insert(0, command)
-        self.execute_vatsal_automator_command()
+        self.boi_automator_input.delete(0, tk.END)
+        self.boi_automator_input.insert(0, command)
+        self.execute_boi_automator_command()
 
     def start_self_operating_text(self):
         """Start self-operating computer with text objective"""
@@ -4204,8 +4204,8 @@ Based on OthersideAI's self-operating-computer framework
             self.update_output(f"{'=' * 60}\n\n", "info")
 
             # BOI acknowledgment
-            if self.vatsal_mode:
-                ack = self.vatsal.acknowledge_command(command)
+            if self.boi_mode:
+                ack = self.boi.acknowledge_command(command)
                 self.update_output(f"🤖 BOI: {ack}\n\n", "info")
 
             command_dict = parse_command(command)
@@ -4213,16 +4213,16 @@ Based on OthersideAI's self-operating-computer framework
             if command_dict.get("action") == "error":
                 error_msg = command_dict.get('description', 'Error processing command')
 
-                if self.vatsal_mode:
-                    vatsal_response = self.vatsal.process_with_personality(
+                if self.boi_mode:
+                    boi_response = self.boi.process_with_personality(
                         command,
                         f"Error: {error_msg}"
                     )
-                    self.update_output(f"🤖 BOI: {vatsal_response}\n", "error")
+                    self.update_output(f"🤖 BOI: {boi_response}\n", "error")
 
                     # Speak error response if voice is enabled
                     if self.voice_commander and self.voice_enabled:
-                        self.voice_commander.speak(vatsal_response)
+                        self.voice_commander.speak(boi_response)
                 else:
                     self.update_output(f"❌ {error_msg}\n", "error")
                     suggestion = get_ai_suggestion(f"User tried: {command}, but got error. Suggest alternatives.")
@@ -4243,13 +4243,13 @@ Based on OthersideAI's self-operating-computer framework
                     })
 
                 # Get BOI response if mode is enabled
-                if self.vatsal_mode:
-                    vatsal_response = self.get_vatsal_response(command, result['message'])
-                    self.update_output(f"🤖 BOI:\n{vatsal_response}\n\n", "success")
+                if self.boi_mode:
+                    boi_response = self.get_boi_response(command, result['message'])
+                    self.update_output(f"🤖 BOI:\n{boi_response}\n\n", "success")
 
                     # Speak BOI's response if voice is enabled
                     if self.voice_commander and self.voice_enabled:
-                        self.voice_commander.speak(vatsal_response)
+                        self.voice_commander.speak(boi_response)
 
                     # Show technical result in smaller text
                     self.update_output(f"📊 Technical Details:\n{result['message']}\n", "info")
@@ -4260,8 +4260,8 @@ Based on OthersideAI's self-operating-computer framework
 
                 # Occasionally show proactive suggestions
                 import random
-                if random.random() < 0.3 and self.vatsal_mode:  # 30% chance
-                    suggestion = self.vatsal.get_proactive_suggestion()
+                if random.random() < 0.3 and self.boi_mode:  # 30% chance
+                    suggestion = self.boi.get_proactive_suggestion()
                     self.update_output(f"\n{suggestion}\n", "command")
 
             else:
@@ -4273,16 +4273,16 @@ Based on OthersideAI's self-operating-computer framework
                         'timestamp': datetime.now().isoformat()
                     })
 
-                if self.vatsal_mode:
-                    vatsal_response = self.vatsal.process_with_personality(
+                if self.boi_mode:
+                    boi_response = self.boi.process_with_personality(
                         command,
                         f"Error: {result['message']}"
                     )
-                    self.update_output(f"🤖 BOI: {vatsal_response}\n", "error")
+                    self.update_output(f"🤖 BOI: {boi_response}\n", "error")
 
                     # Speak error response if voice is enabled
                     if self.voice_commander and self.voice_enabled:
-                        self.voice_commander.speak(vatsal_response)
+                        self.voice_commander.speak(boi_response)
                 else:
                     self.update_output(f"❌ Error:\n{result['message']}\n", "error")
 
@@ -4297,7 +4297,7 @@ Based on OthersideAI's self-operating-computer framework
                     'timestamp': datetime.now().isoformat()
                 })
 
-            if self.vatsal_mode:
+            if self.boi_mode:
                 self.update_output(f"🤖 BOI: Apologies, Sir. Encountered an unexpected error: {str(e)}\n", "error")
             else:
                 self.update_output(f"❌ Error: {str(e)}\n", "error")
@@ -4861,7 +4861,7 @@ For more information, visit the documentation or contact support.
 
     def show_suggestion(self):
         """Show BOI proactive suggestion"""
-        suggestion = self.vatsal.get_proactive_suggestion()
+        suggestion = self.boi.get_proactive_suggestion()
         self.update_output(f"\n{suggestion}\n\n", "command")
 
     def show_about(self):

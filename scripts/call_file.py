@@ -2,8 +2,8 @@
 """
 Phone Link Automator - Call Any Contact
 Reads mobile number from contacts.json and dials via Phone Link app
-Usage: python call_vatsal.py <contact_name>
-Example: python call_vatsal.py vatsal
+Usage: python call_boi.py <contact_name>
+Example: python call_boi.py boi
 """
 
 import os
@@ -155,12 +155,12 @@ def show_usage():
     print("  PHONE LINK AUTOMATOR")
     print("=" * 50)
     print()
-    print("Usage: python call_vatsal.py <contact_name>")
+    print("Usage: python call_boi.py <contact_name>")
     print()
     print("Examples:")
-    print("  python call_vatsal.py vatsal")
-    print("  python call_vatsal.py mata")
-    print("  python call_vatsal.py pita")
+    print("  python call_boi.py boi")
+    print("  python call_boi.py mata")
+    print("  python call_boi.py pita")
     print()
     
     contacts = load_contacts()

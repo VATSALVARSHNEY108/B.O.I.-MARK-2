@@ -34,7 +34,7 @@ def main():
             recognizer = None
     else:
         print("⚠️  No trained model found")
-        print("   Run: python train_vatsal_face.py")
+        print("   Run: python train_boi_face.py")
     
     print()
     print("📹 Opening camera...")

@@ -36,7 +36,7 @@
       "voice_feedback": "Screenshot taken"
     },
     "TWO_PEACE_SIGNS": {
-      "action": "greet_vatsal",
+      "action": "greet_boi",
       "description": "VATSAL greeting with supreme leader messages",
       "cooldown": 3,
       "priority": 15,
@@ -157,9 +157,9 @@
       "method": "take_screenshot",
       "description": "Capture screenshot"
     },
-    "greet_vatsal": {
+    "greet_boi": {
       "module": "gesture_detector",
-      "method": "greet_vatsal",
+      "method": "greet_boi",
       "description": "Special VATSAL greeting"
     },
     "volume_up": {
