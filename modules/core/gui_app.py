@@ -1479,7 +1479,6 @@ class ModernBOIGUI:
         row.pack(fill="x", padx=5, pady=6)
 
         is_user = sender.strip().upper() == "USER"
-        print(f"DEBUG: sender={sender}, is_user={is_user}, message={message[:50]}")
 
         if is_user:
             # USER PROMPT - BRIGHT BLUE (#0066FF) with WHITE text
@@ -1507,10 +1506,19 @@ class ModernBOIGUI:
 
     def update_output(self, message, msg_type="info"):
         """Add message to chat interface"""
-        # Clean up newlines from old format
-        message = message.strip().replace("\n", " ").replace("📝 You: ", "👤 ")
+        message = message.strip().replace("\n", " ")
+        
+        # Detect if this is a user message (starts with 👤)
+        is_user_msg = message.startswith("👤")
+        if is_user_msg:
+            message = message.replace("👤 ", "")
+            sender = "USER"
+        else:
+            message = message.replace("📝 You: ", "👤 ")
+            sender = "BOI"
+        
         if message:
-            self.add_chat_message(message, sender="BOI", msg_type=msg_type)
+            self.add_chat_message(message, sender=sender, msg_type=msg_type)
 
     def clear_output(self):
         """Clear chat messages"""
