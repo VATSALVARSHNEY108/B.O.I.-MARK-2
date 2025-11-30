@@ -1474,37 +1474,38 @@ class ModernBOIGUI:
         if not hasattr(self, 'chat_scrollable') or self.chat_scrollable is None:
             return
 
-        # Message container - full width for alignment
-        msg_container = tk.Frame(self.chat_scrollable, bg="#f7f7f7")
-        msg_container.pack(fill="x", padx=5, pady=8)
-
         # Determine styling based on sender
         if sender == "USER":
             # User messages: right-aligned, blue background, bold white text
-            bubble_bg = "#007BFF"
+            bubble_bg = "#0066FF"
             text_fg = "white"
-            side = "right"
-            padx_bubble = (100, 10)
+            is_user = True
         else:
             # BOI messages: left-aligned, light gray background, bold dark text
-            bubble_bg = "#E8E8E8"
-            text_fg = "#1a1a1a"
-            side = "left"
-            padx_bubble = (10, 100)
+            bubble_bg = "#D3D3D3"
+            text_fg = "#000000"
+            is_user = False
 
-        # Message bubble frame - this won't fill, allowing side-packing to work
-        bubble = tk.Frame(msg_container, bg=bubble_bg, relief="flat", bd=0)
-        bubble.pack(side=side, padx=padx_bubble, pady=0, fill="both", expand=False)
+        # Message container - use side packing for alignment
+        msg_container = tk.Frame(self.chat_scrollable, bg="#f7f7f7")
+        msg_container.pack(fill="x", padx=5, pady=8)
+
+        # Message bubble frame
+        bubble = tk.Frame(msg_container, bg=bubble_bg, relief="solid", bd=1)
+        if is_user:
+            bubble.pack(side="right", padx=(150, 10), pady=0)
+        else:
+            bubble.pack(side="left", padx=(10, 150), pady=0)
 
         # Sender label (small, subtle)
         sender_label = tk.Label(
             bubble,
-            text=f"{'👤 You' if sender == 'USER' else '🤖 BOI'}",
+            text=f"{'👤 YOU' if is_user else '🤖 BOI'}",
             bg=bubble_bg,
             fg=text_fg,
-            font=("Segoe UI", 8, "bold"),
+            font=("Segoe UI", 9, "bold"),
             padx=12,
-            pady=8
+            pady=6
         )
         sender_label.pack(anchor="w")
 
@@ -1516,7 +1517,7 @@ class ModernBOIGUI:
             fg=text_fg,
             font=("Segoe UI", 11, "bold"),
             justify="left",
-            wraplength=400,
+            wraplength=350,
             padx=12,
             pady=10
         )
