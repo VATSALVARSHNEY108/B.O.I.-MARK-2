@@ -1474,27 +1474,27 @@ class ModernBOIGUI:
         if not hasattr(self, 'chat_scrollable') or self.chat_scrollable is None:
             return
 
-        # Message container - full width for proper alignment
+        # Message container - full width for alignment
         msg_container = tk.Frame(self.chat_scrollable, bg="#f7f7f7")
-        msg_container.pack(fill="x", padx=10, pady=8)
+        msg_container.pack(fill="x", padx=5, pady=8)
 
-        # Inner frame for alignment control
+        # Determine styling based on sender
         if sender == "USER":
             # User messages: right-aligned, blue background, bold white text
             bubble_bg = "#007BFF"
             text_fg = "white"
-            inner_frame = tk.Frame(msg_container, bg="#f7f7f7")
-            inner_frame.pack(anchor="e", padx=(200, 10))
+            side = "right"
+            padx_bubble = (100, 10)
         else:
             # BOI messages: left-aligned, light gray background, bold dark text
             bubble_bg = "#E8E8E8"
             text_fg = "#1a1a1a"
-            inner_frame = tk.Frame(msg_container, bg="#f7f7f7")
-            inner_frame.pack(anchor="w", padx=(10, 200))
+            side = "left"
+            padx_bubble = (10, 100)
 
-        # Message bubble frame
-        bubble = tk.Frame(inner_frame, bg=bubble_bg, relief="flat", bd=0)
-        bubble.pack(fill="both", expand=True)
+        # Message bubble frame - this won't fill, allowing side-packing to work
+        bubble = tk.Frame(msg_container, bg=bubble_bg, relief="flat", bd=0)
+        bubble.pack(side=side, padx=padx_bubble, pady=0, fill="both", expand=False)
 
         # Sender label (small, subtle)
         sender_label = tk.Label(
