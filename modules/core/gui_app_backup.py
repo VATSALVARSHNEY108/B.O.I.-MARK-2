@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 from modules.core.gemini_controller import parse_command, get_ai_suggestion
 from modules.core.command_executor import CommandExecutor
-from modules.core.boi_assistant import create_boi_assistant
+from modules.core.vatsal_assistant import create_boi_assistant
 from modules.monitoring.advanced_smart_screen_monitor import create_advanced_smart_screen_monitor
 from modules.monitoring.ai_screen_monitoring_system import create_ai_screen_monitoring_system
 from modules.ai_features.chatbots import SimpleChatbot

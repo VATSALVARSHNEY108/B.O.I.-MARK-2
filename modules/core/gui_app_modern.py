@@ -34,7 +34,7 @@ except:
     CommandExecutor = None
 
 try:
-    from modules.core.boi_assistant import create_boi_assistant
+    from modules.core.vatsal_assistant import create_boi_assistant
 except:
     create_boi_assistant = None
 

@@ -5,7 +5,7 @@ Transforms cold technical responses into warm, engaging, conversational interact
 
 import random
 from datetime import datetime
-from modules.core.boi_assistant import BOIAssistant
+from modules.core.vatsal_assistant import BOIAssistant
 
 
 class PersonaResponseService:
