@@ -1470,60 +1470,48 @@ class ModernBOIGUI:
             self.root.after(0, lambda: self.execute_btn.config(state="normal", text="▶ Execute"))
 
     def add_chat_message(self, message, sender="BOI", msg_type="info"):
-        """Add a chat message with modern conversational bot interface"""
+        """Add a chat message with distinct visual styling for user and BOI"""
         if not hasattr(self, 'chat_scrollable') or self.chat_scrollable is None:
             return
 
-        # Determine styling based on sender
+        # Create outer row for message
+        row = tk.Frame(self.chat_scrollable, bg="#ffffff")
+        row.pack(fill="x", padx=0, pady=8)
+
         if sender == "USER":
-            # User messages: right-aligned, blue background, bold white text
-            bubble_bg = "#0066FF"
-            text_fg = "white"
-            is_user = True
+            # USER PROMPT - Right side, bright blue
+            left_spacer = tk.Frame(row, bg="#ffffff", width=50)
+            left_spacer.pack(side="left", fill="x", expand=True)
+
+            bubble_container = tk.Frame(row, bg="#ffffff")
+            bubble_container.pack(side="left", fill="both", padx=(0, 15))
+
+            bubble = tk.Frame(bubble_container, bg="#2196F3", relief="flat", bd=0)
+            bubble.pack(side="right")
+
+            header = tk.Label(bubble, text="👤 YOU", bg="#2196F3", fg="white", font=("Segoe UI", 9, "bold"), padx=12, pady=5)
+            header.pack(anchor="w")
+
+            text = tk.Label(bubble, text=message, bg="#2196F3", fg="white", font=("Segoe UI", 11, "bold"), justify="left", wraplength=400, padx=12, pady=10)
+            text.pack(anchor="w", fill="x")
         else:
-            # BOI messages: left-aligned, light gray background, bold dark text
-            bubble_bg = "#D3D3D3"
-            text_fg = "#000000"
-            is_user = False
+            # BOI REPLY - Left side, light green
+            bubble_container = tk.Frame(row, bg="#ffffff")
+            bubble_container.pack(side="left", fill="both", padx=(15, 0))
 
-        # Message container - use side packing for alignment
-        msg_container = tk.Frame(self.chat_scrollable, bg="#f7f7f7")
-        msg_container.pack(fill="x", padx=5, pady=8)
+            bubble = tk.Frame(bubble_container, bg="#4CAF50", relief="flat", bd=0)
+            bubble.pack(side="left")
 
-        # Message bubble frame
-        bubble = tk.Frame(msg_container, bg=bubble_bg, relief="solid", bd=1)
-        if is_user:
-            bubble.pack(side="right", padx=(150, 10), pady=0)
-        else:
-            bubble.pack(side="left", padx=(10, 150), pady=0)
+            header = tk.Label(bubble, text="🤖 BOI", bg="#4CAF50", fg="white", font=("Segoe UI", 9, "bold"), padx=12, pady=5)
+            header.pack(anchor="w")
 
-        # Sender label (small, subtle)
-        sender_label = tk.Label(
-            bubble,
-            text=f"{'👤 YOU' if is_user else '🤖 BOI'}",
-            bg=bubble_bg,
-            fg=text_fg,
-            font=("Segoe UI", 9, "bold"),
-            padx=12,
-            pady=6
-        )
-        sender_label.pack(anchor="w")
+            text = tk.Label(bubble, text=message, bg="#4CAF50", fg="white", font=("Segoe UI", 11, "bold"), justify="left", wraplength=400, padx=12, pady=10)
+            text.pack(anchor="w", fill="x")
 
-        # Message text - BOLD
-        msg_label = tk.Label(
-            bubble,
-            text=message,
-            bg=bubble_bg,
-            fg=text_fg,
-            font=("Segoe UI", 11, "bold"),
-            justify="left",
-            wraplength=350,
-            padx=12,
-            pady=10
-        )
-        msg_label.pack(anchor="w", fill="x")
+            right_spacer = tk.Frame(row, bg="#ffffff", width=50)
+            right_spacer.pack(side="left", fill="x", expand=True)
 
-        self.chat_messages.append((msg_container, message))
+        self.chat_messages.append((row, message))
         self.chat_canvas.after(50, lambda: self.chat_canvas.yview_moveto(1.0))
 
     def update_output(self, message, msg_type="info"):
