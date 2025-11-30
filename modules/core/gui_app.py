@@ -2270,13 +2270,29 @@ personality and advanced automation capabilities.
 • Selenium WebDriver
 • And many more...
 
-🌟 Created by the BOI Team
+🎖️ CREATOR INFORMATION:
+
+Created by: VATSAL VARSHNEY
+Position: Supreme Leader, AI/ML Engineer, Full-Stack Developer
+
+📍 Expertise:
+   • Artificial Intelligence & Machine Learning
+   • Desktop Automation & Control Systems
+   • Python Development & System Architecture
+   • Full-Stack Web Development
+   • Advanced Automation Solutions
+
+🔗 Connect:
+   • GitHub: https://github.com/BOIVARSHNEY108
+   • LinkedIn: https://www.linkedin.com/in/boi-varshney108/
+
+🌟 Vatsal Varshney - Creating Intelligent Automation Solutions
 
 © 2024 BOI. All rights reserved.
                                """,
                                bg=self.BG_SECONDARY,
                                fg=self.TEXT_PRIMARY,
-                               font=("Segoe UI", 11),
+                               font=("Segoe UI", 10),
                                justify="left")
         description.pack(padx=20, pady=20)
 
