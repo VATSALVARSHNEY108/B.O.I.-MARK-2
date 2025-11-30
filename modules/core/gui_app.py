@@ -383,6 +383,9 @@ class ModernBOIGUI:
 
         # Command input section
         self._create_command_section_for_tab(content_frame)
+        
+        # TTS section
+        self._create_tts_section(content_frame)
 
         # Output console section
         self._create_output_section_for_tab(content_frame)
@@ -480,6 +483,83 @@ class ModernBOIGUI:
                 self.vsign_btn = btn
             elif icon == "🗣️":
                 self.speaking_btn = btn
+
+    def _create_tts_section(self, parent):
+        """Create Text-to-Speech section"""
+        # Modern clean section with beautiful shadow
+        section_shadow, section = self.create_shadowed_frame(parent)
+        section_shadow.pack(fill="x", pady=(8, 10), padx=8)
+
+        # Section header
+        header = tk.Frame(section, bg=self.BG_SECONDARY)
+        header.pack(fill="x", padx=15, pady=(10, 8))
+
+        tk.Label(
+            header,
+            text="🎙️",
+            font=("Segoe UI", 12),
+            bg=self.BG_SECONDARY,
+            fg=self.TEXT_PRIMARY
+        ).pack(side="left", padx=(0, 8))
+
+        tk.Label(
+            header,
+            text="Text-to-Speech",
+            font=("Segoe UI", 11, "bold"),
+            bg=self.BG_SECONDARY,
+            fg=self.TEXT_PRIMARY
+        ).pack(side="left")
+
+        # Input area
+        input_area = tk.Frame(section, bg=self.BG_SECONDARY)
+        input_area.pack(fill="x", padx=15, pady=(0, 12))
+
+        # Input row
+        input_row = tk.Frame(input_area, bg=self.BG_SECONDARY)
+        input_row.pack(fill="x", pady=(0, 8))
+
+        # TTS input box
+        self.tts_input = tk.Entry(
+            input_row,
+            bg="white",
+            fg=self.TEXT_PRIMARY,
+            font=("Segoe UI", 12, "bold"),
+            insertbackground=self.TEXT_PRIMARY,
+            relief="solid",
+            borderwidth=1
+        )
+        self.tts_input.pack(side="left", fill="both", expand=True, ipady=12)
+        self.tts_input.bind("<Return>", lambda e: self.speak_text())
+
+        # Buttons row
+        buttons_row = tk.Frame(input_area, bg=self.BG_SECONDARY)
+        buttons_row.pack(fill="x")
+
+        # Speak button
+        speak_shadow, self.tts_speak_btn = self.create_shadowed_button(
+            buttons_row,
+            text="🔊 Speak",
+            command=self.speak_text,
+            bg_color="#00AA00",
+            fg_color="white",
+            font=("Segoe UI", 10, "bold"),
+            padx=20,
+            pady=8
+        )
+        speak_shadow.pack(side="left", padx=(0, 8))
+
+        # Stop button
+        stop_shadow, self.tts_stop_btn = self.create_shadowed_button(
+            buttons_row,
+            text="⏹️ Stop",
+            command=self.stop_tts,
+            bg_color="#FF6B6B",
+            fg_color="white",
+            font=("Segoe UI", 10, "bold"),
+            padx=20,
+            pady=8
+        )
+        stop_shadow.pack(side="left")
 
     def _create_output_section_for_tab(self, parent):
         """Create ChatGPT-like chat interface"""
@@ -1502,13 +1582,6 @@ class ModernBOIGUI:
             msg_text = tk.Label(bubble, text=message, bg="#00AA00", fg="#FFFFFF", font=("Segoe UI", 13), justify="left",
                                 wraplength=475, padx=8, pady=6)
             msg_text.pack(anchor="w", fill="x")
-            
-            # SPEAK BOI MESSAGE if speaker mode is enabled
-            if self.speaking_enabled and self.voice_commander:
-                try:
-                    self.voice_commander.speak(message)
-                except Exception as e:
-                    print(f"⚠️ TTS Error: {e}")
 
         self.chat_messages.append((row, message))
         self.chat_canvas.after(50, lambda: self.chat_canvas.yview_moveto(1.0))
@@ -1698,6 +1771,32 @@ class ModernBOIGUI:
         if self.vsign_detecting:
             self.root.after(0, lambda: self.vsign_btn.config(bg=self.BUTTON_BG, fg=self.TEXT_PRIMARY))
             self.vsign_detecting = False
+
+    def speak_text(self):
+        """Speak custom text from TTS input"""
+        text = self.tts_input.get().strip()
+        if not text:
+            self.update_output("⚠️ Please enter text to speak", "warning")
+            return
+        
+        if self.voice_commander:
+            try:
+                self.update_output(f"🎙️ Speaking: {text}", "info")
+                self.voice_commander.speak(text)
+            except Exception as e:
+                self.update_output(f"❌ TTS Error: {e}", "error")
+        else:
+            self.update_output("⚠️ Voice system not available", "warning")
+
+    def stop_tts(self):
+        """Stop current TTS"""
+        if self.voice_commander:
+            try:
+                self.voice_commander.stop()
+                self.update_output("⏹️ TTS stopped", "info")
+            except Exception as e:
+                print(f"Error stopping TTS: {e}")
+        self.tts_input.delete(0, tk.END)
 
     def toggle_speaking(self):
         """Toggle text-to-speech"""
