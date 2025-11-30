@@ -1474,42 +1474,38 @@ class ModernBOIGUI:
         if not hasattr(self, 'chat_scrollable') or self.chat_scrollable is None:
             return
 
-        # Create outer row for message
+        # Create row for this message
         row = tk.Frame(self.chat_scrollable, bg="#ffffff")
-        row.pack(fill="x", padx=0, pady=8)
+        row.pack(fill="x", padx=0, pady=6)
 
-        if sender == "USER":
-            # USER PROMPT - Right side, bright blue
-            left_spacer = tk.Frame(row, bg="#ffffff", width=50)
-            left_spacer.pack(side="left", fill="x", expand=True)
+        is_user = (sender.strip().upper() == "USER")
 
-            bubble_container = tk.Frame(row, bg="#ffffff")
-            bubble_container.pack(side="left", fill="both", padx=(0, 15))
+        if is_user:
+            # USER PROMPT - Right side, bright blue (#2196F3)
+            spacer_left = tk.Frame(row, bg="#ffffff")
+            spacer_left.pack(side="left", fill="x", expand=True)
 
-            bubble = tk.Frame(bubble_container, bg="#2196F3", relief="flat", bd=0)
-            bubble.pack(side="right")
+            bubble = tk.Frame(row, bg="#2196F3", relief="flat", bd=0)
+            bubble.pack(side="right", padx=(0, 10), fill="x")
 
-            header = tk.Label(bubble, text="👤 YOU", bg="#2196F3", fg="white", font=("Segoe UI", 9, "bold"), padx=12, pady=5)
-            header.pack(anchor="w")
+            header_text = tk.Label(bubble, text="👤 YOU", bg="#2196F3", fg="white", font=("Segoe UI", 9, "bold"), padx=10, pady=4)
+            header_text.pack(anchor="w")
 
-            text = tk.Label(bubble, text=message, bg="#2196F3", fg="white", font=("Segoe UI", 11, "bold"), justify="left", wraplength=400, padx=12, pady=10)
-            text.pack(anchor="w", fill="x")
+            msg_text = tk.Label(bubble, text=message, bg="#2196F3", fg="white", font=("Segoe UI", 11, "bold"), justify="left", wraplength=350, padx=10, pady=8)
+            msg_text.pack(anchor="w", fill="x")
         else:
-            # BOI REPLY - Left side, light green
-            bubble_container = tk.Frame(row, bg="#ffffff")
-            bubble_container.pack(side="left", fill="both", padx=(15, 0))
+            # BOI REPLY - Left side, light green (#4CAF50)
+            bubble = tk.Frame(row, bg="#4CAF50", relief="flat", bd=0)
+            bubble.pack(side="left", padx=(10, 0), fill="x")
 
-            bubble = tk.Frame(bubble_container, bg="#4CAF50", relief="flat", bd=0)
-            bubble.pack(side="left")
+            header_text = tk.Label(bubble, text="🤖 BOI", bg="#4CAF50", fg="white", font=("Segoe UI", 9, "bold"), padx=10, pady=4)
+            header_text.pack(anchor="w")
 
-            header = tk.Label(bubble, text="🤖 BOI", bg="#4CAF50", fg="white", font=("Segoe UI", 9, "bold"), padx=12, pady=5)
-            header.pack(anchor="w")
+            msg_text = tk.Label(bubble, text=message, bg="#4CAF50", fg="white", font=("Segoe UI", 11, "bold"), justify="left", wraplength=350, padx=10, pady=8)
+            msg_text.pack(anchor="w", fill="x")
 
-            text = tk.Label(bubble, text=message, bg="#4CAF50", fg="white", font=("Segoe UI", 11, "bold"), justify="left", wraplength=400, padx=12, pady=10)
-            text.pack(anchor="w", fill="x")
-
-            right_spacer = tk.Frame(row, bg="#ffffff", width=50)
-            right_spacer.pack(side="left", fill="x", expand=True)
+            spacer_right = tk.Frame(row, bg="#ffffff")
+            spacer_right.pack(side="left", fill="x", expand=True)
 
         self.chat_messages.append((row, message))
         self.chat_canvas.after(50, lambda: self.chat_canvas.yview_moveto(1.0))
