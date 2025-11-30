@@ -80,7 +80,7 @@ class ModernBOIGUI:
 
         # Configure root window
         self.root.configure(bg=self.BG_PRIMARY)
-        self.root.geometry("720x1000")
+        self.root.geometry("700x1000")
 
         # Set window icon
         self._set_window_icon()
@@ -1496,12 +1496,19 @@ class ModernBOIGUI:
             bubble.pack(fill="x", padx=2, pady=2)
 
             header_text = tk.Label(bubble, text="🤖 BOI", bg="#00AA00", fg="#FFFFFF", font=("Segoe UI", 12, "bold"),
-                                   padx=16, pady=8)
+                                   padx=8, pady=6)
             header_text.pack(anchor="w")
 
             msg_text = tk.Label(bubble, text=message, bg="#00AA00", fg="#FFFFFF", font=("Segoe UI", 13), justify="left",
-                                wraplength=300, padx=16, pady=12)
+                                wraplength=475, padx=8, pady=6)
             msg_text.pack(anchor="w", fill="x")
+            
+            # SPEAK BOI MESSAGE if speaker mode is enabled
+            if self.speaking_enabled and self.voice_commander:
+                try:
+                    self.voice_commander.speak(message)
+                except Exception as e:
+                    print(f"⚠️ TTS Error: {e}")
 
         self.chat_messages.append((row, message))
         self.chat_canvas.after(50, lambda: self.chat_canvas.yview_moveto(1.0))
