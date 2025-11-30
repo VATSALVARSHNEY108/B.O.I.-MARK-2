@@ -1506,15 +1506,13 @@ class ModernBOIGUI:
 
     def update_output(self, message, msg_type="info"):
         """Add message to chat interface"""
-        message = message.strip().replace("\n", " ")
+        message = message.strip().replace("\n", " ").replace("📝 You: ", "👤 ")
         
         # Detect if this is a user message (starts with 👤)
-        is_user_msg = message.startswith("👤")
-        if is_user_msg:
-            message = message.replace("👤 ", "")
+        if message.startswith("👤"):
+            message = message.replace("👤 ", "", 1)
             sender = "USER"
         else:
-            message = message.replace("📝 You: ", "👤 ")
             sender = "BOI"
         
         if message:
