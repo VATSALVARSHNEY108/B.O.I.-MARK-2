@@ -1488,7 +1488,7 @@ class ModernBOIGUI:
             bubble = tk.Frame(row, bg="#2196F3", relief="flat", bd=0)
             bubble.pack(side="right", padx=(0, 10), fill="x")
 
-            header_text = tk.Label(bubble, text="👤 YOU", bg="#2196F3", fg="white", font=("Segoe UI", 9, "bold"), padx=10, pady=4)
+            header_text = tk.Label(bubble, text="👤 USER", bg="#2196F3", fg="white", font=("Segoe UI", 9, "bold"), padx=10, pady=4)
             header_text.pack(anchor="w")
 
             msg_text = tk.Label(bubble, text=message, bg="#2196F3", fg="white", font=("Segoe UI", 11, "bold"), justify="left", wraplength=350, padx=10, pady=8)
