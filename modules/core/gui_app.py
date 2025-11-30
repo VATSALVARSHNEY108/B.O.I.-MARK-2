@@ -1502,6 +1502,13 @@ class ModernBOIGUI:
             msg_text = tk.Label(bubble, text=message, bg="#00AA00", fg="#FFFFFF", font=("Segoe UI", 13), justify="left",
                                 wraplength=475, padx=8, pady=6)
             msg_text.pack(anchor="w", fill="x")
+            
+            # AUTO-SPEAK BOI MESSAGE
+            if self.voice_commander:
+                try:
+                    self.voice_commander.speak(message)
+                except Exception as e:
+                    pass
 
         self.chat_messages.append((row, message))
         self.chat_canvas.after(50, lambda: self.chat_canvas.yview_moveto(1.0))
