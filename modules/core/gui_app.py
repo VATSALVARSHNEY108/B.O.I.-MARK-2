@@ -10,7 +10,8 @@ from PIL import Image, ImageTk, ImageDraw
 from modules.core.gemini_controller import parse_command, get_ai_suggestion
 from modules.core.command_executor import CommandExecutor
 from modules.core.vatsal_assistant import create_boi_assistant
-from modules.monitoring.advanced_smart_screen_monitor import AIScreenMonitoringSystem, create_advanced_smart_screen_monitor
+from modules.monitoring.advanced_smart_screen_monitor import AIScreenMonitoringSystem, \
+    create_advanced_smart_screen_monitor
 from modules.monitoring.ai_screen_monitoring_system import create_ai_screen_monitoring_system
 from modules.ai_features.chatbots import SimpleChatbot
 from modules.automation.file_automation import create_file_automation
@@ -79,7 +80,7 @@ class ModernBOIGUI:
 
         # Configure root window
         self.root.configure(bg=self.BG_PRIMARY)
-        self.root.geometry("700x900")
+        self.root.geometry("720x1000")
 
         # Set window icon
         self._set_window_icon()
@@ -1267,10 +1268,7 @@ class ModernBOIGUI:
             ("❓ Help", self.show_help),
             ("👥 Contacts", self.show_contacts),
             ("📞 Phone Link", self.show_phone_link_control),
-            ("ℹ️ About", self.show_about),
-            ("💡 Suggestion", self.show_suggestion),
-            ("🛡️ Security", self.show_security_dashboard),
-            ("🔧 Batch Tools", self.show_batch_utilities)
+            ("ℹ️ About", self.show_about)
         ]
 
         for text, command in bottom_buttons:
@@ -1485,20 +1483,24 @@ class ModernBOIGUI:
             bubble = tk.Frame(row, bg="#0066FF", relief="solid", bd=3)
             bubble.pack(fill="x", padx=2, pady=2)
 
-            header_text = tk.Label(bubble, text="👤 YOU", bg="#0066FF", fg="#FFFFFF", font=("Segoe UI", 12, "bold"), padx=16, pady=8)
+            header_text = tk.Label(bubble, text="👤 YOU", bg="#0066FF", fg="#FFFFFF", font=("Segoe UI", 12, "bold"),
+                                   padx=16, pady=8)
             header_text.pack(anchor="w")
 
-            msg_text = tk.Label(bubble, text=message, bg="#0066FF", fg="#FFFFFF", font=("Segoe UI", 13, "italic"), justify="left", wraplength=300, padx=16, pady=12)
+            msg_text = tk.Label(bubble, text=message, bg="#0066FF", fg="#FFFFFF", font=("Segoe UI", 13, "italic"),
+                                justify="left", wraplength=300, padx=16, pady=12)
             msg_text.pack(anchor="w", fill="x")
         else:
             # BOI REPLY - BRIGHT GREEN (#00AA00) with WHITE text
             bubble = tk.Frame(row, bg="#00AA00", relief="solid", bd=3)
             bubble.pack(fill="x", padx=2, pady=2)
 
-            header_text = tk.Label(bubble, text="🤖 BOI", bg="#00AA00", fg="#FFFFFF", font=("Segoe UI", 12, "bold"), padx=16, pady=8)
+            header_text = tk.Label(bubble, text="🤖 BOI", bg="#00AA00", fg="#FFFFFF", font=("Segoe UI", 12, "bold"),
+                                   padx=16, pady=8)
             header_text.pack(anchor="w")
 
-            msg_text = tk.Label(bubble, text=message, bg="#00AA00", fg="#FFFFFF", font=("Segoe UI", 13), justify="left", wraplength=300, padx=16, pady=12)
+            msg_text = tk.Label(bubble, text=message, bg="#00AA00", fg="#FFFFFF", font=("Segoe UI", 13), justify="left",
+                                wraplength=300, padx=16, pady=12)
             msg_text.pack(anchor="w", fill="x")
 
         self.chat_messages.append((row, message))
@@ -1507,14 +1509,14 @@ class ModernBOIGUI:
     def update_output(self, message, msg_type="info"):
         """Add message to chat interface"""
         message = message.strip().replace("\n", " ").replace("📝 You: ", "👤 ")
-        
+
         # Detect if this is a user message (starts with 👤)
         if message.startswith("👤"):
             message = message.replace("👤 ", "", 1)
             sender = "USER"
         else:
             sender = "BOI"
-        
+
         if message:
             self.add_chat_message(message, sender=sender, msg_type=msg_type)
 
@@ -3071,12 +3073,12 @@ personality and advanced automation capabilities.
         input_box_frame.pack(fill="x", padx=5, pady=(0, 5))
 
         self.boi_input = tk.Entry(input_box_frame,
-                                     bg="#2e3350",
-                                     fg="#e0e0e0",
-                                     font=("Segoe UI", 12),
-                                     relief="solid",
-                                     bd=2,
-                                     insertbackground="#00d4aa")
+                                  bg="#2e3350",
+                                  fg="#e0e0e0",
+                                  font=("Segoe UI", 12),
+                                  relief="solid",
+                                  bd=2,
+                                  insertbackground="#00d4aa")
         self.boi_input.pack(side="left", fill="x", expand=True, ipady=10)
         self.boi_input.bind("<Return>", lambda e: self.send_to_boi_ai())
 
@@ -3214,12 +3216,12 @@ personality and advanced automation capabilities.
         input_box_frame.pack(fill="x", padx=5, pady=(0, 5))
 
         self.boi_automator_input = tk.Entry(input_box_frame,
-                                               bg="#2e3350",
-                                               fg="#e0e0e0",
-                                               font=("Segoe UI", 12),
-                                               relief="solid",
-                                               bd=2,
-                                               insertbackground="#00d4aa")
+                                            bg="#2e3350",
+                                            fg="#e0e0e0",
+                                            font=("Segoe UI", 12),
+                                            relief="solid",
+                                            bd=2,
+                                            insertbackground="#00d4aa")
         self.boi_automator_input.pack(side="left", fill="x", expand=True, ipady=10)
         self.boi_automator_input.bind("<Return>", lambda e: self.execute_boi_automator_command())
 
@@ -5934,7 +5936,7 @@ personality and advanced automation capabilities.
         try:
             self._update_boi_automator_output("🤔 Understanding command...\n", "info")
             result = self.boi_automator.execute_command(command,
-                                                           confirmation_callback=self._boi_confirmation_callback)
+                                                        confirmation_callback=self._boi_confirmation_callback)
 
             if "✓" in result:
                 self._update_boi_automator_output(f"\n{result}\n", "success")
