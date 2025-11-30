@@ -1476,7 +1476,7 @@ class ModernBOIGUI:
 
         # Message container with padding
         msg_container = tk.Frame(self.chat_scrollable, bg="#f7f7f7")
-        msg_container.pack(anchor="w" if sender == "USER" else "w", fill="x", padx=10, pady=8)
+        msg_container.pack(anchor="e" if sender == "USER" else "w", fill="x", padx=10, pady=8)
 
         # Determine styling based on sender
         if sender == "USER":
@@ -1506,7 +1506,7 @@ class ModernBOIGUI:
             padx=12,
             pady=8
         )
-        sender_label.pack(anchor="w")
+        sender_label.pack(anchor="e" if sender == "USER" else "w")
 
         # Message text - BOLD
         msg_label = tk.Label(
@@ -1515,12 +1515,12 @@ class ModernBOIGUI:
             bg=bubble_bg,
             fg=text_fg,
             font=("Segoe UI", 11, "bold"),
-            justify="left",
+            justify="right" if sender == "USER" else "left",
             wraplength=450,
             padx=12,
             pady=10
         )
-        msg_label.pack(anchor="w", fill="x")
+        msg_label.pack(anchor="e" if sender == "USER" else "w", fill="x")
 
         self.chat_messages.append((msg_container, message))
         self.chat_canvas.after(50, lambda: self.chat_canvas.yview_moveto(1.0))
