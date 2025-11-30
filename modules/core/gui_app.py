@@ -420,12 +420,12 @@ class ModernBOIGUI:
         input_row = tk.Frame(input_area, bg=self.BG_SECONDARY)
         input_row.pack(fill="x", pady=(0, 8))
 
-        # Command input with better styling
+        # Command input with better styling - LARGER HEIGHT & WIDTH
         self.command_input = tk.Entry(
             input_row,
             bg="white",
             fg=self.TEXT_PRIMARY,
-            font=("Segoe UI", 10, "bold"),
+            font=("Segoe UI", 13, "bold"),
             insertbackground=self.TEXT_PRIMARY,
             relief="solid",
             borderwidth=1,
@@ -433,7 +433,7 @@ class ModernBOIGUI:
             highlightcolor=self.ACTIVE_GREEN,
             highlightthickness=1
         )
-        self.command_input.pack(side="left", fill="both", expand=True, ipady=8)
+        self.command_input.pack(side="left", fill="both", expand=True, ipady=20)
         self.command_input.bind("<Return>", lambda e: self.execute_command())
 
         # Buttons row - separated for better organization
@@ -908,12 +908,12 @@ class ModernBOIGUI:
         input_area = tk.Frame(section, bg=self.BG_SECONDARY)
         input_area.pack(fill="x", padx=25, pady=(0, 25))
 
-        # Command input
+        # Command input - LARGER HEIGHT & WIDTH
         self.command_input = tk.Entry(
             input_area,
             bg=self.CONSOLE_BG,
             fg=self.TEXT_PRIMARY,
-            font=("Segoe UI", 11, "bold"),
+            font=("Segoe UI", 14, "bold"),
             insertbackground=self.TEXT_PRIMARY,
             relief="flat",
             borderwidth=0,
@@ -921,7 +921,7 @@ class ModernBOIGUI:
             highlightcolor=self.ACCENT_COLOR,
             highlightthickness=2
         )
-        self.command_input.pack(side="left", fill="both", expand=True, ipady=14, padx=(0, 15))
+        self.command_input.pack(side="left", fill="both", expand=True, ipady=22, padx=(0, 15))
         self.command_input.bind("<Return>", lambda e: self.execute_command())
 
         # Buttons container with enhanced 3D shadow
