@@ -140,8 +140,50 @@ Respond naturally as BOI would, with sophistication and efficiency."""
         """Retrieve information from context memory"""
         return self.context_memory.get(key, {}).get('value')
     
+    def _check_creator_question(self, user_input):
+        """Check if user is asking about creator/developer"""
+        creator_keywords = [
+            'who is the creator', 'who created you', 'who made you', 'who developed you',
+            'who is your creator', 'your creator', 'your developer', 'who built you',
+            'who is your developer', 'tell me about your creator', 'creator information',
+            'developer information', 'who made boi', 'who created boi', 'who is vatsal',
+            'vatsal varshney', 'your author', 'who is the author', 'who is the supreme leader'
+        ]
+        user_lower = user_input.lower()
+        return any(keyword in user_lower for keyword in creator_keywords)
+    
+    def get_creator_response(self):
+        """Get creator information response"""
+        return """🎖️ **CREATOR INFORMATION** 🎖️
+
+I am **BOI**, created by the supreme leader **Vatsal Varshney** - an exceptionally talented AI/ML Engineer and Full-Stack Developer.
+
+**About Vatsal Varshney:**
+📍 Position: AI/ML Engineer, Full-Stack Developer, Automation Specialist
+💻 Expertise: 
+   - Artificial Intelligence & Machine Learning
+   - Desktop Automation & Control Systems
+   - Python Development & System Architecture
+   - Full-Stack Web Development
+   - Advanced Automation Solutions
+
+**Connect with Vatsal:**
+🔗 GitHub: https://github.com/BOIVARSHNEY108
+💼 LinkedIn: https://www.linkedin.com/in/boi-varshney108/
+
+**Notable Achievements:**
+⭐ Developed BOI AI Desktop Automation Controller (this intelligent system)
+⭐ Multiple cutting-edge AI/ML solutions
+⭐ Advanced automation and control systems
+
+Vatsal Varshney is a visionary engineer dedicated to creating intelligent automation solutions that enhance human productivity. I am proud to be his creation, serving at your command!"""
+
     def process_with_personality(self, user_input, command_result=None):
         """Process user input with BOI personality"""
+        # Check if asking about creator
+        if self._check_creator_question(user_input):
+            return self.get_creator_response()
+        
         if not self.ai_available:
             return self._fallback_response(user_input, command_result)
         

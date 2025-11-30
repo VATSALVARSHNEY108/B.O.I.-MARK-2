@@ -1346,7 +1346,7 @@ class ModernBOIGUI:
             self.update_output("✅ Gemini AI is ready!", "success")
             if self.boi and self.boi_mode:
                 greeting = self.boi.get_greeting()
-                self.update_output(f"🤖 BOI: {greeting}", "info")
+                self.update_output(f"{greeting}", "info")
             self.update_output("Type a command or click a button to get started.", "info")
         else:
             self.update_output("⚠️ WARNING: GEMINI_API_KEY not found!", "warning")
@@ -1502,7 +1502,7 @@ class ModernBOIGUI:
             msg_text = tk.Label(bubble, text=message, bg="#00AA00", fg="#FFFFFF", font=("Segoe UI", 13), justify="left",
                                 wraplength=475, padx=8, pady=6)
             msg_text.pack(anchor="w", fill="x")
-            
+
             # AUTO-SPEAK BOI MESSAGE
             if self.voice_commander:
                 try:
@@ -6472,7 +6472,7 @@ Based on OthersideAI's self-operating-computer framework
             # BOI acknowledgment
             if self.boi_mode:
                 ack = self.boi.acknowledge_command(command)
-                self.update_output(f"🤖 BOI: {ack}\n\n", "info")
+                self.update_output(f" {ack}\n\n", "info")
 
             command_dict = parse_command(command)
 
@@ -6484,7 +6484,7 @@ Based on OthersideAI's self-operating-computer framework
                         command,
                         f"Error: {error_msg}"
                     )
-                    self.update_output(f"🤖 BOI: {boi_response}\n", "error")
+                    self.update_output(f" {boi_response}\n", "error")
 
                     # Speak error response if voice is enabled
                     if self.voice_commander and self.voice_enabled:
@@ -6511,14 +6511,12 @@ Based on OthersideAI's self-operating-computer framework
                 # Get BOI response if mode is enabled
                 if self.boi_mode:
                     boi_response = self.get_boi_response(command, result['message'])
-                    self.update_output(f"🤖 BOI:\n{boi_response}\n\n", "success")
+                    self.update_output(f"\n{boi_response}\n\n", "success")
 
                     # Speak BOI's response if voice is enabled
                     if self.voice_commander and self.voice_enabled:
                         self.voice_commander.speak(boi_response)
 
-                    # Show technical result in smaller text
-                    self.update_output(f"📊 Technical Details:\n{result['message']}\n", "info")
                 else:
                     self.update_output(f"✅ Result:\n{result['message']}\n", "success")
 
@@ -6544,7 +6542,7 @@ Based on OthersideAI's self-operating-computer framework
                         command,
                         f"Error: {result['message']}"
                     )
-                    self.update_output(f"🤖 BOI: {boi_response}\n", "error")
+                    self.update_output(f" {boi_response}\n", "error")
 
                     # Speak error response if voice is enabled
                     if self.voice_commander and self.voice_enabled:
@@ -6564,7 +6562,7 @@ Based on OthersideAI's self-operating-computer framework
                 })
 
             if self.boi_mode:
-                self.update_output(f"🤖 BOI: Apologies, Sir. Encountered an unexpected error: {str(e)}\n", "error")
+                self.update_output(f" Apologies, Sir. Encountered an unexpected error: {str(e)}\n", "error")
             else:
                 self.update_output(f"❌ Error: {str(e)}\n", "error")
             self.update_status("❌ Error", "#f38ba8")
