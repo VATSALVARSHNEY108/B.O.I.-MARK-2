@@ -1474,27 +1474,27 @@ class ModernBOIGUI:
         if not hasattr(self, 'chat_scrollable') or self.chat_scrollable is None:
             return
 
-        # Message container with padding
+        # Message container - full width for proper alignment
         msg_container = tk.Frame(self.chat_scrollable, bg="#f7f7f7")
-        msg_container.pack(anchor="e" if sender == "USER" else "w", fill="x", padx=10, pady=8)
+        msg_container.pack(fill="x", padx=10, pady=8)
 
-        # Determine styling based on sender
+        # Inner frame for alignment control
         if sender == "USER":
             # User messages: right-aligned, blue background, bold white text
             bubble_bg = "#007BFF"
             text_fg = "white"
-            anchor_pos = "e"
-            padx_val = 20
+            inner_frame = tk.Frame(msg_container, bg="#f7f7f7")
+            inner_frame.pack(anchor="e", padx=(200, 10))
         else:
             # BOI messages: left-aligned, light gray background, bold dark text
             bubble_bg = "#E8E8E8"
             text_fg = "#1a1a1a"
-            anchor_pos = "w"
-            padx_val = 20
+            inner_frame = tk.Frame(msg_container, bg="#f7f7f7")
+            inner_frame.pack(anchor="w", padx=(10, 200))
 
         # Message bubble frame
-        bubble = tk.Frame(msg_container, bg=bubble_bg, relief="flat", bd=0)
-        bubble.pack(anchor=anchor_pos, padx=padx_val, pady=2)
+        bubble = tk.Frame(inner_frame, bg=bubble_bg, relief="flat", bd=0)
+        bubble.pack(fill="both", expand=True)
 
         # Sender label (small, subtle)
         sender_label = tk.Label(
@@ -1506,7 +1506,7 @@ class ModernBOIGUI:
             padx=12,
             pady=8
         )
-        sender_label.pack(anchor="e" if sender == "USER" else "w")
+        sender_label.pack(anchor="w")
 
         # Message text - BOLD
         msg_label = tk.Label(
@@ -1515,12 +1515,12 @@ class ModernBOIGUI:
             bg=bubble_bg,
             fg=text_fg,
             font=("Segoe UI", 11, "bold"),
-            justify="right" if sender == "USER" else "left",
-            wraplength=450,
+            justify="left",
+            wraplength=400,
             padx=12,
             pady=10
         )
-        msg_label.pack(anchor="e" if sender == "USER" else "w", fill="x")
+        msg_label.pack(anchor="w", fill="x")
 
         self.chat_messages.append((msg_container, message))
         self.chat_canvas.after(50, lambda: self.chat_canvas.yview_moveto(1.0))
