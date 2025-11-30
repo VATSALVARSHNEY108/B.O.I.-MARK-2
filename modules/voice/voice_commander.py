@@ -21,14 +21,23 @@ class VoiceCommander:
         self.tts_engine = pyttsx3.init()
         self.command_callback = command_callback
 
-        # Speech settings
-        self.tts_engine.setProperty('rate', 165)
+        # Speech settings - CHILD VOICE
+        self.tts_engine.setProperty('rate', 185)  # Faster for energetic child voice
         self.tts_engine.setProperty('volume', 0.95)
 
-        # Set male voice (index 0 is typically male)
+        # Set child voice - use female voice (usually index 1) for child-like tone
         voices = self.tts_engine.getProperty('voices')
-        if len(voices) > 0:
+        if len(voices) > 1:
+            # Try to use female voice (usually index 1)
+            self.tts_engine.setProperty('voice', voices[1].id)
+        elif len(voices) > 0:
             self.tts_engine.setProperty('voice', voices[0].id)
+        
+        # Increase pitch for child-like voice
+        try:
+            self.tts_engine.setProperty('pitch', 1.8)  # Higher pitch = more child-like
+        except:
+            pass  # Some systems don't support pitch adjustment
 
         # Initialize sound effects for voice commanding
         try:
