@@ -62,7 +62,7 @@ class ModernBOIGUI:
 
     def __init__(self, root):
         self.root = root
-        self.root.title("B.O.I. - no your friend")
+        self.root.title("B.O.I. - not your friend")
 
         # Initialize theme colors (exact match to web GUI CSS)
         self.BG_PRIMARY = "#F5F1E8"  # var(--bg-primary)
@@ -79,7 +79,7 @@ class ModernBOIGUI:
 
         # Configure root window
         self.root.configure(bg=self.BG_PRIMARY)
-        self.root.geometry("630x900")
+        self.root.geometry("700x900")
 
         # Set window icon
         self._set_window_icon()
@@ -1389,8 +1389,8 @@ class ModernBOIGUI:
                 except:
                     pass
 
-            # Display user command in chat
-            self.add_chat_message(f"👤 {command}", sender="USER", msg_type="command")
+            # Display user command in chat (BLUE - USER category)
+            self.add_chat_message(command, sender="USER", msg_type="command")
 
             # BOI acknowledgment
             if self.boi_mode and self.boi and hasattr(self.boi, 'acknowledge_command'):
@@ -1470,7 +1470,7 @@ class ModernBOIGUI:
             self.root.after(0, lambda: self.execute_btn.config(state="normal", text="▶ Execute"))
 
     def add_chat_message(self, message, sender="BOI", msg_type="info"):
-        """Add a chat message with distinct visual styling for user and BOI"""
+        """Add a chat message with DISTINCT COLORS - USER=BLUE, BOI=GREEN"""
         if not hasattr(self, 'chat_scrollable') or self.chat_scrollable is None:
             return
 
@@ -1481,24 +1481,24 @@ class ModernBOIGUI:
         is_user = (sender.strip().upper() == "USER")
 
         if is_user:
-            # USER PROMPT - Blue background with italic text, distinct styling
-            bubble = tk.Frame(row, bg="#1E88E5", relief="solid", bd=2)
+            # USER PROMPT - BRIGHT BLUE (#2196F3) with WHITE text
+            bubble = tk.Frame(row, bg="#2196F3", relief="solid", bd=3)
             bubble.pack(fill="x", padx=2, pady=2)
 
-            header_text = tk.Label(bubble, text="👤 USER", bg="#1E88E5", fg="#FFFFFF", font=("Segoe UI", 10, "bold"), padx=12, pady=5)
+            header_text = tk.Label(bubble, text="👤 YOU", bg="#2196F3", fg="#FFFFFF", font=("Segoe UI", 11, "bold"), padx=12, pady=6)
             header_text.pack(anchor="w")
 
-            msg_text = tk.Label(bubble, text=message, bg="#1E88E5", fg="#FFFFFF", font=("Segoe UI", 10, "italic"), justify="left", wraplength=280, padx=12, pady=6)
+            msg_text = tk.Label(bubble, text=message, bg="#2196F3", fg="#FFFFFF", font=("Segoe UI", 11, "italic"), justify="left", wraplength=280, padx=12, pady=8)
             msg_text.pack(anchor="w", fill="x")
         else:
-            # BOI REPLY - Green background with regular text, different style
-            bubble = tk.Frame(row, bg="#43A047", relief="solid", bd=2)
+            # BOI REPLY - BRIGHT GREEN (#4CAF50) with WHITE text
+            bubble = tk.Frame(row, bg="#4CAF50", relief="solid", bd=3)
             bubble.pack(fill="x", padx=2, pady=2)
 
-            header_text = tk.Label(bubble, text="🤖 BOI", bg="#43A047", fg="#FFFFFF", font=("Segoe UI", 10, "bold"), padx=12, pady=5)
+            header_text = tk.Label(bubble, text="🤖 BOI", bg="#4CAF50", fg="#FFFFFF", font=("Segoe UI", 11, "bold"), padx=12, pady=6)
             header_text.pack(anchor="w")
 
-            msg_text = tk.Label(bubble, text=message, bg="#43A047", fg="#E8F5E9", font=("Segoe UI", 10), justify="left", wraplength=280, padx=12, pady=6)
+            msg_text = tk.Label(bubble, text=message, bg="#4CAF50", fg="#FFFFFF", font=("Segoe UI", 11), justify="left", wraplength=280, padx=12, pady=8)
             msg_text.pack(anchor="w", fill="x")
 
         self.chat_messages.append((row, message))
