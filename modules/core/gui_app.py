@@ -1485,20 +1485,20 @@ class ModernBOIGUI:
             bubble = tk.Frame(row, bg="#0066FF", relief="solid", bd=3)
             bubble.pack(fill="x", padx=2, pady=2)
 
-            header_text = tk.Label(bubble, text="👤 YOU", bg="#0066FF", fg="#FFFFFF", font=("Segoe UI", 11, "bold"), padx=12, pady=6)
+            header_text = tk.Label(bubble, text="👤 YOU", bg="#0066FF", fg="#FFFFFF", font=("Segoe UI", 12, "bold"), padx=16, pady=8)
             header_text.pack(anchor="w")
 
-            msg_text = tk.Label(bubble, text=message, bg="#0066FF", fg="#FFFFFF", font=("Segoe UI", 11, "italic"), justify="left", wraplength=280, padx=12, pady=8)
+            msg_text = tk.Label(bubble, text=message, bg="#0066FF", fg="#FFFFFF", font=("Segoe UI", 13, "italic"), justify="left", wraplength=300, padx=16, pady=12)
             msg_text.pack(anchor="w", fill="x")
         else:
             # BOI REPLY - BRIGHT GREEN (#00AA00) with WHITE text
             bubble = tk.Frame(row, bg="#00AA00", relief="solid", bd=3)
             bubble.pack(fill="x", padx=2, pady=2)
 
-            header_text = tk.Label(bubble, text="🤖 BOI", bg="#00AA00", fg="#FFFFFF", font=("Segoe UI", 11, "bold"), padx=12, pady=6)
+            header_text = tk.Label(bubble, text="🤖 BOI", bg="#00AA00", fg="#FFFFFF", font=("Segoe UI", 12, "bold"), padx=16, pady=8)
             header_text.pack(anchor="w")
 
-            msg_text = tk.Label(bubble, text=message, bg="#00AA00", fg="#FFFFFF", font=("Segoe UI", 11), justify="left", wraplength=280, padx=12, pady=8)
+            msg_text = tk.Label(bubble, text=message, bg="#00AA00", fg="#FFFFFF", font=("Segoe UI", 13), justify="left", wraplength=300, padx=16, pady=12)
             msg_text.pack(anchor="w", fill="x")
 
         self.chat_messages.append((row, message))
