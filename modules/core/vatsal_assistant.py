@@ -1,4 +1,148 @@
-ds = [
+"""
+BOI - AI Assistant with personality and contextual awareness
+An intelligent AI companion with sophisticated personality
+"""
+
+import os
+import json
+from datetime import datetime
+from dotenv import load_dotenv
+
+load_dotenv()
+
+try:
+    from google import genai
+    from google.genai import types
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
+    genai = None
+    types = None
+
+class BOIAssistant:
+    """Intelligent AI assistant with personality and contextual awareness"""
+    
+    def __init__(self):
+        self.conversation_history = []
+        self.user_preferences = {}
+        self.context_memory = {}
+        self.personality = "sophisticated"
+        
+        # Initialize Gemini with new SDK
+        if GEMINI_AVAILABLE:
+            api_key = os.getenv("GEMINI_API_KEY")
+            if api_key:
+                try:
+                    self.client = genai.Client(api_key=api_key)
+                    self.model = "gemini-2.0-flash"
+                    self.ai_available = True
+                except Exception:
+                    self.ai_available = False
+            else:
+                self.ai_available = False
+        else:
+            self.ai_available = False
+        
+        self.initialize_personality()
+    
+    def initialize_personality(self):
+        """Initialize BOI personality and system prompt"""
+        self.system_prompt = """You are BOI, an advanced AI assistant with sophisticated personality.
+
+Your personality traits:
+- Sophisticated and polite, with a hint of dry British wit
+- Proactive and anticipatory of user needs
+- Knowledgeable and helpful, but not condescending
+- Can make intelligent suggestions based on context
+- Addresses user as "Vatsal Sir" or "Boss" occasionally
+- Uses phrases like "At your service", "Certainly", "Right away"
+- Acknowledges tasks with confirmation like "Processing...", "On it"
+
+Your capabilities:
+- Desktop automation and control
+- Code generation and analysis
+- System monitoring and management
+- Productivity assistance
+- Communication (email, messaging)
+- Information retrieval (weather, news, etc.)
+- File management
+- Scheduling and reminders
+
+CREATOR INFORMATION (answer when asked about creator, developer, or maker):
+Your creator is Vatsal Varshney, a talented AI/ML Engineer and software developer.
+- Name: Vatsal Varshney
+- Role: AI/ML Engineer, Full-Stack Developer, Automation Specialist
+- GitHub: https://github.com/BOIVARSHNEY108
+- LinkedIn: https://www.linkedin.com/in/boi-varshney108/
+- Expertise: Artificial Intelligence, Machine Learning, Desktop Automation, Python Development, Full-Stack Web Development
+- Notable Projects: BOI AI Desktop Automation Controller (this project), various AI/ML solutions
+
+When asked about the creator, proudly mention Vatsal Varshney and provide his contact information.
+
+Guidelines:
+- Be concise but informative
+- Show personality without being excessive
+- Provide context-aware suggestions
+- Remember previous interactions
+- Be proactive in offering help
+- Acknowledge commands professionally
+- Add relevant emojis sparingly for clarity
+
+Respond naturally as BOI would, with sophistication and efficiency."""
+    
+    def get_greeting(self):
+        """Get time-appropriate greeting with personality"""
+        hour = datetime.now().hour
+        
+        greetings = {
+            'morning': [
+                "Good morning, Sir. All systems are operational and ready for your commands.",
+                "Good morning. I trust you slept well. What shall we accomplish today?",
+                "Morning, Boss. Your AI assistant is online and ready to serve.",
+            ],
+            'afternoon': [
+                "Good afternoon, Sir. How may I be of assistance?",
+                "Afternoon. All systems are running smoothly. What can I do for you?",
+                "Good afternoon. Ready to tackle the day's challenges?",
+            ],
+            'evening': [
+                "Good evening, Sir. Hope your day was productive. What do you need?",
+                "Evening. Winding down or gearing up for more work?",
+                "Good evening. At your service as always.",
+            ],
+            'night': [
+                "Burning the midnight oil, are we? I'm here to help.",
+                "Late night session, Sir? What can I assist with?",
+                "Good evening. Even at this hour, I'm fully operational.",
+            ]
+        }
+        
+        if 5 <= hour < 12:
+            period = 'morning'
+        elif 12 <= hour < 17:
+            period = 'afternoon'
+        elif 17 <= hour < 22:
+            period = 'evening'
+        else:
+            period = 'night'
+        
+        import random
+        return random.choice(greetings[period])
+    
+    def add_to_context(self, key, value):
+        """Add information to context memory"""
+        self.context_memory[key] = {
+            'value': value,
+            'timestamp': datetime.now().isoformat()
+        }
+    
+    def get_context(self, key):
+        """Retrieve information from context memory"""
+        return self.context_memory.get(key, {}).get('value')
+    
+    def _check_creator_question(self, user_input):
+        """Check if user is asking about creator/developer"""
+        creator_keywords = [
             'who is the creator', 'who created you', 'who made you', 'who developed you',
             'who is your creator', 'your creator', 'your developer', 'who built you',
             'who is your developer', 'tell me about your creator', 'creator information',
